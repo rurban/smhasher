@@ -30,3 +30,7 @@ SMhasher
 | Murmur2B        |	 	    5946.77  |		   30.34         	| 12.7% bias      |
 | Murmur2C        |	 	    3883.56  |		   33.94         	| 1.8% bias, collisions, 3.4% distrib |
 | Murmur3A        |	        2343.75  |   	   34.03 		    |                 |
+| Murmur3C        |	        3046.89  |   	   63.66 		    |                 |
+
+I added some SSE assisted hashes, but some popular slower cryptographic hashes are still missing.
+See [https://code.google.com/p/smhasher/w/list](https://code.google.com/p/smhasher/w/list)
