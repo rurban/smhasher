@@ -124,12 +124,16 @@ uint32_t x17 ( const void * key, int len, uint32_t h )
 {
   const uint8_t * data = (const uint8_t*)key;
     
-  for(int i = 0; i < len; ++i) 
-  {
-        h = 17 * h + (data[i] - ' ');
-    }
+  for(int i = 0; i < len; ++i) {
+    h = 17 * h + (data[i] - ' ');
+  }
 
-    return h ^ (h >> 16);
+  return h ^ (h >> 16);
+}
+
+void x17_test ( const void * key, int len, uint32_t seed, void * out )
+{
+  *(uint32_t*)out = x17(key, len, seed);
 }
 
 //-----------------------------------------------------------------------------
@@ -138,12 +142,71 @@ void Bernstein ( const void * key, int len, uint32_t seed, void * out )
 {
   const uint8_t * data = (const uint8_t*)key;
     
-  for(int i = 0; i < len; ++i) 
-  {
-        seed = 33 * seed + data[i];
-    }
+  for(int i = 0; i < len; ++i) {
+    seed = 33 * seed + data[i];
+  }
 
   *(uint32_t*)out = seed;
+}
+
+// another older bernstein, as used in perl5
+void djb2 ( const void * key, int len, uint32_t hash, void * out )
+{
+  unsigned char * str = (unsigned char *)key;
+  const unsigned char * const end = (const unsigned char *)str + len;
+  while (str < end) {
+    hash = ((hash << 5) + hash) + *str++;
+  }
+  *(uint32_t*)out = hash;
+}
+
+// as used in perl5
+void sdbm ( const void * key, int len, uint32_t hash, void * out )
+{
+  unsigned char * str = (unsigned char *)key;
+  const unsigned char * const end = (const unsigned char *)str + len;
+  while (str < end) {
+    hash = (hash << 6) + (hash << 16) - hash + *str++;
+  }
+  *(uint32_t*)out = hash;
+}
+
+// as used in perl5
+void JenkinsOOAT ( const void * key, int len, uint32_t hash, void * out )
+{
+  unsigned char * str = (unsigned char *)key;
+  const unsigned char * const end = (const unsigned char *)str + len;
+  unsigned char seed[8];
+  memcpy(seed,&hash,8);
+  while (str < end) {
+    hash += (hash << 10);
+    hash ^= (hash >> 6);
+    hash += *str++;
+  }
+  
+  hash += (hash << 10);
+  hash ^= (hash >> 6);
+  hash += seed[4];
+   
+  hash += (hash << 10);
+  hash ^= (hash >> 6);
+  hash += seed[5];
+   
+  hash += (hash << 10);
+  hash ^= (hash >> 6);
+  hash += seed[6];
+   
+  hash += (hash << 10);
+  hash ^= (hash >> 6);
+  hash += seed[7];
+   
+  hash += (hash << 10);
+  hash ^= (hash >> 6);
+
+  hash += (hash << 3);
+  hash ^= (hash >> 11);
+  hash = hash + (hash << 15);
+  *(uint32_t*)out = hash;
 }
 
 //-----------------------------------------------------------------------------

@@ -9,7 +9,7 @@ SMhasher
 | crc32           | 	     333.70  |		   46.80       | 100% bias, 2.17x collisions    |
 | md5_32a         | 	     331.67  |		  670.46       | 8589.93x collisions, distrib   |
 | sha1_32a        | 	     262.58  |		 1638.29       | 8589.93x collisions, distrib   |
-| hasshe2         |         2078.01  |             54.48       | ??              |
+| hasshe2         |         2078.01  |             54.48       | collisions, 36.6% distrib      |
 | crc32_hw        | 	    6127.57  |		   29.78       | 100% bias, collisions, distrib |
 | crc64_hw        | 	    8059.75  |		   30.87       | 100% bias, collisions, distrib |
 | crc32_hw1       | 	   22584.94  |		   34.69       | 100% bias, collisions, distrib |

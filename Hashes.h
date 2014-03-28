@@ -49,6 +49,10 @@ void CityHashCrc128_test   ( const void * key, int len, uint32_t seed, void * ou
 void FNV32a                ( const void * key, int len, uint32_t seed, void * out );
 void FNV64a                ( const void * key, int len, uint32_t seed, void * out );
 void Bernstein             ( const void * key, int len, uint32_t seed, void * out );
+void djb2                  ( const void * key, int len, uint32_t seed, void * out );
+void sdbm                  ( const void * key, int len, uint32_t seed, void * out );
+void x17_test              ( const void * key, int len, uint32_t seed, void * out );
+void JenkinsOOAT           ( const void * key, int len, uint32_t seed, void * out );
 void SuperFastHash         ( const void * key, int len, uint32_t seed, void * out );
 void lookup3_test          ( const void * key, int len, uint32_t seed, void * out );
 void MurmurOAAT_test       ( const void * key, int len, uint32_t seed, void * out );
