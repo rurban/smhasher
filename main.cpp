@@ -77,7 +77,7 @@ HashInfo g_hashes[] =
   { djb2,                 32, 0xBDB4B640, "djb2",        "Bernstein as in perl5" },
   { sdbm,                 32, 0x582AF769, "sdbm",        "sdbm as in perl5" },
   { x17_test,             32, 0x8128E14C, "x17",         "x17" },
-  { JenkinsOOAT,          32, 0x83E133DA, "JenkinsOOAT", "Bob Jenkins' old OOAT as in perl5" },
+  { JenkinsOOAT,          32, 0xCF8DDE51, "JenkinsOOAT", "Bob Jenkins' old OOAT as in perl5" },
   { lookup3_test,         32, 0x3D83917A, "lookup3",     "Bob Jenkins' lookup3" },
   { SuperFastHash,        32, 0x980ACD1D, "superfast",   "Paul Hsieh's SuperFastHash" },
   { MurmurOAAT_test,      32, 0x5363BD98, "MurmurOAAT",  "Murmur one-at-a-time" },
