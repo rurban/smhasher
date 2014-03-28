@@ -54,21 +54,23 @@ HashInfo g_hashes[] =
 #if 0
   { sha1_64a,             32, 0xF9376EA7, "sha1_64a",    "SHA1 64-bit, first 64 bits of result" },
   { sha2_32a,             32, 0xF9376EA7, "sha2_32a",    "SHA2, first 32 bits of result" },
-  { sha2_64a,             64, 0xF9376EA7, "sha2_64a",    "SHA2 64-bit, first 64 bits of result" },
+  { sha2_64a,             64, 0xF9376EA7, "sha2_64a",    "SHA2, first 64 bits of result" },
   { BLAKE2_32a,           32, 0xF9376EA7, "blake2_32a",  "BLAKE2, first 32 bits of result" },
-  { BLAKE2_64a,           64, 0xF9376EA7, "blake2_64a",  "BLAKE2 64bit, first 64 bits of result" },
-  { bcrypt_32a,           32, 0xF9376EA7, "bcrypt_32a",  "bcrypt, first 32 bits of result" },
-  { scrypt_32a,           64, 0xF9376EA7, "scrypt_32a",  "scrypt, first 32 bits of result" },
+  { BLAKE2_64a,           64, 0xF9376EA7, "blake2_64a",  "BLAKE2, first 64 bits of result" },
+  { bcrypt_64a,           64, 0xF9376EA7, "bcrypt_64a",  "bcrypt, first 64 bits of result" },
+  { scrypt_64a,           64, 0xF9376EA7, "scrypt_64a",  "scrypt, first 64 bits of result" },
 #endif
 
 #ifdef __SSE2__
-  { hasshe2,             128, 0x115218A1, "hasshe2",     "SSE2 hasshe2, 128-bit" }, 
+  { hasshe2_test,        128, 0x115218A1, "hasshe2",     "SSE2 hasshe2, 128-bit" }, 
 #endif
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { crc32c_hw_test,       32, 0x3719DB20, "crc32_hw",    "SSE4.2 crc32 in HW" },
   { crc64c_hw_test,       64, 0xE7C3FD0E, "crc64_hw",    "SSE4.2 crc64 in HW" },
   { crc32c_hw1_test,      32, 0x0C7346F0, "crc32_hw1",   "Faster Adler SSE4.2 crc32 in HW" },
 #endif
+// elf64 or macho64 bit only
+//{ fhtw_test,            64, 0x0,        "fhtw",        "fhtw asm" },
   { FNV32a,               32, 0xE3CBBE91, "FNV",         "Fowler-Noll-Vo hash, 32-bit" },
   { FNV64a,               64, 0x103455FC, "FNV64",       "Fowler-Noll-Vo hash, 64-bit" },
   { Bernstein,            32, 0xBDB4B640, "bernstein",   "Bernstein, 32-bit" },
@@ -580,19 +582,17 @@ int main ( int argc, char ** argv )
   {
     hashToTest = argv[1];
 
-    if (!strcmp(hashToTest,"--list")) {
+    if (strcmp(hashToTest,"--list") == 0) {
       for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++) {
         printf("%s\t(%s)\n", g_hashes[i].name, g_hashes[i].desc);
       }
-      exit;
+      exit(0);
     }
   }
 
   // Code runs on the 3rd CPU by default
-
   SetAffinity((1 << 2));
-
-  //SelfTest();
+  SelfTest();
 
   int timeBegin = clock();
 
