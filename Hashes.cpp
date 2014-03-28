@@ -138,26 +138,17 @@ void x17_test ( const void * key, int len, uint32_t seed, void * out )
 
 //-----------------------------------------------------------------------------
 
+// also used in perl5 as djb2
 void Bernstein ( const void * key, int len, uint32_t seed, void * out ) 
 {
   const uint8_t * data = (const uint8_t*)key;
     
   for(int i = 0; i < len; ++i) {
+    //seed = ((seed << 5) + seed) + data[i];
     seed = 33 * seed + data[i];
   }
 
   *(uint32_t*)out = seed;
-}
-
-// another older bernstein, as used in perl5
-void djb2 ( const void * key, int len, uint32_t hash, void * out )
-{
-  unsigned char * str = (unsigned char *)key;
-  const unsigned char * const end = (const unsigned char *)str + len;
-  while (str < end) {
-    hash = ((hash << 5) + hash) + *str++;
-  }
-  *(uint32_t*)out = hash;
 }
 
 // as used in perl5
@@ -165,6 +156,7 @@ void sdbm ( const void * key, int len, uint32_t hash, void * out )
 {
   unsigned char * str = (unsigned char *)key;
   const unsigned char * const end = (const unsigned char *)str + len;
+  // note that perl5 adds the seed to the end of key, which looks like cargo cult
   while (str < end) {
     hash = (hash << 6) + (hash << 16) - hash + *str++;
   }
@@ -177,6 +169,7 @@ void JenkinsOOAT ( const void * key, int len, uint32_t hash, void * out )
   unsigned char * str = (unsigned char *)key;
   const unsigned char * const end = (const unsigned char *)str + len;
   unsigned char seed[8];
+  // note that perl5 adds the seed to the end of key, which looks like cargo cult
   memcpy(seed,&hash,8);
   while (str < end) {
     hash += (hash << 10);
@@ -280,5 +273,16 @@ void crc32c_hw1_test( const void *input, int len, uint32_t seed, void *out ) {
     return;
   }
   *(uint32_t*)out = crc32c(input, len, seed);
+}
+#endif
+
+#if defined(__SSSE3__) && defined(__x86_64__)
+/* https://github.com/floodyberry/siphash */
+void siphash_test( const void *input, int len, uint32_t seed, void *out ) {
+  if (!len) {
+    *(uint32_t*)out = 0;
+    return;
+  }
+  *(uint64_t*)out = siphash(seed, input, len);
 }
 #endif
