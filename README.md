@@ -16,6 +16,10 @@ SMhasher
 | FNV             | 	     740.34  |		   41.87       | 100% bias, collisions, distrib |
 | FNV64           | 	     744.22  |		   42.51       | 100% bias, collisions, distrib |
 | bernstein       | 	     753.62  |		   44.73       | 100% bias, collisions, distrib |
+| djb2            |          766.29  |             36.17       | 100% bias, collisions, distrib |
+| sdbm            |          737.83  |  	   30.57       | 100% bias, collisions, distrib |
+| x17             |          497.34  |    	   36.09       | 100% bias, collisions, distrib |
+| JenkinsOOAT     |          425.83  |    	   83.75       | 99.98% bias, collisions, distrib |
 | lookup3         | 	    1685.01  |		   31.54       | 1.5-11.5% bias, 7.2x collisions |
 | superfast       | 	    1532.52  |		   34.72       | 28% bias, collisions, 30% distr |
 | MurmurOAAT      | 	     431.89  |		   39.36       | 91% bias, 5273.01x collisions, 37% distr |
