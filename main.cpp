@@ -62,10 +62,10 @@ HashInfo g_hashes[] =
 #endif
 
 #ifdef __SSE2__
-  { hasshe2_test,        128, 0x115218A1, "hasshe2",     "SSE2 hasshe2, 128-bit" }, 
+  { hasshe2_test,        256, 0xF5D39DFE, "hasshe2",     "SSE2 hasshe2, 256-bit" },
 #endif
 #if defined(__SSE4_2__) && defined(__x86_64__)
-  { crc32c_hw_test,       32, 0x3719DB20, "crc32_hw",    "SSE4.2 crc32 in HW" },
+  { crc32c_hw_test,       32, 0x0C7346F0, "crc32_hw",    "SSE4.2 crc32 in HW" },
   { crc64c_hw_test,       64, 0xE7C3FD0E, "crc64_hw",    "SSE4.2 crc64 in HW" },
   { crc32c_hw1_test,      32, 0x0C7346F0, "crc32_hw1",   "Faster Adler SSE4.2 crc32 in HW" },
 #endif

@@ -24,16 +24,13 @@ bool VerificationTest ( pfHash hash, const int hashbits, uint32_t expected, bool
 
   // Hash keys of the form {0}, {0,1}, {0,1,2}... up to N=255,using 256-N as
   // the seed
-
   for(int i = 0; i < 256; i++)
   {
     key[i] = (uint8_t)i;
-
     hash(key,i,256-i,&hashes[i*hashbytes]);
   }
 
   // Then hash the result array
-
   hash(hashes,hashbytes*256,0,final);
 
   // The first four bytes of that hash, interpreted as a little-endian integer, is our
