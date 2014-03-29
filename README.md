@@ -1,8 +1,7 @@
 SMhasher
 ========
 
-| Hash function   |   MiB/sec   | cycles/hash  | Quality problem                |
-|                 |   @ 3 ghz   | 10-byte keys |                                |
+| Hash function   |MiB/sec @ 3 ghz | cycles/hash 10-byte keys | Quality problem |
 |:----------------|------------:|-------------:|--------------------------------|
 | donothing32     | 20620706.92 |        25.82 | overall bad                    |
 | donothing64     | 20489811.27 |        25.43 | overall bad                    |
