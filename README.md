@@ -40,8 +40,10 @@ SMhasher
 | PMurHash32      |     1651.11 |        47.38 |                                |
 
 I added some SSE assisted hashes.
-See [https://code.google.com/p/smhasher/w/list](https://code.google.com/p/smhasher/w/list)
-and [http://bench.cr.yp.to/primitives-hash.html](http://bench.cr.yp.to/primitives-hash.html)
+See [https://code.google.com/p/smhasher/w/list](https://code.google.com/p/smhasher/w/list).
+
+* [http://bench.cr.yp.to/primitives-hash.html](http://bench.cr.yp.to/primitives-hash.html) lists the benchmarks.
+* The [Hash Function Lounge](http://www.larc.usp.br/~pbarreto/hflounge.html) overviews the known weaknesses and attacks.
 
 Hash functions for symbol tables or hash tables typically use 32 bit hashes,
 for databases typically 64 or 128bit, for crypto more than 256 bit.
@@ -49,7 +51,6 @@ for databases typically 64 or 128bit, for crypto more than 256 bit.
 TODO
 ----
 Some popular slower cryptographic hashes or more secure hashes are still missing.
-SipHash, universal hashing, BLAKE2, bcrypt, scrypt.
+Universal hashing, BLAKE2, SHA-2, SHA-3.
 
-The attacks described in https://131002.net/siphash/ against City, Murmur or Perl JenkinsOAAT
-are not yet included here.
+The attacks described in [SipHash](https://131002.net/siphash/) against City, Murmur or Perl JenkinsOAAT or at [Hash Function Lounge](http://www.larc.usp.br/~pbarreto/hflounge.html) are not included here.
