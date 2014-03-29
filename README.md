@@ -43,7 +43,7 @@ I added some SSE assisted hashes.
 See [https://code.google.com/p/smhasher/w/list](https://code.google.com/p/smhasher/w/list)
 and [http://bench.cr.yp.to/primitives-hash.html](http://bench.cr.yp.to/primitives-hash.html)
 
-Hash functions for symbol tables or general functions typically use 32 bit hashes,
+Hash functions for symbol tables or hash tables typically use 32 bit hashes,
 for databases typically 64 or 128bit, for crypto more than 256 bit.
 
 TODO
