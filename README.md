@@ -42,7 +42,7 @@ SMhasher
 I added some SSE assisted hashes.
 See [https://code.google.com/p/smhasher/w/list](https://code.google.com/p/smhasher/w/list).
 
-* [http://bench.cr.yp.to/primitives-hash.html](http://bench.cr.yp.to/primitives-hash.html) lists the benchmarks.
+* [http://bench.cr.yp.to/primitives-hash.html](http://bench.cr.yp.to/primitives-hash.html) lists the benchmarks of all currently tested secure hashes.
 * The [Hash Function Lounge](http://www.larc.usp.br/~pbarreto/hflounge.html) overviews the known weaknesses and attacks.
 
 Hash functions for symbol tables or hash tables typically use 32 bit hashes,
