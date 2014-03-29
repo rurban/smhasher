@@ -39,10 +39,14 @@ IF(SSE4_2_FOUND)
   set(SSE2_SRC "hasshe2.c")
   set(SSE4_SRC "crc32_hw.c")
   set(SSE4_SRC1 "crc32_hw1.c")
+  set(SIPHASH_SRC "siphash_ssse3.c")
 ELSEIF(SSE2_FOUND)
   set(CMAKE_C_FLAGS   "-msse2")
   set(CMAKE_CXX_FLAGS "-msse2")
   set(SSE2_SRC "hasshe2.c")
+  set(SIPHASH_SRC "siphash_sse2.c")
+ELSE()
+  set(SIPHASH_SRC "siphash.c")
 ENDIF(SSE4_2_FOUND)
 
 add_library(
@@ -67,6 +71,7 @@ add_library(
   Platform.cpp
   Random.cpp
   sha1.cpp
+  ${SIPHASH_SRC}
   SpeedTest.cpp
   Spooky.cpp
   SpookyTest.cpp

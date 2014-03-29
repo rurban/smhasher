@@ -276,13 +276,17 @@ void crc32c_hw1_test( const void *input, int len, uint32_t seed, void *out ) {
 }
 #endif
 
-#if defined(__SSSE3__) && defined(__x86_64__)
+extern "C" {
+  uint64_t siphash(const unsigned char key[16], const unsigned char *m, size_t len);
+}
 /* https://github.com/floodyberry/siphash */
 void siphash_test( const void *input, int len, uint32_t seed, void *out ) {
+  unsigned char key[16] = {0,0,0,0,0,0,0,0,
+                           0,0,0,0,0,0,0,0};
   if (!len) {
     *(uint32_t*)out = 0;
     return;
   }
-  *(uint64_t*)out = siphash(seed, input, len);
+  memcpy(key, &seed, sizeof(seed));
+  *(uint64_t*)out = siphash(key, (const unsigned char *)input, (size_t)len);
 }
-#endif

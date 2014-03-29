@@ -76,7 +76,7 @@ HashInfo g_hashes[] =
   { Bernstein,            32, 0xBDB4B640, "bernstein",   "Bernstein, 32-bit" },
   { sdbm,                 32, 0x582AF769, "sdbm",        "sdbm as in perl5" },
   { x17_test,             32, 0x8128E14C, "x17",         "x17" },
-  { JenkinsOOAT,          32, 0xCF8DDE51, "JenkinsOOAT", "Bob Jenkins' old OOAT as in perl5" },
+  { JenkinsOOAT,          32, 0x83E133DA, "JenkinsOOAT", "Bob Jenkins' old OOAT as in perl5" },
   { lookup3_test,         32, 0x3D83917A, "lookup3",     "Bob Jenkins' lookup3" },
   { SuperFastHash,        32, 0x980ACD1D, "superfast",   "Paul Hsieh's SuperFastHash" },
   { MurmurOAAT_test,      32, 0x5363BD98, "MurmurOAAT",  "Murmur one-at-a-time" },
@@ -87,6 +87,7 @@ HashInfo g_hashes[] =
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { CityHashCrc128_test, 128, 0xD4389C97, "CityCrc128",  "Google CityHashCrc128WithSeed SSE4.2" },
 #endif
+  { siphash_test,         64, 0xC58D7F9C, "SipHash",     "SipHash - SSSE3 optimized" },
 
   { SpookyHash32_test,    32, 0x3F798BBB, "Spooky32",    "Bob Jenkins' SpookyHash, 32-bit result" },
   { SpookyHash64_test,    64, 0xA7F955F1, "Spooky64",    "Bob Jenkins' SpookyHash, 64-bit result" },
