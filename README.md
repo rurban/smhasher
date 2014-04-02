@@ -51,6 +51,6 @@ for databases typically 64 or 128bit, for crypto more than 256 bit.
 TODO
 ----
 Some popular slower cryptographic hashes or more secure hashes are still missing.
-Universal hashing, BLAKE2, SHA-2, SHA-3.
+BLAKE2, SHA-2, SHA-3.
 
 The attacks described in [SipHash](https://131002.net/siphash/) against City, Murmur or Perl JenkinsOAAT or at [Hash Function Lounge](http://www.larc.usp.br/~pbarreto/hflounge.html) are not included here.
