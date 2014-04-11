@@ -163,7 +163,7 @@ void sdbm ( const void * key, int len, uint32_t hash, void * out )
   *(uint32_t*)out = hash;
 }
 
-// as used in perl5
+// as used in perl5 as one_at_a_time_hard
 void JenkinsOOAT ( const void * key, int len, uint32_t hash, void * out )
 {
   unsigned char * str = (unsigned char *)key;
@@ -196,6 +196,22 @@ void JenkinsOOAT ( const void * key, int len, uint32_t hash, void * out )
   hash += (hash << 10);
   hash ^= (hash >> 6);
 
+  hash += (hash << 3);
+  hash ^= (hash >> 11);
+  hash = hash + (hash << 15);
+  *(uint32_t*)out = hash;
+}
+
+// as used in perl5 until 5.17 (one_at_a_time_old)
+void JenkinsOOAT_perl ( const void * key, int len, uint32_t hash, void * out )
+{
+  unsigned char * str = (unsigned char *)key;
+  const unsigned char * const end = (const unsigned char *)str + len;
+  while (str < end) {
+    hash += *str++;
+    hash += (hash << 10);
+    hash ^= (hash >> 6);
+  }
   hash += (hash << 3);
   hash ^= (hash >> 11);
   hash = hash + (hash << 15);

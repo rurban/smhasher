@@ -53,6 +53,7 @@ void Bernstein             ( const void * key, int len, uint32_t seed, void * ou
 void sdbm                  ( const void * key, int len, uint32_t seed, void * out );
 void x17_test              ( const void * key, int len, uint32_t seed, void * out );
 void JenkinsOOAT           ( const void * key, int len, uint32_t seed, void * out );
+void JenkinsOOAT_perl      ( const void * key, int len, uint32_t seed, void * out );
 void SuperFastHash         ( const void * key, int len, uint32_t seed, void * out );
 void lookup3_test          ( const void * key, int len, uint32_t seed, void * out );
 void MurmurOAAT_test       ( const void * key, int len, uint32_t seed, void * out );

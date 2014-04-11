@@ -315,3 +315,20 @@ void PMurHash32_test(const void *key, int len, uint32_t seed, void *out)
 }
 
 /*---------------------------------------------------------------------------*/
+#ifdef TEST
+int main() {
+  // http://www.cprover.org/cbmc/
+  // cbmc PMurHash.c --function PMurHash32 --unwind 255 --bounds-check --pointer-check
+  //=> seed=308736u (00000000000001001011011000000000)
+  //   key=INVALID-128 (1000000011111111111111111111111111111111111111111111110101100111)
+  //   len=640
+  // Violated property:
+  //file PMurHash.c line 201 function PMurHash32_Process
+  //dereference failure: object bounds
+  //!(POINTER_OFFSET(ptr) < 0) && OBJECT_SIZE(ptr) >= 1 + POINTER_OFFSET(ptr) || DYNAMIC_OBJECT(ptr)
+
+  uint32_t seed = 308736;
+  unsigned long long key = 0x80fffffffffffd67ULL;
+  PMurHash32(seed, &key, sizeof(key));
+}
+#endif
