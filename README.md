@@ -54,4 +54,12 @@ TODO
 Some popular slower cryptographic hashes or more secure hashes are still missing.
 BLAKE2, SHA-2, SHA-3.
 
-The attacks described in [SipHash](https://131002.net/siphash/) against City, Murmur or Perl JenkinsOAAT or at [Hash Function Lounge](http://www.larc.usp.br/~pbarreto/hflounge.html) are not included here.
+SECURITY
+--------
+
+The attacks described in [SipHash](https://131002.net/siphash/) against City, Murmur or Perl
+JenkinsOAAT or at [Hash Function Lounge](http://www.larc.usp.br/~pbarreto/hflounge.html) are not included here.
+
+Such an attack avoidance cannot not be the problem of the hash function, but the collision resolution scheme.
+You can attack every single hash function, even the best, if you detect the seed, so you need to protect
+your collision handling scheme from the worst-case O(n), i.e. separate chaining with linked lists.
