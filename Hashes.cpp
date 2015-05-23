@@ -170,7 +170,7 @@ void JenkinsOOAT ( const void * key, int len, uint32_t hash, void * out )
   const unsigned char * const end = (const unsigned char *)str + len;
   unsigned char seed[8];
   // note that perl5 adds the seed to the end of key, which looks like cargo cult
-  memcpy(seed,&hash,8);
+  memcpy(seed,&hash,sizeof(hash));
   while (str < end) {
     hash += (hash << 10);
     hash ^= (hash >> 6);
