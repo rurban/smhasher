@@ -76,7 +76,7 @@ HashInfo g_hashes[] =
   { Bernstein,            32, 0xBDB4B640, "bernstein",   "Bernstein, 32-bit" },
   { sdbm,                 32, 0x582AF769, "sdbm",        "sdbm as in perl5" },
   { x17_test,             32, 0x8128E14C, "x17",         "x17" },
-  { JenkinsOOAT,          32, 0x1B110746, "JenkinsOOAT", "Bob Jenkins' OOAT as in perl 5.18" },
+  { JenkinsOOAT,          32, 0x83E133DA, "JenkinsOOAT", "Bob Jenkins' OOAT as in perl 5.18" },
   { JenkinsOOAT_perl,     32, 0xEE05869B, "JenkinsOOAT_perl", "Bob Jenkins' OOAT as in old perl5" },
   { lookup3_test,         32, 0x3D83917A, "lookup3",     "Bob Jenkins' lookup3" },
   { SuperFastHash,        32, 0x980ACD1D, "superfast",   "Paul Hsieh's SuperFastHash" },
@@ -84,8 +84,8 @@ HashInfo g_hashes[] =
   { Crap8_test,           32, 0x743E97A1, "Crap8",       "Crap8" },
 
   { CityHash64_test,      64, 0x25A20825, "City64",      "Google CityHash64WithSeed" },
-  { CityHash128_test,    128, 0x6531F54E, "City128",     "Google CityHash128WithSeed" },
 #if defined(__SSE4_2__) && defined(__x86_64__)
+  { CityHash128_test,    128, 0x6531F54E, "City128",     "Google CityHash128WithSeed" },
   { CityHashCrc128_test, 128, 0xD4389C97, "CityCrc128",  "Google CityHashCrc128WithSeed SSE4.2" },
 #endif
   { siphash_test,         64, 0xC58D7F9C, "SipHash",     "SipHash - SSSE3 optimized" },
