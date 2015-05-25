@@ -79,6 +79,7 @@ add_library(
   SuperFastHash.cpp
   Types.cpp
   PMurHash.c
+  xxhash.c
 )
 
 add_executable(

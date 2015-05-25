@@ -108,6 +108,8 @@ HashInfo g_hashes[] =
   { MurmurHash3_x64_128, 128, 0x6384BA69, "Murmur3F",    "MurmurHash3 for x64, 128-bit" },
 
   { PMurHash32_test,      32, 0xB0F57EE3, "PMurHash32",  "Shane Day's portable-ized MurmurHash3 for x86, 32-bit." },
+  { xxHash32_test,        32, 0xBA88B743, "xxHash32",    "xxHash, 32-bit result" },
+  { xxHash64_test,        64, 0x024B7CF4, "xxHash64",    "xxHash, 64-bit result" },
 };
 
 HashInfo * findHash ( const char * name )
