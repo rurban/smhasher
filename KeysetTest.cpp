@@ -158,7 +158,7 @@ bool SanityTest ( pfHash hash, const int hashbits )
 
 void AppendedZeroesTest ( pfHash hash, const int hashbits )
 {
-  printf("Running sanity check 2");
+  printf("Running sanity check 2 AppendedZeroesTest");
   
   Rand r(173994);
 

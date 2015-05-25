@@ -49,6 +49,9 @@ See [https://code.google.com/p/smhasher/w/list](https://code.google.com/p/smhash
 Hash functions for symbol tables or hash tables typically use 32 bit hashes,
 for databases typically 64 or 128bit, for crypto more than 256 bit.
 
+Typical median key size in perl5 is 20, the most common 4.
+See [github.com/rurban/perl-hash-stats](https://github.com/rurban/perl-hash-stats)
+
 TODO
 ----
 Some popular slower cryptographic hashes or more secure hashes are still missing.
@@ -59,7 +62,9 @@ SECURITY
 
 The attacks described in [SipHash](https://131002.net/siphash/) against City, Murmur or Perl
 JenkinsOAAT or at [Hash Function Lounge](http://www.larc.usp.br/~pbarreto/hflounge.html) are not included here.
+Also missing are \0 attacks with binary keys.
 
 Such an attack avoidance cannot not be the problem of the hash function, but the collision resolution scheme.
-You can attack every single hash function, even the best, if you detect the seed, so you need to protect
-your collision handling scheme from the worst-case O(n), i.e. separate chaining with linked lists.
+You can attack every single hash function, even the best, if you detect the seed, e.g. from the sort-order,
+so you need to protect your collision handling scheme from the worst-case O(n), i.e. separate chaining
+with linked lists. Linked lists chaining is also very cache-unfriendly.
