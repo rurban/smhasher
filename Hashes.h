@@ -6,6 +6,7 @@
 #include "MurmurHash2.h"
 #include "MurmurHash3.h"
 #include "xxhash.h"
+#include "metrohash.h"
 
 //----------
 // These are _not_ hash functions (even though people tend to use crc32 as one...)
@@ -104,12 +105,29 @@ inline void MurmurHash64B_test ( const void * key, int len, uint32_t seed, void 
   *(uint64_t*)out = MurmurHash64B(key,len,seed);
 }
 
-inline void xxHash32_test( const void * key, int len, uint32_t seed, void * out )
-{
+inline void xxHash32_test( const void * key, int len, uint32_t seed, void * out ) {
   *(uint32_t*)out = (uint32_t) XXH32(key, (size_t) len, (unsigned) seed);
 }
 
-inline void xxHash64_test( const void * key, int len, uint32_t seed, void * out )
-{
+inline void xxHash64_test( const void * key, int len, uint32_t seed, void * out ) {
   *(uint64_t*)out = (uint64_t) XXH64(key, (size_t) len, (unsigned long long) seed);
+}
+
+inline void metrohash64_1_test ( const void * key, int len, uint32_t seed, void * out ) {
+  metrohash64_1((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
+}
+inline void metrohash64_2_test ( const void * key, int len, uint32_t seed, void * out ) {
+  metrohash64_2((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
+}
+inline void metrohash128_1_test ( const void * key, int len, uint32_t seed, void * out ) {
+  metrohash128_1((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
+}
+inline void metrohash128_2_test ( const void * key, int len, uint32_t seed, void * out ) {
+  metrohash128_2((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
+}
+inline void metrohash128crc_1_test ( const void * key, int len, uint32_t seed, void * out ) {
+  metrohash128crc_1((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
+}
+inline void metrohash128crc_2_test ( const void * key, int len, uint32_t seed, void * out ) {
+  metrohash128crc_2((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
 }

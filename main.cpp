@@ -110,6 +110,13 @@ HashInfo g_hashes[] =
   { PMurHash32_test,      32, 0xB0F57EE3, "PMurHash32",  "Shane Day's portable-ized MurmurHash3 for x86, 32-bit." },
   { xxHash32_test,        32, 0xBA88B743, "xxHash32",    "xxHash, 32-bit result" },
   { xxHash64_test,        64, 0x024B7CF4, "xxHash64",    "xxHash, 64-bit result" },
+  
+  { metrohash64_1_test,       64, 0xEE88F7D2, "metrohash64_1",     "MetroHash64_1" },
+  { metrohash64_2_test,       64, 0xE1FC7C6E, "metrohash64_2",     "MetroHash64_2" },
+  { metrohash128_1_test,     128, 0x20E8A1D7, "metrohash128_1",    "MetroHash128_1" },
+  { metrohash128_2_test,     128, 0x5437C684, "metrohash128_2",    "MetroHash128_2" },
+  { metrohash128crc_1_test,  128, 0x5E75144E, "metrohash128crc_1", "MetroHash128crc_1" },
+  { metrohash128crc_2_test,  128, 0x1ACF3E77, "metrohash128crc_2", "MetroHash128crc_2" },
 };
 
 HashInfo * findHash ( const char * name )

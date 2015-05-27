@@ -80,6 +80,9 @@ add_library(
   Types.cpp
   PMurHash.c
   xxhash.c
+  metrohash64.cpp
+  metrohash128.cpp
+  metrohash128crc.cpp
 )
 
 add_executable(
