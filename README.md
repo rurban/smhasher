@@ -30,15 +30,24 @@ SMhasher
 | SipHash         |      779.74 |       154.68 |                                |
 | Spooky32        |     9223.07 |        51.10 |                                |
 | Spooky64        |     9189.83 |        52.43 |                                |
-| Spooky128       |     8976.22 |        51.62 |                                |
-| Murmur2         |     3024.36 |        25.93 | 2.42% bias, collisions, 2% distrib |
-| Murmur2A        |     3063.94 |        36.69 | 1.7% bias, 81x coll, 1.7% distrib  |
-| Murmur2B        |     5946.77 |        30.34 | 12.7% bias                     |
-| Murmur2C        |     3883.56 |        33.94 | 1.8% bias, collisions, 3.4% distrib |
-| Murmur3A        |     2343.75 |        34.03 |                                |
-| Murmur3C        |     3046.89 |        63.66 |                                |
-| Murmur3F        |     4952.79 |        43.52 |                                |
-| PMurHash32      |     1651.11 |        47.38 |                                |
+| Spooky128       |     8883.58 |        52.30 |                                |
+| Murmur2         |	    3165.74 |	   30.60 | 2.42% bias, collisions, 2% distrib |
+| Murmur2A        |	    3064.14 |	   37.15 | 1.7% bias, 81x coll, 1.7% distrib  |
+| Murmur2B        |	    5977.77 |	   31.77 | 12.7% bias                     |
+| Murmur2C        |	    4008.20 |	   35.97 | 1.8% bias, collisions, 3.4% distrib |
+| Murmur3A        |	    2282.61 |	   35.11 |                            |
+| Murmur3C        |	    3011.28 |	   66.24 |                            |
+| Murmur3F        |	    4415.51 |	   43.96 |                            |
+| MurmurOAAT      |	     431.89 |	   39.36 | 91% bias, collisions, distr |
+| PMurHash32      |	    1544.64 |	   45.24 |                            |
+| xxHash32        |	    5780.04 |	   35.02 | collisions with 4bit diff  |
+| xxHash64        |	    7909.28 |	   42.33 |                            |
+| metrohash64_1   |	    9305.80 |	   34.34 |                            |
+| metrohash64_2   |	    9303.72 |	   32.81 |                            |
+| metrohash128_1  |	    9281.99 |	   41.60 |                            |
+| metrohash128_2  |	    9202.54 |	   37.06 |                            |
+| metrohash128crc_1 |  13657.21 |	   37.44 |                            |
+| metrohash128crc_2 |  13734.94 |	   38.03 |                            |
 
 I added some SSE assisted hashes.
 See [https://code.google.com/p/smhasher/w/list](https://code.google.com/p/smhasher/w/list).
