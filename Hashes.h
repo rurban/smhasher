@@ -125,6 +125,12 @@ inline void metrohash128_1_test ( const void * key, int len, uint32_t seed, void
 inline void metrohash128_2_test ( const void * key, int len, uint32_t seed, void * out ) {
   metrohash128_2((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
 }
+inline void metrohash64crc_1_test ( const void * key, int len, uint32_t seed, void * out ) {
+  metrohash64crc_1((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
+}
+inline void metrohash64crc_2_test ( const void * key, int len, uint32_t seed, void * out ) {
+  metrohash64crc_2((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
+}
 inline void metrohash128crc_1_test ( const void * key, int len, uint32_t seed, void * out ) {
   metrohash128crc_1((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
 }

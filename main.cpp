@@ -113,10 +113,16 @@ HashInfo g_hashes[] =
   
   { metrohash64_1_test,       64, 0xEE88F7D2, "metrohash64_1",     "MetroHash64_1" },
   { metrohash64_2_test,       64, 0xE1FC7C6E, "metrohash64_2",     "MetroHash64_2" },
+#if defined(__SSE4_2__) && defined(__x86_64__)
+  { metrohash64crc_1_test,    64, 0x29C68A50, "metrohash64crc_1",  "MetroHash64crc_1" },
+  { metrohash64crc_2_test,    64, 0x2C00BD9F, "metrohash64crc_2",  "MetroHash64crc_2" },
+#endif
   { metrohash128_1_test,     128, 0x20E8A1D7, "metrohash128_1",    "MetroHash128_1" },
   { metrohash128_2_test,     128, 0x5437C684, "metrohash128_2",    "MetroHash128_2" },
+#if defined(__SSE4_2__) && defined(__x86_64__)
   { metrohash128crc_1_test,  128, 0x5E75144E, "metrohash128crc_1", "MetroHash128crc_1" },
   { metrohash128crc_2_test,  128, 0x1ACF3E77, "metrohash128crc_2", "MetroHash128crc_2" },
+#endif
 };
 
 HashInfo * findHash ( const char * name )

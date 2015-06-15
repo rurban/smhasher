@@ -3,6 +3,7 @@
 // The MIT License (MIT)
 //
 // Copyright (c) 2015 J. Andrew Rogers
+// Copyright (c) 2015 cPanel Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -28,16 +29,21 @@
 
 #include <stdint.h>
 #include <string.h>
+// TODO: msvc compat
 
 // MetroHash 64-bit hash functions
 void metrohash64_1(const uint8_t * key, uint64_t len, uint32_t seed, uint8_t * out);
 void metrohash64_2(const uint8_t * key, uint64_t len, uint32_t seed, uint8_t * out);
 
+// MetroHash 64-bit hash functions using HW CRC instruction
+void metrohash64crc_1(const uint8_t * key, uint64_t len, uint32_t seed, uint8_t * out);
+void metrohash64crc_2(const uint8_t * key, uint64_t len, uint32_t seed, uint8_t * out);
+
 // MetroHash 128-bit hash functions
 void metrohash128_1(const uint8_t * key, uint64_t len, uint32_t seed, uint8_t * out);
 void metrohash128_2(const uint8_t * key, uint64_t len, uint32_t seed, uint8_t * out);
 
-// MetroHash 128-bit hash functions using CRC instruction
+// MetroHash 128-bit hash functions using HW CRC instruction
 void metrohash128crc_1(const uint8_t * key, uint64_t len, uint32_t seed, uint8_t * out);
 void metrohash128crc_2(const uint8_t * key, uint64_t len, uint32_t seed, uint8_t * out);
 

@@ -39,6 +39,8 @@ IF(SSE4_2_FOUND)
   set(SSE2_SRC "hasshe2.c")
   set(SSE4_SRC "crc32_hw.c")
   set(SSE4_SRC1 "crc32_hw1.c")
+  set(METROCRC64_SRC "metrohash64crc.cpp")
+  set(METROCRC128_SRC "metrohash128crc.cpp")
   set(SIPHASH_SRC "siphash_ssse3.c")
 ELSEIF(SSE2_FOUND)
   set(CMAKE_C_FLAGS   "-msse2")
@@ -82,7 +84,8 @@ add_library(
   xxhash.c
   metrohash64.cpp
   metrohash128.cpp
-  metrohash128crc.cpp
+  ${METROCRC64_SRC} 
+  ${METROCRC128_SRC} 
 )
 
 add_executable(
