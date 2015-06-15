@@ -47,7 +47,7 @@ HashInfo g_hashes[] =
   { DoNothingHash,        64, 0x00000000, "donothing64", "Do-Nothing function (only valid for measuring call overhead)" },
   { DoNothingHash,       128, 0x00000000, "donothing128", "Do-Nothing function (only valid for measuring call overhead)" },
 
-  { crc32,                32, 0x3719DB20, "crc32",       "CRC-32" },
+  { crc32,                32, 0x3719DB20, "crc32",       "CRC-32 soft" },
 
   { md5_32,               32, 0xC10C356B, "md5_32a",     "MD5, first 32 bits of result" },
   { sha1_32a,             32, 0xF9376EA7, "sha1_32a",    "SHA1, first 32 bits of result" },
@@ -69,10 +69,17 @@ HashInfo g_hashes[] =
   { crc64c_hw_test,       64, 0xE7C3FD0E, "crc64_hw",    "SSE4.2 crc64 in HW" },
   { crc32c_hw1_test,      32, 0x0C7346F0, "crc32_hw1",   "Faster Adler SSE4.2 crc32 in HW" },
 #endif
-// elf64 or macho64 bit only
+// elf64 or macho64 only
 //{ fhtw_test,            64, 0x0,        "fhtw",        "fhtw asm" },
   { FNV32a,               32, 0xE3CBBE91, "FNV",         "Fowler-Noll-Vo hash, 32-bit" },
   { FNV64a,               64, 0x103455FC, "FNV64",       "Fowler-Noll-Vo hash, 64-bit" },
+#if 0
+  { fletcher2,            64, 0x0, "fletcher2",  "fletcher2 ZFS"}
+  { fletcher4,            64, 0x0, "fletcher4",  "fletcher4 ZFS"}
+  { Jesteress,            32, 0x0, "Jesteress",  "FNV1a-Jesteress 32-bit sanmayce" },
+  { Meiyan,       	  32, 0x0, "Meiyan",     "FNV1a-Meiyan 32-bit sanmayce" },
+  { YoshimitsuTRIAD,      32, 0x0, "YoshimitsuTRIAD",     " FNV1a-YoshimitsuTRIAD 32-bit sanmayce" },
+#endif
   { Bernstein,            32, 0xBDB4B640, "bernstein",   "Bernstein, 32-bit" },
   { sdbm,                 32, 0x582AF769, "sdbm",        "sdbm as in perl5" },
   { x17_test,             32, 0x8128E14C, "x17",         "x17" },
@@ -83,6 +90,7 @@ HashInfo g_hashes[] =
   { MurmurOAAT_test,      32, 0x5363BD98, "MurmurOAAT",  "Murmur one-at-a-time" },
   { Crap8_test,           32, 0x743E97A1, "Crap8",       "Crap8" },
 
+  { CityHash32_test,      32, 0x5C28AD62, "City32",      "Google CityHash32WithSeed" },
   { CityHash64_test,      64, 0x25A20825, "City64",      "Google CityHash64WithSeed" },
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { CityHash128_test,    128, 0x6531F54E, "City128",     "Google CityHash128WithSeed" },
@@ -95,21 +103,22 @@ HashInfo g_hashes[] =
   { SpookyHash128_test,  128, 0x8D263080, "Spooky128",   "Bob Jenkins' SpookyHash, 128-bit result" },
 
   // MurmurHash2
-
   { MurmurHash2_test,     32, 0x27864C1E, "Murmur2",     "MurmurHash2 for x86, 32-bit" },
   { MurmurHash2A_test,    32, 0x7FBD4396, "Murmur2A",    "MurmurHash2A for x86, 32-bit" },
   { MurmurHash64A_test,   64, 0x1F0D3804, "Murmur2B",    "MurmurHash2 for x64, 64-bit" },
   { MurmurHash64B_test,   64, 0xDD537C05, "Murmur2C",    "MurmurHash2 for x86, 64-bit" },
 
   // MurmurHash3
-
   { MurmurHash3_x86_32,   32, 0xB0F57EE3, "Murmur3A",    "MurmurHash3 for x86, 32-bit" },
   { MurmurHash3_x86_128, 128, 0xB3ECE62A, "Murmur3C",    "MurmurHash3 for x86, 128-bit" },
   { MurmurHash3_x64_128, 128, 0x6384BA69, "Murmur3F",    "MurmurHash3 for x64, 128-bit" },
-
   { PMurHash32_test,      32, 0xB0F57EE3, "PMurHash32",  "Shane Day's portable-ized MurmurHash3 for x86, 32-bit." },
+
   { xxHash32_test,        32, 0xBA88B743, "xxHash32",    "xxHash, 32-bit result" },
   { xxHash64_test,        64, 0x024B7CF4, "xxHash64",    "xxHash, 64-bit result" },
+#if 0
+  { xxhash256_test,       64, 0x024B7CF4, "xxhash256",   "xxhash256, 64-bit result" },
+#endif
   
   { metrohash64_1_test,       64, 0xEE88F7D2, "metrohash64_1",     "MetroHash64_1" },
   { metrohash64_2_test,       64, 0xE1FC7C6E, "metrohash64_2",     "MetroHash64_2" },
@@ -123,6 +132,7 @@ HashInfo g_hashes[] =
   { metrohash128crc_1_test,  128, 0x5E75144E, "metrohash128crc_1", "MetroHash128crc_1" },
   { metrohash128crc_2_test,  128, 0x1ACF3E77, "metrohash128crc_2", "MetroHash128crc_2" },
 #endif
+
 };
 
 HashInfo * findHash ( const char * name )
