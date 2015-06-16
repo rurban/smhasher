@@ -507,54 +507,54 @@ unsigned long long XXH64 (const void* input, size_t len, unsigned long long seed
 }
 
 /* Simplier, older variant added by m^2 Maciej Adamczyk. Unportable */
-void XXH_256(const void* input, size_t len, uint64_t* out)
+void XXH_256(const void* input, size_t len, U64* out)
 {
-    const uint8_t* p = (uint8_t*)input;
-    const uint8_t* const bEnd = p + len;
-    uint64_t v1 = len * PRIME64_1;
-    uint64_t v2 = v1;
-    uint64_t v3 = v1;
-    uint64_t v4 = v1;
+    const BYTE* p = (BYTE*)input;
+    const BYTE* const bEnd = p + len;
+    U64 v1 = len * PRIME64_1;
+    U64 v2 = v1;
+    U64 v3 = v1;
+    U64 v4 = v1;
  
-    const size_t big_loop_step = 4 * 4 * sizeof(uint64_t);
-    const size_t small_loop_step = 4 * sizeof(uint64_t);
+    const size_t big_loop_step = 4 * 4 * sizeof(U64);
+    const size_t small_loop_step = 4 * sizeof(U64);
     // Set the big loop limit early enough, so the well-mixing small loop can be executed twice after it
-    const uint8_t* const big_loop_limit   = bEnd - big_loop_step - 2 * small_loop_step;
-    const uint8_t* const small_loop_limit = bEnd - small_loop_step;
+    const BYTE* const big_loop_limit   = bEnd - big_loop_step - 2 * small_loop_step;
+    const BYTE* const small_loop_limit = bEnd - small_loop_step;
  
     while (p < big_loop_limit)
     {
-        v1 = XXH_rotl64(v1, 29) + (*(uint64_t*)p); p+=sizeof(uint64_t);
-        v2 = XXH_rotl64(v2, 31) + (*(uint64_t*)p); p+=sizeof(uint64_t);
-        v3 = XXH_rotl64(v3, 33) + (*(uint64_t*)p); p+=sizeof(uint64_t);
-        v4 = XXH_rotl64(v4, 35) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v1 = XXH_rotl64(v1, 29) + (*(U64*)p); p+=sizeof(U64);
+        v2 = XXH_rotl64(v2, 31) + (*(U64*)p); p+=sizeof(U64);
+        v3 = XXH_rotl64(v3, 33) + (*(U64*)p); p+=sizeof(U64);
+        v4 = XXH_rotl64(v4, 35) + (*(U64*)p); p+=sizeof(U64);
         v1 += v2 *= PRIME64_1;
-        v1 = XXH_rotl64(v1, 29) + (*(uint64_t*)p); p+=sizeof(uint64_t);
-        v2 = XXH_rotl64(v2, 31) + (*(uint64_t*)p); p+=sizeof(uint64_t);
-        v3 = XXH_rotl64(v3, 33) + (*(uint64_t*)p); p+=sizeof(uint64_t);
-        v4 = XXH_rotl64(v4, 35) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v1 = XXH_rotl64(v1, 29) + (*(U64*)p); p+=sizeof(U64);
+        v2 = XXH_rotl64(v2, 31) + (*(U64*)p); p+=sizeof(U64);
+        v3 = XXH_rotl64(v3, 33) + (*(U64*)p); p+=sizeof(U64);
+        v4 = XXH_rotl64(v4, 35) + (*(U64*)p); p+=sizeof(U64);
         v2 += v3 *= PRIME64_1;
-        v1 = XXH_rotl64(v1, 29) + (*(uint64_t*)p); p+=sizeof(uint64_t);
-        v2 = XXH_rotl64(v2, 31) + (*(uint64_t*)p); p+=sizeof(uint64_t);
-        v3 = XXH_rotl64(v3, 33) + (*(uint64_t*)p); p+=sizeof(uint64_t);
-        v4 = XXH_rotl64(v4, 35) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v1 = XXH_rotl64(v1, 29) + (*(U64*)p); p+=sizeof(U64);
+        v2 = XXH_rotl64(v2, 31) + (*(U64*)p); p+=sizeof(U64);
+        v3 = XXH_rotl64(v3, 33) + (*(U64*)p); p+=sizeof(U64);
+        v4 = XXH_rotl64(v4, 35) + (*(U64*)p); p+=sizeof(U64);
         v3 += v4 *= PRIME64_1;
-        v1 = XXH_rotl64(v1, 29) + (*(uint64_t*)p); p+=sizeof(uint64_t);
-        v2 = XXH_rotl64(v2, 31) + (*(uint64_t*)p); p+=sizeof(uint64_t);
-        v3 = XXH_rotl64(v3, 33) + (*(uint64_t*)p); p+=sizeof(uint64_t);
-        v4 = XXH_rotl64(v4, 35) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v1 = XXH_rotl64(v1, 29) + (*(U64*)p); p+=sizeof(U64);
+        v2 = XXH_rotl64(v2, 31) + (*(U64*)p); p+=sizeof(U64);
+        v3 = XXH_rotl64(v3, 33) + (*(U64*)p); p+=sizeof(U64);
+        v4 = XXH_rotl64(v4, 35) + (*(U64*)p); p+=sizeof(U64);
         v4 += v1 *= PRIME64_1;
     }
  
     while (p < small_loop_limit)
     {
-        v1 = XXH_rotl64(v1, 29) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v1 = XXH_rotl64(v1, 29) + (*(U64*)p); p+=sizeof(U64);
         v2 += v1 *= PRIME64_1;
-        v2 = XXH_rotl64(v2, 31) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v2 = XXH_rotl64(v2, 31) + (*(U64*)p); p+=sizeof(U64);
         v3 += v2 *= PRIME64_1;
-        v3 = XXH_rotl64(v3, 33) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v3 = XXH_rotl64(v3, 33) + (*(U64*)p); p+=sizeof(U64);
         v4 += v3 *= PRIME64_1;
-        v4 = XXH_rotl64(v4, 35) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v4 = XXH_rotl64(v4, 35) + (*(U64*)p); p+=sizeof(U64);
         v1 += v4 *= PRIME64_1;
     }
     XXH_memcpy(out, p, bEnd - p);
