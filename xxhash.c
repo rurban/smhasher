@@ -1,6 +1,7 @@
 /*
 xxHash - Fast Hash algorithm
 Copyright (C) 2012-2014, Yann Collet.
+Copyright (C) 2012, Maciej Adamczyk
 BSD 2-Clause License (http://www.opensource.org/licenses/bsd-license.php)
 
 Redistribution and use in source and binary forms, with or without
@@ -29,6 +30,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 You can contact the author at :
 - xxHash source repository : http://code.google.com/p/xxhash/
 - public discussion board : https://groups.google.com/forum/#!forum/lz4c
+
+This file contains a super-fast hash function for checksumming
+purposes, designed for large (1 KB++) inputs.
+Known limitations:
+    * they use 64-bit math and will not be so fast on 32-bit machines
+    * on architectures that disallow unaligned memory access, the input
+      must be 8-byte aligned. Aligning it on other architectures
+      is not needed, but will improve performance.
+    * it produces different results on big and small endian.
 */
 
 
@@ -494,6 +504,65 @@ unsigned long long XXH64 (const void* input, size_t len, unsigned long long seed
     else
         return XXH64_endian_align(input, len, seed, XXH_bigEndian, XXH_unaligned);
 #endif
+}
+
+/* Simplier, older variant added by m^2 Maciej Adamczyk. Unportable */
+void XXH_256(const void* input, size_t len, uint64_t* out)
+{
+    const uint8_t* p = (uint8_t*)input;
+    const uint8_t* const bEnd = p + len;
+    uint64_t v1 = len * PRIME64_1;
+    uint64_t v2 = v1;
+    uint64_t v3 = v1;
+    uint64_t v4 = v1;
+ 
+    const size_t big_loop_step = 4 * 4 * sizeof(uint64_t);
+    const size_t small_loop_step = 4 * sizeof(uint64_t);
+    // Set the big loop limit early enough, so the well-mixing small loop can be executed twice after it
+    const uint8_t* const big_loop_limit   = bEnd - big_loop_step - 2 * small_loop_step;
+    const uint8_t* const small_loop_limit = bEnd - small_loop_step;
+ 
+    while (p < big_loop_limit)
+    {
+        v1 = XXH_rotl64(v1, 29) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v2 = XXH_rotl64(v2, 31) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v3 = XXH_rotl64(v3, 33) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v4 = XXH_rotl64(v4, 35) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v1 += v2 *= PRIME64_1;
+        v1 = XXH_rotl64(v1, 29) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v2 = XXH_rotl64(v2, 31) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v3 = XXH_rotl64(v3, 33) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v4 = XXH_rotl64(v4, 35) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v2 += v3 *= PRIME64_1;
+        v1 = XXH_rotl64(v1, 29) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v2 = XXH_rotl64(v2, 31) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v3 = XXH_rotl64(v3, 33) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v4 = XXH_rotl64(v4, 35) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v3 += v4 *= PRIME64_1;
+        v1 = XXH_rotl64(v1, 29) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v2 = XXH_rotl64(v2, 31) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v3 = XXH_rotl64(v3, 33) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v4 = XXH_rotl64(v4, 35) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v4 += v1 *= PRIME64_1;
+    }
+ 
+    while (p < small_loop_limit)
+    {
+        v1 = XXH_rotl64(v1, 29) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v2 += v1 *= PRIME64_1;
+        v2 = XXH_rotl64(v2, 31) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v3 += v2 *= PRIME64_1;
+        v3 = XXH_rotl64(v3, 33) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v4 += v3 *= PRIME64_1;
+        v4 = XXH_rotl64(v4, 35) + (*(uint64_t*)p); p+=sizeof(uint64_t);
+        v1 += v4 *= PRIME64_1;
+    }
+    XXH_memcpy(out, p, bEnd - p);
+ 
+    out[0] += v1;
+    out[1] += v2;
+    out[2] += v3;
+    out[3] += v4;
 }
 
 /****************************************************
