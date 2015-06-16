@@ -20,6 +20,8 @@ ELSEIF(CMAKE_SYSTEM_NAME MATCHES "Darwin")
    STRING(REGEX REPLACE "^.*(SSE4.2).*$" "\\1" SSE_THERE ${CPUINFO})
    STRING(COMPARE EQUAL "SSE4.2" "${SSE_THERE}" SSE42_TRUE)
 ENDIF(CMAKE_SYSTEM_NAME MATCHES "Linux")
+# TODO: Windows, BSD and ARM8 crc detection
+# TODO: 32bit filter
 
 IF (SSE2_TRUE)
    set(SSE2_FOUND true CACHE BOOL "SSE2 available")
@@ -38,9 +40,12 @@ IF(SSE4_2_FOUND)
   set(CMAKE_EXE_LINKER_FLAGS "-lpthread")
   set(SSE2_SRC "hasshe2.c")
   set(SSE4_SRC "crc32_hw.c")
+# 64bit only:
+IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
   set(SSE4_SRC1 "crc32_hw1.c")
   set(METROCRC64_SRC "metrohash64crc.cpp")
   set(METROCRC128_SRC "metrohash128crc.cpp")
+ENDIF()
   set(SIPHASH_SRC "siphash_ssse3.c")
 ELSEIF(SSE2_FOUND)
   set(CMAKE_C_FLAGS   "-msse2")
@@ -50,6 +55,10 @@ ELSEIF(SSE2_FOUND)
 ELSE()
   set(SIPHASH_SRC "siphash.c")
 ENDIF(SSE4_2_FOUND)
+
+IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
+  set(X64ONLY_SRC "metrohash64.cpp metrohash128.cpp")
+ENDIF()
 
 add_library(
   SMHasherSupport
@@ -82,8 +91,7 @@ add_library(
   Types.cpp
   PMurHash.c
   xxhash.c
-  metrohash64.cpp
-  metrohash128.cpp
+  ${X64ONLY_SRC}
   ${METROCRC64_SRC} 
   ${METROCRC128_SRC} 
 )
