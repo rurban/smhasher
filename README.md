@@ -53,7 +53,7 @@ SMhasher
 | metrohash128crc_2 |  13734.94 |	   38.03 |                            |
 
 I added some SSE assisted hashes and fast intel/arm CRC32-C HW variants, but not the fastest
-[crcutil](https://code.google.com/p/crcutils/) yet.
+[crcutil](https://code.google.com/p/crcutil/) yet.
 See [https://code.google.com/p/smhasher/w/list](https://code.google.com/p/smhasher/w/list).
 
 * [http://www.strchr.com/hash_functions](http://www.strchr.com/hash_functions) lists other benchmarks and quality of most simple and fast hash functions.
