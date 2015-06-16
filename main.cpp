@@ -12,7 +12,7 @@
 //-----------------------------------------------------------------------------
 // Configuration. TODO - move these to command-line flags
 
-bool g_testAll = false;
+bool g_testAll = true;
 
 bool g_testSanity      = false;
 bool g_testSpeed       = false;
@@ -28,6 +28,29 @@ bool g_testWindow      = false;
 bool g_testText        = false;
 bool g_testZeroes      = false;
 bool g_testSeed        = false;
+
+struct TestOpts {
+  bool         &var;
+  const char*  name;
+};
+TestOpts g_testopts[] =
+{
+  { g_testAll, 		"All" },
+  { g_testSanity, 	"Sanity" },
+  { g_testSpeed, 	"Speed" },
+  { g_testDiff, 	"Diff" },
+  { g_testDiffDist, 	"DiffDist" },
+  { g_testAvalanche, 	"Avalanche" },
+  { g_testBIC, 		"BIC" },
+  { g_testCyclic,	"Cyclic" },
+  { g_testTwoBytes,	"TwoBytes" },
+  { g_testSparse,	"Sparse" },
+  { g_testPermutation,	"Permutation" },
+  { g_testWindow,	"Window" },
+  { g_testText,		"Text" },
+  { g_testZeroes,	"Zeroes" },
+  { g_testSeed,		"Seed" }
+};
 
 //-----------------------------------------------------------------------------
 // This is the list of all hashes that SMHasher can test.
@@ -186,7 +209,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
   const int hashbits = sizeof(hashtype) * 8;
 
   printf("-------------------------------------------------------------------------------\n");
-  printf("--- Testing %s (%s)\n\n",info->name,info->desc);
+  printf("--- Testing %s \"%s\"\n\n",info->name,info->desc);
 
   //-----------------------------------------------------------------------------
   // Sanity tests
@@ -610,16 +633,53 @@ int main ( int argc, char ** argv )
   if(argc < 2)
   {
     printf("No test hash given on command line, testing %s (Murmur3_x86_32).\n", hashToTest);
+    printf("Usage: SMHasher --list or --test=Test1,... Hash\n");
   }
   else
   {
     hashToTest = argv[1];
 
-    if (strcmp(hashToTest,"--list") == 0) {
-      for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++) {
-        printf("%s\t(%s)\n", g_hashes[i].name, g_hashes[i].desc);
+    if (strncmp(hashToTest,"--", 2) == 0) {
+      if (strcmp(hashToTest,"--list") == 0) {
+        for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++) {
+          printf("%s\t(%s)\n", g_hashes[i].name, g_hashes[i].desc);
+        }
+        exit(0);
       }
-      exit(0);
+      /* default: --test=All. comma seperated list of options */
+      if (strncmp(hashToTest,"--test=", 6) == 0) {
+        char *opt = (char *)&hashToTest[7];
+        char *rest = opt;
+        char *p;
+        bool found = false;
+        g_testAll = false;
+        do {
+          if (p = strchr(rest, ',')) {
+            opt = strndup(rest, p-rest);
+            rest = p+1;
+          } else {
+            opt = rest;
+          }
+          for(size_t i = 0; i < sizeof(g_testopts) / sizeof(TestOpts); i++) {
+            if (strcmp(opt, g_testopts[i].name) == 0) {
+              g_testopts[i].var = true; found = true; break;
+            }
+          }
+          if (!found) {
+            printf("Invalid option: --test=%s\n", opt);
+            printf("Valid tests: --test=%s", g_testopts[0].name);
+            for(size_t i = 1; i < sizeof(g_testopts) / sizeof(TestOpts); i++) {
+              printf(",%s", g_testopts[i].name);
+            }
+            printf("\n");
+            exit(0);
+          }
+        } while (p);
+      }
+      if (argc > 2)
+        hashToTest = argv[2];
+      else
+        hashToTest = "murmur3a";
     }
   }
 
@@ -629,24 +689,7 @@ int main ( int argc, char ** argv )
 
   int timeBegin = clock();
 
-  g_testAll = true;
-
-  //g_testSanity = true;
-  g_testSpeed = true;
-  //g_testAvalanche = true;
-  //g_testBIC = true;
-  //g_testCyclic = true;
-  //g_testTwoBytes = true;
-  //g_testDiff = true;
-  //g_testDiffDist = true;
-  //g_testSparse = true;
-  g_testPermutation = true;
-  //g_testWindow = true;
-  //g_testZeroes = true;
-
   testHash(hashToTest);
-
-  //----------
 
   int timeEnd = clock();
 
