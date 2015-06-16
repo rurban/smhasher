@@ -24,6 +24,7 @@ SMhasher
 | superfast       |     1532.52 |        34.72 | 28% bias, collisions, 30% distr |
 | MurmurOAAT      |      431.89 |        39.36 | 91% bias, 5273.01x collisions, 37% distr |
 | Crap8           |     3064.24 |        23.01 | collisions, 99.998% distr      |
+| City32          |     3397.98 |        34.87 |                                |
 | City64          |     9678.77 |        30.13 | 2 minor collisions             |
 | City128         |     9750.69 |        46.78 |                                |
 | CityCrc128      |    12871.94 |        56.12 |                                |
@@ -44,19 +45,22 @@ SMhasher
 | xxHash64        |	    7909.28 |	   42.33 |                            |
 | metrohash64_1   |	    9305.80 |	   34.34 |                            |
 | metrohash64_2   |	    9303.72 |	   32.81 |                            |
+| metrohash64crc_1 |   14215.93 |	   25.77 | cyclic collisions with 8 byte |
+| metrohash64crc_2 |   13538.51 |	   31.93 | cyclic collisions with 8 byte |
 | metrohash128_1  |	    9281.99 |	   41.60 |                            |
 | metrohash128_2  |	    9202.54 |	   37.06 |                            |
 | metrohash128crc_1 |  13657.21 |	   37.44 |                            |
 | metrohash128crc_2 |  13734.94 |	   38.03 |                            |
 
-I added some SSE assisted hashes.
+I added some SSE assisted hashes and fast intel/arm CRC32-C HW variants.
 See [https://code.google.com/p/smhasher/w/list](https://code.google.com/p/smhasher/w/list).
 
+* [http://www.strchr.com/hash_functions](http://www.strchr.com/hash_functions) lists other benchmarks and quality of most simple and fast hash functions.
 * [http://bench.cr.yp.to/primitives-hash.html](http://bench.cr.yp.to/primitives-hash.html) lists the benchmarks of all currently tested secure hashes.
 * The [Hash Function Lounge](http://www.larc.usp.br/~pbarreto/hflounge.html) overviews the known weaknesses and attacks.
 
 Hash functions for symbol tables or hash tables typically use 32 bit hashes,
-for databases typically 64 or 128bit, for crypto more than 256 bit.
+for databases and file systems typically 64 or 128bit, for crypto more than 256 bit.
 
 Typical median key size in perl5 is 20, the most common 4.
 See [github.com/rurban/perl-hash-stats](https://github.com/rurban/perl-hash-stats)
