@@ -70,7 +70,7 @@ bool VerificationTest ( pfHash hash, const int hashbits, uint32_t expected, bool
 
 bool SanityTest ( pfHash hash, const int hashbits )
 {
-  printf("Running sanity check 1");
+  printf("Running sanity check 1    ");
   
   Rand r(883741);
 
@@ -158,7 +158,7 @@ bool SanityTest ( pfHash hash, const int hashbits )
 
 void AppendedZeroesTest ( pfHash hash, const int hashbits )
 {
-  printf("Running sanity check 2 AppendedZeroesTest");
+  printf("Running AppendedZeroesTest");
   
   Rand r(173994);
 
