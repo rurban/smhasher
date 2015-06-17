@@ -52,6 +52,10 @@ SMhasher
 | metrohash128crc_1 |  13657.21 |        37.44 |                            |
 | metrohash128crc_2 |  13734.94 |        38.03 |                            |
 
+
+Summary
+-----
+
 I added some SSE assisted hashes and fast intel/arm CRC32-C HW variants, but not the fastest
 [crcutil](https://code.google.com/p/crcutil/) yet. See [our crcutil results](https://github.com/rurban/smhasher/blob/master/doc/crcutil).
 See also the old [https://code.google.com/p/smhasher/w/list](https://code.google.com/p/smhasher/w/list).
@@ -63,15 +67,18 @@ So the fastest hash functions on x86_64 without quality problems are:
 * xxHash64
 * City
 
-* [http://www.strchr.com/hash_functions](http://www.strchr.com/hash_functions) lists other benchmarks and quality of most simple and fast hash functions.
-* [http://bench.cr.yp.to/primitives-hash.html](http://bench.cr.yp.to/primitives-hash.html) lists the benchmarks of all currently tested secure hashes.
-* The [Hash Function Lounge](http://www.larc.usp.br/~pbarreto/hflounge.html) overviews the known weaknesses and attacks.
-
 Hash functions for symbol tables or hash tables typically use 32 bit hashes,
 for databases and file systems typically 64 or 128bit, for crypto now starting with 256 bit.
 
 Typical median key size in perl5 is 20, the most common 4.
 See [github.com/rurban/perl-hash-stats](https://github.com/rurban/perl-hash-stats)
+
+Other
+-----
+
+* [http://www.strchr.com/hash_functions](http://www.strchr.com/hash_functions) lists other benchmarks and quality of most simple and fast hash functions.
+* [http://bench.cr.yp.to/primitives-hash.html](http://bench.cr.yp.to/primitives-hash.html) lists the benchmarks of all currently tested secure hashes.
+* The [Hash Function Lounge](http://www.larc.usp.br/~pbarreto/hflounge.html) overviews the known weaknesses and attacks.
 
 TODO
 ----
