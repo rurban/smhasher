@@ -113,12 +113,18 @@ HashInfo g_hashes[] =
   { MurmurOAAT_test,      32, 0x5363BD98, "MurmurOAAT",  "Murmur one-at-a-time" },
   { Crap8_test,           32, 0x743E97A1, "Crap8",       "Crap8" },
 
-  { CityHash32_test,      32, 0x5C28AD62, "City32",      "Google CityHash32WithSeed" },
-  { CityHash64_test,      64, 0x25A20825, "City64",      "Google CityHash64WithSeed" },
+  { CityHash32_test,      32, 0x5C28AD62, "City32",      "Google CityHash32WithSeed (old)" },
+  { CityHash64_test,      64, 0x25A20825, "City64",      "Google CityHash64WithSeed (old)" },
 #if defined(__SSE4_2__) && defined(__x86_64__)
-  { CityHash128_test,    128, 0x6531F54E, "City128",     "Google CityHash128WithSeed" },
-  { CityHashCrc128_test, 128, 0xD4389C97, "CityCrc128",  "Google CityHashCrc128WithSeed SSE4.2" },
+  { CityHash128_test,    128, 0x6531F54E, "City128",     "Google CityHash128WithSeed (old)" },
+  { CityHashCrc128_test, 128, 0xD4389C97, "CityCrc128",  "Google CityHashCrc128WithSeed SSE4.2 (old)" },
 #endif
+#if defined(__x86_64__)
+  { FarmHash32_test,      32, 0x2E226C14, "FarmHash32",  "Google FarmHash32WithSeed" },
+  { FarmHash64_test,      64, 0x35F84A93, "FarmHash64",  "Google FarmHash64WithSeed" },
+  { FarmHash128_test,    128, 0x9E636AAE, "FarmHash128", "Google FarmHash128WithSeed" },
+#endif
+
   { siphash_test,         64, 0xC58D7F9C, "SipHash",     "SipHash - SSSE3 optimized" },
 
   { SpookyHash32_test,    32, 0x3F798BBB, "Spooky32",    "Bob Jenkins' SpookyHash, 32-bit result" },

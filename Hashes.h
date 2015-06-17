@@ -5,6 +5,7 @@
 #include "MurmurHash1.h"
 #include "MurmurHash2.h"
 #include "MurmurHash3.h"
+
 #if defined(__x86_64__)
 #include "xxhash.h"
 #include "metrohash.h"
@@ -62,9 +63,13 @@ void SuperFastHash         ( const void * key, int len, uint32_t seed, void * ou
 void lookup3_test          ( const void * key, int len, uint32_t seed, void * out );
 void MurmurOAAT_test       ( const void * key, int len, uint32_t seed, void * out );
 void Crap8_test            ( const void * key, int len, uint32_t seed, void * out );
+
 void CityHash32_test       ( const void * key, int len, uint32_t seed, void * out );
 void CityHash64_test       ( const void * key, int len, uint32_t seed, void * out );
 void CityHash128_test      ( const void * key, int len, uint32_t seed, void * out );
+void FarmHash32_test       ( const void * key, int len, uint32_t seed, void * out );
+void FarmHash64_test       ( const void * key, int len, uint32_t seed, void * out );
+void FarmHash128_test      ( const void * key, int len, uint32_t seed, void * out );
 
 void SpookyHash32_test     ( const void * key, int len, uint32_t seed, void * out );
 void SpookyHash64_test     ( const void * key, int len, uint32_t seed, void * out );
@@ -139,4 +144,5 @@ inline void metrohash128crc_1_test ( const void * key, int len, uint32_t seed, v
 inline void metrohash128crc_2_test ( const void * key, int len, uint32_t seed, void * out ) {
   metrohash128crc_2((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
 }
+
 #endif

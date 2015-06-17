@@ -24,29 +24,33 @@ SMhasher
 | superfast       |     1532.52 |        34.72 | 28% bias, collisions, 30% distr |
 | MurmurOAAT      |      431.89 |        39.36 | 91% bias, 5273.01x collisions, 37% distr |
 | Crap8           |     3064.24 |        23.01 | collisions, 99.998% distr      |
-| City32          |     3397.98 |        34.87 |                                |
-| City64          |     9678.77 |        30.13 | 2 minor collisions             |
-| City128         |     9750.69 |        46.78 |                                |
-| CityCrc128      |    12871.94 |        56.12 |                                |
-| SipHash         |      779.74 |       154.68 |                                |
-| Spooky32        |     9223.07 |        51.10 |                                |
-| Spooky64        |     9189.83 |        52.43 |                                |
-| Spooky128       |     8883.58 |        52.30 |                                |
 | Murmur2         |	    3165.74 |        30.60 | 2.42% bias, collisions, 2% distrib |
 | Murmur2A        |	    3064.14 |        37.15 | 1.7% bias, 81x coll, 1.7% distrib  |
 | Murmur2B        |	    5977.77 |        31.77 | 12.7% bias                     |
 | Murmur2C        |	    4008.20 |        35.97 | 1.8% bias, collisions, 3.4% distrib |
+| MurmurOAAT      |	     431.89 |        39.36 | 91% bias, collisions, distr    |
+
+| PMurHash32      |	    1544.64 |        45.24 |                            |
 | Murmur3A        |	    2282.61 |        35.11 |                            |
 | Murmur3C        |	    3011.28 |        66.24 |                            |
 | Murmur3F        |	    4415.51 |        43.96 |                            |
-| MurmurOAAT      |	     431.89 |        39.36 | 91% bias, collisions, distr |
-| PMurHash32      |	    1544.64 |        45.24 |                            |
+| City32          |     3397.98 |        34.87 |                            |
+| City64          |     9678.77 |        30.13 | 2 minor collisions         |
+| City128         |     9750.69 |        46.78 |                            |
+| CityCrc128      |    12871.94 |        56.12 |                            |
+| FarmHash32      |    12852.46 |        27.88 |                            |
+| FarmHash64      |    14164.64 |        29.82 |                            |
+| FarmHash128     |    16153.90 |        44.99 |                            |
+| SipHash         |      779.74 |       154.68 |                            |
+| Spooky32        |     9223.07 |        51.10 |                            |
+| Spooky64        |     9189.83 |        52.43 |                            |
+| Spooky128       |     8883.58 |        52.30 |                            |
 | xxHash32        |	    5780.04 |        35.02 | collisions with 4bit diff  |
 | xxHash64        |	    7909.28 |        42.33 |                            |
 | metrohash64_1   |	    9305.80 |        34.34 |                            |
 | metrohash64_2   |	    9303.72 |        32.81 |                            |
-| metrohash64crc_1 |   14215.93 |        25.77 | cyclic collisions with 8 byte |
-| metrohash64crc_2 |   13538.51 |        31.93 | cyclic collisions with 8 byte |
+| metrohash64crc_1 |   14215.93 |        25.77 | cyclic collisions 8 byte   |
+| metrohash64crc_2 |   13538.51 |        31.93 | cyclic collisions 8 byte   |
 | metrohash128_1  |	    9281.99 |        41.60 |                            |
 | metrohash128_2  |	    9202.54 |        37.06 |                            |
 | metrohash128crc_1 |  13657.21 |        37.44 |                            |
@@ -62,10 +66,11 @@ See also the old [https://code.google.com/p/smhasher/w/list](https://code.google
 
 So the fastest hash functions on x86_64 without quality problems are:
 
-* Metro
+* FarmHash
+* Metro (_but not 64crc yet, WIP_)
 * Spooky32
 * xxHash64
-* City
+* City (_deprecated_)
 
 Hash functions for symbol tables or hash tables typically use 32 bit hashes,
 for databases and file systems typically 64 or 128bit, for crypto now starting with 256 bit.
