@@ -34,8 +34,8 @@ SMhasher
 | Murmur3C        	|      4582.45	|    40.56 |                            |
 | Murmur3F        	|      7037.66	|    37.38 |                            |
 | City32          	|      6346.17	|    31.20 |                            |
-| City64          	|     13460.57	|    26.14 |                            |
-| City128         	|     14991.24	|    38.59 | 2 minor collisions         |
+| City64          	|     13460.57	|    26.14 | 2 minor collisions         |
+| City128         	|     14991.24	|    38.59 |                            |
 | CityCrc128      	|     19300.94	|    43.58 |                            |
 | FarmHash32      	|     12815.77	|    27.31 |                            |
 | FarmHash64      	|     13597.07	|    29.48 |                            |
@@ -44,14 +44,14 @@ SMhasher
 | Spooky32        	|     13288.56	|    38.45 |                            |
 | Spooky64        	|     13886.73	|    39.80 |                            |
 | Spooky128       	|     13176.36	|    38.66 |                            |
-| xxHash32        	|      7004.33	|    27.37 |                            |
-| xxHash64        	|     13965.82	|    31.50 | collisions with 4bit diff  |
+| xxHash32        	|      7004.33	|    27.37 | collisions with 4bit diff  |
+| xxHash64        	|     13965.82	|    31.50 |                            |
 | metrohash64_1   	|     14624.06	|    26.78 |                            |
 | metrohash64_2   	|     14639.30	|    23.61 |                            |
 | metrohash128_1  	|     14706.25	|    29.63 |                            |
-| metrohash128_2  	|     15246.65	|    26.99 | cyclic collisions 8 byte   |
+| metrohash128_2  	|     15246.65	|    26.99 |                            |
 | metrohash64crc_1	|     28287.41	|    23.27 | cyclic collisions 8 byte   |
-| metrohash64crc_2	|     28552.97	|    23.09 |                            |
+| metrohash64crc_2	|     28552.97	|    23.09 | cyclic collisions 8 byte   |
 | metrohash128crc_1	|     27701.39	|    25.58 |                            |
 | metrohash128crc_2	|     25736.80	|    25.84 |                            |
 
