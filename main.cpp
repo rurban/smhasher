@@ -235,15 +235,14 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
     BulkSpeedTest(info->hash,info->verification);
     printf("\n");
+    double sum = 0.0;
 
     for(int i = 1; i < 32; i++)
     {
-      double cycles;
-
-      TinySpeedTest(hashfunc<hashtype>(info->hash),sizeof(hashtype),i,info->verification,true,cycles);
+      sum += TinySpeedTest(hashfunc<hashtype>(info->hash),sizeof(hashtype),i,info->verification,true);
     }
-
-    printf("\n");
+    sum = sum / 32.0;
+    printf("Average                                    %6.3f cycles/hash\n",sum);
   }
 
   //-----------------------------------------------------------------------------
@@ -338,12 +337,15 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
     bool result = true;
     bool drawDiagram = false;
 
+#if 0
+    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+0,8,100000,drawDiagram);
+#else
     result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+0,8,10000000,drawDiagram);
     result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+1,8,10000000,drawDiagram);
     result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+2,8,10000000,drawDiagram);
     result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+3,8,10000000,drawDiagram);
     result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+4,8,10000000,drawDiagram);
-
+#endif
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
   }
@@ -630,15 +632,14 @@ void testHash ( const char * name )
 
 int main ( int argc, char ** argv )
 {
-  const char * hashToTest = "murmur3a";
+  const char * defaulthash = "metrohash64crc_1"; /* "murmur3a"; */
+  const char * hashToTest = defaulthash;
 
-  if(argc < 2)
-  {
-    printf("No test hash given on command line, testing %s (Murmur3_x86_32).\n", hashToTest);
-    printf("Usage: SMHasher --list or --test=Test1,... Hash\n");
+  if(argc < 2) {
+    printf("No test hash given on command line, testing %s.\n", hashToTest);
+    printf("Usage: SMHasher --list or --test=Speed,... hash\n");
   }
-  else
-  {
+  else {
     hashToTest = argv[1];
 
     if (strncmp(hashToTest,"--", 2) == 0) {
@@ -681,7 +682,7 @@ int main ( int argc, char ** argv )
       if (argc > 2)
         hashToTest = argv[2];
       else
-        hashToTest = "murmur3a";
+        hashToTest = defaulthash;
     }
   }
 

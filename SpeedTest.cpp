@@ -214,6 +214,7 @@ void BulkSpeedTest ( pfHash hash, uint32_t seed )
   const int blocksize = 256 * 1024;
 
   printf("Bulk speed test - %d-byte keys\n",blocksize);
+  double sumbpc = 0.0;
 
   for(int align = 0; align < 8; align++)
   {
@@ -223,12 +224,15 @@ void BulkSpeedTest ( pfHash hash, uint32_t seed )
     
     double bestbps = (bestbpc * 3000000000.0 / 1048576.0);
     printf("Alignment %2d - %6.3f bytes/cycle - %7.2f MiB/sec @ 3 ghz\n",align,bestbpc,bestbps);
+    sumbpc += bestbpc;
   }
+  sumbpc = sumbpc / 8.0;
+  printf("Average      - %6.3f bytes/cycle - %7.2f MiB/sec @ 3 ghz\n",sumbpc,(sumbpc * 3000000000.0 / 1048576.0));
 }
 
 //-----------------------------------------------------------------------------
 
-void TinySpeedTest ( pfHash hash, int hashsize, int keysize, uint32_t seed, bool verbose, double & /*outCycles*/ )
+double TinySpeedTest ( pfHash hash, int hashsize, int keysize, uint32_t seed, bool verbose )
 {
   const int trials = 999999;
 
@@ -236,7 +240,8 @@ void TinySpeedTest ( pfHash hash, int hashsize, int keysize, uint32_t seed, bool
   
   double cycles = SpeedTest(hash,seed,trials,keysize,0);
   
-  printf("%8.2f cycles/hash\n",cycles);  
+  printf("%8.2f cycles/hash\n",cycles);
+  return cycles;
 }
 
 //-----------------------------------------------------------------------------
