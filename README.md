@@ -1,7 +1,7 @@
 SMhasher
 ========
 
-| Hash function   |MiB/sec @ 3 ghz | cycles/hash 10-byte keys | Quality problem |
+| Hash function   |MiB/sec @ 3ghz| cycles/hash | Quality problems             |
 |:----------------|------------:|-------------:|--------------------------------|
 | donothing32     | 20620706.92 |        25.82 | overall bad                    |
 | donothing64     | 20489811.27 |        25.43 | overall bad                    |
@@ -32,53 +32,68 @@ SMhasher
 | Spooky32        |     9223.07 |        51.10 |                                |
 | Spooky64        |     9189.83 |        52.43 |                                |
 | Spooky128       |     8883.58 |        52.30 |                                |
-| Murmur2         |	    3165.74 |	   30.60 | 2.42% bias, collisions, 2% distrib |
-| Murmur2A        |	    3064.14 |	   37.15 | 1.7% bias, 81x coll, 1.7% distrib  |
-| Murmur2B        |	    5977.77 |	   31.77 | 12.7% bias                     |
-| Murmur2C        |	    4008.20 |	   35.97 | 1.8% bias, collisions, 3.4% distrib |
-| Murmur3A        |	    2282.61 |	   35.11 |                            |
-| Murmur3C        |	    3011.28 |	   66.24 |                            |
-| Murmur3F        |	    4415.51 |	   43.96 |                            |
-| MurmurOAAT      |	     431.89 |	   39.36 | 91% bias, collisions, distr |
-| PMurHash32      |	    1544.64 |	   45.24 |                            |
-| xxHash32        |	    5780.04 |	   35.02 | collisions with 4bit diff  |
-| xxHash64        |	    7909.28 |	   42.33 |                            |
-| metrohash64_1   |	    9305.80 |	   34.34 |                            |
-| metrohash64_2   |	    9303.72 |	   32.81 |                            |
-| metrohash64crc_1 |   14215.93 |	   25.77 | cyclic collisions with 8 byte |
-| metrohash64crc_2 |   13538.51 |	   31.93 | cyclic collisions with 8 byte |
-| metrohash128_1  |	    9281.99 |	   41.60 |                            |
-| metrohash128_2  |	    9202.54 |	   37.06 |                            |
-| metrohash128crc_1 |  13657.21 |	   37.44 |                            |
-| metrohash128crc_2 |  13734.94 |	   38.03 |                            |
+| Murmur2         |	    3165.74 |        30.60 | 2.42% bias, collisions, 2% distrib |
+| Murmur2A        |	    3064.14 |        37.15 | 1.7% bias, 81x coll, 1.7% distrib  |
+| Murmur2B        |	    5977.77 |        31.77 | 12.7% bias                     |
+| Murmur2C        |	    4008.20 |        35.97 | 1.8% bias, collisions, 3.4% distrib |
+| Murmur3A        |	    2282.61 |        35.11 |                            |
+| Murmur3C        |	    3011.28 |        66.24 |                            |
+| Murmur3F        |	    4415.51 |        43.96 |                            |
+| MurmurOAAT      |	     431.89 |        39.36 | 91% bias, collisions, distr |
+| PMurHash32      |	    1544.64 |        45.24 |                            |
+| xxHash32        |	    5780.04 |        35.02 | collisions with 4bit diff  |
+| xxHash64        |	    7909.28 |        42.33 |                            |
+| metrohash64_1   |	    9305.80 |        34.34 |                            |
+| metrohash64_2   |	    9303.72 |        32.81 |                            |
+| metrohash64crc_1 |   14215.93 |        25.77 | cyclic collisions with 8 byte |
+| metrohash64crc_2 |   13538.51 |        31.93 | cyclic collisions with 8 byte |
+| metrohash128_1  |	    9281.99 |        41.60 |                            |
+| metrohash128_2  |	    9202.54 |        37.06 |                            |
+| metrohash128crc_1 |  13657.21 |        37.44 |                            |
+| metrohash128crc_2 |  13734.94 |        38.03 |                            |
 
 I added some SSE assisted hashes and fast intel/arm CRC32-C HW variants, but not the fastest
-[crcutil](https://code.google.com/p/crcutil/) yet.
-See [https://code.google.com/p/smhasher/w/list](https://code.google.com/p/smhasher/w/list).
+[crcutil](https://code.google.com/p/crcutil/) yet. See [our crcutil results](https://github.com/rurban/smhasher/blob/master/doc/crcutil).
+See also the old [https://code.google.com/p/smhasher/w/list](https://code.google.com/p/smhasher/w/list).
+
+So the fastest hash functions on x86_64 without quality problems are:
+
+* Metro
+* Spooky32
+* xxHash64
+* City
 
 * [http://www.strchr.com/hash_functions](http://www.strchr.com/hash_functions) lists other benchmarks and quality of most simple and fast hash functions.
 * [http://bench.cr.yp.to/primitives-hash.html](http://bench.cr.yp.to/primitives-hash.html) lists the benchmarks of all currently tested secure hashes.
 * The [Hash Function Lounge](http://www.larc.usp.br/~pbarreto/hflounge.html) overviews the known weaknesses and attacks.
 
 Hash functions for symbol tables or hash tables typically use 32 bit hashes,
-for databases and file systems typically 64 or 128bit, for crypto more than 256 bit.
+for databases and file systems typically 64 or 128bit, for crypto now starting with 256 bit.
 
 Typical median key size in perl5 is 20, the most common 4.
 See [github.com/rurban/perl-hash-stats](https://github.com/rurban/perl-hash-stats)
 
 TODO
 ----
-Some popular slower cryptographic hashes or more secure hashes are still missing.
-BLAKE2, SHA-2, SHA-3.
+
+Some popular SSE-improved FNV1 (_sanmayce_) variants, fletcher (_ZFS_), FarmHash, ...
+and slower cryptographic hashes or more secure hashes are still
+missing. BLAKE2, SHA-2, SHA-3 (Keccak), Grøstl, JH, Skein, ...
 
 SECURITY
 --------
 
-The attacks described in [SipHash](https://131002.net/siphash/) against City, Murmur or Perl
-JenkinsOAAT or at [Hash Function Lounge](http://www.larc.usp.br/~pbarreto/hflounge.html) are not included here.
-Also missing are \0 attacks with binary keys.
+The hash table attacks described in
+[SipHash](https://131002.net/siphash/) against City, Murmur or Perl
+JenkinsOAAT or at
+[Hash Function Lounge](http://www.larc.usp.br/~pbarreto/hflounge.html)
+are not included here.
 
-Such an attack avoidance cannot not be the problem of the hash function, but the collision resolution scheme.
-You can attack every single hash function, even the best, if you detect the seed, e.g. from the sort-order,
-so you need to protect your collision handling scheme from the worst-case O(n), i.e. separate chaining
-with linked lists. Linked lists chaining is also very cache-unfriendly.
+Such an attack avoidance cannot not be the problem of the hash
+function, but the hash table collision resolution scheme.  You can
+attack every single hash function, even the best, if you detect the
+seed, e.g. from the sort-order, so you need to protect your collision
+handling scheme from the worst-case O(n), i.e. separate chaining with
+linked lists. Linked lists chaining is also very cache-unfriendly.
+
+The '\0' vulnerability attack with binary keys is tested in the 2nd Sanity test.
