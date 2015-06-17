@@ -66,6 +66,7 @@ struct HashInfo
 
 HashInfo g_hashes[] =
 {
+  // first the bad hash funcs, failing tests:
   { DoNothingHash,        32, 0x00000000, "donothing32", "Do-Nothing function (only valid for measuring call overhead)" },
   { DoNothingHash,        64, 0x00000000, "donothing64", "Do-Nothing function (only valid for measuring call overhead)" },
   { DoNothingHash,       128, 0x00000000, "donothing128", "Do-Nothing function (only valid for measuring call overhead)" },
@@ -97,8 +98,8 @@ HashInfo g_hashes[] =
   { FNV32a,               32, 0xE3CBBE91, "FNV",         "Fowler-Noll-Vo hash, 32-bit" },
   { FNV64a,               64, 0x103455FC, "FNV64",       "Fowler-Noll-Vo hash, 64-bit" },
 #if 0
-  { fletcher2,            64, 0x0, "fletcher2",  "fletcher2 ZFS"}
-  { fletcher4,            64, 0x0, "fletcher4",  "fletcher4 ZFS"}
+  { fletcher2,            64, 0x0, "fletcher2",  "fletcher2 ZFS"} //TODO
+  { fletcher4,            64, 0x0, "fletcher4",  "fletcher4 ZFS"} //TODO
   { Jesteress,            32, 0x0, "Jesteress",  "FNV1a-Jesteress 32-bit sanmayce" },
   { Meiyan,       	  32, 0x0, "Meiyan",     "FNV1a-Meiyan 32-bit sanmayce" },
   { YoshimitsuTRIAD,      32, 0x0, "YoshimitsuTRIAD",     " FNV1a-YoshimitsuTRIAD 32-bit sanmayce" },
@@ -112,7 +113,20 @@ HashInfo g_hashes[] =
   { SuperFastHash,        32, 0x980ACD1D, "superfast",   "Paul Hsieh's SuperFastHash" },
   { MurmurOAAT_test,      32, 0x5363BD98, "MurmurOAAT",  "Murmur one-at-a-time" },
   { Crap8_test,           32, 0x743E97A1, "Crap8",       "Crap8" },
+  { MurmurHash2_test,     32, 0x27864C1E, "Murmur2",     "MurmurHash2 for x86, 32-bit" },
+  { MurmurHash2A_test,    32, 0x7FBD4396, "Murmur2A",    "MurmurHash2A for x86, 32-bit" },
+#if defined(__x86_64__)
+  { MurmurHash64A_test,   64, 0x1F0D3804, "Murmur2B",    "MurmurHash2 for x64, 64-bit" },
+#endif
+  { MurmurHash64B_test,   64, 0xDD537C05, "Murmur2C",    "MurmurHash2 for x86, 64-bit" },
 
+  // and now the quality hash funcs, which mostly work
+  { PMurHash32_test,      32, 0xB0F57EE3, "PMurHash32",  "Shane Day's portable-ized MurmurHash3 for x86, 32-bit." },
+  { MurmurHash3_x86_32,   32, 0xB0F57EE3, "Murmur3A",    "MurmurHash3 for x86, 32-bit" },
+  { MurmurHash3_x86_128, 128, 0xB3ECE62A, "Murmur3C",    "MurmurHash3 for x86, 128-bit" },
+#if defined(__x86_64__)
+  { MurmurHash3_x64_128, 128, 0x6384BA69, "Murmur3F",    "MurmurHash3 for x64, 128-bit" },
+#endif
   { CityHash32_test,      32, 0x5C28AD62, "City32",      "Google CityHash32WithSeed (old)" },
   { CityHash64_test,      64, 0x25A20825, "City64",      "Google CityHash64WithSeed (old)" },
 #if defined(__SSE4_2__) && defined(__x86_64__)
@@ -124,29 +138,10 @@ HashInfo g_hashes[] =
   { FarmHash64_test,      64, 0x35F84A93, "FarmHash64",  "Google FarmHash64WithSeed" },
   { FarmHash128_test,    128, 0x9E636AAE, "FarmHash128", "Google FarmHash128WithSeed" },
 #endif
-
   { siphash_test,         64, 0xC58D7F9C, "SipHash",     "SipHash - SSSE3 optimized" },
-
   { SpookyHash32_test,    32, 0x3F798BBB, "Spooky32",    "Bob Jenkins' SpookyHash, 32-bit result" },
   { SpookyHash64_test,    64, 0xA7F955F1, "Spooky64",    "Bob Jenkins' SpookyHash, 64-bit result" },
   { SpookyHash128_test,  128, 0x8D263080, "Spooky128",   "Bob Jenkins' SpookyHash, 128-bit result" },
-
-  // MurmurHash2
-  { MurmurHash2_test,     32, 0x27864C1E, "Murmur2",     "MurmurHash2 for x86, 32-bit" },
-  { MurmurHash2A_test,    32, 0x7FBD4396, "Murmur2A",    "MurmurHash2A for x86, 32-bit" },
-#if defined(__x86_64__)
-  { MurmurHash64A_test,   64, 0x1F0D3804, "Murmur2B",    "MurmurHash2 for x64, 64-bit" },
-#endif
-  { MurmurHash64B_test,   64, 0xDD537C05, "Murmur2C",    "MurmurHash2 for x86, 64-bit" },
-
-  // MurmurHash3
-  { MurmurHash3_x86_32,   32, 0xB0F57EE3, "Murmur3A",    "MurmurHash3 for x86, 32-bit" },
-  { MurmurHash3_x86_128, 128, 0xB3ECE62A, "Murmur3C",    "MurmurHash3 for x86, 128-bit" },
-#if defined(__x86_64__)
-  { MurmurHash3_x64_128, 128, 0x6384BA69, "Murmur3F",    "MurmurHash3 for x64, 128-bit" },
-#endif
-  { PMurHash32_test,      32, 0xB0F57EE3, "PMurHash32",  "Shane Day's portable-ized MurmurHash3 for x86, 32-bit." },
-
 #if defined(__x86_64__)
   { xxHash32_test,        32, 0xBA88B743, "xxHash32",    "xxHash, 32-bit for x64" },
   { xxHash64_test,        64, 0x024B7CF4, "xxHash64",    "xxHash, 64-bit" },
@@ -154,8 +149,7 @@ HashInfo g_hashes[] =
   { xxhash256_test,       64, 0x024B7CF4, "xxhash256",   "xxhash256, 64-bit unportable" },
 #endif
 #endif  
-  
-#if defined(__x86_64__)
+  #if defined(__x86_64__)
   { metrohash64_1_test,       64, 0xEE88F7D2, "metrohash64_1",     "MetroHash64_1 for 64-bit" },
   { metrohash64_2_test,       64, 0xE1FC7C6E, "metrohash64_2",     "MetroHash64_2 for 64-bit" },
   { metrohash128_1_test,     128, 0x20E8A1D7, "metrohash128_1",    "MetroHash128_1 for 64-bit" },
@@ -218,6 +212,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
   printf("-------------------------------------------------------------------------------\n");
   printf("--- Testing %s \"%s\"\n\n",info->name,info->desc);
+  fflush(NULL);
 
   //-----------------------------------------------------------------------------
   // Sanity tests
@@ -225,11 +220,13 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
   if(g_testSanity || g_testAll)
   {
     printf("[[[ Sanity Tests ]]]\n\n");
+    fflush(NULL);
 
     VerificationTest(hash,hashbits,info->verification,true);
     SanityTest(hash,hashbits);
     AppendedZeroesTest(hash,hashbits);
     printf("\n");
+    fflush(NULL);
   }
 
   //-----------------------------------------------------------------------------
@@ -237,11 +234,13 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
   if(g_testSpeed || g_testAll)
   {
+    double sum = 0.0;
     printf("[[[ Speed Tests ]]]\n\n");
+    fflush(NULL);
 
     BulkSpeedTest(info->hash,info->verification);
     printf("\n");
-    double sum = 0.0;
+    fflush(NULL);
 
     for(int i = 1; i < 32; i++)
     {
@@ -249,6 +248,8 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
     }
     sum = sum / 32.0;
     printf("Average                                    %6.3f cycles/hash\n",sum);
+    printf("\n");
+    fflush(NULL);
   }
 
   //-----------------------------------------------------------------------------
@@ -257,6 +258,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
   if(g_testDiff || g_testAll)
   {
     printf("[[[ Differential Tests ]]]\n\n");
+    fflush(NULL);
 
     bool result = true;
     bool dumpCollisions = false;
@@ -267,6 +269,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
+    fflush(NULL);
   }
 
   //-----------------------------------------------------------------------------
@@ -275,12 +278,14 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
   if(g_testDiffDist /*|| g_testAll*/)
   {
     printf("[[[ Differential Distribution Tests ]]]\n\n");
+    fflush(NULL);
 
     bool result = true;
 
     result &= DiffDistTest2<uint64_t,hashtype>(hash);
 
     printf("\n");
+    fflush(NULL);
   }
 
   //-----------------------------------------------------------------------------
@@ -289,6 +294,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
   if(g_testAvalanche || g_testAll)
   {
     printf("[[[ Avalanche Tests ]]]\n\n");
+    fflush(NULL);
 
     bool result = true;
 
@@ -314,6 +320,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
+    fflush(NULL);
   }
 
   //-----------------------------------------------------------------------------
@@ -323,6 +330,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
   if(g_testBIC)
   {
     printf("[[[ Bit Independence Criteria ]]]\n\n");
+    fflush(NULL);
 
     bool result = true;
 
@@ -331,6 +339,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
+    fflush(NULL);
   }
 
   //-----------------------------------------------------------------------------
@@ -339,6 +348,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
   if(g_testCyclic || g_testAll)
   {
     printf("[[[ Keyset 'Cyclic' Tests ]]]\n\n");
+    fflush(NULL);
 
     bool result = true;
     bool drawDiagram = false;
@@ -354,6 +364,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 #endif
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
+    fflush(NULL);
   }
 
   //-----------------------------------------------------------------------------
@@ -364,6 +375,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
   if(g_testTwoBytes || g_testAll)
   {
     printf("[[[ Keyset 'TwoBytes' Tests ]]]\n\n");
+    fflush(NULL);
 
     bool result = true;
     bool drawDiagram = false;
@@ -375,6 +387,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
+    fflush(NULL);
   }
 
   //-----------------------------------------------------------------------------
@@ -383,6 +396,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
   if(g_testSparse || g_testAll)
   {
     printf("[[[ Keyset 'Sparse' Tests ]]]\n\n");
+    fflush(NULL);
 
     bool result = true;
     bool drawDiagram = false;
@@ -398,6 +412,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
+    fflush(NULL);
   }
 
   //-----------------------------------------------------------------------------
@@ -409,6 +424,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
       // This one breaks lookup3, surprisingly
 
       printf("[[[ Keyset 'Combination Lowbits' Tests ]]]\n\n");
+      fflush(NULL);
 
       bool result = true;
       bool drawDiagram = false;
@@ -424,10 +440,12 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
       if(!result) printf("*********FAIL*********\n");
       printf("\n");
+      fflush(NULL);
     }
 
     {
       printf("[[[ Keyset 'Combination Highbits' Tests ]]]\n\n");
+      fflush(NULL);
 
       bool result = true;
       bool drawDiagram = false;
@@ -443,10 +461,12 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
       if(!result) printf("*********FAIL*********\n");
       printf("\n");
+      fflush(NULL);
     }
 
     {
       printf("[[[ Keyset 'Combination 0x8000000' Tests ]]]\n\n");
+      fflush(NULL);
 
       bool result = true;
       bool drawDiagram = false;
@@ -462,6 +482,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
       if(!result) printf("*********FAIL*********\n");
       printf("\n");
+      fflush(NULL);
     }
 
     {
@@ -481,6 +502,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
       if(!result) printf("*********FAIL*********\n");
       printf("\n");
+      fflush(NULL);
     }
 
     {
@@ -502,6 +524,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
       if(!result) printf("*********FAIL*********\n");
       printf("\n");
+      fflush(NULL);
     }
   }
 
@@ -524,6 +547,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
+    fflush(NULL);
   }
 
   //-----------------------------------------------------------------------------
@@ -544,6 +568,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
+    fflush(NULL);
   }
 
   //-----------------------------------------------------------------------------
@@ -560,6 +585,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
+    fflush(NULL);
   }
 
   //-----------------------------------------------------------------------------
@@ -576,6 +602,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
+    fflush(NULL);
   }
 }
 
@@ -693,7 +720,7 @@ int main ( int argc, char ** argv )
   }
 
   // Code runs on the 3rd CPU by default
-  SetAffinity((1 << 2));
+  //SetAffinity((1 << 2));
   SelfTest();
 
   int timeBegin = clock();
@@ -703,8 +730,10 @@ int main ( int argc, char ** argv )
   int timeEnd = clock();
 
   printf("\n");
+  fflush(NULL);
   printf("Input vcode 0x%08x, Output vcode 0x%08x, Result vcode 0x%08x\n",g_inputVCode,g_outputVCode,g_resultVCode);
   printf("Verification value is 0x%08x - Testing took %f seconds\n",g_verify,double(timeEnd-timeBegin)/double(CLOCKS_PER_SEC));
   printf("-------------------------------------------------------------------------------\n");
+  fflush(NULL);
   return 0;
 }
