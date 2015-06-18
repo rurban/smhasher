@@ -29,7 +29,7 @@ SMhasher
 | Murmur2B        	|      7534.67	|    27.48 | 12.7% bias                     |
 | Murmur2C        	|      4543.07	|    29.72 | 1.8% bias, collisions, 3.4% distrib |
 | PMurHash32      	|      2927.84	|    37.16 | 91% bias, collisions, distr    |
-|                   |               |          |                            |
+| ------------------|               |          |                            |
 | Murmur3A        	|      2911.94	|    29.54 |                            |
 | Murmur3C        	|      4582.45	|    40.56 |                            |
 | Murmur3F        	|      7037.66	|    37.38 |                            |
