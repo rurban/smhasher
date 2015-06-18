@@ -65,7 +65,7 @@ See also the old [https://code.google.com/p/smhasher/w/list](https://code.google
 
 So the fastest hash functions on x86_64 without quality problems are:
 
-* FarmHash
+* FarmHash (_C++ only, see cfarmhash on github for a 64bit variant in C_)
 * Metro (_but not 64crc yet, WIP_)
 * Spooky32
 * xxHash64
