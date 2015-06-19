@@ -77,6 +77,10 @@ for databases and file systems typically 64 or 128bit, for crypto now starting w
 Typical median key size in perl5 is 20, the most common 4.
 See [github.com/rurban/perl-hash-stats](https://github.com/rurban/perl-hash-stats)
 
+When used in a hash table the instruction cache will usually beat the
+CPU and throughput measured here. In my tests the smallest
+`FNV1A` beats the fastest `crc32_hw1`.
+
 Other
 -----
 
