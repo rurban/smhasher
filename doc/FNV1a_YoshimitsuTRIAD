@@ -1,79 +1,81 @@
 -------------------------------------------------------------------------------
---- Testing FNV1a "Fowler-Noll-Vo hash, 32-bit"
+--- Testing FNV1a_YoshimitsuTRIAD "FNV1a unrolled via YoshimitsuTRIAD, 32-bit"
 
 [[[ Sanity Tests ]]]
 
-Verification value 0xE3CBBE91 : Passed!
+Verification value 0x0F9723B9 : Passed!
 Running sanity check 1    ..........PASS
-Running AppendedZeroesTest..........PASS
+Running AppendedZeroesTest.
+*********FAIL*********
 
 [[[ Speed Tests ]]]
 
 Bulk speed test - 262144-byte keys
-Alignment  0 -  0.321 bytes/cycle -  918.76 MiB/sec @ 3 ghz
-Alignment  1 -  0.321 bytes/cycle -  919.33 MiB/sec @ 3 ghz
-Alignment  2 -  0.342 bytes/cycle -  978.00 MiB/sec @ 3 ghz
-Alignment  3 -  0.327 bytes/cycle -  934.96 MiB/sec @ 3 ghz
-Alignment  4 -  0.322 bytes/cycle -  921.32 MiB/sec @ 3 ghz
-Alignment  5 -  0.323 bytes/cycle -  922.80 MiB/sec @ 3 ghz
-Alignment  6 -  0.359 bytes/cycle - 1026.19 MiB/sec @ 3 ghz
-Alignment  7 -  0.332 bytes/cycle -  950.62 MiB/sec @ 3 ghz
-Average      -  0.331 bytes/cycle -  946.50 MiB/sec @ 3 ghz
+Alignment  0 -  6.697 bytes/cycle - 19159.09 MiB/sec @ 3 ghz
+Alignment  1 -  6.343 bytes/cycle - 18148.49 MiB/sec @ 3 ghz
+Alignment  2 -  6.343 bytes/cycle - 18147.38 MiB/sec @ 3 ghz
+Alignment  3 -  6.342 bytes/cycle - 18145.88 MiB/sec @ 3 ghz
+Alignment  4 -  6.670 bytes/cycle - 19083.47 MiB/sec @ 3 ghz
+Alignment  5 -  6.316 bytes/cycle - 18069.56 MiB/sec @ 3 ghz
+Alignment  6 -  5.712 bytes/cycle - 16343.21 MiB/sec @ 3 ghz
+Alignment  7 -  6.316 bytes/cycle - 18070.06 MiB/sec @ 3 ghz
+Average      -  6.342 bytes/cycle - 18145.89 MiB/sec @ 3 ghz
 
-Small key speed test -    1-byte keys -    16.00 cycles/hash
-Small key speed test -    2-byte keys -    25.76 cycles/hash
-Small key speed test -    3-byte keys -    15.64 cycles/hash
-Small key speed test -    4-byte keys -    15.91 cycles/hash
-Small key speed test -    5-byte keys -    34.53 cycles/hash
-Small key speed test -    6-byte keys -    15.85 cycles/hash
-Small key speed test -    7-byte keys -    16.86 cycles/hash
-Small key speed test -    8-byte keys -    23.85 cycles/hash
-Small key speed test -    9-byte keys -    16.36 cycles/hash
-Small key speed test -   10-byte keys -    28.50 cycles/hash
-Small key speed test -   11-byte keys -    17.34 cycles/hash
-Small key speed test -   12-byte keys -    18.12 cycles/hash
-Small key speed test -   13-byte keys -    19.53 cycles/hash
-Small key speed test -   14-byte keys -    19.88 cycles/hash
-Small key speed test -   15-byte keys -    34.84 cycles/hash
-Small key speed test -   16-byte keys -    26.47 cycles/hash
-Small key speed test -   17-byte keys -    22.57 cycles/hash
-Small key speed test -   18-byte keys -    42.47 cycles/hash
-Small key speed test -   19-byte keys -    24.57 cycles/hash
-Small key speed test -   20-byte keys -    30.36 cycles/hash
-Small key speed test -   21-byte keys -    32.31 cycles/hash
-Small key speed test -   22-byte keys -    33.70 cycles/hash
-Small key speed test -   23-byte keys -    33.64 cycles/hash
-Small key speed test -   24-byte keys -    33.91 cycles/hash
-Small key speed test -   25-byte keys -    37.41 cycles/hash
-Small key speed test -   26-byte keys -    47.18 cycles/hash
-Small key speed test -   27-byte keys -    28.89 cycles/hash
-Small key speed test -   28-byte keys -    48.84 cycles/hash
-Small key speed test -   29-byte keys -    60.80 cycles/hash
-Small key speed test -   30-byte keys -    58.73 cycles/hash
-Small key speed test -   31-byte keys -    74.79 cycles/hash
-Average                                    29.863 cycles/hash
+Small key speed test -    1-byte keys -    28.90 cycles/hash
+Small key speed test -    2-byte keys -    26.18 cycles/hash
+Small key speed test -    3-byte keys -    16.51 cycles/hash
+Small key speed test -    4-byte keys -    15.99 cycles/hash
+Small key speed test -    5-byte keys -    16.00 cycles/hash
+Small key speed test -    6-byte keys -    32.64 cycles/hash
+Small key speed test -    7-byte keys -    15.99 cycles/hash
+Small key speed test -    8-byte keys -    16.00 cycles/hash
+Small key speed test -    9-byte keys -    16.00 cycles/hash
+Small key speed test -   10-byte keys -    18.02 cycles/hash
+Small key speed test -   11-byte keys -    16.74 cycles/hash
+Small key speed test -   12-byte keys -    17.90 cycles/hash
+Small key speed test -   13-byte keys -    15.91 cycles/hash
+Small key speed test -   14-byte keys -    23.23 cycles/hash
+Small key speed test -   15-byte keys -    15.38 cycles/hash
+Small key speed test -   16-byte keys -    15.49 cycles/hash
+Small key speed test -   17-byte keys -    16.72 cycles/hash
+Small key speed test -   18-byte keys -    28.56 cycles/hash
+Small key speed test -   19-byte keys -    16.20 cycles/hash
+Small key speed test -   20-byte keys -    15.68 cycles/hash
+Small key speed test -   21-byte keys -    17.19 cycles/hash
+Small key speed test -   22-byte keys -    17.14 cycles/hash
+Small key speed test -   23-byte keys -    17.37 cycles/hash
+Small key speed test -   24-byte keys -    15.51 cycles/hash
+Small key speed test -   25-byte keys -    15.38 cycles/hash
+Small key speed test -   26-byte keys -    23.80 cycles/hash
+Small key speed test -   27-byte keys -    16.16 cycles/hash
+Small key speed test -   28-byte keys -    15.86 cycles/hash
+Small key speed test -   29-byte keys -    16.26 cycles/hash
+Small key speed test -   30-byte keys -    16.10 cycles/hash
+Small key speed test -   31-byte keys -    29.69 cycles/hash
+Average                                    18.265 cycles/hash
 
 [[[ Differential Tests ]]]
 
 Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 32 bit hashes.
 1000 reps, 8303632000 total tests, expecting 1.93 random collisions..........
-7 total collisions, of which 7 single collisions were ignored
+7200 total collisions, of which 561 single collisions were ignored !!!!! 
 
 Testing 11017632 up-to-4-bit differentials in 128-bit keys -> 32 bit hashes.
 1000 reps, 11017632000 total tests, expecting 2.57 random collisions..........
-3 total collisions, of which 3 single collisions were ignored
+2123712 total collisions, of which 1948 single collisions were ignored !!!!! 
 
 Testing 2796416 up-to-3-bit differentials in 256-bit keys -> 32 bit hashes.
 1000 reps, 2796416000 total tests, expecting 0.65 random collisions..........
-1 total collisions, of which 1 single collisions were ignored
+149471 total collisions, of which 600 single collisions were ignored !!!!! 
 
+*********FAIL*********
 
 [[[ Avalanche Tests ]]]
 
-Testing  32-bit keys ->  32-bit hashes,   300000 reps.......... worst bias is 100.000000% !!!!! 
-Testing  40-bit keys ->  32-bit hashes,   300000 reps.......... worst bias is 100.000000% !!!!! 
-Testing  48-bit keys ->  32-bit hashes,   300000 reps.......... worst bias is 100.000000% !!!!! 
-Testing  56-bit keys ->  32-bit hashes,   300000 reps.......... worst bias is 100.000000% !!!!! 
+Testing  32-bit keys ->  32-bit hashes,   300000 reps.......... worst bias is 50.136000% !!!!! 
+Testing  40-bit keys ->  32-bit hashes,   300000 reps.......... worst bias is 49.983333% !!!!! 
+Testing  48-bit keys ->  32-bit hashes,   300000 reps.......... worst bias is 49.961333% !!!!! 
+Testing  56-bit keys ->  32-bit hashes,   300000 reps.......... worst bias is 50.240667% !!!!! 
 Testing  64-bit keys ->  32-bit hashes,   300000 reps.......... worst bias is 100.000000% !!!!! 
 Testing  72-bit keys ->  32-bit hashes,   300000 reps.......... worst bias is 100.000000% !!!!! 
 Testing  80-bit keys ->  32-bit hashes,   300000 reps.......... worst bias is 100.000000% !!!!! 
@@ -91,123 +93,124 @@ Testing 152-bit keys ->  32-bit hashes,   300000 reps.......... worst bias is 10
 [[[ Keyset 'Cyclic' Tests ]]]
 
 Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
-Testing collisions   - Expected 11641.53, actual 217246.00 (18.66x) !!!!! 
-Testing distribution - Worst bias is the  20-bit window at bit   0 - 94.729% !!!!! 
+Testing collisions   - Expected 11641.53, actual 11636.00 ( 1.00x)
+Testing distribution - Worst bias is the  20-bit window at bit  30 - 0.039%
 
 Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
-Testing collisions   - Expected 11641.53, actual 115440.00 ( 9.92x) !!!!! 
-Testing distribution - Worst bias is the  20-bit window at bit   0 - 89.985% !!!!! 
+Testing collisions   - Expected 11641.53, actual 11669.00 ( 1.00x)
+Testing distribution - Worst bias is the  20-bit window at bit  22 - 0.034%
 
 Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
-Testing collisions   - Expected 11641.53, actual 205386.00 (17.64x) !!!!! 
-Testing distribution - Worst bias is the  19-bit window at bit  30 - 94.453% !!!!! 
+Testing collisions   - Expected 11641.53, actual 11638.00 ( 1.00x)
+Testing distribution - Worst bias is the  20-bit window at bit  25 - 0.028%
 
 Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
-Testing collisions   - Expected 11641.53, actual 115011.00 ( 9.88x) !!!!! 
-Testing distribution - Worst bias is the  20-bit window at bit  26 - 90.010% !!!!! 
+Testing collisions   - Expected 11641.53, actual 11541.00 ( 0.99x)
+Testing distribution - Worst bias is the  20-bit window at bit   5 - 0.036%
 
 Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
-Testing collisions   - Expected 11641.53, actual 206223.00 (17.71x) !!!!! 
-Testing distribution - Worst bias is the  20-bit window at bit  31 - 94.451% !!!!! 
+Testing collisions   - Expected 11641.53, actual 23357.00 ( 2.01x) !!!!! 
+Testing distribution - Worst bias is the  20-bit window at bit  13 - 0.050%
 
 *********FAIL*********
 
 [[[ Keyset 'TwoBytes' Tests ]]]
 
 Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
-Testing collisions   - Expected    49.57, actual    13.00 ( 0.26x)
-Testing distribution - Worst bias is the  16-bit window at bit  24 - 10.260% !!!!! 
+Testing collisions   - Expected    49.57, actual  1208.00 (24.37x) !!!!! 
+Testing distribution - Worst bias is the  16-bit window at bit   3 - 0.163%
 
 Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
-Testing collisions   - Expected  3484.56, actual  7125.00 ( 2.04x) !!!!! 
-Testing distribution - Worst bias is the  20-bit window at bit  22 - 1.714% !!!!! 
+Testing collisions   - Expected  3484.56, actual 1202313.00 (345.04x) !!!!! 
+Testing distribution - Worst bias is the  20-bit window at bit  17 - 17.090% !!!!! 
 
 Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
-Testing collisions   - Expected 40347.77, actual 53215.00 ( 1.32x)
-Testing distribution - Worst bias is the  20-bit window at bit  20 - 0.211%
+Testing collisions   - Expected 40347.77, actual 6399278.00 (158.60x) !!!!! 
+Testing distribution - Worst bias is the  20-bit window at bit  18 - 12.252% !!!!! 
 
 Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
-Testing collisions   - Expected 227963.15, actual 255728.00 ( 1.12x)
-Testing distribution - Worst bias is the  20-bit window at bit  19 - 0.148%
+Testing collisions   - Expected 227963.15, actual 16191020.00 (71.02x) !!!!! 
+Testing distribution - Worst bias is the  20-bit window at bit  16 - 9.054% !!!!! 
 
 Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
-Testing collisions   - Expected 871784.70, actual 917142.00 ( 1.05x)
-Testing distribution - Worst bias is the  20-bit window at bit  19 - 0.075%
+Testing collisions   - Expected 871784.70, actual 43989521.00 (50.46x) !!!!! 
+Testing distribution - Worst bias is the  20-bit window at bit   0 - 10.560% !!!!! 
 
 *********FAIL*********
 
 [[[ Keyset 'Sparse' Tests ]]]
 
 Keyset 'Sparse' - 32-bit keys with up to 6 bits set - 1149017 keys
-Testing collisions   - Expected   153.70, actual   190.00 ( 1.24x)
-Testing distribution - Worst bias is the  14-bit window at bit  29 - 2.443% !!!!! 
+Testing collisions   - Expected   153.70, actual  3402.00 (22.13x) !!!!! 
+Testing distribution - Worst bias is the  17-bit window at bit  17 - 1.018% !!!!! 
 
 Keyset 'Sparse' - 40-bit keys with up to 6 bits set - 4598479 keys
-Testing collisions   - Expected  2461.72, actual  3619.00 ( 1.47x)
-Testing distribution - Worst bias is the  19-bit window at bit  21 - 4.080% !!!!! 
+Testing collisions   - Expected  2461.72, actual  4264.00 ( 1.73x)
+Testing distribution - Worst bias is the  19-bit window at bit  16 - 1.542% !!!!! 
 
 Keyset 'Sparse' - 48-bit keys with up to 5 bits set - 1925357 keys
-Testing collisions   - Expected   431.55, actual   481.00 ( 1.11x)
-Testing distribution - Worst bias is the  17-bit window at bit  22 - 7.099% !!!!! 
+Testing collisions   - Expected   431.55, actual  1917.00 ( 4.44x) !!!!! 
+Testing distribution - Worst bias is the  18-bit window at bit   2 - 5.998% !!!!! 
 
 Keyset 'Sparse' - 56-bit keys with up to 5 bits set - 4216423 keys
-Testing collisions   - Expected  2069.66, actual  2527.00 ( 1.22x)
-Testing distribution - Worst bias is the  16-bit window at bit  21 - 7.348% !!!!! 
+Testing collisions   - Expected  2069.66, actual  3175.00 ( 1.53x)
+Testing distribution - Worst bias is the  19-bit window at bit   0 - 8.938% !!!!! 
 
 Keyset 'Sparse' - 64-bit keys with up to 5 bits set - 8303633 keys
-Testing collisions   - Expected  8026.87, actual  8745.00 ( 1.09x)
-Testing distribution - Worst bias is the  20-bit window at bit   0 - 8.374% !!!!! 
+Testing collisions   - Expected  8026.87, actual 624855.00 (77.85x) !!!!! 
+Testing distribution - Worst bias is the  20-bit window at bit  18 - 6.743% !!!!! 
 
 Keyset 'Sparse' - 96-bit keys with up to 4 bits set - 3469497 keys
-Testing collisions   - Expected  1401.34, actual  1370.00 ( 0.98x)
-Testing distribution - Worst bias is the  16-bit window at bit  22 - 16.655% !!!!! 
+Testing collisions   - Expected  1401.34, actual 54883.00 (39.16x) !!!!! 
+Testing distribution - Worst bias is the  19-bit window at bit   1 - 3.395% !!!!! 
 
 Keyset 'Sparse' - 256-bit keys with up to 3 bits set - 2796417 keys
-Testing collisions   - Expected   910.36, actual  1088.00 ( 1.20x)
-Testing distribution - Worst bias is the  16-bit window at bit  22 - 32.556% !!!!! 
+Testing collisions   - Expected   910.36, actual 2185572.00 (2400.77x) !!!!! 
+Testing distribution - Worst bias is the  19-bit window at bit  23 - 57.899% !!!!! 
 
 Keyset 'Sparse' - 2048-bit keys with up to 2 bits set - 2098177 keys
-Testing collisions   - Expected   512.50, actual  1135.00 ( 2.21x) !!!!! 
-Testing distribution - Worst bias is the  13-bit window at bit   0 - 56.979% !!!!! 
+Testing collisions   - Expected   512.50, actual 1702566.00 (3322.08x) !!!!! 
+Testing distribution - Worst bias is the  18-bit window at bit  16 - 70.313% !!!!! 
 
 *********FAIL*********
 
 [[[ Keyset 'Combination Lowbits' Tests ]]]
 
 Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
-Testing collisions   - Expected 42799.01, actual     0.00 ( 0.00x)
-Testing distribution - Worst bias is the  20-bit window at bit  20 - 50.342% !!!!! 
+Testing collisions   - Expected 42799.01, actual 2189660.00 (51.16x) !!!!! 
+Testing distribution - Worst bias is the  20-bit window at bit   0 - 1.789% !!!!! 
 
+*********FAIL*********
 
 [[[ Keyset 'Combination Highbits' Tests ]]]
 
 Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
-Testing collisions   - Expected 42799.01, actual 550392.00 (12.86x) !!!!! 
-Testing distribution - Worst bias is the  19-bit window at bit  29 - 96.143% !!!!! 
+Testing collisions   - Expected 42799.01, actual 16777985.00 (392.02x) !!!!! 
+Testing distribution - Worst bias is the  20-bit window at bit  16 - 76.532% !!!!! 
 
 *********FAIL*********
 
 [[[ Keyset 'Combination 0x8000000' Tests ]]]
 
 Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
-Testing collisions   - Expected   512.00, actual 25340.00 (49.49x) !!!!! 
-Testing distribution - Worst bias is the  18-bit window at bit   0 - 97.974% !!!!! 
+Testing collisions   - Expected   512.00, actual 2076749.00 (4056.16x) !!!!! 
+Testing distribution - Worst bias is the  18-bit window at bit  18 - 96.533% !!!!! 
 
 *********FAIL*********
 
 [[[ Keyset 'Combination 0x0000001' Tests ]]]
 
 Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
-Testing collisions   - Expected   512.00, actual  2768.00 ( 5.41x) !!!!! 
-Testing distribution - Worst bias is the  18-bit window at bit  26 - 89.488% !!!!! 
+Testing collisions   - Expected   512.00, actual 582837.00 (1138.36x) !!!!! 
+Testing distribution - Worst bias is the  18-bit window at bit  21 - 6.686% !!!!! 
 
 *********FAIL*********
 
 [[[ Keyset 'Combination Hi-Lo' Tests ]]]
 
 Keyset 'Combination' - up to 6 blocks from a set of 15 - 12204240 keys
-Testing collisions   - Expected 17339.30, actual 38790.00 ( 2.24x) !!!!! 
-Testing distribution - Worst bias is the  20-bit window at bit  18 - 51.163% !!!!! 
+Testing collisions   - Expected 17339.30, actual 4432630.00 (255.64x) !!!!! 
+Testing distribution - Worst bias is the  20-bit window at bit  16 - 10.417% !!!!! 
 
 *********FAIL*********
 
@@ -283,34 +286,35 @@ Window at  64 - Testing collisions   - Expected   128.00, actual     0.00 ( 0.00
 [[[ Keyset 'Text' Tests ]]]
 
 Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
-Testing collisions   - Expected 25418.13, actual 37240.00 ( 1.47x)
-Testing distribution - Worst bias is the  20-bit window at bit  26 - 2.086% !!!!! 
+Testing collisions   - Expected 25418.13, actual 67376.00 ( 2.65x) !!!!! 
+Testing distribution - Worst bias is the  20-bit window at bit  23 - 2.921% !!!!! 
 
 Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
-Testing collisions   - Expected 25418.13, actual 59282.00 ( 2.33x) !!!!! 
-Testing distribution - Worst bias is the  19-bit window at bit  27 - 1.749% !!!!! 
+Testing collisions   - Expected 25418.13, actual     0.00 ( 0.00x)
+Testing distribution - Worst bias is the  20-bit window at bit  30 - 4.365% !!!!! 
 
 Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
-Testing collisions   - Expected 25418.13, actual 48060.00 ( 1.89x)
-Testing distribution - Worst bias is the  20-bit window at bit  30 - 2.932% !!!!! 
+Testing collisions   - Expected 25418.13, actual     0.00 ( 0.00x)
+Testing distribution - Worst bias is the  20-bit window at bit  20 - 19.738% !!!!! 
 
 *********FAIL*********
 
 [[[ Keyset 'Zeroes' Tests ]]]
 
 Keyset 'Zeroes' - 65536 keys
-Testing collisions   - Expected     0.50, actual     0.00 ( 0.00x)
-Testing distribution - Worst bias is the  10-bit window at bit  25 - 74.999% !!!!! 
+Testing collisions   - Expected     0.50, actual 40957.00 (81915.25x) !!!!! 
+Testing distribution - Worst bias is the  13-bit window at bit  10 - 24.606% !!!!! 
 
+*********FAIL*********
 
 [[[ Keyset 'Seed' Tests ]]]
 
 Keyset 'Seed' - 1000000 keys
 Testing collisions   - Expected   116.42, actual     0.00 ( 0.00x)
-Testing distribution - Worst bias is the  17-bit window at bit   7 - 6.747% !!!!! 
+Testing distribution - Worst bias is the  17-bit window at bit   3 - 0.130%
 
 
 
-Input vcode 0x07def0f0, Output vcode 0xf8453d9c, Result vcode 0x00000001
-Verification value is 0x00000001 - Testing took 1660.210435 seconds
+Input vcode 0x6b96ae13, Output vcode 0x05288a9e, Result vcode 0x00000001
+Verification value is 0x00000001 - Testing took 1387.121729 seconds
 -------------------------------------------------------------------------------
