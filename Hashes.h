@@ -53,6 +53,7 @@ void CityHashCrc64_test    ( const void * key, int len, uint32_t seed, void * ou
 void CityHashCrc128_test   ( const void * key, int len, uint32_t seed, void * out );
 #endif
 void FNV32a                ( const void * key, int len, uint32_t seed, void * out );
+void FNV32a_YoshimitsuTRIAD( const void * key, int len, uint32_t seed, void * out );
 void FNV64a                ( const void * key, int len, uint32_t seed, void * out );
 void Bernstein             ( const void * key, int len, uint32_t seed, void * out );
 void sdbm                  ( const void * key, int len, uint32_t seed, void * out );

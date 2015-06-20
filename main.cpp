@@ -95,14 +95,14 @@ HashInfo g_hashes[] =
 #endif
 // elf64 or macho64 only
 //{ fhtw_test,            64, 0x0,        "fhtw",        "fhtw asm" },
-  { FNV32a,               32, 0xE3CBBE91, "FNV",         "Fowler-Noll-Vo hash, 32-bit" },
+  { FNV32a,               32, 0xE3CBBE91, "FNV1a",         "Fowler-Noll-Vo hash, 32-bit" },
+  { FNV32a_YoshimitsuTRIAD,32,0x0F9723B9, "FNV1a_YoshimitsuTRIAD", "FNV1a-YoshimitsuTRIAD 32-bit sanmayce" },
   { FNV64a,               64, 0x103455FC, "FNV64",       "Fowler-Noll-Vo hash, 64-bit" },
 #if 0
   { fletcher2,            64, 0x0, "fletcher2",  "fletcher2 ZFS"} //TODO
   { fletcher4,            64, 0x0, "fletcher4",  "fletcher4 ZFS"} //TODO
   { Jesteress,            32, 0x0, "Jesteress",  "FNV1a-Jesteress 32-bit sanmayce" },
   { Meiyan,       	  32, 0x0, "Meiyan",     "FNV1a-Meiyan 32-bit sanmayce" },
-  { YoshimitsuTRIAD,      32, 0x0, "YoshimitsuTRIAD",     " FNV1a-YoshimitsuTRIAD 32-bit sanmayce" },
 #endif
   { Bernstein,            32, 0xBDB4B640, "bernstein",   "Bernstein, 32-bit" },
   { sdbm,                 32, 0x582AF769, "sdbm",        "sdbm as in perl5" },
