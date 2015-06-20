@@ -10,11 +10,11 @@ SMhasher
 | md5_32a         	|       553.41	|   393.37 | 8589.93x collisions, distrib   |
 | sha1_32a        	|       539.68	|   733.05 | 8589.93x collisions, distrib   |
 | hasshe2         	|      2808.13	|    42.98 | collisions, 36.6% distrib      |
-| crc32_hw        	|      7162.71	|    26.55 | 100% bias, collisions, distrib |
-| crc64_hw        	|      9585.10	|    26.18 | 100% bias, collisions, distrib |
-| crc32_hw1       	|     26871.56	|    31.27 | 100% bias, collisions, distrib |
+| crc32_hw        	|      7162.71	|    26.55 | insecure,100% bias, collisions, distrib |
+| crc64_hw        	|      9585.10	|    26.18 | insecure,100% bias, collisions, distrib |
+| crc32_hw1       	|     26871.56	|    31.27 | insecure,100% bias, collisions, distrib |
 | FNV1a          	|       946.50	|    29.86 | 100% bias, collisions, distrib |
-| FNV1a_YoshimitsuTRIAD|  18145.89	|    18.27 | zeros,100% bias, collisions, distrib |
+| FNV1a_YoshimitsuTRIAD|  18145.89	|    18.27 | insecure,zeros,100% bias, collisions, distrib |
 | FNV64           	|       982.23	|    30.38 | 100% bias, collisions, distrib |
 | bernstein       	|      1355.42	|    33.98 | 100% bias, collisions, distrib |
 | sdbm            	|       992.55	|    29.23 | 100% bias, collisions, distrib |
