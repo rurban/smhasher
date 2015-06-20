@@ -85,7 +85,6 @@ void
 FNV32a(const void *key, int len, uint32_t seed, void *out)
 {
   unsigned int	  h = seed;
-
   const uint8_t  *data = (const uint8_t *)key;
 
   h ^= BIG_CONSTANT(2166136261);
@@ -103,46 +102,46 @@ FNV32a_YoshimitsuTRIAD(const void *key, int len, uint32_t seed, void *out)
 {
   const uint8_t  *p = (const uint8_t *)key;
   const uint32_t  PRIME = 709607;
-  uint32_t	  hash32 = seed ^ 2166136261;
-  uint32_t	  hash32B = 2166136261;
+  uint32_t	  hash32A = seed ^ 2166136261;
+  uint32_t	  hash32B = 2166136261 + len;
   uint32_t	  hash32C = 2166136261;
 
   for (; len >= 3 * 2 * sizeof(uint32_t); len -= 3 * 2 * sizeof(uint32_t), p += 3 * 2 * sizeof(uint32_t)) {
-    hash32  = (hash32  ^ (ROTL32(*(uint32_t *) (p + 0), 5)  ^ *(uint32_t *) (p + 4)))  * PRIME;
+    hash32A = (hash32A ^ (ROTL32(*(uint32_t *) (p + 0), 5)  ^ *(uint32_t *) (p + 4)))  * PRIME;
     hash32B = (hash32B ^ (ROTL32(*(uint32_t *) (p + 8), 5)  ^ *(uint32_t *) (p + 12))) * PRIME;
     hash32C = (hash32C ^ (ROTL32(*(uint32_t *) (p + 16), 5) ^ *(uint32_t *) (p + 20))) * PRIME;
   }
   if (p != key) {
-    hash32 = (hash32 ^ ROTL32(hash32C, 5)) * PRIME;
+    hash32A = (hash32A ^ ROTL32(hash32C, 5)) * PRIME;
   }
   //Cases 0. .31
   if (len & 4 * sizeof(uint32_t)) {
-    hash32 = (hash32 ^ (ROTL32(*(uint32_t *) (p + 0), 5) ^ *(uint32_t *) (p + 4))) * PRIME;
+    hash32A = (hash32A ^ (ROTL32(*(uint32_t *) (p + 0), 5) ^ *(uint32_t *) (p + 4))) * PRIME;
     hash32B = (hash32B ^ (ROTL32(*(uint32_t *) (p + 8), 5) ^ *(uint32_t *) (p + 12))) * PRIME;
     p += 8 * sizeof(uint16_t);
   }
   //Cases 0. .15
   if (len & 2 * sizeof(uint32_t)) {
-    hash32 = (hash32 ^ *(uint32_t *) (p + 0)) * PRIME;
+    hash32A = (hash32A ^ *(uint32_t *) (p + 0)) * PRIME;
     hash32B = (hash32B ^ *(uint32_t *) (p + 4)) * PRIME;
     p += 4 * sizeof(uint16_t);
   }
   //Cases:0. .7
   if (len & sizeof(uint32_t)) {
-    hash32 = (hash32 ^ *(uint16_t *) (p + 0)) * PRIME;
+    hash32A = (hash32A ^ *(uint16_t *) (p + 0)) * PRIME;
     hash32B = (hash32B ^ *(uint16_t *) (p + 2)) * PRIME;
     p += 2 * sizeof(uint16_t);
   }
   //Cases:0. .3
   if (len & sizeof(uint16_t)) {
-    hash32 = (hash32 ^ *(uint16_t *) p) * PRIME;
+    hash32A = (hash32A ^ *(uint16_t *) p) * PRIME;
     p += sizeof(uint16_t);
   }
   if (len & 1)
-    hash32 = (hash32 ^ *p) * PRIME;
+    hash32A = (hash32A ^ *p) * PRIME;
 
-  hash32 = (hash32 ^ ROTL32(hash32B, 5)) * PRIME;
-  *(uint32_t *) out = hash32 ^ (hash32 >> 16);
+  hash32A = (hash32A ^ ROTL32(hash32B, 5)) * PRIME;
+  *(uint32_t *) out = hash32A ^ (hash32A >> 16);
 }
 
 void

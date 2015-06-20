@@ -96,7 +96,7 @@ HashInfo g_hashes[] =
 // elf64 or macho64 only
 //{ fhtw_test,            64, 0x0,        "fhtw",        "fhtw asm" },
   { FNV32a,               32, 0xE3CBBE91, "FNV1a",         "Fowler-Noll-Vo hash, 32-bit" },
-  { FNV32a_YoshimitsuTRIAD,32,0x0F9723B9, "FNV1a_YoshimitsuTRIAD", "FNV1a-YoshimitsuTRIAD 32-bit sanmayce" },
+  { FNV32a_YoshimitsuTRIAD,32,0xD8AFFD71, "FNV1a_YoshimitsuTRIAD", "FNV1a-YoshimitsuTRIAD 32-bit sanmayce" },
   { FNV64a,               64, 0x103455FC, "FNV64",       "Fowler-Noll-Vo hash, 64-bit" },
 #if 0
   { fletcher2,            64, 0x0, "fletcher2",  "fletcher2 ZFS"} //TODO

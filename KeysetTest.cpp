@@ -46,12 +46,12 @@ bool VerificationTest ( pfHash hash, const int hashbits, uint32_t expected, bool
 
   if(expected != verification)
   {
-    if(verbose) printf("Verification value 0x%08X : Failed! (Expected 0x%08x)\n",verification,expected);
+    if(verbose) printf("Verification value 0x%08X : FAIL! (Expected 0x%08x)\n",verification,expected);
     return false;
   }
   else
   {
-    if(verbose) printf("Verification value 0x%08X : Passed!\n",verification);
+    if(verbose) printf("Verification value 0x%08X : PASS\n",verification);
     return true;
   }
 }
@@ -136,7 +136,7 @@ bool SanityTest ( pfHash hash, const int hashbits )
 
   if(result == false)
   {
-    printf("*********FAIL*********\n");
+    printf("FAIL  !!!!!\n");
   }
   else
   {
@@ -186,7 +186,7 @@ void AppendedZeroesTest ( pfHash hash, const int hashbits )
 
       if(memcmp(h1,h2,hashbytes) == 0)
       {
-        printf("\n*********FAIL*********\n");
+        printf("FAIL !!!!!\n");
         return;
       }
 
@@ -296,32 +296,18 @@ void DumpCollisionMap ( CollisionMap<hashtype,ByteVec> & cmap )
 void ReportCollisions ( pfHash hash )
 {
   printf("Hashing keyset\n");
-
   std::vector<uint128_t> hashes;
-
   HashCallback<uint128_t> c(hash,hashes);
-
   TwoBytesKeygen(20,c);
-
   printf("%d hashes\n",(int)hashes.size());
-
   printf("Finding collisions\n");
-
   HashSet<uint128_t> collisions;
-
   FindCollisions(hashes,collisions,1000);
-
   printf("%d collisions\n",(int)collisions.size());
-
   printf("Mapping collisions\n");
-
   CollisionMap<uint128_t,ByteVec> cmap;
-
   CollisionCallback<uint128_t> c2(hash,collisions,cmap);
-
   TwoBytesKeygen(20,c2);
-
   printf("Dumping collisions\n");
-
   DumpCollisionMap(cmap);
 }
