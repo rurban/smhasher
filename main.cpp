@@ -161,6 +161,10 @@ HashInfo g_hashes[] =
   { metrohash128crc_2_test,  128, 0x1ACF3E77, "metrohash128crc_2", "MetroHash128crc_2 for x64" },
 #endif
 #endif
+#if defined(__x86_64__)
+  { cmetrohash64_1_test,        64, 0xEE88F7D2, "cmetrohash64_1",    "cmetrohash64_1, 64-bit for x64" },
+  { cmetrohash64_2_test,        64, 0xE1FC7C6E, "cmetrohash64_2",    "cmetrohash64_2, 64-bit for x64" },
+#endif
 };
 
 HashInfo * findHash ( const char * name )
