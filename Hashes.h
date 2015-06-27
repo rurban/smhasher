@@ -9,6 +9,7 @@
 #if defined(__x86_64__)
 #include "xxhash.h"
 #include "metrohash.h"
+#include "cmetrohash.h"
 #endif
 
 //----------
@@ -145,5 +146,10 @@ inline void metrohash128crc_1_test ( const void * key, int len, uint32_t seed, v
 inline void metrohash128crc_2_test ( const void * key, int len, uint32_t seed, void * out ) {
   metrohash128crc_2((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
 }
-
+inline void cmetrohash64_1_test ( const void * key, int len, uint32_t seed, void * out ) {
+  cmetrohash64_1((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
+}
+inline void cmetrohash64_2_test ( const void * key, int len, uint32_t seed, void * out ) {
+  cmetrohash64_2((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
+}
 #endif
