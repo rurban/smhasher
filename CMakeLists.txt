@@ -65,7 +65,7 @@ ELSE()
 ENDIF(SSE4_2_FOUND)
 
 IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
-  set(X64ONLY_SRC xxhash.c metrohash64.cpp metrohash128.cpp farmhash.cc FarmTest.cc cmetrohash64.c)
+  set(X64ONLY_SRC xxhash.c metrohash64.cpp metrohash128.cpp farmhash.cc FarmTest.cc cmetrohash64.c opt_cmetrohash64_1.c)
 ENDIF()
 
 add_library(
