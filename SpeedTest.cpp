@@ -216,7 +216,9 @@ void BulkSpeedTest ( pfHash hash, uint32_t seed )
   printf("Bulk speed test - %d-byte keys\n",blocksize);
   double sumbpc = 0.0;
 
-  for(int align = 0; align < 8; align++)
+  volatile double warmup_cycles = SpeedTest(hash,seed,trials,blocksize,0);
+
+  for(int align = 7; align >= 0; align--)
   {
     double cycles = SpeedTest(hash,seed,trials,blocksize,align);
     
