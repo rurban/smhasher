@@ -70,6 +70,7 @@ HashInfo g_hashes[] =
   { DoNothingHash,        32, 0x00000000, "donothing32", "Do-Nothing function (only valid for measuring call overhead)" },
   { DoNothingHash,        64, 0x00000000, "donothing64", "Do-Nothing function (only valid for measuring call overhead)" },
   { DoNothingHash,       128, 0x00000000, "donothing128", "Do-Nothing function (only valid for measuring call overhead)" },
+  { NoopOAATReadHash,     64, 0x00000000, "NOP_OAAT_read64", "Noop function (only valid for measuring call + OAAT reading overhead)" },
 
   { crc32,                32, 0x3719DB20, "crc32",       "CRC-32 soft" },
 
@@ -162,6 +163,7 @@ HashInfo g_hashes[] =
 #endif
 #endif
 #if defined(__x86_64__)
+  { cmetrohash64_1_optshort_test,	 64, 0xEE88F7D2, "cmetrohash64_1_optshort", "cmetrohash64_1 (shorter key optimized) , 64-bit for x64" },
   { cmetrohash64_1_test,        64, 0xEE88F7D2, "cmetrohash64_1",    "cmetrohash64_1, 64-bit for x64" },
   { cmetrohash64_2_test,        64, 0xE1FC7C6E, "cmetrohash64_2",    "cmetrohash64_2, 64-bit for x64" },
 #endif

@@ -2,9 +2,17 @@ project(SMHasher)
 
 cmake_minimum_required(VERSION 2.4)
 
-set(CMAKE_BUILD_TYPE Release)
-#set(CMAKE_BUILD_TYPE Debug)
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE "Release" CACHE STRING
+       "Choose the type of build, options are: Debug Release
+  RelWithDebInfo MinSizeRel."
+  FORCE)
+endif(NOT CMAKE_BUILD_TYPE)
+
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+set(CMAKE_C_FLAGS_RELEASE "-O3")
+set(CMAKE_C_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
 
 IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
    EXEC_PROGRAM(cat ARGS "/proc/cpuinfo" OUTPUT_VARIABLE CPUINFO)
@@ -57,7 +65,7 @@ ELSE()
 ENDIF(SSE4_2_FOUND)
 
 IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
-  set(X64ONLY_SRC xxhash.c metrohash64.cpp metrohash128.cpp farmhash.cc FarmTest.cc cmetrohash64.c)
+  set(X64ONLY_SRC xxhash.c metrohash64.cpp metrohash128.cpp farmhash.cc FarmTest.cc cmetrohash64.c opt_cmetrohash64_1.c)
 ENDIF()
 
 add_library(
