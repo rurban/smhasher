@@ -1,6 +1,7 @@
 project(SMHasher)
 
 cmake_minimum_required(VERSION 2.4)
+cmake_policy(SET CMP0003 NEW)
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release" CACHE STRING
@@ -45,9 +46,9 @@ ENDIF (SSE42_TRUE)
 IF(SSE4_2_FOUND)
   set(CMAKE_C_FLAGS   "-msse2 -msse4.2")
   set(CMAKE_CXX_FLAGS "-msse2 -msse4.2")
-  set(CMAKE_EXE_LINKER_FLAGS "-lpthread")
   set(SSE2_SRC "hasshe2.c")
   set(SSE4_SRC "crc32_hw.c")
+  find_package(Threads)
 # 64bit only:
 IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
   set(SSE4_SRC1 "crc32_hw1.c")
@@ -111,4 +112,5 @@ add_executable(
 target_link_libraries(
   SMHasher
   SMHasherSupport
+  ${CMAKE_THREAD_LIBS_INIT}
 )
