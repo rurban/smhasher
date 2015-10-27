@@ -359,7 +359,7 @@ crc64c_hw_test(const void *input, int len, uint32_t seed, void *out)
   *(uint64_t *) out = crc64c_hw(input, len, seed);
 }
 /* Faster Adler SSE4.2 crc32 in HW */
-void
+inline void
 crc32c_hw1_test(const void *input, int len, uint32_t seed, void *out)
 {
   if (!len) {
@@ -370,8 +370,21 @@ crc32c_hw1_test(const void *input, int len, uint32_t seed, void *out)
 }
 #endif
 
-extern		"C" {
-  uint64_t	  siphash(const unsigned char key[16], const unsigned char *m, size_t len);
+/* Cloudflare optimized zlib crc32 with PCLMUL */
+#if 0
+inline void
+zlib_crc32_test(const void *input, int len, uint32_t seed, void *out)
+{
+    if (!len) {
+      *(uint32_t *) out = 0;
+      return;
+    }
+    *(uint32_t *) out = crc32(seed, input, (unsigned)len);
+}
+#endif
+
+extern "C" {
+  uint64_t siphash(const unsigned char key[16], const unsigned char *m, size_t len);
 }
 /* https://github.com/floodyberry/siphash */
 void
@@ -386,3 +399,21 @@ siphash_test(const void *input, int len, uint32_t seed, void *out)
   memcpy(key, &seed, sizeof(seed));
   *(uint64_t *) out = siphash(key, (const unsigned char *)input, (size_t) len);
 }
+
+/* https://github.com/gamozolabs/falkhash */
+#if defined(__SSE4_2__) && defined(__x86_64__)
+extern "C" {
+  uint64_t falkhash_test(uint8_t *data, uint64_t len, uint32_t seed, void *out);
+}
+void
+falkhash_test_cxx(const void *input, int len, uint32_t seed, void *out)
+{
+  uint64_t hash[2] = {0ULL, 0ULL};
+  if (!len) {
+    *(uint32_t *) out = 0;
+    return;
+  }
+  falkhash_test((uint8_t *)input, (uint64_t)len, seed, hash);
+  *(uint64_t *) out = hash[0];
+}
+#endif

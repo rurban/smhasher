@@ -21,6 +21,7 @@ IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
    STRING(COMPARE EQUAL "sse2" "${SSE_THERE}" SSE2_TRUE)
    STRING(REGEX REPLACE "^.*(sse4_2).*$" "\\1" SSE_THERE ${CPUINFO})
    STRING(COMPARE EQUAL "sse4_2" "${SSE_THERE}" SSE42_TRUE)
+   set(FALKHASH_OBJ      falkhash-elf64.o)
 ELSEIF(CMAKE_SYSTEM_NAME MATCHES "Darwin")
    EXEC_PROGRAM("/usr/sbin/sysctl -n machdep.cpu.features" OUTPUT_VARIABLE
       CPUINFO)
@@ -28,6 +29,7 @@ ELSEIF(CMAKE_SYSTEM_NAME MATCHES "Darwin")
    STRING(COMPARE EQUAL "SSE2" "${SSE_THERE}" SSE2_TRUE)
    STRING(REGEX REPLACE "^.*(SSE4.2).*$" "\\1" SSE_THERE ${CPUINFO})
    STRING(COMPARE EQUAL "SSE4.2" "${SSE_THERE}" SSE42_TRUE)
+   set(FALKHASH_OBJ      falkhash-macho64.o)
 ENDIF(CMAKE_SYSTEM_NAME MATCHES "Linux")
 # TODO: Windows, BSD and ARM8 crc detection
 # TODO: 32bit filter
@@ -46,27 +48,31 @@ ENDIF (SSE42_TRUE)
 IF(SSE4_2_FOUND)
   set(CMAKE_C_FLAGS   "-msse2 -msse4.2")
   set(CMAKE_CXX_FLAGS "-msse2 -msse4.2")
-  set(SSE2_SRC "hasshe2.c")
-  set(SSE4_SRC "crc32_hw.c")
-  find_package(Threads)
+  set(CMAKE_EXE_LINKER_FLAGS "-lpthread")
+  set(SSE2_SRC        hasshe2.c)
+  set(SSE4_SRC        crc32_hw.c)
 # 64bit only:
 IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
-  set(SSE4_SRC1 "crc32_hw1.c")
-  set(METROCRC64_SRC "metrohash64crc.cpp")
-  set(METROCRC128_SRC "metrohash128crc.cpp")
+  #enable_language(ASM-NASM)
+  #set(CMAKE_ASM_FLAGS "-f elf64")
+  set(SSE4_SRC1       crc32_hw1.c)
+  set(METROCRC64_SRC  metrohash64crc.cpp)
+  set(METROCRC128_SRC metrohash128crc.cpp)
+  set(SSE4_OBJ        ${FALKHASH_OBJ})
 ENDIF()
-  set(SIPHASH_SRC "siphash_ssse3.c")
+  set(SIPHASH_SRC     siphash_ssse3.c)
 ELSEIF(SSE2_FOUND)
   set(CMAKE_C_FLAGS   "-msse2")
   set(CMAKE_CXX_FLAGS "-msse2")
-  set(SSE2_SRC "hasshe2.c")
-  set(SIPHASH_SRC "siphash_sse2.c")
+  set(SSE2_SRC        hasshe2.c)
+  set(SIPHASH_SRC     siphash_sse2.c)
 ELSE()
-  set(SIPHASH_SRC "siphash.c")
+  set(SIPHASH_SRC     siphash.c)
 ENDIF(SSE4_2_FOUND)
 
 IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
-  set(X64ONLY_SRC xxhash.c metrohash64.cpp metrohash128.cpp farmhash.cc FarmTest.cc cmetrohash64.c opt_cmetrohash64_1.c)
+  set(X64ONLY_SRC     xxhash.c metrohash64.cpp metrohash128.cpp farmhash.cc
+                      FarmTest.cc cmetrohash64.c opt_cmetrohash64_1.c)
 ENDIF()
 
 add_library(
@@ -101,7 +107,8 @@ add_library(
   PMurHash.c
   ${X64ONLY_SRC}
   ${METROCRC64_SRC} 
-  ${METROCRC128_SRC} 
+  ${METROCRC128_SRC}
+  ${SSE4_OBJ}
 )
 
 add_executable(

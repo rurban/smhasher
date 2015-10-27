@@ -54,6 +54,7 @@ void crc32c_hw1_test       ( const void * key, int len, uint32_t seed, void * ou
 void crc64c_hw_test        ( const void * key, int len, uint32_t seed, void * out );
 void CityHashCrc64_test    ( const void * key, int len, uint32_t seed, void * out );
 void CityHashCrc128_test   ( const void * key, int len, uint32_t seed, void * out );
+void falkhash_test_cxx     ( const void * key, int len, uint32_t seed, void * out );
 #endif
 void FNV32a                ( const void * key, int len, uint32_t seed, void * out );
 void FNV32a_YoshimitsuTRIAD( const void * key, int len, uint32_t seed, void * out );
