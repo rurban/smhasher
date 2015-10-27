@@ -59,17 +59,19 @@ SMhasher
 | cmetrohash64_1_optshort |   16862.58  |    23.11 |                            |
 | cmetrohash64_1        |     15799.52  |    25.44 |                            |
 | cmetrohash64_2        |     15040.97  |    28.59 |                            |
+| falkhash              |     36785.50  |    65.55 | avalanche ~0.6% bias       |
 
 
 Summary
 -------
 
-I added some SSE assisted hashes and fast intel/arm CRC32-C HW variants, but not the fastest
+I added some SSE assisted hashes and fast intel/arm CRC32-C and AES HW variants, but not the fastest
 [crcutil](https://code.google.com/p/crcutil/) yet. See [our crcutil results](https://github.com/rurban/smhasher/blob/master/doc/crcutil).
 See also the old [https://code.google.com/p/smhasher/w/list](https://code.google.com/p/smhasher/w/list).
 
 So the fastest hash functions on x86_64 without quality problems are:
 
+* falkhash (_macho64 and elf64 nasm only, with HW AES extension_)
 * FarmHash (_C++ only, see cfarmhash on github for a 64bit variant in C_)
 * Metro (_but not 64crc yet, WIP_)
 * Spooky32

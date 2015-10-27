@@ -92,7 +92,9 @@ HashInfo g_hashes[] =
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { crc32c_hw_test,       32, 0x0C7346F0, "crc32_hw",    "SSE4.2 crc32 in HW" },
   { crc64c_hw_test,       64, 0xE7C3FD0E, "crc64_hw",    "SSE4.2 crc64 in HW" },
+#if 0
   { crc32c_hw1_test,      32, 0x0C7346F0, "crc32_hw1",   "Faster Adler SSE4.2 crc32 in HW" },
+#endif
 #endif
 // elf64 or macho64 only
 //{ fhtw_test,            64, 0x0,        "fhtw",        "fhtw asm" },
@@ -166,6 +168,9 @@ HashInfo g_hashes[] =
   { cmetrohash64_1_optshort_test,	 64, 0xEE88F7D2, "cmetrohash64_1_optshort", "cmetrohash64_1 (shorter key optimized) , 64-bit for x64" },
   { cmetrohash64_1_test,        64, 0xEE88F7D2, "cmetrohash64_1",    "cmetrohash64_1, 64-bit for x64" },
   { cmetrohash64_2_test,        64, 0xE1FC7C6E, "cmetrohash64_2",    "cmetrohash64_2, 64-bit for x64" },
+#endif
+#if defined(__SSE4_2__) && defined(__x86_64__)
+  { falkhash_test_cxx,          64, 0x2F99B071, "falkhash",          "falkhash.asm with aesenc, 64-bit for x64" },
 #endif
 };
 
@@ -696,7 +701,7 @@ int main ( int argc, char ** argv )
         bool found = false;
         g_testAll = false;
         do {
-          if (p = strchr(rest, ',')) {
+          if ((p = strchr(rest, ','))) {
             opt = strndup(rest, p-rest);
             rest = p+1;
           } else {
