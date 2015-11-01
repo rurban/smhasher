@@ -13,6 +13,8 @@
 #include "opt_cmetrohash.h"
 #endif
 
+#include "fasthash.h"
+
 //----------
 // These are _not_ hash functions (even though people tend to use crc32 as one...)
 
@@ -137,6 +139,7 @@ inline void metrohash128_1_test ( const void * key, int len, uint32_t seed, void
 inline void metrohash128_2_test ( const void * key, int len, uint32_t seed, void * out ) {
   metrohash128_2((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
 }
+#if defined(__SSE4_2__) && defined(__x86_64__)
 inline void metrohash64crc_1_test ( const void * key, int len, uint32_t seed, void * out ) {
   metrohash64crc_1((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
 }
@@ -149,6 +152,7 @@ inline void metrohash128crc_1_test ( const void * key, int len, uint32_t seed, v
 inline void metrohash128crc_2_test ( const void * key, int len, uint32_t seed, void * out ) {
   metrohash128crc_2((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
 }
+#endif
 inline void cmetrohash64_1_test ( const void * key, int len, uint32_t seed, void * out ) {
   cmetrohash64_1((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
 }
@@ -157,5 +161,11 @@ inline void cmetrohash64_1_optshort_test ( const void * key, int len, uint32_t s
 }
 inline void cmetrohash64_2_test ( const void * key, int len, uint32_t seed, void * out ) {
   cmetrohash64_2((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
+}
+inline void fasthash32_test ( const void * key, int len, uint32_t seed, void * out ) {
+  *(uint32_t*)out = fasthash32(key, (size_t) len, seed);
+}
+inline void fasthash64_test ( const void * key, int len, uint32_t seed, void * out ) {
+  *(uint64_t*)out = fasthash64(key, (size_t) len, (uint64_t)seed);
 }
 #endif
