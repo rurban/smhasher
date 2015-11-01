@@ -130,6 +130,10 @@ HashInfo g_hashes[] =
 #if defined(__x86_64__)
   { MurmurHash3_x64_128, 128, 0x6384BA69, "Murmur3F",    "MurmurHash3 for x64, 128-bit" },
 #endif
+#if defined(__x86_64__)
+  { fasthash32_test,      32, 0xE9481AFC, "fasthash32",        "fast-hash 32bit" },
+  { fasthash64_test,      64, 0xA16231A7, "fasthash64",        "fast-hash 64bit" },
+#endif
   { CityHash32_test,      32, 0x5C28AD62, "City32",      "Google CityHash32WithSeed (old)" },
   { CityHash64_test,      64, 0x25A20825, "City64",      "Google CityHash64WithSeed (old)" },
 #if defined(__SSE4_2__) && defined(__x86_64__)
@@ -165,7 +169,7 @@ HashInfo g_hashes[] =
 #endif
 #endif
 #if defined(__x86_64__)
-  { cmetrohash64_1_optshort_test,	 64, 0xEE88F7D2, "cmetrohash64_1_optshort", "cmetrohash64_1 (shorter key optimized) , 64-bit for x64" },
+  { cmetrohash64_1_optshort_test, 64, 0xEE88F7D2, "cmetrohash64_1_optshort", "cmetrohash64_1 (shorter key optimized) , 64-bit for x64" },
   { cmetrohash64_1_test,        64, 0xEE88F7D2, "cmetrohash64_1",    "cmetrohash64_1, 64-bit for x64" },
   { cmetrohash64_2_test,        64, 0xE1FC7C6E, "cmetrohash64_2",    "cmetrohash64_2, 64-bit for x64" },
 #endif

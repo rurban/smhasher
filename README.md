@@ -30,11 +30,13 @@ SMhasher
 | Murmur2A              |      4027.33  |    28.19 | 12.7% bias                     |
 | Murmur2B              |      7648.97  |    21.26 | 1.8% bias, collisions, 3.4% distrib |
 | Murmur2C              |      5398.54  |    26.74 | 91% bias, collisions, distr    |
-| PMurHash32            |      3242.25  |    31.52 |                            |
 | ----------------------|               |          |                            |
+| PMurHash32            |      3242.25  |    31.52 |                            |
 | Murmur3A              |      3188.52  |    24.50 |                            |
 | Murmur3C              |      5400.86  |    35.01 |                            |
 | Murmur3F              |      7845.17  |    35.23 |                            |
+| fasthash32            |      8048.25  |    23.77 |                            |
+| fasthash64            |      8015.22  |    22.04 |                            |
 | City32                |      7152.39  |    24.00 | 2 minor collisions         |
 | City64                |     15335.21  |    23.99 |                            |
 | City128               |     16383.46  |    34.13 |                            |
@@ -59,7 +61,7 @@ SMhasher
 | cmetrohash64_1_optshort |   16862.58  |    23.11 |                            |
 | cmetrohash64_1        |     15799.52  |    25.44 |                            |
 | cmetrohash64_2        |     15040.97  |    28.59 |                            |
-| falkhash              |     36785.50  |    65.55 | avalanche ~0.6% bias       |
+| falkhash              |     36785.50  |    65.55 |                            |
 
 
 Summary
@@ -76,10 +78,12 @@ So the fastest hash functions on x86_64 without quality problems are:
 * Metro (_but not 64crc yet, WIP_)
 * Spooky32
 * xxHash64
+* fasthash
 * City (_deprecated_)
 
-Hash functions for symbol tables or hash tables typically use 32 bit hashes,
-for databases and file systems typically 64 or 128bit, for crypto now starting with 256 bit.
+Hash functions for symbol tables or hash tables typically use 32 bit
+hashes, for databases, file systems and file checksums typically 64 or
+128bit, for crypto now starting with 256 bit.
 
 Typical median key size in perl5 is 20, the most common 4.
 See [github.com/rurban/perl-hash-stats](https://github.com/rurban/perl-hash-stats)
