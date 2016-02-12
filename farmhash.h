@@ -49,10 +49,6 @@
 #include <string.h>   // for memcpy and memset
 #include <utility>
 
-#if defined(__SSE4_2__)
-#define FARMHASH_ASSUME_SSE42 1
-#endif
-
 #ifndef NAMESPACE_FOR_HASH_FUNCTIONS
 #define NAMESPACE_FOR_HASH_FUNCTIONS util
 #endif

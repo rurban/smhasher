@@ -141,7 +141,7 @@ HashInfo g_hashes[] =
   { CityHashCrc128_test, 128, 0xD4389C97, "CityCrc128",  "Google CityHashCrc128WithSeed SSE4.2 (old)" },
 #endif
 #if defined(__x86_64__)
-  { FarmHash32_test,      32, 0x2E226C14, "FarmHash32",  "Google FarmHash32WithSeed" },
+  { FarmHash32_test,      32, 0xA2E45238, "FarmHash32",  "Google FarmHash32WithSeed" },
   { FarmHash64_test,      64, 0x35F84A93, "FarmHash64",  "Google FarmHash64WithSeed" },
   { FarmHash128_test,    128, 0x9E636AAE, "FarmHash128", "Google FarmHash128WithSeed" },
 #endif
