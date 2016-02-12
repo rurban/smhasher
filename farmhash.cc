@@ -26,6 +26,16 @@
 // (or its equivalent for your compiler); if you use -DFARMHASH_ASSUME_AESNI
 // you likely need -maes (or its equivalent for your compiler).
 
+#ifdef FARMHASH_ASSUME_SSSE3
+#undef FARMHASH_ASSUME_SSSE3
+#define FARMHASH_ASSUME_SSSE3 1
+#endif
+
+#ifdef FARMHASH_ASSUME_SSE41
+#undef FARMHASH_ASSUME_SSE41
+#define FARMHASH_ASSUME_SSE41 1
+#endif
+
 #ifdef FARMHASH_ASSUME_SSE42
 #undef FARMHASH_ASSUME_SSE42
 #define FARMHASH_ASSUME_SSE42 1
@@ -34,6 +44,11 @@
 #ifdef FARMHASH_ASSUME_AESNI
 #undef FARMHASH_ASSUME_AESNI
 #define FARMHASH_ASSUME_AESNI 1
+#endif
+
+#ifdef FARMHASH_ASSUME_AVX
+#undef FARMHASH_ASSUME_AVX
+#define FARMHASH_ASSUME_AVX 1
 #endif
 
 #if !defined(FARMHASH_CAN_USE_CXX11) && defined(LANG_CXX11)
@@ -58,7 +73,7 @@
 // FARMHASH PORTABILITY LAYER: LIKELY and UNLIKELY
 
 #if !defined(LIKELY)
-#if defined(FARMHASH_OPTIONAL_BUILTIN_EXPECT) && !defined(HAVE_BUILTIN_EXPECT)
+#if defined(FARMHASH_NO_BUILTIN_EXPECT) || (defined(FARMHASH_OPTIONAL_BUILTIN_EXPECT) && !defined(HAVE_BUILTIN_EXPECT))
 #define LIKELY(x) (x)
 #else
 #define LIKELY(x) (__builtin_expect(!!(x), 1))
@@ -262,6 +277,28 @@ STATIC_INLINE uint64_t Rotate64(uint64_t val, int shift) {
 #define is_64bit (x86_64 || (sizeof(void*) == 8))
 #endif
 
+#undef can_use_ssse3
+#if defined(__SSSE3__) || defined(FARMHASH_ASSUME_SSSE3)
+
+#include <immintrin.h>
+#define can_use_ssse3 1
+// Now we can use _mm_hsub_epi16 and so on.
+
+#else
+#define can_use_ssse3 0
+#endif
+
+#undef can_use_sse41
+#if defined(__SSE4_1__) || defined(FARMHASH_ASSUME_SSE41)
+
+#include <immintrin.h>
+#define can_use_sse41 1
+// Now we can use _mm_insert_epi64 and so on.
+
+#else
+#define can_use_sse41 0
+#endif
+
 #undef can_use_sse42
 #if defined(__SSE4_2__) || defined(FARMHASH_ASSUME_SSE42)
 
@@ -284,8 +321,18 @@ STATIC_INLINE uint64_t Rotate64(uint64_t val, int shift) {
 #define can_use_aesni 0
 #endif
 
-#if can_use_sse42 || can_use_aesni
-STATIC_INLINE __m128i Load128(const char* s) {
+#undef can_use_avx
+#if defined(__AVX__) || defined(FARMHASH_ASSUME_AVX)
+
+#include <immintrin.h>
+#define can_use_avx 1
+
+#else
+#define can_use_avx 0
+#endif
+
+#if can_use_ssse3 || can_use_sse41 || can_use_sse42 || can_use_aesni || can_use_avx
+STATIC_INLINE __m128i Fetch128(const char* s) {
   return _mm_loadu_si128(reinterpret_cast<const __m128i*>(s));
 }
 #endif
@@ -353,7 +400,7 @@ template <> uint128_t DebugTweak(uint128_t x) {
   return x;
 }
 
-}  // namespace NAMESPACE_FOR_HASH_FUNCTIONS;
+}  // namespace NAMESPACE_FOR_HASH_FUNCTIONS
 
 using namespace std;
 using namespace NAMESPACE_FOR_HASH_FUNCTIONS;
@@ -528,6 +575,443 @@ uint64_t Hash64WithSeeds(const char *s, size_t len, uint64_t seed0, uint64_t see
   return HashLen16(Hash64(s, len) - seed0, seed1);
 }
 }  // namespace farmhashna
+namespace farmhashuo {
+#undef Fetch
+#define Fetch Fetch64
+
+#undef Rotate
+#define Rotate Rotate64
+
+STATIC_INLINE uint64_t H(uint64_t x, uint64_t y, uint64_t mul, int r) {
+  uint64_t a = (x ^ y) * mul;
+  a ^= (a >> 47);
+  uint64_t b = (y ^ a) * mul;
+  return Rotate(b, r) * mul;
+}
+
+uint64_t Hash64WithSeeds(const char *s, size_t len,
+                         uint64_t seed0, uint64_t seed1) {
+  if (len <= 64) {
+    return farmhashna::Hash64WithSeeds(s, len, seed0, seed1);
+  }
+
+  // For strings over 64 bytes we loop.  Internal state consists of
+  // 64 bytes: u, v, w, x, y, and z.
+  uint64_t x = seed0;
+  uint64_t y = seed1 * k2 + 113;
+  uint64_t z = farmhashna::ShiftMix(y * k2) * k2;
+  pair<uint64_t, uint64_t> v = make_pair(seed0, seed1);
+  pair<uint64_t, uint64_t> w = make_pair(0, 0);
+  uint64_t u = x - z;
+  x *= k2;
+  uint64_t mul = k2 + (u & 0x82);
+
+  // Set end so that after the loop we have 1 to 64 bytes left to process.
+  const char* end = s + ((len - 1) / 64) * 64;
+  const char* last64 = end + ((len - 1) & 63) - 63;
+  assert(s + len - 64 == last64);
+  do {
+    uint64_t a0 = Fetch(s);
+    uint64_t a1 = Fetch(s + 8);
+    uint64_t a2 = Fetch(s + 16);
+    uint64_t a3 = Fetch(s + 24);
+    uint64_t a4 = Fetch(s + 32);
+    uint64_t a5 = Fetch(s + 40);
+    uint64_t a6 = Fetch(s + 48);
+    uint64_t a7 = Fetch(s + 56);
+    x += a0 + a1;
+    y += a2;
+    z += a3;
+    v.first += a4;
+    v.second += a5 + a1;
+    w.first += a6;
+    w.second += a7;
+
+    x = Rotate(x, 26);
+    x *= 9;
+    y = Rotate(y, 29);
+    z *= mul;
+    v.first = Rotate(v.first, 33);
+    v.second = Rotate(v.second, 30);
+    w.first ^= x;
+    w.first *= 9;
+    z = Rotate(z, 32);
+    z += w.second;
+    w.second += z;
+    z *= 9;
+    std::swap(u, y);
+
+    z += a0 + a6;
+    v.first += a2;
+    v.second += a3;
+    w.first += a4;
+    w.second += a5 + a6;
+    x += a1;
+    y += a7;
+
+    y += v.first;
+    v.first += x - y;
+    v.second += w.first;
+    w.first += v.second;
+    w.second += x - y;
+    x += w.second;
+    w.second = Rotate(w.second, 34);
+    std::swap(u, z);
+    s += 64;
+  } while (s != end);
+  // Make s point to the last 64 bytes of input.
+  s = last64;
+  u *= 9;
+  v.second = Rotate(v.second, 28);
+  v.first = Rotate(v.first, 20);
+  w.first += ((len - 1) & 63);
+  u += y;
+  y += u;
+  x = Rotate(y - x + v.first + Fetch(s + 8), 37) * mul;
+  y = Rotate(y ^ v.second ^ Fetch(s + 48), 42) * mul;
+  x ^= w.second * 9;
+  y += v.first + Fetch(s + 40);
+  z = Rotate(z + w.first, 33) * mul;
+  v = farmhashna::WeakHashLen32WithSeeds(s, v.second * mul, x + w.first);
+  w = farmhashna::WeakHashLen32WithSeeds(s + 32, z + w.second, y + Fetch(s + 16));
+  return H(farmhashna::HashLen16(v.first + x, w.first ^ y, mul) + z - u,
+           H(v.second + y, w.second + z, k2, 30) ^ x,
+           k2,
+           31);
+}
+
+uint64_t Hash64WithSeed(const char *s, size_t len, uint64_t seed) {
+  return len <= 64 ? farmhashna::Hash64WithSeed(s, len, seed) :
+      Hash64WithSeeds(s, len, 0, seed);
+}
+
+uint64_t Hash64(const char *s, size_t len) {
+  return len <= 64 ? farmhashna::Hash64(s, len) :
+      Hash64WithSeeds(s, len, 81, 0);
+}
+}  // namespace farmhashuo
+namespace farmhashxo {
+#undef Fetch
+#define Fetch Fetch64
+
+#undef Rotate
+#define Rotate Rotate64
+
+STATIC_INLINE uint64_t H32(const char *s, size_t len, uint64_t mul,
+                           uint64_t seed0 = 0, uint64_t seed1 = 0) {
+  uint64_t a = Fetch(s) * k1;
+  uint64_t b = Fetch(s + 8);
+  uint64_t c = Fetch(s + len - 8) * mul;
+  uint64_t d = Fetch(s + len - 16) * k2;
+  uint64_t u = Rotate(a + b, 43) + Rotate(c, 30) + d + seed0;
+  uint64_t v = a + Rotate(b + k2, 18) + c + seed1;
+  a = farmhashna::ShiftMix((u ^ v) * mul);
+  b = farmhashna::ShiftMix((v ^ a) * mul);
+  return b;
+}
+
+// Return an 8-byte hash for 33 to 64 bytes.
+STATIC_INLINE uint64_t HashLen33to64(const char *s, size_t len) {
+  uint64_t mul0 = k2 - 30;
+  uint64_t mul1 = k2 - 30 + 2 * len;
+  uint64_t h0 = H32(s, 32, mul0);
+  uint64_t h1 = H32(s + len - 32, 32, mul1);
+  return ((h1 * mul1) + h0) * mul1;
+}
+
+// Return an 8-byte hash for 65 to 96 bytes.
+STATIC_INLINE uint64_t HashLen65to96(const char *s, size_t len) {
+  uint64_t mul0 = k2 - 114;
+  uint64_t mul1 = k2 - 114 + 2 * len;
+  uint64_t h0 = H32(s, 32, mul0);
+  uint64_t h1 = H32(s + 32, 32, mul1);
+  uint64_t h2 = H32(s + len - 32, 32, mul1, h0, h1);
+  return (h2 * 9 + (h0 >> 17) + (h1 >> 21)) * mul1;
+}
+
+uint64_t Hash64(const char *s, size_t len) {
+  if (len <= 32) {
+    if (len <= 16) {
+      return farmhashna::HashLen0to16(s, len);
+    } else {
+      return farmhashna::HashLen17to32(s, len);
+    }
+  } else if (len <= 64) {
+    return HashLen33to64(s, len);
+  } else if (len <= 96) {
+    return HashLen65to96(s, len);
+  } else if (len <= 256) {
+    return farmhashna::Hash64(s, len);
+  } else {
+    return farmhashuo::Hash64(s, len);
+  }
+}
+
+uint64_t Hash64WithSeeds(const char *s, size_t len, uint64_t seed0, uint64_t seed1) {
+  return farmhashuo::Hash64WithSeeds(s, len, seed0, seed1);
+}
+
+uint64_t Hash64WithSeed(const char *s, size_t len, uint64_t seed) {
+  return farmhashuo::Hash64WithSeed(s, len, seed);
+}
+}  // namespace farmhashxo
+namespace farmhashte {
+#if !can_use_sse41 || !x86_64
+
+uint64_t Hash64(const char *s, size_t len) {
+  FARMHASH_DIE_IF_MISCONFIGURED;
+  return s == NULL ? 0 : len;
+}
+
+uint64_t Hash64WithSeed(const char *s, size_t len, uint64_t seed) {
+  FARMHASH_DIE_IF_MISCONFIGURED;
+  return seed + Hash64(s, len);
+}
+
+uint64_t Hash64WithSeeds(const char *s, size_t len,
+                         uint64_t seed0, uint64_t seed1) {
+  FARMHASH_DIE_IF_MISCONFIGURED;
+  return seed0 + seed1 + Hash64(s, len);
+}
+
+#else
+
+#undef Fetch
+#define Fetch Fetch64
+
+#undef Rotate
+#define Rotate Rotate64
+
+#undef Bswap
+#define Bswap Bswap64
+
+// Helpers for data-parallel operations (1x 128 bits or 2x 64 or 4x 32).
+STATIC_INLINE __m128i Add(__m128i x, __m128i y) { return _mm_add_epi64(x, y); }
+STATIC_INLINE __m128i Xor(__m128i x, __m128i y) { return _mm_xor_si128(x, y); }
+STATIC_INLINE __m128i Mul(__m128i x, __m128i y) { return _mm_mullo_epi32(x, y); }
+STATIC_INLINE __m128i Shuf(__m128i x, __m128i y) { return _mm_shuffle_epi8(y, x); }
+
+// Requires n >= 256.  Requires SSE4.1. Should be slightly faster if the
+// compiler uses AVX instructions (e.g., use the -mavx flag with GCC).
+STATIC_INLINE uint64_t Hash64Long(const char* s, size_t n,
+                                  uint64_t seed0, uint64_t seed1) {
+  const __m128i kShuf =
+      _mm_set_epi8(4, 11, 10, 5, 8, 15, 6, 9, 12, 2, 14, 13, 0, 7, 3, 1);
+  const __m128i kMult =
+      _mm_set_epi8(0xbd, 0xd6, 0x33, 0x39, 0x45, 0x54, 0xfa, 0x03,
+                   0x34, 0x3e, 0x33, 0xed, 0xcc, 0x9e, 0x2d, 0x51);
+  uint64_t seed2 = (seed0 + 113) * (seed1 + 9);
+  uint64_t seed3 = (Rotate(seed0, 23) + 27) * (Rotate(seed1, 30) + 111);
+  __m128i d0 = _mm_cvtsi64_si128(seed0);
+  __m128i d1 = _mm_cvtsi64_si128(seed1);
+  __m128i d2 = Shuf(kShuf, d0);
+  __m128i d3 = Shuf(kShuf, d1);
+  __m128i d4 = Xor(d0, d1);
+  __m128i d5 = Xor(d1, d2);
+  __m128i d6 = Xor(d2, d4);
+  __m128i d7 = _mm_set1_epi32(seed2 >> 32);
+  __m128i d8 = Mul(kMult, d2);
+  __m128i d9 = _mm_set1_epi32(seed3 >> 32);
+  __m128i d10 = _mm_set1_epi32(seed3);
+  __m128i d11 = Add(d2, _mm_set1_epi32(seed2));
+  const char* end = s + (n & ~static_cast<size_t>(255));
+  do {
+    __m128i z;
+    z = Fetch128(s);
+    d0 = Add(d0, z);
+    d1 = Shuf(kShuf, d1);
+    d2 = Xor(d2, d0);
+    d4 = Xor(d4, z);
+    d4 = Xor(d4, d1);
+    std::swap(d0, d6);
+    z = Fetch128(s + 16);
+    d5 = Add(d5, z);
+    d6 = Shuf(kShuf, d6);
+    d8 = Shuf(kShuf, d8);
+    d7 = Xor(d7, d5);
+    d0 = Xor(d0, z);
+    d0 = Xor(d0, d6);
+    std::swap(d5, d11);
+    z = Fetch128(s + 32);
+    d1 = Add(d1, z);
+    d2 = Shuf(kShuf, d2);
+    d4 = Shuf(kShuf, d4);
+    d5 = Xor(d5, z);
+    d5 = Xor(d5, d2);
+    std::swap(d10, d4);
+    z = Fetch128(s + 48);
+    d6 = Add(d6, z);
+    d7 = Shuf(kShuf, d7);
+    d0 = Shuf(kShuf, d0);
+    d8 = Xor(d8, d6);
+    d1 = Xor(d1, z);
+    d1 = Add(d1, d7);
+    z = Fetch128(s + 64);
+    d2 = Add(d2, z);
+    d5 = Shuf(kShuf, d5);
+    d4 = Add(d4, d2);
+    d6 = Xor(d6, z);
+    d6 = Xor(d6, d11);
+    std::swap(d8, d2);
+    z = Fetch128(s + 80);
+    d7 = Xor(d7, z);
+    d8 = Shuf(kShuf, d8);
+    d1 = Shuf(kShuf, d1);
+    d0 = Add(d0, d7);
+    d2 = Add(d2, z);
+    d2 = Add(d2, d8);
+    std::swap(d1, d7);
+    z = Fetch128(s + 96);
+    d4 = Shuf(kShuf, d4);
+    d6 = Shuf(kShuf, d6);
+    d8 = Mul(kMult, d8);
+    d5 = Xor(d5, d11);
+    d7 = Xor(d7, z);
+    d7 = Add(d7, d4);
+    std::swap(d6, d0);
+    z = Fetch128(s + 112);
+    d8 = Add(d8, z);
+    d0 = Shuf(kShuf, d0);
+    d2 = Shuf(kShuf, d2);
+    d1 = Xor(d1, d8);
+    d10 = Xor(d10, z);
+    d10 = Xor(d10, d0);
+    std::swap(d11, d5);
+    z = Fetch128(s + 128);
+    d4 = Add(d4, z);
+    d5 = Shuf(kShuf, d5);
+    d7 = Shuf(kShuf, d7);
+    d6 = Add(d6, d4);
+    d8 = Xor(d8, z);
+    d8 = Xor(d8, d5);
+    std::swap(d4, d10);
+    z = Fetch128(s + 144);
+    d0 = Add(d0, z);
+    d1 = Shuf(kShuf, d1);
+    d2 = Add(d2, d0);
+    d4 = Xor(d4, z);
+    d4 = Xor(d4, d1);
+    z = Fetch128(s + 160);
+    d5 = Add(d5, z);
+    d6 = Shuf(kShuf, d6);
+    d8 = Shuf(kShuf, d8);
+    d7 = Xor(d7, d5);
+    d0 = Xor(d0, z);
+    d0 = Xor(d0, d6);
+    std::swap(d2, d8);
+    z = Fetch128(s + 176);
+    d1 = Add(d1, z);
+    d2 = Shuf(kShuf, d2);
+    d4 = Shuf(kShuf, d4);
+    d5 = Mul(kMult, d5);
+    d5 = Xor(d5, z);
+    d5 = Xor(d5, d2);
+    std::swap(d7, d1);
+    z = Fetch128(s + 192);
+    d6 = Add(d6, z);
+    d7 = Shuf(kShuf, d7);
+    d0 = Shuf(kShuf, d0);
+    d8 = Add(d8, d6);
+    d1 = Xor(d1, z);
+    d1 = Xor(d1, d7);
+    std::swap(d0, d6);
+    z = Fetch128(s + 208);
+    d2 = Add(d2, z);
+    d5 = Shuf(kShuf, d5);
+    d4 = Xor(d4, d2);
+    d6 = Xor(d6, z);
+    d6 = Xor(d6, d9);
+    std::swap(d5, d11);
+    z = Fetch128(s + 224);
+    d7 = Add(d7, z);
+    d8 = Shuf(kShuf, d8);
+    d1 = Shuf(kShuf, d1);
+    d0 = Xor(d0, d7);
+    d2 = Xor(d2, z);
+    d2 = Xor(d2, d8);
+    std::swap(d10, d4);
+    z = Fetch128(s + 240);
+    d3 = Add(d3, z);
+    d4 = Shuf(kShuf, d4);
+    d6 = Shuf(kShuf, d6);
+    d7 = Mul(kMult, d7);
+    d5 = Add(d5, d3);
+    d7 = Xor(d7, z);
+    d7 = Xor(d7, d4);
+    std::swap(d3, d9);
+    s += 256;
+  } while (s != end);
+  d6 = Add(Mul(kMult, d6), _mm_cvtsi64_si128(n));
+  if (n % 256 != 0) {
+    d7 = Add(_mm_shuffle_epi32(d8, (0 << 6) + (3 << 4) + (2 << 2) + (1 << 0)), d7);
+    d8 = Add(Mul(kMult, d8), _mm_cvtsi64_si128(farmhashxo::Hash64(s, n % 256)));
+  }
+  __m128i t[8];
+  d0 = Mul(kMult, Shuf(kShuf, Mul(kMult, d0)));
+  d3 = Mul(kMult, Shuf(kShuf, Mul(kMult, d3)));
+  d9 = Mul(kMult, Shuf(kShuf, Mul(kMult, d9)));
+  d1 = Mul(kMult, Shuf(kShuf, Mul(kMult, d1)));
+  d0 = Add(d11, d0);
+  d3 = Xor(d7, d3);
+  d9 = Add(d8, d9);
+  d1 = Add(d10, d1);
+  d4 = Add(d3, d4);
+  d5 = Add(d9, d5);
+  d6 = Xor(d1, d6);
+  d2 = Add(d0, d2);
+  t[0] = d0;
+  t[1] = d3;
+  t[2] = d9;
+  t[3] = d1;
+  t[4] = d4;
+  t[5] = d5;
+  t[6] = d6;
+  t[7] = d2;
+  return farmhashxo::Hash64(reinterpret_cast<const char*>(t), sizeof(t));
+}
+
+uint64_t Hash64(const char *s, size_t len) {
+  // Empirically, farmhashxo seems faster until length 512.
+  return len >= 512 ? Hash64Long(s, len, k2, k1) : farmhashxo::Hash64(s, len);
+}
+
+uint64_t Hash64WithSeed(const char *s, size_t len, uint64_t seed) {
+  return len >= 512 ? Hash64Long(s, len, k1, seed) :
+      farmhashxo::Hash64WithSeed(s, len, seed);
+}
+
+uint64_t Hash64WithSeeds(const char *s, size_t len, uint64_t seed0, uint64_t seed1) {
+  return len >= 512 ? Hash64Long(s, len, seed0, seed1) :
+      farmhashxo::Hash64WithSeeds(s, len, seed0, seed1);
+}
+
+#endif
+}  // namespace farmhashte
+namespace farmhashnt {
+#if !can_use_sse41 || !x86_64
+
+uint32_t Hash32(const char *s, size_t len) {
+  FARMHASH_DIE_IF_MISCONFIGURED;
+  return s == NULL ? 0 : len;
+}
+
+uint32_t Hash32WithSeed(const char *s, size_t len, uint32_t seed) {
+  FARMHASH_DIE_IF_MISCONFIGURED;
+  return seed + Hash32(s, len);
+}
+
+#else
+
+uint32_t Hash32(const char *s, size_t len) {
+  return static_cast<uint32_t>(farmhashte::Hash64(s, len));
+}
+
+uint32_t Hash32WithSeed(const char *s, size_t len, uint32_t seed) {
+  return static_cast<uint32_t>(farmhashte::Hash64WithSeed(s, len, seed));
+}
+
+#endif
+}  // namespace farmhashnt
 namespace farmhashmk {
 #undef Fetch
 #define Fetch Fetch32
@@ -672,17 +1156,14 @@ STATIC_INLINE __m128i Xor(__m128i x, __m128i y) { return _mm_xor_si128(x, y); }
 STATIC_INLINE __m128i Or(__m128i x, __m128i y) { return _mm_or_si128(x, y); }
 STATIC_INLINE __m128i Mul(__m128i x, __m128i y) { return _mm_mullo_epi32(x, y); }
 STATIC_INLINE __m128i Mul5(__m128i x) { return Add(x, _mm_slli_epi32(x, 2)); }
-STATIC_INLINE __m128i Rotate(__m128i x, int c) {
+STATIC_INLINE __m128i RotateLeft(__m128i x, int c) {
   return Or(_mm_slli_epi32(x, c),
             _mm_srli_epi32(x, 32 - c));
 }
-STATIC_INLINE __m128i Rot17(__m128i x) { return Rotate(x, 17); }
-STATIC_INLINE __m128i Rot19(__m128i x) { return Rotate(x, 19); }
+STATIC_INLINE __m128i Rol17(__m128i x) { return RotateLeft(x, 17); }
+STATIC_INLINE __m128i Rol19(__m128i x) { return RotateLeft(x, 19); }
 STATIC_INLINE __m128i Shuffle0321(__m128i x) {
   return _mm_shuffle_epi32(x, (0 << 6) + (3 << 4) + (2 << 2) + (1 << 0));
-}
-STATIC_INLINE __m128i Shuffle2031(__m128i x) {
-  return _mm_shuffle_epi32(x, (2 << 6) + (0 << 4) + (3 << 2) + (1 << 0));
 }
 
 uint32_t Hash32(const char *s, size_t len) {
@@ -722,10 +1203,10 @@ uint32_t Hash32(const char *s, size_t len) {
 #define Murk(a, h)                              \
   Add(k,                                        \
       Mul5(                                     \
-          Rot19(                                \
+          Rol19(                                \
               Xor(                              \
                   Mulc2(                        \
-                      Rot17(                    \
+                      Rol17(                    \
                           Mulc1(a))),           \
                   (h)))))
 
@@ -737,11 +1218,11 @@ uint32_t Hash32(const char *s, size_t len) {
   __m128i k = _mm_set1_epi32(0xe6546b64);
   __m128i q;
   if (len < 80) {
-    __m128i a = Load128(s);
-    __m128i b = Load128(s + 16);
-    __m128i c = Load128(s + (len - 15) / 2);
-    __m128i d = Load128(s + len - 32);
-    __m128i e = Load128(s + len - 16);
+    __m128i a = Fetch128(s);
+    __m128i b = Fetch128(s + 16);
+    __m128i c = Fetch128(s + (len - 15) / 2);
+    __m128i d = Fetch128(s + len - 32);
+    __m128i e = Fetch128(s + len - 16);
     h = Add(h, a);
     g = Add(g, b);
     q = g;
@@ -767,11 +1248,11 @@ uint32_t Hash32(const char *s, size_t len) {
 
 #undef Chunk
 #define Chunk() do {                            \
-  __m128i a = Load128(s);                       \
-  __m128i b = Load128(s + 16);                  \
-  __m128i c = Load128(s + 32);                  \
-  __m128i d = Load128(s + 48);                  \
-  __m128i e = Load128(s + 64);                  \
+  __m128i a = Fetch128(s);                      \
+  __m128i b = Fetch128(s + 16);                 \
+  __m128i c = Fetch128(s + 32);                 \
+  __m128i d = Fetch128(s + 48);                 \
+  __m128i e = Fetch128(s + 64);                 \
   h = Add(h, a);                                \
   g = Add(g, b);                                \
   g = Shuffle0321(g);                           \
@@ -781,7 +1262,7 @@ uint32_t Hash32(const char *s, size_t len) {
   f = Add(f, h);                                \
   h = Add(h, d);                                \
   q = Add(q, e);                                \
-  h = Rot17(h);                                 \
+  h = Rol17(h);                                 \
   h = Mulc1(h);                                 \
   k = Xor(k, _mm_shuffle_epi8(g, f));           \
   g = Add(Xor(c, g), a);                        \
@@ -865,35 +1346,6 @@ uint32_t Hash32WithSeed(const char *s, size_t len, uint32_t seed) {
 
 #endif
 }  // namespace farmhashsu
-namespace farmhashns {
-#if !can_use_sse42 || !can_use_aesni || !x86_64
-
-uint32_t Hash32(const char *s, size_t len) {
-  FARMHASH_DIE_IF_MISCONFIGURED;
-  return s == NULL ? 0 : len;
-}
-
-uint32_t Hash32WithSeed(const char *s, size_t len, uint32_t seed) {
-  FARMHASH_DIE_IF_MISCONFIGURED;
-  return seed + Hash32(s, len);
-}
-
-#else
-
-uint32_t Hash32(const char *s, size_t len) {
-  return len <= 256 ?
-      static_cast<uint32_t>(farmhashna::Hash64(s, len)) :
-      farmhashsu::Hash32(s, len);
-}
-
-uint32_t Hash32WithSeed(const char *s, size_t len, uint32_t seed) {
-  return len <= 256 ?
-      static_cast<uint32_t>(farmhashna::Hash64WithSeed(s, len, seed)) :
-      farmhashsu::Hash32WithSeed(s, len, seed);
-}
-
-#endif
-}  // namespace farmhashns
 namespace farmhashsa {
 #if !can_use_sse42
 
@@ -985,11 +1437,11 @@ uint32_t Hash32(const char *s, size_t len) {
   __m128i f = g;
   __m128i k = _mm_set1_epi32(0xe6546b64);
   if (len < 80) {
-    __m128i a = Load128(s);
-    __m128i b = Load128(s + 16);
-    __m128i c = Load128(s + (len - 15) / 2);
-    __m128i d = Load128(s + len - 32);
-    __m128i e = Load128(s + len - 16);
+    __m128i a = Fetch128(s);
+    __m128i b = Fetch128(s + 16);
+    __m128i c = Fetch128(s + (len - 15) / 2);
+    __m128i d = Fetch128(s + len - 32);
+    __m128i e = Fetch128(s + len - 16);
     h = Add(h, a);
     g = Add(g, b);
     g = Shuffle0321(g);
@@ -1014,11 +1466,11 @@ uint32_t Hash32(const char *s, size_t len) {
 
 #undef Chunk
 #define Chunk() do {                            \
-  __m128i a = Load128(s);                       \
-  __m128i b = Load128(s + 16);                  \
-  __m128i c = Load128(s + 32);                  \
-  __m128i d = Load128(s + 48);                  \
-  __m128i e = Load128(s + 64);                  \
+  __m128i a = Fetch128(s);                       \
+  __m128i b = Fetch128(s + 16);                  \
+  __m128i c = Fetch128(s + 32);                  \
+  __m128i d = Fetch128(s + 48);                  \
+  __m128i e = Fetch128(s + 64);                  \
   h = Add(h, a);                                \
   g = Add(g, b);                                \
   g = Shuffle0321(g);                           \
@@ -1420,14 +1872,10 @@ namespace NAMESPACE_FOR_HASH_FUNCTIONS {
 // May change from time to time, may differ on different platforms, may differ
 // depending on NDEBUG.
 uint32_t Hash32(const char* s, size_t len) {
-  if (can_use_sse42 & can_use_aesni & x86_64)
-    return DebugTweak(farmhashns::Hash32(s, len));
-
   return DebugTweak(
-      (can_use_sse42 & can_use_aesni) ?
-      farmhashsu::Hash32(s, len) :
-      can_use_sse42 ?
-      farmhashsa::Hash32(s, len) :
+      (can_use_sse41 & x86_64) ? farmhashnt::Hash32(s, len) :
+      (can_use_sse42 & can_use_aesni) ? farmhashsu::Hash32(s, len) :
+      can_use_sse42 ? farmhashsa::Hash32(s, len) :
       farmhashmk::Hash32(s, len));
 }
 
@@ -1436,14 +1884,10 @@ uint32_t Hash32(const char* s, size_t len) {
 // May change from time to time, may differ on different platforms, may differ
 // depending on NDEBUG.
 uint32_t Hash32WithSeed(const char* s, size_t len, uint32_t seed) {
-  if (can_use_sse42 & can_use_aesni & x86_64)
-    return DebugTweak(farmhashns::Hash32WithSeed(s, len, seed));
-
   return DebugTweak(
-      (can_use_sse42 & can_use_aesni) ?
-      farmhashsu::Hash32WithSeed(s, len, seed) :
-      can_use_sse42 ?
-      farmhashsa::Hash32WithSeed(s, len, seed) :
+      (can_use_sse41 & x86_64) ? farmhashnt::Hash32WithSeed(s, len, seed) :
+      (can_use_sse42 & can_use_aesni) ? farmhashsu::Hash32WithSeed(s, len, seed) :
+      can_use_sse42 ? farmhashsa::Hash32WithSeed(s, len, seed) :
       farmhashmk::Hash32WithSeed(s, len, seed));
 }
 
@@ -1452,7 +1896,10 @@ uint32_t Hash32WithSeed(const char* s, size_t len, uint32_t seed) {
 // May change from time to time, may differ on different platforms, may differ
 // depending on NDEBUG.
 uint64_t Hash64(const char* s, size_t len) {
-  return DebugTweak(farmhashna::Hash64(s, len));
+  return DebugTweak(
+      (can_use_sse42 & x86_64) ?
+      farmhashte::Hash64(s, len) :
+      farmhashxo::Hash64(s, len));
 }
 
 // Hash function for a byte array.
@@ -1512,6 +1959,9 @@ uint128_t Fingerprint128(const char* s, size_t len) {
   return farmhashcc::Fingerprint128(s, len);
 }
 
+// Older and still available but perhaps not as fast as the above:
+//   farmhashns::Hash32{,WithSeed}()
+
 }  // namespace NAMESPACE_FOR_HASH_FUNCTIONS
 
 #if FARMHASHSELFTEST
@@ -1555,7 +2005,7 @@ void Setup() {
 }
 
 int NoteErrors() {
-#define NUM_SELF_TESTS 6
+#define NUM_SELF_TESTS 9
   if (++completed_self_tests == NUM_SELF_TESTS)
     std::exit(errors > 0);
   return errors;
@@ -3057,10 +3507,14 @@ bool Test(int offset, int len = 0) {
 #undef Check
 #undef IsAlive
 
-#define Check(x) do {                           \
-  bool ok = expected[index++] == (x);           \
-  assert(ok);                                   \
-  errors += !ok;                                \
+#define Check(x) do {                                                   \
+  const uint32_t actual = (x), e = expected[index++];                   \
+  bool ok = actual == e;                                                \
+  if (!ok) {                                                            \
+    cerr << "expected " << hex << e << " but got " << actual << endl;   \
+    ++errors;                                                           \
+  }                                                                     \
+  assert(ok);                                                           \
 } while (0)
 
 #define IsAlive(x) do { alive += IsNonZero(x); } while (0)
@@ -3175,7 +3629,7 @@ void Setup() {
 }
 
 int NoteErrors() {
-#define NUM_SELF_TESTS 6
+#define NUM_SELF_TESTS 9
   if (++completed_self_tests == NUM_SELF_TESTS)
     std::exit(errors > 0);
   return errors;
@@ -3953,10 +4407,14 @@ bool Test(int offset, int len = 0) {
 #undef Check
 #undef IsAlive
 
-#define Check(x) do {                           \
-  bool ok = expected[index++] == (x);           \
-  assert(ok);                                   \
-  errors += !ok;                                \
+#define Check(x) do {                                                   \
+  const uint32_t actual = (x), e = expected[index++];                   \
+  bool ok = actual == e;                                                \
+  if (!ok) {                                                            \
+    cerr << "expected " << hex << e << " but got " << actual << endl;   \
+    ++errors;                                                           \
+  }                                                                     \
+  assert(ok);                                                           \
 } while (0)
 
 #define IsAlive(x) do { alive += IsNonZero(x); } while (0)
@@ -4067,7 +4525,7 @@ void Setup() {
 }
 
 int NoteErrors() {
-#define NUM_SELF_TESTS 6
+#define NUM_SELF_TESTS 9
   if (++completed_self_tests == NUM_SELF_TESTS)
     std::exit(errors > 0);
   return errors;
@@ -5207,10 +5665,14 @@ bool Test(int offset, int len = 0) {
 #undef Check
 #undef IsAlive
 
-#define Check(x) do {                           \
-  bool ok = expected[index++] == (x);           \
-  assert(ok);                                   \
-  errors += !ok;                                \
+#define Check(x) do {                                                   \
+  const uint32_t actual = (x), e = expected[index++];                   \
+  bool ok = actual == e;                                                \
+  if (!ok) {                                                            \
+    cerr << "expected " << hex << e << " but got " << actual << endl;   \
+    ++errors;                                                           \
+  }                                                                     \
+  assert(ok);                                                           \
 } while (0)
 
 #define IsAlive(x) do { alive += IsNonZero(x); } while (0)
@@ -5323,7 +5785,7 @@ void Setup() {
 }
 
 int NoteErrors() {
-#define NUM_SELF_TESTS 6
+#define NUM_SELF_TESTS 9
   if (++completed_self_tests == NUM_SELF_TESTS)
     std::exit(errors > 0);
   return errors;
@@ -5339,7 +5801,7 @@ template <> inline bool IsNonZero<uint128_t>(uint128_t x) {
 
 #endif  // FARMHASH_SELF_TEST_GUARD
 
-namespace farmhashnsTest {
+namespace farmhashntTest {
 
 uint32_t CreateSeed(int offset, int salt) {
   uint32_t h = static_cast<uint32_t>(salt & 0xffffffff);
@@ -5437,663 +5899,663 @@ uint32_t expected[] = {
 1413396341u,
 146044391u,
 429095991u,
-1578546616u,
+3056862311u,
 366414107u,
-1207522198u,
+2293458109u,
 1684583131u,
-1157614300u,
+1170404994u,
 520792961u,
-586863115u,
+1577421232u,
 4033596884u,
-4140791139u,
+4229339322u,
 3242407770u,
-232064808u,
+2649785113u,
 816692935u,
-3748861010u,
+3555213933u,
 517646945u,
-648000590u,
+2180594090u,
 3047062993u,
-4027776454u,
+2391606125u,
 382936554u,
-1973395102u,
+788479970u,
 2826990641u,
-1029055034u,
+3167748333u,
 1758123094u,
-325737734u,
+389974094u,
 3338548567u,
-3698087965u,
+2583576230u,
 3198590202u,
-191910725u,
+4155628142u,
 542201663u,
-2135941665u,
+2856634168u,
 3948351189u,
-3252374102u,
+4194218315u,
 1467786451u,
-3444053918u,
+2743592929u,
 1062268187u,
-4081398201u,
+3810665822u,
 2560479831u,
-4225182569u,
+997658837u,
 3067277639u,
-1709989541u,
+1211737169u,
 59581167u,
-3639843023u,
+1389679610u,
 4189944477u,
-877580602u,
+100876854u,
 2062343506u,
-3762572073u,
+3088828656u,
 3284356565u,
-732225574u,
+3130054947u,
 3532596884u,
-1652884780u,
+3887208531u,
 259034107u,
-1426140634u,
+3233195759u,
 3200749877u,
-24035717u,
+760633989u,
 1115203611u,
-3146815575u,
+1516407838u,
 1778459926u,
-579625482u,
+2146672889u,
 2457048126u,
-389846205u,
+2217471853u,
 862072556u,
-1481069623u,
+3745267835u,
 701920051u,
-3388062747u,
-1005815394u,
-734239551u,
-1279682138u,
-49703572u,
-2509302188u,
-2815915291u,
-4017598378u,
-3035635454u,
-12886044u,
-2627383582u,
-855990313u,
-263366740u,
-3405007814u,
-1190977418u,
-2514169310u,
-4129538640u,
-3625507637u,
-2993032712u,
-2183845740u,
-1116991810u,
-462795667u,
-1343017609u,
-25485284u,
-1623631848u,
-573836428u,
-1937681565u,
-1668258120u,
-954762543u,
-732086117u,
-2936126607u,
-3171090854u,
-1927385370u,
-1492209542u,
-2148675559u,
-2760941207u,
-1338083267u,
-314727461u,
-2084630531u,
-3129033323u,
-636616055u,
-470463518u,
-408721884u,
-357324860u,
-2691859523u,
-1185564327u,
-1975527044u,
-1943802836u,
-1490330107u,
-448403661u,
-1910401882u,
-3201262636u,
-2554452696u,
-1852004679u,
-2803250686u,
-1022551180u,
-839529273u,
-2597259793u,
-3909443124u,
-2711436388u,
-837475154u,
-1068395209u,
-484603494u,
-3914002299u,
-268427550u,
-2914011058u,
+581695350u,
+1410111809u,
+3326135446u,
+2187968410u,
+4267859263u,
+479241367u,
+2868987960u,
+704325635u,
+1418509533u,
+735688735u,
+3283299459u,
+813690332u,
+1439630796u,
+3195309868u,
+1616408198u,
+3254795114u,
+2799925823u,
+3929484338u,
+1798536177u,
+4205965408u,
+1499475160u,
+4247675634u,
+3779953975u,
+785893184u,
+2778575413u,
+1160134629u,
+823113169u,
+4116162021u,
+4167766971u,
+2487440590u,
+4004655503u,
+4044418876u,
+1462554406u,
+2011102035u,
+4265993528u,
+576405853u,
+4038839101u,
+2425317635u,
+1401013391u,
+3062418115u,
+3167030094u,
+2602636307u,
+4264167741u,
+4017058800u,
+1029665228u,
+4036354071u,
+2670703363u,
+688472265u,
+1054670286u,
+338058159u,
+1539305024u,
+146827036u,
+4060134777u,
+2502815838u,
+1603444633u,
+2448966429u,
+3891353218u,
+1082330589u,
+201837927u,
+2848283092u,
+883849006u,
+1982110346u,
+541496720u,
+133643215u,
+3847827123u,
+4015671361u,
 2849988118u,
-3406991497u,
+3452457457u,
 2102063419u,
-1246595599u,
+3281002516u,
 1539151988u,
-991511607u,
+1147951686u,
 2005032160u,
-164940926u,
+2415262714u,
 116647396u,
-1764165478u,
+1029284767u,
 2159170082u,
-1723308975u,
+1919171906u,
 2017579106u,
-2264728166u,
+2473524405u,
 1694443528u,
-4058183171u,
+3671562289u,
 505662155u,
-1898176786u,
+1019936943u,
 1511077569u,
-2055059789u,
+773792826u,
 2089123665u,
-3204250304u,
+484732447u,
 1120017626u,
-780634378u,
+2809286837u,
 4029205195u,
-1953796601u,
+1097806406u,
 136118734u,
-3063437608u,
+4017075736u,
 1403506686u,
-4055855649u,
+1516736273u,
 2562064338u,
-2858726767u,
+2984955003u,
 3071338162u,
-1189614342u,
+1923531348u,
 771592405u,
-1941874618u,
+2586632018u,
 4032960199u,
-752188080u,
+2687561076u,
 308584855u,
-3760952096u,
+1692079268u,
 2565680167u,
-3471066607u,
+3674576684u,
 3770488806u,
-3738784936u,
+69201295u,
 1255084262u,
-1831557743u,
+3593730713u,
 54945052u,
-3442180039u,
+1939595371u,
 2432427547u,
-1356028512u,
+2295501078u,
 1280920000u,
-4135481831u,
+82177963u,
 1121403845u,
-3293015483u,
+2889101923u,
 713121337u,
-2976737859u,
+1747052377u,
 927011680u,
-2118505126u,
+4142246789u,
 1958963937u,
-910892050u,
+1636932722u,
 4075249328u,
-1240000030u,
+2025886508u,
 3026358429u,
-1241665335u,
+1845587644u,
 3615577014u,
-2296824134u,
+1363253259u,
 3087190425u,
-1034244398u,
+341851980u,
 2515339233u,
-2502657424u,
+1276595523u,
 460237542u,
-1808504491u,
+4198897105u,
 2069753399u,
-3292597295u,
+4278599955u,
 356742959u,
-3248055817u,
+3735275001u,
 1750561299u,
-3810297651u,
+668829411u,
 3384018814u,
-2316548367u,
+4233785523u,
 451656820u,
-1745659881u,
+107312677u,
 2390172694u,
-4102497288u,
+1216645846u,
 164402616u,
-3861555476u,
+1689811113u,
 1767810825u,
-472304191u,
+1397772514u,
 3323383489u,
-2963590112u,
+2986430557u,
 207428029u,
-3472047571u,
+2260498180u,
 2360400900u,
-884421165u,
+1263709570u,
 1377764574u,
-3604258095u,
+4252610345u,
 1099809675u,
-3741651161u,
+2776960536u,
 3542220540u,
-2521038253u,
+3752806924u,
 337070226u,
-641040550u,
+3267551635u,
 1306761320u,
-1383997679u,
+2220373824u,
 4109252858u,
-2252520167u,
+896322512u,
 1788337208u,
-1012411364u,
+1336556841u,
 2911512007u,
-4294520281u,
+3712582785u,
 3071359622u,
-2357687350u,
+2561488770u,
 3898950547u,
-1027027239u,
+536047554u,
 2040551642u,
-2137668425u,
+3528794619u,
 3565689036u,
-3589545214u,
+1197100813u,
 1864569342u,
-3153745937u,
+3329594980u,
 490608221u,
-1604548872u,
+1174785921u,
 3287246572u,
-1713154780u,
+2163330264u,
 500120236u,
-2489716881u,
+2520062970u,
 1561519055u,
-1005636939u,
+4042710240u,
 2774151984u,
-3144450144u,
+3160666939u,
 96459446u,
-250533792u,
+1878067032u,
 4237425634u,
-1187061987u,
+2952135524u,
 4100839753u,
-3784939568u,
+1265237690u,
 4246879223u,
-124492786u,
+834830418u,
 3476334357u,
-820852908u,
+4277111759u,
 2511026735u,
-1528632094u,
+3065234219u,
 556796152u,
-3692729434u,
+198182691u,
 2913077464u,
-3158127917u,
+1535115487u,
 4046477658u,
-692059110u,
+140762681u,
 990407433u,
-1540183799u,
+2198985327u,
 2926590471u,
-3178387550u,
+559702706u,
 82077489u,
-2853224222u,
+1096697687u,
 4190838199u,
-4095846095u,
+3046872820u,
 1583801700u,
-432327540u,
+2185339100u,
 3912423882u,
-4189387259u,
+3703603898u,
 2540185277u,
-1679786240u,
+1446869792u,
 4051584612u,
-3454981037u,
+2719373510u,
 1675560450u,
-2222395828u,
+1996164093u,
 405251683u,
-1385561439u,
+2864244470u,
 4071581802u,
-2287305551u,
+2028708916u,
 803575837u,
-2452657767u,
+557660441u,
 3841480082u,
-2350937598u,
+255451671u,
 779434428u,
-3692865672u,
+3452203069u,
 2285701422u,
-215970497u,
+1568745354u,
 823305654u,
-2272612521u,
+3184047862u,
 4159715581u,
-552925303u,
+3160134214u,
 3198900547u,
-4064071435u,
+1566527339u,
 4194096960u,
-3671038966u,
+1496132623u,
 1719108984u,
-406757708u,
+2584236470u,
 531310503u,
-3037314475u,
+3456882941u,
 3382290593u,
-3842309471u,
+467441309u,
 3241407531u,
-2512514774u,
+2540270567u,
 1397502982u,
-3139578968u,
+3348545480u,
 811750340u,
-3622282782u,
+1017047954u,
 2540585554u,
-4146963980u,
+3531646869u,
 943914610u,
-3054347639u,
+1903578924u,
 1911188923u,
-2338031599u,
+241574049u,
 3181425568u,
-1196757691u,
+3529565564u,
 240953857u,
-240495962u,
+2964595704u,
 3828377737u,
-2246245780u,
+4260564140u,
 4262383425u,
-841480070u,
+383233885u,
 4051263539u,
-4164532914u,
+919677938u,
 1683612329u,
-2368092311u,
+4204155962u,
 2283918569u,
-3923500892u,
+4153726847u,
 350160869u,
-1469342315u,
+1387233546u,
 1891558063u,
-13327420u,
+740563169u,
 330624974u,
-3543885677u,
+2948665536u,
 376390582u,
-2968738516u,
+3799363969u,
 3187805406u,
-645016762u,
+2263421398u,
 1928519266u,
-1610271373u,
+2746577402u,
 2108753646u,
-191994904u,
+768287270u,
 2247006571u,
-1106275740u,
+212490675u,
 917121602u,
-2845309942u,
+2549835613u,
 2864033668u,
-1102873346u,
+3738062408u,
 2006922227u,
-1983773590u,
+2616619070u,
 3449066284u,
-2741371614u,
+431292293u,
 786322314u,
-2974240289u,
+1415970351u,
 3263135197u,
-521432811u,
+2954777083u,
 3206261120u,
-976892272u,
+2287507921u,
 1781944746u,
-2209584557u,
+4081586725u,
 1109175923u,
-1091877599u,
+1813855658u,
 1129462471u,
-3273688770u,
+1037031473u,
 3389003793u,
-2502161880u,
+3122687303u,
 1164309901u,
-7371540u,
+3193251135u,
 3626554867u,
-1145247203u,
+3071568023u,
 3656006011u,
-1696355359u,
+1167681812u,
 3155218919u,
-2917345728u,
+2704165015u,
 1854985978u,
-1628881950u,
+1712976649u,
 878608872u,
-2069566979u,
+4155949943u,
 3163786257u,
-2933010098u,
+1626463554u,
 1256485167u,
-122035049u,
+582664250u,
 2083771672u,
-508560958u,
+804336148u,
 2770847216u,
-456842861u,
+1674051445u,
 3992583643u,
-4281971893u,
+2966108111u,
 900741486u,
-2825943628u,
+4014551783u,
 300318232u,
-2533900859u,
+3517585534u,
 542270815u,
-3320103693u,
+760762191u,
 1216399252u,
-639941430u,
+643179562u,
 3652676161u,
-4100211814u,
+2990167340u,
 3262252593u,
-2315856188u,
+2134299399u,
 411263051u,
-3250435765u,
+1342880802u,
 1967599860u,
-4020453639u,
+853593042u,
 2682611693u,
-3802058181u,
+850464484u,
 3286110054u,
-471725410u,
+3842907484u,
 3623364733u,
-721788662u,
+3693536939u,
 1615375832u,
-1310964134u,
+2318423400u,
 4145497671u,
-1492533854u,
+1728968857u,
 2686506989u,
-3342031659u,
+1502282913u,
 2151665147u,
-2754346599u,
+3651607391u,
 1178454681u,
-3751680858u,
+4146839064u,
 2601416506u,
-748595836u,
+1448097974u,
 238887261u,
-1885975275u,
+4093725287u,
 2367569534u,
-741809437u,
+679517009u,
 3539886328u,
-2748286642u,
+3086277222u,
 1390394371u,
-3005091922u,
-793108368u,
-1529669805u,
-2332660395u,
-2217730223u,
-2634687611u,
-442806463u,
-1968135266u,
-454523002u,
-3177866230u,
-2808960136u,
-4259114138u,
-4103264843u,
-3103714075u,
-2462967542u,
-1466891491u,
-477973764u,
-834565647u,
-741089037u,
-218837573u,
-1710536528u,
-2469088212u,
-1229072375u,
-2828341u,
-176923431u,
-985763350u,
-4095477420u,
-1984145538u,
-1870791084u,
-674956677u,
-1978138947u,
-1296493993u,
-1818183554u,
-3443333721u,
-2124949983u,
-2549590262u,
-2700850794u,
-2662736367u,
-739638109u,
-4061447096u,
-2960078422u,
-2453781158u,
-929570940u,
-3200328383u,
-2406328791u,
-1419180666u,
-2152455739u,
-2805741044u,
-3305999074u,
-3183816361u,
-2303165050u,
-4922104u,
-63096005u,
-936656347u,
-3104453886u,
-1088673880u,
-1113407526u,
-1457890086u,
-453478383u,
-1107686695u,
-3626027824u,
-1159687359u,
-2248467888u,
-2004578380u,
-3274954621u,
-1787958646u,
-2628726704u,
-1138419798u,
-3735442315u,
-692385301u,
-313807213u,
-2329068673u,
-59375364u,
-3261084359u,
-2088644507u,
-2471153194u,
-788336435u,
-4024527246u,
-141504460u,
-2307553888u,
-1930559950u,
-48975711u,
-2745693338u,
-230161982u,
-3429230862u,
-1335968626u,
-609591304u,
-57435073u,
-4279281136u,
-3152151665u,
-3984484924u,
-3459883943u,
-397478330u,
-1738762229u,
-3033590066u,
-3611539498u,
-1363463523u,
-3319364965u,
-2671169141u,
-3819548561u,
-1691193757u,
-2423834608u,
-2820147055u,
-1378120632u,
-1240565187u,
-3180720050u,
-680831086u,
-3309658414u,
-1986166490u,
-762099827u,
-510883662u,
-2047373648u,
-3606742294u,
-3894965352u,
-2342078853u,
-1091255717u,
-776594727u,
-3217317445u,
-1574468485u,
-3844504016u,
-2819598918u,
-1037401010u,
-2550943503u,
-3867184001u,
-1687911772u,
-165313836u,
-1679575281u,
-2418947263u,
-2038774952u,
-3913543652u,
-3209155736u,
-149905221u,
-3859604717u,
-713919631u,
-4069810796u,
-1882959164u,
-1019939034u,
-2379867302u,
-3666323035u,
-1157389013u,
-2422300650u,
-3366777340u,
-2526452062u,
-1313747885u,
-1039617868u,
-1620553692u,
-2032976978u,
-578789528u,
-1592846839u,
-2270630604u,
-897850577u,
-1603294178u,
-3105664807u,
-1442670138u,
-1728019360u,
-79313861u,
-1683031101u,
-1913067024u,
-4070719870u,
-708986470u,
-2586453359u,
-3993348863u,
-3358251279u,
-3003552537u,
-750174793u,
-836888956u,
-4190747426u,
-4251291318u,
-4145164938u,
-1366883260u,
-1912910955u,
-510192669u,
-1851315039u,
-3574241274u,
-3220062924u,
-2821142039u,
-1317082195u,
-2274293302u,
-1839219569u,
-126586168u,
-3989293643u,
-2680178207u,
-347056948u,
-799681430u,
-2864517481u,
-3180404853u,
-213140045u,
-1956305184u,
-1474675286u,
-3085723423u,
-2841859626u,
-308421914u,
-3670309263u,
-1765052231u,
-245459238u,
-113434331u,
-4079521092u,
-2115235526u,
-2943408816u,
-1055476938u,
-1506442339u,
-2291296392u,
-3267864332u,
-1282145528u,
-3700108015u,
-1932843667u,
-2677701670u,
-6041177u,
-3889648557u,
-1461025478u,
+119173722u,
+1766260771u,
+751439914u,
+215917713u,
+2656990891u,
+1570750352u,
+3533987737u,
+3576119563u,
+963183826u,
+3796810515u,
+136547246u,
+2592925324u,
+427154472u,
+1228758574u,
+1464255968u,
+2984611177u,
+2001585786u,
+1525438381u,
+1348536411u,
+2861338018u,
+764077711u,
+3785343245u,
+457568934u,
+4104954272u,
+2381948487u,
+3148473363u,
+2180270337u,
+1387729170u,
+951677556u,
+2721005055u,
+66786703u,
+1149351924u,
+1895026827u,
+3711056516u,
+3638638708u,
+2263003308u,
+3448840877u,
+225333538u,
+3797521928u,
+3262952567u,
+2078619498u,
+1178073973u,
+3288261538u,
+1496966875u,
+2481012988u,
+114945840u,
+1632780103u,
+2087949619u,
+3787017905u,
+2575395164u,
+2971726178u,
+3642087909u,
+3894199764u,
+203853421u,
+425935223u,
+3565833278u,
+1748785729u,
+580966986u,
+2124704694u,
+1107045577u,
+1067532701u,
+1406028344u,
+18613994u,
+3476683808u,
+3762914298u,
+1844996900u,
+904215228u,
+1118521573u,
+3657647605u,
+3136157065u,
+2287683323u,
+126005630u,
+3555092974u,
+49515858u,
+1010661841u,
+1902040126u,
+1400735275u,
+2771676666u,
+2225229957u,
+3454177594u,
+2883475137u,
+4144472319u,
+1051332394u,
+542648229u,
+1669710469u,
+553041029u,
+584127807u,
+2993670925u,
+3587959456u,
+1745399498u,
+1404723176u,
+1334333531u,
+3239516985u,
+1275954779u,
+367320647u,
+3684418197u,
+4030809053u,
+484559105u,
+4255931645u,
+4271715616u,
+3171911678u,
+928543347u,
+2159512867u,
+313902234u,
+647086234u,
+577214736u,
+1130129573u,
+995791646u,
+1645086060u,
+4122335794u,
+1064648931u,
+2752145076u,
+3312498873u,
+4238535494u,
+1471227427u,
+633688562u,
+1959779970u,
+766642813u,
+1380896111u,
+3647601207u,
+1733961041u,
+521947915u,
+189164145u,
+486382294u,
+3770038872u,
+3235740744u,
+1912506671u,
+2276864677u,
+1588060152u,
+2504457929u,
+1471020554u,
+3623212998u,
+3026631806u,
+2342164722u,
+1674890530u,
+3011542850u,
+3549160092u,
+4290680005u,
+3943068002u,
+2273781461u,
+2127663659u,
+1646681121u,
+447810651u,
+2366308558u,
+970504950u,
+2008155560u,
+2695940969u,
+3444688454u,
+1739318893u,
+2683090634u,
+2774816580u,
+437560100u,
+512012738u,
+3305170944u,
+665292744u,
+3580039116u,
+1579404983u,
+3397891494u,
+710590371u,
+2514565805u,
+3624609754u,
+3516075816u,
+1314000850u,
+1935166880u,
+3257747610u,
+3776931214u,
+3183054185u,
+675129307u,
+3333261712u,
+1154611403u,
+2759854023u,
+1963228038u,
+505138315u,
+1803966773u,
+4032705384u,
+798395739u,
+3473799845u,
+476400898u,
+602972493u,
+3289878097u,
+2520311409u,
+3214794876u,
+748160407u,
+1326769504u,
+902775872u,
+1372805534u,
+1213925114u,
+3009384989u,
+3781981134u,
+2835608783u,
+2716786748u,
+1669490957u,
+1089334066u,
+250756920u,
+4041016629u,
+2495807367u,
+2008251381u,
+106212622u,
+1927268995u,
+2251978818u,
+3788056262u,
+3678660147u,
+2656772270u,
+1997584981u,
+2668998785u,
+2954162084u,
+845687881u,
+776018378u,
+2066910012u,
+918315064u,
 };
 
 // Return false only if offset is -1 and a spot check of 3 hashes all yield 0.
@@ -6101,19 +6563,23 @@ bool Test(int offset, int len = 0) {
 #undef Check
 #undef IsAlive
 
-#define Check(x) do {                           \
-  bool ok = expected[index++] == (x);           \
-  assert(ok);                                   \
-  errors += !ok;                                \
+#define Check(x) do {                                                   \
+  const uint32_t actual = (x), e = expected[index++];                   \
+  bool ok = actual == e;                                                \
+  if (!ok) {                                                            \
+    cerr << "expected " << hex << e << " but got " << actual << endl;   \
+    ++errors;                                                           \
+  }                                                                     \
+  assert(ok);                                                           \
 } while (0)
 
 #define IsAlive(x) do { alive += IsNonZero(x); } while (0)
 
   // After the following line is where the uses of "Check" and such will go.
   static int index = 0;
-if (offset == -1) { int alive = 0; IsAlive(farmhashns::Hash32WithSeed(data, len++, SEED)); IsAlive(farmhashns::Hash32(data, len++)); IsAlive(farmhashns::Hash32(data, len++)); len -= 3; return alive > 0; }
-Check(farmhashns::Hash32WithSeed(data + offset, len, SEED));
-Check(farmhashns::Hash32(data + offset, len));
+if (offset == -1) { int alive = 0; IsAlive(farmhashnt::Hash32WithSeed(data, len++, SEED)); IsAlive(farmhashnt::Hash32(data, len++)); IsAlive(farmhashnt::Hash32(data, len++)); len -= 3; return alive > 0; }
+Check(farmhashnt::Hash32WithSeed(data + offset, len, SEED));
+Check(farmhashnt::Hash32(data + offset, len));
 
   return true;
 #undef Check
@@ -6123,7 +6589,7 @@ Check(farmhashns::Hash32(data + offset, len));
 int RunTest() {
   Setup();
   int i = 0;
-  cout << "Running farmhashnsTest";
+  cout << "Running farmhashntTest";
   if (!Test(-1)) {
     cout << "... Unavailable\n";
     return NoteErrors();
@@ -6145,8 +6611,8 @@ int RunTest() {
 
 // After the following line is where the code to print hash codes will go.
 void Dump(int offset, int len) {
-cout << farmhashns::Hash32WithSeed(data + offset, len, SEED) << "u," << endl;
-cout << farmhashns::Hash32(data + offset, len) << "u," << endl;
+cout << farmhashnt::Hash32WithSeed(data + offset, len, SEED) << "u," << endl;
+cout << farmhashnt::Hash32(data + offset, len) << "u," << endl;
 }
 
 #endif
@@ -6155,11 +6621,11 @@ cout << farmhashns::Hash32(data + offset, len) << "u," << endl;
 #undef SEED1
 #undef SEED0
 
-}  // namespace farmhashnsTest
+}  // namespace farmhashntTest
 
 #if TESTING
 
-static int farmhashnsTestResult = farmhashnsTest::RunTest();
+static int farmhashntTestResult = farmhashntTest::RunTest();
 
 #else
 int main(int argc, char** argv) {
@@ -6167,12 +6633,12 @@ int main(int argc, char** argv) {
   cout << "uint32_t expected[] = {\n";
   int i = 0;
   for ( ; i < kTestSize - 1; i++) {
-    farmhashnsTest::Dump(i * i, i);
+    farmhashntTest::Dump(i * i, i);
   }
   for ( ; i < kDataSize; i += i / 7) {
-    farmhashnsTest::Dump(0, i);
+    farmhashntTest::Dump(0, i);
   }
-  farmhashnsTest::Dump(0, kDataSize);
+  farmhashntTest::Dump(0, kDataSize);
   cout << "};\n";
 }
 #endif
@@ -6215,7 +6681,7 @@ void Setup() {
 }
 
 int NoteErrors() {
-#define NUM_SELF_TESTS 6
+#define NUM_SELF_TESTS 9
   if (++completed_self_tests == NUM_SELF_TESTS)
     std::exit(errors > 0);
   return errors;
@@ -6993,10 +7459,14 @@ bool Test(int offset, int len = 0) {
 #undef Check
 #undef IsAlive
 
-#define Check(x) do {                           \
-  bool ok = expected[index++] == (x);           \
-  assert(ok);                                   \
-  errors += !ok;                                \
+#define Check(x) do {                                                   \
+  const uint32_t actual = (x), e = expected[index++];                   \
+  bool ok = actual == e;                                                \
+  if (!ok) {                                                            \
+    cerr << "expected " << hex << e << " but got " << actual << endl;   \
+    ++errors;                                                           \
+  }                                                                     \
+  assert(ok);                                                           \
 } while (0)
 
 #define IsAlive(x) do { alive += IsNonZero(x); } while (0)
@@ -7107,7 +7577,7 @@ void Setup() {
 }
 
 int NoteErrors() {
-#define NUM_SELF_TESTS 6
+#define NUM_SELF_TESTS 9
   if (++completed_self_tests == NUM_SELF_TESTS)
     std::exit(errors > 0);
   return errors;
@@ -7885,10 +8355,14 @@ bool Test(int offset, int len = 0) {
 #undef Check
 #undef IsAlive
 
-#define Check(x) do {                           \
-  bool ok = expected[index++] == (x);           \
-  assert(ok);                                   \
-  errors += !ok;                                \
+#define Check(x) do {                                                   \
+  const uint32_t actual = (x), e = expected[index++];                   \
+  bool ok = actual == e;                                                \
+  if (!ok) {                                                            \
+    cerr << "expected " << hex << e << " but got " << actual << endl;   \
+    ++errors;                                                           \
+  }                                                                     \
+  assert(ok);                                                           \
 } while (0)
 
 #define IsAlive(x) do { alive += IsNonZero(x); } while (0)
@@ -7957,6 +8431,3422 @@ int main(int argc, char** argv) {
     farmhashsuTest::Dump(0, i);
   }
   farmhashsuTest::Dump(0, kDataSize);
+  cout << "};\n";
+}
+#endif
+#ifndef FARMHASH_SELF_TEST_GUARD
+#define FARMHASH_SELF_TEST_GUARD
+#include <cstdio>
+#include <iostream>
+#include <string.h>
+
+using std::cout;
+using std::cerr;
+using std::endl;
+using std::hex;
+
+static const uint64_t kSeed0 = 1234567;
+static const uint64_t kSeed1 = k0;
+static const int kDataSize = 1 << 20;
+static const int kTestSize = 300;
+#define kSeed128 Uint128(kSeed0, kSeed1)
+
+static char data[kDataSize];
+
+static int completed_self_tests = 0;
+static int errors = 0;
+
+// Initialize data to pseudorandom values.
+void Setup() {
+  if (completed_self_tests == 0) {
+    uint64_t a = 9;
+    uint64_t b = 777;
+    for (int i = 0; i < kDataSize; i++) {
+      a += b;
+      b += a;
+      a = (a ^ (a >> 41)) * k0;
+      b = (b ^ (b >> 41)) * k0 + i;
+      uint8_t u = b >> 37;
+      memcpy(data + i, &u, 1);  // uint8_t -> char
+    }
+  }
+}
+
+int NoteErrors() {
+#define NUM_SELF_TESTS 9
+  if (++completed_self_tests == NUM_SELF_TESTS)
+    std::exit(errors > 0);
+  return errors;
+}
+
+template <typename T> inline bool IsNonZero(T x) {
+  return x != 0;
+}
+
+template <> inline bool IsNonZero<uint128_t>(uint128_t x) {
+  return x != Uint128(0, 0);
+}
+
+#endif  // FARMHASH_SELF_TEST_GUARD
+
+namespace farmhashteTest {
+
+uint32_t CreateSeed(int offset, int salt) {
+  uint32_t h = static_cast<uint32_t>(salt & 0xffffffff);
+  h = h * c1;
+  h ^= (h >> 17);
+  h = h * c1;
+  h ^= (h >> 17);
+  h = h * c1;
+  h ^= (h >> 17);
+  h += static_cast<uint32_t>(offset & 0xffffffff);
+  h = h * c1;
+  h ^= (h >> 17);
+  h = h * c1;
+  h ^= (h >> 17);
+  h = h * c1;
+  h ^= (h >> 17);
+  return h;
+}
+
+#undef SEED
+#undef SEED1
+#undef SEED0
+#define SEED CreateSeed(offset, -1)
+#define SEED0 CreateSeed(offset, 0)
+#define SEED1 CreateSeed(offset, 1)
+
+#undef TESTING
+#define TESTING 1
+#if TESTING
+uint32_t expected[] = {
+1140953930u, 861465670u,
+3277735313u, 2681724312u,
+2598464059u, 797982799u,
+890626835u, 800175912u,
+2603993599u, 921001710u,
+1410420968u, 2134990486u,
+3283896453u, 1867689945u,
+2914424215u, 2244477846u,
+255297188u, 2992121793u,
+1110588164u, 4186314283u,
+161451183u, 3943596029u,
+4019337850u, 452431531u,
+283198166u, 2741341286u,
+3379021470u, 2557197665u,
+299850021u, 2532580744u,
+452473466u, 1706958772u,
+1298374911u, 3099673830u,
+2199864459u, 3696623795u,
+236935126u, 2976578695u,
+4055299123u, 3281581178u,
+1053458494u, 1882212500u,
+2305012065u, 2169731866u,
+3456121707u, 275903667u,
+458884671u, 3033004529u,
+3058973506u, 2379411653u,
+1898235244u, 1402319660u,
+2700149065u, 2699376854u,
+147814787u, 720739346u,
+2433714046u, 4222949502u,
+4220361840u, 1712034059u,
+3425469811u, 3690733394u,
+4148372108u, 1330324210u,
+594028478u, 2921867846u,
+1635026870u, 192883107u,
+780716741u, 1728752234u,
+3280331829u, 326029180u,
+3969463346u, 1436364519u,
+393215742u, 3349570000u,
+3824583307u, 1612122221u,
+2859809759u, 3808705738u,
+1379537552u, 1646032583u,
+2233466664u, 1432476832u,
+4023053163u, 2650381482u,
+2052294713u, 3552092450u,
+1628777059u, 1499109081u,
+3476440786u, 3829307897u,
+2960536756u, 1554038301u,
+1145519619u, 3190844552u,
+2902102606u, 3600725550u,
+237495366u, 540224401u,
+65721842u, 489963606u,
+1448662590u, 397635823u,
+1596489240u, 1562872448u,
+1790705123u, 2128624475u,
+180854224u, 2604346966u,
+1435705557u, 1262831810u,
+155445229u, 1672724608u,
+1669465176u, 1341975128u,
+663607706u, 2077310004u,
+3610042449u, 1911523866u,
+1043692997u, 1454396064u,
+2563776023u, 294527927u,
+1099072299u, 1389770549u,
+703505868u, 678706990u,
+2952353448u, 2026137563u,
+3603803785u, 629449419u,
+1933894405u, 3043213226u,
+226132789u, 2489287368u,
+1552847036u, 645684964u,
+3828089804u, 3632594520u,
+187883449u, 230403464u,
+3151491850u, 3272648435u,
+3729087873u, 1303930448u,
+2002861219u, 165370827u,
+916494250u, 1230085527u,
+3103338579u, 3064290191u,
+3807265751u, 3628174014u,
+231181488u, 851743255u,
+2295806711u, 1781190011u,
+2988893883u, 1554380634u,
+1142264800u, 3667013118u,
+1968445277u, 315203929u,
+2638023604u, 2290487377u,
+732137533u, 1909203251u,
+440398219u, 1891630171u,
+1380301172u, 1498556724u,
+4072067757u, 4165088768u,
+4204318635u, 441430649u,
+3931792696u, 197618179u,
+956300927u, 914413116u,
+3010839769u, 2837339569u,
+2148126371u, 1913303225u,
+3074915312u, 3117299654u,
+4139181436u, 2993479124u,
+3178848746u, 1357272220u,
+1438494951u, 507436733u,
+667183474u, 2084369203u,
+3854939912u, 1413396341u,
+126024219u, 146044391u,
+1016656857u, 3022024459u,
+3254014218u, 429095991u,
+990500595u, 3056862311u,
+985653208u, 1718653828u,
+623071693u, 366414107u,
+1771289760u, 2293458109u,
+3047342438u, 2991127487u,
+3120876698u, 1684583131u,
+3638043310u, 1170404994u,
+863214540u, 1087193030u,
+199124911u, 520792961u,
+3169775996u, 1577421232u,
+3331828431u, 1013201099u,
+1716848157u, 4033596884u,
+1770708857u, 4229339322u,
+1146169032u, 1434258493u,
+3824360466u, 3242407770u,
+1926419493u, 2649785113u,
+872586426u, 762243036u,
+2736953692u, 816692935u,
+1571283333u, 3555213933u,
+2266795890u, 3781899767u,
+4290630595u, 517646945u,
+3006163611u, 2180594090u,
+959214578u, 558910384u,
+1283799121u, 3047062993u,
+3830962609u, 2391606125u,
+3544509313u, 622325861u,
+834785312u, 382936554u,
+1421463872u, 788479970u,
+1825135056u, 2725923798u,
+580988377u, 2826990641u,
+247825043u, 3167748333u,
+812546227u, 2506885666u,
+2584372201u, 1758123094u,
+1891789696u, 389974094u,
+345313518u, 2022370576u,
+3886113119u, 3338548567u,
+1083486947u, 2583576230u,
+1776047957u, 1771384107u,
+3604937815u, 3198590202u,
+3027522813u, 4155628142u,
+4232136669u, 427759438u,
+4244322689u, 542201663u,
+1549591985u, 2856634168u,
+556609672u, 45845311u,
+1175961330u, 3948351189u,
+4165739882u, 4194218315u,
+1634635545u, 4151937410u,
+713127376u, 1467786451u,
+1327394015u, 2743592929u,
+2638154051u, 810082938u,
+3077742128u, 1062268187u,
+4084325664u, 3810665822u,
+3735739145u, 2794294783u,
+2335576331u, 2560479831u,
+690240711u, 997658837u,
+2442302747u, 3948961926u,
+3958366652u, 3067277639u,
+2059157774u, 1211737169u,
+1516711748u, 2339636583u,
+4188504038u, 59581167u,
+2767897792u, 1389679610u,
+2658147000u, 2643979752u,
+3758739543u, 4189944477u,
+1454470782u, 100876854u,
+2995362413u, 118817200u,
+3252925478u, 2062343506u,
+2804483644u, 3088828656u,
+1231633714u, 4168280671u,
+2931588131u, 3284356565u,
+1255909792u, 3130054947u,
+4173605289u, 1407328702u,
+1677744031u, 3532596884u,
+3162657845u, 3887208531u,
+2256541290u, 3459463480u,
+3740979556u, 259034107u,
+392987633u, 3233195759u,
+3606709555u, 3424793077u,
+315836068u, 3200749877u,
+4065431359u, 760633989u,
+2982018998u, 1811050648u,
+234531934u, 1115203611u,
+3897494162u, 1516407838u,
+1603559457u, 323296368u,
+2632963283u, 1778459926u,
+2879836826u, 2146672889u,
+3486330348u, 492621815u,
+1231665285u, 2457048126u,
+3438440082u, 2217471853u,
+3355404249u, 3275550588u,
+1052645068u, 862072556u,
+4110617119u, 3745267835u,
+2657392572u, 4279236653u,
+1688445808u, 701920051u,
+956734128u, 581695350u,
+3157862788u, 2585726058u,
+1192588249u, 1410111809u,
+1651193125u, 3326135446u,
+1073280453u, 97376972u,
+2513844237u, 2187968410u,
+3976859649u, 4267859263u,
+3429034542u, 564493077u,
+3000537321u, 479241367u,
+3845637831u, 2868987960u,
+51544337u, 1029173765u,
+393624922u, 704325635u,
+2357610553u, 1418509533u,
+2007814586u, 3866658271u,
+3082385053u, 735688735u,
+916110004u, 3283299459u,
+1051684175u, 1083796807u,
+4074716319u, 813690332u,
+144264390u, 1439630796u,
+1508556987u, 675582689u,
+3748881891u, 3195309868u,
+362884708u, 1616408198u,
+43233176u, 837301135u,
+881504822u, 3254795114u,
+1385506591u, 2799925823u,
+1469874582u, 3464841997u,
+497175391u, 3929484338u,
+3975771289u, 1798536177u,
+2926265846u, 1374242438u,
+3675707838u, 4205965408u,
+3153165629u, 1499475160u,
+187287713u, 548490821u,
+3255259608u, 4247675634u,
+1940181471u, 3779953975u,
+687167150u, 2319566715u,
+1742785722u, 785893184u,
+2296977392u, 2778575413u,
+1794720651u, 48131484u,
+4084891412u, 1160134629u,
+3737623280u, 823113169u,
+3423207646u, 3803213486u,
+710625654u, 4116162021u,
+3693420287u, 4167766971u,
+1666602807u, 295320990u,
+3513255468u, 2487440590u,
+234080704u, 4004655503u,
+2971762528u, 1479656873u,
+4090178629u, 4044418876u,
+391947536u, 1462554406u,
+3909295855u, 1239580330u,
+1515601363u, 2011102035u,
+1442068334u, 4265993528u,
+1191921695u, 2291355695u,
+4257172787u, 576405853u,
+314332944u, 4038839101u,
+55559918u, 2378985842u,
+711098718u, 2425317635u,
+1644327317u, 1401013391u,
+4193760037u, 2958260436u,
+3167371443u, 3062418115u,
+3800755475u, 3167030094u,
+3489648204u, 1405430357u,
+526177822u, 2602636307u,
+915406019u, 4264167741u,
+1484090483u, 3070944737u,
+254529415u, 4017058800u,
+1702710265u, 1029665228u,
+2000382906u, 3185573940u,
+1381258384u, 4036354071u,
+2900841028u, 2670703363u,
+2921748807u, 2899069938u,
+4130543625u, 688472265u,
+4186808827u, 1054670286u,
+1132985391u, 2840525968u,
+4175776103u, 338058159u,
+1735964501u, 1539305024u,
+3497121710u, 1568260669u,
+2227290760u, 146827036u,
+3977176001u, 4060134777u,
+857488494u, 250055052u,
+4284109679u, 2502815838u,
+2592281721u, 1603444633u,
+1390562014u, 1556658131u,
+616327404u, 2448966429u,
+3051191726u, 3891353218u,
+1213304082u, 762328245u,
+2239052397u, 1082330589u,
+2455957292u, 201837927u,
+405397452u, 3079886794u,
+2583939798u, 2848283092u,
+3750724631u, 883849006u,
+3204198988u, 3341327098u,
+1855234968u, 1982110346u,
+1485529487u, 541496720u,
+4117290321u, 3607433551u,
+2168864636u, 133643215u,
+1055817409u, 3847827123u,
+2960769387u, 4046101649u,
+1176127003u, 4015671361u,
+4243643405u, 2849988118u,
+517111221u, 1796672358u,
+2045051700u, 3452457457u,
+2948254999u, 2102063419u,
+1556410577u, 1536380876u,
+3776661467u, 3281002516u,
+1735616066u, 1539151988u,
+1087795162u, 3332431596u,
+685631442u, 1147951686u,
+95237878u, 2005032160u,
+4012206915u, 4224354805u,
+3204999386u, 2415262714u,
+1433635018u, 116647396u,
+83167836u, 2881562655u,
+2729416454u, 1029284767u,
+881378302u, 2159170082u,
+555057366u, 1169104445u,
+3963877000u, 1919171906u,
+336034862u, 2017579106u,
+4059340529u, 3020819343u,
+865146997u, 2473524405u,
+944743644u, 1694443528u,
+1804513294u, 2904752429u,
+617975720u, 3671562289u,
+260177668u, 505662155u,
+1885941445u, 2504509403u,
+2260041112u, 1019936943u,
+3722741628u, 1511077569u,
+3100701179u, 1379422864u,
+1535670711u, 773792826u,
+1103819072u, 2089123665u,
+1157547425u, 329152940u,
+4142587430u, 484732447u,
+2475035432u, 1120017626u,
+412145504u, 965125959u,
+324924679u, 2809286837u,
+2842141483u, 4029205195u,
+2974306813u, 515627448u,
+3791551981u, 1097806406u,
+3873078673u, 136118734u,
+1872130856u, 3632422367u,
+3574135531u, 4017075736u,
+1699452298u, 1403506686u,
+344414660u, 1189129691u,
+3487080616u, 1516736273u,
+1805475756u, 2562064338u,
+163335594u, 2732147834u,
+4077452507u, 2984955003u,
+4271866024u, 3071338162u,
+2347111903u, 873829983u,
+1948409509u, 1923531348u,
+459509140u, 771592405u,
+1750124750u, 2334938333u,
+213811117u, 2586632018u,
+185232757u, 4032960199u,
+2447383637u, 284777551u,
+1654276320u, 2687561076u,
+3512945009u, 308584855u,
+1861027147u, 4102279334u,
+3203802620u, 1692079268u,
+4250142168u, 2565680167u,
+1507046104u, 841195925u,
+520565830u, 3674576684u,
+38924274u, 3770488806u,
+2414430882u, 3978473838u,
+3703994407u, 69201295u,
+3099963860u, 1255084262u,
+690971838u, 3539996781u,
+3696902571u, 3593730713u,
+2363435042u, 54945052u,
+1785765213u, 184911581u,
+1586241476u, 1939595371u,
+2534883189u, 2432427547u,
+2374171993u, 2039128933u,
+2955715987u, 2295501078u,
+2741583197u, 1280920000u,
+686818699u, 1238742497u,
+3843660102u, 82177963u,
+1281043691u, 1121403845u,
+1697846708u, 284852964u,
+278661677u, 2889101923u,
+2127558730u, 713121337u,
+872502474u, 511142139u,
+1261140657u, 1747052377u,
+2108187161u, 927011680u,
+955328267u, 3821994995u,
+2707230761u, 4142246789u,
+4134691985u, 1958963937u,
+2498463509u, 1977988705u,
+1419293714u, 1636932722u,
+2567532373u, 4075249328u,
+240575705u, 1956681213u,
+2598802768u, 2025886508u,
+4104757832u, 3026358429u,
+3242615202u, 4026813725u,
+255108733u, 1845587644u,
+3573008472u, 3615577014u,
+1222733548u, 1205557630u,
+917608574u, 1363253259u,
+1541946015u, 3087190425u,
+1138008081u, 1444019663u,
+109793386u, 341851980u,
+857839960u, 2515339233u,
+156283211u, 1906768669u,
+3886713057u, 1276595523u,
+2809830736u, 460237542u,
+3420452099u, 142985419u,
+205970448u, 4198897105u,
+1950698961u, 2069753399u,
+1142216925u, 1113051162u,
+1033680610u, 4278599955u,
+1106466069u, 356742959u,
+531521052u, 3494863964u,
+225629455u, 3735275001u,
+3662626864u, 1750561299u,
+1012864651u, 2101846429u,
+1074553219u, 668829411u,
+992181339u, 3384018814u,
+3330664522u, 860966321u,
+1885071395u, 4233785523u,
+100741310u, 451656820u,
+2148187612u, 1063001151u,
+360256231u, 107312677u,
+3650357479u, 2390172694u,
+22452685u, 237319043u,
+3600462351u, 1216645846u,
+2088767754u, 164402616u,
+2418980170u, 926137824u,
+94638678u, 1689811113u,
+2751052984u, 1767810825u,
+271289013u, 3896132233u,
+103797041u, 1397772514u,
+3441135892u, 3323383489u,
+2491268371u, 1662561885u,
+1612872497u, 2986430557u,
+2756998822u, 207428029u,
+937973965u, 2791656726u,
+1949717207u, 2260498180u,
+2648427775u, 2360400900u,
+2080496169u, 486358863u,
+1582022990u, 1263709570u,
+1396468647u, 1377764574u,
+363008508u, 1293502429u,
+224580012u, 4252610345u,
+1435134775u, 1099809675u,
+533671980u, 1533438766u,
+1820532305u, 2776960536u,
+3374512975u, 3542220540u,
+822810075u, 3716663290u,
+1157398049u, 3752806924u,
+4081637863u, 337070226u,
+3866585976u, 359270190u,
+2110942730u, 3267551635u,
+644850146u, 1306761320u,
+746972907u, 934259457u,
+2341378668u, 2220373824u,
+1242645122u, 4109252858u,
+1625266099u, 1173698481u,
+383517064u, 896322512u,
+3377483696u, 1788337208u,
+455496839u, 3194373887u,
+1837689083u, 1336556841u,
+1658628529u, 2911512007u,
+3838343487u, 2757664765u,
+1537187340u, 3712582785u,
+367022558u, 3071359622u,
+3926147070u, 35432879u,
+3093195926u, 2561488770u,
+4273132307u, 3898950547u,
+2838251049u, 2103926083u,
+2549435227u, 536047554u,
+1858986613u, 2040551642u,
+1147412575u, 1972369852u,
+4166184983u, 3528794619u,
+4077477194u, 3565689036u,
+808048238u, 3826350461u,
+1359641525u, 1197100813u,
+265993036u, 1864569342u,
+725164342u, 2264788336u,
+1831223342u, 3329594980u,
+923017956u, 490608221u,
+3818634478u, 258154469u,
+1441714797u, 1174785921u,
+3833372385u, 3287246572u,
+1677395563u, 3569218731u,
+868981704u, 2163330264u,
+2649450292u, 500120236u,
+465161780u, 746438382u,
+1145009669u, 2520062970u,
+2810524030u, 1561519055u,
+1479878006u, 3864969305u,
+2686075657u, 4042710240u,
+3224066062u, 2774151984u,
+2226179547u, 1643626042u,
+2328730865u, 3160666939u,
+2107011431u, 96459446u,
+3920328742u, 3336407558u,
+829404209u, 1878067032u,
+1235983679u, 4237425634u,
+466519055u, 3870676863u,
+934312076u, 2952135524u,
+276949224u, 4100839753u,
+424001484u, 1955120893u,
+4015478120u, 1265237690u,
+427484362u, 4246879223u,
+3452969617u, 1724363362u,
+1553513184u, 834830418u,
+1858777639u, 3476334357u,
+4144030366u, 2450047160u,
+2950762705u, 4277111759u,
+358032121u, 2511026735u,
+167923105u, 2059208280u,
+251949572u, 3065234219u,
+1535473864u, 556796152u,
+1513237478u, 3150857516u,
+1103404394u, 198182691u,
+1476438092u, 2913077464u,
+207119516u, 3963810232u,
+2954651680u, 1535115487u,
+3051522276u, 4046477658u,
+917804636u, 864395565u,
+632704095u, 140762681u,
+1802040304u, 990407433u,
+3771506212u, 4106024923u,
+1287729497u, 2198985327u,
+4052924496u, 2926590471u,
+3084557148u, 1472898694u,
+1009870118u, 559702706u,
+4265214507u, 82077489u,
+3067891003u, 3295678907u,
+2402308151u, 1096697687u,
+464407878u, 4190838199u,
+4269578403u, 3060919438u,
+2899950405u, 3046872820u,
+733509243u, 1583801700u,
+40453902u, 3879773881u,
+1993425202u, 2185339100u,
+1877837196u, 3912423882u,
+3293122640u, 4104318469u,
+1679617763u, 3703603898u,
+8759461u, 2540185277u,
+1152198475u, 2038345882u,
+2503579743u, 1446869792u,
+2019419351u, 4051584612u,
+3178289407u, 3992503830u,
+2879018745u, 2719373510u,
+700836153u, 1675560450u,
+4121245793u, 2064715719u,
+343595772u, 1996164093u,
+3130433948u, 405251683u,
+2804817126u, 1607133689u,
+463852893u, 2864244470u,
+2224044848u, 4071581802u,
+2537107938u, 2246347953u,
+3207234525u, 2028708916u,
+2272418128u, 803575837u,
+38655481u, 2170452091u,
+3272166407u, 557660441u,
+4019147902u, 3841480082u,
+298459606u, 2600943364u,
+2440657523u, 255451671u,
+3424361375u, 779434428u,
+3088526123u, 490671625u,
+1322855877u, 3452203069u,
+3057021940u, 2285701422u,
+2014993457u, 2390431709u,
+2002090272u, 1568745354u,
+1783152480u, 823305654u,
+4053862835u, 2200236540u,
+3009412313u, 3184047862u,
+3032187389u, 4159715581u,
+2966902888u, 252986948u,
+1849329144u, 3160134214u,
+3420960112u, 3198900547u,
+749160960u, 379139040u,
+1208883495u, 1566527339u,
+3006227299u, 4194096960u,
+556075248u, 497404038u,
+1717327230u, 1496132623u,
+1775955687u, 1719108984u,
+1014328900u, 4189966956u,
+2108574735u, 2584236470u,
+684087286u, 531310503u,
+4264509527u, 773405691u,
+3088905079u, 3456882941u,
+3105682208u, 3382290593u,
+2289363624u, 3296306400u,
+4168438718u, 467441309u,
+777173623u, 3241407531u,
+1183994815u, 1132983260u,
+1610606159u, 2540270567u,
+2649684057u, 1397502982u,
+146657385u, 3318434267u,
+2109315753u, 3348545480u,
+3193669211u, 811750340u,
+1073256162u, 3571673088u,
+546596661u, 1017047954u,
+3403136990u, 2540585554u,
+1477047647u, 4145867423u,
+2826408201u, 3531646869u,
+784952939u, 943914610u,
+2717443875u, 3657384638u,
+1806867885u, 1903578924u,
+3985088434u, 1911188923u,
+1764002686u, 3672748083u,
+1832925325u, 241574049u,
+519948041u, 3181425568u,
+2939747257u, 1634174593u,
+3429894862u, 3529565564u,
+1089679033u, 240953857u,
+2025369941u, 2695166650u,
+517086873u, 2964595704u,
+3017658263u, 3828377737u,
+2144895011u, 994799311u,
+1184683823u, 4260564140u,
+308018483u, 4262383425u,
+1374752558u, 3431057723u,
+1572637805u, 383233885u,
+3188015819u, 4051263539u,
+233319221u, 3794788167u,
+2017406667u, 919677938u,
+4074952232u, 1683612329u,
+4213676186u, 327142514u,
+3032591014u, 4204155962u,
+206775997u, 2283918569u,
+2395147154u, 3427505379u,
+2211319468u, 4153726847u,
+2217060665u, 350160869u,
+2493667051u, 1648200185u,
+3441709766u, 1387233546u,
+140980u, 1891558063u,
+760080239u, 2088061981u,
+1580964938u, 740563169u,
+422986366u, 330624974u,
+4264507722u, 150928357u,
+2738323042u, 2948665536u,
+918718096u, 376390582u,
+3966098971u, 717653678u,
+3219466255u, 3799363969u,
+3424344721u, 3187805406u,
+375347278u, 3490350144u,
+1992212097u, 2263421398u,
+3855037968u, 1928519266u,
+3866327955u, 1129127000u,
+1782515131u, 2746577402u,
+3059200728u, 2108753646u,
+2738070963u, 1336849395u,
+1705302106u, 768287270u,
+1343511943u, 2247006571u,
+1956142255u, 1780259453u,
+3475618043u, 212490675u,
+622521957u, 917121602u,
+1852992332u, 1267987847u,
+3170016833u, 2549835613u,
+3299763344u, 2864033668u,
+3378768767u, 1236609378u,
+4169365948u, 3738062408u,
+2661022773u, 2006922227u,
+2760592161u, 3828932355u,
+2636387819u, 2616619070u,
+1237256330u, 3449066284u,
+2871755260u, 3729280948u,
+3862686086u, 431292293u,
+3285899651u, 786322314u,
+2531158535u, 724901242u,
+2377363130u, 1415970351u,
+1244759631u, 3263135197u,
+965248856u, 174024139u,
+2297418515u, 2954777083u,
+987586766u, 3206261120u,
+4059515114u, 3903854066u,
+1931934525u, 2287507921u,
+1827135136u, 1781944746u,
+574617451u, 2299034788u,
+2650140034u, 4081586725u,
+2482286699u, 1109175923u,
+458483596u, 618705848u,
+4059852729u, 1813855658u,
+4190721328u, 1129462471u,
+4089998050u, 3575732749u,
+2375584220u, 1037031473u,
+1623777358u, 3389003793u,
+546597541u, 352770237u,
+1383747654u, 3122687303u,
+1646071378u, 1164309901u,
+290870767u, 830691298u,
+929335420u, 3193251135u,
+989577914u, 3626554867u,
+591974737u, 3996958215u,
+3163711272u, 3071568023u,
+1516846461u, 3656006011u,
+2698625268u, 2510865430u,
+340274176u, 1167681812u,
+3698796465u, 3155218919u,
+4102288238u, 1673474350u,
+3069708839u, 2704165015u,
+1237411891u, 1854985978u,
+3646837503u, 3625406022u,
+921552000u, 1712976649u,
+3939149151u, 878608872u,
+3406359248u, 1068844551u,
+1834682077u, 4155949943u,
+2437686324u, 3163786257u,
+2645117577u, 1988168803u,
+747285578u, 1626463554u,
+1235300371u, 1256485167u,
+1914142538u, 4141546431u,
+3838102563u, 582664250u,
+1883344352u, 2083771672u,
+2611657933u, 2139079047u,
+2250573853u, 804336148u,
+3066325351u, 2770847216u,
+4275641370u, 1455750577u,
+3346357270u, 1674051445u,
+601221482u, 3992583643u,
+1402445097u, 3622527604u,
+2509017299u, 2966108111u,
+2557027816u, 900741486u,
+1790771021u, 2912643797u,
+2631381069u, 4014551783u,
+90375300u, 300318232u,
+3269968032u, 2679371729u,
+2664752123u, 3517585534u,
+3253901179u, 542270815u,
+1188641600u, 365479232u,
+2210121140u, 760762191u,
+1273768482u, 1216399252u,
+3484324231u, 4287337666u,
+16322182u, 643179562u,
+325675502u, 3652676161u,
+3120716054u, 3330259752u,
+1011990087u, 2990167340u,
+1097584090u, 3262252593u,
+1829409951u, 3665087267u,
+1214854475u, 2134299399u,
+3704419305u, 411263051u,
+1625446136u, 549838529u,
+4283196353u, 1342880802u,
+3460621305u, 1967599860u,
+4282843369u, 1275671016u,
+2544665755u, 853593042u,
+901109753u, 2682611693u,
+110631633u, 797487791u,
+1472073141u, 850464484u,
+797089608u, 3286110054u,
+350397471u, 2775631060u,
+366448238u, 3842907484u,
+2219863904u, 3623364733u,
+1850985302u, 4009616991u,
+294963924u, 3693536939u,
+3061255808u, 1615375832u,
+1920066675u, 4113028420u,
+4032223840u, 2318423400u,
+2701956286u, 4145497671u,
+3991532344u, 2536338351u,
+1679099863u, 1728968857u,
+449740816u, 2686506989u,
+685242457u, 97590863u,
+3258354115u, 1502282913u,
+1235084019u, 2151665147u,
+528459289u, 231097464u,
+2477280726u, 3651607391u,
+2091754612u, 1178454681u,
+980597335u, 1604483865u,
+1842333726u, 4146839064u,
+3213794286u, 2601416506u,
+754220096u, 3571436033u,
+488595746u, 1448097974u,
+4004834921u, 238887261u,
+3320337489u, 1416989070u,
+2928916831u, 4093725287u,
+186020771u, 2367569534u,
+3046087671u, 4090084518u,
+3548184546u, 679517009u,
+1962659444u, 3539886328u,
+4192003933u, 1678423485u,
+3827951761u, 3086277222u,
+2144472852u, 1390394371u,
+2976322029u, 1574517163u,
+3553313841u, 119173722u,
+1702434637u, 1766260771u,
+3629581771u, 1407497759u,
+895654784u, 751439914u,
+4008409498u, 215917713u,
+1482103833u, 695551833u,
+1288382231u, 2656990891u,
+2581779077u, 1570750352u,
+3710689053u, 1741390464u,
+2666411616u, 3533987737u,
+4289478316u, 3576119563u,
+4118694920u, 108199666u,
+3869794273u, 963183826u,
+2081410737u, 3796810515u,
+791123882u, 2525792704u,
+1036883117u, 136547246u,
+875691100u, 2592925324u,
+614302599u, 3013176417u,
+2689342539u, 427154472u,
+532957601u, 1228758574u,
+1898117151u, 1181643858u,
+1908591042u, 1464255968u,
+446980910u, 2984611177u,
+58509511u, 1046943619u,
+3508927906u, 2001585786u,
+2544767379u, 1525438381u,
+552181222u, 1959725830u,
+879448844u, 1348536411u,
+4242243590u, 2861338018u,
+1082052441u, 1034351453u,
+601175800u, 764077711u,
+530635011u, 3785343245u,
+2178026726u, 117256687u,
+2378297261u, 457568934u,
+76438221u, 4104954272u,
+956793873u, 3783168634u,
+2485968477u, 2381948487u,
+4226929450u, 3148473363u,
+2518273601u, 3569490233u,
+879369091u, 2180270337u,
+3674375989u, 1387729170u,
+977997984u, 4270646856u,
+568650985u, 951677556u,
+4213877384u, 2721005055u,
+1073364549u, 2563403831u,
+1678669911u, 66786703u,
+2273631661u, 1149351924u,
+3651298990u, 1581883443u,
+246723096u, 1895026827u,
+3810605772u, 3711056516u,
+4058833288u, 2193790614u,
+2080120290u, 3638638708u,
+2915672708u, 2263003308u,
+2361934197u, 4136767460u,
+1976115991u, 3448840877u,
+2019238520u, 225333538u,
+874340815u, 2976159827u,
+1555273378u, 3797521928u,
+1942347150u, 3262952567u,
+435997738u, 340403353u,
+2817830907u, 2078619498u,
+749534111u, 1178073973u,
+894654712u, 3361226032u,
+841092198u, 3288261538u,
+1696412169u, 1496966875u,
+697501571u, 1059158875u,
+3739946319u, 2481012988u,
+568983526u, 114945840u,
+1559249010u, 2218244008u,
+2841706923u, 1632780103u,
+4020169654u, 2087949619u,
+2438736103u, 24032648u,
+833416317u, 3787017905u,
+2373238993u, 2575395164u,
+3434544481u, 3228481067u,
+2542976862u, 2971726178u,
+2880371864u, 3642087909u,
+2407477975u, 2239080836u,
+1043714217u, 3894199764u,
+2235879182u, 203853421u,
+2933669448u, 2504940536u,
+834683330u, 425935223u,
+3560796393u, 3565833278u,
+1668000829u, 3683399154u,
+3414330886u, 1748785729u,
+1023171602u, 580966986u,
+2531038985u, 3227325488u,
+2657385925u, 2124704694u,
+233442446u, 1107045577u,
+3407293834u, 552770757u,
+3899097693u, 1067532701u,
+115667924u, 1406028344u,
+1707768231u, 3724015962u,
+2419657149u, 18613994u,
+2532882091u, 3476683808u,
+1560838678u, 811220224u,
+895961699u, 3762914298u,
+1328752423u, 1844996900u,
+1420427894u, 1848067707u,
+1210281744u, 904215228u,
+4055325594u, 1118521573u,
+2496554183u, 2579259919u,
+3996647489u, 3657647605u,
+325254059u, 3136157065u,
+3951522674u, 4052925250u,
+3341068436u, 2287683323u,
+1313073005u, 126005630u,
+2505120084u, 1194725057u,
+853746559u, 3555092974u,
+2689238752u, 49515858u,
+1244776042u, 1069300695u,
+61073168u, 1010661841u,
+1269521335u, 1902040126u,
+990632502u, 2378708922u,
+3858321250u, 1400735275u,
+2974699176u, 2771676666u,
+170995186u, 2877798589u,
+545726212u, 2225229957u,
+1086473152u, 3454177594u,
+3859483262u, 1499729584u,
+2088002891u, 2883475137u,
+3222194252u, 4144472319u,
+2212229854u, 4146740722u,
+567988835u, 1051332394u,
+3932046135u, 542648229u,
+3017852446u, 1277887997u,
+162888005u, 1669710469u,
+1492500905u, 553041029u,
+1434876932u, 533989516u,
+3817492747u, 584127807u,
+4147115982u, 2993670925u,
+4020312558u, 710021255u,
+3509733475u, 3587959456u,
+2088550465u, 1745399498u,
+2952242967u, 1259815443u,
+869648362u, 1404723176u,
+3947542735u, 1334333531u,
+3873471582u, 229399758u,
+59634866u, 3239516985u,
+3844250972u, 1275954779u,
+492891666u, 1029533080u,
+1552951157u, 367320647u,
+699480890u, 3684418197u,
+3707014310u, 471105777u,
+1824587258u, 4030809053u,
+3489914436u, 484559105u,
+1235750398u, 1428453396u,
+4230459084u, 4255931645u,
+1848597055u, 4271715616u,
+331780381u, 482425775u,
+2435323270u, 3171911678u,
+3507210587u, 928543347u,
+4197807526u, 3680046204u,
+2766042024u, 2159512867u,
+179373257u, 313902234u,
+4024837592u, 294795361u,
+1622282562u, 647086234u,
+2825039429u, 577214736u,
+4043412446u, 2426981244u,
+1277736097u, 1130129573u,
+2601395338u, 995791646u,
+36668922u, 3344746679u,
+1521532225u, 1645086060u,
+2622763015u, 4122335794u,
+2936887705u, 494465807u,
+2580840343u, 1064648931u,
+1247887787u, 2752145076u,
+1277612417u, 1249660507u,
+2288678613u, 3312498873u,
+2459273912u, 4238535494u,
+3117488020u, 2571979978u,
+2680188909u, 1471227427u,
+1616494033u, 633688562u,
+2268653416u, 3268237290u,
+3021962815u, 1959779970u,
+3321382074u, 766642813u,
+204429780u, 1323319858u,
+3676032891u, 1380896111u,
+4030639049u, 3647601207u,
+1830028502u, 2830263774u,
+1375962216u, 1733961041u,
+939765180u, 521947915u,
+3903267364u, 497472767u,
+1619700946u, 189164145u,
+3115593885u, 486382294u,
+1262445920u, 4062496162u,
+2464795849u, 3770038872u,
+4032121374u, 3235740744u,
+3757765258u, 1777199847u,
+2167243108u, 1912506671u,
+4180515317u, 2276864677u,
+536034089u, 2384915026u,
+162938278u, 1588060152u,
+4018349945u, 2504457929u,
+841450426u, 2790120722u,
+2719983588u, 1471020554u,
+1390856732u, 3623212998u,
+2506944218u, 1035080801u,
+348812127u, 3026631806u,
+746483541u, 2342164722u,
+122104390u, 4074122771u,
+3986865419u, 1674890530u,
+3693306023u, 3011542850u,
+1294951725u, 899303190u,
+3577146915u, 3549160092u,
+1241677652u, 4290680005u,
+3193053279u, 2029187390u,
+3298063095u, 3943068002u,
+3946220635u, 2273781461u,
+889053698u, 1376304022u,
+1486839612u, 2127663659u,
+344127443u, 1646681121u,
+2780117810u, 2142045764u,
+2694572773u, 447810651u,
+2185527146u, 2366308558u,
+290335413u, 584901173u,
+2012370276u, 970504950u,
+3258236042u, 2008155560u,
+3945579565u, 614796295u,
+24452072u, 2695940969u,
+3983727134u, 3444688454u,
+1327044473u, 3545633451u,
+1875293322u, 1739318893u,
+1707527799u, 2683090634u,
+2848082386u, 2814622471u,
+4111401777u, 2774816580u,
+3849839194u, 437560100u,
+2238350150u, 2462124836u,
+665017710u, 512012738u,
+2945294779u, 3305170944u,
+819477765u, 59419271u,
+155125658u, 665292744u,
+444722813u, 3580039116u,
+2355675635u, 663735032u,
+3247800169u, 1579404983u,
+1985115003u, 3397891494u,
+358696453u, 1474896279u,
+516388613u, 710590371u,
+3490497111u, 2514565805u,
+2386143445u, 477509654u,
+412854590u, 3624609754u,
+3214388668u, 3516075816u,
+2731288520u, 1369482895u,
+4033204378u, 1314000850u,
+829769325u, 1935166880u,
+1608191643u, 2607067237u,
+423820371u, 3257747610u,
+1355298041u, 3776931214u,
+4105054901u, 2107080812u,
+1911521879u, 3183054185u,
+3910177801u, 675129307u,
+1209358971u, 4205727791u,
+1435726287u, 3333261712u,
+1400982708u, 1154611403u,
+1663501483u, 2837596667u,
+3164734053u, 2759854023u,
+4012043629u, 1963228038u,
+3981675284u, 2677557877u,
+520119591u, 505138315u,
+897271356u, 1803966773u,
+1016663294u, 616691903u,
+2254742522u, 4032705384u,
+2468470796u, 798395739u,
+3025169002u, 3570037122u,
+1461093710u, 3473799845u,
+3702624858u, 476400898u,
+1043039728u, 2304070437u,
+181576948u, 602972493u,
+3996616030u, 3289878097u,
+2068516226u, 3922247304u,
+1299968266u, 2520311409u,
+1968824721u, 3214794876u,
+1581813122u, 2668800905u,
+3297613974u, 748160407u,
+1145536484u, 1326769504u,
+2973323521u, 3775262814u,
+3218653169u, 902775872u,
+3498603433u, 1372805534u,
+704686363u, 3626542352u,
+2271580579u, 1213925114u,
+46329775u, 3009384989u,
+1330254048u, 1194824134u,
+514204310u, 3781981134u,
+442526164u, 2835608783u,
+3460471867u, 510634034u,
+546406434u, 2716786748u,
+2840500021u, 1669490957u,
+2536189149u, 3251421224u,
+1358736072u, 1089334066u,
+3260749330u, 250756920u,
+2974806681u, 1513718866u,
+82635635u, 4041016629u,
+3391765744u, 2495807367u,
+3962674316u, 2822889695u,
+753413337u, 2008251381u,
+3123390177u, 106212622u,
+490570565u, 1684884205u,
+793892547u, 1927268995u,
+2344148164u, 2251978818u,
+437424236u, 2774023200u,
+2674940754u, 3788056262u,
+2597882666u, 3678660147u,
+3797434193u, 3838215866u,
+279687080u, 2656772270u,
+2190204787u, 1997584981u,
+3384401882u, 3160208845u,
+3629379425u, 2668998785u,
+1050036757u, 2954162084u,
+917091826u, 1744374041u,
+1454282570u, 845687881u,
+2997173625u, 776018378u,
+1137560602u, 1938378389u,
+1748082354u, 2066910012u,
+2677675207u, 918315064u,
+};
+
+// Return false only if offset is -1 and a spot check of 3 hashes all yield 0.
+bool Test(int offset, int len = 0) {
+#undef Check
+#undef IsAlive
+
+#define Check(x) do {                                                   \
+  const uint32_t actual = (x), e = expected[index++];                   \
+  bool ok = actual == e;                                                \
+  if (!ok) {                                                            \
+    cerr << "expected " << hex << e << " but got " << actual << endl;   \
+    ++errors;                                                           \
+  }                                                                     \
+  assert(ok);                                                           \
+} while (0)
+
+#define IsAlive(x) do { alive += IsNonZero(x); } while (0)
+
+  // After the following line is where the uses of "Check" and such will go.
+  static int index = 0;
+if (offset == -1) { int alive = 0; { uint64_t h = farmhashte::Hash64WithSeeds(data, len++, SEED0, SEED1); IsAlive(h >> 32); IsAlive((h << 32) >> 32); } { uint64_t h = farmhashte::Hash64WithSeed(data, len++, SEED); IsAlive(h >> 32); IsAlive((h << 32) >> 32); } { uint64_t h = farmhashte::Hash64(data, len++); IsAlive(h >> 32); IsAlive((h << 32) >> 32); } len -= 3; return alive > 0; }
+{ uint64_t h = farmhashte::Hash64WithSeeds(data + offset, len, SEED0, SEED1); Check(h >> 32); Check((h << 32) >> 32); }
+{ uint64_t h = farmhashte::Hash64WithSeed(data + offset, len, SEED); Check(h >> 32); Check((h << 32) >> 32); }
+{ uint64_t h = farmhashte::Hash64(data + offset, len); Check(h >> 32); Check((h << 32) >> 32); }
+
+  return true;
+#undef Check
+#undef IsAlive
+}
+
+int RunTest() {
+  Setup();
+  int i = 0;
+  cout << "Running farmhashteTest";
+  if (!Test(-1)) {
+    cout << "... Unavailable\n";
+    return NoteErrors();
+  }
+  // Good.  The function is attempting to hash, so run the full test.
+  int errors_prior_to_test = errors;
+  for ( ; i < kTestSize - 1; i++) {
+    Test(i * i, i);
+  }
+  for ( ; i < kDataSize; i += i / 7) {
+    Test(0, i);
+  }
+  Test(0, kDataSize);
+  cout << (errors == errors_prior_to_test ? "... OK\n" : "... Failed\n");
+  return NoteErrors();
+}
+
+#else
+
+// After the following line is where the code to print hash codes will go.
+void Dump(int offset, int len) {
+{ uint64_t h = farmhashte::Hash64WithSeeds(data + offset, len, SEED0, SEED1); cout << (h >> 32) << "u, " << ((h << 32) >> 32) << "u," << endl; }
+{ uint64_t h = farmhashte::Hash64WithSeed(data + offset, len, SEED); cout << (h >> 32) << "u, " << ((h << 32) >> 32) << "u," << endl; }
+{ uint64_t h = farmhashte::Hash64(data + offset, len); cout << (h >> 32) << "u, " << ((h << 32) >> 32) << "u," << endl; }
+}
+
+#endif
+
+#undef SEED
+#undef SEED1
+#undef SEED0
+
+}  // namespace farmhashteTest
+
+#if TESTING
+
+static int farmhashteTestResult = farmhashteTest::RunTest();
+
+#else
+int main(int argc, char** argv) {
+  Setup();
+  cout << "uint32_t expected[] = {\n";
+  int i = 0;
+  for ( ; i < kTestSize - 1; i++) {
+    farmhashteTest::Dump(i * i, i);
+  }
+  for ( ; i < kDataSize; i += i / 7) {
+    farmhashteTest::Dump(0, i);
+  }
+  farmhashteTest::Dump(0, kDataSize);
+  cout << "};\n";
+}
+#endif
+#ifndef FARMHASH_SELF_TEST_GUARD
+#define FARMHASH_SELF_TEST_GUARD
+#include <cstdio>
+#include <iostream>
+#include <string.h>
+
+using std::cout;
+using std::cerr;
+using std::endl;
+using std::hex;
+
+static const uint64_t kSeed0 = 1234567;
+static const uint64_t kSeed1 = k0;
+static const int kDataSize = 1 << 20;
+static const int kTestSize = 300;
+#define kSeed128 Uint128(kSeed0, kSeed1)
+
+static char data[kDataSize];
+
+static int completed_self_tests = 0;
+static int errors = 0;
+
+// Initialize data to pseudorandom values.
+void Setup() {
+  if (completed_self_tests == 0) {
+    uint64_t a = 9;
+    uint64_t b = 777;
+    for (int i = 0; i < kDataSize; i++) {
+      a += b;
+      b += a;
+      a = (a ^ (a >> 41)) * k0;
+      b = (b ^ (b >> 41)) * k0 + i;
+      uint8_t u = b >> 37;
+      memcpy(data + i, &u, 1);  // uint8_t -> char
+    }
+  }
+}
+
+int NoteErrors() {
+#define NUM_SELF_TESTS 9
+  if (++completed_self_tests == NUM_SELF_TESTS)
+    std::exit(errors > 0);
+  return errors;
+}
+
+template <typename T> inline bool IsNonZero(T x) {
+  return x != 0;
+}
+
+template <> inline bool IsNonZero<uint128_t>(uint128_t x) {
+  return x != Uint128(0, 0);
+}
+
+#endif  // FARMHASH_SELF_TEST_GUARD
+
+namespace farmhashuoTest {
+
+uint32_t CreateSeed(int offset, int salt) {
+  uint32_t h = static_cast<uint32_t>(salt & 0xffffffff);
+  h = h * c1;
+  h ^= (h >> 17);
+  h = h * c1;
+  h ^= (h >> 17);
+  h = h * c1;
+  h ^= (h >> 17);
+  h += static_cast<uint32_t>(offset & 0xffffffff);
+  h = h * c1;
+  h ^= (h >> 17);
+  h = h * c1;
+  h ^= (h >> 17);
+  h = h * c1;
+  h ^= (h >> 17);
+  return h;
+}
+
+#undef SEED
+#undef SEED1
+#undef SEED0
+#define SEED CreateSeed(offset, -1)
+#define SEED0 CreateSeed(offset, 0)
+#define SEED1 CreateSeed(offset, 1)
+
+#undef TESTING
+#define TESTING 1
+#if TESTING
+uint32_t expected[] = {
+3277735313u, 2681724312u,
+2598464059u, 797982799u,
+2603993599u, 921001710u,
+1410420968u, 2134990486u,
+2914424215u, 2244477846u,
+255297188u, 2992121793u,
+161451183u, 3943596029u,
+4019337850u, 452431531u,
+3379021470u, 2557197665u,
+299850021u, 2532580744u,
+1298374911u, 3099673830u,
+2199864459u, 3696623795u,
+4055299123u, 3281581178u,
+1053458494u, 1882212500u,
+3456121707u, 275903667u,
+458884671u, 3033004529u,
+1898235244u, 1402319660u,
+2700149065u, 2699376854u,
+2433714046u, 4222949502u,
+4220361840u, 1712034059u,
+4148372108u, 1330324210u,
+594028478u, 2921867846u,
+780716741u, 1728752234u,
+3280331829u, 326029180u,
+393215742u, 3349570000u,
+3824583307u, 1612122221u,
+1379537552u, 1646032583u,
+2233466664u, 1432476832u,
+2052294713u, 3552092450u,
+1628777059u, 1499109081u,
+2960536756u, 1554038301u,
+1145519619u, 3190844552u,
+237495366u, 540224401u,
+65721842u, 489963606u,
+1596489240u, 1562872448u,
+1790705123u, 2128624475u,
+1435705557u, 1262831810u,
+155445229u, 1672724608u,
+663607706u, 2077310004u,
+3610042449u, 1911523866u,
+2563776023u, 294527927u,
+1099072299u, 1389770549u,
+2952353448u, 2026137563u,
+3603803785u, 629449419u,
+226132789u, 2489287368u,
+1552847036u, 645684964u,
+187883449u, 230403464u,
+3151491850u, 3272648435u,
+2002861219u, 165370827u,
+916494250u, 1230085527u,
+3807265751u, 3628174014u,
+231181488u, 851743255u,
+2988893883u, 1554380634u,
+1142264800u, 3667013118u,
+2638023604u, 2290487377u,
+732137533u, 1909203251u,
+1380301172u, 1498556724u,
+4072067757u, 4165088768u,
+3931792696u, 197618179u,
+956300927u, 914413116u,
+2148126371u, 1913303225u,
+3074915312u, 3117299654u,
+3178848746u, 1357272220u,
+1438494951u, 507436733u,
+3854939912u, 1413396341u,
+126024219u, 146044391u,
+3254014218u, 429095991u,
+165589978u, 1578546616u,
+623071693u, 366414107u,
+249776086u, 1207522198u,
+3120876698u, 1684583131u,
+46987739u, 1157614300u,
+199124911u, 520792961u,
+3614377032u, 586863115u,
+1716848157u, 4033596884u,
+1164298657u, 4140791139u,
+3824360466u, 3242407770u,
+3725511003u, 232064808u,
+2736953692u, 816692935u,
+512845449u, 3748861010u,
+4290630595u, 517646945u,
+22638523u, 648000590u,
+1283799121u, 3047062993u,
+1024246061u, 4027776454u,
+834785312u, 382936554u,
+411505255u, 1973395102u,
+580988377u, 2826990641u,
+3474970689u, 1029055034u,
+2584372201u, 1758123094u,
+589567754u, 325737734u,
+3886113119u, 3338548567u,
+257578986u, 3698087965u,
+3604937815u, 3198590202u,
+2305332220u, 191910725u,
+4244322689u, 542201663u,
+3315355162u, 2135941665u,
+1175961330u, 3948351189u,
+23075771u, 3252374102u,
+713127376u, 1467786451u,
+663013031u, 3444053918u,
+3077742128u, 1062268187u,
+2115441882u, 4081398201u,
+2335576331u, 2560479831u,
+1379288194u, 4225182569u,
+3958366652u, 3067277639u,
+3667516477u, 1709989541u,
+4188504038u, 59581167u,
+2725013602u, 3639843023u,
+3758739543u, 4189944477u,
+2470483982u, 877580602u,
+3252925478u, 2062343506u,
+3981838403u, 3762572073u,
+2931588131u, 3284356565u,
+1129162571u, 732225574u,
+1677744031u, 3532596884u,
+3232041815u, 1652884780u,
+3740979556u, 259034107u,
+2227121257u, 1426140634u,
+315836068u, 3200749877u,
+1386256573u, 24035717u,
+234531934u, 1115203611u,
+1598686658u, 3146815575u,
+2632963283u, 1778459926u,
+739944537u, 579625482u,
+1231665285u, 2457048126u,
+3903349120u, 389846205u,
+1052645068u, 862072556u,
+2834153464u, 1481069623u,
+1688445808u, 701920051u,
+3740748788u, 3388062747u,
+1192588249u, 1410111809u,
+2633463887u, 4050419847u,
+2513844237u, 2187968410u,
+2951683019u, 3015806005u,
+3000537321u, 479241367u,
+252167538u, 1231057113u,
+393624922u, 704325635u,
+1467197045u, 2066433573u,
+3082385053u, 735688735u,
+956434529u, 4028590195u,
+4074716319u, 813690332u,
+2124740535u, 804073145u,
+3748881891u, 3195309868u,
+841856605u, 2585865274u,
+881504822u, 3254795114u,
+1241815736u, 970796142u,
+497175391u, 3929484338u,
+4264993211u, 1835322201u,
+3675707838u, 4205965408u,
+300298607u, 3858319990u,
+3255259608u, 4247675634u,
+1095823272u, 1197245408u,
+1742785722u, 785893184u,
+1702965674u, 850401405u,
+4084891412u, 1160134629u,
+2555998391u, 1972759056u,
+710625654u, 4116162021u,
+3352753742u, 85121177u,
+3513255468u, 2487440590u,
+2480032715u, 2287747045u,
+4090178629u, 4044418876u,
+1703944517u, 486290428u,
+1515601363u, 2011102035u,
+573985957u, 3536053779u,
+4257172787u, 576405853u,
+1523550693u, 1014952061u,
+711098718u, 2425317635u,
+3460807169u, 3688987163u,
+3167371443u, 3062418115u,
+3330028292u, 1713171303u,
+526177822u, 2602636307u,
+1245357025u, 3346699703u,
+254529415u, 4017058800u,
+1829738451u, 2164236533u,
+1381258384u, 4036354071u,
+1749181924u, 4118435443u,
+4130543625u, 688472265u,
+2731071299u, 2547657502u,
+4175776103u, 338058159u,
+3729582129u, 4181845558u,
+2227290760u, 146827036u,
+2459178427u, 1025353883u,
+4284109679u, 2502815838u,
+825124804u, 2533140036u,
+616327404u, 2448966429u,
+413992636u, 2334782461u,
+2239052397u, 1082330589u,
+3381164715u, 199381437u,
+2583939798u, 2848283092u,
+2300168091u, 2156336315u,
+1855234968u, 1982110346u,
+2482046810u, 3158163887u,
+2168864636u, 133643215u,
+3904021624u, 3646514568u,
+1176127003u, 4015671361u,
+100525019u, 3534706803u,
+2045051700u, 3452457457u,
+1492267772u, 2308393828u,
+3776661467u, 3281002516u,
+4246334524u, 743955039u,
+685631442u, 1147951686u,
+2040912376u, 2911148054u,
+3204999386u, 2415262714u,
+313209105u, 777065474u,
+2729416454u, 1029284767u,
+1632078298u, 1817552554u,
+3963877000u, 1919171906u,
+3843219958u, 3073580867u,
+865146997u, 2473524405u,
+2593817617u, 3643076308u,
+617975720u, 3671562289u,
+121812599u, 2902367378u,
+2260041112u, 1019936943u,
+320945955u, 2337845588u,
+1535670711u, 773792826u,
+3152195900u, 4090794518u,
+4142587430u, 484732447u,
+419191319u, 3377973345u,
+324924679u, 2809286837u,
+1562277603u, 1378362199u,
+3791551981u, 1097806406u,
+1386297408u, 2304900033u,
+3574135531u, 4017075736u,
+1161238398u, 1358056883u,
+3487080616u, 1516736273u,
+851615042u, 2927899494u,
+4077452507u, 2984955003u,
+3907754394u, 3578173844u,
+1948409509u, 1923531348u,
+3578472493u, 3710074193u,
+213811117u, 2586632018u,
+1922589216u, 274958014u,
+1654276320u, 2687561076u,
+2569061755u, 3122046057u,
+3203802620u, 1692079268u,
+477806878u, 140587742u,
+520565830u, 3674576684u,
+91246882u, 1010215946u,
+3703994407u, 69201295u,
+776213083u, 3677771507u,
+3696902571u, 3593730713u,
+2907901228u, 3239753796u,
+1586241476u, 1939595371u,
+2268396558u, 3468719670u,
+2955715987u, 2295501078u,
+2775848696u, 1358532390u,
+3843660102u, 82177963u,
+4094477877u, 191727221u,
+278661677u, 2889101923u,
+1352525614u, 2844977667u,
+1261140657u, 1747052377u,
+2334120653u, 645125282u,
+2707230761u, 4142246789u,
+1068639717u, 2288162940u,
+1419293714u, 1636932722u,
+3252686293u, 318543902u,
+2598802768u, 2025886508u,
+2250788464u, 2711763065u,
+255108733u, 1845587644u,
+3719270134u, 3940707863u,
+917608574u, 1363253259u,
+788659330u, 673256220u,
+109793386u, 341851980u,
+2698465479u, 3011229884u,
+3886713057u, 1276595523u,
+2439962760u, 2700515456u,
+205970448u, 4198897105u,
+875511891u, 371715572u,
+1033680610u, 4278599955u,
+3120038721u, 1256300069u,
+225629455u, 3735275001u,
+3961944123u, 1769389163u,
+1074553219u, 668829411u,
+1098679359u, 2573697509u,
+1885071395u, 4233785523u,
+2513878053u, 2030193788u,
+360256231u, 107312677u,
+310517502u, 2618936366u,
+3600462351u, 1216645846u,
+2970730323u, 4278812598u,
+94638678u, 1689811113u,
+4125738800u, 3103759730u,
+103797041u, 1397772514u,
+1669653333u, 572567964u,
+1612872497u, 2986430557u,
+214990655u, 3117607990u,
+1949717207u, 2260498180u,
+1493936866u, 3554860960u,
+1582022990u, 1263709570u,
+1244120487u, 3416600761u,
+224580012u, 4252610345u,
+286306391u, 814956796u,
+1820532305u, 2776960536u,
+3082703465u, 1659265982u,
+1157398049u, 3752806924u,
+3508246460u, 2902716664u,
+2110942730u, 3267551635u,
+902835431u, 405228165u,
+2341378668u, 2220373824u,
+3303626294u, 1175118221u,
+383517064u, 896322512u,
+1697257567u, 2202820683u,
+1837689083u, 1336556841u,
+914535232u, 3634083711u,
+1537187340u, 3712582785u,
+1088201893u, 3270984620u,
+3093195926u, 2561488770u,
+1962968100u, 236189500u,
+2549435227u, 536047554u,
+422609195u, 2958815818u,
+4166184983u, 3528794619u,
+1042329086u, 3914176886u,
+1359641525u, 1197100813u,
+1269739674u, 3301844628u,
+1831223342u, 3329594980u,
+2433669782u, 494908536u,
+1441714797u, 1174785921u,
+1933050423u, 958901065u,
+868981704u, 2163330264u,
+3243110680u, 1443133429u,
+1145009669u, 2520062970u,
+3851564853u, 2664619323u,
+2686075657u, 4042710240u,
+2125408249u, 4165697916u,
+2328730865u, 3160666939u,
+588683409u, 2126275847u,
+829404209u, 1878067032u,
+2567792910u, 897670516u,
+934312076u, 2952135524u,
+504832490u, 3312698056u,
+4015478120u, 1265237690u,
+3376133707u, 967674402u,
+1553513184u, 834830418u,
+2396504772u, 3278582098u,
+2950762705u, 4277111759u,
+4159211303u, 1290097509u,
+251949572u, 3065234219u,
+1832020534u, 312136369u,
+1103404394u, 198182691u,
+1369599600u, 3906710870u,
+2954651680u, 1535115487u,
+2389327507u, 1813520230u,
+632704095u, 140762681u,
+3123202913u, 3336005523u,
+1287729497u, 2198985327u,
+2470730783u, 3821758006u,
+1009870118u, 559702706u,
+4274686257u, 3187546567u,
+2402308151u, 1096697687u,
+678932329u, 3716363135u,
+2899950405u, 3046872820u,
+3754655641u, 2021741414u,
+1993425202u, 2185339100u,
+2838253700u, 3099212100u,
+1679617763u, 3703603898u,
+1135665833u, 3559875668u,
+2503579743u, 1446869792u,
+879818611u, 3788305533u,
+2879018745u, 2719373510u,
+3606051203u, 2166567748u,
+343595772u, 1996164093u,
+1577656121u, 475248376u,
+463852893u, 2864244470u,
+1332049663u, 3326459767u,
+3207234525u, 2028708916u,
+938916154u, 3115246264u,
+3272166407u, 557660441u,
+1265684026u, 245033807u,
+2440657523u, 255451671u,
+3811885130u, 1399880284u,
+1322855877u, 3452203069u,
+1324994449u, 3796404024u,
+2002090272u, 1568745354u,
+3700047753u, 31799506u,
+3009412313u, 3184047862u,
+728680761u, 3848624873u,
+1849329144u, 3160134214u,
+1272923193u, 1474278816u,
+1208883495u, 1566527339u,
+4136466541u, 630825649u,
+1717327230u, 1496132623u,
+2449386742u, 128106940u,
+2108574735u, 2584236470u,
+2872246579u, 397338552u,
+3088905079u, 3456882941u,
+1715915153u, 2940716269u,
+4168438718u, 467441309u,
+872996731u, 3206901319u,
+1610606159u, 2540270567u,
+1301658081u, 2379410194u,
+2109315753u, 3348545480u,
+2041927873u, 2644077493u,
+546596661u, 1017047954u,
+2596792972u, 2783958892u,
+2826408201u, 3531646869u,
+2219352672u, 4217451852u,
+1806867885u, 1903578924u,
+2076465705u, 2373061493u,
+1832925325u, 241574049u,
+1509517110u, 3703614272u,
+3429894862u, 3529565564u,
+4010000614u, 2256197939u,
+517086873u, 2964595704u,
+3501035294u, 4079457298u,
+1184683823u, 4260564140u,
+2339268412u, 3871564102u,
+1572637805u, 383233885u,
+3351411126u, 3419328182u,
+2017406667u, 919677938u,
+29804156u, 46276077u,
+3032591014u, 4204155962u,
+1172319502u, 969309871u,
+2211319468u, 4153726847u,
+3094193193u, 4240669441u,
+3441709766u, 1387233546u,
+4048882438u, 1217896566u,
+1580964938u, 740563169u,
+3691850348u, 3176426539u,
+2738323042u, 2948665536u,
+1474029445u, 3513354882u,
+3219466255u, 3799363969u,
+3961796122u, 1055550923u,
+1992212097u, 2263421398u,
+4289759174u, 2516844140u,
+1782515131u, 2746577402u,
+721928440u, 3529570984u,
+1705302106u, 768287270u,
+3474902815u, 4000011125u,
+3475618043u, 212490675u,
+549130471u, 2970128275u,
+3170016833u, 2549835613u,
+3691104824u, 2694324482u,
+4169365948u, 3738062408u,
+602930397u, 2148954730u,
+2636387819u, 2616619070u,
+301617872u, 374657036u,
+3862686086u, 431292293u,
+4225245165u, 1358580562u,
+2377363130u, 1415970351u,
+3885060756u, 1438379807u,
+2297418515u, 2954777083u,
+3970368221u, 1229801760u,
+1931934525u, 2287507921u,
+1713471510u, 2145608111u,
+2650140034u, 4081586725u,
+4196863572u, 1896558394u,
+4059852729u, 1813855658u,
+2618400836u, 1396056469u,
+2375584220u, 1037031473u,
+249284003u, 2450077637u,
+1383747654u, 3122687303u,
+2664431743u, 3855028730u,
+929335420u, 3193251135u,
+137313762u, 1850894384u,
+3163711272u, 3071568023u,
+418541677u, 3621223039u,
+340274176u, 1167681812u,
+4106647531u, 4022465625u,
+3069708839u, 2704165015u,
+2332023349u, 641449034u,
+921552000u, 1712976649u,
+1876484273u, 2343049860u,
+1834682077u, 4155949943u,
+2061821157u, 4240649383u,
+747285578u, 1626463554u,
+165503115u, 359629739u,
+3838102563u, 582664250u,
+3878924635u, 4117237498u,
+2250573853u, 804336148u,
+331393443u, 4242530387u,
+3346357270u, 1674051445u,
+3348019777u, 1722242971u,
+2509017299u, 2966108111u,
+4189102509u, 3323592310u,
+2631381069u, 4014551783u,
+4250787412u, 3448394212u,
+2664752123u, 3517585534u,
+3605365141u, 1669471183u,
+2210121140u, 760762191u,
+249697459u, 3416920106u,
+16322182u, 643179562u,
+1564226597u, 2134630675u,
+1011990087u, 2990167340u,
+2349550842u, 1642428946u,
+1214854475u, 2134299399u,
+2704221532u, 2104175211u,
+4283196353u, 1342880802u,
+198529755u, 2004468390u,
+2544665755u, 853593042u,
+2090611294u, 2970943872u,
+1472073141u, 850464484u,
+1407609278u, 3062461105u,
+366448238u, 3842907484u,
+488797416u, 1432670231u,
+294963924u, 3693536939u,
+3390549825u, 1583234720u,
+4032223840u, 2318423400u,
+2965642867u, 930822729u,
+1679099863u, 1728968857u,
+900822335u, 702309817u,
+3258354115u, 1502282913u,
+2811888503u, 3924947660u,
+2477280726u, 3651607391u,
+3788310204u, 1300369123u,
+1842333726u, 4146839064u,
+2468893861u, 4091095953u,
+488595746u, 1448097974u,
+1159634090u, 1738834113u,
+2928916831u, 4093725287u,
+530850094u, 291657799u,
+3548184546u, 679517009u,
+399175380u, 2658337143u,
+3827951761u, 3086277222u,
+2067718397u, 3632376023u,
+3553313841u, 119173722u,
+1702434637u, 1766260771u,
+895654784u, 751439914u,
+4008409498u, 215917713u,
+1288382231u, 2656990891u,
+2581779077u, 1570750352u,
+2666411616u, 3533987737u,
+4289478316u, 3576119563u,
+3869794273u, 963183826u,
+2081410737u, 3796810515u,
+1036883117u, 136547246u,
+875691100u, 2592925324u,
+2689342539u, 427154472u,
+532957601u, 1228758574u,
+1908591042u, 1464255968u,
+446980910u, 2984611177u,
+3508927906u, 2001585786u,
+2544767379u, 1525438381u,
+879448844u, 1348536411u,
+4242243590u, 2861338018u,
+601175800u, 764077711u,
+530635011u, 3785343245u,
+2378297261u, 457568934u,
+76438221u, 4104954272u,
+2485968477u, 2381948487u,
+4226929450u, 3148473363u,
+879369091u, 2180270337u,
+3674375989u, 1387729170u,
+568650985u, 951677556u,
+4213877384u, 2721005055u,
+1678669911u, 66786703u,
+2273631661u, 1149351924u,
+246723096u, 1895026827u,
+3810605772u, 3711056516u,
+2080120290u, 3638638708u,
+2915672708u, 2263003308u,
+1976115991u, 3448840877u,
+2019238520u, 225333538u,
+1555273378u, 3797521928u,
+1942347150u, 3262952567u,
+2817830907u, 2078619498u,
+749534111u, 1178073973u,
+841092198u, 3288261538u,
+1696412169u, 1496966875u,
+3739946319u, 2481012988u,
+568983526u, 114945840u,
+2841706923u, 1632780103u,
+4020169654u, 2087949619u,
+833416317u, 3787017905u,
+2373238993u, 2575395164u,
+2542976862u, 2971726178u,
+2880371864u, 3642087909u,
+1043714217u, 3894199764u,
+2235879182u, 203853421u,
+834683330u, 425935223u,
+3560796393u, 3565833278u,
+3414330886u, 1748785729u,
+1023171602u, 580966986u,
+2657385925u, 2124704694u,
+233442446u, 1107045577u,
+3899097693u, 1067532701u,
+115667924u, 1406028344u,
+2419657149u, 18613994u,
+2532882091u, 3476683808u,
+895961699u, 3762914298u,
+1328752423u, 1844996900u,
+1210281744u, 904215228u,
+4055325594u, 1118521573u,
+3996647489u, 3657647605u,
+325254059u, 3136157065u,
+3341068436u, 2287683323u,
+1313073005u, 126005630u,
+853746559u, 3555092974u,
+2689238752u, 49515858u,
+61073168u, 1010661841u,
+1269521335u, 1902040126u,
+3858321250u, 1400735275u,
+2974699176u, 2771676666u,
+545726212u, 2225229957u,
+1086473152u, 3454177594u,
+2088002891u, 2883475137u,
+3222194252u, 4144472319u,
+567988835u, 1051332394u,
+3932046135u, 542648229u,
+162888005u, 1669710469u,
+1492500905u, 553041029u,
+3817492747u, 584127807u,
+4147115982u, 2993670925u,
+3509733475u, 3587959456u,
+2088550465u, 1745399498u,
+869648362u, 1404723176u,
+3947542735u, 1334333531u,
+59634866u, 3239516985u,
+3844250972u, 1275954779u,
+2512155003u, 1685649437u,
+639306006u, 2524620206u,
+576786501u, 655707039u,
+2864351838u, 3736264674u,
+1200907897u, 2384379464u,
+15823708u, 206117476u,
+1193310960u, 1093099415u,
+3696538026u, 4112584792u,
+2069527017u, 547588820u,
+4178147211u, 2827259351u,
+940846775u, 1054995047u,
+2976960697u, 1934305529u,
+2199137382u, 1005722394u,
+1875867180u, 2064356511u,
+4019734130u, 3096333006u,
+2069509024u, 2906358341u,
+2232866485u, 1456016086u,
+1422674894u, 867282151u,
+1612503136u, 1739843072u,
+134947567u, 2978775774u,
+1284167756u, 1090844589u,
+831688783u, 2079216362u,
+1626991196u, 3644714163u,
+3678110059u, 898470030u,
+3916646913u, 3182422972u,
+3630426828u, 969847973u,
+3427164640u, 3463937250u,
+3044785046u, 897322257u,
+3443872170u, 4185408854u,
+2557463241u, 4080940424u,
+2048168570u, 2429169982u,
+3174690447u, 2513494106u,
+1213061732u, 3143736628u,
+3482268149u, 1250714337u,
+31648125u, 3872383625u,
+1565760579u, 36665130u,
+751041229u, 2257179590u,
+2915361862u, 280819225u,
+2907818413u, 4254297769u,
+3493178615u, 3755944354u,
+4043533423u, 1134196225u,
+4177134659u, 127246419u,
+2442615581u, 923049607u,
+1004426206u, 782768297u,
+2410586681u, 1430106871u,
+4103323427u, 3168399477u,
+3716682375u, 3616334719u,
+3413209549u, 656672786u,
+2876965944u, 182894450u,
+456581318u, 2683752067u,
+3877875910u, 3190666241u,
+3240336907u, 4024807233u,
+1681224377u, 1576191191u,
+3599250276u, 2381111980u,
+3495321877u, 3956024585u,
+1611608524u, 3815677453u,
+2062334396u, 1656117707u,
+5457134u, 3234118251u,
+470187419u, 2688566989u,
+3259870297u, 660100446u,
+442236198u, 2542452448u,
+493137955u, 392411099u,
+947967568u, 1234595917u,
+4230082284u, 2762976773u,
+2870085764u, 1455086530u,
+2762099647u, 4011882747u,
+1215981925u, 3227517889u,
+3269061963u, 4037515364u,
+3168911474u, 4255057396u,
+2026092260u, 1736192508u,
+3909727042u, 3114708966u,
+1938800693u, 680793595u,
+1525265867u, 2808224480u,
+2122290603u, 1211197714u,
+3520488321u, 3979192396u,
+3540779343u, 4192918639u,
+2736030448u, 1120335563u,
+1698949078u, 3993310631u,
+1966048551u, 2228221363u,
+597941119u, 3498018399u,
+393987327u, 454500547u,
+1222959566u, 567151340u,
+3774764786u, 1492844524u,
+3308300614u, 805568076u,
+868414882u, 177406999u,
+1608110313u, 642061169u,
+1027515771u, 3131251981u,
+2851936150u, 4272755262u,
+1532845092u, 709643652u,
+682573592u, 1244104217u,
+796769556u, 2500467040u,
+3002618826u, 1112998535u,
+1780193104u, 1243644607u,
+3691719535u, 2958853053u,
+466635014u, 2277292580u,
+4082276003u, 1030800045u,
+1750863246u, 379050598u,
+3576413281u, 731493104u,
+132259176u, 4115195437u,
+1769890695u, 2715470335u,
+1819263183u, 2028531518u,
+2154809766u, 3672399742u,
+76727603u, 4198182186u,
+2304993586u, 1666387627u,
+284366017u, 3359785538u,
+3469807328u, 2926494787u,
+3829072836u, 2493478921u,
+3738499303u, 3311304980u,
+932916545u, 2235559063u,
+2909742396u, 1765719309u,
+1456588655u, 508290328u,
+1490719640u, 3356513470u,
+2908490783u, 251085588u,
+830410677u, 3172220325u,
+3897208579u, 1940535730u,
+151909546u, 2384458112u,
+};
+
+// Return false only if offset is -1 and a spot check of 3 hashes all yield 0.
+bool Test(int offset, int len = 0) {
+#undef Check
+#undef IsAlive
+
+#define Check(x) do {                                                   \
+  const uint32_t actual = (x), e = expected[index++];                   \
+  bool ok = actual == e;                                                \
+  if (!ok) {                                                            \
+    cerr << "expected " << hex << e << " but got " << actual << endl;   \
+    ++errors;                                                           \
+  }                                                                     \
+  assert(ok);                                                           \
+} while (0)
+
+#define IsAlive(x) do { alive += IsNonZero(x); } while (0)
+
+  // After the following line is where the uses of "Check" and such will go.
+  static int index = 0;
+if (offset == -1) { int alive = 0; { uint64_t h = farmhashuo::Hash64WithSeed(data, len++, SEED); IsAlive(h >> 32); IsAlive((h << 32) >> 32); } { uint64_t h = farmhashuo::Hash64(data, len++); IsAlive(h >> 32); IsAlive((h << 32) >> 32); } { uint64_t h = farmhashuo::Hash64(data, len++); IsAlive(h >> 32); IsAlive((h << 32) >> 32); } len -= 3; return alive > 0; }
+{ uint64_t h = farmhashuo::Hash64WithSeed(data + offset, len, SEED); Check(h >> 32); Check((h << 32) >> 32); }
+{ uint64_t h = farmhashuo::Hash64(data + offset, len); Check(h >> 32); Check((h << 32) >> 32); }
+
+  return true;
+#undef Check
+#undef IsAlive
+}
+
+int RunTest() {
+  Setup();
+  int i = 0;
+  cout << "Running farmhashuoTest";
+  if (!Test(-1)) {
+    cout << "... Unavailable\n";
+    return NoteErrors();
+  }
+  // Good.  The function is attempting to hash, so run the full test.
+  int errors_prior_to_test = errors;
+  for ( ; i < kTestSize - 1; i++) {
+    Test(i * i, i);
+  }
+  for ( ; i < kDataSize; i += i / 7) {
+    Test(0, i);
+  }
+  Test(0, kDataSize);
+  cout << (errors == errors_prior_to_test ? "... OK\n" : "... Failed\n");
+  return NoteErrors();
+}
+
+#else
+
+// After the following line is where the code to print hash codes will go.
+void Dump(int offset, int len) {
+{ uint64_t h = farmhashuo::Hash64WithSeed(data + offset, len, SEED); cout << (h >> 32) << "u, " << ((h << 32) >> 32) << "u," << endl; }
+{ uint64_t h = farmhashuo::Hash64(data + offset, len); cout << (h >> 32) << "u, " << ((h << 32) >> 32) << "u," << endl; }
+}
+
+#endif
+
+#undef SEED
+#undef SEED1
+#undef SEED0
+
+}  // namespace farmhashuoTest
+
+#if TESTING
+
+static int farmhashuoTestResult = farmhashuoTest::RunTest();
+
+#else
+int main(int argc, char** argv) {
+  Setup();
+  cout << "uint32_t expected[] = {\n";
+  int i = 0;
+  for ( ; i < kTestSize - 1; i++) {
+    farmhashuoTest::Dump(i * i, i);
+  }
+  for ( ; i < kDataSize; i += i / 7) {
+    farmhashuoTest::Dump(0, i);
+  }
+  farmhashuoTest::Dump(0, kDataSize);
+  cout << "};\n";
+}
+#endif
+#ifndef FARMHASH_SELF_TEST_GUARD
+#define FARMHASH_SELF_TEST_GUARD
+#include <cstdio>
+#include <iostream>
+#include <string.h>
+
+using std::cout;
+using std::cerr;
+using std::endl;
+using std::hex;
+
+static const uint64_t kSeed0 = 1234567;
+static const uint64_t kSeed1 = k0;
+static const int kDataSize = 1 << 20;
+static const int kTestSize = 300;
+#define kSeed128 Uint128(kSeed0, kSeed1)
+
+static char data[kDataSize];
+
+static int completed_self_tests = 0;
+static int errors = 0;
+
+// Initialize data to pseudorandom values.
+void Setup() {
+  if (completed_self_tests == 0) {
+    uint64_t a = 9;
+    uint64_t b = 777;
+    for (int i = 0; i < kDataSize; i++) {
+      a += b;
+      b += a;
+      a = (a ^ (a >> 41)) * k0;
+      b = (b ^ (b >> 41)) * k0 + i;
+      uint8_t u = b >> 37;
+      memcpy(data + i, &u, 1);  // uint8_t -> char
+    }
+  }
+}
+
+int NoteErrors() {
+#define NUM_SELF_TESTS 9
+  if (++completed_self_tests == NUM_SELF_TESTS)
+    std::exit(errors > 0);
+  return errors;
+}
+
+template <typename T> inline bool IsNonZero(T x) {
+  return x != 0;
+}
+
+template <> inline bool IsNonZero<uint128_t>(uint128_t x) {
+  return x != Uint128(0, 0);
+}
+
+#endif  // FARMHASH_SELF_TEST_GUARD
+
+namespace farmhashxoTest {
+
+uint32_t CreateSeed(int offset, int salt) {
+  uint32_t h = static_cast<uint32_t>(salt & 0xffffffff);
+  h = h * c1;
+  h ^= (h >> 17);
+  h = h * c1;
+  h ^= (h >> 17);
+  h = h * c1;
+  h ^= (h >> 17);
+  h += static_cast<uint32_t>(offset & 0xffffffff);
+  h = h * c1;
+  h ^= (h >> 17);
+  h = h * c1;
+  h ^= (h >> 17);
+  h = h * c1;
+  h ^= (h >> 17);
+  return h;
+}
+
+#undef SEED
+#undef SEED1
+#undef SEED0
+#define SEED CreateSeed(offset, -1)
+#define SEED0 CreateSeed(offset, 0)
+#define SEED1 CreateSeed(offset, 1)
+
+#undef TESTING
+#define TESTING 1
+#if TESTING
+uint32_t expected[] = {
+1140953930u, 861465670u,
+3277735313u, 2681724312u,
+2598464059u, 797982799u,
+890626835u, 800175912u,
+2603993599u, 921001710u,
+1410420968u, 2134990486u,
+3283896453u, 1867689945u,
+2914424215u, 2244477846u,
+255297188u, 2992121793u,
+1110588164u, 4186314283u,
+161451183u, 3943596029u,
+4019337850u, 452431531u,
+283198166u, 2741341286u,
+3379021470u, 2557197665u,
+299850021u, 2532580744u,
+452473466u, 1706958772u,
+1298374911u, 3099673830u,
+2199864459u, 3696623795u,
+236935126u, 2976578695u,
+4055299123u, 3281581178u,
+1053458494u, 1882212500u,
+2305012065u, 2169731866u,
+3456121707u, 275903667u,
+458884671u, 3033004529u,
+3058973506u, 2379411653u,
+1898235244u, 1402319660u,
+2700149065u, 2699376854u,
+147814787u, 720739346u,
+2433714046u, 4222949502u,
+4220361840u, 1712034059u,
+3425469811u, 3690733394u,
+4148372108u, 1330324210u,
+594028478u, 2921867846u,
+1635026870u, 192883107u,
+780716741u, 1728752234u,
+3280331829u, 326029180u,
+3969463346u, 1436364519u,
+393215742u, 3349570000u,
+3824583307u, 1612122221u,
+2859809759u, 3808705738u,
+1379537552u, 1646032583u,
+2233466664u, 1432476832u,
+4023053163u, 2650381482u,
+2052294713u, 3552092450u,
+1628777059u, 1499109081u,
+3476440786u, 3829307897u,
+2960536756u, 1554038301u,
+1145519619u, 3190844552u,
+2902102606u, 3600725550u,
+237495366u, 540224401u,
+65721842u, 489963606u,
+1448662590u, 397635823u,
+1596489240u, 1562872448u,
+1790705123u, 2128624475u,
+180854224u, 2604346966u,
+1435705557u, 1262831810u,
+155445229u, 1672724608u,
+1669465176u, 1341975128u,
+663607706u, 2077310004u,
+3610042449u, 1911523866u,
+1043692997u, 1454396064u,
+2563776023u, 294527927u,
+1099072299u, 1389770549u,
+703505868u, 678706990u,
+2952353448u, 2026137563u,
+3603803785u, 629449419u,
+1933894405u, 3043213226u,
+226132789u, 2489287368u,
+1552847036u, 645684964u,
+3828089804u, 3632594520u,
+187883449u, 230403464u,
+3151491850u, 3272648435u,
+3729087873u, 1303930448u,
+2002861219u, 165370827u,
+916494250u, 1230085527u,
+3103338579u, 3064290191u,
+3807265751u, 3628174014u,
+231181488u, 851743255u,
+2295806711u, 1781190011u,
+2988893883u, 1554380634u,
+1142264800u, 3667013118u,
+1968445277u, 315203929u,
+2638023604u, 2290487377u,
+732137533u, 1909203251u,
+440398219u, 1891630171u,
+1380301172u, 1498556724u,
+4072067757u, 4165088768u,
+4204318635u, 441430649u,
+3931792696u, 197618179u,
+956300927u, 914413116u,
+3010839769u, 2837339569u,
+2148126371u, 1913303225u,
+3074915312u, 3117299654u,
+4139181436u, 2993479124u,
+3178848746u, 1357272220u,
+1438494951u, 507436733u,
+667183474u, 2084369203u,
+3854939912u, 1413396341u,
+126024219u, 146044391u,
+1016656857u, 3022024459u,
+3254014218u, 429095991u,
+990500595u, 3056862311u,
+985653208u, 1718653828u,
+623071693u, 366414107u,
+1771289760u, 2293458109u,
+3047342438u, 2991127487u,
+3120876698u, 1684583131u,
+3638043310u, 1170404994u,
+863214540u, 1087193030u,
+199124911u, 520792961u,
+3169775996u, 1577421232u,
+3331828431u, 1013201099u,
+1716848157u, 4033596884u,
+1770708857u, 4229339322u,
+1146169032u, 1434258493u,
+3824360466u, 3242407770u,
+1926419493u, 2649785113u,
+872586426u, 762243036u,
+2736953692u, 816692935u,
+1571283333u, 3555213933u,
+2266795890u, 3781899767u,
+4290630595u, 517646945u,
+3006163611u, 2180594090u,
+959214578u, 558910384u,
+1283799121u, 3047062993u,
+3830962609u, 2391606125u,
+3544509313u, 622325861u,
+834785312u, 382936554u,
+1421463872u, 788479970u,
+1825135056u, 2725923798u,
+580988377u, 2826990641u,
+247825043u, 3167748333u,
+812546227u, 2506885666u,
+2584372201u, 1758123094u,
+1891789696u, 389974094u,
+345313518u, 2022370576u,
+3886113119u, 3338548567u,
+1083486947u, 2583576230u,
+1776047957u, 1771384107u,
+3604937815u, 3198590202u,
+3027522813u, 4155628142u,
+4232136669u, 427759438u,
+4244322689u, 542201663u,
+1549591985u, 2856634168u,
+556609672u, 45845311u,
+1175961330u, 3948351189u,
+4165739882u, 4194218315u,
+1634635545u, 4151937410u,
+713127376u, 1467786451u,
+1327394015u, 2743592929u,
+2638154051u, 810082938u,
+3077742128u, 1062268187u,
+4084325664u, 3810665822u,
+3735739145u, 2794294783u,
+2335576331u, 2560479831u,
+690240711u, 997658837u,
+2442302747u, 3948961926u,
+3958366652u, 3067277639u,
+2059157774u, 1211737169u,
+1516711748u, 2339636583u,
+4188504038u, 59581167u,
+2767897792u, 1389679610u,
+2658147000u, 2643979752u,
+3758739543u, 4189944477u,
+1454470782u, 100876854u,
+2995362413u, 118817200u,
+3252925478u, 2062343506u,
+2804483644u, 3088828656u,
+1231633714u, 4168280671u,
+2931588131u, 3284356565u,
+1255909792u, 3130054947u,
+4173605289u, 1407328702u,
+1677744031u, 3532596884u,
+3162657845u, 3887208531u,
+2256541290u, 3459463480u,
+3740979556u, 259034107u,
+392987633u, 3233195759u,
+3606709555u, 3424793077u,
+315836068u, 3200749877u,
+4065431359u, 760633989u,
+2982018998u, 1811050648u,
+234531934u, 1115203611u,
+3897494162u, 1516407838u,
+1603559457u, 323296368u,
+2632963283u, 1778459926u,
+2879836826u, 2146672889u,
+3486330348u, 492621815u,
+1231665285u, 2457048126u,
+3438440082u, 2217471853u,
+3355404249u, 3275550588u,
+1052645068u, 862072556u,
+4110617119u, 3745267835u,
+2657392572u, 4279236653u,
+1688445808u, 701920051u,
+956734128u, 581695350u,
+3157862788u, 2585726058u,
+1192588249u, 1410111809u,
+1651193125u, 3326135446u,
+1073280453u, 97376972u,
+2513844237u, 2187968410u,
+3976859649u, 4267859263u,
+3429034542u, 564493077u,
+3000537321u, 479241367u,
+3845637831u, 2868987960u,
+51544337u, 1029173765u,
+393624922u, 704325635u,
+2357610553u, 1418509533u,
+2007814586u, 3866658271u,
+3082385053u, 735688735u,
+916110004u, 3283299459u,
+1051684175u, 1083796807u,
+4074716319u, 813690332u,
+144264390u, 1439630796u,
+1508556987u, 675582689u,
+3748881891u, 3195309868u,
+362884708u, 1616408198u,
+43233176u, 837301135u,
+881504822u, 3254795114u,
+1385506591u, 2799925823u,
+1469874582u, 3464841997u,
+497175391u, 3929484338u,
+3975771289u, 1798536177u,
+2926265846u, 1374242438u,
+3675707838u, 4205965408u,
+3153165629u, 1499475160u,
+187287713u, 548490821u,
+3255259608u, 4247675634u,
+1940181471u, 3779953975u,
+687167150u, 2319566715u,
+1742785722u, 785893184u,
+2296977392u, 2778575413u,
+1794720651u, 48131484u,
+4084891412u, 1160134629u,
+3737623280u, 823113169u,
+3423207646u, 3803213486u,
+710625654u, 4116162021u,
+3693420287u, 4167766971u,
+1666602807u, 295320990u,
+3513255468u, 2487440590u,
+234080704u, 4004655503u,
+2971762528u, 1479656873u,
+4090178629u, 4044418876u,
+391947536u, 1462554406u,
+3909295855u, 1239580330u,
+1515601363u, 2011102035u,
+1442068334u, 4265993528u,
+1191921695u, 2291355695u,
+4257172787u, 576405853u,
+314332944u, 4038839101u,
+55559918u, 2378985842u,
+711098718u, 2425317635u,
+1644327317u, 1401013391u,
+4193760037u, 2958260436u,
+3167371443u, 3062418115u,
+3800755475u, 3167030094u,
+3489648204u, 1405430357u,
+526177822u, 2602636307u,
+915406019u, 4264167741u,
+1484090483u, 3070944737u,
+254529415u, 4017058800u,
+1702710265u, 1029665228u,
+2000382906u, 3185573940u,
+1381258384u, 4036354071u,
+2900841028u, 2670703363u,
+2921748807u, 2899069938u,
+4130543625u, 688472265u,
+4186808827u, 1054670286u,
+1132985391u, 2840525968u,
+4175776103u, 338058159u,
+1735964501u, 1539305024u,
+3497121710u, 1568260669u,
+2227290760u, 146827036u,
+3977176001u, 4060134777u,
+857488494u, 250055052u,
+4284109679u, 2502815838u,
+2592281721u, 1603444633u,
+1390562014u, 1556658131u,
+616327404u, 2448966429u,
+3051191726u, 3891353218u,
+1213304082u, 762328245u,
+2239052397u, 1082330589u,
+2455957292u, 201837927u,
+405397452u, 3079886794u,
+2583939798u, 2848283092u,
+3750724631u, 883849006u,
+3204198988u, 3341327098u,
+1855234968u, 1982110346u,
+1485529487u, 541496720u,
+4117290321u, 3607433551u,
+2168864636u, 133643215u,
+1055817409u, 3847827123u,
+2960769387u, 4046101649u,
+1176127003u, 4015671361u,
+4243643405u, 2849988118u,
+517111221u, 1796672358u,
+2045051700u, 3452457457u,
+2948254999u, 2102063419u,
+1556410577u, 1536380876u,
+3776661467u, 3281002516u,
+1735616066u, 1539151988u,
+1087795162u, 3332431596u,
+685631442u, 1147951686u,
+95237878u, 2005032160u,
+4012206915u, 4224354805u,
+3204999386u, 2415262714u,
+1433635018u, 116647396u,
+83167836u, 2881562655u,
+2729416454u, 1029284767u,
+881378302u, 2159170082u,
+555057366u, 1169104445u,
+3963877000u, 1919171906u,
+336034862u, 2017579106u,
+4059340529u, 3020819343u,
+865146997u, 2473524405u,
+944743644u, 1694443528u,
+1804513294u, 2904752429u,
+617975720u, 3671562289u,
+260177668u, 505662155u,
+1885941445u, 2504509403u,
+2260041112u, 1019936943u,
+3722741628u, 1511077569u,
+3100701179u, 1379422864u,
+1535670711u, 773792826u,
+1103819072u, 2089123665u,
+1157547425u, 329152940u,
+4142587430u, 484732447u,
+2475035432u, 1120017626u,
+412145504u, 965125959u,
+324924679u, 2809286837u,
+2842141483u, 4029205195u,
+2974306813u, 515627448u,
+3791551981u, 1097806406u,
+3873078673u, 136118734u,
+1872130856u, 3632422367u,
+3574135531u, 4017075736u,
+1699452298u, 1403506686u,
+344414660u, 1189129691u,
+3487080616u, 1516736273u,
+1805475756u, 2562064338u,
+163335594u, 2732147834u,
+4077452507u, 2984955003u,
+4271866024u, 3071338162u,
+2347111903u, 873829983u,
+1948409509u, 1923531348u,
+459509140u, 771592405u,
+1750124750u, 2334938333u,
+213811117u, 2586632018u,
+185232757u, 4032960199u,
+2447383637u, 284777551u,
+1654276320u, 2687561076u,
+3512945009u, 308584855u,
+1861027147u, 4102279334u,
+3203802620u, 1692079268u,
+4250142168u, 2565680167u,
+1507046104u, 841195925u,
+520565830u, 3674576684u,
+38924274u, 3770488806u,
+2414430882u, 3978473838u,
+3703994407u, 69201295u,
+3099963860u, 1255084262u,
+690971838u, 3539996781u,
+3696902571u, 3593730713u,
+2363435042u, 54945052u,
+1785765213u, 184911581u,
+1586241476u, 1939595371u,
+2534883189u, 2432427547u,
+2374171993u, 2039128933u,
+2955715987u, 2295501078u,
+2741583197u, 1280920000u,
+686818699u, 1238742497u,
+3843660102u, 82177963u,
+1281043691u, 1121403845u,
+1697846708u, 284852964u,
+278661677u, 2889101923u,
+2127558730u, 713121337u,
+872502474u, 511142139u,
+1261140657u, 1747052377u,
+2108187161u, 927011680u,
+955328267u, 3821994995u,
+2707230761u, 4142246789u,
+4134691985u, 1958963937u,
+2498463509u, 1977988705u,
+1419293714u, 1636932722u,
+2567532373u, 4075249328u,
+240575705u, 1956681213u,
+2598802768u, 2025886508u,
+4104757832u, 3026358429u,
+3242615202u, 4026813725u,
+255108733u, 1845587644u,
+3573008472u, 3615577014u,
+1222733548u, 1205557630u,
+917608574u, 1363253259u,
+1541946015u, 3087190425u,
+1138008081u, 1444019663u,
+109793386u, 341851980u,
+857839960u, 2515339233u,
+156283211u, 1906768669u,
+3886713057u, 1276595523u,
+2809830736u, 460237542u,
+3420452099u, 142985419u,
+205970448u, 4198897105u,
+1950698961u, 2069753399u,
+1142216925u, 1113051162u,
+1033680610u, 4278599955u,
+1106466069u, 356742959u,
+531521052u, 3494863964u,
+225629455u, 3735275001u,
+3662626864u, 1750561299u,
+1012864651u, 2101846429u,
+1074553219u, 668829411u,
+992181339u, 3384018814u,
+3330664522u, 860966321u,
+1885071395u, 4233785523u,
+100741310u, 451656820u,
+2148187612u, 1063001151u,
+360256231u, 107312677u,
+3650357479u, 2390172694u,
+22452685u, 237319043u,
+3600462351u, 1216645846u,
+2088767754u, 164402616u,
+2418980170u, 926137824u,
+94638678u, 1689811113u,
+2751052984u, 1767810825u,
+271289013u, 3896132233u,
+103797041u, 1397772514u,
+3441135892u, 3323383489u,
+2491268371u, 1662561885u,
+1612872497u, 2986430557u,
+2756998822u, 207428029u,
+937973965u, 2791656726u,
+1949717207u, 2260498180u,
+2648427775u, 2360400900u,
+2080496169u, 486358863u,
+1582022990u, 1263709570u,
+1396468647u, 1377764574u,
+363008508u, 1293502429u,
+224580012u, 4252610345u,
+1435134775u, 1099809675u,
+533671980u, 1533438766u,
+1820532305u, 2776960536u,
+3374512975u, 3542220540u,
+822810075u, 3716663290u,
+1157398049u, 3752806924u,
+4081637863u, 337070226u,
+3866585976u, 359270190u,
+2110942730u, 3267551635u,
+644850146u, 1306761320u,
+746972907u, 934259457u,
+2341378668u, 2220373824u,
+1242645122u, 4109252858u,
+1625266099u, 1173698481u,
+383517064u, 896322512u,
+3377483696u, 1788337208u,
+455496839u, 3194373887u,
+1837689083u, 1336556841u,
+1658628529u, 2911512007u,
+3838343487u, 2757664765u,
+1537187340u, 3712582785u,
+367022558u, 3071359622u,
+3926147070u, 35432879u,
+3093195926u, 2561488770u,
+4273132307u, 3898950547u,
+2838251049u, 2103926083u,
+2549435227u, 536047554u,
+1858986613u, 2040551642u,
+1147412575u, 1972369852u,
+4166184983u, 3528794619u,
+4077477194u, 3565689036u,
+808048238u, 3826350461u,
+1359641525u, 1197100813u,
+265993036u, 1864569342u,
+725164342u, 2264788336u,
+1831223342u, 3329594980u,
+923017956u, 490608221u,
+3818634478u, 258154469u,
+1441714797u, 1174785921u,
+3833372385u, 3287246572u,
+1677395563u, 3569218731u,
+868981704u, 2163330264u,
+2649450292u, 500120236u,
+465161780u, 746438382u,
+1145009669u, 2520062970u,
+2810524030u, 1561519055u,
+1479878006u, 3864969305u,
+2686075657u, 4042710240u,
+3224066062u, 2774151984u,
+2226179547u, 1643626042u,
+2328730865u, 3160666939u,
+2107011431u, 96459446u,
+3920328742u, 3336407558u,
+829404209u, 1878067032u,
+1235983679u, 4237425634u,
+466519055u, 3870676863u,
+934312076u, 2952135524u,
+276949224u, 4100839753u,
+424001484u, 1955120893u,
+4015478120u, 1265237690u,
+427484362u, 4246879223u,
+3452969617u, 1724363362u,
+1553513184u, 834830418u,
+1858777639u, 3476334357u,
+4144030366u, 2450047160u,
+2950762705u, 4277111759u,
+358032121u, 2511026735u,
+167923105u, 2059208280u,
+251949572u, 3065234219u,
+1535473864u, 556796152u,
+1513237478u, 3150857516u,
+1103404394u, 198182691u,
+1476438092u, 2913077464u,
+207119516u, 3963810232u,
+2954651680u, 1535115487u,
+3051522276u, 4046477658u,
+917804636u, 864395565u,
+632704095u, 140762681u,
+1802040304u, 990407433u,
+3771506212u, 4106024923u,
+1287729497u, 2198985327u,
+4052924496u, 2926590471u,
+3084557148u, 1472898694u,
+1009870118u, 559702706u,
+4265214507u, 82077489u,
+3067891003u, 3295678907u,
+2402308151u, 1096697687u,
+464407878u, 4190838199u,
+4269578403u, 3060919438u,
+2899950405u, 3046872820u,
+733509243u, 1583801700u,
+40453902u, 3879773881u,
+1993425202u, 2185339100u,
+1877837196u, 3912423882u,
+3293122640u, 4104318469u,
+1679617763u, 3703603898u,
+8759461u, 2540185277u,
+1152198475u, 2038345882u,
+2503579743u, 1446869792u,
+2019419351u, 4051584612u,
+3178289407u, 3992503830u,
+2879018745u, 2719373510u,
+700836153u, 1675560450u,
+4121245793u, 2064715719u,
+343595772u, 1996164093u,
+3130433948u, 405251683u,
+2804817126u, 1607133689u,
+463852893u, 2864244470u,
+2224044848u, 4071581802u,
+2537107938u, 2246347953u,
+3207234525u, 2028708916u,
+2272418128u, 803575837u,
+38655481u, 2170452091u,
+3272166407u, 557660441u,
+4019147902u, 3841480082u,
+298459606u, 2600943364u,
+2440657523u, 255451671u,
+3424361375u, 779434428u,
+3088526123u, 490671625u,
+1322855877u, 3452203069u,
+3057021940u, 2285701422u,
+2014993457u, 2390431709u,
+2002090272u, 1568745354u,
+1783152480u, 823305654u,
+4053862835u, 2200236540u,
+3009412313u, 3184047862u,
+3032187389u, 4159715581u,
+2966902888u, 252986948u,
+1849329144u, 3160134214u,
+3420960112u, 3198900547u,
+749160960u, 379139040u,
+1208883495u, 1566527339u,
+3006227299u, 4194096960u,
+556075248u, 497404038u,
+1717327230u, 1496132623u,
+1775955687u, 1719108984u,
+1014328900u, 4189966956u,
+2108574735u, 2584236470u,
+684087286u, 531310503u,
+4264509527u, 773405691u,
+3088905079u, 3456882941u,
+3105682208u, 3382290593u,
+2289363624u, 3296306400u,
+4168438718u, 467441309u,
+777173623u, 3241407531u,
+1183994815u, 1132983260u,
+1610606159u, 2540270567u,
+2649684057u, 1397502982u,
+146657385u, 3318434267u,
+2109315753u, 3348545480u,
+3193669211u, 811750340u,
+1073256162u, 3571673088u,
+546596661u, 1017047954u,
+3403136990u, 2540585554u,
+1477047647u, 4145867423u,
+2826408201u, 3531646869u,
+784952939u, 943914610u,
+2717443875u, 3657384638u,
+1806867885u, 1903578924u,
+3985088434u, 1911188923u,
+1764002686u, 3672748083u,
+1832925325u, 241574049u,
+519948041u, 3181425568u,
+2939747257u, 1634174593u,
+3429894862u, 3529565564u,
+1089679033u, 240953857u,
+2025369941u, 2695166650u,
+517086873u, 2964595704u,
+3017658263u, 3828377737u,
+2144895011u, 994799311u,
+1184683823u, 4260564140u,
+308018483u, 4262383425u,
+1374752558u, 3431057723u,
+1572637805u, 383233885u,
+3188015819u, 4051263539u,
+233319221u, 3794788167u,
+2017406667u, 919677938u,
+4074952232u, 1683612329u,
+4213676186u, 327142514u,
+3032591014u, 4204155962u,
+206775997u, 2283918569u,
+2395147154u, 3427505379u,
+2211319468u, 4153726847u,
+2217060665u, 350160869u,
+2493667051u, 1648200185u,
+3441709766u, 1387233546u,
+140980u, 1891558063u,
+760080239u, 2088061981u,
+1580964938u, 740563169u,
+422986366u, 330624974u,
+4264507722u, 150928357u,
+2738323042u, 2948665536u,
+918718096u, 376390582u,
+3966098971u, 717653678u,
+3219466255u, 3799363969u,
+3424344721u, 3187805406u,
+375347278u, 3490350144u,
+1992212097u, 2263421398u,
+3855037968u, 1928519266u,
+3866327955u, 1129127000u,
+1782515131u, 2746577402u,
+3059200728u, 2108753646u,
+2738070963u, 1336849395u,
+1705302106u, 768287270u,
+1343511943u, 2247006571u,
+1956142255u, 1780259453u,
+3475618043u, 212490675u,
+622521957u, 917121602u,
+1852992332u, 1267987847u,
+3170016833u, 2549835613u,
+3299763344u, 2864033668u,
+3378768767u, 1236609378u,
+4169365948u, 3738062408u,
+2661022773u, 2006922227u,
+2760592161u, 3828932355u,
+2636387819u, 2616619070u,
+1237256330u, 3449066284u,
+2871755260u, 3729280948u,
+3862686086u, 431292293u,
+3285899651u, 786322314u,
+2531158535u, 724901242u,
+2377363130u, 1415970351u,
+1244759631u, 3263135197u,
+965248856u, 174024139u,
+2297418515u, 2954777083u,
+987586766u, 3206261120u,
+4059515114u, 3903854066u,
+1931934525u, 2287507921u,
+1827135136u, 1781944746u,
+574617451u, 2299034788u,
+2650140034u, 4081586725u,
+2482286699u, 1109175923u,
+458483596u, 618705848u,
+4059852729u, 1813855658u,
+4190721328u, 1129462471u,
+4089998050u, 3575732749u,
+2375584220u, 1037031473u,
+1623777358u, 3389003793u,
+546597541u, 352770237u,
+1383747654u, 3122687303u,
+1646071378u, 1164309901u,
+290870767u, 830691298u,
+929335420u, 3193251135u,
+989577914u, 3626554867u,
+591974737u, 3996958215u,
+3163711272u, 3071568023u,
+1516846461u, 3656006011u,
+2698625268u, 2510865430u,
+340274176u, 1167681812u,
+3698796465u, 3155218919u,
+4102288238u, 1673474350u,
+3069708839u, 2704165015u,
+1237411891u, 1854985978u,
+3646837503u, 3625406022u,
+921552000u, 1712976649u,
+3939149151u, 878608872u,
+3406359248u, 1068844551u,
+1834682077u, 4155949943u,
+2437686324u, 3163786257u,
+2645117577u, 1988168803u,
+747285578u, 1626463554u,
+1235300371u, 1256485167u,
+1914142538u, 4141546431u,
+3838102563u, 582664250u,
+1883344352u, 2083771672u,
+2611657933u, 2139079047u,
+2250573853u, 804336148u,
+3066325351u, 2770847216u,
+4275641370u, 1455750577u,
+3346357270u, 1674051445u,
+601221482u, 3992583643u,
+1402445097u, 3622527604u,
+2509017299u, 2966108111u,
+2557027816u, 900741486u,
+1790771021u, 2912643797u,
+2631381069u, 4014551783u,
+90375300u, 300318232u,
+3269968032u, 2679371729u,
+2664752123u, 3517585534u,
+3253901179u, 542270815u,
+1188641600u, 365479232u,
+2210121140u, 760762191u,
+1273768482u, 1216399252u,
+3484324231u, 4287337666u,
+16322182u, 643179562u,
+325675502u, 3652676161u,
+3120716054u, 3330259752u,
+1011990087u, 2990167340u,
+1097584090u, 3262252593u,
+1829409951u, 3665087267u,
+1214854475u, 2134299399u,
+3704419305u, 411263051u,
+1625446136u, 549838529u,
+4283196353u, 1342880802u,
+3460621305u, 1967599860u,
+4282843369u, 1275671016u,
+2544665755u, 853593042u,
+901109753u, 2682611693u,
+110631633u, 797487791u,
+1472073141u, 850464484u,
+797089608u, 3286110054u,
+350397471u, 2775631060u,
+366448238u, 3842907484u,
+2219863904u, 3623364733u,
+1850985302u, 4009616991u,
+294963924u, 3693536939u,
+3061255808u, 1615375832u,
+1920066675u, 4113028420u,
+4032223840u, 2318423400u,
+2701956286u, 4145497671u,
+3991532344u, 2536338351u,
+1679099863u, 1728968857u,
+449740816u, 2686506989u,
+685242457u, 97590863u,
+3258354115u, 1502282913u,
+1235084019u, 2151665147u,
+528459289u, 231097464u,
+2477280726u, 3651607391u,
+2091754612u, 1178454681u,
+980597335u, 1604483865u,
+1842333726u, 4146839064u,
+3213794286u, 2601416506u,
+754220096u, 3571436033u,
+488595746u, 1448097974u,
+4004834921u, 238887261u,
+3320337489u, 1416989070u,
+2928916831u, 4093725287u,
+186020771u, 2367569534u,
+3046087671u, 4090084518u,
+3548184546u, 679517009u,
+1962659444u, 3539886328u,
+4192003933u, 1678423485u,
+3827951761u, 3086277222u,
+2144472852u, 1390394371u,
+2976322029u, 1574517163u,
+3553313841u, 119173722u,
+1702434637u, 1766260771u,
+3629581771u, 1407497759u,
+895654784u, 751439914u,
+4008409498u, 215917713u,
+1482103833u, 695551833u,
+1288382231u, 2656990891u,
+2581779077u, 1570750352u,
+3710689053u, 1741390464u,
+2666411616u, 3533987737u,
+4289478316u, 3576119563u,
+4118694920u, 108199666u,
+3869794273u, 963183826u,
+2081410737u, 3796810515u,
+791123882u, 2525792704u,
+1036883117u, 136547246u,
+875691100u, 2592925324u,
+614302599u, 3013176417u,
+2689342539u, 427154472u,
+532957601u, 1228758574u,
+1898117151u, 1181643858u,
+1908591042u, 1464255968u,
+446980910u, 2984611177u,
+58509511u, 1046943619u,
+3508927906u, 2001585786u,
+2544767379u, 1525438381u,
+552181222u, 1959725830u,
+879448844u, 1348536411u,
+4242243590u, 2861338018u,
+1082052441u, 1034351453u,
+601175800u, 764077711u,
+530635011u, 3785343245u,
+2178026726u, 117256687u,
+2378297261u, 457568934u,
+76438221u, 4104954272u,
+956793873u, 3783168634u,
+2485968477u, 2381948487u,
+4226929450u, 3148473363u,
+2518273601u, 3569490233u,
+879369091u, 2180270337u,
+3674375989u, 1387729170u,
+977997984u, 4270646856u,
+568650985u, 951677556u,
+4213877384u, 2721005055u,
+1073364549u, 2563403831u,
+1678669911u, 66786703u,
+2273631661u, 1149351924u,
+3651298990u, 1581883443u,
+246723096u, 1895026827u,
+3810605772u, 3711056516u,
+4058833288u, 2193790614u,
+2080120290u, 3638638708u,
+2915672708u, 2263003308u,
+2361934197u, 4136767460u,
+1976115991u, 3448840877u,
+2019238520u, 225333538u,
+874340815u, 2976159827u,
+1555273378u, 3797521928u,
+1942347150u, 3262952567u,
+435997738u, 340403353u,
+2817830907u, 2078619498u,
+749534111u, 1178073973u,
+894654712u, 3361226032u,
+841092198u, 3288261538u,
+1696412169u, 1496966875u,
+697501571u, 1059158875u,
+3739946319u, 2481012988u,
+568983526u, 114945840u,
+1559249010u, 2218244008u,
+2841706923u, 1632780103u,
+4020169654u, 2087949619u,
+2438736103u, 24032648u,
+833416317u, 3787017905u,
+2373238993u, 2575395164u,
+3434544481u, 3228481067u,
+2542976862u, 2971726178u,
+2880371864u, 3642087909u,
+2407477975u, 2239080836u,
+1043714217u, 3894199764u,
+2235879182u, 203853421u,
+2933669448u, 2504940536u,
+834683330u, 425935223u,
+3560796393u, 3565833278u,
+1668000829u, 3683399154u,
+3414330886u, 1748785729u,
+1023171602u, 580966986u,
+2531038985u, 3227325488u,
+2657385925u, 2124704694u,
+233442446u, 1107045577u,
+3407293834u, 552770757u,
+3899097693u, 1067532701u,
+115667924u, 1406028344u,
+1707768231u, 3724015962u,
+2419657149u, 18613994u,
+2532882091u, 3476683808u,
+1560838678u, 811220224u,
+895961699u, 3762914298u,
+1328752423u, 1844996900u,
+1420427894u, 1848067707u,
+1210281744u, 904215228u,
+4055325594u, 1118521573u,
+2496554183u, 2579259919u,
+3996647489u, 3657647605u,
+325254059u, 3136157065u,
+3951522674u, 4052925250u,
+3341068436u, 2287683323u,
+1313073005u, 126005630u,
+2505120084u, 1194725057u,
+853746559u, 3555092974u,
+2689238752u, 49515858u,
+1244776042u, 1069300695u,
+61073168u, 1010661841u,
+1269521335u, 1902040126u,
+990632502u, 2378708922u,
+3858321250u, 1400735275u,
+2974699176u, 2771676666u,
+170995186u, 2877798589u,
+545726212u, 2225229957u,
+1086473152u, 3454177594u,
+3859483262u, 1499729584u,
+2088002891u, 2883475137u,
+3222194252u, 4144472319u,
+2212229854u, 4146740722u,
+567988835u, 1051332394u,
+3932046135u, 542648229u,
+3017852446u, 1277887997u,
+162888005u, 1669710469u,
+1492500905u, 553041029u,
+1434876932u, 533989516u,
+3817492747u, 584127807u,
+4147115982u, 2993670925u,
+4020312558u, 710021255u,
+3509733475u, 3587959456u,
+2088550465u, 1745399498u,
+2952242967u, 1259815443u,
+869648362u, 1404723176u,
+3947542735u, 1334333531u,
+3873471582u, 229399758u,
+59634866u, 3239516985u,
+3844250972u, 1275954779u,
+1385684948u, 2243700741u,
+2512155003u, 1685649437u,
+639306006u, 2524620206u,
+955360345u, 1646776457u,
+576786501u, 655707039u,
+2864351838u, 3736264674u,
+655621239u, 362070173u,
+1200907897u, 2384379464u,
+15823708u, 206117476u,
+3652870937u, 122927134u,
+1193310960u, 1093099415u,
+3696538026u, 4112584792u,
+1834541277u, 845639252u,
+2069527017u, 547588820u,
+4178147211u, 2827259351u,
+1764455305u, 3312003602u,
+940846775u, 1054995047u,
+2976960697u, 1934305529u,
+3095615046u, 3354962706u,
+2199137382u, 1005722394u,
+1875867180u, 2064356511u,
+3363633633u, 2688499147u,
+4019734130u, 3096333006u,
+2069509024u, 2906358341u,
+3247463123u, 4191788132u,
+2232866485u, 1456016086u,
+1422674894u, 867282151u,
+1851386407u, 1268304058u,
+1612503136u, 1739843072u,
+134947567u, 2978775774u,
+2051592101u, 1017127033u,
+1284167756u, 1090844589u,
+831688783u, 2079216362u,
+2079309682u, 1950585801u,
+1626991196u, 3644714163u,
+3678110059u, 898470030u,
+1117570988u, 2517572125u,
+3916646913u, 3182422972u,
+3630426828u, 969847973u,
+2835126238u, 53541366u,
+3427164640u, 3463937250u,
+3044785046u, 897322257u,
+103038235u, 3804506837u,
+3443872170u, 4185408854u,
+2557463241u, 4080940424u,
+3669923099u, 2789619871u,
+2048168570u, 2429169982u,
+3174690447u, 2513494106u,
+3099587829u, 2627855577u,
+1213061732u, 3143736628u,
+3482268149u, 1250714337u,
+3553412672u, 2689632914u,
+31648125u, 3872383625u,
+1565760579u, 36665130u,
+1282106920u, 359361724u,
+751041229u, 2257179590u,
+2915361862u, 280819225u,
+954406473u, 4101682199u,
+2907818413u, 4254297769u,
+3493178615u, 3755944354u,
+3539557658u, 3330196096u,
+4043533423u, 1134196225u,
+4177134659u, 127246419u,
+4213770762u, 1978302978u,
+2442615581u, 923049607u,
+1004426206u, 782768297u,
+2702745496u, 1880389457u,
+2410586681u, 1430106871u,
+4103323427u, 3168399477u,
+201787012u, 3105353527u,
+3716682375u, 3616334719u,
+3413209549u, 656672786u,
+526032790u, 2895072131u,
+2876965944u, 182894450u,
+456581318u, 2683752067u,
+1287916294u, 1270745752u,
+3877875910u, 3190666241u,
+3240336907u, 4024807233u,
+4227999465u, 2389301430u,
+1681224377u, 1576191191u,
+3599250276u, 2381111980u,
+3995044500u, 995595530u,
+3495321877u, 3956024585u,
+1611608524u, 3815677453u,
+1520987487u, 3669102590u,
+2062334396u, 1656117707u,
+5457134u, 3234118251u,
+4242065111u, 596879987u,
+470187419u, 2688566989u,
+3259870297u, 660100446u,
+1042378442u, 2206034096u,
+442236198u, 2542452448u,
+493137955u, 392411099u,
+3111186954u, 438250493u,
+947967568u, 1234595917u,
+4230082284u, 2762976773u,
+421203727u, 3728409592u,
+2870085764u, 1455086530u,
+2762099647u, 4011882747u,
+1785430706u, 3684427488u,
+1215981925u, 3227517889u,
+3269061963u, 4037515364u,
+1749401388u, 2167451566u,
+3168911474u, 4255057396u,
+2026092260u, 1736192508u,
+4123254745u, 2319366806u,
+3909727042u, 3114708966u,
+1938800693u, 680793595u,
+3933041672u, 616863613u,
+1525265867u, 2808224480u,
+2122290603u, 1211197714u,
+1186177814u, 2395325006u,
+3520488321u, 3979192396u,
+3540779343u, 4192918639u,
+1763872074u, 3402419930u,
+2736030448u, 1120335563u,
+1698949078u, 3993310631u,
+2947659998u, 1461045789u,
+1966048551u, 2228221363u,
+597941119u, 3498018399u,
+1441110751u, 2229999711u,
+393987327u, 454500547u,
+1222959566u, 567151340u,
+2496952483u, 1708770195u,
+3774764786u, 1492844524u,
+3308300614u, 805568076u,
+4068812294u, 3404648243u,
+868414882u, 177406999u,
+1608110313u, 642061169u,
+2093999089u, 222470301u,
+1027515771u, 3131251981u,
+2851936150u, 4272755262u,
+2763002551u, 1881527822u,
+1532845092u, 709643652u,
+682573592u, 1244104217u,
+440905170u, 1111321746u,
+796769556u, 2500467040u,
+3002618826u, 1112998535u,
+1188525643u, 4212674512u,
+1780193104u, 1243644607u,
+3691719535u, 2958853053u,
+2813437721u, 4036584207u,
+466635014u, 2277292580u,
+4082276003u, 1030800045u,
+1899531424u, 609466946u,
+1750863246u, 379050598u,
+3576413281u, 731493104u,
+2707384133u, 2289193651u,
+132259176u, 4115195437u,
+1769890695u, 2715470335u,
+3348954692u, 2166575624u,
+1819263183u, 2028531518u,
+2154809766u, 3672399742u,
+1142139448u, 88299682u,
+76727603u, 4198182186u,
+2304993586u, 1666387627u,
+2488475423u, 3832777692u,
+284366017u, 3359785538u,
+3469807328u, 2926494787u,
+1914195188u, 1134129972u,
+3829072836u, 2493478921u,
+3738499303u, 3311304980u,
+726951526u, 911080963u,
+932916545u, 2235559063u,
+2909742396u, 1765719309u,
+465269850u, 3803621553u,
+1456588655u, 508290328u,
+1490719640u, 3356513470u,
+2262196163u, 1451774941u,
+2908490783u, 251085588u,
+830410677u, 3172220325u,
+4039692645u, 1383603170u,
+3897208579u, 1940535730u,
+151909546u, 2384458112u,
+};
+
+// Return false only if offset is -1 and a spot check of 3 hashes all yield 0.
+bool Test(int offset, int len = 0) {
+#undef Check
+#undef IsAlive
+
+#define Check(x) do {                                                   \
+  const uint32_t actual = (x), e = expected[index++];                   \
+  bool ok = actual == e;                                                \
+  if (!ok) {                                                            \
+    cerr << "expected " << hex << e << " but got " << actual << endl;   \
+    ++errors;                                                           \
+  }                                                                     \
+  assert(ok);                                                           \
+} while (0)
+
+#define IsAlive(x) do { alive += IsNonZero(x); } while (0)
+
+  // After the following line is where the uses of "Check" and such will go.
+  static int index = 0;
+if (offset == -1) { int alive = 0; { uint64_t h = farmhashxo::Hash64WithSeeds(data, len++, SEED0, SEED1); IsAlive(h >> 32); IsAlive((h << 32) >> 32); } { uint64_t h = farmhashxo::Hash64WithSeed(data, len++, SEED); IsAlive(h >> 32); IsAlive((h << 32) >> 32); } { uint64_t h = farmhashxo::Hash64(data, len++); IsAlive(h >> 32); IsAlive((h << 32) >> 32); } len -= 3; return alive > 0; }
+{ uint64_t h = farmhashxo::Hash64WithSeeds(data + offset, len, SEED0, SEED1); Check(h >> 32); Check((h << 32) >> 32); }
+{ uint64_t h = farmhashxo::Hash64WithSeed(data + offset, len, SEED); Check(h >> 32); Check((h << 32) >> 32); }
+{ uint64_t h = farmhashxo::Hash64(data + offset, len); Check(h >> 32); Check((h << 32) >> 32); }
+
+  return true;
+#undef Check
+#undef IsAlive
+}
+
+int RunTest() {
+  Setup();
+  int i = 0;
+  cout << "Running farmhashxoTest";
+  if (!Test(-1)) {
+    cout << "... Unavailable\n";
+    return NoteErrors();
+  }
+  // Good.  The function is attempting to hash, so run the full test.
+  int errors_prior_to_test = errors;
+  for ( ; i < kTestSize - 1; i++) {
+    Test(i * i, i);
+  }
+  for ( ; i < kDataSize; i += i / 7) {
+    Test(0, i);
+  }
+  Test(0, kDataSize);
+  cout << (errors == errors_prior_to_test ? "... OK\n" : "... Failed\n");
+  return NoteErrors();
+}
+
+#else
+
+// After the following line is where the code to print hash codes will go.
+void Dump(int offset, int len) {
+{ uint64_t h = farmhashxo::Hash64WithSeeds(data + offset, len, SEED0, SEED1); cout << (h >> 32) << "u, " << ((h << 32) >> 32) << "u," << endl; }
+{ uint64_t h = farmhashxo::Hash64WithSeed(data + offset, len, SEED); cout << (h >> 32) << "u, " << ((h << 32) >> 32) << "u," << endl; }
+{ uint64_t h = farmhashxo::Hash64(data + offset, len); cout << (h >> 32) << "u, " << ((h << 32) >> 32) << "u," << endl; }
+}
+
+#endif
+
+#undef SEED
+#undef SEED1
+#undef SEED0
+
+}  // namespace farmhashxoTest
+
+#if TESTING
+
+static int farmhashxoTestResult = farmhashxoTest::RunTest();
+
+#else
+int main(int argc, char** argv) {
+  Setup();
+  cout << "uint32_t expected[] = {\n";
+  int i = 0;
+  for ( ; i < kTestSize - 1; i++) {
+    farmhashxoTest::Dump(i * i, i);
+  }
+  for ( ; i < kDataSize; i += i / 7) {
+    farmhashxoTest::Dump(0, i);
+  }
+  farmhashxoTest::Dump(0, kDataSize);
   cout << "};\n";
 }
 #endif
