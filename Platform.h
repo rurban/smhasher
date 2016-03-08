@@ -91,4 +91,8 @@ __inline__ unsigned long long int rdtsc()
 
 #endif	//	!defined(_MSC_VER)
 
+#ifdef __FreeBSD__
+#include <stdlib.h> //required for exit(..)
+#endif
+
 //-----------------------------------------------------------------------------
