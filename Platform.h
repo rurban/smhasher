@@ -38,6 +38,7 @@ void SetAffinity ( int cpu );
 
 #else	//	defined(_MSC_VER)
 
+#include <stdlib.h>
 #include <stdint.h>
 
 #define	FORCE_INLINE inline __attribute__((always_inline))
@@ -90,9 +91,5 @@ __inline__ unsigned long long int rdtsc()
 #define _stricmp strcasecmp
 
 #endif	//	!defined(_MSC_VER)
-
-#ifdef __FreeBSD__
-#include <stdlib.h> //required for exit(..)
-#endif
 
 //-----------------------------------------------------------------------------
