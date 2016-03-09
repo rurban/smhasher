@@ -21,6 +21,7 @@
 // FarmHash, by Geoff Pike
 
 #include "farmhash.h"
+
 // FARMHASH ASSUMPTIONS: Modify as needed, or use -DFARMHASH_ASSUME_SSE42 etc.
 // Note that if you use -DFARMHASH_ASSUME_SSE42 you likely need -msse42
 // (or its equivalent for your compiler); if you use -DFARMHASH_ASSUME_AESNI
@@ -28,27 +29,27 @@
 
 #ifdef FARMHASH_ASSUME_SSSE3
 #undef FARMHASH_ASSUME_SSSE3
-#define FARMHASH_ASSUME_SSSE3 1
+#define FARMHASH_ASSUME_SSSE3
 #endif
 
 #ifdef FARMHASH_ASSUME_SSE41
 #undef FARMHASH_ASSUME_SSE41
-#define FARMHASH_ASSUME_SSE41 1
+#define FARMHASH_ASSUME_SSE41
 #endif
 
 #ifdef FARMHASH_ASSUME_SSE42
 #undef FARMHASH_ASSUME_SSE42
-#define FARMHASH_ASSUME_SSE42 1
+#define FARMHASH_ASSUME_SSE42
 #endif
 
 #ifdef FARMHASH_ASSUME_AESNI
 #undef FARMHASH_ASSUME_AESNI
-#define FARMHASH_ASSUME_AESNI 1
+#define FARMHASH_ASSUME_AESNI
 #endif
 
 #ifdef FARMHASH_ASSUME_AVX
 #undef FARMHASH_ASSUME_AVX
-#define FARMHASH_ASSUME_AVX 1
+#define FARMHASH_ASSUME_AVX
 #endif
 
 #if !defined(FARMHASH_CAN_USE_CXX11) && defined(LANG_CXX11)
