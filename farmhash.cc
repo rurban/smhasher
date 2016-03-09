@@ -259,6 +259,7 @@ STATIC_INLINE uint64_t Rotate64(uint64_t val, int shift) {
 #endif
 
 // PLATFORM-SPECIFIC FUNCTIONS AND MACROS
+// TODO: See https://stackoverflow.com/questions/11228855/header-files-for-simd-intrinsics
 
 #undef x86_64
 #if defined (__x86_64) || defined (__x86_64__)
@@ -281,16 +282,27 @@ STATIC_INLINE uint64_t Rotate64(uint64_t val, int shift) {
 #undef can_use_ssse3
 #if defined(__SSSE3__) || defined(FARMHASH_ASSUME_SSSE3)
 
-#include <immintrin.h>
-#define can_use_ssse3 1
+# ifdef __GNUC__
+#  define GCC_VERSION (__GNUC__ * 100 + __GNUC_MINOR__)
+#  if GCC_VERSION > 403
+#   include <immintrin.h>
+#   define can_use_ssse3 1
+#  else
+#   define can_use_ssse3 0
+#  endif
+# else
+#  include <immintrin.h>
+#  define can_use_ssse3 1
+# endif
 // Now we can use _mm_hsub_epi16 and so on.
 
 #else
-#define can_use_ssse3 0
+# define can_use_ssse3 0
 #endif
 
 #undef can_use_sse41
-#if defined(__SSE4_1__) || defined(FARMHASH_ASSUME_SSE41)
+
+#if can_use_ssse3 && (defined(__SSE4_1__) || defined(FARMHASH_ASSUME_SSE41))
 
 #include <immintrin.h>
 #define can_use_sse41 1
