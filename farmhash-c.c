@@ -41,13 +41,24 @@
 #endif
 
 #if defined(__SSSE3__)
-#include <immintrin.h>
-#define CAN_USE_SSSE3 1  // Now we can use _mm_hsub_epi16 and so on.
+# ifdef __GNUC__
+#  define GCC_VERSION (__GNUC__ * 100 + __GNUC_MINOR__)
+#  if GCC_VERSION > 403
+#   include <immintrin.h>
+#   define CAN_USE_SSSE3 1
+#  else
+#   define CAN_USE_SSSE3 0
+#  endif
+# else
+#  include <immintrin.h>
+#  define CAN_USE_SSSE3 1
+# endif
+// Now we can use _mm_hsub_epi16 and so on.
 #else
 #define CAN_USE_SSSE3 0
 #endif
 
-#if defined(__SSE4_1__)
+#if CAN_USE_SSSE3 && defined(__SSE4_1__)
 #include <immintrin.h>
 #define CAN_USE_SSE41 1  // Now we can use _mm_insert_epi64 and so on.
 #else
@@ -68,7 +79,7 @@
 #define CAN_USE_AESNI 0
 #endif
 
-#if defined(__AVX__)
+#if CAN_USE_SSSE3 && defined(__AVX__)
 #include <immintrin.h>
 #define CAN_USE_AVX 1
 #else
@@ -1119,7 +1130,7 @@ uint32_t farmhash32_su_with_seed(const char *s, size_t len, uint32_t seed) {
 
 // farmhash sa
 
-#if CAN_USE_SSE42
+#if CAN_USE_SSE41 && CAN_USE_SSE42
 
 uint32_t farmhash32_sa(const char *s, size_t len) {
   const uint32_t seed = 81;
@@ -1556,7 +1567,7 @@ uint32_t farmhash32(const char* s, size_t len) {
       farmhash32_nt(s, len)
 #elif CAN_USE_SSE42 && CAN_USE_AESNI
       farmhash32_su(s, len)
-#elif CAN_USE_SSE42
+#elif CAN_USE_SSE41 && CAN_USE_SSE42
       farmhash32_sa(s, len)
 #else
       farmhash32_mk(s, len)
@@ -1576,7 +1587,7 @@ uint32_t farmhash32_with_seed(const char* s, size_t len, uint32_t seed) {
       farmhash32_nt_with_seed(s, len, seed)
 #elif CAN_USE_SSE42 && CAN_USE_AESNI
       farmhash32_su_with_seed(s, len, seed)
-#elif CAN_USE_SSE42
+#elif CAN_USE_SSE41 && CAN_USE_SSE42
       farmhash32_sa_with_seed(s, len, seed)
 #else
       farmhash32_mk_with_seed(s, len, seed)
@@ -1591,7 +1602,7 @@ uint32_t farmhash32_with_seed(const char* s, size_t len, uint32_t seed) {
 // depending on NDEBUG.
 uint64_t farmhash64(const char* s, size_t len) {
   return debug_tweak64(
-#if CAN_USE_SSE42 && x86_64
+#if CAN_USE_SSE41 && CAN_USE_SSE42 && x86_64
       farmhash64_te(s, len)
 #else
       farmhash64_xo(s, len)
