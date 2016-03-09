@@ -93,8 +93,9 @@
 
 static inline uint32_t bswap32(const uint32_t x) {
   uint32_t y = x;
+  size_t i;
 
-  for (size_t i = 0; i < sizeof(uint32_t) >> 1; i++) {
+  for (i = 0; i < sizeof(uint32_t) >> 1; i++) {
 
     uint32_t d = sizeof(uint32_t) - i - 1;
 
@@ -114,8 +115,9 @@ static inline uint32_t bswap32(const uint32_t x) {
 
 static inline uint64_t bswap64(const uint64_t x) {
   uint64_t y = x;
-
-  for (size_t i = 0; i < sizeof(uint64_t) >> 1; i++) {
+  size_t i;
+  
+  for (i = 0; i < sizeof(uint64_t) >> 1; i++) {
 
     uint64_t d = sizeof(uint64_t) - i - 1;
 
@@ -869,7 +871,8 @@ static inline uint32_t farmhash32_mk_len_13_to_24(const char *s, size_t len, uin
 static inline uint32_t farmhash32_mk_len_0_to_4(const char *s, size_t len, uint32_t seed) {
   uint32_t b = seed;
   uint32_t c = 9;
-  for (size_t i = 0; i < len; i++) {
+  size_t i;
+  for (i = 0; i < len; i++) {
     signed char v = s[i];
     b = b * c1 + v;
     c ^= b;
@@ -1286,7 +1289,8 @@ static inline uint32_t farmhash32_cc_len_13_to_24(const char *s, size_t len) {
 static inline uint32_t farmhash32_cc_len_0_to_4(const char *s, size_t len) {
   uint32_t b = 0;
   uint32_t c = 9;
-  for (size_t i = 0; i < len; i++) {
+  size_t i;
+  for (i = 0; i < len; i++) {
     signed char v = s[i];
     b = b * c1 + v;
     c ^= b;
@@ -1475,6 +1479,8 @@ uint128_c_t farmhash128_cc_city_with_seed(const char *s, size_t len, uint128_c_t
   uint64_t x = uint128_c_t_low64(seed);
   uint64_t y = uint128_c_t_high64(seed);
   uint64_t z = len * k1;
+  size_t tail_done;
+
   v.a = ror64(y ^ k1, 49) * k1 + fetch64(s);
   v.b = ror64(v.a, 42) * k1 + fetch64(s + 8);
   w.a = ror64(y + z, 35) * k1 + x;
@@ -1508,7 +1514,7 @@ uint128_c_t farmhash128_cc_city_with_seed(const char *s, size_t len, uint128_c_t
   w.a *= 9;
   v.a *= k0;
   // If 0 < len < 128, hash up to 4 chunks of 32 bytes each from the end of s.
-  for (size_t tail_done = 0; tail_done < len; ) {
+  for (tail_done = 0; tail_done < len; ) {
     tail_done += 32;
     y = ror64(x + y, 42) * k0 + v.b;
     w.a += fetch64(s + len - tail_done + 16);
