@@ -41,9 +41,9 @@ SMhasher
 | City64                |     15335.21  |    23.99 |                            |
 | City128               |     16383.46  |    34.13 |                            |
 | CityCrc128            |     21221.23  |    37.03 |                            |
-| FarmHash32        	|     24831.45	|    24.99 |                            |
-| FarmHash64        	|     15573.65	|    24.73 |                            |
-| FarmHash128       	|     16744.30	|    43.37 |                            |
+| FarmHash32        	|     24831.45	|    24.99 | disabled. too machine-specific |
+| FarmHash64        	|     15573.65	|    24.73 | machine-specific           |
+| FarmHash128       	|     16744.30	|    43.37 | machine-specific           |
 | farmhash32_c       	|     24647.21	|    25.36 |                            |
 | farmhash64_c    	    |     15983.83	|    30.86 |                            |
 | farmhash128_c     	|     17419.63	|    72.37 |                            |
@@ -77,7 +77,7 @@ See also the old [https://code.google.com/p/smhasher/w/list](https://code.google
 So the fastest hash functions on x86_64 without quality problems are:
 
 * falkhash (_macho64 and elf64 nasm only, with HW AES extension_)
-* FarmHash
+* FarmHash (_not portable, too machine specific: 64 vs 32bit, old gcc, ..._)
 * Metro (_but not 64crc yet, WIP_)
 * Spooky32
 * xxHash64

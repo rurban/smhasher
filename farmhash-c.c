@@ -1560,6 +1560,9 @@ uint128_c_t farmhash_cc_fingerprint128(const char* s, size_t len) {
 // farmhash function for a byte array.  See also Hash(), below.
 // May change from time to time, may differ on different platforms, may differ
 // depending on NDEBUG.
+// As this short 32-bit variant leads to different hash values with the x86_64
+// SSE4.1 variant, compared to a 32bit or gcc <4.4 result, it is not portable and
+// not recommended. Disabled in SMHasher
 uint32_t farmhash32(const char* s, size_t len) {
   return debug_tweak32(
 
@@ -1580,6 +1583,9 @@ uint32_t farmhash32(const char* s, size_t len) {
 // hashed into the result.
 // May change from time to time, may differ on different platforms, may differ
 // depending on NDEBUG.
+// As this short 32-bit variant leads to different hash values with the x86_64
+// SSE4.1 variant, compared to a 32bit or gcc <4.4 result, it is not portable and
+// not recommended. Disabled in SMHasher
 uint32_t farmhash32_with_seed(const char* s, size_t len, uint32_t seed) {
   return debug_tweak32(
 

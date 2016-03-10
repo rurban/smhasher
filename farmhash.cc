@@ -1001,6 +1001,9 @@ uint64_t Hash64WithSeeds(const char *s, size_t len, uint64_t seed0, uint64_t see
 #endif
 }  // namespace farmhashte
 namespace farmhashnt {
+
+// Note that this will lead to different hash values to the SSE4.1 variant,
+// thus not portable and not recommended. Disabled in SMHasher
 #if !can_use_sse41 || !x86_64
 
 uint32_t Hash32(const char *s, size_t len) {
