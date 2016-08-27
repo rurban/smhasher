@@ -164,6 +164,39 @@ NEVER_INLINE int64_t timehash ( pfHash hash, const void * key, int len, int seed
 }
 
 //-----------------------------------------------------------------------------
+// Specialized procedure for small lengths. Serialize invocations of the hash
+// function, make sure they would not be computed in parallel on an out-of-order CPU.
+
+NEVER_INLINE int64_t timehash_small ( pfHash hash, const void * key, int len, int seed )
+{
+  const int NUM_TRIALS = 200;
+  volatile unsigned long long int begin, end;
+  uint32_t hash_temp[16] = {};
+  uint32_t *buf = new uint32_t[(len + 3) / 4];
+  memcpy(buf,key,len);
+
+  begin = rdtsc();
+
+  for(int i = 0; i < NUM_TRIALS; i++) {
+    hash(buf,len,seed,hash_temp);
+    // XXX Add dependency between invocations of hash-function to prevent parallel
+    // evaluation of them. However this way the invocations still would not be
+    // fully serialized. Another option is to use lfence instruction (load-from-memory
+    // serialization instruction) or mfence (load-from-memory AND store-to-memory
+    // serialization instruction):
+    //   __asm volatile ("lfence");
+    // It's hard to say which one is the most realistic and sensible approach.
+    seed += hash_temp[0];
+    buf[0] ^= hash_temp[0];
+  }
+
+  end = rdtsc();
+  delete[] buf;
+
+  return (int64_t)((end - begin) / (double)NUM_TRIALS);
+}
+
+//-----------------------------------------------------------------------------
 
 double SpeedTest ( pfHash hash, uint32_t seed, const int trials, const int blocksize, const int align )
 {
@@ -188,9 +221,18 @@ double SpeedTest ( pfHash hash, uint32_t seed, const int trials, const int block
   for(int itrial = 0; itrial < trials; itrial++)
   {
     r.rand_p(block,blocksize);
-    
-    double t = (double)timehash(hash,block,blocksize,itrial);
-    
+
+    double t;
+
+    if(blocksize < 100)
+    {
+      t = (double)timehash_small(hash,block,blocksize,itrial);
+    }
+    else
+    {
+      t = (double)timehash(hash,block,blocksize,itrial);
+    }
+
     if(t > 0) times.push_back(t);
   }
 
@@ -236,7 +278,7 @@ void BulkSpeedTest ( pfHash hash, uint32_t seed )
 
 double TinySpeedTest ( pfHash hash, int hashsize, int keysize, uint32_t seed, bool verbose )
 {
-  const int trials = 999999;
+  const int trials = 99999;
 
   if(verbose) printf("Small key speed test - %4d-byte keys - ",keysize);
   
