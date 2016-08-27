@@ -262,7 +262,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
     {
       sum += TinySpeedTest(hashfunc<hashtype>(info->hash),sizeof(hashtype),i,info->verification,true);
     }
-    sum = sum / 32.0;
+    sum = sum / 31.0;
     printf("Average                                    %6.3f cycles/hash\n",sum);
     printf("\n");
     fflush(NULL);
