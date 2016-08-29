@@ -1,70 +1,70 @@
 SMhasher
 ========
 
-| Hash function     |MiB/sec @ Haswell 3ghz | cycles/hash | Quality problems    |
-|:------------------|--------------:|---------:|--------------------------------|
-| donothing32           |  28295961.78  |    24.66 | overall bad                    |
-| donothing64           |  30859408.29  |    26.16 | overall bad                    |
-| donothing128          |  40564679.38  |    25.48 | overall bad                    |
+| Hash function         |      MiB/sec  |cycles/hash| Quality problems              |
+|:----------------------|--------------:|---------:|--------------------------------|
+| donothing32           |   9637878.60  |     5.48 | overall bad                    |
+| donothing64           |   8211016.32	|     5.15 | overall bad                    |
+| donothing128          |   7676888.89	|     5.83 | overall bad                    |
 | NOP_OAAT_read64       |      2414.92  |    45.03 | 100% bias, 2.17x collisions    |
-| crc32                 |       403.80  |    74.33 | insecure, 8589.93x collisions, distrib   |
-| md5_32a               |       497.78  |   386.72 | 8589.93x collisions, distrib   |
-| sha1_32a              |       513.43  |   657.10 | collisions, 36.6% distrib      |
-| hasshe2               |      3210.42  |    41.31 | insecure,100% bias, collisions, distrib |
-| crc32_hw              |      8204.61  |    23.09 | insecure,100% bias, collisions, distrib |
-| crc64_hw              |     10917.00  |    21.50 | insecure,100% bias, collisions, distrib |
+| crc32                 |       569.71	|    97.67 | insecure, 8589.93x collisions, distrib   |
+| md5_32a               |       414.75	|   533.59 | 8589.93x collisions, distrib   |
+| sha1_32a              |       657.77	|   971.34 | collisions, 36.6% distrib      |
+| hasshe2               |      2292.04	|    72.23 | insecure,100% bias, collisions, distrib |
+| crc32_hw              |      7733.44  |    43.48 | insecure,100% bias, collisions, distrib |
+| crc64_hw              |     10937.53  |    23.33 | insecure,100% bias, collisions, distrib |
 | crc32_hw1             |     30703.38  |    27.08 | insecure,100% bias, collisions, distrib |
-| FNV1a                 |      1011.45  |    32.92 | zeros,100% bias, collisions, distrib |
-| FNV1a_YoshimitsuTRIAD |     18204.42  |    20.74 | 100% bias, collisions, distrib |
-| FNV64                 |       990.31  |    33.12 | 100% bias, collisions, distrib |
-| bernstein             |      1348.66  |    33.99 | 100% bias, collisions, distrib |
-| sdbm                  |      1026.19  |    30.06 | 100% bias, collisions, distrib |
-| x17                   |       794.05  |    35.24 | 99.98% bias, collisions, distrib |
-| JenkinsOOAT           |       810.29  |    60.17 | 53.5% bias, collisions, distrib |
-| JenkinsOOAT_perl      |       820.96  |    54.22 | 1.5-11.5% bias, 7.2x collisions |
-| lookup3               |      3030.99  |    23.64 | 28% bias, collisions, 30% distr |
-| superfast             |      2620.25  |    28.64 | 91% bias, 5273.01x collisions, 37% distr |
-| MurmurOAAT            |       684.14  |    48.19 | collisions, 99.998% distr      |
-| Crap8                 |      4080.28  |    21.59 | 2.42% bias, collisions, 2% distrib |
-| Murmur2               |      3956.34  |    22.75 | 1.7% bias, 81x coll, 1.7% distrib  |
-| Murmur2A              |      4027.33  |    28.19 | 12.7% bias                     |
-| Murmur2B              |      7648.97  |    21.26 | 1.8% bias, collisions, 3.4% distrib |
-| Murmur2C              |      5398.54  |    26.74 | 91% bias, collisions, distr    |
+| FNV1a                 |      1026.17  |    52.90 | zeros,100% bias, collisions, distrib |
+| FNV1a_YoshimitsuTRIAD |     15700.04  |    20.62 | 100% bias, collisions, distrib |
+| FNV64                 |      1015.60  |    53.55 | 100% bias, collisions, distrib |
+| bernstein             |      1026.17  |    51.13 | 100% bias, collisions, distrib |
+| sdbm                  |       977.48  |    51.75 | 100% bias, collisions, distrib |
+| x17                   |       893.28  |    62.36 | 99.98% bias, collisions, distrib |
+| JenkinsOOAT           |       563.23  |   104.31 | 53.5% bias, collisions, distrib |
+| JenkinsOOAT_perl      |       676.91  |    87.82 | 1.5-11.5% bias, 7.2x collisions |
+| lookup3               |      3303.80  |    31.66 | 28% bias, collisions, 30% distr |
+| superfast             |      3158.88  |    35.44 | 91% bias, 5273.01x collisions, 37% distr |
+| MurmurOAAT            |       719.76  |    76.48 | collisions, 99.998% distr      |
+| Crap8                 |      4069.57  |    26.83 | 2.42% bias, collisions, 2% distrib |
+| Murmur2               |      4049.53  |    31.64 | 1.7% bias, 81x coll, 1.7% distrib  |
+| Murmur2A              |      4031.16  |    34.56 | 12.7% bias                     |
+| Murmur2B              |      8062.20  |    33.62 | 1.8% bias, collisions, 3.4% distrib |
+| Murmur2C              |      5381.36  |    35.33 | 91% bias, collisions, distr    |
 | ----------------------|               |          |                            |
-| PMurHash32            |      3242.25  |    31.52 |                            |
-| Murmur3A              |      3188.52  |    24.50 |                            |
-| Murmur3C              |      5400.86  |    35.01 |                            |
-| Murmur3F              |      7845.17  |    35.23 |                            |
-| fasthash32            |      8048.25  |    23.77 |                            |
-| fasthash64            |      8015.22  |    22.04 |                            |
-| City32                |      7152.39  |    24.00 | 2 minor collisions         |
-| City64                |     15335.21  |    23.99 |                            |
-| City128               |     16383.46  |    34.13 |                            |
-| CityCrc128            |     21221.23  |    37.03 |                            |
-| FarmHash32        	|     24831.45	|    24.99 | disabled. too machine-specific |
-| FarmHash64        	|     15573.65	|    24.73 | machine-specific           |
-| FarmHash128       	|     16744.30	|    43.37 | machine-specific           |
-| farmhash32_c       	|     24647.21	|    25.36 |                            |
-| farmhash64_c    	    |     15983.83	|    30.86 |                            |
-| farmhash128_c     	|     17419.63	|    72.37 |                            |
-| SipHash               |      1268.37  |   105.28 |                            |
-| Spooky32              |     15989.78  |    30.95 |                            |
-| Spooky64              |     15994.90  |    34.74 |                            |
-| Spooky128             |     16017.34  |    34.97 | collisions with 4bit diff  |
-| xxHash32              |      7547.52  |    25.05 |                            |
-| xxHash64              |     15789.29  |    30.01 |                            |
-| metrohash64_1         |     17287.69  |    27.17 |                            |
-| metrohash64_2         |     16554.01  |    22.76 |                            |
-| metrohash128_1        |     16673.07  |    24.31 |                            |
-| metrohash128_2        |     16542.33  |    28.02 | cyclic collisions 8 byte   |
-| metrohash64crc_1      |     29181.89  |    22.60 | cyclic collisions 8 byte   |
-| metrohash64crc_2      |     29596.02  |    21.55 |                            |
-| metrohash128crc_1     |     28870.28  |    24.89 |                            |
-| metrohash128crc_2     |     27789.30  |    27.23 |                            |
-| cmetrohash64_1_optshort |   16862.58  |    23.11 |                            |
-| cmetrohash64_1        |     15799.52  |    25.44 |                            |
-| cmetrohash64_2        |     15040.97  |    28.59 |                            |
-| falkhash              |     36785.50  |    65.55 |                            |
+| PMurHash32            |      3034.35  |    45.11 |                            |
+| Murmur3A              |      3263.93  |    37.86 |                            |
+| Murmur3C              |      3733.90  |    48.66 |                            |
+| Murmur3F              |      7136.07  |    36.33 |                            |
+| fasthash32            |      7198.92  |    33.05 |                            |
+| fasthash64            |      6911.62  |    33.57 |                            |
+| City32                |      6054.93  |    41.96 | 2 minor collisions         |
+| City64                |     14116.86  |    46.76 |                            |
+| City128               |     13512.87  |    47.20 |                            |
+| CityCrc128            |     21009.15  |    51.60 |                            |
+| FarmHash64        	|     12795.07  |    49.34 | machine-specific           |
+| FarmHash128       	|     13514.39  |    59.63 | machine-specific           |
+| FarmHash32        	|     24831.45  |    24.99 | disabled. too machine-specific |
+| farmhash32_c       	|     24647.21  |    25.36 |                            |
+| farmhash64_c    	    |     14976.48  |    41.88 |                            |
+| farmhash128_c     	|     15856.60  |    56.52 |                            |
+| SipHash               |      1264.31  |   117.20 |                            |
+| Spooky32              |     15352.40  |    43.98 |                            |
+| Spooky64              |     16411.41  |    43.69 |                            |
+| Spooky128             |     16358.37  |    45.04 | collisions with 4bit diff  |
+| xxHash32              |      4494.48  |    47.90 |                            |
+| xxHash64              |     15580.86  |    44.80 |                            |
+| metrohash64_1         |     16555.13  |    37.22 |                            |
+| metrohash64_2         |     16287.46  |    39.82 |                            |
+| metrohash128_1        |     15802.90  |    47.65 |                            |
+| metrohash128_2        |     15500.74  |    48.16 | cyclic collisions 8 byte   |
+| metrohash64crc_1      |     23946.99  |    45.67 | cyclic collisions 8 byte   |
+| metrohash64crc_2      |     25105.50  |    38.75 |                            |
+| metrohash128crc_1     |     27411.55  |    46.06 |                            |
+| metrohash128crc_2     |     27790.85  |    45.67 |                            |
+| cmetrohash64_1_o      |     17237.75  |    36.95 |                            |
+| cmetrohash64_1        |     16463.21  |    36.30 |                            |
+| cmetrohash64_2        |     17188.28  |    35.40 |                            |
+| falkhash              |     39817.46  |   124.81 |                            |
 
 
 Summary
@@ -94,9 +94,19 @@ See [github.com/rurban/perl-hash-stats](https://github.com/rurban/perl-hash-stat
 When used in a hash table the instruction cache will usually beat the
 CPU and throughput measured here. In my tests the smallest `FNV1A`
 beats the fastest `crc32_hw1` with
-[Perl 5 hash tables](https://github.com/rurban/perl-hash-stats).  Even
-if those worse hash functions will lead to more collisions, the
-overall speed advantage beats the worse quality.
+[Perl 5 hash tables](https://github.com/rurban/perl-hash-stats). 
+Even if those worse hash functions will lead to more collisions, the
+overall speed advantage beats the slightly worse quality.
+See e.g. [A Seven-Dimensional Analysis of Hashing Methods and its Implications on Query Processing](https://infosys.cs.uni-saarland.de/publications/p249-richter.pdf)
+for a concise overview of the best hash table strategies, confirming that the
+simpliest Mult hashing (bernstein, FNV*, x17, sdbm) always beat "better" hash
+functions (Tabulation, Murmur, Farm, ...) when used in a hash table.
+
+The fast hash functions tested here are recommendable as fast for file
+digests and maybe bigger databases, but not for 32bit hash tables.  The
+"Quality problems" lead to less uniform distribution, i.e.  more collisions
+and worse performance, but are rarely related to real security attacks, just
+the 2nd sanity test against \0 invariance is security relevant.
 
 Other
 -----
@@ -123,9 +133,27 @@ are not included here.
 
 Such an attack avoidance cannot not be the problem of the hash
 function, but the hash table collision resolution scheme.  You can
-attack every single hash function, even the best, if you detect the
+attack every single hash function, even the best and most secure if you detect the
 seed, e.g. from the sort-order, so you need to protect your collision
 handling scheme from the worst-case O(n), i.e. separate chaining with
-linked lists. Linked lists chaining is also very cache-unfriendly.
+linked lists. Linked lists chaining allows high load factors, but is very
+cache-unfriendly.
+The only recommendable linked list scheme is inlining the key or hash into
+the array. Nowadays everybody uses fast open addressing, even if the load factor
+needs to be ~50%, unless you use Cuckoo Hashing.
+
+I.e. the usage of siphash for their hash table in Python 3.4, ruby,
+rust, systemd, OpenDNS, Haskell and OpenBSD is pure security theatre.
+siphash is not secure enough for security purposes and not fast
+enough for general usage.
+Using Murmur is usually slower than a simple Mult, even in the worst case.
+Provable secure is only uniform hashing, i.e. 2-5 independent Mult or Tabulation,
+or using a guaranteed logarithmic or linear collision scheme, such as Robin Hood
+or Cockoo hashing.
+
+One more note regarding security: Nowadays even SHA1 can be solved in
+a solver, like Z3 (or faster ones). So all hash functions with less
+than 256 bits tested here cannot be considered "secure" at all.
 
 The '\0' vulnerability attack with binary keys is tested in the 2nd Sanity test.
+
