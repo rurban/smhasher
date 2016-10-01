@@ -71,7 +71,11 @@ HashInfo g_hashes[] =
   { DoNothingHash,        64, 0x00000000, "donothing64", "Do-Nothing function (only valid for measuring call overhead)" },
   { DoNothingHash,       128, 0x00000000, "donothing128", "Do-Nothing function (only valid for measuring call overhead)" },
   { NoopOAATReadHash,     64, 0x00000000, "NOP_OAAT_read64", "Noop function (only valid for measuring call + OAAT reading overhead)" },
-
+  { BadHash,     	  32, 0xAB432E23, "BadHash", 	 "very simple XOR shift" },
+  { sumhash,     	  32, 0x0000A9AC, "sumhash", 	 "sum all bytes" },
+  { sumhash32,     	  32, 0xF5562C80, "sumhash32",   "sum all 32bit words" },
+  
+  // here start the real hashes
   { crc32,                32, 0x3719DB20, "crc32",       "CRC-32 soft" },
 
   { md5_32,               32, 0xC10C356B, "md5_32a",     "MD5, first 32 bits of result" },
@@ -98,7 +102,7 @@ HashInfo g_hashes[] =
 #endif
 // elf64 or macho64 only
 //{ fhtw_test,            64, 0x0,        "fhtw",        "fhtw asm" },
-  { FNV32a,               32, 0xE3CBBE91, "FNV1a",         "Fowler-Noll-Vo hash, 32-bit" },
+  { FNV32a,               32, 0xE3CBBE91, "FNV1a",       "Fowler-Noll-Vo hash, 32-bit" },
   { FNV32a_YoshimitsuTRIAD,32,0xD8AFFD71, "FNV1a_YoshimitsuTRIAD", "FNV1a-YoshimitsuTRIAD 32-bit sanmayce" },
   { FNV64a,               64, 0x103455FC, "FNV64",       "Fowler-Noll-Vo hash, 64-bit" },
 #if 0

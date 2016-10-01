@@ -18,6 +18,7 @@
 //----------
 // These are _not_ hash functions (even though people tend to use crc32 as one...)
 
+void BadHash               ( const void * key, int len, uint32_t seed, void * out );
 void sumhash               ( const void * key, int len, uint32_t seed, void * out );
 void sumhash32             ( const void * key, int len, uint32_t seed, void * out );
 

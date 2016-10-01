@@ -214,7 +214,7 @@ sdbm(const void *key, int len, uint32_t hash, void *out)
   unsigned char  *str = (unsigned char *)key;
   const unsigned char *const end = (const unsigned char *)str + len;
   //note that perl5 adds the seed to the end of key, which looks like cargo cult
-    while (str < end) {
+  while (str < end) {
     hash = (hash << 6) + (hash << 16) - hash + *str++;
   }
   *(uint32_t *) out = hash;
@@ -262,7 +262,7 @@ JenkinsOOAT(const void *key, int len, uint32_t hash, void *out)
 }
 
 //as used in perl5 until 5.17(one_at_a_time_old)
-  void		  JenkinsOOAT_perl(const void *key, int len, uint32_t hash, void *out)
+void JenkinsOOAT_perl(const void *key, int len, uint32_t hash, void *out)
 {
   unsigned char  *str = (unsigned char *)key;
   const unsigned char *const end = (const unsigned char *)str + len;
