@@ -119,6 +119,7 @@ add_library(
   ${METROCRC128_SRC}
   ${SSE4_OBJ}
   t1ha.cc
+  mum.cc
 )
 
 add_executable(
