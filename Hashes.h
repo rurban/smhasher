@@ -173,3 +173,12 @@ inline void fasthash64_test ( const void * key, int len, uint32_t seed, void * o
   *(uint64_t*)out = fasthash64(key, (size_t) len, (uint64_t)seed);
 }
 #endif
+
+//-----------------------------------------------------------------------------
+
+#include "t1ha.h"
+
+inline void t1ha_test(const void * key, int len, uint32_t seed, void * out)
+{
+  *(uint64_t*)out = t1ha(key, len, seed);
+}

@@ -181,6 +181,7 @@ HashInfo g_hashes[] =
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { falkhash_test_cxx,          64, 0x2F99B071, "falkhash",          "falkhash.asm with aesenc, 64-bit for x64" },
 #endif
+  { t1ha_test,            64, 0x49F33A1B, "t1ha",        "Fast Positive Hash (The 1Hippeus project)" },
 };
 
 HashInfo * findHash ( const char * name )
