@@ -41,7 +41,7 @@
 #include "t1ha.h"
 #include <string.h>
 
-#if !defined(__GNUC__) || !__GNUC_PREREQ(4, 2)
+#if !defined(__GNUC__) || (__GNUC__ < 4)
 #error Sorry, t1ha requires modern GCC compiler (gcc 4.2 or compatible).
 #endif
 
