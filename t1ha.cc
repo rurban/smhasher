@@ -145,3 +145,77 @@ uint64_t t1ha(const void *data, size_t len, uint64_t seed) {
     } while (!need_align && left >= sizeof(uint64_t) * 4);
   }
 }
+
+//-----------------------------------------------------------------------------
+
+#ifdef __SIZEOF_INT128__
+
+static inline uint64_t mux(uint64_t v, uint64_t p) {
+  __uint128_t r = (__uint128_t)v * (__uint128_t)p;
+  return r ^ (r >> 64);
+}
+
+uint64_t t1ha_mux(const void *data, size_t len, uint64_t seed) {
+  uint64_t left = len;
+  uint64_t a = seed;
+  uint64_t b = len;
+
+  const bool need_align =
+      ((uintptr_t)data) % sizeof(uint64_t) != 0 && !UNALIGNED_OK;
+  const uint64_t *v = (const uint64_t *)data;
+  uint64_t align[4];
+
+  if (left >= sizeof(uint64_t) * 4) {
+    uint64_t c = rot(len) + seed;
+    uint64_t d = len ^ rot(seed);
+
+    do {
+      if (need_align) {
+        memcpy(&align, data, (sizeof(align) > left) ? left : sizeof(align));
+        data = (const uint64_t *)data + 4;
+        v = align;
+      }
+
+      uint64_t w0 = fetch(v + 0);
+      uint64_t w1 = fetch(v + 1);
+      uint64_t w2 = fetch(v + 2);
+      uint64_t w3 = fetch(v + 3);
+
+      uint64_t d02 = w0 ^ rot(w2 + d);
+      uint64_t c13 = w1 ^ rot(w3 + c);
+      c += a ^ rot(w0, s0);
+      d -= b ^ rot(w1, s2);
+      a ^= p1 * (d02 + w3);
+      b ^= p0 * (c13 + w2);
+
+      v += 4;
+      left -= sizeof(uint64_t) * 4;
+    } while (left >= sizeof(uint64_t) * 4);
+
+    a ^= p6 * (rot(c) + d);
+    b ^= p5 * (c + rot(d));
+  }
+
+  if (need_align && left) {
+    memcpy(&align, data, (sizeof(align) > left) ? left : sizeof(align));
+    data = (const uint64_t *)data + 4;
+    v = align;
+  }
+
+  switch (left) {
+  case sizeof(uint64_t) * 3 + 1 ... sizeof(uint64_t) * 4:
+    b += mux(fetch(v++), p4);
+  case sizeof(uint64_t) * 2 + 1 ... sizeof(uint64_t) * 3:
+    a += mux(fetch(v++), p3);
+  case sizeof(uint64_t) + 1 ... sizeof(uint64_t) * 2:
+    b += mux(fetch(v++), p2);
+  case 1 ... sizeof(uint64_t):
+    a += mux(fetch(v) << (8 * (sizeof(uint64_t) - left)), p1);
+  case 0:
+    return mux(rot(a + b), p4) + mix(b, a);
+  default:
+    __builtin_unreachable();
+  }
+}
+
+#endif /* __SIZEOF_INT128__ */

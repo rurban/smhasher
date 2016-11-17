@@ -182,6 +182,9 @@ HashInfo g_hashes[] =
   { falkhash_test_cxx,          64, 0x2F99B071, "falkhash",          "falkhash.asm with aesenc, 64-bit for x64" },
 #endif
   { t1ha_test,                  64, 0x49F33A1B, "t1ha",              "Fast Positive Hash (The 1Hippeus project)" },
+#ifdef __SIZEOF_INT128__
+  { t1ha_mux_test,              64, 0xA4312547, "t1ha_mux",          "t1ha with mul_64x64_128 (experimental)" },
+#endif
   { mum_hash_test,              64, 0x3EEAE2D4, "MUM",               "github.com/vnmakarov/mum-hash" },
 };
 

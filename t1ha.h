@@ -47,6 +47,9 @@ extern "C" {
 #endif
 
 uint64_t t1ha(const void *data, size_t len, uint64_t seed);
+#ifdef __SIZEOF_INT128__
+uint64_t t1ha_mux(const void *data, size_t len, uint64_t seed);
+#endif /* __SIZEOF_INT128__ */
 
 #ifdef __cplusplus
 }

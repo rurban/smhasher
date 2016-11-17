@@ -156,4 +156,3 @@ a solver, like Z3 (or faster ones). So all hash functions with less
 than 256 bits tested here cannot be considered "secure" at all.
 
 The '\0' vulnerability attack with binary keys is tested in the 2nd Sanity test.
-

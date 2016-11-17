@@ -184,4 +184,11 @@ inline void t1ha_test(const void * key, int len, uint32_t seed, void * out)
 }
 
 //-----------------------------------------------------------------------------
-void mum_hash_test          ( const void * key, int len, uint32_t seed, void * out );
+#ifdef __SIZEOF_INT128__
+inline void t1ha_mux_test(const void * key, int len, uint32_t seed, void * out)
+{
+  *(uint64_t*)out = t1ha_mux(key, len, seed);
+}
+#endif /* __SIZEOF_INT128__ */
+
+void mum_hash_test(const void * key, int len, uint32_t seed, void * out);
