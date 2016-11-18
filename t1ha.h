@@ -28,9 +28,8 @@
  *
  * Briefly, it is a 64-bit Hash Function:
  *  1) For 64-bit platforms, in predominantly for x86_64.
- *  2) 5-10% faster than City64 from Google:
- *      - with approximately the same quality,
- *      - but has bit more regular structure and less code size.
+ *  2) In most cases up to 15% faster than City64, xxHash, mum-hash,
+ *     metro-hash, etc.
  *  3) Not suitable for cryptography.
  *
  * ACKNOWLEDGEMENT:
@@ -47,9 +46,6 @@ extern "C" {
 #endif
 
 uint64_t t1ha(const void *data, size_t len, uint64_t seed);
-#ifdef __SIZEOF_INT128__
-uint64_t t1ha_mux(const void *data, size_t len, uint64_t seed);
-#endif /* __SIZEOF_INT128__ */
 
 #ifdef __cplusplus
 }

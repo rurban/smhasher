@@ -65,8 +65,7 @@ SMhasher
 | cmetrohash64_1        |     16463.21  |    36.30 |                            |
 | cmetrohash64_2        |     17188.28  |    35.40 |                            |
 | falkhash              |     39817.46  |   124.81 |                            |
-| t1ha                  |     16178.72  |    37.15 |                            |
-| t1ha_mux              |     16532.79  |    28.03 |                            |
+| t1ha                  |     15690.55  |    26.39 |                            |
 | MUM                   |     11942.99  |    30.75 |                            |
 
 Summary
@@ -79,7 +78,7 @@ See also the old [https://code.google.com/p/smhasher/w/list](https://code.google
 So the fastest hash functions on x86_64 without quality problems are:
 
 * falkhash (_macho64 and elf64 nasm only, with HW AES extension_)
-* t1ha(\_mux) (_mux only 64bit with int128_)
+* t1ha + mum
 * FarmHash (_not portable, too machine specific: 64 vs 32bit, old gcc, ..._)
 * Metro (_but not 64crc yet, WIP_)
 * Spooky32
