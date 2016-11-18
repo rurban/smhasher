@@ -114,9 +114,9 @@ FNV32a_YoshimitsuTRIAD(const void *key, int len, uint32_t seed, void *out)
 {
   const uint8_t  *p = (const uint8_t *)key;
   const uint32_t  PRIME = 709607;
-  uint32_t	  hash32A = seed ^ 2166136261;
-  uint32_t	  hash32B = 2166136261 + len;
-  uint32_t	  hash32C = 2166136261;
+  uint32_t	  hash32A = seed ^ BIG_CONSTANT(2166136261);
+  uint32_t	  hash32B = BIG_CONSTANT(2166136261) + len;
+  uint32_t	  hash32C = BIG_CONSTANT(2166136261);
 
   for (; len >= 3 * 2 * sizeof(uint32_t); len -= 3 * 2 * sizeof(uint32_t), p += 3 * 2 * sizeof(uint32_t)) {
     hash32A = (hash32A ^ (ROTL32(*(uint32_t *) (p + 0), 5)  ^ *(uint32_t *) (p + 4)))  * PRIME;

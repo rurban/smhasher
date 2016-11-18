@@ -182,7 +182,7 @@ HashInfo g_hashes[] =
   { falkhash_test_cxx,          64, 0x2F99B071, "falkhash",          "falkhash.asm with aesenc, 64-bit for x64" },
 #endif
   { t1ha_test,                  64, 0xD6836381, "t1ha",              "Fast Positive Hash (The 1Hippeus project)" },
-  { mum_hash_test,              64, 0x3EEAE2D4, "MUM",               "github.com/vnmakarov/mum-hash" },
+  { mum_hash_test,              64, 0xA973C6C0, "MUM",               "github.com/vnmakarov/mum-hash" },
 };
 
 HashInfo * findHash ( const char * name )
