@@ -96,8 +96,7 @@ See [github.com/rurban/perl-hash-stats](https://github.com/rurban/perl-hash-stat
 
 When used in a hash table the instruction cache will usually beat the
 CPU and throughput measured here. In my tests the smallest `FNV1A`
-beats the fastest `crc32_hw1` with
-[Perl 5 hash tables](https://github.com/rurban/perl-hash-stats). 
+beats the fastest `crc32_hw1` with [Perl 5 hash tables](https://github.com/rurban/perl-hash-stats). 
 Even if those worse hash functions will lead to more collisions, the
 overall speed advantage beats the slightly worse quality.
 See e.g. [A Seven-Dimensional Analysis of Hashing Methods and its Implications on Query Processing](https://infosys.cs.uni-saarland.de/publications/p249-richter.pdf)
@@ -148,14 +147,17 @@ needs to be ~50%, unless you use Cuckoo Hashing.
 I.e. the usage of siphash for their hash table in Python 3.4, ruby,
 rust, systemd, OpenDNS, Haskell and OpenBSD is pure security theatre.
 siphash is not secure enough for security purposes and not fast
-enough for general usage.
+enough for general usage. Brute-force generation of ~32k collisions need 2-4m
+for all these hashes. siphash being the slowest needs max 4m, other typically
+max 2m30s, with <10s for practical 16k collision attacks with all hash functions.
 Using Murmur is usually slower than a simple Mult, even in the worst case.
 Provable secure is only uniform hashing, i.e. 2-5 independent Mult or Tabulation,
 or using a guaranteed logarithmic or linear collision scheme, such as Robin Hood
 or Cockoo hashing.
 
 One more note regarding security: Nowadays even SHA1 can be solved in
-a solver, like Z3 (or faster ones). So all hash functions with less
-than 256 bits tested here cannot be considered "secure" at all.
+a solver, like Z3 (or faster ones) for practical hash table collision
+attacks (i.e. 14-20 bits). So all hash functions with less than 256
+bits tested here cannot be considered "secure" at all.
 
 The '\0' vulnerability attack with binary keys is tested in the 2nd Sanity test.
