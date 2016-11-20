@@ -2,7 +2,7 @@
  *  Copyright (c) 2016 Positive Technologies, https://www.ptsecurity.com,
  *  Fast Positive Hash.
  *
- *  Portions Copyright (c) 2010-2013 Leonid Yuriev <leo@yuriev.ru>,
+ *  Portions Copyright (c) 2010-2016 Leonid Yuriev <leo@yuriev.ru>,
  *  The 1Hippeus project (t1h).
  *
  *  This software is provided 'as-is', without any express or implied
@@ -27,14 +27,15 @@
  * by [Positive Technologies](https://www.ptsecurity.ru)
  *
  * Briefly, it is a 64-bit Hash Function:
- *  1) For 64-bit platforms, in predominantly for x86_64.
- *  2) In most cases up to 15% faster than City64, xxHash, mum-hash,
- *     metro-hash, etc.
- *  3) Not suitable for cryptography.
+ *  1. Created for 64-bit little-endian platforms, in predominantly for x86_64,
+ *     but without penalties could runs on any 64-bit CPU.
+ *  2. In most cases up to 15% faster than City64, xxHash, mum-hash, metro-hash
+ *     and all others which are not use specific hardware tricks.
+ *  3. Not suitable for cryptography.
  *
  * ACKNOWLEDGEMENT:
- * The t1ha was originally developed by Leonid Yuriev for The 1Hippeus project.
- * 1Hippeus - zerocopy messaging in the spirit of Sparta!
+ * The t1ha was originally developed by Leonid Yuriev (Леонид Юрьев)
+ * for The 1Hippeus project - zerocopy messaging in the spirit of Sparta!
  */
 
 #include "t1ha.h"
@@ -134,15 +135,17 @@ static __inline uint64_t rot(uint64_t v, unsigned s) {
 }
 
 /* xor-mul-xor mixer */
-static __inline uint64_t mix(uint64_t a, uint64_t b, uint64_t p) {
-  uint64_t m = (a ^ b) * p;
-  return m ^ rot(m, s0);
+static __inline uint64_t mix(uint64_t v, uint64_t p) {
+  v *= p;
+  return v ^ rot(v, s0);
 }
 
 #ifdef __SIZEOF_INT128__
 
+/* xor high and low parts of full 128-bit product */
 static __inline uint64_t mux(uint64_t v, uint64_t p) {
   __uint128_t r = (__uint128_t)v * (__uint128_t)p;
+  /* modern GCC could nicely optimize this */
   return r ^ (r >> 64);
 }
 
@@ -158,11 +161,17 @@ static __inline unsigned add_with_carry(uint64_t *sum, uint64_t addend) {
 }
 
 static uint64_t mux(uint64_t v, uint64_t p) {
+  /* performs 64x64 to 128 bit multiplication */
   uint64_t ll = mul_32x32_64(v, p);
   uint64_t lh = mul_32x32_64(v >> 32, p);
   uint64_t hl = mul_32x32_64(p >> 32, v);
-  uint64_t hh = mul_32x32_64(v >> 32, p >> 32) + (lh >> 32) + (hl >> 32) +
-                add_with_carry(&ll, lh << 32) + add_with_carry(&ll, hl << 32);
+  uint64_t hh =
+      mul_32x32_64(v >> 32, p >> 32) + (lh >> 32) + (hl >> 32) +
+      /* Few simplification are possible here for 32-bit architectures,
+       * but thus we would lost compatibility with the original 64-bit
+       * version.  Think is very bad idea, because then 32-bit t1ha will
+       * still (relatively) very slowly and well yet not compatible. */
+      add_with_carry(&ll, lh << 32) + add_with_carry(&ll, hl << 32);
   return hh ^ ll;
 }
 
@@ -184,9 +193,9 @@ uint64_t t1ha(const void *data, size_t len, uint64_t seed) {
 
     do {
       if (unlikely(need_align)) {
-        memcpy(&align, data, (sizeof(align) > left) ? left : sizeof(align));
+        v = (const uint64_t *)memcpy(
+            &align, data, (sizeof(align) > left) ? left : sizeof(align));
         data = (const uint64_t *)data + 4;
-        v = align;
       }
 
       uint64_t w0 = fetch64(v + 0);
@@ -209,10 +218,10 @@ uint64_t t1ha(const void *data, size_t len, uint64_t seed) {
     b ^= p5 * (c + rot(d, s1));
   }
 
-  if (left > 1 && unlikely(need_align)) {
-    memcpy(&align, data, (sizeof(align) > left) ? left : sizeof(align));
-    data = (const uint64_t *)data + 4;
-    v = align;
+  if (unlikely(need_align)) {
+    v = (const uint64_t *)data;
+    if (left > 1)
+      v = (const uint64_t *)memcpy(&align, v, left);
   }
 
   switch (left) {
@@ -225,7 +234,7 @@ uint64_t t1ha(const void *data, size_t len, uint64_t seed) {
   case 1 ... sizeof(uint64_t):
     a += mux(fetch_tail(v, left), p1);
   case 0:
-    return mux(rot(a + b, s1), p4) + mix(b, a, p0);
+    return mux(rot(a + b, s1), p4) + mix(a ^ b, p0);
   default:
     __builtin_unreachable();
   }
