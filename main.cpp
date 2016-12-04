@@ -181,7 +181,13 @@ HashInfo g_hashes[] =
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { falkhash_test_cxx,          64, 0x2F99B071, "falkhash",          "falkhash.asm with aesenc, 64-bit for x64" },
 #endif
-  { t1ha_test,                  64, 0xD6836381, "t1ha",              "Fast Positive Hash (The 1Hippeus project)" },
+  { t1ha_test,                  64, 0xD6836381, "t1ha",              "Fast Positive Hash (64-bit, little-endian)" },
+  { t1ha_64be_test,             64, 0x93F864DE, "t1ha_64be",         "Fast Positive Hash (64-bit, big-engian)" },
+  { t1ha_32le_test,             64, 0x7C4F4A76, "t1ha_32le",         "Fast Positive Hash (32-bit, little-endian)" },
+  { t1ha_32be_test,             64, 0xAFCF7AE0, "t1ha_32be",         "Fast Positive Hash (32-bit, big-endian)" },
+#if defined(__SSE4_2__) && (defined(__x86_64__) || defined(_M_X64))
+  { t1ha_crc_test,              64, 0xA57ACE7D, "t1ha_crc",          "Fast Positive Hash (SSE4.2 CRC32C)" },
+#endif
   { mum_hash_test,              64,
 #if defined(__GNUC__) && UINT_MAX != ULONG_MAX
                                     0x3EEAE2D4,

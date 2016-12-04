@@ -41,78 +41,223 @@
 #include "t1ha.h"
 #include <string.h>
 
-#if !defined(__GNUC__) || (__GNUC__ < 4)
-#error Sorry, t1ha requires modern GCC compiler (gcc 4.4 or compatible).
-#endif
-
 #if !defined(__BYTE_ORDER__) || !defined(__ORDER_LITTLE_ENDIAN__) ||           \
     !defined(__ORDER_BIG_ENDIAN__)
+#define __ORDER_LITTLE_ENDIAN__ 1234
+#define __ORDER_BIG_ENDIAN__ 4321
+#if defined(__LITTLE_ENDIAN__) || defined(__ARMEL__) ||                        \
+    defined(__THUMBEL__) || defined(__AARCH64EL__) || defined(__MIPSEL__) ||   \
+    defined(_MIPSEL) || defined(__MIPSEL) || defined(__i386) ||                \
+    defined(__x86_64) || defined(_M_IX86) || defined(_M_X64) ||                \
+    defined(i386) || defined(_X86_) || defined(__i386__) || defined(_X86_64_)
+#define __BYTE_ORDER__ __ORDER_LITTLE_ENDIAN__
+#elif defined(__BIG_ENDIAN__) || defined(__ARMEB__) || defined(__THUMBEB__) || \
+    defined(__AARCH64EB__) || defined(__MIPSEB__) || defined(_MIPSEB) ||       \
+    defined(__MIPSEB)
+#define __BYTE_ORDER__ __ORDER_BIG_ENDIAN__
+#else
 #error __BYTE_ORDER__ should be defined.
+#endif
+#endif
+
+#if __BYTE_ORDER__ != __ORDER_LITTLE_ENDIAN__ &&                               \
+    __BYTE_ORDER__ != __ORDER_BIG_ENDIAN__
+#error Unsupported byte order.
 #endif
 
 #if !defined(UNALIGNED_OK)
-#if defined(__i386) || defined(__x86_64) || defined(_M_IX86)
+#if defined(__i386) || defined(__x86_64) || defined(_M_IX86) ||                \
+    defined(_M_X64) || defined(i386) || defined(_X86_) || defined(__i386__) || \
+    defined(_X86_64_)
 #define UNALIGNED_OK 1
 #else
 #define UNALIGNED_OK 0
 #endif
 #endif
 
+#ifndef __clang__
+#define __has_builtin(x) (0)
+#endif
+
+#ifndef __GNUC_PREREQ
+#if defined(__GNUC__) && defined(__GNUC_MINOR__)
+#define __GNUC_PREREQ(maj, min)                                                \
+  ((__GNUC__ << 16) + __GNUC_MINOR__ >= ((maj) << 16) + (min))
+#else
+#define __GNUC_PREREQ(maj, min) 0
+#endif
+#endif
+
+#if __GNUC_PREREQ(4, 4) || defined(__clang__)
+
+#if defined(__i386) || defined(__x86_64)
+#include <x86intrin.h>
+#endif
 #define likely(cond) __builtin_expect(!!(cond), 1)
 #define unlikely(cond) __builtin_expect(!!(cond), 0)
+#define unreachable() __builtin_unreachable()
+#define bswap64(v) __builtin_bswap64(v)
+#define bswap32(v) __builtin_bswap32(v)
+#if __GNUC_PREREQ(4, 8) || __has_builtin(__builtin_bswap16)
+#define bswap16(v) __builtin_bswap16(v)
+#endif
 
-static __inline uint64_t fetch64(const void *v) {
+#elif defined(_MSC_VER)
+
+#include <intrin.h>
+#include <stdlib.h>
+#define likely(cond) (cond)
+#define unlikely(cond) (cond)
+#define unreachable() __assume(0)
+#define bswap64(v) _byteswap_uint64(v)
+#define bswap32(v) _byteswap_ulong(v)
+#define bswap16(v) _byteswap_ushort(v)
+#define rot64(v, s) _rotr64(v, s)
+#define rot32(v, s) _rotr(v, s)
+
+#if defined(_M_ARM64) || defined(_M_X64)
+#pragma intrinsic(_umul128)
+#define mul_64x64_128(a, b, ph) _umul128(a, b, ph)
+#pragma intrinsic(__umulh)
+#define mul_64x64_high(a, b) __umulh(a, b)
+#endif
+
+#if defined(_M_IX86)
+#pragma intrinsic(__emulu)
+#define mul_32x32_64(a, b) __emulu(a, b)
+#elif defined(_M_ARM)
+#define mul_32x32_64(a, b) _arm_umull(a, b)
+#endif
+
+#else /* Compiler */
+
+#define likely(cond) (cond)
+#define unlikely(cond) (cond)
+#define unreachable()                                                          \
+  do                                                                           \
+    for (;;)                                                                   \
+      ;                                                                        \
+  while (0)
+#endif /* Compiler */
+
+#ifndef bswap64
+static __inline uint64_t bswap64(uint64_t v) {
+  return v << 56 | v >> 56 | ((v << 40) & 0x00ff000000000000ull) |
+         ((v << 24) & 0x0000ff0000000000ull) |
+         ((v << 8) & 0x000000ff00000000ull) |
+         ((v >> 8) & 0x00000000ff000000ull) |
+         ((v >> 24) & 0x0000000000ff0000ull) |
+         ((v >> 40) & 0x000000000000ff00ull);
+}
+#endif /* bswap64 */
+
+#ifndef bswap32
+static __inline uint32_t bswap32(uint32_t v) {
+  return v << 24 | v >> 24 | ((v << 8) & 0x00ff0000) | ((v >> 8) & 0x0000ff00);
+}
+#endif /* bswap32 */
+
+#ifndef bswap16
+static __inline uint16_t bswap16(uint16_t v) { return v << 8 | v >> 8; }
+#endif /* bswap16 */
+
+#ifndef rot64
+static __inline uint64_t rot64(uint64_t v, unsigned s) {
+  return (v >> s) | (v << (64 - s));
+}
+#endif /* rot64 */
+
+#ifndef rot32
+static __inline uint32_t rot32(uint32_t v, unsigned s) {
+  return (v >> s) | (v << (32 - s));
+}
+#endif /* rot32 */
+
+#ifndef mul_32x32_64
+static __inline uint64_t mul_32x32_64(uint32_t a, uint32_t b) {
+  return a * (uint64_t)b;
+}
+#endif /* mul_32x32_64 */
+
+/***************************************************************************/
+
+static __inline uint64_t fetch64_le(const void *v) {
 #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
   return *(const uint64_t *)v;
-#elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-  return __builtin_bswap64(*(const uint64_t *)v);
 #else
-#error Unsupported byte order.
+  return bswap64(*(const uint64_t *)v);
 #endif
 }
 
-static __inline uint64_t fetch32(const void *v) {
+static __inline uint64_t fetch32_le(const void *v) {
 #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
   return *(const uint32_t *)v;
-#elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-  return __builtin_bswap32(*(const uint32_t *)v);
 #else
-#error Unsupported byte order.
+  return bswap32(*(const uint32_t *)v);
 #endif
 }
 
-static __inline uint64_t fetch16(const void *v) {
+static __inline uint64_t fetch16_le(const void *v) {
 #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
   return *(const uint16_t *)v;
-#elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-  return __builtin_bswap16(*(const uint16_t *)v);
 #else
-#error Unsupported byte order.
+  return bswap16(*(const uint16_t *)v);
 #endif
 }
 
-static __inline uint64_t fetch_tail(const void *v, size_t tail) {
-  const uint8_t *_ = (const uint8_t *)v;
-  switch (tail % sizeof(uint64_t)) {
-  case 1:
-    return _[0];
-  case 2:
-    return fetch16(_);
-  case 3:
-    return fetch16(_) | (_[2] << 16);
-  case 4:
-    return fetch32(_);
-  case 5:
-    return fetch32(_) | ((uint64_t)_[4] << 32);
-  case 6:
-    return fetch32(_) | (fetch16(_ + 4) << 32);
-  case 7:
-    return fetch32(_) | (fetch16(_ + 4) << 32) | ((uint64_t)_[6] << 48);
+static __inline uint64_t tail64_le(const void *v, size_t tail) {
+  const uint8_t *p = (const uint8_t *)v;
+  uint64_t r = 0;
+  switch (tail & 7) {
+#if UNALIGNED_OK && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+  /* For most CPUs this code is better when not needed
+   * copying for alignment or byte reordering. */
   case 0:
-    return fetch64(_);
-  default:
-    __builtin_unreachable();
+    return fetch64_le(p);
+  case 7:
+    r = p[6] << 8;
+  case 6:
+    r += p[5];
+    r <<= 8;
+  case 5:
+    r += p[4];
+    r <<= 32;
+  case 4:
+    return r + fetch32_le(p);
+  case 3:
+    r = p[2] << 16;
+  case 2:
+    return r + fetch16_le(p);
+  case 1:
+    return p[0];
+#else
+  /* For most CPUs this code is better than a
+   * copying for alignment and/or byte reordering. */
+  case 0:
+    r = p[7] << 8;
+  case 7:
+    r += p[6];
+    r <<= 8;
+  case 6:
+    r += p[5];
+    r <<= 8;
+  case 5:
+    r += p[4];
+    r <<= 8;
+  case 4:
+    r += p[3];
+    r <<= 8;
+  case 3:
+    r += p[2];
+    r <<= 8;
+  case 2:
+    r += p[1];
+    r <<= 8;
+  case 1:
+    return r + p[0];
+#endif
   }
+  unreachable();
 }
 
 /* 'magic' primes */
@@ -129,30 +274,10 @@ static const unsigned s0 = 41;
 static const unsigned s1 = 17;
 static const unsigned s2 = 31;
 
-/* cyclic rotation */
-static __inline uint64_t rot(uint64_t v, unsigned s) {
-  return (v >> s) | (v << (sizeof(v) * 8 - s));
-}
-
 /* xor-mul-xor mixer */
 static __inline uint64_t mix(uint64_t v, uint64_t p) {
   v *= p;
-  return v ^ rot(v, s0);
-}
-
-#ifdef __SIZEOF_INT128__
-
-/* xor high and low parts of full 128-bit product */
-static __inline uint64_t mux(uint64_t v, uint64_t p) {
-  __uint128_t r = (__uint128_t)v * (__uint128_t)p;
-  /* modern GCC could nicely optimize this */
-  return r ^ (r >> 64);
-}
-
-#else
-
-static __inline uint64_t mul_32x32_64(uint32_t a, uint32_t b) {
-  return a * (uint64_t)b;
+  return v ^ rot64(v, s0);
 }
 
 static __inline unsigned add_with_carry(uint64_t *sum, uint64_t addend) {
@@ -160,11 +285,29 @@ static __inline unsigned add_with_carry(uint64_t *sum, uint64_t addend) {
   return *sum < addend;
 }
 
-static uint64_t mux(uint64_t v, uint64_t p) {
+/* xor high and low parts of full 128-bit product */
+static __inline uint64_t mux64(uint64_t v, uint64_t p) {
+#ifdef __SIZEOF_INT128__
+  __uint128_t r = (__uint128_t)v * (__uint128_t)p;
+  /* modern GCC could nicely optimize this */
+  return r ^ (r >> 64);
+#elif defined(_INTEGRAL_MAX_BITS) && _INTEGRAL_MAX_BITS >= 128
+  __uint128 r = (__uint128)v * (__uint128)p;
+  return r ^ (r >> 64);
+#elif defined(mul_64x64_128)
+  uint64_t l, h;
+  l = mul_64x64_128(v, p, &h);
+  return l ^ h;
+#elif defined(mul_64x64_high)
+  uint64_t l, h;
+  l = v * p;
+  h = mul_64x64_high(v, p);
+  return l ^ h;
+#else
   /* performs 64x64 to 128 bit multiplication */
-  uint64_t ll = mul_32x32_64(v, p);
-  uint64_t lh = mul_32x32_64(v >> 32, p);
-  uint64_t hl = mul_32x32_64(p >> 32, v);
+  uint64_t ll = mul_32x32_64((uint32_t)v, (uint32_t)p);
+  uint64_t lh = mul_32x32_64(v >> 32, (uint32_t)p);
+  uint64_t hl = mul_32x32_64(p >> 32, (uint32_t)v);
   uint64_t hh =
       mul_32x32_64(v >> 32, p >> 32) + (lh >> 32) + (hl >> 32) +
       /* Few simplification are possible here for 32-bit architectures,
@@ -173,69 +316,523 @@ static uint64_t mux(uint64_t v, uint64_t p) {
        * still (relatively) very slowly and well yet not compatible. */
       add_with_carry(&ll, lh << 32) + add_with_carry(&ll, hl << 32);
   return hh ^ ll;
+#endif
 }
 
-#endif /* __SIZEOF_INT128__ */
-
 uint64_t t1ha(const void *data, size_t len, uint64_t seed) {
-  uint64_t left = len;
   uint64_t a = seed;
   uint64_t b = len;
 
-  const int need_align =
-      ((uintptr_t)data) % sizeof(uint64_t) != 0 && !UNALIGNED_OK;
-  const uint64_t *v = (const uint64_t *)data;
+  const int need_align = (((uintptr_t)data) & 7) != 0 && !UNALIGNED_OK;
   uint64_t align[4];
 
-  if (left > sizeof(uint64_t) * 4) {
-    uint64_t c = rot(len, s1) + seed;
-    uint64_t d = len ^ rot(seed, s1);
-
+  if (unlikely(len > 32)) {
+    uint64_t c = rot64(len, s1) + seed;
+    uint64_t d = len ^ rot64(seed, s1);
+    const void *detent = (const uint8_t *)data + len - 31;
     do {
-      if (unlikely(need_align)) {
-        v = (const uint64_t *)memcpy(
-            &align, data, (sizeof(align) > left) ? left : sizeof(align));
-        data = (const uint64_t *)data + 4;
-      }
+      const uint64_t *v = (const uint64_t *)data;
+      if (unlikely(need_align))
+        v = (const uint64_t *)memcpy(&align, v, 32);
 
-      uint64_t w0 = fetch64(v + 0);
-      uint64_t w1 = fetch64(v + 1);
-      uint64_t w2 = fetch64(v + 2);
-      uint64_t w3 = fetch64(v + 3);
+      uint64_t w0 = fetch64_le(v + 0);
+      uint64_t w1 = fetch64_le(v + 1);
+      uint64_t w2 = fetch64_le(v + 2);
+      uint64_t w3 = fetch64_le(v + 3);
 
-      uint64_t d02 = w0 ^ rot(w2 + d, s1);
-      uint64_t c13 = w1 ^ rot(w3 + c, s1);
-      c += a ^ rot(w0, s0);
-      d -= b ^ rot(w1, s2);
+      uint64_t d02 = w0 ^ rot64(w2 + d, s1);
+      uint64_t c13 = w1 ^ rot64(w3 + c, s1);
+      c += a ^ rot64(w0, s0);
+      d -= b ^ rot64(w1, s2);
       a ^= p1 * (d02 + w3);
       b ^= p0 * (c13 + w2);
+      data = (const uint64_t *)data + 4;
+    } while (likely(data < detent));
 
-      v += 4;
-      left -= sizeof(uint64_t) * 4;
-    } while (left >= sizeof(uint64_t) * 4);
-
-    a ^= p6 * (rot(c, s1) + d);
-    b ^= p5 * (c + rot(d, s1));
+    a ^= p6 * (rot64(c, s1) + d);
+    b ^= p5 * (c + rot64(d, s1));
+    len &= 31;
   }
 
-  if (unlikely(need_align)) {
-    v = (const uint64_t *)data;
-    if (left > 1)
-      v = (const uint64_t *)memcpy(&align, v, left);
-  }
+  const uint64_t *v = (const uint64_t *)data;
+  if (unlikely(need_align) && len > 8)
+    v = (const uint64_t *)memcpy(&align, v, len);
 
-  switch (left) {
-  case sizeof(uint64_t) * 3 + 1 ... sizeof(uint64_t) * 4:
-    b += mux(fetch64(v++), p4);
-  case sizeof(uint64_t) * 2 + 1 ... sizeof(uint64_t) * 3:
-    a += mux(fetch64(v++), p3);
-  case sizeof(uint64_t) + 1 ... sizeof(uint64_t) * 2:
-    b += mux(fetch64(v++), p2);
-  case 1 ... sizeof(uint64_t):
-    a += mux(fetch_tail(v, left), p1);
-  case 0:
-    return mux(rot(a + b, s1), p4) + mix(a ^ b, p0);
+  switch (len) {
   default:
-    __builtin_unreachable();
+    b += mux64(fetch64_le(v++), p4);
+  case 24:
+  case 23:
+  case 22:
+  case 21:
+  case 20:
+  case 19:
+  case 18:
+  case 17:
+    a += mux64(fetch64_le(v++), p3);
+  case 16:
+  case 15:
+  case 14:
+  case 13:
+  case 12:
+  case 11:
+  case 10:
+  case 9:
+    b += mux64(fetch64_le(v++), p2);
+  case 8:
+  case 7:
+  case 6:
+  case 5:
+  case 4:
+  case 3:
+  case 2:
+  case 1:
+    a += mux64(tail64_le(v, len), p1);
+  case 0:
+    return mux64(rot64(a + b, s1), p4) + mix(a ^ b, p0);
   }
 }
+
+/***************************************************************************/
+
+static __inline uint64_t fetch64_be(const void *v) {
+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+  return *(const uint64_t *)v;
+#else
+  return bswap64(*(const uint64_t *)v);
+#endif
+}
+
+static __inline uint64_t fetch32_be(const void *v) {
+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+  return *(const uint32_t *)v;
+#else
+  return bswap32(*(const uint32_t *)v);
+#endif
+}
+
+static __inline uint64_t fetch16_be(const void *v) {
+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+  return *(const uint16_t *)v;
+#else
+  return bswap16(*(const uint16_t *)v);
+#endif
+}
+
+static __inline uint64_t tail64_be(const void *v, size_t tail) {
+  const uint8_t *p = (const uint8_t *)v;
+  switch (tail & 7) {
+#if UNALIGNED_OK && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+  /* For most CPUs this code is better when not needed
+   * copying for alignment or byte reordering. */
+  case 1:
+    return p[0];
+  case 2:
+    return fetch16_be(p);
+  case 3:
+    return fetch16_be(p) << 8 | p[2];
+  case 4:
+    return fetch32_be(p);
+  case 5:
+    return fetch32_be(p) << 8 | p[4];
+  case 6:
+    return fetch32_be(p) << 16 | fetch16_be(p + 4);
+  case 7:
+    return fetch32_be(p) << 24 | fetch16_be(p + 4) << 8 | p[6];
+  case 0:
+    return fetch64_be(p);
+#else
+  /* For most CPUs this code is better than a
+   * copying for alignment and/or byte reordering. */
+  case 1:
+    return p[0];
+  case 2:
+    return p[1] | p[0] << 8;
+  case 3:
+    return p[2] | p[1] << 8 | p[0] << 16;
+  case 4:
+    return p[3] | p[2] << 8 | p[1] << 16 | (uint64_t)p[0] << 24;
+  case 5:
+    return p[4] | p[3] << 8 | p[2] << 16 | (uint64_t)p[1] << 24 |
+           (uint64_t)p[0] << 32;
+  case 6:
+    return p[5] | p[4] << 8 | p[3] << 16 | (uint64_t)p[2] << 24 |
+           (uint64_t)p[1] << 32 | (uint64_t)p[0] << 40;
+  case 7:
+    return p[6] | p[5] << 8 | p[4] << 16 | (uint64_t)p[3] << 24 |
+           (uint64_t)p[2] << 32 | (uint64_t)p[1] << 40 | (uint64_t)p[0] << 48;
+  case 0:
+    return p[7] | p[6] << 8 | p[5] << 16 | (uint64_t)p[4] << 24 |
+           (uint64_t)p[3] << 32 | (uint64_t)p[2] << 40 | (uint64_t)p[1] << 48 |
+           (uint64_t)p[0] << 56;
+#endif
+  }
+  unreachable();
+}
+
+uint64_t t1ha_64be(const void *data, size_t len, uint64_t seed) {
+  uint64_t a = seed;
+  uint64_t b = len;
+
+  const int need_align = (((uintptr_t)data) & 7) != 0 && !UNALIGNED_OK;
+  uint64_t align[4];
+
+  if (unlikely(len > 32)) {
+    uint64_t c = rot64(len, s1) + seed;
+    uint64_t d = len ^ rot64(seed, s1);
+    const void *detent = (const uint8_t *)data + len - 31;
+    do {
+      const uint64_t *v = (const uint64_t *)data;
+      if (unlikely(need_align))
+        v = (const uint64_t *)memcpy(&align, v, 32);
+
+      uint64_t w0 = fetch64_be(v + 0);
+      uint64_t w1 = fetch64_be(v + 1);
+      uint64_t w2 = fetch64_be(v + 2);
+      uint64_t w3 = fetch64_be(v + 3);
+
+      uint64_t d02 = w0 ^ rot64(w2 + d, s1);
+      uint64_t c13 = w1 ^ rot64(w3 + c, s1);
+      c += a ^ rot64(w0, s0);
+      d -= b ^ rot64(w1, s2);
+      a ^= p1 * (d02 + w3);
+      b ^= p0 * (c13 + w2);
+      data = (const uint64_t *)data + 4;
+    } while (likely(data < detent));
+
+    a ^= p6 * (rot64(c, s1) + d);
+    b ^= p5 * (c + rot64(d, s1));
+    len &= 31;
+  }
+
+  const uint64_t *v = (const uint64_t *)data;
+  if (unlikely(need_align) && len > 8)
+    v = (const uint64_t *)memcpy(&align, v, len);
+
+  switch (len) {
+  default:
+    b += mux64(fetch64_be(v++), p4);
+  case 24:
+  case 23:
+  case 22:
+  case 21:
+  case 20:
+  case 19:
+  case 18:
+  case 17:
+    a += mux64(fetch64_be(v++), p3);
+  case 16:
+  case 15:
+  case 14:
+  case 13:
+  case 12:
+  case 11:
+  case 10:
+  case 9:
+    b += mux64(fetch64_be(v++), p2);
+  case 8:
+  case 7:
+  case 6:
+  case 5:
+  case 4:
+  case 3:
+  case 2:
+  case 1:
+    a += mux64(tail64_be(v, len), p1);
+  case 0:
+    return mux64(rot64(a + b, s1), p4) + mix(a ^ b, p0);
+  }
+}
+
+/***************************************************************************/
+
+static __inline uint32_t tail32_le(const void *v, size_t tail) {
+  const uint8_t *p = (const uint8_t *)v;
+  uint32_t r = 0;
+  switch (tail & 3) {
+#if UNALIGNED_OK && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+  /* For most CPUs this code is better when not needed
+   * copying for alignment or byte reordering. */
+  case 0:
+    return fetch32_le(p);
+  case 3:
+    r = p[2] << 16;
+  case 2:
+    return r + fetch16_le(p);
+  case 1:
+    return p[0];
+#else
+  /* For most CPUs this code is better than a
+   * copying for alignment and/or byte reordering. */
+  case 0:
+    r += p[3];
+    r <<= 8;
+  case 3:
+    r += p[2];
+    r <<= 8;
+  case 2:
+    r += p[1];
+    r <<= 8;
+  case 1:
+    return r + p[0];
+#endif
+  }
+  unreachable();
+}
+
+static __inline uint32_t tail32_be(const void *v, size_t tail) {
+  const uint8_t *p = (const uint8_t *)v;
+  switch (tail & 3) {
+#if UNALIGNED_OK && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+  /* For most CPUs this code is better when not needed
+   * copying for alignment or byte reordering. */
+  case 1:
+    return p[0];
+  case 2:
+    return fetch16_be(p);
+  case 3:
+    return fetch16_be(p) << 8 | p[2];
+  case 0:
+    return fetch32_be(p);
+#else
+  /* For most CPUs this code is better than a
+   * copying for alignment and/or byte reordering. */
+  case 1:
+    return p[0];
+  case 2:
+    return p[1] | p[0] << 8;
+  case 3:
+    return p[2] | p[1] << 8 | p[0] << 16;
+  case 0:
+    return p[3] | p[2] << 8 | p[1] << 16 | (uint32_t)p[0] << 24;
+#endif
+  }
+  unreachable();
+}
+
+static __inline uint64_t remix32(uint32_t a, uint32_t b) {
+  a ^= rot32(b, 13);
+  uint64_t l = a | (uint64_t)b << 32;
+  l *= p0;
+  l ^= l >> 41;
+  return l;
+}
+
+static __inline void mixup32(uint32_t *a, uint32_t *b, uint32_t v, uint32_t p) {
+  uint64_t l = mul_32x32_64(*b + v, p);
+  *a ^= (uint32_t)l;
+  *b += (uint32_t)(l >> 32);
+}
+
+/* 32-bit 'magic' primes */
+static const uint32_t q0 = 0x92D78269;
+static const uint32_t q1 = 0xCA9B4735;
+static const uint32_t q2 = 0xA4ABA1C3;
+static const uint32_t q3 = 0xF6499843;
+static const uint32_t q4 = 0x86F0FD61;
+static const uint32_t q5 = 0xCA2DA6FB;
+static const uint32_t q6 = 0xC4BB3575;
+
+uint64_t t1ha_32le(const void *data, size_t len, uint64_t seed) {
+  uint32_t a = rot32(len, s1) + seed;
+  uint32_t b = len ^ rot32(seed, s1);
+
+  const int need_align = (((uintptr_t)data) & 3) != 0 && !UNALIGNED_OK;
+  uint32_t align[4];
+
+  if (unlikely(len > 16)) {
+    uint32_t c = ~a;
+    uint32_t d = rot32(c, 23);
+    const void *detent = (const uint8_t *)data + len - 15;
+    do {
+      const uint32_t *v = (const uint32_t *)data;
+      if (unlikely(need_align))
+        v = (const uint32_t *)memcpy(&align, v, 16);
+
+      uint32_t w0 = fetch32_le(v + 0);
+      uint32_t w1 = fetch32_le(v + 1);
+      uint32_t w2 = fetch32_le(v + 2);
+      uint32_t w3 = fetch32_le(v + 3);
+
+      uint32_t c02 = w0 ^ rot32(w2 + c, 11);
+      uint32_t d13 = w1 + rot32(w3 + d, s1);
+      c ^= rot32(b + w1, 7);
+      d ^= rot32(a + w0, 3);
+      b = q1 * (c02 + w3);
+      a = q0 * (d13 ^ w2);
+
+      data = (const uint32_t *)data + 4;
+    } while (likely(data < detent));
+
+    c += a;
+    d += b;
+    a ^= q6 * (rot32(c, 16) + d);
+    b ^= q5 * (c + rot32(d, 16));
+
+    len &= 15;
+  }
+
+  const uint8_t *v = (const uint8_t *)data;
+  if (unlikely(need_align) && len > 4)
+    v = (const uint8_t *)memcpy(&align, v, len);
+
+  switch (len) {
+  default:
+    mixup32(&a, &b, fetch32_le(v), q4);
+    v += 4;
+  case 12:
+  case 11:
+  case 10:
+  case 9:
+    mixup32(&b, &a, fetch32_le(v), q3);
+    v += 4;
+  case 8:
+  case 7:
+  case 6:
+  case 5:
+    mixup32(&a, &b, fetch32_le(v), q2);
+    v += 4;
+  case 4:
+  case 3:
+  case 2:
+  case 1:
+    mixup32(&b, &a, tail32_le(v, len), q1);
+  case 0:
+    return remix32(a, b);
+  }
+}
+
+uint64_t t1ha_32be(const void *data, size_t len, uint64_t seed) {
+  uint32_t a = rot32(len, s1) + seed;
+  uint32_t b = len ^ rot32(seed, s1);
+
+  const int need_align = (((uintptr_t)data) & 3) != 0 && !UNALIGNED_OK;
+  uint32_t align[4];
+
+  if (unlikely(len > 16)) {
+    uint32_t c = ~a;
+    uint32_t d = rot32(c, 23);
+    const void *detent = (const uint8_t *)data + len - 15;
+    do {
+      const uint32_t *v = (const uint32_t *)data;
+      if (unlikely(need_align))
+        v = (const uint32_t *)memcpy(&align, v, 16);
+
+      uint32_t w0 = fetch32_be(v + 0);
+      uint32_t w1 = fetch32_be(v + 1);
+      uint32_t w2 = fetch32_be(v + 2);
+      uint32_t w3 = fetch32_be(v + 3);
+
+      uint32_t c02 = w0 ^ rot32(w2 + c, 11);
+      uint32_t d13 = w1 + rot32(w3 + d, s1);
+      c ^= rot32(b + w1, 7);
+      d ^= rot32(a + w0, 3);
+      b = q1 * (c02 + w3);
+      a = q0 * (d13 ^ w2);
+
+      data = (const uint32_t *)data + 4;
+    } while (likely(data < detent));
+
+    c += a;
+    d += b;
+    a ^= q6 * (rot32(c, 16) + d);
+    b ^= q5 * (c + rot32(d, 16));
+
+    len &= 15;
+  }
+
+  const uint8_t *v = (const uint8_t *)data;
+  if (unlikely(need_align) && len > 4)
+    v = (const uint8_t *)memcpy(&align, v, len);
+
+  switch (len) {
+  default:
+    mixup32(&a, &b, fetch32_be(v), q4);
+    v += 4;
+  case 12:
+  case 11:
+  case 10:
+  case 9:
+    mixup32(&b, &a, fetch32_be(v), q3);
+    v += 4;
+  case 8:
+  case 7:
+  case 6:
+  case 5:
+    mixup32(&a, &b, fetch32_be(v), q2);
+    v += 4;
+  case 4:
+  case 3:
+  case 2:
+  case 1:
+    mixup32(&b, &a, tail32_be(v, len), q1);
+  case 0:
+    return remix32(a, b);
+  }
+}
+
+/***************************************************************************/
+
+#if defined(__SSE4_2__) && (defined(__x86_64__) || defined(_M_X64))
+
+uint64_t t1ha_ia32crc(const void *data, size_t len, uint64_t seed) {
+  uint64_t a = seed;
+  uint64_t b = len;
+  const uint64_t *v = (const uint64_t *)data;
+
+  if (unlikely(len > 32)) {
+    const void *detent = (const uint8_t *)data + len - 31;
+    uint32_t x = b;
+    uint32_t y = a;
+    uint32_t z = ~a ^ b;
+
+    do {
+      uint32_t t = a + x;
+      a = rot64(a, 17) + p0 * v[0];
+      x += _mm_crc32_u64(y, v[1]);
+      y += _mm_crc32_u64(z, v[2]);
+      z += _mm_crc32_u64(t, v[3]);
+      v += 4;
+    } while (likely(detent > (const void *)v));
+
+    a ^= x * p5 + y * p6 + z;
+    b = x + y * p5 + z * p6;
+    len &= 31;
+  }
+
+  switch (len) {
+  default:
+    b += mux64(*v++, p4);
+  case 24:
+  case 23:
+  case 22:
+  case 21:
+  case 20:
+  case 19:
+  case 18:
+  case 17:
+    a += mux64(*v++, p3);
+  case 16:
+  case 15:
+  case 14:
+  case 13:
+  case 12:
+  case 11:
+  case 10:
+  case 9:
+    b += mux64(*v++, p2);
+  case 8:
+  case 7:
+  case 6:
+  case 5:
+  case 4:
+  case 3:
+  case 2:
+  case 1:
+    a += mux64(tail64_le(v, len), p1);
+  case 0:
+    return mux64(rot64(a + b, s1), p4) + mix(a ^ b, p0);
+  }
+}
+
+#endif /* __SSE4_2__ && __x86_64__ */
