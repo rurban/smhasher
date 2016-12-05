@@ -635,14 +635,14 @@ static const uint32_t q6 = 0xC4BB3575;
 
 uint64_t t1ha_32le(const void *data, size_t len, uint64_t seed) {
   uint32_t a = rot32(len, s1) + seed;
-  uint32_t b = len ^ rot32(seed, s1);
+  uint32_t b = len ^ (seed >> 32);
 
   const int need_align = (((uintptr_t)data) & 3) != 0 && !UNALIGNED_OK;
   uint32_t align[4];
 
   if (unlikely(len > 16)) {
     uint32_t c = ~a;
-    uint32_t d = rot32(c, 23);
+    uint32_t d = rot32(b, 5);
     const void *detent = (const uint8_t *)data + len - 15;
     do {
       const uint32_t *v = (const uint32_t *)data;
@@ -704,14 +704,14 @@ uint64_t t1ha_32le(const void *data, size_t len, uint64_t seed) {
 
 uint64_t t1ha_32be(const void *data, size_t len, uint64_t seed) {
   uint32_t a = rot32(len, s1) + seed;
-  uint32_t b = len ^ rot32(seed, s1);
+  uint32_t b = len ^ (seed >> 32);
 
   const int need_align = (((uintptr_t)data) & 3) != 0 && !UNALIGNED_OK;
   uint32_t align[4];
 
   if (unlikely(len > 16)) {
     uint32_t c = ~a;
-    uint32_t d = rot32(c, 23);
+    uint32_t d = rot32(b, 5);
     const void *detent = (const uint8_t *)data + len - 15;
     do {
       const uint32_t *v = (const uint32_t *)data;
