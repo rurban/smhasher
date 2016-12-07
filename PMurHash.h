@@ -14,11 +14,6 @@
 /* We can't use the name 'uint32_t' here because it will conflict with
  * any version provided by the system headers or application. */
 
-/* First look for special cases */
-#if defined(_MSC_VER)
-  #define MH_UINT32 unsigned long
-#endif
-
 /* If the compiler says it's C99 then take its word for it */
 #if !defined(MH_UINT32) && ( \
      defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L )

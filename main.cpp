@@ -697,6 +697,20 @@ void testHash ( const char * name )
 }
 //-----------------------------------------------------------------------------
 
+#ifdef _MSC_VER
+static char* strndup(char const *s, size_t n)
+{
+  size_t len = strnlen(s, n);
+  char *p = (char*) malloc(len + 1);
+
+  if (p == NULL)
+    return NULL;
+
+  p[len] = '\0';
+  return (char*) memcpy(p, s, len);
+}
+#endif
+
 int main ( int argc, char ** argv )
 {
   const char * defaulthash = "metrohash64crc_1"; /* "murmur3a"; */

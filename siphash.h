@@ -1,12 +1,8 @@
 #ifndef SIPHASH_H
 #define SIPHASH_H
 
-#if defined(_MSC_VER)
-	typedef unsigned __int64 uint64_t;
-#else
-	#include <stdint.h>
-	#include <stdlib.h>
-#endif
+#include <stdint.h>
+#include <stdlib.h>
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 extern "C" {
