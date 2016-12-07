@@ -185,7 +185,7 @@ inline void t1ha_test(const void * key, int len, uint32_t seed, void * out)
 
 void mum_hash_test(const void * key, int len, uint32_t seed, void * out);
 
-#if defined(__SSE4_2__) && (defined(__x86_64__) || defined(_M_X64))
+#if (defined(__SSE4_2__) && defined(__x86_64__)) || defined(_M_X64)
 inline void t1ha_crc_test(const void * key, int len, uint32_t seed, void * out)
 {
   *(uint64_t*)out = t1ha_ia32crc(key, len, seed);
