@@ -185,7 +185,7 @@ HashInfo g_hashes[] =
   { t1ha_64be_test,             64, 0x93F864DE, "t1ha_64be",         "Fast Positive Hash (64-bit, big-engian)" },
   { t1ha_32le_test,             64, 0xE489F366, "t1ha_32le",         "Fast Positive Hash (32-bit, little-endian)" },
   { t1ha_32be_test,             64, 0x71F649A9, "t1ha_32be",         "Fast Positive Hash (32-bit, big-endian)" },
-#if defined(__SSE4_2__) && (defined(__x86_64__) || defined(_M_X64))
+#if (defined(__SSE4_2__) && defined(__x86_64__)) || defined(_M_X64)
   { t1ha_crc_test,              64, 0xA57ACE7D, "t1ha_crc",          "Fast Positive Hash (SSE4.2 CRC32C)" },
 #endif
   { mum_hash_test,              64,

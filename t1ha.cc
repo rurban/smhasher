@@ -791,7 +791,7 @@ uint64_t t1ha_32be(const void *data, size_t len, uint64_t seed) {
 
 /***************************************************************************/
 
-#if defined(__SSE4_2__) && (defined(__x86_64__) || defined(_M_X64))
+#if (defined(__SSE4_2__) && defined(__x86_64__)) || defined(_M_X64)
 
 uint64_t t1ha_ia32crc(const void *data, size_t len, uint64_t seed) {
   uint64_t a = seed;
