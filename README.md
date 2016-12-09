@@ -65,11 +65,11 @@ SMhasher
 | cmetrohash64_1        |     16463.21  |    36.30 |                            |
 | cmetrohash64_2        |     17188.28  |    35.40 |                            |
 | falkhash              |     39817.46  |   124.81 |                            |
-| t1ha                  |     15690.55  |    26.21 |                            |
-| t1ha_64be             |     11006.18  |    28.36 |  machine-specific          |
-| t1ha_32le             |      8007.13  |    35.66 |  machine-specific          |
-| t1ha_32be             |      6520.03	|    35.63 |  machine-specific          |
-| t1ha_crc              |     17134.77  |    29.26 |                            |
+| t1ha                  |     15480.28	|    26.41 |                            |
+| t1ha_64be             |      5203.00	|    53.69 |  machine-specific          |
+| t1ha_32le             |      8930.90	|    29.79 |  machine-specific          |
+| t1ha_32be             |      6931.84	|    34.17 |  machine-specific          |
+| t1ha_crc              |     16757.73	|    28.69 |                            |
 | MUM                   |     11942.99  |    30.75 |  machine-specific          |
 
 Summary
