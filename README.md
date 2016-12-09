@@ -65,8 +65,12 @@ SMhasher
 | cmetrohash64_1        |     16463.21  |    36.30 |                            |
 | cmetrohash64_2        |     17188.28  |    35.40 |                            |
 | falkhash              |     39817.46  |   124.81 |                            |
-| t1ha                  |     15690.55  |    26.39 |                            |
-| MUM                   |     11942.99  |    30.75 |                            |
+| t1ha                  |     15690.55  |    26.21 |                            |
+| t1ha_64be             |     11006.18  |    28.36 |  machine-specific          |
+| t1ha_32le             |      8007.13  |    35.66 |  machine-specific          |
+| t1ha_32be             |      6520.03	|    35.63 |  machine-specific          |
+| t1ha_crc              |     17134.77  |    29.26 |                            |
+| MUM                   |     11942.99  |    30.75 |  machine-specific          |
 
 Summary
 -------
@@ -78,7 +82,7 @@ See also the old [https://code.google.com/p/smhasher/w/list](https://code.google
 So the fastest hash functions on x86_64 without quality problems are:
 
 * falkhash (_macho64 and elf64 nasm only, with HW AES extension_)
-* t1ha + mum
+* t1ha + mum (_machine specific, mum: different arch results_)
 * FarmHash (_not portable, too machine specific: 64 vs 32bit, old gcc, ..._)
 * Metro (_but not 64crc yet, WIP_)
 * Spooky32
@@ -145,14 +149,15 @@ needs to be ~50%, unless you use Cuckoo Hashing.
 
 I.e. the usage of siphash for their hash table in Python 3.4, ruby,
 rust, systemd, OpenDNS, Haskell and OpenBSD is pure security theatre.
-siphash is not secure enough for security purposes and not fast
-enough for general usage. Brute-force generation of ~32k collisions need 2-4m
-for all these hashes. siphash being the slowest needs max 4m, other typically
-max 2m30s, with <10s for practical 16k collision attacks with all hash functions.
-Using Murmur is usually slower than a simple Mult, even in the worst case.
-Provable secure is only uniform hashing, i.e. 2-5 independent Mult or Tabulation,
-or using a guaranteed logarithmic or linear collision scheme, such as Robin Hood
-or Cockoo hashing.
+siphash is not secure enough for security purposes and not fast enough
+for general usage. Brute-force generation of ~32k collisions need 2-4m
+for all these hashes. siphash being the slowest needs max 4m, other
+typically max 2m30s, with <10s for practical 16k collision attacks
+with all hash functions.  Using Murmur is usually slower than a simple
+Mult, even in the worst case.  Provable secure is only uniform
+hashing, i.e. 2-5 independent Mult or Tabulation, or using a
+guaranteed logarithmic collision scheme (a tree) or a linear collision
+scheme, such as Robin Hood or Cockoo hashing with collision counting.
 
 One more note regarding security: Nowadays even SHA1 can be solved in
 a solver, like Z3 (or faster ones) for practical hash table collision
