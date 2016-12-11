@@ -277,6 +277,61 @@ void JenkinsOOAT_perl(const void *key, int len, uint32_t hash, void *out)
   *(uint32_t *) out = hash;
 }
 
+//------------------------------------------------
+// One of a smallest non-multiplicative One-At-a-Time function
+// that passes whole SMHasher.
+// Author: Sokolov Yura aka funny-falcon <funny.falcon@gmail.com>
+void GoodOAAT(const void *key, int len, uint32_t seed, void *out) {
+#define grol(x,n) (((x)<<(n))|((x)>>(32-(n))))
+#define gror(x,n) (((x)>>(n))|((x)<<(32-(n))))
+  unsigned char  *str = (unsigned char *)key;
+  const unsigned char *const end = (const unsigned char *)str + len;
+  uint32_t h1 = seed ^ 0x3b00;
+  uint32_t h2 = grol(seed, 15);
+  for (;str != end; str++) {
+    h1 += str[0];
+    h1 += h1 << 3; // h1 *= 9
+    h2 += h1;
+    // the rest could be as in MicroOAAT: h1 = grol(h1, 7)
+    // but clang doesn't generate ROTL instruction then.
+    h2 = grol(h2, 7);
+    h2 += h2 << 2; // h2 *= 5
+  }
+  h1 ^= h2;
+  /* now h1 passes all collision checks,
+   * so it is suitable for hash-tables with prime numbers. */
+  h1 += grol(h2, 14);
+  h2 ^= h1; h2 += gror(h1, 6);
+  h1 ^= h2; h1 += grol(h2, 5);
+  h2 ^= h1; h2 += gror(h1, 8);
+  *(uint32_t *) out = h2;
+#undef grol
+#undef gror
+}
+
+// MicroOAAT suitable for hash-tables using prime numbers.
+// It passes all collision checks.
+// Author: Sokolov Yura aka funny-falcon <funny.falcon@gmail.com>
+void MicroOAAT(const void *key, int len, uint32_t seed, void *out) {
+#define grol(x,n) (((x)<<(n))|((x)>>(32-(n))))
+#define gror(x,n) (((x)>>(n))|((x)<<(32-(n))))
+  unsigned char  *str = (unsigned char *)key;
+  const unsigned char *const end = (const unsigned char *)str + len;
+  uint32_t h1 = seed ^ 0x3b00;
+  uint32_t h2 = grol(seed, 15);
+  for (;str != end; str++) {
+    h1 += str[0];
+    h1 += h1 << 3; // h1 *= 9
+    h2 -= h1;
+    // unfortunately, clang produces bad code here,
+    // cause it doesn't generate rotl instruction.
+    h1 = grol(h1, 7);
+  }
+  *(uint32_t *) out = h1 ^ h2;
+#undef grol
+#undef gror
+}
+
 //-----------------------------------------------------------------------------
 //Crap8 hash from http://www.team5150.com / ~andrew / noncryptohashzoo / Crap8.html
 

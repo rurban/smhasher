@@ -67,6 +67,8 @@ void sdbm                  ( const void * key, int len, uint32_t seed, void * ou
 void x17_test              ( const void * key, int len, uint32_t seed, void * out );
 void JenkinsOOAT           ( const void * key, int len, uint32_t seed, void * out );
 void JenkinsOOAT_perl      ( const void * key, int len, uint32_t seed, void * out );
+void GoodOAAT              ( const void * key, int len, uint32_t seed, void * out );
+void MicroOAAT             ( const void * key, int len, uint32_t seed, void * out );
 void SuperFastHash         ( const void * key, int len, uint32_t seed, void * out );
 void lookup3_test          ( const void * key, int len, uint32_t seed, void * out );
 void MurmurOAAT_test       ( const void * key, int len, uint32_t seed, void * out );
