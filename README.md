@@ -7,30 +7,32 @@ SMhasher
 | donothing64           |   8211016.32	|     5.15 | overall bad                    |
 | donothing128          |   7676888.89	|     5.83 | overall bad                    |
 | NOP_OAAT_read64       |      2414.92  |    45.03 | 100% bias, 2.17x collisions    |
-| crc32                 |       569.71	|    97.67 | insecure, 8589.93x collisions, distrib   |
+| crc32                 |       569.71	|    97.67 | insecure, 8589.93x collisions, distrib  |
 | md5_32a               |       414.75	|   533.59 | 8589.93x collisions, distrib   |
 | sha1_32a              |       657.77	|   971.34 | collisions, 36.6% distrib      |
 | hasshe2               |      2292.04	|    72.23 | insecure,100% bias, collisions, distrib |
 | crc32_hw              |      7733.44  |    43.48 | insecure,100% bias, collisions, distrib |
 | crc64_hw              |     10937.53  |    23.33 | insecure,100% bias, collisions, distrib |
 | crc32_hw1             |     30703.38  |    27.08 | insecure,100% bias, collisions, distrib |
-| FNV1a                 |      1026.17  |    52.90 | zeros,100% bias, collisions, distrib |
-| FNV1a_YoshimitsuTRIAD |     15700.04  |    20.62 | 100% bias, collisions, distrib |
-| FNV64                 |      1015.60  |    53.55 | 100% bias, collisions, distrib |
-| bernstein             |      1026.17  |    51.13 | 100% bias, collisions, distrib |
-| sdbm                  |       977.48  |    51.75 | 100% bias, collisions, distrib |
+| FNV1a                 |      1026.17  |    52.90 | zeros,100% bias, collisions, distrib    |
+| FNV1a_YoshimitsuTRIAD |     15700.04  |    20.62 | 100% bias, collisions, distrib   |
+| FNV64                 |      1015.60  |    53.55 | 100% bias, collisions, distrib   |
+| bernstein             |      1026.17  |    51.13 | 100% bias, collisions, distrib   |
+| sdbm                  |       977.48  |    51.75 | 100% bias, collisions, distrib   |
 | x17                   |       893.28  |    62.36 | 99.98% bias, collisions, distrib |
-| JenkinsOOAT           |       563.23  |   104.31 | 53.5% bias, collisions, distrib |
-| JenkinsOOAT_perl      |       676.91  |    87.82 | 1.5-11.5% bias, 7.2x collisions |
-| lookup3               |      3303.80  |    31.66 | 28% bias, collisions, 30% distr |
+| JenkinsOOAT           |       563.23  |   104.31 | 53.5% bias, collisions, distrib  |
+| JenkinsOOAT_perl      |       676.91  |    87.82 | 1.5-11.5% bias, 7.2x collisions  |
+| MicroOAAT             |       913.58  |    60.92 | 100% bias, distrib               |
+| lookup3               |      3303.80  |    31.66 | 28% bias, collisions, 30% distr  |
 | superfast             |      3158.88  |    35.44 | 91% bias, 5273.01x collisions, 37% distr |
-| MurmurOAAT            |       719.76  |    76.48 | collisions, 99.998% distr      |
+| MurmurOAAT            |       719.76  |    76.48 | collisions, 99.998% distr          |
 | Crap8                 |      4069.57  |    26.83 | 2.42% bias, collisions, 2% distrib |
 | Murmur2               |      4049.53  |    31.64 | 1.7% bias, 81x coll, 1.7% distrib  |
-| Murmur2A              |      4031.16  |    34.56 | 12.7% bias                     |
-| Murmur2B              |      8062.20  |    33.62 | 1.8% bias, collisions, 3.4% distrib |
-| Murmur2C              |      5381.36  |    35.33 | 91% bias, collisions, distr    |
+| Murmur2A              |      4031.16  |    34.56 | 12.7% bias                         |
+| Murmur2B              |      8062.20  |    33.62 | 1.8% bias, collisions, 3.4% distrib|
+| Murmur2C              |      5381.36  |    35.33 | 91% bias, collisions, distr        |
 | ----------------------|               |          |                            |
+| GoodOAAT              |      1352.94  |    50.80 |                            |
 | PMurHash32            |      3034.35  |    45.11 |                            |
 | Murmur3A              |      3263.93  |    37.86 |                            |
 | Murmur3C              |      3733.90  |    48.66 |                            |
@@ -66,9 +68,9 @@ SMhasher
 | cmetrohash64_2        |     17188.28  |    35.40 |                            |
 | falkhash              |     39817.46  |   124.81 |                            |
 | t1ha                  |     15480.28	|    26.41 |                            |
-| t1ha_64be             |      5203.00	|    53.69 |  machine-specific          |
-| t1ha_32le             |      8930.90	|    29.79 |  machine-specific          |
-| t1ha_32be             |      6931.84	|    34.17 |  machine-specific          |
+| t1ha_64be             |      5203.00	|    53.69 |                            |
+| t1ha_32le             |      8930.90	|    29.79 |                            |
+| t1ha_32be             |      6931.84	|    34.17 |                            |
 | t1ha_crc              |     16757.73	|    28.69 |                            |
 | MUM                   |     11942.99  |    30.75 |  machine-specific          |
 
