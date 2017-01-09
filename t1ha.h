@@ -1,8 +1,8 @@
 /*
- *  Copyright (c) 2016 Positive Technologies, https://www.ptsecurity.com,
+ *  Copyright (c) 2016-2017 Positive Technologies, https://www.ptsecurity.com,
  *  Fast Positive Hash.
  *
- *  Portions Copyright (c) 2010-2016 Leonid Yuriev <leo@yuriev.ru>,
+ *  Portions Copyright (c) 2010-2017 Leonid Yuriev <leo@yuriev.ru>,
  *  The 1Hippeus project (t1h).
  *
  *  This software is provided 'as-is', without any express or implied
@@ -59,19 +59,41 @@ uint64_t t1ha(const void *data, size_t len, uint64_t seed);
  *    but it is differs from t1ha(). */
 uint64_t t1ha_64be(const void *data, size_t len, uint64_t seed);
 
-/* Just alternative nick for generic t1ha.
+/* Just a nickname for the generic t1ha.
  * 't1ha_64le' mean that is for 64-bit little-endian platforms. */
 static __inline uint64_t t1ha_64le(const void *data, size_t len,
                                    uint64_t seed) {
   return t1ha(data, len, seed);
 }
 
+/* The alternative little/big-endian versions, which were
+ * designed for a 32-bit CPUs. In comparison to the main t1ha:
+ *   - much faster on 32-bit architectures.
+ *   - half of speed on 64-bit architectures.
+ *   - useful in case primary target platform is 32-bit. */
 uint64_t t1ha_32le(const void *data, size_t len, uint64_t seed);
 uint64_t t1ha_32be(const void *data, size_t len, uint64_t seed);
 
 #if (defined(__SSE4_2__) && defined(__x86_64__)) || defined(_M_X64)
+/* Machine specific hash, which uses CRC32c hardware acceleration.
+ * Available only on modern x86 CPUs with support for SSE 4.2. */
 uint64_t t1ha_ia32crc(const void *data, size_t len, uint64_t seed);
 #endif /* __SSE4_2__ && __x86_64__ */
+
+#if defined(__AES__) || defined(_M_X64) || defined(_M_IX86)
+/* Machine specific hash, which uses AES hardware acceleration.
+ * Available only on modern x86 CPUs with AES-NI extension. */
+uint64_t t1ha_ia32aes(const void *data, size_t len, uint64_t seed);
+#endif /* __AES__ */
+
+/* Machine-specific facade that selects the fastest hash for
+ * the current processor.
+ *
+ * BE CAREFUL!!! This is mean that hash result could be differ,
+ * when someone (CPU, BIOS, OS, compiler, source code) was changed.
+ * Briefly, such hash-results and their derivatives, should
+ * not be persist or transferred over a network. */
+uint64_t t1ha_local(const void *data, size_t len, uint64_t seed);
 
 #ifdef __cplusplus
 }

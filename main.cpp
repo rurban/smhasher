@@ -190,6 +190,9 @@ HashInfo g_hashes[] =
 #if (defined(__SSE4_2__) && defined(__x86_64__)) || defined(_M_X64)
   { t1ha_crc_test,              64, 0xA57ACE7D, "t1ha_crc",          "Fast Positive Hash (SSE4.2 CRC32C)" },
 #endif
+#if defined(__AES__)
+  { t1ha_aes_test,              64, 0x54BBFF21, "t1ha_aes",          "Fast Positive Hash (AES-NI)" },
+#endif
   { mum_hash_test,              64,
 #if defined(__GNUC__) && UINT_MAX != ULONG_MAX
                                     0x3EEAE2D4,

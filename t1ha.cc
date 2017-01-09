@@ -1,8 +1,8 @@
 /*
- *  Copyright (c) 2016 Positive Technologies, https://www.ptsecurity.com,
+ *  Copyright (c) 2016-2017 Positive Technologies, https://www.ptsecurity.com,
  *  Fast Positive Hash.
  *
- *  Portions Copyright (c) 2010-2016 Leonid Yuriev <leo@yuriev.ru>,
+ *  Portions Copyright (c) 2010-2017 Leonid Yuriev <leo@yuriev.ru>,
  *  The 1Hippeus project (t1h).
  *
  *  This software is provided 'as-is', without any express or implied
@@ -792,6 +792,7 @@ uint64_t t1ha_32be(const void *data, size_t len, uint64_t seed) {
 /***************************************************************************/
 
 #if (defined(__SSE4_2__) && defined(__x86_64__)) || defined(_M_X64)
+#include <nmmintrin.h>
 
 uint64_t t1ha_ia32crc(const void *data, size_t len, uint64_t seed) {
   uint64_t a = seed;
@@ -800,16 +801,16 @@ uint64_t t1ha_ia32crc(const void *data, size_t len, uint64_t seed) {
 
   if (unlikely(len > 32)) {
     const void *detent = (const uint8_t *)data + len - 31;
-    uint32_t x = b;
-    uint32_t y = a;
-    uint32_t z = ~a ^ b;
+    uint32_t x = (uint32_t)b;
+    uint32_t y = (uint32_t)a;
+    uint32_t z = (uint32_t)(~a ^ b);
 
     do {
-      uint32_t t = a + x;
+      uint32_t t = (uint32_t)a + x;
       a = rot64(a, 17) + p0 * v[0];
-      x += _mm_crc32_u64(y, v[1]);
-      y += _mm_crc32_u64(z, v[2]);
-      z += _mm_crc32_u64(t, v[3]);
+      x += (uint32_t)_mm_crc32_u64(y, v[1]);
+      y += (uint32_t)_mm_crc32_u64(z, v[2]);
+      z += (uint32_t)_mm_crc32_u64(t, v[3]);
       v += 4;
     } while (likely(detent > (const void *)v));
 
@@ -854,3 +855,136 @@ uint64_t t1ha_ia32crc(const void *data, size_t len, uint64_t seed) {
 }
 
 #endif /* __SSE4_2__ && __x86_64__ */
+
+/***************************************************************************/
+
+#if defined(__AES__) || defined(_M_X64) || defined(_M_IX86)
+#include <emmintrin.h>
+#include <wmmintrin.h>
+
+uint64_t t1ha_ia32aes(const void *data, size_t len, uint64_t seed) {
+  uint64_t a = seed;
+  uint64_t b = len;
+
+  if (unlikely(len > 32)) {
+    __m128i x = _mm_set_epi64x(a, b);
+    __m128i y = _mm_aesenc_si128(x, _mm_set_epi64x(p0, p1));
+
+    const __m128i *v = (const __m128i *)data;
+    const __m128i *const detent =
+        (const __m128i *)((const uint8_t *)data + (len & ~15ul));
+    data = detent;
+
+    if (len & 16) {
+      x = _mm_add_epi64(x, _mm_loadu_si128(v++));
+      y = _mm_aesenc_si128(x, y);
+    }
+    len &= 15;
+
+    if (v + 7 < detent) {
+      __m128i salt = y;
+      do {
+        __m128i t = _mm_aesenc_si128(_mm_loadu_si128(v++), salt);
+        t = _mm_aesdec_si128(t, _mm_loadu_si128(v++));
+        t = _mm_aesdec_si128(t, _mm_loadu_si128(v++));
+        t = _mm_aesdec_si128(t, _mm_loadu_si128(v++));
+
+        t = _mm_aesdec_si128(t, _mm_loadu_si128(v++));
+        t = _mm_aesdec_si128(t, _mm_loadu_si128(v++));
+        t = _mm_aesdec_si128(t, _mm_loadu_si128(v++));
+        t = _mm_aesdec_si128(t, _mm_loadu_si128(v++));
+
+        salt = _mm_add_epi64(salt, _mm_set_epi64x(p2, p3));
+        t = _mm_aesenc_si128(x, t);
+        x = _mm_add_epi64(y, x);
+        y = t;
+      } while (v + 7 < detent);
+    }
+
+    while (v < detent) {
+      __m128i v0y = _mm_add_epi64(y, _mm_loadu_si128(v++));
+      __m128i v1x = _mm_sub_epi64(x, _mm_loadu_si128(v++));
+      x = _mm_aesdec_si128(x, v0y);
+      y = _mm_aesdec_si128(y, v1x);
+    }
+
+    x = _mm_add_epi64(_mm_aesdec_si128(x, _mm_aesenc_si128(y, x)), y);
+#if defined(__x86_64__) || defined(_M_X64)
+    a = _mm_cvtsi128_si64(x);
+#if defined(__SSE4_1__)
+    b = _mm_extract_epi64(x, 1);
+#else
+    b = _mm_cvtsi128_si64(_mm_unpackhi_epi64(x, x));
+#endif
+#else
+    a = (uint32_t)_mm_cvtsi128_si32(x);
+#if defined(__SSE4_1__)
+    a |= (uint64_t)_mm_extract_epi32(x, 1) << 32;
+    b = (uint32_t)_mm_extract_epi32(x, 2) |
+        (uint64_t)_mm_extract_epi32(x, 3) << 32;
+#else
+    a |= (uint64_t)_mm_cvtsi128_si32(_mm_shuffle_epi32(x, 1)) << 32;
+    x = _mm_unpackhi_epi64(x, x);
+    b = (uint32_t)_mm_cvtsi128_si32(x);
+    b |= (uint64_t)_mm_cvtsi128_si32(_mm_shuffle_epi32(x, 1)) << 32;
+#endif
+#endif
+#if !defined(__x86_64__) && !defined(_M_X64)
+    _mm_empty();
+#endif
+  }
+
+  const uint64_t *v = (const uint64_t *)data;
+  switch (len) {
+  default:
+    b += mux64(*v++, p4);
+  case 24:
+  case 23:
+  case 22:
+  case 21:
+  case 20:
+  case 19:
+  case 18:
+  case 17:
+    a += mux64(*v++, p3);
+  case 16:
+  case 15:
+  case 14:
+  case 13:
+  case 12:
+  case 11:
+  case 10:
+  case 9:
+    b += mux64(*v++, p2);
+  case 8:
+  case 7:
+  case 6:
+  case 5:
+  case 4:
+  case 3:
+  case 2:
+  case 1:
+    a += mux64(tail64_le(v, len), p1);
+  case 0:
+    return mux64(rot64(a + b, s1), p4) + mix(a ^ b, p0);
+  }
+}
+
+#endif /* __AES__ */
+
+/***************************************************************************/
+
+uint64_t t1ha_local(const void *data, size_t len, uint64_t seed) {
+#if (defined(__SSE4_2__) && defined(__x86_64__)) || defined(_M_X64)
+  /* TODO: check sse4.2 ability by cpuid */
+  return t1ha_ia32crc(data, len, seed);
+#elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+  if (sizeof(long) >= 8)
+    return t1ha_64be(data, len, seed);
+  return t1ha_32be(data, len, seed);
+#else
+  if (sizeof(long) >= 8)
+    return t1ha_64le(data, len, seed);
+  return t1ha_32le(data, len, seed);
+#endif
+}
