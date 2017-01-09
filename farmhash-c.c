@@ -40,25 +40,14 @@
 #define x86 x86_64
 #endif
 
-#if defined(__SSSE3__)
-# ifdef __GNUC__
-#  define GCC_VERSION (__GNUC__ * 100 + __GNUC_MINOR__)
-#  if GCC_VERSION > 403
-#   include <immintrin.h>
-#   define CAN_USE_SSSE3 1
-#  else
-#   define CAN_USE_SSSE3 0
-#  endif
-# else
-#  include <immintrin.h>
-#  define CAN_USE_SSSE3 1
-# endif
-// Now we can use _mm_hsub_epi16 and so on.
+#if defined(__SSSE3__) || defined(__SSE4_1__) || defined(__SSE4_2__)
+#include <tmmintrin.h>
+#define CAN_USE_SSSE3 1 // Now we can use _mm_hsub_epi16 and so on.
 #else
 #define CAN_USE_SSSE3 0
 #endif
 
-#if CAN_USE_SSSE3 && defined(__SSE4_1__)
+#if defined(__SSE4_1__) || defined(__SSE4_2__)
 #include <immintrin.h>
 #define CAN_USE_SSE41 1  // Now we can use _mm_insert_epi64 and so on.
 #else
@@ -79,7 +68,7 @@
 #define CAN_USE_AESNI 0
 #endif
 
-#if CAN_USE_SSSE3 && defined(__AVX__)
+#if defined(__AVX__)
 #include <immintrin.h>
 #define CAN_USE_AVX 1
 #else
@@ -127,7 +116,7 @@ static inline uint32_t bswap32(const uint32_t x) {
 static inline uint64_t bswap64(const uint64_t x) {
   uint64_t y = x;
   size_t i;
-  
+
   for (i = 0; i < sizeof(uint64_t) >> 1; i++) {
 
     uint64_t d = sizeof(uint64_t) - i - 1;
@@ -648,7 +637,7 @@ uint64_t farmhash64_xo_with_seed(const char *s, size_t len, uint64_t seed) {
 
 // farmhash te
 
-#if x86_64 && CAN_USE_SSE41
+#if x86_64 && CAN_USE_SSE41 && CAN_USE_SSSE3
 
 // Requires n >= 256.  Requires SSE4.1. Should be slightly faster if the
 // compiler uses AVX instructions (e.g., use the -mavx flag with GCC).
@@ -848,7 +837,7 @@ uint64_t farmhash64_te_with_seeds(const char *s, size_t len, uint64_t seed0, uin
 
 // farmhash nt
 
-#if x86_64 && CAN_USE_SSE41
+#if x86_64 && CAN_USE_SSE41 && CAN_USE_SSSE3
 
 uint32_t farmhash32_nt(const char *s, size_t len) {
   return (uint32_t) farmhash64_te(s, len);
