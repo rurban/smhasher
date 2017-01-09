@@ -1,7 +1,15 @@
-project(SMHasher)
-
-cmake_minimum_required(VERSION 2.4)
+cmake_minimum_required(VERSION 2.8)
 cmake_policy(SET CMP0003 NEW)
+
+project(SMHasher C CXX)
+
+include(CheckCCompilerFlag)
+# Check if the same compile family is used for both C and CXX
+if (NOT (CMAKE_C_COMPILER_ID STREQUAL CMAKE_CXX_COMPILER_ID))
+    message(WARNING "CMAKE_C_COMPILER_ID (${CMAKE_C_COMPILER_ID}) is different "
+                    "from CMAKE_CXX_COMPILER_ID (${CMAKE_CXX_COMPILER_ID})."
+                    "The final binary may be unusable.")
+endif()
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release" CACHE STRING
@@ -45,8 +53,14 @@ ELSEIF(CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
    STRING(REGEX REPLACE "^.*(AES).*$" "\\1" AES_THERE ${CPUINFO})
    STRING(COMPARE EQUAL "AES" "${AES_THERE}" AES_TRUE)
 ENDIF(CMAKE_SYSTEM_NAME MATCHES "Linux")
+
+if (CMAKE_COMPILER_IS_GNUCC OR (CMAKE_C_COMPILER_ID STREQUAL Clang))
+  set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -march=native")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
+else()
 # TODO: Windows, BSD and ARM8 crc detection
 # TODO: 32bit filter
+endif()
 
 IF (SSE2_TRUE)
    set(SSE2_FOUND true CACHE BOOL "SSE2 available")
@@ -64,16 +78,11 @@ ELSE (AES_TRUE)
   set(AES_FOUND false CACHE BOOL "AES-NI not available")
 ENDIF (AES_TRUE)
 
-IF(AES_FOUND)
-  set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -maes")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -maes")
-IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
+IF(AES_FOUND AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
   set(SSE4_OBJ        ${FALKHASH_OBJ})
 ENDIF()
-ENDIF(AES_FOUND)
+
 IF(SSE4_2_FOUND)
-  set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -msse2 -msse4.2")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse2 -msse4.2")
   set(CMAKE_EXE_LINKER_FLAGS "-lpthread")
   set(SSE2_SRC        hasshe2.c)
   set(SSE4_SRC        crc32_hw.c)
@@ -87,8 +96,6 @@ IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
 ENDIF()
   set(SIPHASH_SRC     siphash_ssse3.c)
 ELSEIF(SSE2_FOUND)
-  set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -msse2")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse2")
   set(SSE2_SRC        hasshe2.c)
   set(SIPHASH_SRC     siphash_sse2.c)
 ELSE()
@@ -112,7 +119,7 @@ add_library(
   DifferentialTest.cpp
   Hashes.cpp
   ${SSE2_SRC}
-  ${SSE4_SRC} 
+  ${SSE4_SRC}
   ${SSE4_SRC1}
   KeysetTest.cpp
   lookup3.cpp
@@ -132,7 +139,7 @@ add_library(
   Types.cpp
   PMurHash.c
   ${X64ONLY_SRC}
-  ${METROCRC64_SRC} 
+  ${METROCRC64_SRC}
   ${METROCRC128_SRC}
   ${SSE4_OBJ}
   t1ha.cc
