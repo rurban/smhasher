@@ -141,7 +141,7 @@ add_library(
   ${METROCRC64_SRC}
   ${METROCRC128_SRC}
   ${SSE4_OBJ}
-  t1ha.cc
+  t1ha.c
   mum.cc
 )
 
