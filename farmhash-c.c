@@ -75,7 +75,11 @@
 #define CAN_USE_AVX 0
 #endif
 
+#ifdef __GNUC__
 #define likely(x) (__builtin_expect(!!(x), 1))
+#else
+#define likely(x) (x)
+#endif
 
 #ifdef LITTLE_ENDIAN
 #define uint32_t_in_expected_order(x) (x)
