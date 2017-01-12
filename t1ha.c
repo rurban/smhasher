@@ -783,8 +783,8 @@ uint64_t t1ha_32be(const void *data, size_t len, uint64_t seed) {
 
 /***************************************************************************/
 
-#if ((__SSE4_2__ || __GNUC_PREREQ(4, 4) || __has_attribute(target)) &&         \
-     defined(__x86_64__)) ||                                                   \
+#if (defined(__x86_64__) && (defined(__SSE4_2__) || __GNUC_PREREQ(4, 4) ||     \
+                             __has_attribute(target))) ||                      \
     defined(_M_X64) || defined(_X86_64_)
 #include <nmmintrin.h>
 
@@ -881,6 +881,7 @@ static uint32_t x86_cpu_features(void) {
 #if defined(__i386__) || defined(__x86_64__) || defined(_M_IX86) ||            \
     defined(_M_X64) || defined(i386) || defined(_X86_) || defined(_X86_64_)
 #include <emmintrin.h>
+#include <smmintrin.h>
 #include <wmmintrin.h>
 
 #if defined(__x86_64__) && defined(__ELF__) &&                                 \
@@ -1004,7 +1005,7 @@ t1ha_ia32aes_avx(const void *data, size_t len, uint64_t seed) {
   }
 }
 
-uint64_t
+static uint64_t
 #if __GNUC_PREREQ(4, 4) || __has_attribute(target)
     __attribute__((target("aes")))
 #endif
