@@ -190,7 +190,7 @@ HashInfo g_hashes[] =
 #if (defined(__SSE4_2__) && defined(__x86_64__)) || defined(_M_X64)
   { t1ha_crc_test,              64, 0xA57ACE7D, "t1ha_crc",          "Fast Positive Hash (machine-specific, requires: SSE4.2 CRC32C)" },
 #endif
-#if defined(__AES__)
+#if defined(__AES__) || defined(_M_X64) || defined(_M_IX86)
   { t1ha_aes_test,              64, 0x54BBFF21, "t1ha_aes",          "Fast Positive Hash (machine-specific, requires: AES-NI)" },
 #endif
   { mum_hash_test,              64,

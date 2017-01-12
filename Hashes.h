@@ -209,7 +209,7 @@ inline void t1ha_32be_test(const void * key, int len, uint32_t seed, void * out)
   *(uint64_t*)out = t1ha_32be(key, len, seed);
 }
 
-#if defined(__AES__) || defined(_M_X64)
+#if defined(__AES__) || defined(_M_X64) || defined(_M_IX86)
 inline void t1ha_aes_test(const void * key, int len, uint32_t seed, void * out)
 {
   *(uint64_t*)out = t1ha_ia32aes(key, len, seed);
