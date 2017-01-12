@@ -718,7 +718,11 @@ static char* strndup(char const *s, size_t n)
 
 int main ( int argc, char ** argv )
 {
+#if (defined(__x86_64__) && __SSE4_2__) || defined(_M_X64) || defined(_X86_64_)
   const char * defaulthash = "metrohash64crc_1"; /* "murmur3a"; */
+#else
+  const char * defaulthash = "t1ha_32le";
+#endif
   const char * hashToTest = defaulthash;
 
   if(argc < 2) {
