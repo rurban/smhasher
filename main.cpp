@@ -74,7 +74,7 @@ HashInfo g_hashes[] =
   { BadHash,     	  32, 0xAB432E23, "BadHash", 	 "very simple XOR shift" },
   { sumhash,     	  32, 0x0000A9AC, "sumhash", 	 "sum all bytes" },
   { sumhash32,     	  32, 0xF5562C80, "sumhash32",   "sum all 32bit words" },
-  
+
   // here start the real hashes
   { crc32,                32, 0x3719DB20, "crc32",       "CRC-32 soft" },
 
@@ -162,7 +162,7 @@ HashInfo g_hashes[] =
 #if 0
   { xxhash256_test,       64, 0x024B7CF4, "xxhash256",   "xxhash256, 64-bit unportable" },
 #endif
-#endif  
+#endif
   #if defined(__x86_64__)
   { metrohash64_1_test,       64, 0xEE88F7D2, "metrohash64_1",     "MetroHash64_1 for 64-bit" },
   { metrohash64_2_test,       64, 0xE1FC7C6E, "metrohash64_2",     "MetroHash64_2 for 64-bit" },
@@ -183,12 +183,15 @@ HashInfo g_hashes[] =
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { falkhash_test_cxx,          64, 0x2F99B071, "falkhash",          "falkhash.asm with aesenc, 64-bit for x64" },
 #endif
-  { t1ha_test,                  64, 0xD6836381, "t1ha",              "Fast Positive Hash (64-bit, little-endian)" },
-  { t1ha_64be_test,             64, 0x93F864DE, "t1ha_64be",         "Fast Positive Hash (64-bit, big-engian)" },
-  { t1ha_32le_test,             64, 0xE489F366, "t1ha_32le",         "Fast Positive Hash (32-bit, little-endian)" },
-  { t1ha_32be_test,             64, 0x71F649A9, "t1ha_32be",         "Fast Positive Hash (32-bit, big-endian)" },
+  { t1ha_test,                  64, 0xD6836381, "t1ha",              "Fast Positive Hash (portable, best for: 64-bit, little-endian)" },
+  { t1ha_64be_test,             64, 0x93F864DE, "t1ha_64be",         "Fast Positive Hash (portable, best for: 64-bit, big-engian)" },
+  { t1ha_32le_test,             64, 0xE489F366, "t1ha_32le",         "Fast Positive Hash (portable, best for: 32-bit, little-endian)" },
+  { t1ha_32be_test,             64, 0x71F649A9, "t1ha_32be",         "Fast Positive Hash (portable, best for: 32-bit, big-endian)" },
 #if (defined(__SSE4_2__) && defined(__x86_64__)) || defined(_M_X64)
-  { t1ha_crc_test,              64, 0xA57ACE7D, "t1ha_crc",          "Fast Positive Hash (SSE4.2 CRC32C)" },
+  { t1ha_crc_test,              64, 0xA57ACE7D, "t1ha_crc",          "Fast Positive Hash (machine-specific, requires: SSE4.2 CRC32C)" },
+#endif
+#if defined(__AES__) || defined(_M_X64) || defined(_M_IX86)
+  { t1ha_aes_test,              64, 0x54BBFF21, "t1ha_aes",          "Fast Positive Hash (machine-specific, requires: AES-NI)" },
 #endif
   { mum_hash_test,              64,
 #if defined(__GNUC__) && UINT_MAX != ULONG_MAX
@@ -715,7 +718,11 @@ static char* strndup(char const *s, size_t n)
 
 int main ( int argc, char ** argv )
 {
+#if (defined(__x86_64__) && __SSE4_2__) || defined(_M_X64) || defined(_X86_64_)
   const char * defaulthash = "metrohash64crc_1"; /* "murmur3a"; */
+#else
+  const char * defaulthash = "t1ha_32le";
+#endif
   const char * hashToTest = defaulthash;
 
   if(argc < 2) {

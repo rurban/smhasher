@@ -74,7 +74,7 @@
 // FARMHASH PORTABILITY LAYER: LIKELY and UNLIKELY
 
 #if !defined(LIKELY)
-#if defined(FARMHASH_NO_BUILTIN_EXPECT) || (defined(FARMHASH_OPTIONAL_BUILTIN_EXPECT) && !defined(HAVE_BUILTIN_EXPECT))
+#if defined(FARMHASH_NO_BUILTIN_EXPECT) || !defined(HAVE_BUILTIN_EXPECT)
 #define LIKELY(x) (x)
 #else
 #define LIKELY(x) (__builtin_expect(!!(x), 1))
