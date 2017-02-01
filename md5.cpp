@@ -350,33 +350,34 @@ void md5_finish( md5_context *ctx, unsigned char output[16] )
 /*
  * output = MD5( input buffer )
  */
-void md5( unsigned char *input, int ilen, unsigned char output[16] )
+void md5( unsigned char *input, int ilen, unsigned char output[16], uint32_t seed )
 {
     md5_context ctx;
 
     md5_starts( &ctx );
+    ctx.state[0] += seed;
     md5_update( &ctx, input, ilen );
     md5_finish( &ctx, output );
 
     memset( &ctx, 0, sizeof( md5_context ) );
 }
 
-unsigned int md5hash ( const void * input, int len, unsigned int /*seed*/ )
+unsigned int md5hash ( const void * input, int len, uint32_t seed )
 {
   unsigned int hash[4];
 
-  md5((unsigned char *)input,len,(unsigned char *)hash);
+  md5((unsigned char *)input,len,(unsigned char *)hash, seed);
 
   //return hash[0] ^ hash[1] ^ hash[2] ^ hash[3];
 
   return hash[0];
 }	
 
-void md5_32            ( const void * key, int len, uint32_t /*seed*/, void * out )
+void md5_32            ( const void * key, int len, uint32_t seed, void * out )
 {
   unsigned int hash[4];
 
-  md5((unsigned char*)key,len,(unsigned char*)hash);
+  md5((unsigned char*)key,len,(unsigned char*)hash, seed);
 
   *(uint32_t*)out = hash[0];
 }
