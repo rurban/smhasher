@@ -78,8 +78,8 @@ HashInfo g_hashes[] =
   // here start the real hashes
   { crc32,                32, 0x3719DB20, "crc32",       "CRC-32 soft" },
 
-  { md5_32,               32, 0xC10C356B, "md5_32a",     "MD5, first 32 bits of result" },
-  { sha1_32a,             32, 0xF9376EA7, "sha1_32a",    "SHA1, first 32 bits of result" },
+  { md5_32,               32, 0xF7192210, "md5_32a",     "MD5, first 32 bits of result" },
+  { sha1_32a,             32, 0xDCB02360, "sha1_32a",    "SHA1, first 32 bits of result" },
 #if 0
   { sha1_64a,             32, 0xF9376EA7, "sha1_64a",    "SHA1 64-bit, first 64 bits of result" },
   { sha2_32a,             32, 0xF9376EA7, "sha2_32a",    "SHA2, first 32 bits of result" },
