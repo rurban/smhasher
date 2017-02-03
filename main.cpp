@@ -247,6 +247,7 @@ HashInfo g_hashes[] =
 #endif
   // and now the quality hash funcs, slowest first
   { tifuhash_64,          64, TIFU_VERIF, "tifuhash_64", "Tiny Floatingpoint Unique Hash with continued egyptian fractions", POOR },
+  { chaskey_test,         32, 0xD5B4A96D, "chaskey",     "mouha.be/chaskey/", GOOD },
   { siphash_test,         64, 0xC58D7F9C, "SipHash",     "SipHash 2-4 - SSSE3 optimized", GOOD },
   { halfsiphash_test,     32, 0xA7A05F72, "HalfSipHash", "HalfSipHash 2-4, 32bit", GOOD },
   { GoodOAAT_test,        32, 0x7B14EEE5, "GoodOAAT",    "Small non-multiplicative OAAT", GOOD },
@@ -405,6 +406,8 @@ void Hash_init (HashInfo* info) {
   else if(info->hash == tsip_test)
     tsip_init();
 #endif
+  else if(info->hash == chaskey_test)
+    chaskey_init();
 }
 
 //-----------------------------------------------------------------------------

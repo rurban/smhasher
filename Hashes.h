@@ -215,6 +215,13 @@ void MurmurHash2A_test     ( const void * key, int len, uint32_t seed, void * ou
 void siphash_test          ( const void * key, int len, uint32_t seed, void * out );
 void siphash13_test        ( const void * key, int len, uint32_t seed, void * out );
 void halfsiphash_test      ( const void * key, int len, uint32_t seed, void * out );
+extern "C" void chaskey_c  ( const void * key, int len, uint32_t seed, void * out );
+extern "C" void chaskey_init();
+inline void
+chaskey_test(const void *input, int len, uint32_t seed, void *out)
+{
+  chaskey_c (input, len, seed, out);
+}
 
 //-----------------------------------------------------------------------------
 // Test harnesses for Murmur1/2

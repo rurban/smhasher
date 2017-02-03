@@ -321,6 +321,7 @@ add_library(
   AvalancheTest.cpp
   Bitslice.cpp
   Bitvec.cpp
+  chaskey.c
   CityTest.cpp
   City.cpp
   crc.cpp
