@@ -106,7 +106,7 @@ HashInfo g_hashes[] =
   { fhtw_test,            64, 0x0,        "fhtw",        "fhtw asm" },
 #endif  
   { FNV32a,               32, 0xE3CBBE91, "FNV1a",       "Fowler-Noll-Vo hash, 32-bit" },
-  { FNV32a_YoshimitsuTRIAD,32,0xD8AFFD71, "FNV1a_YoshimitsuTRIAD", "FNV1a-YoshimitsuTRIAD 32-bit sanmayce" },
+  { FNV32a_YoshimitsuTRIAD,32,0xD8AFFD71, "FNV1a_YT",    "FNV1a-YoshimitsuTRIAD 32-bit sanmayce" },
   { FNV64a,               64, 0x103455FC, "FNV64",       "Fowler-Noll-Vo hash, 64-bit" },
 #if 0
   { fletcher2,            64, 0x0, "fletcher2",  "fletcher2 ZFS"} //TODO
@@ -184,7 +184,7 @@ HashInfo g_hashes[] =
 #endif
 #endif
 #if defined(__x86_64__)
-  { cmetrohash64_1_optshort_test, 64, 0xEE88F7D2, "cmetrohash64_1_optshort", "cmetrohash64_1 (shorter key optimized) , 64-bit for x64" },
+  { cmetrohash64_1_optshort_test, 64, 0xEE88F7D2, "cmetrohash64_1o", "cmetrohash64_1 (shorter key optimized) , 64-bit for x64" },
   { cmetrohash64_1_test,        64, 0xEE88F7D2, "cmetrohash64_1",    "cmetrohash64_1, 64-bit for x64" },
   { cmetrohash64_2_test,        64, 0xE1FC7C6E, "cmetrohash64_2",    "cmetrohash64_2, 64-bit for x64" },
 #endif
@@ -743,7 +743,7 @@ int main ( int argc, char ** argv )
     if (strncmp(hashToTest,"--", 2) == 0) {
       if (strcmp(hashToTest,"--list") == 0) {
         for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++) {
-          printf("%s\t(%s)\n", g_hashes[i].name, g_hashes[i].desc);
+          printf("%-16s\t(%s)\n", g_hashes[i].name, g_hashes[i].desc);
         }
         exit(0);
       }
