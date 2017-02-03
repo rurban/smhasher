@@ -6,7 +6,7 @@ cd build
 case `uname -s` in
 Darwin)  cmake .. ;;
 FreeBSD) CXX=clang++ CC=clang cmake .. ;;
-*)       CXX=g++-5.0  CC=gcc-5.0 cmake ..   ;;
+*)       CXX=clang++-4.0  CC=clang-4.0 cmake ..   ;;
 esac
 make -j4
 cd ..

@@ -58,7 +58,11 @@ typedef unsigned __int64 uint64_t;
 
 #ifdef __GNUC__
 #define _MUM_ATTRIBUTE_UNUSED  __attribute__((unused))
-#define _MUM_OPTIMIZE(opts) __attribute__((__optimize__ (opts)))
+# ifdef __clang__
+#  define _MUM_OPTIMIZE(opts)
+# else
+#  define _MUM_OPTIMIZE(opts) __attribute__((__optimize__ (opts)))
+# endif
 #define _MUM_TARGET(opts) __attribute__((__target__ (opts)))
 #else
 #define _MUM_ATTRIBUTE_UNUSED

@@ -103,9 +103,10 @@ ELSE()
 ENDIF(SSE4_2_FOUND)
 
 IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
-  set(X64ONLY_SRC     xxhash.c metrohash64.cpp metrohash128.cpp farmhash.cc
-                      FarmTest.cc farmhash-c.c farmhash-c-test.cc cmetrohash64.c opt_cmetrohash64_1.c
-                      fasthash.cpp)
+  set(64ONLY_SRC
+    xxhash.c metrohash64.cpp metrohash128.cpp farmhash.cc
+    FarmTest.cc farmhash-c.c farmhash-c-test.cc cmetrohash64.c
+    opt_cmetrohash64_1.c fasthash.cpp)
 ENDIF()
 
 add_library(
@@ -138,7 +139,7 @@ add_library(
   SuperFastHash.cpp
   Types.cpp
   PMurHash.c
-  ${X64ONLY_SRC}
+  ${64ONLY_SRC}
   ${METROCRC64_SRC}
   ${METROCRC128_SRC}
   ${SSE4_OBJ}

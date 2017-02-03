@@ -96,6 +96,8 @@ void MurmurHash2_test      ( const void * key, int len, uint32_t seed, void * ou
 void MurmurHash2A_test     ( const void * key, int len, uint32_t seed, void * out );
 
 void siphash_test          ( const void * key, int len, uint32_t seed, void * out );
+void siphash13_test        ( const void * key, int len, uint32_t seed, void * out );
+void halfsiphash_test      ( const void * key, int len, uint32_t seed, void * out );
 
 //-----------------------------------------------------------------------------
 // Test harnesses for Murmur1/2

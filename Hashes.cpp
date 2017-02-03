@@ -230,7 +230,7 @@ JenkinsOOAT(const void *key, int len, uint32_t hash, void *out)
   unsigned char  *seed = (unsigned char *)&s;
   //unsigned char seed[8];
   //note that perl5 adds the seed to the end of key, which looks like cargo cult
-    while (str < end) {
+  while (str < end) {
     hash += (hash << 10);
     hash ^= (hash >> 6);
     hash += *str++;
@@ -392,8 +392,10 @@ hasshe2_test(const void *input, int len, uint32_t seed, void *out)
 }
 #endif
 
-#if defined(__SSE4_2__) && defined(__x86_64__)
-/* Compute CRC-32C using the Intel hardware instruction. */
+#if defined(__SSE4_2__) && (defined(__i686__) || defined(_M_IX86) || defined(__x86_64__))
+/* Compute CRC-32C using the Intel hardware instruction.
+   TODO: arm8
+ */
 void
 crc32c_hw_test(const void *input, int len, uint32_t seed, void *out)
 {
@@ -403,6 +405,17 @@ crc32c_hw_test(const void *input, int len, uint32_t seed, void *out)
   }
   *(uint32_t *) out = crc32c_hw(input, len, seed);
 }
+/* Faster Adler SSE4.2 crc32 in HW */
+void
+crc32c_hw1_test(const void *input, int len, uint32_t seed, void *out)
+{
+  if (!len) {
+    *(uint32_t *) out = 0;
+    return;
+  }
+  *(uint32_t *) out = crc32c(input, len, seed);
+}
+#if defined(__SSE4_2__) && defined(__x86_64__)
 /* Compute CRC-64C using the Intel hardware instruction. */
 void
 crc64c_hw_test(const void *input, int len, uint32_t seed, void *out)
@@ -413,21 +426,12 @@ crc64c_hw_test(const void *input, int len, uint32_t seed, void *out)
   }
   *(uint64_t *) out = crc64c_hw(input, len, seed);
 }
-/* Faster Adler SSE4.2 crc32 in HW */
-inline void
-crc32c_hw1_test(const void *input, int len, uint32_t seed, void *out)
-{
-  if (!len) {
-    *(uint32_t *) out = 0;
-    return;
-  }
-  *(uint32_t *) out = crc32c(input, len, seed);
-}
+#endif
 #endif
 
 /* Cloudflare optimized zlib crc32 with PCLMUL */
 #if 0
-inline void
+void
 zlib_crc32_test(const void *input, int len, uint32_t seed, void *out)
 {
     if (!len) {
@@ -438,21 +442,55 @@ zlib_crc32_test(const void *input, int len, uint32_t seed, void *out)
 }
 #endif
 
+#if 0 && defined(__x86_64__) && (defined(__linux__) || defined(__APPLE__))  
 extern "C" {
-  uint64_t siphash(const unsigned char key[16], const unsigned char *m, size_t len);
+  uint64_t fhtw_test(const unsigned char key[16], const unsigned char *m, size_t len);
+  int fhtw_hash(void* key, int key_len);
 }
+/* asm */
+inline void
+fhtw_test(const void *input, int len, uint32_t seed, void *out)
+{
+  *(uint32_t *) out = fhtw_hash(input, len);
+}
+#endif
+
+#include "siphash.h"
+
 /* https://github.com/floodyberry/siphash */
 void
 siphash_test(const void *input, int len, uint32_t seed, void *out)
 {
-  unsigned char	  key[16] = {0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0};
+  /* 128bit state, filled with a 32bit seed */
+  unsigned char	key[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   if (!len) {
     *(uint32_t *) out = 0;
     return;
   }
   memcpy(key, &seed, sizeof(seed));
   *(uint64_t *) out = siphash(key, (const unsigned char *)input, (size_t) len);
+}
+void
+siphash13_test(const void *input, int len, uint32_t seed, void *out)
+{
+  unsigned char	key[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  if (!len) {
+    *(uint32_t *) out = 0;
+    return;
+  }
+  memcpy(key, &seed, sizeof(seed));
+  *(uint64_t *) out = siphash13(key, (const unsigned char *)input, (size_t) len);
+}
+void
+halfsiphash_test(const void *input, int len, uint32_t seed, void *out)
+{
+  unsigned char	key[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  if (!len) {
+    *(uint32_t *) out = 0;
+    return;
+  }
+  memcpy(key, &seed, sizeof(seed));
+  *(uint32_t *) out = halfsiphash(key, (const unsigned char *)input, (size_t) len);
 }
 
 /* https://github.com/gamozolabs/falkhash */
@@ -472,3 +510,5 @@ falkhash_test_cxx(const void *input, int len, uint32_t seed, void *out)
   *(uint64_t *) out = hash[0];
 }
 #endif
+
+
