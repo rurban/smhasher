@@ -88,6 +88,7 @@ IF(SSE4_2_FOUND)
   set(SSE4_SRC        crc32_hw.c)
 # 64bit only:
 IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
+  set(CMAKE_EXE_LINKER_FLAGS "-lpthread")
   #enable_language(ASM-NASM)
   #set(CMAKE_ASM_FLAGS "-f elf64")
   set(SSE4_SRC1       crc32_hw1.c)
