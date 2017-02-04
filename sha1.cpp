@@ -21,15 +21,51 @@ A million repetitions of "a"
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h> /* for u_int*_t */
+#include <sys/param.h> /* for endianness */
+
+#if !defined(__BYTE_ORDER__) || !defined(__ORDER_LITTLE_ENDIAN__) ||           \
+    !defined(__ORDER_BIG_ENDIAN__)
+#if defined(__BYTE_ORDER) && defined(__LITTLE_ENDIAN) && defined(__BIG_ENDIAN)
+#define __ORDER_LITTLE_ENDIAN__ __LITTLE_ENDIAN
+#define __ORDER_BIG_ENDIAN__ __BIG_ENDIAN
+#define __BYTE_ORDER__ __BYTE_ORDER
+#else
+#define __ORDER_LITTLE_ENDIAN__ 1234
+#define __ORDER_BIG_ENDIAN__ 4321
+#if defined(__LITTLE_ENDIAN__) || defined(_LITTLE_ENDIAN) ||                   \
+    defined(__ARMEL__) || defined(__THUMBEL__) || defined(__AARCH64EL__) ||    \
+    defined(__MIPSEL__) || defined(_MIPSEL) || defined(__MIPSEL) ||            \
+    defined(__i386) || defined(__x86_64__) || defined(_M_IX86) ||              \
+    defined(_M_X64) || defined(i386) || defined(_X86_) || defined(__i386__) || \
+    defined(_X86_64_) || defined(_M_ARM) || defined(__e2k__)
+#define __BYTE_ORDER__ __ORDER_LITTLE_ENDIAN__
+#elif defined(__BIG_ENDIAN__) || defined(_BIG_ENDIAN) || defined(__ARMEB__) || \
+    defined(__THUMBEB__) || defined(__AARCH64EB__) || defined(__MIPSEB__) ||   \
+    defined(_MIPSEB) || defined(__MIPSEB)
+#define __BYTE_ORDER__ __ORDER_BIG_ENDIAN__
+#else
+#error __BYTE_ORDER__ should be defined.
+#endif
+#endif
+#endif
+
+#if __BYTE_ORDER__ != __ORDER_LITTLE_ENDIAN__ &&                               \
+    __BYTE_ORDER__ != __ORDER_BIG_ENDIAN__
+#error Unsupported byte order.
+#endif
 
 #define rol(value, bits) (((value) << (bits)) | ((value) >> (32 - (bits))))
 
 /* blk0() and blk() perform the initial expand. */
 /* I got the idea of expanding during the round function from SSLeay */
+
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
 #define blk0(i)                                                                \
   (block->l[i] = (rol(block->l[i], 24) & 0xFF00FF00) |                         \
                  (rol(block->l[i], 8) & 0x00FF00FF))
-
+#else
+#define blk0(i) block->l[i]
+#endif
 #define blk(i)                                                                 \
   (block->l[i & 15] = rol(block->l[(i + 13) & 15] ^ block->l[(i + 8) & 15] ^   \
                               block->l[(i + 2) & 15] ^ block->l[i & 15],       \
