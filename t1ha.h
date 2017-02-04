@@ -33,6 +33,8 @@
  *     and all others which are not use specific hardware tricks.
  *  3. Not suitable for cryptography.
  *
+ * The Future will Positive. Всё будет хорошо.
+ *
  * ACKNOWLEDGEMENT:
  * The t1ha was originally developed by Leonid Yuriev (Леонид Юрьев)
  * for The 1Hippeus project - zerocopy messaging in the spirit of Sparta!
