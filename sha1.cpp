@@ -21,9 +21,15 @@ A million repetitions of "a"
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h> /* for u_int*_t */
+#include <sys/param.h> /* for endianness */
 
 #if !defined(__BYTE_ORDER__) || !defined(__ORDER_LITTLE_ENDIAN__) ||           \
     !defined(__ORDER_BIG_ENDIAN__)
+#if defined(__BYTE_ORDER) && defined(__LITTLE_ENDIAN) && defined(__BIG_ENDIAN)
+#define __ORDER_LITTLE_ENDIAN__ __LITTLE_ENDIAN
+#define __ORDER_BIG_ENDIAN__ __BIG_ENDIAN
+#define __BYTE_ORDER__ __BYTE_ORDER
+#else
 #define __ORDER_LITTLE_ENDIAN__ 1234
 #define __ORDER_BIG_ENDIAN__ 4321
 #if defined(__LITTLE_ENDIAN__) || defined(_LITTLE_ENDIAN) ||                   \
@@ -39,6 +45,7 @@ A million repetitions of "a"
 #define __BYTE_ORDER__ __ORDER_BIG_ENDIAN__
 #else
 #error __BYTE_ORDER__ should be defined.
+#endif
 #endif
 #endif
 
