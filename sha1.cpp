@@ -26,9 +26,14 @@ A million repetitions of "a"
 
 /* blk0() and blk() perform the initial expand. */
 /* I got the idea of expanding during the round function from SSLeay */
+/* BIG_ENDIAN defined by cmake TestBigEndian */
+#ifndef BIG_ENDIAN
 #define blk0(i)                                                                \
   (block->l[i] = (rol(block->l[i], 24) & 0xFF00FF00) |                         \
                  (rol(block->l[i], 8) & 0x00FF00FF))
+#else
+#define blk0(i)  block->l[i]
+#endif
 
 #define blk(i)                                                                 \
   (block->l[i & 15] = rol(block->l[(i + 13) & 15] ^ block->l[(i + 8) & 15] ^   \

@@ -11,6 +11,18 @@ if (NOT (CMAKE_C_COMPILER_ID STREQUAL CMAKE_CXX_COMPILER_ID))
                     "The final binary may be unusable.")
 endif()
 
+IF (CMAKE_MAJOR_VERSION GREATER 2)
+  cmake_policy(SET CMP0056 OLD)
+  cmake_policy(SET CMP0065 NEW) # ENABLE_EXPORTS
+  cmake_policy(SET CMP0066 OLD)
+
+  include (TestBigEndian)
+  TEST_BIG_ENDIAN(IS_BIG_ENDIAN)
+  if(IS_BIG_ENDIAN)
+    set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -DBIG_ENDIAN")
+  endif()
+endif()
+
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release" CACHE STRING
        "Choose the type of build, options are: Debug Release
@@ -49,7 +61,10 @@ ELSEIF(CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
    STRING(COMPARE EQUAL "AES" "${AES_THERE}" AES_TRUE)
 ENDIF(CMAKE_SYSTEM_NAME MATCHES "Linux")
 
-if (CMAKE_COMPILER_IS_GNUCC OR (CMAKE_C_COMPILER_ID STREQUAL Clang))
+if (CMAKE_COMPILER_IS_GNUCC
+    OR (CMAKE_C_COMPILER_ID STREQUAL AppleClang)
+    OR (CMAKE_C_COMPILER_ID STREQUAL Clang)
+    OR (CMAKE_C_COMPILER_ID STREQUAL Intel))
   set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
   set(CMAKE_CXX_FLAGS_RELEASE "-O3")
   set(CMAKE_C_FLAGS_RELEASE "-O3")
@@ -69,8 +84,13 @@ if (CMAKE_COMPILER_IS_GNUCC OR (CMAKE_C_COMPILER_ID STREQUAL Clang))
   #ENDIF (AES_TRUE)
   set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -march=native")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+  # using Visual Studio C++
+  set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} /arch:SSE2")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")
 else()
-# TODO: Windows, BSD and ARM8 crc detection
+  message(WARNING "Unknown ${CMAKE_C_COMPILER_ID} compiler")
+# TODO: BSD and ARM8 crc detection
 # TODO: 32bit filter
 endif()
 
