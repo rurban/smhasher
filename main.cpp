@@ -5,6 +5,7 @@
 #include "AvalancheTest.h"
 #include "DifferentialTest.h"
 #include "PMurHash.h"
+#include "beagle_hash.h"
 
 #include <stdio.h>
 #include <time.h>
@@ -82,6 +83,22 @@ HashInfo g_hashes[] =
   { MurmurHash3_x64_128, 128, 0x6384BA69, "Murmur3F",    "MurmurHash3 for x64, 128-bit" },
 
   { PMurHash32_test,      32, 0xB0F57EE3, "PMurHash32",  "Shane Day's portable-ized MurmurHash3 for x86, 32-bit." },
+  // BeagleHash
+  { beagle_hash_32_32_a_smhasher_test,   32, 0xBB43B5F1, "BeagleHash_32_32", "Yves Orton's hash for 64-bit reduced to 32 (32 bit seed)." },
+  { beagle_hash_32_64_a_smhasher_test,   32, 0x6C7929B0, "BeagleHash_32_64", "Yves Orton's hash for 64-bit reduced to 32 (64 bit seed)." },
+  { beagle_hash_32_96_a_smhasher_test,   32, 0x4B11307A, "BeagleHash_32_96", "Yves Orton's hash for 64-bit reduced to 32 (96 bit seed)." },
+  { beagle_hash_32_112_a_smhasher_test,  32, 0xBA933644, "BeagleHash_32_112", "Yves Orton's hash for 64-bit reduced to 32 (112 bit seed)." },
+  { beagle_hash_32_127_a_smhasher_test,  32, 0xDB284F99, "BeagleHash_32_127", "Yves Orton's hash for 64-bit reduced to 32 (127 bit seed)." },
+
+  { beagle_hash_64_32_a_smhasher_test,   64, 0xD4F7FCAF, "BeagleHash_64_32", "Yves Orton's hash for 64-bit. (32 bit seed)" },
+  { beagle_hash_64_64_a_smhasher_test,   64, 0xE52564BC, "BeagleHash_64_64", "Yves Orton's hash for 64-bit. (64 bit seed)" },
+  { beagle_hash_64_96_a_smhasher_test,   64, 0xF0B02DD9, "BeagleHash_64_96", "Yves Orton's hash for 64-bit (96 bit seed)." },
+  { beagle_hash_64_112_a_smhasher_test,  64, 0x406A0DD1, "BeagleHash_64_112", "Yves Orton's hash for 64-bit (112 bit seed)." },
+  { beagle_hash_64_127_a_smhasher_test,  64, 0x197649A9, "BeagleHash_64_127", "Yves Orton's hash for 64-bit (127 bit seed)." },
+
+  { zaphod_hash_a_smhasher_test,   32, 0x0277EDDF, "ZaphodHash", "Marvin32 like hash" },
+  { hailstone_hash_a_smhasher_test,   32, 0xBB494861, "HailstoneHash", "Marvin32 like hash using Collatz sequence" },
+
 };
 
 HashInfo * findHash ( const char * name )
