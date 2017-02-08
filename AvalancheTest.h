@@ -90,7 +90,7 @@ bool AvalancheTest ( pfHash hash, const int reps )
 
   double b = maxBias(bins,reps);
 
-  printf(" worst bias is %f%%",b * 100.0);
+  printf(" worst bias is %5.3f%%",b * 100.0);
 
   if(b > AVALANCHE_FAIL)
   {
