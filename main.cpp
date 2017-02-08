@@ -564,7 +564,7 @@ void testHash ( const char * name )
 
     if(pInfo->hashbits == 32)
     {
-      test<uint32_t>( VerifyHash, pInfo );
+      test<uint32_t>( pInfo->hash, pInfo );
     }
     else if(pInfo->hashbits == 64)
     {
