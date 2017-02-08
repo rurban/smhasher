@@ -527,18 +527,24 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
     printf("\n");
     pass &= result;
   }
+
   //-----------------------------------------------------------------------------
   // Keyset 'Effs'
+
   if(g_testEffs || g_testAll)
   {
     printf("[[[ Keyset 'Effs' Tests ]]] - %s\n\n",info->name);
+    
     bool result = true;
     bool drawDiagram = false;
+
     result &= EffsKeyTest<hashtype>( hash, drawDiagram );
+    
     if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
     pass &= result;
   }
+
   if (pass) {
       printf("####### %s - ALL TESTS PASSED. #######",info->name);
   } else {
