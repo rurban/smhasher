@@ -376,7 +376,7 @@ bool TextKeyTest ( hashfunc<hashtype> hash, const char * prefix, const char * co
 template < typename hashtype >
 bool ZeroKeyTest ( pfHash hash, bool drawDiagram )
 {
-  int keycount = 64*1024;
+  int keycount = 128*1024;
 
   printf("Keyset 'Zeroes' - %d keys\n",keycount);
 
