@@ -209,17 +209,18 @@ bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & coll
 
     if(sizeof(hashtype) == sizeof(uint32_t))
     {
-    // 2x expected collisions = fail
+        // 2x expected collisions = fail
 
-    // #TODO - collision failure cutoff needs to be expressed as a standard deviation instead
-    // of a scale factor, otherwise we fail erroneously if there are a small expected number
-    // of collisions
+        // #TODO - collision failure cutoff needs to be expressed as a standard deviation instead
+        // of a scale factor, otherwise we fail erroneously if there are a small expected number
+        // of collisions
 
-    if(double(collcount) / double(expected) > 2.0)
-    {
-      printf(" !!!!! ");
-      result = false;
-    }
+        if(double(collcount) / double(expected) > 2.0 &&
+           abs(double(collcount) - double(expected)) > 1)
+        {
+          printf(" !!!!! ");
+          result = false;
+        }
     }
     else
     {
