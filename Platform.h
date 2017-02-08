@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 // Platform-specific functions and macros
-
-#pragma once
+#ifndef _PLATFORM_H
+#define _PLATFORM_H
 
 void SetAffinity ( int cpu );
 
@@ -90,5 +90,5 @@ __inline__ unsigned long long int rdtsc()
 #define _stricmp strcasecmp
 
 #endif	//	!defined(_MSC_VER)
-
+#endif  //      !defined(_PLATFORM_H)
 //-----------------------------------------------------------------------------
