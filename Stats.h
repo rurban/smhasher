@@ -103,7 +103,7 @@ int PrintCollisions ( hashfunc<hashtype> hash, std::vector<keytype> & keys )
 // Measure the distribution "score" for each possible N-bit span up to 20 bits
 
 template< typename hashtype >
-double TestDistribution ( std::vector<hashtype> & hashes, bool drawDiagram )
+bool TestDistribution ( std::vector<hashtype> & hashes, bool drawDiagram )
 {
   printf("Testing distribution - ");
 
@@ -182,7 +182,7 @@ double TestDistribution ( std::vector<hashtype> & hashes, bool drawDiagram )
   if(pct >= 1.0) printf(" !!!!! ");
   printf("\n");
 
-  return worst;
+  return pct < 1.0;
 }
 
 //----------------------------------------------------------------------------
@@ -239,7 +239,7 @@ bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & coll
 
   if(testDist)
   {
-    TestDistribution(hashes,drawDiagram);
+    result &= TestDistribution(hashes,drawDiagram);
   }
 
   return result;

@@ -12,14 +12,15 @@
 //-----------------------------------------------------------------------------
 // Configuration. TODO - move these to command-line flags
 
-bool g_testAll = false;
+bool g_testAll = true;
+bool g_testReallyAll = false;
 
 bool g_testSanity      = false;
 bool g_testSpeed       = false;
 bool g_testDiff        = false;
-bool g_testDiffDist    = false;
+bool g_testDiffDist    = false; /* only ReallyAll */
 bool g_testAvalanche   = false;
-bool g_testBIC         = false;
+bool g_testBIC         = false; /* only ReallyAll */
 bool g_testCyclic      = false;
 bool g_testTwoBytes    = false;
 bool g_testSparse      = false;
@@ -27,6 +28,7 @@ bool g_testPermutation = false;
 bool g_testWindow      = false;
 bool g_testText        = false;
 bool g_testZeroes      = false;
+bool g_testEffs        = false;
 bool g_testSeed        = false;
 
 //-----------------------------------------------------------------------------
@@ -114,7 +116,7 @@ void SelfTest ( void )
     {
       HashInfo * info = & g_hashes[i];
 
-      printf("%16s - ",info->name);
+      printf("%24s - ",info->name);
       pass &= VerificationTest(info->hash,info->hashbits,info->verification,true);
     }
 
@@ -128,6 +130,7 @@ template < typename hashtype >
 void test ( hashfunc<hashtype> hash, HashInfo * info )
 {
   const int hashbits = sizeof(hashtype) * 8;
+  bool pass= true;
 
   printf("-------------------------------------------------------------------------------\n");
   printf("--- Testing %s (%s)\n\n",info->name,info->desc);
@@ -137,11 +140,13 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
   if(g_testSanity || g_testAll)
   {
-    printf("[[[ Sanity Tests ]]]\n\n");
+    printf("[[[ Sanity Tests ]]] - %s\n\n",info->name);
 
-    VerificationTest(hash,hashbits,info->verification,true);
-    SanityTest(hash,hashbits);
-    AppendedZeroesTest(hash,hashbits);
+    pass &= VerificationTest(hash,hashbits,info->verification,true);
+    pass &= SanityTest(hash,hashbits);
+    pass &= AppendedZeroesTest(hash,hashbits);
+
+    if(!pass) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
   }
 
@@ -150,7 +155,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
   if(g_testSpeed || g_testAll)
   {
-    printf("[[[ Speed Tests ]]]\n\n");
+    printf("[[[ Speed Tests ]]] - %s\n\n",info->name);
 
     BulkSpeedTest(info->hash,info->verification);
     printf("\n");
@@ -170,7 +175,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
   if(g_testDiff || g_testAll)
   {
-    printf("[[[ Differential Tests ]]]\n\n");
+    printf("[[[ Differential Tests ]]] - %s\n\n",info->name);
 
     bool result = true;
     bool dumpCollisions = false;
@@ -179,22 +184,25 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
     result &= DiffTest< Blob<128>, hashtype >(hash,4,1000,dumpCollisions);
     result &= DiffTest< Blob<256>, hashtype >(hash,3,1000,dumpCollisions);
 
-    if(!result) printf("*********FAIL*********\n");
+    if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
+    pass &= result;
   }
 
   //-----------------------------------------------------------------------------
   // Differential-distribution tests
 
-  if(g_testDiffDist /*|| g_testAll*/)
+  if(g_testDiffDist || g_testReallyAll)
   {
-    printf("[[[ Differential Distribution Tests ]]]\n\n");
+    printf("[[[ Differential Distribution Tests ]]] - %s\n\n",info->name);
 
     bool result = true;
 
     result &= DiffDistTest2<uint64_t,hashtype>(hash);
 
+    if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
+    pass &= result;
   }
 
   //-----------------------------------------------------------------------------
@@ -202,7 +210,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
   if(g_testAvalanche || g_testAll)
   {
-    printf("[[[ Avalanche Tests ]]]\n\n");
+    printf("[[[ Avalanche Tests ]]] - %s\n\n",info->name);
 
     bool result = true;
 
@@ -226,25 +234,27 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
     result &= AvalancheTest< Blob<144>, hashtype > (hash,300000);
     result &= AvalancheTest< Blob<152>, hashtype > (hash,300000);
 
-    if(!result) printf("*********FAIL*********\n");
+    if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
+    pass &= result;
   }
 
   //-----------------------------------------------------------------------------
   // Bit Independence Criteria. Interesting, but doesn't tell us much about
   // collision or distribution.
 
-  if(g_testBIC)
+  if(g_testBIC || g_testReallyAll)
   {
-    printf("[[[ Bit Independence Criteria ]]]\n\n");
+    printf("[[[ Bit Independence Criteria ]]] - %s\n\n",info->name);
 
     bool result = true;
 
     //result &= BicTest<uint64_t,hashtype>(hash,2000000);
-    BicTest3<Blob<88>,hashtype>(hash,2000000);
+    result &= BicTest3<Blob<88>,hashtype>(hash,2000000);
 
-    if(!result) printf("*********FAIL*********\n");
+    if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
+    pass &= result;
   }
 
   //-----------------------------------------------------------------------------
@@ -252,7 +262,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
   if(g_testCyclic || g_testAll)
   {
-    printf("[[[ Keyset 'Cyclic' Tests ]]]\n\n");
+    printf("[[[ Keyset 'Cyclic' Tests ]]] - %s\n\n",info->name);
 
     bool result = true;
     bool drawDiagram = false;
@@ -263,8 +273,9 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
     result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+3,8,10000000,drawDiagram);
     result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+4,8,10000000,drawDiagram);
 
-    if(!result) printf("*********FAIL*********\n");
+    if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
+    pass &= result;
   }
 
   //-----------------------------------------------------------------------------
@@ -274,7 +285,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
   if(g_testTwoBytes || g_testAll)
   {
-    printf("[[[ Keyset 'TwoBytes' Tests ]]]\n\n");
+    printf("[[[ Keyset 'TwoBytes' Tests ]]] - %s\n\n",info->name);
 
     bool result = true;
     bool drawDiagram = false;
@@ -284,8 +295,9 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
       result &= TwoBytesTest2<hashtype>(hash,i,drawDiagram);
     }
 
-    if(!result) printf("*********FAIL*********\n");
+    if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
+    pass &= result;
   }
 
   //-----------------------------------------------------------------------------
@@ -293,7 +305,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
   if(g_testSparse || g_testAll)
   {
-    printf("[[[ Keyset 'Sparse' Tests ]]]\n\n");
+    printf("[[[ Keyset 'Sparse' Tests ]]] - %s\n\n",info->name);
 
     bool result = true;
     bool drawDiagram = false;
@@ -307,8 +319,9 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
     result &= SparseKeyTest< 256,hashtype>(hash,3,true,true,true,drawDiagram);
     result &= SparseKeyTest<2048,hashtype>(hash,2,true,true,true,drawDiagram);
 
-    if(!result) printf("*********FAIL*********\n");
+    if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
+    pass &= result;
   }
 
   //-----------------------------------------------------------------------------
@@ -319,7 +332,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
     {
       // This one breaks lookup3, surprisingly
 
-      printf("[[[ Keyset 'Combination Lowbits' Tests ]]]\n\n");
+      printf("[[[ Keyset 'Combination Lowbits' Tests ]]] - %s\n\n",info->name);
 
       bool result = true;
       bool drawDiagram = false;
@@ -333,12 +346,13 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
       result &= CombinationKeyTest<hashtype>(hash,8,blocks,sizeof(blocks) / sizeof(uint32_t),true,true,drawDiagram);
 
-      if(!result) printf("*********FAIL*********\n");
+    if(!result) printf("********* %s - FAIL *********\n",info->name);
       printf("\n");
+      pass &= result;
     }
 
     {
-      printf("[[[ Keyset 'Combination Highbits' Tests ]]]\n\n");
+      printf("[[[ Keyset 'Combination Highbits' Tests ]]] - %s\n\n",info->name);
 
       bool result = true;
       bool drawDiagram = false;
@@ -352,12 +366,13 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
       result &= CombinationKeyTest<hashtype>(hash,8,blocks,sizeof(blocks) / sizeof(uint32_t),true,true,drawDiagram);
 
-      if(!result) printf("*********FAIL*********\n");
+      if(!result) printf("********* %s - FAIL *********\n",info->name);
       printf("\n");
+      pass &= result;
     }
 
     {
-      printf("[[[ Keyset 'Combination 0x8000000' Tests ]]]\n\n");
+      printf("[[[ Keyset 'Combination 0x8000000' Tests ]]] - %s\n\n",info->name);
 
       bool result = true;
       bool drawDiagram = false;
@@ -371,12 +386,13 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
       result &= CombinationKeyTest<hashtype>(hash,20,blocks,sizeof(blocks) / sizeof(uint32_t),true,true,drawDiagram);
 
-      if(!result) printf("*********FAIL*********\n");
+      if(!result) printf("********* %s - FAIL *********\n",info->name);
       printf("\n");
+      pass &= result;
     }
 
     {
-      printf("[[[ Keyset 'Combination 0x0000001' Tests ]]]\n\n");
+      printf("[[[ Keyset 'Combination 0x0000001' Tests ]]] - %s\n\n",info->name);
 
       bool result = true;
       bool drawDiagram = false;
@@ -390,12 +406,13 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
       result &= CombinationKeyTest<hashtype>(hash,20,blocks,sizeof(blocks) / sizeof(uint32_t),true,true,drawDiagram);
 
-      if(!result) printf("*********FAIL*********\n");
+      if(!result) printf("********* %s - FAIL *********\n",info->name);
       printf("\n");
+      pass &= result;
     }
 
     {
-      printf("[[[ Keyset 'Combination Hi-Lo' Tests ]]]\n\n");
+      printf("[[[ Keyset 'Combination Hi-Lo' Tests ]]] - %s\n\n",info->name);
 
       bool result = true;
       bool drawDiagram = false;
@@ -411,8 +428,9 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
       result &= CombinationKeyTest<hashtype>(hash,6,blocks,sizeof(blocks) / sizeof(uint32_t),true,true,drawDiagram);
 
-      if(!result) printf("*********FAIL*********\n");
+      if(!result) printf("********* %s - FAIL *********\n",info->name);
       printf("\n");
+      pass &= result;
     }
   }
 
@@ -424,7 +442,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
   if(g_testWindow || g_testAll)
   {
-    printf("[[[ Keyset 'Window' Tests ]]]\n\n");
+    printf("[[[ Keyset 'Window' Tests ]]] - %s\n\n",info->name);
 
     bool result = true;
     bool testCollision = true;
@@ -433,8 +451,9 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
     result &= WindowedKeyTest< Blob<hashbits*2>, hashtype > ( hash, 20, testCollision, testDistribution, drawDiagram );
 
-    if(!result) printf("*********FAIL*********\n");
+    if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
+    pass &= result;
   }
 
   //-----------------------------------------------------------------------------
@@ -442,7 +461,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
   if(g_testText || g_testAll)
   {
-    printf("[[[ Keyset 'Text' Tests ]]]\n\n");
+    printf("[[[ Keyset 'Text' Tests ]]] - %s\n\n",info->name);
 
     bool result = true;
     bool drawDiagram = false;
@@ -453,8 +472,9 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
     result &= TextKeyTest( hash, "FooBar", alnum,4, "",       drawDiagram );
     result &= TextKeyTest( hash, "",       alnum,4, "FooBar", drawDiagram );
 
-    if(!result) printf("*********FAIL*********\n");
+    if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
+    pass &= result;
   }
 
   //-----------------------------------------------------------------------------
@@ -462,15 +482,16 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
   if(g_testZeroes || g_testAll)
   {
-    printf("[[[ Keyset 'Zeroes' Tests ]]]\n\n");
+    printf("[[[ Keyset 'Zeroes' Tests ]]] - %s\n\n",info->name);
 
     bool result = true;
     bool drawDiagram = false;
 
     result &= ZeroKeyTest<hashtype>( hash, drawDiagram );
 
-    if(!result) printf("*********FAIL*********\n");
+    if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
+    pass &= result;
   }
 
   //-----------------------------------------------------------------------------
@@ -478,15 +499,33 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
   if(g_testSeed || g_testAll)
   {
-    printf("[[[ Keyset 'Seed' Tests ]]]\n\n");
+    printf("[[[ Keyset 'Seed' Tests ]]] - %s\n\n",info->name);
 
     bool result = true;
     bool drawDiagram = false;
 
     result &= SeedTest<hashtype>( hash, 1000000, drawDiagram );
 
-    if(!result) printf("*********FAIL*********\n");
+    if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
+    pass &= result;
+  }
+  //-----------------------------------------------------------------------------
+  // Keyset 'Effs'
+  if(g_testEffs || g_testAll)
+  {
+    printf("[[[ Keyset 'Effs' Tests ]]] - %s\n\n",info->name);
+    bool result = true;
+    bool drawDiagram = false;
+    result &= EffsKeyTest<hashtype>( hash, drawDiagram );
+    if(!result) printf("********* %s - FAIL *********\n",info->name);
+    printf("\n");
+    pass &= result;
+  }
+  if (pass) {
+      printf("####### %s - ALL TESTS PASSED. #######",info->name);
+  } else {
+      printf("******* %s - TESTS FAILED *******",info->name);
   }
 }
 
@@ -568,7 +607,7 @@ int main ( int argc, char ** argv )
 
   int timeBegin = clock();
 
-  g_testAll = true;
+  //g_testAll = false;
 
   //g_testSanity = true;
   //g_testSpeed = true;
@@ -582,6 +621,8 @@ int main ( int argc, char ** argv )
   //g_testPermutation = true;
   //g_testWindow = true;
   //g_testZeroes = true;
+  //g_testEffs = true;
+  //g_testSeed = true;
 
   testHash(hashToTest);
 

@@ -19,7 +19,7 @@
 
 bool VerificationTest   ( pfHash hash, const int hashbits, uint32_t expected, bool verbose );
 bool SanityTest         ( pfHash hash, const int hashbits );
-void AppendedZeroesTest ( pfHash hash, const int hashbits );
+bool AppendedZeroesTest ( pfHash hash, const int hashbits );
 
 //-----------------------------------------------------------------------------
 // Keyset 'Combination' - all possible combinations of input blocks
