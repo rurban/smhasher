@@ -589,7 +589,7 @@ void testHash ( const char * name )
 int main ( int argc, char ** argv )
 {
   const char * hashToTest = "murmur3a";
-
+  setvbuf(stdout, NULL, _IONBF, 0);
   if(argc < 2)
   {
     printf("(No test hash given on command line, testing Murmur3_x86_32.)\n");
