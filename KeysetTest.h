@@ -406,6 +406,43 @@ bool ZeroKeyTest ( pfHash hash, bool drawDiagram )
 }
 
 //-----------------------------------------------------------------------------
+// Keyset 'Effs' - keys consisting of all 0xFF, differing only in length
+
+// We reuse one block of empty bytes, otherwise the RAM cost is enormous.
+
+template < typename hashtype >
+bool EffsKeyTest ( pfHash hash, bool drawDiagram )
+{
+  int keycount = 128*1024;
+
+  printf("Keyset 'Effs' - %d keys\n",keycount);
+
+  unsigned char * nullblock = new unsigned char[keycount];
+  memset(nullblock,0xFF,keycount);
+
+  //----------
+
+  std::vector<hashtype> hashes;
+
+  hashes.resize(keycount);
+
+  for(int i = 0; i < keycount; i++)
+  {
+    hash(nullblock,i,0,&hashes[i]);
+  }
+
+  bool result = true;
+
+  result &= TestHashList(hashes,true,true,drawDiagram);
+
+  printf("\n");
+
+  delete [] nullblock;
+
+  return result;
+}
+
+//-----------------------------------------------------------------------------
 // Keyset 'Seed' - hash "the quick brown fox..." using different seeds
 
 template < typename hashtype >
