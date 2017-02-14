@@ -212,7 +212,8 @@ bool WindowedKeyTest ( hashfunc<hashtype> hash, const int windowbits, bool testC
 
   int testcount = keybits;
 
-  printf("Keyset 'Windowed' - %3d-bit key, %3d-bit window - %d tests, %d keys per test\n",keybits,windowbits,testcount,keycount);
+  printf("Keyset 'Windowed' - %3d-bit key, %3d-bit window - %d tests, %d keys per test\n",
+          keybits,windowbits,testcount,keycount);
 
   for(int j = 0; j <= testcount; j++)
   {
@@ -376,7 +377,7 @@ bool TextKeyTest ( hashfunc<hashtype> hash, const char * prefix, const char * co
 template < typename hashtype >
 bool ZeroKeyTest ( pfHash hash, bool drawDiagram )
 {
-  int keycount = 128*1024;
+  int keycount = 256 * 1024;
 
   printf("Keyset 'Zeroes' - %d keys\n",keycount);
 
@@ -413,7 +414,7 @@ bool ZeroKeyTest ( pfHash hash, bool drawDiagram )
 template < typename hashtype >
 bool EffsKeyTest ( pfHash hash, bool drawDiagram )
 {
-  int keycount = 128*1024;
+  int keycount = 256 * 1024;
 
   printf("Keyset 'Effs' - %d keys\n",keycount);
 
