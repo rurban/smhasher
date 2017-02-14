@@ -39,6 +39,9 @@ bool g_testSeed        = false;
 struct HashInfo
 {
   pfHash hash;
+  pfSeedPrep prep;
+  int base_seedbits;
+  int prep_seedbits;
   int hashbits;
   uint32_t verification;
   const char * name;
@@ -47,58 +50,100 @@ struct HashInfo
 
 HashInfo g_hashes[] =
 {
-  { DoNothingHash,        32, 0x00000000, "donothing32", "Do-Nothing function (only valid for measuring call overhead)" },
-  { DoNothingHash,        64, 0x00000000, "donothing64", "Do-Nothing function (only valid for measuring call overhead)" },
-  { DoNothingHash,       128, 0x00000000, "donothing128", "Do-Nothing function (only valid for measuring call overhead)" },
+  { DoNothingHash, NULL,  32,  32,  32, 0x00000000, "donothing32",
+      "Do-Nothing function (only valid for measuring call overhead)" },
+  { DoNothingHash, NULL,  32,  32,  64, 0x00000000, "donothing64",
+      "Do-Nothing function (only valid for measuring call overhead)" },
+  { DoNothingHash, NULL,  32,  32, 128, 0x00000000, "donothing128",
+      "Do-Nothing function (only valid for measuring call overhead)" },
 
-  { crc32,                32, 0x3719DB20, "crc32",       "CRC-32" },
+  { crc32,         NULL,  32,  32,  32, 0x3719DB20, "crc32",
+      "CRC-32" },
 
-  { md5_32,               32, 0xC10C356B, "md5_32a",     "MD5, first 32 bits of result" },
-  { sha1_32a,             32, 0xF9376EA7, "sha1_32a",    "SHA1, first 32 bits of result" },
+  { md5_32,        NULL,  32,  32,  32, 0xC10C356B, "md5_32a",
+      "MD5, first 32 bits" },
+  { sha1_32a,      NULL,  32,  32,  32, 0xF9376EA7, "sha1_32a",
+      "SHA1, first 32 bits" },
 
-  { FNV,                  32, 0xE3CBBE91, "FNV",         "Fowler-Noll-Vo hash, 32-bit" },
-  { Bernstein,            32, 0xBDB4B640, "bernstein",   "Bernstein, 32-bit" },
-  { lookup3_test,         32, 0x3D83917A, "lookup3",     "Bob Jenkins' lookup3" },
-  { SuperFastHash,        32, 0x980ACD1D, "superfast",   "Paul Hsieh's SuperFastHash" },
-  { MurmurOAAT_test,      32, 0x5363BD98, "MurmurOAAT",  "Murmur one-at-a-time" },
-  { Crap8_test,           32, 0x743E97A1, "Crap8",       "Crap8" },
+  { FNV,           NULL, 32, 32, 32, 0xE3CBBE91, "FNV",
+      "Fowler-Noll-Vo hash, 32-bit" },
+  { Bernstein,     NULL, 32, 32, 32, 0xBDB4B640, "bernstein",
+      "Bernstein, 32-bit" },
+  { lookup3_test,  NULL, 32, 32, 32, 0x3D83917A, "lookup3",
+      "Bob Jenkins' lookup3" },
+  { SuperFastHash, NULL, 32, 32, 32, 0x980ACD1D, "superfast",
+      "Paul Hsieh's SuperFastHash" },
+  { MurmurOAAT_test, NULL, 32, 32, 32, 0x5363BD98, "MurmurOAAT",
+      "Murmur one-at-a-time" },
+  { Crap8_test,      NULL, 32, 32, 32, 0x743E97A1, "Crap8",
+      "Crap8" },
 
-  { CityHash64_test,      64, 0x25A20825, "City64",      "Google CityHash64WithSeed" },
-  { CityHash128_test,    128, 0x6531F54E, "City128",     "Google CityHash128WithSeed" },
+  { CityHash64_test,  NULL, 32, 32, 64, 0x25A20825, "City64",
+      "Google CityHash64WithSeed" },
+  { CityHash128_test, NULL, 32, 32,128, 0x6531F54E, "City128",
+      "Google CityHash128WithSeed" },
 
-  { SpookyHash32_test,    32, 0x3F798BBB, "Spooky32",    "Bob Jenkins' SpookyHash, 32-bit result" },
-  { SpookyHash64_test,    64, 0xA7F955F1, "Spooky64",    "Bob Jenkins' SpookyHash, 64-bit result" },
-  { SpookyHash128_test,  128, 0x8D263080, "Spooky128",   "Bob Jenkins' SpookyHash, 128-bit result" },
+  { SpookyHash32_test, NULL, 32, 32,32, 0x3F798BBB, "Spooky32",
+      "Bob Jenkins' SpookyHash, 32-bit result" },
+  { SpookyHash64_test, NULL, 32, 32,64, 0xA7F955F1, "Spooky64",
+      "Bob Jenkins' SpookyHash, 64-bit result" },
+  { SpookyHash128_test, NULL, 32, 32,8, 0x8D263080, "Spooky128",
+      "Bob Jenkins' SpookyHash, 128-bit result" },
 
   // MurmurHash2
 
-  { MurmurHash2_test,     32, 0x27864C1E, "Murmur2",     "MurmurHash2 for x86, 32-bit" },
-  { MurmurHash2A_test,    32, 0x7FBD4396, "Murmur2A",    "MurmurHash2A for x86, 32-bit" },
-  { MurmurHash64A_test,   64, 0x1F0D3804, "Murmur2B",    "MurmurHash2 for x64, 64-bit" },
-  { MurmurHash64B_test,   64, 0xDD537C05, "Murmur2C",    "MurmurHash2 for x86, 64-bit" },
+  { MurmurHash2_test, NULL, 32, 32, 32, 0x27864C1E, "Murmur2",
+    "MurmurHash2 for x86, 32-bit" },
+  { MurmurHash2A_test, NULL, 32, 32, 32, 0x7FBD4396, "Murmur2A",
+      "MurmurHash2A for x86, 32-bit" },
+  { MurmurHash64A_test, NULL, 32, 32, 64, 0x1F0D3804, "Murmur2B",
+      "MurmurHash2 for x64, 64-bit" },
+  { MurmurHash64B_test, NULL, 32, 32, 64, 0xDD537C05, "Murmur2C",
+      "MurmurHash2 for x86, 64-bit" },
 
   // MurmurHash3
 
-  { MurmurHash3_x86_32,   32, 0xB0F57EE3, "Murmur3A",    "MurmurHash3 for x86, 32-bit" },
-  { MurmurHash3_x86_128, 128, 0xB3ECE62A, "Murmur3C",    "MurmurHash3 for x86, 128-bit" },
-  { MurmurHash3_x64_128, 128, 0x6384BA69, "Murmur3F",    "MurmurHash3 for x64, 128-bit" },
+  { MurmurHash3_x86_32,  NULL, 32, 32,  32, 0xB0F57EE3, "Murmur3A",
+      "MurmurHash3 for x86, 32-bit" },
+  { MurmurHash3_x86_128, NULL, 32, 32, 128, 0xB3ECE62A, "Murmur3C",
+      "MurmurHash3 for x86, 128-bit" },
+  { MurmurHash3_x64_128, NULL, 32, 32, 128, 0x6384BA69, "Murmur3F",
+      "MurmurHash3 for x64, 128-bit" },
 
-  { PMurHash32_test,      32, 0xB0F57EE3, "PMurHash32",  "Shane Day's portable-ized MurmurHash3 for x86, 32-bit." },
-  // BeagleHash
-  { beagle_hash_32_32_a_smhasher_test,   32, 0xBB43B5F1, "BeagleHash_32_32", "Yves Orton's hash for 64-bit reduced to 32 (32 bit seed)." },
-  { beagle_hash_32_64_a_smhasher_test,   32, 0x6C7929B0, "BeagleHash_32_64", "Yves Orton's hash for 64-bit reduced to 32 (64 bit seed)." },
-  { beagle_hash_32_96_a_smhasher_test,   32, 0x4B11307A, "BeagleHash_32_96", "Yves Orton's hash for 64-bit reduced to 32 (96 bit seed)." },
-  { beagle_hash_32_112_a_smhasher_test,  32, 0xBA933644, "BeagleHash_32_112", "Yves Orton's hash for 64-bit reduced to 32 (112 bit seed)." },
-  { beagle_hash_32_127_a_smhasher_test,  32, 0xDB284F99, "BeagleHash_32_127", "Yves Orton's hash for 64-bit reduced to 32 (127 bit seed)." },
+  { PMurHash32_test,     NULL, 32, 32,  32, 0xB0F57EE3, "PMurHash32",
+      "Shane Day's portable-ized MurmurHash3 for x86, 32-bit." },
+  // BeagleHash_32_xx
+  { beagle_hash_32_32_a_smhasher_test, NULL, 32, 32,  32, 0x47CECE27, "BeagleHash_32_32",
+      "Yves Orton's hash for 64-bit reduced to 32 (32 bit seed)." },
+  { beagle_hash_32_64_a_smhasher_test, NULL, 32, 32,  32, 0xC7CD22FA, "BeagleHash_32_64",
+      "Yves Orton's hash for 64-bit reduced to 32 (64 bit seed)." },
+  { beagle_hash_32_96_a_smhasher_test, NULL, 32, 32,  32, 0xCE38DE69, "BeagleHash_32_96",
+      "Yves Orton's hash for 64-bit reduced to 32 (96 bit seed)." },
+  { beagle_hash_32_112_a_smhasher_test,NULL, 32, 32,  32, 0x5CCE6AC4, "BeagleHash_32_112",
+      "Yves Orton's hash for 64-bit reduced to 32 (112 bit seed)." },
+  { beagle_hash_32_127_a_smhasher_test,NULL, 32, 32,  32, 0xC9134969, "BeagleHash_32_127",
+      "Yves Orton's hash for 64-bit reduced to 32 (127 bit seed)." },
 
-  { beagle_hash_64_32_a_smhasher_test,   64, 0xD4F7FCAF, "BeagleHash_64_32", "Yves Orton's hash for 64-bit. (32 bit seed)" },
-  { beagle_hash_64_64_a_smhasher_test,   64, 0xE52564BC, "BeagleHash_64_64", "Yves Orton's hash for 64-bit. (64 bit seed)" },
-  { beagle_hash_64_96_a_smhasher_test,   64, 0xF0B02DD9, "BeagleHash_64_96", "Yves Orton's hash for 64-bit (96 bit seed)." },
-  { beagle_hash_64_112_a_smhasher_test,  64, 0x406A0DD1, "BeagleHash_64_112", "Yves Orton's hash for 64-bit (112 bit seed)." },
-  { beagle_hash_64_127_a_smhasher_test,  64, 0x197649A9, "BeagleHash_64_127", "Yves Orton's hash for 64-bit (127 bit seed)." },
+  // BeagleHash_64_xx
+  { beagle_hash_64_32_a_smhasher_test, NULL, 32, 32,   64, 0xDE789E78, "BeagleHash_64_32",
+      "Yves Orton's hash for 64-bit. (32 bit seed)" },
+  { beagle_hash_64_64_a_smhasher_test, NULL, 32, 32,   64, 0x3CDD6E7C, "BeagleHash_64_64",
+      "Yves Orton's hash for 64-bit. (64 bit seed)" },
+  { beagle_hash_64_96_a_smhasher_test, NULL, 32, 32,   64, 0x40EBE522, "BeagleHash_64_96",
+      "Yves Orton's hash for 64-bit (96 bit seed)." },
+  { beagle_hash_64_112_a_smhasher_test, NULL, 32, 32,  64, 0xF91596C5, "BeagleHash_64_112",
+      "Yves Orton's hash for 64-bit (112 bit seed)." },
+  { beagle_hash_64_127_a_smhasher_test, NULL, 32, 32,  64, 0x575C6DA6, "BeagleHash_64_127",
+      "Yves Orton's hash for 64-bit (127 bit seed)." },
 
-  { zaphod_hash_a_smhasher_test,   32, 0x0277EDDF, "ZaphodHash", "Marvin32 like hash" },
-  { hailstone_hash_a_smhasher_test,   32, 0xBB494861, "HailstoneHash", "Marvin32 like hash using Collatz sequence" },
+  { zaphod_hash_smhasher_test,NULL, 32, 32,           32, 0x00000000, "Zaphod32",
+      "Marvin32 like hash" },
+  { phat_hash_smhasher_test,NULL, 32, 32,             32, 0x00000000, "Phat",
+      "Phat Hash" },
+  { phat4_hash_smhasher_test,NULL, 32, 32,            32, 0x00000000, "Phat4",
+      "Phat4 Hash" },
+  { marvin_32_smhasher_test, NULL, 32, 32,            32, 0xE6711235, "Marvin32",
+      "Marvin32 from MicroSoft" },
 
 };
 
