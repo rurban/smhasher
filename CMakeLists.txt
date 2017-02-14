@@ -31,6 +31,7 @@ add_library(
   Types.cpp
   PMurHash.c
   beagle_hash.c
+  Marvin32.c
 )
 
 add_executable(

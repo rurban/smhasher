@@ -6,6 +6,7 @@
 #include "DifferentialTest.h"
 #include "PMurHash.h"
 #include "beagle_hash.h"
+#include "Marvin32.h"
 
 #include <stdio.h>
 #include <time.h>
