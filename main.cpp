@@ -178,7 +178,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
     BulkSpeedTest(info->hash,info->verification);
     printf("\n");
 
-    for(int i = 1; i < 32; i++)
+    for(int i = 0; i < 63; i++)
     {
       double cycles;
 
@@ -231,26 +231,27 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
     printf("[[[ Avalanche Tests ]]] - %s\n\n",info->name);
 
     bool result = true;
+    const int reps = 1000000;
 
-    result &= AvalancheTest< Blob< 32>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob< 40>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob< 48>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob< 56>, hashtype > (hash,300000);
+    result &= AvalancheTest< Blob< 32>, hashtype > (hash,reps);
+    result &= AvalancheTest< Blob< 40>, hashtype > (hash,reps);
+    result &= AvalancheTest< Blob< 48>, hashtype > (hash,reps);
+    result &= AvalancheTest< Blob< 56>, hashtype > (hash,reps);
 
-    result &= AvalancheTest< Blob< 64>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob< 72>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob< 80>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob< 88>, hashtype > (hash,300000);
+    result &= AvalancheTest< Blob< 64>, hashtype > (hash,reps);
+    result &= AvalancheTest< Blob< 72>, hashtype > (hash,reps);
+    result &= AvalancheTest< Blob< 80>, hashtype > (hash,reps);
+    result &= AvalancheTest< Blob< 88>, hashtype > (hash,reps);
 
-    result &= AvalancheTest< Blob< 96>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob<104>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob<112>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob<120>, hashtype > (hash,300000);
+    result &= AvalancheTest< Blob< 96>, hashtype > (hash,reps);
+    result &= AvalancheTest< Blob<104>, hashtype > (hash,reps);
+    result &= AvalancheTest< Blob<112>, hashtype > (hash,reps);
+    result &= AvalancheTest< Blob<120>, hashtype > (hash,reps);
 
-    result &= AvalancheTest< Blob<128>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob<136>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob<144>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob<152>, hashtype > (hash,300000);
+    result &= AvalancheTest< Blob<128>, hashtype > (hash,reps);
+    result &= AvalancheTest< Blob<136>, hashtype > (hash,reps);
+    result &= AvalancheTest< Blob<144>, hashtype > (hash,reps);
+    result &= AvalancheTest< Blob<152>, hashtype > (hash,reps);
 
     if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
