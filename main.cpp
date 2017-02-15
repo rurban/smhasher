@@ -33,6 +33,29 @@ bool g_testZeroes      = false;
 bool g_testEffs        = false;
 bool g_testSeed        = false;
 
+struct TestOpts {
+  bool         &var;
+  const char*  name;
+};
+TestOpts g_testopts[] =
+{
+  { g_testAll, 		"All" },
+  { g_testSanity, 	"Sanity" },
+  { g_testSpeed, 	"Speed" },
+  { g_testDiff, 	"Diff" },
+  { g_testDiffDist, 	"DiffDist" },
+  { g_testAvalanche, 	"Avalanche" },
+  { g_testBIC, 		"BIC" },
+  { g_testCyclic,	"Cyclic" },
+  { g_testTwoBytes,	"TwoBytes" },
+  { g_testSparse,	"Sparse" },
+  { g_testPermutation,	"Permutation" },
+  { g_testWindow,	"Window" },
+  { g_testText,		"Text" },
+  { g_testZeroes,	"Zeroes" },
+  { g_testSeed,		"Seed" }
+};
+
 //-----------------------------------------------------------------------------
 // This is the list of all hashes that SMHasher can test.
 
@@ -656,17 +679,78 @@ void testHash ( const char * name )
 }
 //-----------------------------------------------------------------------------
 
+#ifdef _MSC_VER
+static char* strndup(char const *s, size_t n)
+{
+  size_t len = strnlen(s, n);
+  char *p = (char*) malloc(len + 1);
+
+  if (p == NULL)
+    return NULL;
+
+  p[len] = '\0';
+  return (char*) memcpy(p, s, len);
+}
+#endif
+
 int main ( int argc, char ** argv )
 {
-  const char * hashToTest = "murmur3a";
-  setvbuf(stdout, NULL, _IONBF, 0);
-  if(argc < 2)
-  {
-    printf("(No test hash given on command line, testing Murmur3_x86_32.)\n");
+#if (defined(__x86_64__) && __SSE4_2__) || defined(_M_X64) || defined(_X86_64_)
+  const char * defaulthash = "metrohash64crc_1"; /* "murmur3a"; */
+#else
+  const char * defaulthash = "t1ha_32le";
+#endif
+  const char * hashToTest = defaulthash;
+
+  if(argc < 2) {
+    printf("No test hash given on command line, testing %s.\n", hashToTest);
+    printf("Usage: SMHasher --list or --test=Speed,... hash\n");
   }
-  else
-  {
+  else {
     hashToTest = argv[1];
+
+    if (strncmp(hashToTest,"--", 2) == 0) {
+      if (strcmp(hashToTest,"--list") == 0) {
+        for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++) {
+          printf("%-16s\t(%s)\n", g_hashes[i].name, g_hashes[i].desc);
+        }
+        exit(0);
+      }
+      /* default: --test=All. comma seperated list of options */
+      if (strncmp(hashToTest,"--test=", 6) == 0) {
+        char *opt = (char *)&hashToTest[7];
+        char *rest = opt;
+        char *p;
+        bool found = false;
+        g_testAll = false;
+        do {
+          if ((p = strchr(rest, ','))) {
+            opt = strndup(rest, p-rest);
+            rest = p+1;
+          } else {
+            opt = rest;
+          }
+          for(size_t i = 0; i < sizeof(g_testopts) / sizeof(TestOpts); i++) {
+            if (strcmp(opt, g_testopts[i].name) == 0) {
+              g_testopts[i].var = true; found = true; break;
+            }
+          }
+          if (!found) {
+            printf("Invalid option: --test=%s\n", opt);
+            printf("Valid tests: --test=%s", g_testopts[0].name);
+            for(size_t i = 1; i < sizeof(g_testopts) / sizeof(TestOpts); i++) {
+              printf(",%s", g_testopts[i].name);
+            }
+            printf("\n");
+            exit(0);
+          }
+        } while (p);
+      }
+      if (argc > 2)
+        hashToTest = argv[2];
+      else
+        hashToTest = defaulthash;
+    }
   }
 
   // Code runs on the 3rd CPU by default
