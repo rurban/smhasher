@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 // Platform-specific functions and macros
-#ifndef _PLATFORM_H
-#define _PLATFORM_H
+
+#pragma once
 
 void SetAffinity ( int cpu );
 
@@ -16,7 +16,7 @@ void SetAffinity ( int cpu );
 #include <stdlib.h>
 #include <math.h>   // Has to be included before intrin.h or VC complains about 'ceil'
 #include <intrin.h> // for __rdtsc
-#include "pstdint.h"
+#include <stdint.h>
 
 #define ROTL32(x,y)	_rotl(x,y)
 #define ROTL64(x,y)	_rotl64(x,y)
@@ -38,6 +38,7 @@ void SetAffinity ( int cpu );
 
 #else	//	defined(_MSC_VER)
 
+#include <stdlib.h>
 #include <stdint.h>
 
 #define	FORCE_INLINE inline __attribute__((always_inline))
@@ -90,5 +91,5 @@ __inline__ unsigned long long int rdtsc()
 #define _stricmp strcasecmp
 
 #endif	//	!defined(_MSC_VER)
-#endif  //      !defined(_PLATFORM_H)
+
 //-----------------------------------------------------------------------------
