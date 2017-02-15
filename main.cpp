@@ -423,6 +423,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
   if(g_testSpeed || g_testAll)
   {
+    double sum = 0.0;
     printf("[[[ Speed Tests ]]] - %s\n\n",info->name);
 
     BulkSpeedTest(info->hash,info->verification);
@@ -430,11 +431,12 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
     for(int i = 0; i <= 64; i++)
     {
-      double cycles;
 
-      TinySpeedTest(hashfunc<hashtype>(info->hash),sizeof(hashtype),i,info->verification,true,cycles);
+      sum += TinySpeedTest(hashfunc<hashtype>(info->hash),
+              sizeof(hashtype), i, info->verification, true);
     }
-
+    sum = sum / 65.0;
+    printf("Average                                    %6.3f cycles/hash\n",sum);
     printf("\n");
   }
 
