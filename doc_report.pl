@@ -65,14 +65,15 @@ foreach my $data (values %funcs) {
 }
 push @sort, 1;
 @sort= map { split/\s*,\s*/, $_ } @sort;
+my @sort_dir= map { s/^\+// ? 1 : 0 } @sort;
 
 no warnings 'numeric';
 foreach my $row (sort {
     my $res= 0;
-    map $res ||= /\+/
-                 ? ($b->[$_] <=> $a->[$_] || $b->[$_] cmp $a->[$_])
-                 : ($a->[$_] <=> $b->[$_] || $a->[$_] cmp $b->[$_])
-             , @sort;
+    map $res ||= $sort_dir[$_]
+                 ? ($b->[$sort[$_]] <=> $a->[$sort[$_]] || $b->[$sort[$_]] cmp $a->[$sort[$_]])
+                 : ($a->[$sort[$_]] <=> $b->[$sort[$_]] || $a->[$sort[$_]] cmp $b->[$sort[$_]])
+             , 0 .. $#sort;
     $res
 } @rows)
 {
