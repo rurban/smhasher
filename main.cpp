@@ -83,11 +83,11 @@ HashInfo g_hashes[] =
   { CityHash128_test, NULL, 32, 32,128, 0x6531F54E, "City128",
       "Google CityHash128WithSeed" },
 
-  { SpookyHash32_test, NULL, 32, 32,32, 0x3F798BBB, "Spooky32",
+  { SpookyHash32_test, NULL, 32, 32,   32, 0x3F798BBB, "Spooky32",
       "Bob Jenkins' SpookyHash, 32-bit result" },
-  { SpookyHash64_test, NULL, 32, 32,64, 0xA7F955F1, "Spooky64",
+  { SpookyHash64_test, NULL, 32, 32,   64, 0xA7F955F1, "Spooky64",
       "Bob Jenkins' SpookyHash, 64-bit result" },
-  { SpookyHash128_test, NULL, 32, 32,8, 0x8D263080, "Spooky128",
+  { SpookyHash128_test, NULL, 32, 32, 128, 0x8D263080, "Spooky128",
       "Bob Jenkins' SpookyHash, 128-bit result" },
 
   // MurmurHash2
@@ -136,13 +136,13 @@ HashInfo g_hashes[] =
   { beagle_hash_64_127_a_smhasher_test, NULL, 32, 32,  64, 0x575C6DA6, "BeagleHash_64_127",
       "Yves Orton's hash for 64-bit (127 bit seed)." },
 
-  { zaphod_hash_smhasher_test,NULL, 32, 32,           32, 0x00000000, "Zaphod32",
+  { zaphod_hash_smhasher_test,          NULL, 32, 32, 32, 0x0549DFCF, "Zaphod32",
       "Marvin32 like hash" },
-  { phat_hash_smhasher_test,NULL, 32, 32,             32, 0x00000000, "Phat",
+  { phat_hash_smhasher_test,            NULL, 32, 32, 32, 0xF7C8FFE3, "Phat",
       "Phat Hash" },
-  { phat4_hash_smhasher_test,NULL, 32, 32,            32, 0x00000000, "Phat4",
+  { phat4_hash_smhasher_test,           NULL, 32, 32, 32, 1 ? 0x0 : 0xB3A5E4A4, "Phat4",
       "Phat4 Hash" },
-  { marvin_32_smhasher_test, NULL, 32, 32,            32, 0xE6711235, "Marvin32",
+  { marvin_32_smhasher_test,            NULL, 32, 32, 32, 0xE6711235, "Marvin32",
       "Marvin32 from MicroSoft" },
 
 };
