@@ -33,8 +33,26 @@ void MixVCode ( const void * blob, int len );
 
 //-----------------------------------------------------------------------------
 
-typedef void (*pfSeedPrep) ( const void *seed_base, const void *seed_prep);
-typedef void (*pfHash) ( const void * blob, const int len, const uint32_t seed, void * out );
+typedef void (*pfSeedPrep32) ( const uint32_t seed, const void *seed_prepared );
+typedef void (*pfSeedPrep) ( const int in_bits, const void *seed_base, const void *seed_prepared );
+typedef void (*pfHashWithSeed) ( const void *blob, const int len, const void *seed, void *out );
+typedef void (*pfHash) ( const void *blob, const int len, const uint32_t seed, void *out );
+
+typedef struct HashInfo
+{
+  pfHash hash;
+  pfHashWithSeed hash_with_seed;
+  pfSeedPrep seed_prep;
+  pfSeedPrep32 seed_prep32;
+  int base_seedbits;
+  int prepared_seedbits;
+  int hashbits;
+  uint32_t verification;
+  const char * name;
+  const char * desc;
+  void *seed;
+} HashInfo;
+
 
 struct ByteVec : public std::vector<uint8_t>
 {
