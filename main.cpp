@@ -53,6 +53,7 @@ TestOpts g_testopts[] =
   { g_testWindow,	"Window" },
   { g_testText,		"Text" },
   { g_testZeroes,	"Zeroes" },
+  { g_testEffs,	        "Effs" },
   { g_testSeed,		"Seed" }
 };
 
@@ -102,9 +103,9 @@ HashInfo g_hashes[] =
 #endif
 
   // -- Message Digests
-  { md5_32,        NULL,  32,  32,  32, 0xC10C356B, "md5_32a",
+  { md5_32,        NULL,  32,  32,  32, 0x0, "md5_32a",
       "MD5, first 32 bits" },
-  { sha1_32a,      NULL,  32,  32,  32, 0xF9376EA7, "sha1_32a",
+  { sha1_32a,      NULL,  32,  32,  32, 0x0, "sha1_32a",
       "SHA1, first 32 bits" },
 #if 0
   { sha1_64a,             NULL, 32, 32, 32, 0x00000000, "sha1_64a",
@@ -885,7 +886,8 @@ int main ( int argc, char ** argv )
   const char * defaulthash = "t1ha_32le";
 #endif
   const char * hashToTest = defaulthash;
-
+  
+  setvbuf(stdout, NULL, _IONBF, 0); /* autoflush stdout */
   if(argc < 2) {
     printf("No test hash given on command line, testing %s.\n", hashToTest);
     printf("Usage: SMHasher --list or --test=Speed,... hash\n");
