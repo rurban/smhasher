@@ -25,7 +25,7 @@ void SetAffinity ( int cpu )
 
 void SetAffinity ( int /*cpu*/ )
 {
-#if !defined(__CYGWIN__) && !defined(__APPLE__)
+#if !defined(__CYGWIN__) && !defined(__APPLE__) && !defined(__FreeBSD__)
   cpu_set_t mask;
     
   CPU_ZERO(&mask);
