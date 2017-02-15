@@ -10,7 +10,7 @@
 // This should hopefully be a thorough and uambiguous test of whether a hash
 // is correctly implemented on a given platform
 
-bool VerificationTest ( pfHash hash, const int hashbits, uint32_t expected, bool verbose )
+bool VerificationTest ( pfHash hash, const int hashbits, uint32_t expected, bool verbose, const char *name )
 {
   const int hashbytes = hashbits / 8;
 
@@ -50,17 +50,19 @@ bool VerificationTest ( pfHash hash, const int hashbits, uint32_t expected, bool
   if(expected != verification)
   {
     if (expected == 0) {
-        printf("Verification value 0x%08X : Testing!\n", verification);
+        printf("Verification value 0x%08X : Testing %s!\n", verification, name);
         return true;
     }
     else if(verbose) {
-        printf("Verification value 0x%08X : Failed! (Expected 0x%08X)\n",verification,expected);
+        printf("Verification value 0x%08X : %s Failed! (Expected 0x%08X)\n",
+                verification, name, expected);
     }
     return false;
   }
   else
   {
-    if(verbose) printf("Verification value 0x%08X : Passed!\n",verification);
+    if(verbose) printf("Verification value 0x%08X : %s Passed!\n",
+            verification, name);
     return true;
   }
 }

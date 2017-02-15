@@ -374,7 +374,7 @@ void SelfTest ( void )
   {
     HashInfo * info = & g_hashes[i];
 
-    pass &= VerificationTest(info->hash,info->hashbits,info->verification,false);
+    pass &= VerificationTest(info->hash,info->hashbits,info->verification,false,info->name);
   }
 
   if(!pass)
@@ -386,7 +386,7 @@ void SelfTest ( void )
       HashInfo * info = & g_hashes[i];
 
       printf("%24s - ",info->name);
-      pass &= VerificationTest(info->hash,info->hashbits,info->verification,true);
+      pass &= VerificationTest(info->hash,info->hashbits,info->verification,true,info->name);
     }
 
     exit(1);
@@ -411,7 +411,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
   {
     printf("[[[ Sanity Tests ]]] - %s\n\n",info->name);
 
-    pass &= VerificationTest(hash,hashbits,info->verification,true);
+    pass &= VerificationTest(hash,hashbits,info->verification,true,info->name);
     pass &= SanityTest(hash,hashbits);
     pass &= AppendedZeroesTest(hash,hashbits);
 

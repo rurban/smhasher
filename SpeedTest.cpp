@@ -252,7 +252,7 @@ double SpeedTest ( pfHash hash, uint32_t seed, const int trials, const int block
 
 void BulkSpeedTest ( pfHash hash, uint32_t seed )
 {
-  const int trials = 4999;
+  const int trials = 2999;
   const int blocksize = 256 * 1024;
 
   printf("Bulk speed test - %d-byte keys\n",blocksize);
@@ -278,7 +278,7 @@ void BulkSpeedTest ( pfHash hash, uint32_t seed )
 
 double TinySpeedTest ( pfHash hash, int hashsize, int keysize, uint32_t seed, bool verbose )
 {
-  const int trials = 1999999;
+  const int trials = 999999;
 
   if(verbose) printf("Small key speed test - %4d-byte keys - ",keysize);
   

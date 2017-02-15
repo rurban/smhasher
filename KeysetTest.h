@@ -17,7 +17,8 @@
 //-----------------------------------------------------------------------------
 // Sanity tests
 
-bool VerificationTest   ( pfHash hash, const int hashbits, uint32_t expected, bool verbose );
+bool VerificationTest   ( pfHash hash, const int hashbits, uint32_t expected, bool verbose,
+        const char *name);
 bool SanityTest         ( pfHash hash, const int hashbits );
 bool AppendedZeroesTest ( pfHash hash, const int hashbits );
 
