@@ -43,17 +43,10 @@
 #ifndef CITY_HASH_H_
 #define CITY_HASH_H_
 
+#include "Platform.h"
 #include <stdlib.h>  // for size_t.
+//#include <stdint.h>
 #include <utility>
-
-// Microsoft Visual Studio may not have stdint.h.
-#if defined(_MSC_VER) && (_MSC_VER < 1600)
-typedef unsigned char uint8_t;
-typedef unsigned int uint32_t;
-typedef unsigned __int64 uint64_t;
-#else  // defined(_MSC_VER)
-#include <stdint.h>
-#endif // !defined(_MSC_VER)
 
 typedef uint8_t uint8;
 typedef uint32_t uint32;
@@ -63,7 +56,8 @@ typedef std::pair<uint64, uint64> uint128;
 inline uint64 Uint128Low64(const uint128& x) { return x.first; }
 inline uint64 Uint128High64(const uint128& x) { return x.second; }
 
-// Hash function for a byte array.
+// Hash functions for a byte array.
+uint32 CityHash32WithSeed(const char *buf, size_t len, uint32 seed);
 uint64 CityHash64(const char *buf, size_t len);
 
 // Hash function for a byte array.  For convenience, a 64-bit seed is also
