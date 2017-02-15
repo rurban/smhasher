@@ -73,23 +73,72 @@ struct HashInfo
 
 HashInfo g_hashes[] =
 {
+  // -- No-op hashes
   { DoNothingHash, NULL,  32,  32,  32, 0x00000000, "donothing32",
       "Do-Nothing function (only valid for measuring call overhead)" },
   { DoNothingHash, NULL,  32,  32,  64, 0x00000000, "donothing64",
       "Do-Nothing function (only valid for measuring call overhead)" },
   { DoNothingHash, NULL,  32,  32, 128, 0x00000000, "donothing128",
       "Do-Nothing function (only valid for measuring call overhead)" },
-
+  { NoopOAATReadHash,     NULL, 32, 32, 64, 0x00000000, "NOP_OAAT_read64",
+      "Noop function (only valid for measuring call + OAAT reading overhead)" },
+  // -- Crap hashes
+  { BadHash,     	  NULL, 32, 32, 32, 0xAB432E23, "BadHash",
+      "very simple XOR shift" },
+  { sumhash,     	  NULL, 32, 32, 32, 0x0000A9AC, "sumhash",
+      "sum all bytes" },
+  { sumhash32,     	  NULL, 32, 32, 32, 0xF5562C80, "sumhash32",
+      "sum all 32bit words" },
   { crc32,         NULL,  32,  32,  32, 0x3719DB20, "crc32",
       "CRC-32" },
+#if defined(__SSE4_2__) && defined(__x86_64__)
+  /* Even 32 uses crc32q, quad only */
+  { crc32c_hw_test,       NULL, 32, 32, 32, 0x0C7346F0, "crc32_hw",
+      "SSE4.2 crc32 in HW" },
+  { crc32c_hw1_test,      NULL, 32, 32, 32, 0x0C7346F0, "crc32_hw1",
+      "Faster Adler SSE4.2 crc32 in HW" },
+  { crc64c_hw_test,       NULL, 32, 32, 64, 0xE7C3FD0E, "crc64_hw",
+      "SSE4.2 crc64 in HW" },
+#endif
 
+  // -- Message Digests
   { md5_32,        NULL,  32,  32,  32, 0xC10C356B, "md5_32a",
       "MD5, first 32 bits" },
   { sha1_32a,      NULL,  32,  32,  32, 0xF9376EA7, "sha1_32a",
       "SHA1, first 32 bits" },
+#if 0
+  { sha1_64a,             NULL, 32, 32, 32, 0x00000000, "sha1_64a",
+      "SHA1 64-bit, first 64 bits of result" },
+  { sha2_32a,             NULL, 32, 32, 32, 0x00000000, "sha2_32a",
+      "SHA2, first 32 bits of result" },
+  { sha2_64a,             NULL, 32, 32, 64, 0x00000000, "sha2_64a",
+      "SHA2, first 64 bits of result" },
+  { sha3_32a,             NULL, 32, 32, 32, 0x00000000, "sha3_32a",
+      "SHA3, first 32 bits of result" },
+  { sha3_64a,             NULL, 32, 32, 64, 0x00000000, "sha3_64a",
+      "SHA3, first 64 bits of result" },
+  { BLAKE2_32a,           NULL, 32, 32, 32, 0x00000000, "blake2_32a",
+      "BLAKE2, first 32 bits of result" },
+  { BLAKE2_64a,           NULL, 32, 32, 64, 0x00000000, "blake2_64a",
+      "BLAKE2, first 64 bits of result" },
+  { bcrypt_64a,           NULL, 32, 32, 64, 0x00000000, "bcrypt_64a",
+      "bcrypt, first 64 bits of result" },
+  { scrypt_64a,           NULL, 32, 32, 64, 0x00000000, "scrypt_64a",
+      "scrypt, first 64 bits of result" },
+#endif
 
-  { FNV,           NULL, 32, 32, 32, 0xE3CBBE91, "FNV",
+  // -- Others
+#if 0 && defined(__x86_64__) && (defined(__linux__) || defined(__APPLE__))
+  // elf64 or macho64 only
+  { fhtw_test,            NULL, 32, 32, 64, 0x0,        "fhtw",
+      "fhtw asm" },
+#endif
+  { FNV32a,               NULL, 32, 32, 32, 0xE3CBBE91, "FNV1a",
       "Fowler-Noll-Vo hash, 32-bit" },
+  { FNV32a_YoshimitsuTRIAD,NULL, 32, 32, 32,0xD8AFFD71, "FNV1a_YT",
+      "FNV1a-YoshimitsuTRIAD 32-bit sanmayce" },
+  { FNV64a,               NULL, 32, 32, 64, 0x103455FC, "FNV64",
+      "Fowler-Noll-Vo hash, 64-bit" },
   { Bernstein,     NULL, 32, 32, 32, 0xBDB4B640, "bernstein",
       "Bernstein, 32-bit" },
   { lookup3_test,  NULL, 32, 32, 32, 0x3D83917A, "lookup3",
@@ -101,11 +150,13 @@ HashInfo g_hashes[] =
   { Crap8_test,      NULL, 32, 32, 32, 0x743E97A1, "Crap8",
       "Crap8" },
 
+  // CityHash
   { CityHash64_test,  NULL, 32, 32, 64, 0x25A20825, "City64",
       "Google CityHash64WithSeed" },
   { CityHash128_test, NULL, 32, 32,128, 0x6531F54E, "City128",
       "Google CityHash128WithSeed" },
 
+  // SpoookyHash
   { SpookyHash32_test, NULL, 32, 32,   32, 0x3F798BBB, "Spooky32",
       "Bob Jenkins' SpookyHash, 32-bit result" },
   { SpookyHash64_test, NULL, 32, 32,   64, 0xA7F955F1, "Spooky64",
@@ -114,7 +165,6 @@ HashInfo g_hashes[] =
       "Bob Jenkins' SpookyHash, 128-bit result" },
 
   // MurmurHash2
-
   { MurmurHash2_test, NULL, 32, 32, 32, 0x27864C1E, "Murmur2",
     "MurmurHash2 for x86, 32-bit" },
   { MurmurHash2A_test, NULL, 32, 32, 32, 0x7FBD4396, "Murmur2A",
@@ -125,16 +175,18 @@ HashInfo g_hashes[] =
       "MurmurHash2 for x86, 64-bit" },
 
   // MurmurHash3
-
   { MurmurHash3_x86_32,  NULL, 32, 32,  32, 0xB0F57EE3, "Murmur3A",
       "MurmurHash3 for x86, 32-bit" },
   { MurmurHash3_x86_128, NULL, 32, 32, 128, 0xB3ECE62A, "Murmur3C",
       "MurmurHash3 for x86, 128-bit" },
+#if defined(__x86_64__)
   { MurmurHash3_x64_128, NULL, 32, 32, 128, 0x6384BA69, "Murmur3F",
       "MurmurHash3 for x64, 128-bit" },
+#endif
 
   { PMurHash32_test,     NULL, 32, 32,  32, 0xB0F57EE3, "PMurHash32",
       "Shane Day's portable-ized MurmurHash3 for x86, 32-bit." },
+
   // BeagleHash_32_xx
   { beagle_hash_32_32_a_smhasher_test, NULL, 32, 32,  32, 0x47CECE27, "BeagleHash_32_32",
       "Yves Orton's hash for 64-bit reduced to 32 (32 bit seed)." },
@@ -159,6 +211,7 @@ HashInfo g_hashes[] =
   { beagle_hash_64_127_a_smhasher_test, NULL, 32, 32,  64, 0x575C6DA6, "BeagleHash_64_127",
       "Yves Orton's hash for 64-bit (127 bit seed)." },
 
+  // ZaphodHash, Marvin32, Phat, Phat4
   { zaphod_hash_smhasher_test,          NULL, 32, 32, 32, 0x0549DFCF, "Zaphod32",
       "Marvin32 like hash" },
   { phat_hash_smhasher_test,            NULL, 32, 32, 32, 0xF7C8FFE3, "Phat",
@@ -167,131 +220,127 @@ HashInfo g_hashes[] =
       "Phat4 Hash" },
   { marvin_32_smhasher_test,            NULL, 32, 32, 32, 0xE6711235, "Marvin32",
       "Marvin32 from MicroSoft" },
-  { NoopOAATReadHash,     NULL, 32, 32, 64, 0x00000000, "NOP_OAAT_read64", "Noop function (only valid for measuring call + OAAT reading overhead)" },
-  { BadHash,     	  NULL, 32, 32, 32, 0xAB432E23, "BadHash", 	 "very simple XOR shift" },
-  { sumhash,     	  NULL, 32, 32, 32, 0x0000A9AC, "sumhash", 	 "sum all bytes" },
-  { sumhash32,     	  NULL, 32, 32, 32, 0xF5562C80, "sumhash32",   "sum all 32bit words" },
-
-#if 0
-  { sha1_64a,             NULL, 32, 32, 32, 0x00000000, "sha1_64a",    "SHA1 64-bit, first 64 bits of result" },
-  { sha2_32a,             NULL, 32, 32, 32, 0x00000000, "sha2_32a",    "SHA2, first 32 bits of result" },
-  { sha2_64a,             NULL, 32, 32, 64, 0x00000000, "sha2_64a",    "SHA2, first 64 bits of result" },
-  { sha3_32a,             NULL, 32, 32, 32, 0x00000000, "sha3_32a",    "SHA3, first 32 bits of result" },
-  { sha3_64a,             NULL, 32, 32, 64, 0x00000000, "sha3_64a",    "SHA3, first 64 bits of result" },
-  { BLAKE2_32a,           NULL, 32, 32, 32, 0x00000000, "blake2_32a",  "BLAKE2, first 32 bits of result" },
-  { BLAKE2_64a,           NULL, 32, 32, 64, 0x00000000, "blake2_64a",  "BLAKE2, first 64 bits of result" },
-  { bcrypt_64a,           NULL, 32, 32, 64, 0x00000000, "bcrypt_64a",  "bcrypt, first 64 bits of result" },
-  { scrypt_64a,           NULL, 32, 32, 64, 0x00000000, "scrypt_64a",  "scrypt, first 64 bits of result" },
-#endif
-
 #ifdef __SSE2__
   { hasshe2_test,        NULL, 32, 32, 256, 0xF5D39DFE, "hasshe2",     "SSE2 hasshe2, 256-bit" },
 #endif
-#if defined(__SSE4_2__) && defined(__x86_64__)
-  /* Even 32 uses crc32q, quad only */
-  { crc32c_hw_test,       NULL, 32, 32, 32, 0x0C7346F0, "crc32_hw",    "SSE4.2 crc32 in HW" },
-  { crc32c_hw1_test,      NULL, 32, 32, 32, 0x0C7346F0, "crc32_hw1",   "Faster Adler SSE4.2 crc32 in HW" },
-  { crc64c_hw_test,       NULL, 32, 32, 64, 0xE7C3FD0E, "crc64_hw",    "SSE4.2 crc64 in HW" },
-#endif
-#if 0 && defined(__x86_64__) && (defined(__linux__) || defined(__APPLE__))
-  // elf64 or macho64 only
-  { fhtw_test,            NULL, 32, 32, 64, 0x0,        "fhtw",        "fhtw asm" },
-#endif
-  { FNV32a,               NULL, 32, 32, 32, 0xE3CBBE91, "FNV1a",       "Fowler-Noll-Vo hash, 32-bit" },
-  { FNV32a_YoshimitsuTRIAD,NULL, 32, 32, 32,0xD8AFFD71, "FNV1a_YT",    "FNV1a-YoshimitsuTRIAD 32-bit sanmayce" },
-  { FNV64a,               NULL, 32, 32, 64, 0x103455FC, "FNV64",       "Fowler-Noll-Vo hash, 64-bit" },
+
+
 #if 0
-  { fletcher2,            NULL, 32, 32, 64, 0x0, "fletcher2",  "fletcher2 ZFS"} //TODO
-  { fletcher4,            NULL, 32, 32, 64, 0x0, "fletcher4",  "fletcher4 ZFS"} //TODO
-  { Jesteress,            NULL, 32, 32, 32, 0x0, "Jesteress",  "FNV1a-Jesteress 32-bit sanmayce" },
-  { Meiyan,       	  NULL, 32, 32, 32, 0x0, "Meiyan",     "FNV1a-Meiyan 32-bit sanmayce" },
+  { fletcher2,            NULL, 32, 32, 64, 0x0, "fletcher2",
+      "fletcher2 ZFS"} //TODO
+  { fletcher4,            NULL, 32, 32, 64, 0x0, "fletcher4",
+      "fletcher4 ZFS"} //TODO
+  { Jesteress,            NULL, 32, 32, 32, 0x0, "Jesteress",
+      "FNV1a-Jesteress 32-bit sanmayce" },
+  { Meiyan,       	  NULL, 32, 32, 32, 0x0, "Meiyan",
+      "FNV1a-Meiyan 32-bit sanmayce" },
 #endif
-  { Bernstein,            NULL, 32, 32, 32, 0xBDB4B640, "bernstein",   "Bernstein, 32-bit" },
-  { sdbm,                 NULL, 32, 32, 32, 0x582AF769, "sdbm",        "sdbm as in perl5" },
-  { x17_test,             NULL, 32, 32, 32, 0x8128E14C, "x17",         "x17" },
+  { sdbm,                 NULL, 32, 32, 32, 0x582AF769, "sdbm",
+      "sdbm as in perl5" },
+  { x17_test,             NULL, 32, 32, 32, 0x8128E14C, "x17",
+      "x17" },
   // also called jhash:
-  { JenkinsOOAT,          NULL, 32, 32, 32, 0x83E133DA, "JenkinsOOAT", "Bob Jenkins' OOAT as in perl 5.18" },
-  { JenkinsOOAT_perl,     NULL, 32, 32, 32, 0xEE05869B, "JenkinsOOAT_perl", "Bob Jenkins' OOAT as in old perl5" },
-  { MicroOAAT,            NULL, 32, 32, 32, 0x16F1BA97, "MicroOAAT", "Small non-multiplicative OAAT that passes all collision checks (by funny-falcon)" },
-  { lookup3_test,         NULL, 32, 32, 32, 0x3D83917A, "lookup3",     "Bob Jenkins' lookup3" },
-  { SuperFastHash,        NULL, 32, 32, 32, 0x980ACD1D, "superfast",   "Paul Hsieh's SuperFastHash" },
-  { MurmurOAAT_test,      NULL, 32, 32, 32, 0x5363BD98, "MurmurOAAT",  "Murmur one-at-a-time" },
-  { Crap8_test,           NULL, 32, 32, 32, 0x743E97A1, "Crap8",       "Crap8" },
-  { MurmurHash2_test,     NULL, 32, 32, 32, 0x27864C1E, "Murmur2",     "MurmurHash2 for x86, 32-bit" },
-  { MurmurHash2A_test,    NULL, 32, 32, 32, 0x7FBD4396, "Murmur2A",    "MurmurHash2A for x86, 32-bit" },
-#if defined(__x86_64__)
-  { MurmurHash64A_test,   NULL, 32, 32, 64, 0x1F0D3804, "Murmur2B",    "MurmurHash2 for x64, 64-bit" },
-#endif
-  { MurmurHash64B_test,   NULL, 32, 32, 64, 0xDD537C05, "Murmur2C",    "MurmurHash2 for x86, 64-bit" },
-  { halfsiphash_test,     NULL, 32, 32, 32, 0xA7A05F72, "HalfSipHash", "HalfSipHash 2-4, 32bit" },
+  { JenkinsOOAT,          NULL, 32, 32, 32, 0x83E133DA, "JenkinsOOAT",
+      "Bob Jenkins' OOAT as in perl 5.18" },
+  { JenkinsOOAT_perl,     NULL, 32, 32, 32, 0xEE05869B, "JenkinsOOAT_perl",
+      "Bob Jenkins' OOAT as in old perl5" },
+  { MicroOAAT,            NULL, 32, 32, 32, 0x16F1BA97, "MicroOAAT",
+      "Small non-multiplicative OAAT that passes all collision checks (by funny-falcon)" },
+  { halfsiphash_test,     NULL, 32, 32, 32, 0xA7A05F72, "HalfSipHash",
+      "HalfSipHash 2-4, 32bit" },
 
   // and now the quality hash funcs, which mostly work
   // GoodOOAT passes whole SMHasher (by funny-falcon)
-  { GoodOAAT,             NULL, 32, 32, 32, 0x7B14EEE5, "GoodOAAT",    "Small non-multiplicative OAAT" },
-  { siphash_test,         NULL, 32, 32, 64, 0xC58D7F9C, "SipHash",     "SipHash 2-4 - SSSE3 optimized" },
+  { GoodOAAT,             NULL, 32, 32, 32, 0x7B14EEE5, "GoodOAAT",
+      "Small non-multiplicative OAAT" },
+  { siphash_test,         NULL, 32, 32, 64, 0xC58D7F9C, "SipHash",
+      "SipHash 2-4 - SSSE3 optimized" },
   // as in rust and swift
-  { siphash13_test,       NULL, 32, 32, 64, 0x29C010BF, "SipHash13",   "SipHash 1-3 - SSSE3 optimized" },
-  { PMurHash32_test,      NULL, 32, 32, 32, 0xB0F57EE3, "PMurHash32",  "Shane Day's portable-ized MurmurHash3 for x86, 32-bit." },
-  { MurmurHash3_x86_32,   NULL, 32, 32, 32, 0xB0F57EE3, "Murmur3A",    "MurmurHash3 for x86, 32-bit" },
-  { MurmurHash3_x86_128, NULL, 32, 32, 128, 0xB3ECE62A, "Murmur3C",    "MurmurHash3 for x86, 128-bit" },
+  { siphash13_test,       NULL, 32, 32, 64, 0x29C010BF, "SipHash13",
+      "SipHash 1-3 - SSSE3 optimized" },
 #if defined(__x86_64__)
-  { MurmurHash3_x64_128, NULL, 32, 32, 128, 0x6384BA69, "Murmur3F",    "MurmurHash3 for x64, 128-bit" },
+  { fasthash32_test,      NULL, 32, 32, 32, 0xE9481AFC, "fasthash32",
+      "fast-hash 32bit" },
+  { fasthash64_test,      NULL, 32, 32, 64, 0xA16231A7, "fasthash64",
+      "fast-hash 64bit" },
 #endif
-#if defined(__x86_64__)
-  { fasthash32_test,      NULL, 32, 32, 32, 0xE9481AFC, "fasthash32",  "fast-hash 32bit" },
-  { fasthash64_test,      NULL, 32, 32, 64, 0xA16231A7, "fasthash64",  "fast-hash 64bit" },
-#endif
-  { CityHash32_test,      NULL, 32, 32, 32, 0x5C28AD62, "City32",      "Google CityHash32WithSeed (old)" },
-  { CityHash64_test,      NULL, 32, 32, 64, 0x25A20825, "City64",      "Google CityHash64WithSeed (old)" },
+  { CityHash32_test,      NULL, 32, 32, 32, 0x5C28AD62, "City32",
+      "Google CityHash32WithSeed (old)" },
+  { CityHash64_test,      NULL, 32, 32, 64, 0x25A20825, "City64",
+      "Google CityHash64WithSeed (old)" },
 #if defined(__SSE4_2__) && defined(__x86_64__)
-  { CityHash128_test,    NULL, 32, 32, 128, 0x6531F54E, "City128",     "Google CityHash128WithSeed (old)" },
-  { CityHashCrc128_test, NULL, 32, 32, 128, 0xD4389C97, "CityCrc128",  "Google CityHashCrc128WithSeed SSE4.2 (old)" },
+  { CityHash128_test,    NULL, 32, 32, 128, 0x6531F54E, "City128",
+      "Google CityHash128WithSeed (old)" },
+  { CityHashCrc128_test, NULL, 32, 32, 128, 0xD4389C97, "CityCrc128",
+      "Google CityHashCrc128WithSeed SSE4.2 (old)" },
 #endif
 #if defined(__x86_64__)
-  { FarmHash64_test,      NULL, 32, 32, 64, 0x35F84A93, "FarmHash64",  "Google FarmHash64WithSeed" },
-  { FarmHash128_test,    NULL, 32, 32, 128, 0x9E636AAE, "FarmHash128", "Google FarmHash128WithSeed" },
-  { farmhash64_c_test,    NULL, 32, 32, 64, 0x35F84A93, "farmhash64_c",  "farmhash64_with_seed (C99)" },
-  { farmhash128_c_test,  NULL, 32, 32, 128, 0x9E636AAE, "farmhash128_c", "farmhash128_with_seed (C99)" },
+  { FarmHash64_test,      NULL, 32, 32, 64, 0x35F84A93, "FarmHash64",
+      "Google FarmHash64WithSeed" },
+  { FarmHash128_test,    NULL, 32, 32, 128, 0x9E636AAE, "FarmHash128",
+      "Google FarmHash128WithSeed" },
+  { farmhash64_c_test,    NULL, 32, 32, 64, 0x35F84A93, "farmhash64_c",
+      "farmhash64_with_seed (C99)" },
+  { farmhash128_c_test,  NULL, 32, 32, 128, 0x9E636AAE, "farmhash128_c",
+      "farmhash128_with_seed (C99)" },
 #endif
-  { SpookyHash32_test,    NULL, 32, 32, 32, 0x3F798BBB, "Spooky32",    "Bob Jenkins' SpookyHash, 32-bit result" },
-  { SpookyHash64_test,    NULL, 32, 32, 64, 0xA7F955F1, "Spooky64",    "Bob Jenkins' SpookyHash, 64-bit result" },
-  { SpookyHash128_test,  NULL, 32, 32, 128, 0x8D263080, "Spooky128",   "Bob Jenkins' SpookyHash, 128-bit result" },
 #if defined(__x86_64__)
-  { xxHash32_test,        NULL, 32, 32, 32, 0xBA88B743, "xxHash32",    "xxHash, 32-bit for x64" },
-  { xxHash64_test,        NULL, 32, 32, 64, 0x024B7CF4, "xxHash64",    "xxHash, 64-bit" },
+  { xxHash32_test,        NULL, 32, 32, 32, 0xBA88B743, "xxHash32",
+      "xxHash, 32-bit for x64" },
+  { xxHash64_test,        NULL, 32, 32, 64, 0x024B7CF4, "xxHash64",
+      "xxHash, 64-bit" },
 #if 0
-  { xxhash256_test,       NULL, 32, 32, 64, 0x024B7CF4, "xxhash256",   "xxhash256, 64-bit unportable" },
-#endif
-#endif
-  #if defined(__x86_64__)
-  { metrohash64_1_test,       NULL, 32, 32, 64, 0xEE88F7D2, "metrohash64_1",     "MetroHash64_1 for 64-bit" },
-  { metrohash64_2_test,       NULL, 32, 32, 64, 0xE1FC7C6E, "metrohash64_2",     "MetroHash64_2 for 64-bit" },
-  { metrohash128_1_test,     NULL, 32, 32, 128, 0x20E8A1D7, "metrohash128_1",    "MetroHash128_1 for 64-bit" },
-  { metrohash128_2_test,     NULL, 32, 32, 128, 0x5437C684, "metrohash128_2",    "MetroHash128_2 for 64-bit" },
-#if defined(__SSE4_2__) && defined(__x86_64__)
-  { metrohash64crc_1_test,    NULL, 32, 32, 64, 0x29C68A50, "metrohash64crc_1",  "MetroHash64crc_1 for x64" },
-  { metrohash64crc_2_test,    NULL, 32, 32, 64, 0x2C00BD9F, "metrohash64crc_2",  "MetroHash64crc_2 for x64" },
-  { metrohash128crc_1_test,  NULL, 32, 32, 128, 0x5E75144E, "metrohash128crc_1", "MetroHash128crc_1 for x64" },
-  { metrohash128crc_2_test,  NULL, 32, 32, 128, 0x1ACF3E77, "metrohash128crc_2", "MetroHash128crc_2 for x64" },
+  { xxhash256_test,       NULL, 32, 32, 64, 0x024B7CF4, "xxhash256",
+      "xxhash256, 64-bit unportable" },
 #endif
 #endif
 #if defined(__x86_64__)
-  { cmetrohash64_1_optshort_test, NULL, 32, 32, 64, 0xEE88F7D2, "cmetrohash64_1o", "cmetrohash64_1 (shorter key optimized) , 64-bit for x64" },
-  { cmetrohash64_1_test,        NULL, 32, 32, 64, 0xEE88F7D2, "cmetrohash64_1",    "cmetrohash64_1, 64-bit for x64" },
-  { cmetrohash64_2_test,        NULL, 32, 32, 64, 0xE1FC7C6E, "cmetrohash64_2",    "cmetrohash64_2, 64-bit for x64" },
+  { metrohash64_1_test,       NULL, 32, 32, 64, 0xEE88F7D2, "metrohash64_1",
+      "MetroHash64_1 for 64-bit" },
+  { metrohash64_2_test,       NULL, 32, 32, 64, 0xE1FC7C6E, "metrohash64_2",
+      "MetroHash64_2 for 64-bit" },
+  { metrohash128_1_test,     NULL, 32, 32, 128, 0x20E8A1D7, "metrohash128_1",
+      "MetroHash128_1 for 64-bit" },
+  { metrohash128_2_test,     NULL, 32, 32, 128, 0x5437C684, "metrohash128_2",
+      "MetroHash128_2 for 64-bit" },
+#if defined(__SSE4_2__) && defined(__x86_64__)
+  { metrohash64crc_1_test,    NULL, 32, 32, 64, 0x29C68A50, "metrohash64crc_1",
+      "MetroHash64crc_1 for x64" },
+  { metrohash64crc_2_test,    NULL, 32, 32, 64, 0x2C00BD9F, "metrohash64crc_2",
+      "MetroHash64crc_2 for x64" },
+  { metrohash128crc_1_test,  NULL, 32, 32, 128, 0x5E75144E, "metrohash128crc_1",
+      "MetroHash128crc_1 for x64" },
+  { metrohash128crc_2_test,  NULL, 32, 32, 128, 0x1ACF3E77, "metrohash128crc_2",
+      "MetroHash128crc_2 for x64" },
+#endif
+#endif
+#if defined(__x86_64__)
+  { cmetrohash64_1_optshort_test, NULL, 32, 32, 64, 0xEE88F7D2, "cmetrohash64_1o",
+      "cmetrohash64_1 (shorter key optimized) , 64-bit for x64" },
+  { cmetrohash64_1_test,        NULL, 32, 32, 64, 0xEE88F7D2, "cmetrohash64_1",
+      "cmetrohash64_1, 64-bit for x64" },
+  { cmetrohash64_2_test,        NULL, 32, 32, 64, 0xE1FC7C6E, "cmetrohash64_2",
+      "cmetrohash64_2, 64-bit for x64" },
 #endif
 #if defined(__SSE4_2__) && defined(__x86_64__)
-  { falkhash_test_cxx,          NULL, 32, 32, 64, 0x2F99B071, "falkhash",          "falkhash.asm with aesenc, 64-bit for x64" },
+  { falkhash_test_cxx,          NULL, 32, 32, 64, 0x2F99B071, "falkhash",
+      "falkhash.asm with aesenc, 64-bit for x64" },
 #endif
-  { t1ha_test,                  NULL, 32, 32, 64, 0xD6836381, "t1ha",              "Fast Positive Hash (portable, best for: 64-bit, little-endian)" },
-  { t1ha_64be_test,             NULL, 32, 32, 64, 0x93F864DE, "t1ha_64be",         "Fast Positive Hash (portable, best for: 64-bit, big-engian)" },
-  { t1ha_32le_test,             NULL, 32, 32, 64, 0xE489F366, "t1ha_32le",         "Fast Positive Hash (portable, best for: 32-bit, little-endian)" },
-  { t1ha_32be_test,             NULL, 32, 32, 64, 0x71F649A9, "t1ha_32be",         "Fast Positive Hash (portable, best for: 32-bit, big-endian)" },
+  { t1ha_test,                  NULL, 32, 32, 64, 0xD6836381, "t1ha",
+      "Fast Positive Hash (portable, best for: 64-bit, little-endian)" },
+  { t1ha_64be_test,             NULL, 32, 32, 64, 0x93F864DE, "t1ha_64be",
+      "Fast Positive Hash (portable, best for: 64-bit, big-endian)" },
+  { t1ha_32le_test,             NULL, 32, 32, 64, 0xE489F366, "t1ha_32le",
+      "Fast Positive Hash (portable, best for: 32-bit, little-endian)" },
+  { t1ha_32be_test,             NULL, 32, 32, 64, 0x71F649A9, "t1ha_32be",
+      "Fast Positive Hash (portable, best for: 32-bit, big-endian)" },
 #if (defined(__SSE4_2__) && defined(__x86_64__)) || defined(_M_X64)
-  { t1ha_crc_test,              NULL, 32, 32, 64, 0xA57ACE7D, "t1ha_crc",          "Fast Positive Hash (machine-specific, requires: SSE4.2 CRC32C)" },
+  { t1ha_crc_test,              NULL, 32, 32, 64, 0xA57ACE7D, "t1ha_crc",
+      "Fast Positive Hash (machine-specific, requires: SSE4.2 CRC32C)" },
 #endif
 #if defined(__AES__) || defined(_M_X64) || defined(_M_IX86)
-  { t1ha_aes_test,              NULL, 32, 32, 64, 0x54BBFF21, "t1ha_aes",          "Fast Positive Hash (machine-specific, requires: AES-NI)" },
+  { t1ha_aes_test,              NULL, 32, 32, 64, 0x54BBFF21, "t1ha_aes",
+      "Fast Positive Hash (machine-specific, requires: AES-NI)" },
 #endif
   { mum_hash_test,              NULL, 32, 32, 64,
 #if defined(__GNUC__) && UINT_MAX != ULONG_MAX
@@ -299,7 +348,8 @@ HashInfo g_hashes[] =
 #else
                                     0xA973C6C0,
 #endif
-                                                "MUM",               "github.com/vnmakarov/mum-hash" },
+                                                "MUM",
+    "github.com/vnmakarov/mum-hash" },
 };
 
 HashInfo * findHash ( const char * name )
