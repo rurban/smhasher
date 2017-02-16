@@ -21,6 +21,7 @@
 #define AVALANCHE_FAIL 0.01
 
 double maxBias ( std::vector<int> & counts, int reps );
+void PrintAvalancheDiagram ( int seedbits, int keybits, int hashbits, int reps, int scale, std::vector<int> & bins );
 
 //-----------------------------------------------------------------------------
 
