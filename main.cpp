@@ -474,6 +474,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
     bool result = true;
     const int reps = 1000000;
+    printf("Expected error: %.5e\n\n", 0.00256 / ( (double)reps / 100000.0 ));
 
     result &= AvalancheTest< Blob< 32>, hashtype > (hash,reps);
     result &= AvalancheTest< Blob< 40>, hashtype > (hash,reps);
@@ -765,7 +766,14 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
     bool result = true;
     bool drawDiagram = false;
 
-    result &= SeedTest<hashtype>( hash, 1000000, drawDiagram );
+    result &= SeedTest<hashtype>( hash, 2000000, drawDiagram,
+        "The quick brown fox jumps over the lazy dog");
+    result &= SeedTest<hashtype>( hash, 2000000, drawDiagram,
+        "");
+    result &= SeedTest<hashtype>( hash, 2000000, drawDiagram,
+        "00101100110101101");
+    result &= SeedTest<hashtype>( hash, 2000000, drawDiagram,
+        "abcbcddbdebdcaaabaaababaaabacbeedbabseeeeeeeesssssseeeewwwww");
 
     if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");

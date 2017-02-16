@@ -448,22 +448,30 @@ bool EffsKeyTest ( pfHash hash, bool drawDiagram )
 // Keyset 'Seed' - hash "the quick brown fox..." using different seeds
 
 template < typename hashtype >
-bool SeedTest ( pfHash hash, int keycount, bool drawDiagram )
+bool SeedTest ( pfHash hash, int count, bool drawDiagram, const char * text )
 {
-  printf("Keyset 'Seed' - %d keys\n",keycount);
+  printf("Keyset 'Seed' - %d seeds, key length %d\n  Key \"%s\"\n",
+          count, (int)strlen(text), text);
 
-  const char * text = "The quick brown fox jumps over the lazy dog";
   const int len = (int)strlen(text);
-
+  uint32_t v = 0;
   //----------
 
   std::vector<hashtype> hashes;
 
-  hashes.resize(keycount);
-
-  for(int i = 0; i < keycount; i++)
+  hashes.resize(count);
+  for(int i = 0; i < count; i++)
   {
-    hash(text,len,i,&hashes[i]);
+    // this gives us a set of unique seeds
+    hash(text,len,v,&hashes[i]);
+    if (!i) v= 1; // start the sequence
+    // we want a "random" set of seeds, but we don't
+    // want duplicates. So we use the following from
+    // Marsaglia which gives us 2^32 unique non-zero
+    // values
+    v ^= v >> 13;
+    v ^= v << 17;
+    v ^= v >> 5;
   }
 
   bool result = true;

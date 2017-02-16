@@ -279,7 +279,7 @@ void BulkSpeedTest ( pfHash hash, uint32_t seed )
 
 double TinySpeedTest ( pfHash hash, int hashsize, int keysize, uint32_t seed, bool verbose, double t0 )
 {
-  const int trials = 599999;
+  const int trials = 199999;
 
   if(verbose) printf("Small key speed test - %2d-byte keys - ",keysize);
   
