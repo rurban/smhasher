@@ -1,9 +1,9 @@
 #!/bin/bash
 make
 rm doc/*.tmp
+./SMHasher Phat4 2>&1 | tee doc/Phat4_32.tmp; mv doc/Phat4_32.tmp doc/Phat4_32.out
 ./SMHasher Zaphod32 2>&1 | tee doc/Zaphod_32.tmp; mv doc/Zaphod_32.tmp doc/Zaphod_32.out
 ./SMHasher Phat 2>&1 | tee doc/Phat_32.tmp; mv doc/Phat_32.tmp doc/Phat_32.out 
-./SMHasher Phat4 2>&1 | tee doc/Phat4_32.tmp; mv doc/Phat4_32.tmp doc/Phat4_32.out
 
 ./SMHasher BeagleHash_32_32 2>&1 | tee doc/BeagleHash_S32_32.tmp doc/BeagleHash_S32_32.out; mv doc/BeagleHash_S32_32.out doc/BeagleHash_S32_32.tmp
 ./SMHasher BeagleHash_64_32 2>&1 | tee doc/BeagleHash_S32_64.tmp mv doc/BeagleHash_S32_64.tmp doc/BeagleHash_S32_64.out
