@@ -91,10 +91,10 @@ HashInfo g_hashes[] =
       "SSE4.2 crc64 in HW", NULL },
 #endif
 
-  // -- Message Digests
-  { md5_32, NULL, NULL, NULL, 32,  32,  32, 0x0, "md5_32a",
+  // -- Message Digests/NIST Hash Functions.
+  { md5_32, NULL, NULL, NULL, 32,  32,  32, 0xF7192210, "md5_32a",
       "MD5, first 32 bits", NULL },
-  { sha1_32a, NULL, NULL, NULL, 32,  32,  32, 0x0, "sha1_32a",
+  { sha1_32a, NULL, NULL, NULL, 32,  32,  32, 0x7FE8C80E, "sha1_32a",
       "SHA1, first 32 bits", NULL },
 #if 0
   { sha1_64a, NULL, NULL, NULL, 32, 32, 32, 0x00000000, "sha1_64a",
