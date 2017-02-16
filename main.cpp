@@ -418,7 +418,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
     BulkSpeedTest(info->hash,info->verification);
     printf("\n");
 
-    for(int i = 0; i <= 31; i++)
+    for(int i = 0; i < 32; i++)
     {
       sum += TinySpeedTest(hashfunc<hashtype>(info->hash),
               sizeof(hashtype), i, info->verification, true, t0);
