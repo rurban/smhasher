@@ -40,14 +40,15 @@ void PrintAvalancheDiagram ( int seedbits, int keybits, int hashbits, int reps, 
 //-----------------------------------------------------------------------------
 
 template < typename keytype, typename hashtype >
-void calcBias ( pfHash hash, std::vector<int> & counts, int reps, Rand & r )
+void calcBiasWithSeed ( pfHash hash, std::vector<int> & counts, int reps, Rand & r )
 {
   const int keybytes = sizeof(keytype);
   const int hashbytes = sizeof(hashtype);
 
+  const int seedbits = 32;
   const int keybits = keybytes * 8;
   const int hashbits = hashbytes * 8;
-
+  uint32_t seed = 0;
   keytype K;
   hashtype A,B;
 
@@ -56,15 +57,31 @@ void calcBias ( pfHash hash, std::vector<int> & counts, int reps, Rand & r )
     if(irep % (reps/10) == 0) printf(".");
 
     r.rand_p(&K,keybytes);
+    seed = r.rand_u32();
 
-    hash(&K,keybytes,0,&A);
+    hash(&K,keybytes,seed,&A);
 
     int * cursor = &counts[0];
+
+    for(uint32_t mask= 1; mask; mask = mask << 1)
+    {
+      seed ^= mask;
+      hash(&K,keybytes,seed,&B);
+      seed ^= mask;
+
+      for(int iOut = 0; iOut < hashbits; iOut++)
+      {
+        int bitA = getbit(&A,hashbytes,iOut);
+        int bitB = getbit(&B,hashbytes,iOut);
+
+        (*cursor++) += (bitA ^ bitB);
+      }
+    }
 
     for(int iBit = 0; iBit < keybits; iBit++)
     {
       flipbit(&K,keybytes,iBit);
-      hash(&K,keybytes,0,&B);
+      hash(&K,keybytes,seed,&B);
       flipbit(&K,keybytes,iBit);
 
       for(int iOut = 0; iOut < hashbits; iOut++)
@@ -88,6 +105,7 @@ bool AvalancheTest ( pfHash hash, const int reps )
   const int keybytes = sizeof(keytype);
   const int hashbytes = sizeof(hashtype);
 
+  const int seedbits = 32;
   const int keybits = keybytes * 8;
   const int hashbits = hashbytes * 8;
 
@@ -95,9 +113,8 @@ bool AvalancheTest ( pfHash hash, const int reps )
 
   //----------
 
-  std::vector<int> bins(keybits*hashbits,0);
-
-  calcBias<keytype,hashtype>(hash,bins,reps,r);
+  std::vector<int> bins((keybits+seedbits)*hashbits,0);
+  calcBiasWithSeed<keytype,hashtype>(hash,bins,reps,r);
   
   //----------
 
@@ -138,6 +155,8 @@ bool AvalancheTest ( pfHash hash, const int reps )
   );
 
   printf("\n");
+  if (!result)
+    PrintAvalancheDiagram(seedbits,keybits,hashbits,reps,1,bins);
   return result;
 }
 
