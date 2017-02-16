@@ -81,7 +81,6 @@ bool VerificationTest ( pfHash hash, const int hashbits, uint32_t expected, bool
 
 bool SanityTest ( pfHash hash, const int hashbits )
 {
-  printf("Running sanity check 1");
   
   Rand r(883741);
 
@@ -98,10 +97,12 @@ bool SanityTest ( pfHash hash, const int hashbits )
 
   uint8_t * hash1 = new uint8_t[hashbytes];
   uint8_t * hash2 = new uint8_t[hashbytes];
-
+  uint32_t seed = 0;
   //----------
   
-  for(int irep = 0; irep < reps; irep++)
+  printf("Sanity check simple key bit flips and consistency");
+
+  for(int irep = 0; irep < reps; irep++, seed = r.rand_u32())
   {
     if(irep % (reps/10) == 0) printf(".");
 
@@ -117,14 +118,14 @@ bool SanityTest ( pfHash hash, const int hashbits )
 
         memcpy(key2,key1,len);
 
-        hash(key1,len,0,hash1);
+        hash(key1,len,seed,hash1);
 
         for(int bit = 0; bit < (len * 8); bit++)
         {
           // Flip a bit, hash the key -> we should get a different result.
 
           flipbit(key2,len,bit);
-          hash(key2,len,0,hash2);
+          hash(key2,len,seed,hash2);
 
           if(memcmp(hash1,hash2,hashbytes) == 0)
           {
@@ -134,7 +135,7 @@ bool SanityTest ( pfHash hash, const int hashbits )
           // Flip it back, hash again -> we should get the original result.
 
           flipbit(key2,len,bit);
-          hash(key2,len,0,hash2);
+          hash(key2,len,seed,hash2);
 
           if(memcmp(hash1,hash2,hashbytes) != 0)
           {
@@ -169,16 +170,20 @@ bool SanityTest ( pfHash hash, const int hashbits )
 
 bool AppendedZeroesTest ( pfHash hash, const int hashbits )
 {
-  printf("Running sanity check 2");
+  printf("Sanity check null suffixes change the hash (simple)");
   
   Rand r(173994);
 
   const int hashbytes = hashbits/8;
+  uint32_t seed = 0;
 
-  for(int rep = 0; rep < 100; rep++)
+  for(int rep = 0; rep < 100; rep++, seed = r.rand_u32())
   {
     if(rep % 10 == 0) printf(".");
 
+    /* Very crude test - check that a 32 byte random string
+     * has a different hash compared to the same string suffixed
+     * with 1 to 32 null bytes. */
     unsigned char key[256];
 
     memset(key,0,sizeof(key));
@@ -193,9 +198,9 @@ bool AppendedZeroesTest ( pfHash hash, const int hashbits )
 
     for(int i = 0; i < 32; i++)
     {
-      hash(key,32+i,0,h1);
+      hash(key,32+i,seed,h1);
 
-      if(memcmp(h1,h2,hashbytes) == 0)
+      if(i && memcmp(h1,h2,hashbytes) == 0)
       {
         printf("\n*********FAIL*********\n");
 
