@@ -15,12 +15,26 @@
 #include <vector>
 #include <stdio.h>
 #include <math.h>
+#include <gsl/gsl_sf.h>
 
 // Avalanche fails if a bit is biased by more than 1%
 
-#define AVALANCHE_FAIL 0.01
+/* no bit may be more than 1% from the expected 50% changed rate */
+#define AVALANCHE_FAIL          0.01
+/* chi-square probability of the table (virtual) must be below 0.95 */
+#define CHI_SQUARE_P_FAIL       0.95
+/* chi-square probability of the table (virtual) must be below 0.95 */
+#define G_TEST_P_FAIL           0.95
+/* Fail if our standard error is more than this many times the actual error.
+ * The expected error varies with seed/key/hash bitsize and reps, so
+ * we normalize the error we receive to that expected for a 32x32 square
+ * with the given repetions. We then compare our normalized error rate to
+ * the expected to get a ratio. A good hash function should average this to
+ * 1 over many reps, and should probably never be further than twice the
+ * expected value. Being under occasionally is fine. */
+#define ERROR_SCALED_RATIO_FAIL 2.0
 
-double maxBias ( std::vector<int> & counts, int reps );
+double calcBiasStats ( std::vector<int> & counts, int reps, double * err, double * chisq, double * gval );
 void PrintAvalancheDiagram ( int seedbits, int keybits, int hashbits, int reps, int scale, std::vector<int> & bins );
 
 //-----------------------------------------------------------------------------
@@ -89,18 +103,41 @@ bool AvalancheTest ( pfHash hash, const int reps )
 
   bool result = true;
 
-  double b = maxBias(bins,reps);
+  double err;
+  double chisq;
+  double gval;
+  double worst_bit_error = calcBiasStats(bins, reps, &err, &chisq, &gval );
+  double err_scaled= err / ((double)bins.size() / 1024.0);
+  double expected_err_scaled= (0.00256 / (reps / 100000.0));
+  double err_scaled_ratio= err_scaled / expected_err_scaled;
+  double chisq_p = 1.0 - gsl_sf_gamma_inc_Q((double)bins.size()-1.0, chisq/2.0);
+  double gval_p = 1.0 - gsl_sf_gamma_inc_Q((double)bins.size()-1.0, gval);
 
-  printf(" worst bias is %5.3f%%",b * 100.0);
 
-  if(b > AVALANCHE_FAIL)
-  {
-    printf(" !!!!! ");
+  if(
+    worst_bit_error     >= AVALANCHE_FAIL ||
+    err_scaled_ratio    >= ERROR_SCALED_RATIO_FAIL ||
+    chisq_p             >= CHI_SQUARE_P_FAIL ||
+    gval_p              >= G_TEST_P_FAIL     ||
+    0
+  ) {
+    printf(" not ok!\n");
     result = false;
+  } else {
+    printf(" ok\n");
   }
 
-  printf("\n");
+  printf(
+    "    worst bit: %5.3f%% error: %.2e error ratio: %.2e\n"
+    "    chi-sq p-value: %.2e gval p-value: %.2e",
+    worst_bit_error * 100.0,
+    err_scaled,
+    err_scaled_ratio,
+    chisq_p,
+    gval_p
+  );
 
+  printf("\n");
   return result;
 }
 

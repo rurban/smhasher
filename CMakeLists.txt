@@ -191,4 +191,6 @@ target_link_libraries(
   SMHasher
   SMHasherSupport
   ${CMAKE_THREAD_LIBS_INIT}
+  gsl
+  gslcblas
 )

@@ -38,22 +38,42 @@ void PrintAvalancheDiagram ( int seedbits, int keybits, int hashbits, int reps, 
 
 //----------------------------------------------------------------------------
 
-double maxBias ( std::vector<int> & counts, int reps )
+double calcBiasStats ( std::vector<int> & counts, int reps, double *err, double *chi, double *gval )
 {
   double worst = 0;
+  double _err;
+  double _chi;
+  double _gval;
+  double dreps= double(reps);
+  double expect= dreps / 2;
+
+  if (!err) err= &_err;
+  if (!chi) chi= &_chi;
+  if (!_gval) gval= &_gval;
+  *err= 0.0;
+  *chi= 0.0;
+  *gval= 0.0;
 
   for(int i = 0; i < (int)counts.size(); i++)
   {
-    double c = double(counts[i]) / double(reps);
+    double changed= double(counts[i]);
+    double same= double(reps-counts[i]);
 
-    double d = fabs(c * 2 - 1);
+    double ratio = changed / dreps;
+    double diff = 0.5 - ratio;
+    double d_pct = fabs(diff * 2);
+    *err += (diff * diff);
+
+    *chi += pow(changed - expect, 2) / expect;
+    *chi += pow(same - expect, 2) / expect;
+    if (changed > 0) *gval += changed * log( changed / expect );
+    if (same > 0) *gval += same * log( same / expect );
       
-    if(d > worst)
+    if(d_pct > worst)
     {
-      worst = d;
+      worst = d_pct;
     }
   }
-
   return worst;
 }
 
