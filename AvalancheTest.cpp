@@ -78,3 +78,4 @@ double calcBiasStats ( std::vector<int> & counts, int reps, double *err, double 
 }
 
 //-----------------------------------------------------------------------------
+/* vim: set sts=2 sw=2 et: */

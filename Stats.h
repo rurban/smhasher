@@ -387,3 +387,4 @@ void TestDistributionFast ( std::vector<hashtype> & hashes, double & dworst, dou
 }
 
 //-----------------------------------------------------------------------------
+/* vim: set sts=2 sw=2 et: */

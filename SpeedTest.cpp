@@ -296,3 +296,4 @@ double TinySpeedTest ( pfHash hash, int hashsize, int keysize, uint32_t seed, bo
 }
 
 //-----------------------------------------------------------------------------
+/* vim: set sts=2 sw=2 et: */

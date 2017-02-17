@@ -478,3 +478,4 @@ void BicTest2 ( pfHash hash, const int reps, bool verbose = true )
 }
 
 //-----------------------------------------------------------------------------
+/* vim: set sts=2 sw=2 et: */

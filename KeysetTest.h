@@ -484,3 +484,4 @@ bool SeedTest ( pfHash hash, int count, bool drawDiagram, const char * text )
 }
 
 //-----------------------------------------------------------------------------
+/* vim: set sts=2 sw=2 et: */
