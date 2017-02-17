@@ -474,29 +474,36 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
     bool result = true;
     const int reps = 1000000;
-    printf("Expected error: %.5e\n\n", 0.00256 / ( (double)reps / 100000.0 ));
+    double confidence = 0.99;
+    printf("Confidence level %.5e Expected error: %.5e\n\n", 0.00256 / ( (double)reps / 100000.0 ));
 
-    result &= AvalancheTest< Blob< 32>, hashtype > (hash,reps);
-    result &= AvalancheTest< Blob< 40>, hashtype > (hash,reps);
-    result &= AvalancheTest< Blob< 48>, hashtype > (hash,reps);
-    result &= AvalancheTest< Blob< 56>, hashtype > (hash,reps);
+    if (0){
+    //result &= AvalancheTest< Blob< 0>, hashtype > (hash, reps, confidence);
+    result &= AvalancheTest< Blob< 8>, hashtype > (hash, reps, confidence);
+    result &= AvalancheTest< Blob< 16>, hashtype > (hash, reps, confidence);
+    result &= AvalancheTest< Blob< 24>, hashtype > (hash, reps, confidence);
+    result &= AvalancheTest< Blob< 32>, hashtype > (hash, reps, confidence);
+    result &= AvalancheTest< Blob< 40>, hashtype > (hash, reps, confidence);
+    result &= AvalancheTest< Blob< 48>, hashtype > (hash, reps, confidence);
+    }
+    result &= AvalancheTest< Blob< 56>, hashtype > (hash, reps, confidence);
+    if (0) {
+    result &= AvalancheTest< Blob< 64>, hashtype > (hash, reps, confidence);
+    result &= AvalancheTest< Blob< 72>, hashtype > (hash, reps, confidence);
+    result &= AvalancheTest< Blob< 80>, hashtype > (hash, reps, confidence);
+    result &= AvalancheTest< Blob< 88>, hashtype > (hash, reps, confidence);
 
-    result &= AvalancheTest< Blob< 64>, hashtype > (hash,reps);
-    result &= AvalancheTest< Blob< 72>, hashtype > (hash,reps);
-    result &= AvalancheTest< Blob< 80>, hashtype > (hash,reps);
-    result &= AvalancheTest< Blob< 88>, hashtype > (hash,reps);
+    result &= AvalancheTest< Blob< 96>, hashtype > (hash, reps, confidence);
+    result &= AvalancheTest< Blob<104>, hashtype > (hash, reps, confidence);
+    result &= AvalancheTest< Blob<112>, hashtype > (hash, reps, confidence);
+    result &= AvalancheTest< Blob<120>, hashtype > (hash, reps, confidence);
 
-    result &= AvalancheTest< Blob< 96>, hashtype > (hash,reps);
-    result &= AvalancheTest< Blob<104>, hashtype > (hash,reps);
-    result &= AvalancheTest< Blob<112>, hashtype > (hash,reps);
-    result &= AvalancheTest< Blob<120>, hashtype > (hash,reps);
-
-    result &= AvalancheTest< Blob<128>, hashtype > (hash,reps);
-    result &= AvalancheTest< Blob<136>, hashtype > (hash,reps);
-    result &= AvalancheTest< Blob<144>, hashtype > (hash,reps);
-    result &= AvalancheTest< Blob<152>, hashtype > (hash,reps);
-
-    if(!result) printf("********* %s - FAIL *********\n",info->name);
+    result &= AvalancheTest< Blob<128>, hashtype > (hash, reps, confidence);
+    result &= AvalancheTest< Blob<136>, hashtype > (hash, reps, confidence);
+    result &= AvalancheTest< Blob<144>, hashtype > (hash, reps, confidence);
+    result &= AvalancheTest< Blob<152>, hashtype > (hash, reps, confidence);
+    }
+    if(!result) printf("********* %s - FAIL *********\n", info->name);
     printf("\n");
     pass &= result;
   }

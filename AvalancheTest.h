@@ -33,9 +33,32 @@
  * 1 over many reps, and should probably never be further than twice the
  * expected value. Being under occasionally is fine. */
 #define ERROR_SCALED_RATIO_FAIL 2.0
+typedef struct av_stats {
+  int    *bins;
+  double *gtests;
+  double *chisqs;
+  double *pcts;
+  int reps;
+  int seedbits;
+  int keybits;
+  int hashbits;
+  int num_bits;
+  int num_bins;
+  int worst_y;
+  int worst_x;
+  int worst_i;
+  double chisq_prob;
+  double gtest_prob;
+  double worst_pct;
+  double err;
+  double err_scaled;
+  double expected_err_scaled;
+  double err_scaled_ratio;
+  double bins_dof;
+} av_statst;
 
-double calcBiasStats ( std::vector<int> & counts, int reps, double * err, double * chisq, double * gval );
-void PrintAvalancheDiagram ( int seedbits, int keybits, int hashbits, int reps, int scale, std::vector<int> & bins );
+double calcBiasStats ( std::vector<int> & counts, int reps, av_statst *stats );
+void PrintAvalancheDiagram ( av_statst *stats, int mode, int scale, double confidence );
 
 //-----------------------------------------------------------------------------
 
@@ -71,10 +94,11 @@ void calcBiasWithSeed ( pfHash hash, std::vector<int> & counts, int reps, Rand &
 
       for(int iOut = 0; iOut < hashbits; iOut++)
       {
-        int bitA = getbit(&A,hashbytes,iOut);
-        int bitB = getbit(&B,hashbytes,iOut);
+        int bitA = getbit(&A,hashbytes,iOut) ? 2 : 0;
+        int bitB = getbit(&B,hashbytes,iOut) ? 1 : 0;
 
-        (*cursor++) += (bitA ^ bitB);
+        cursor[ bitA + bitB ]++;
+        cursor += 4;
       }
     }
 
@@ -86,10 +110,11 @@ void calcBiasWithSeed ( pfHash hash, std::vector<int> & counts, int reps, Rand &
 
       for(int iOut = 0; iOut < hashbits; iOut++)
       {
-        int bitA = getbit(&A,hashbytes,iOut);
-        int bitB = getbit(&B,hashbytes,iOut);
+        int bitA = getbit(&A,hashbytes,iOut) ? 2 : 0;
+        int bitB = getbit(&B,hashbytes,iOut) ? 1 : 0;
 
-        (*cursor++) += (bitA ^ bitB);
+        cursor[ bitA + bitB ]++;
+        cursor += 4;
       }
     }
   }
@@ -98,45 +123,85 @@ void calcBiasWithSeed ( pfHash hash, std::vector<int> & counts, int reps, Rand &
 //-----------------------------------------------------------------------------
 
 template < typename keytype, typename hashtype >
-bool AvalancheTest ( pfHash hash, const int reps )
+bool AvalancheTest ( pfHash hash, const int reps, double confidence )
 {
   Rand r(48273);
+  int seedbits = 32;
+  int keybits = sizeof(keytype) * 8;
+  int hashbits = sizeof(hashtype) * 8;
+  int num_bits = ( keybits + seedbits ) * hashbits;
+  int num_bins = num_bits * 4;
+  std::vector<int> bins(num_bins,0);
+  std::vector<double> gtests(num_bits,0);
+  std::vector<double> pcts(num_bits,0);
+  std::vector<double> chisqs(num_bits,0);
   
-  const int keybytes = sizeof(keytype);
-  const int hashbytes = sizeof(hashtype);
+  av_statst stats = {
+    &bins[0],
+    &gtests[0],
+    &chisqs[0],
+    &pcts[0],
+    reps,
+    seedbits,
+    keybits,
+    hashbits,
+    num_bits,
+    num_bins,
+  };
 
-  const int seedbits = 32;
-  const int keybits = keybytes * 8;
-  const int hashbits = hashbytes * 8;
-
-  printf("Testing %3d-bit keys -> %3d-bit hashes, %8d reps",keybits,hashbits,reps);
+  printf("Testing %3d-bit seeds, %3d-bit keys -> %3d-bit hashes, %8d reps",
+          stats.seedbits, stats.keybits, stats.hashbits, reps);
 
   //----------
 
-  std::vector<int> bins((keybits+seedbits)*hashbits,0);
-  calcBiasWithSeed<keytype,hashtype>(hash,bins,reps,r);
+  calcBiasWithSeed<keytype,hashtype>(hash, bins, reps, r);
   
   //----------
 
   bool result = true;
 
-  double err;
-  double chisq;
-  double gval;
-  double worst_bit_error = calcBiasStats(bins, reps, &err, &chisq, &gval );
-  double err_scaled= err / ((double)bins.size() / 1024.0);
-  double expected_err_scaled= (0.00256 / (reps / 100000.0));
-  double err_scaled_ratio= err_scaled / expected_err_scaled;
-  double chisq_p = 1.0 - gsl_sf_gamma_inc_Q((double)bins.size()-1.0, chisq/2.0);
-  double gval_p = 1.0 - gsl_sf_gamma_inc_Q((double)bins.size()-1.0, gval);
+  double worst_bit_error = calcBiasStats( bins, reps, &stats );
 
+  int failed= 0;
+  int score_size= hashbits;
+  std::vector<double> scores(score_size,0);
+  std::vector<int> scores_incr(score_size,0);
+  std::vector<int> scores_count(score_size,0);
+  std::vector<int> scores_bad(score_size,0);
+  std::vector<int> scores_failed(score_size,0);
+  for (int start_p= 0; start_p < score_size; start_p++) {
+    for (int incr= hashbits - 7; incr < hashbits + 7 ; incr++) {
+      int cnt = 0;
+      int bad = 0;
+      for (int p= start_p; p < num_bits; p += incr) {
+        cnt++;
+        if (gtests[p] >= confidence) {
+          bad++;
+        }
+      }
+      double score= double(bad) / double(cnt);
+      if ( score > scores[start_p] && score >= 0.4 ){
+        scores[start_p]= score;
+        scores_incr[start_p]= incr;
+        scores_count[start_p]= cnt;
+        scores_bad[start_p]= bad;
+        scores_failed[start_p]= 1;
+        failed++;
+        if (0)
+            printf("\nfailed at start pos %d (%d,%d), increment %d, count %d bad %d score %f\n",
+              start_p, start_p/hashbits, start_p % hashbits, incr,
+              scores_count[start_p], scores_bad[start_p], scores[start_p]);
+      }
+    }
+  }
 
   if(
-    worst_bit_error     >= AVALANCHE_FAIL ||
-    err_scaled_ratio    >= ERROR_SCALED_RATIO_FAIL ||
-    chisq_p             >= CHI_SQUARE_P_FAIL ||
-    gval_p              >= G_TEST_P_FAIL     ||
-    0
+    worst_bit_error        >= AVALANCHE_FAIL          ||
+    stats.err_scaled_ratio >= ERROR_SCALED_RATIO_FAIL ||
+    stats.chisq_prob       >= CHI_SQUARE_P_FAIL       ||
+    stats.gtest_prob       >= G_TEST_P_FAIL           ||
+    failed                                            ||
+    !result
   ) {
     printf(" not ok!\n");
     result = false;
@@ -144,19 +209,26 @@ bool AvalancheTest ( pfHash hash, const int reps )
     printf(" ok\n");
   }
 
+  if (!result)
+    PrintAvalancheDiagram(&stats, 3, 1, confidence);
+
   printf(
     "    worst bit: %5.3f%% error: %.2e error ratio: %.2e\n"
-    "    chi-sq p-value: %.2e gval p-value: %.2e",
+    "    chi-sq p-value: %.2e gval p-value: %.2e\n",
     worst_bit_error * 100.0,
-    err_scaled,
-    err_scaled_ratio,
-    chisq_p,
-    gval_p
+    stats.err_scaled,
+    stats.err_scaled_ratio,
+    stats.chisq_prob,
+    stats.gtest_prob
   );
-
-  printf("\n");
+  for (int i= 0; i < score_size; i++) {
+    if (scores_failed[i]) {
+      printf("    Striping error at bit %d increment %d, %.2f%% in error! %d/%d\n",
+        i, scores_incr[i], scores[i] * 100, scores_bad[i], scores_count[i]);
+    }
+  }
   if (!result)
-    PrintAvalancheDiagram(seedbits,keybits,hashbits,reps,1,bins);
+    printf("FAILED\n");
   return result;
 }
 
