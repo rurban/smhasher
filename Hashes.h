@@ -35,6 +35,7 @@ void randhash_128          ( const void * key, int len, uint32_t seed, void * ou
 
 void md5_32                ( const void * key, int len, uint32_t seed, void * out );
 void sha1_32a              ( const void * key, int len, uint32_t seed, void * out );
+void sha1_32b              ( const void * key, int len, uint32_t seed, void * out );
 #if 0
 void sha1_64a              ( const void * key, int len, uint32_t seed, void * out );
 void sha2_32a              ( const void * key, int len, uint32_t seed, void * out );
