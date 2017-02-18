@@ -21,9 +21,7 @@ void PrintAvalancheDiagram ( av_statst *stats, int mode, int scale, double confi
   if(!scale) scale = 1;
   double expect = double(stats->reps) / 4;
   int failed = 0;
-  double *cursor= mode == 0 ? stats->pcts :
-                  mode == 1 ? stats->chisqs :
-                  stats->gtests;
+  double *cursor= mode ? stats->gtests : stats->pcts;
 
   if (stats->hashbits == 32) {
     printf("%12s |0         1         2         3 |\n","");
@@ -75,58 +73,91 @@ void PrintAvalancheDiagram ( av_statst *stats, int mode, int scale, double confi
 }
 
 //----------------------------------------------------------------------------
+#define GTEST_PROB(bins,gval) \
+  ( 1.0 - gsl_sf_gamma_inc_Q( ( double(bins) - 1.0) / 2.0, (gval) ) )
 
-double calcBiasStats ( std::vector<int> & counts, int reps, av_statst *stats )
+double calcBiasStats ( std::vector<int> & counts, int reps, av_statst *stats, double confidence )
 {
   double worst = 0.0;
   double dreps= double(reps);
-  double expect_changed= dreps / 2.0;
-  double expect= dreps / 4.0;
+  double expected= dreps / 2.0;
 
   stats->err= 0.0;
-  stats->chisq_prob= 0.0;
   stats->gtest_prob= 0.0;
   stats->worst_pct= 0.0;
+  std::vector<int> col_bins(stats->hashbits * 2,0);
+  std::vector<int> row_bins(stats->num_rows * 2,0);
 
   for(int i = 0; i < (int)counts.size(); i += 4 )
   {
     double changed= double(counts[i + 1] + counts[i + 2]);
-
+    double stayed=  double(counts[i + 0] + counts[i + 3]);
     double ratio = changed / dreps;
     double diff = 0.5 - ratio;
     double d_pct = fabs(diff * 2);
     stats->err += (diff * diff);
 
-    double this_chisq = 0.0;
-    double this_gtest = 0.0;
+    int row= (i / 4) / stats->hashbits;
+    int col= (i / 4) % stats->hashbits;
+    col_bins[(col * 2) + 0] += stayed;
+    col_bins[(col * 2) + 1] += changed;
+    row_bins[(row * 2) + 0] += stayed;
+    row_bins[(row * 2) + 1] += changed;
 
-    for (int j = 0; j < 4; j++) {
-        this_chisq += pow(counts[ i + j ] - expect, 2) / expect;
-        stats->chisq_prob += pow(counts[ i + j ] - expect, 2) / expect;
-        if ( counts[ i + j ] > 0 ) {
-            this_gtest += counts[ i + j ] * log( counts[ i + j ] / expect );
-            stats->gtest_prob += counts[ i + j ] * log( counts[ i + j ] / expect );
-        }
+    double this_gtest = 0.0;
+    if ( changed ) {
+        double adj= changed * log( changed / expected );
+        this_gtest += adj;
+        stats->gtest_prob += adj;
     }
-    stats->chisqs[i/4] = (1.0 - gsl_sf_gamma_inc_Q( 3.0 / 2.0, this_chisq / 2.0));
-    stats->gtests[i/4] = 1.0 - gsl_sf_gamma_inc_Q( 3.0 / 2.0, this_gtest);
+    if ( stayed ) {
+        double adj= stayed * log( stayed / expected );
+        this_gtest += adj;
+        stats->gtest_prob += adj;
+    }
+
+    stats->gtests[i/4] = GTEST_PROB( 1, this_gtest );
     stats->pcts[i/4] = d_pct;
-      
+
     if(d_pct > worst)
     {
         stats->worst_pct= d_pct;
-        stats->worst_i= i/4;
         worst = d_pct;
+        stats->worst_x = col;
+        stats->worst_y = row;
     }
   }
-  stats->bins_dof = double(stats->num_bins) - 1.0;
+  for (int i= 0; i < stats->hashbits * 2; i+=2) {
+    double gtest= 0.0;
+    double l= double(col_bins[i + 0]);
+    double r= double(col_bins[i + 1]);
+    double m= (l + r) / 2;
+    if (l) gtest += l * log( l / m );
+    if (r) gtest += r * log( r / m );
+
+    gtest = GTEST_PROB( 2.0, gtest );
+    stats->col_gtests[i/2] = gtest;
+    if ( gtest > confidence )
+      printf("Col %d failed gtest %.8f (%.0f | %.0f | %.0f)\n", i/2, gtest, l, m, r );
+  }
+  for (int i= 0; i < stats->num_rows * 2; i+=2) {
+    double gtest= 0.0;
+    double l= double(row_bins[i + 0]);
+    double r= double(row_bins[i + 1]);
+    double m= (l + r) / 2;
+    if (l) gtest += l * log( l / m );
+    if (r) gtest += r * log( r / m );
+
+    gtest = GTEST_PROB( 2.0, gtest );
+    stats->row_gtests[i/2] = gtest;
+    if ( gtest > confidence )
+      printf("Row %d failed gtest %.8f (%.0f | %.0f | %.0f)\n", i/2, gtest, l, m, r );
+  }
+
   stats->err_scaled = stats->err / ( double(stats->num_bits) / 1024.0 );
   stats->expected_err_scaled = (0.00256 / (stats->reps / 100000.0));
   stats->err_scaled_ratio= stats->err_scaled / stats->expected_err_scaled;
-  stats->chisq_prob = 1.0 - gsl_sf_gamma_inc_Q(stats->bins_dof/2.0, stats->chisq_prob/2.0);
-  stats->gtest_prob = 1.0 - gsl_sf_gamma_inc_Q(stats->bins_dof/2.0, stats->gtest_prob);
-  stats->worst_x = stats->worst_i % stats->hashbits;
-  stats->worst_y = stats->worst_i / stats->hashbits;
+  stats->gtest_prob = GTEST_PROB( stats->num_bins / 2, stats->gtest_prob );
   return worst;
 }
 

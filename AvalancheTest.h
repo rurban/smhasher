@@ -21,9 +21,7 @@
 
 /* no bit may be more than 1% from the expected 50% changed rate */
 #define AVALANCHE_FAIL          0.01
-/* chi-square probability of the table (virtual) must be below 0.95 */
-#define CHI_SQUARE_P_FAIL       0.95
-/* chi-square probability of the table (virtual) must be below 0.95 */
+/* g-test probability of the table (virtual) must be below 0.95 */
 #define G_TEST_P_FAIL           0.95
 /* Fail if our standard error is more than this many times the actual error.
  * The expected error varies with seed/key/hash bitsize and reps, so
@@ -34,30 +32,29 @@
  * expected value. Being under occasionally is fine. */
 #define ERROR_SCALED_RATIO_FAIL 2.0
 typedef struct av_stats {
-  int    *bins;
-  double *gtests;
-  double *chisqs;
-  double *pcts;
-  int reps;
-  int seedbits;
-  int keybits;
-  int hashbits;
-  int num_bits;
-  int num_bins;
-  int worst_y;
-  int worst_x;
-  int worst_i;
-  double chisq_prob;
-  double gtest_prob;
-  double worst_pct;
-  double err;
-  double err_scaled;
-  double expected_err_scaled;
-  double err_scaled_ratio;
-  double bins_dof;
+  int     *bins;
+  double  *gtests;
+  double  *pcts;
+  double  *col_gtests;
+  double  *row_gtests;
+  int     reps;
+  int     seedbits;
+  int     keybits;
+  int     hashbits;
+  int     num_bits;
+  int     num_bins;
+  int     num_rows;
+  int     worst_y;
+  int     worst_x;
+  double  gtest_prob;
+  double  worst_pct;
+  double  err;
+  double  err_scaled;
+  double  expected_err_scaled;
+  double  err_scaled_ratio;
 } av_statst;
 
-double calcBiasStats ( std::vector<int> & counts, int reps, av_statst *stats );
+double calcBiasStats ( std::vector<int> & counts, int reps, av_statst *stats, double confidence );
 void PrintAvalancheDiagram ( av_statst *stats, int mode, int scale, double confidence );
 
 //-----------------------------------------------------------------------------
@@ -125,28 +122,32 @@ void calcBiasWithSeed ( pfHash hash, std::vector<int> & counts, int reps, Rand &
 template < typename keytype, typename hashtype >
 bool AvalancheTest ( pfHash hash, const int reps, double confidence )
 {
-  Rand r(48273);
+  Rand r(923145681);
   int seedbits = 32;
   int keybits = sizeof(keytype) * 8;
   int hashbits = sizeof(hashtype) * 8;
+  int num_rows = keybits + seedbits;
   int num_bits = ( keybits + seedbits ) * hashbits;
   int num_bins = num_bits * 4;
   std::vector<int> bins(num_bins,0);
   std::vector<double> gtests(num_bits,0);
   std::vector<double> pcts(num_bits,0);
-  std::vector<double> chisqs(num_bits,0);
+  std::vector<double> col_gtest(hashbits,0);
+  std::vector<double> row_gtest(num_rows,0);
   
   av_statst stats = {
     &bins[0],
     &gtests[0],
-    &chisqs[0],
     &pcts[0],
+    &col_gtest[0],
+    &row_gtest[0],
     reps,
     seedbits,
     keybits,
     hashbits,
     num_bits,
     num_bins,
+    num_rows,
   };
 
   printf("Testing %3d-bit seeds, %3d-bit keys -> %3d-bit hashes, %8d reps",
@@ -160,7 +161,7 @@ bool AvalancheTest ( pfHash hash, const int reps, double confidence )
 
   bool result = true;
 
-  double worst_bit_error = calcBiasStats( bins, reps, &stats );
+  double worst_bit_error = calcBiasStats( bins, reps, &stats, confidence );
 
   int failed= 0;
   int score_size= hashbits;
@@ -198,7 +199,6 @@ bool AvalancheTest ( pfHash hash, const int reps, double confidence )
   if(
     worst_bit_error        >= AVALANCHE_FAIL          ||
     stats.err_scaled_ratio >= ERROR_SCALED_RATIO_FAIL ||
-    stats.chisq_prob       >= CHI_SQUARE_P_FAIL       ||
     stats.gtest_prob       >= G_TEST_P_FAIL           ||
     failed                                            ||
     !result
@@ -213,13 +213,12 @@ bool AvalancheTest ( pfHash hash, const int reps, double confidence )
     PrintAvalancheDiagram(&stats, 3, 1, confidence);
 
   printf(
-    "    worst bit: %5.3f%% error: %.2e error ratio: %.2e\n"
-    "    chi-sq p-value: %.2e gval p-value: %.2e\n",
+    "    worst bit: %5.3f%% error: %.8f error ratio: %.4f\n"
+    "    probability not-random (g-test): %12.5f%%\n",
     worst_bit_error * 100.0,
     stats.err_scaled,
     stats.err_scaled_ratio,
-    stats.chisq_prob,
-    stats.gtest_prob
+    stats.gtest_prob * 100.0
   );
   for (int i= 0; i < score_size; i++) {
     if (scores_failed[i]) {
