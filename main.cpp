@@ -64,273 +64,275 @@ TestOpts g_testopts[] =
 HashInfo g_hashes[] =
 {
   // -- No-op hashes
-  { DoNothingHash, NULL, NULL, NULL, 32,  32,  32, 0x00000000, "donothing32",
+  { DoNothingHash, NULL, NULL, 32,  32,  32, 0x00000000, "donothing32",
       "Do-Nothing function (only valid for measuring call overhead)", NULL },
-  { DoNothingHash, NULL, NULL, NULL, 32,  32,  64, 0x00000000, "donothing64",
+  { DoNothingHash, NULL, NULL, 32,  32,  64, 0x00000000, "donothing64",
       "Do-Nothing function (only valid for measuring call overhead)", NULL },
-  { DoNothingHash, NULL, NULL, NULL, 32,  32, 128, 0x00000000, "donothing128",
+  { DoNothingHash, NULL, NULL, 32,  32, 128, 0x00000000, "donothing128",
       "Do-Nothing function (only valid for measuring call overhead)", NULL },
-  { NoopOAATReadHash, NULL, NULL, NULL, 32, 32, 64, 0x00000000, "NOP_OAAT_read64",
+  { NoopOAATReadHash, NULL, NULL, 32, 32, 64, 0x00000000, "NOP_OAAT_read64",
       "Noop function (only valid for measuring call + OAAT reading overhead)", NULL },
   // -- Crap hashes
-  { BadHash, NULL, NULL, NULL, 32, 32, 32, 0xAB432E23, "BadHash",
+  { BadHash, NULL, NULL, 32, 32, 32, 0xAB432E23, "BadHash",
       "very simple XOR shift", NULL },
-  { sumhash, NULL, NULL, NULL, 32, 32, 32, 0x0000A9AC, "sumhash",
+  { sumhash, NULL, NULL, 32, 32, 32, 0x0000A9AC, "sumhash",
       "sum all bytes", NULL },
-  { sumhash32, NULL, NULL, NULL, 32, 32, 32, 0xF5562C80, "sumhash32",
+  { sumhash32, NULL, NULL, 32, 32, 32, 0xF5562C80, "sumhash32",
       "sum all 32bit words", NULL },
-  { crc32, NULL, NULL, NULL, 32,  32,  32, 0x3719DB20, "crc32",
+  { crc32, NULL, NULL, 32,  32,  32, 0x3719DB20, "crc32",
       "CRC-32", NULL },
 #if defined(__SSE4_2__) && defined(__x86_64__)
   /* Even 32 uses crc32q, quad only */
-  { crc32c_hw_test, NULL, NULL, NULL, 32, 32, 32, 0x0C7346F0, "crc32_hw",
+  { crc32c_hw_test, NULL, NULL, 32, 32, 32, 0x0C7346F0, "crc32_hw",
       "SSE4.2 crc32 in HW", NULL },
-  { crc32c_hw1_test, NULL, NULL, NULL, 32, 32, 32, 0x0C7346F0, "crc32_hw1",
+  { crc32c_hw1_test, NULL, NULL, 32, 32, 32, 0x0C7346F0, "crc32_hw1",
       "Faster Adler SSE4.2 crc32 in HW", NULL },
-  { crc64c_hw_test, NULL, NULL, NULL, 32, 32, 64, 0xE7C3FD0E, "crc64_hw",
+  { crc64c_hw_test, NULL, NULL, 32, 32, 64, 0xE7C3FD0E, "crc64_hw",
       "SSE4.2 crc64 in HW", NULL },
 #endif
 
   // -- Message Digests/NIST Hash Functions.
-  { md5_32, NULL, NULL, NULL, 32,  32,  32, 0xF7192210, "md5_32a",
+  { md5_32, NULL, NULL, 32,  32,  32, 0xF7192210, "md5_32a",
       "MD5, first 32 bits", NULL },
-  { sha1_32a, NULL, NULL, NULL, 32,  32,  32, 0x7FE8C80E, "sha1_32a",
+  { sha1_32a, NULL, NULL, 32,  32,  32, 0x7FE8C80E, "sha1_32a",
       "SHA1, first 32 bits", NULL },
-  { sha1_32b, NULL, NULL, NULL, 32,  32,  32, 0x0, "sha1_32b",
+  { sha1_32b, NULL, NULL, 32,  32,  32, 0x0, "sha1_32b",
       "SHA1, first 32 bits xored with last 32 bits", NULL },
 #if 0
-  { sha1_64a, NULL, NULL, NULL, 32, 32, 32, 0x00000000, "sha1_64a",
+  { sha1_64a, NULL, NULL, 32, 32, 32, 0x00000000, "sha1_64a",
       "SHA1 64-bit, first 64 bits of result", NULL },
-  { sha2_32a, NULL, NULL, NULL, 32, 32, 32, 0x00000000, "sha2_32a",
+  { sha2_32a, NULL, NULL, 32, 32, 32, 0x00000000, "sha2_32a",
       "SHA2, first 32 bits of result", NULL },
-  { sha2_64a, NULL, NULL, NULL, 32, 32, 64, 0x00000000, "sha2_64a",
+  { sha2_64a, NULL, NULL, 32, 32, 64, 0x00000000, "sha2_64a",
       "SHA2, first 64 bits of result", NULL },
-  { sha3_32a, NULL, NULL, NULL, 32, 32, 32, 0x00000000, "sha3_32a",
+  { sha3_32a, NULL, NULL, 32, 32, 32, 0x00000000, "sha3_32a",
       "SHA3, first 32 bits of result", NULL },
-  { sha3_64a, NULL, NULL, NULL, 32, 32, 64, 0x00000000, "sha3_64a",
+  { sha3_64a, NULL, NULL, 32, 32, 64, 0x00000000, "sha3_64a",
       "SHA3, first 64 bits of result", NULL },
-  { BLAKE2_32a, NULL, NULL, NULL, 32, 32, 32, 0x00000000, "blake2_32a",
+  { BLAKE2_32a, NULL, NULL, 32, 32, 32, 0x00000000, "blake2_32a",
       "BLAKE2, first 32 bits of result", NULL },
-  { BLAKE2_64a, NULL, NULL, NULL, 32, 32, 64, 0x00000000, "blake2_64a",
+  { BLAKE2_64a, NULL, NULL, 32, 32, 64, 0x00000000, "blake2_64a",
       "BLAKE2, first 64 bits of result", NULL },
-  { bcrypt_64a, NULL, NULL, NULL, 32, 32, 64, 0x00000000, "bcrypt_64a",
+  { bcrypt_64a, NULL, NULL, 32, 32, 64, 0x00000000, "bcrypt_64a",
       "bcrypt, first 64 bits of result", NULL },
-  { scrypt_64a, NULL, NULL, NULL, 32, 32, 64, 0x00000000, "scrypt_64a",
+  { scrypt_64a, NULL, NULL, 32, 32, 64, 0x00000000, "scrypt_64a",
       "scrypt, first 64 bits of result", NULL },
 #endif
 
   // -- Others
 #if 0 && defined(__x86_64__) && (defined(__linux__) || defined(__APPLE__))
   // elf64 or macho64 only
-  { fhtw_test, NULL, NULL, NULL, 32, 32, 64, 0x0,        "fhtw",
+  { fhtw_test, NULL, NULL, 32, 32, 64, 0x0,        "fhtw",
       "fhtw asm", NULL },
 #endif
-  { FNV32a, NULL, NULL, NULL, 32, 32, 32, 0xE3CBBE91, "FNV1a",
+  { FNV32a, NULL, NULL, 32, 32, 32, 0xE3CBBE91, "FNV1a",
       "Fowler-Noll-Vo hash, 32-bit", NULL },
-  { FNV32a_YoshimitsuTRIAD, NULL, NULL, NULL, 32, 32, 32,0xD8AFFD71, "FNV1a_YT",
+  { FNV32a_YoshimitsuTRIAD, NULL, NULL, 32, 32, 32,0xD8AFFD71, "FNV1a_YT",
       "FNV1a-YoshimitsuTRIAD 32-bit sanmayce", NULL },
-  { FNV64a, NULL, NULL, NULL, 32, 32, 64, 0x103455FC, "FNV64",
+  { FNV64a, NULL, NULL, 32, 32, 64, 0x103455FC, "FNV64",
       "Fowler-Noll-Vo hash, 64-bit", NULL },
-  { Bernstein, NULL, NULL, NULL, 32, 32, 32, 0xBDB4B640, "bernstein",
+  { Bernstein, NULL, NULL, 32, 32, 32, 0xBDB4B640, "bernstein",
       "Bernstein, 32-bit", NULL },
-  { lookup3_test, NULL, NULL, NULL, 32, 32, 32, 0x3D83917A, "lookup3",
+  { lookup3_test, NULL, NULL, 32, 32, 32, 0x3D83917A, "lookup3",
       "Bob Jenkins' lookup3", NULL },
-  { SuperFastHash, NULL, NULL, NULL, 32, 32, 32, 0x980ACD1D, "superfast",
+  { SuperFastHash, NULL, NULL, 32, 32, 32, 0x980ACD1D, "superfast",
       "Paul Hsieh's SuperFastHash", NULL },
-  { MurmurOAAT_test, NULL, NULL, NULL, 32, 32, 32, 0x5363BD98, "MurmurOAAT",
+  { MurmurOAAT_test, NULL, NULL, 32, 32, 32, 0x5363BD98, "MurmurOAAT",
       "Murmur one-at-a-time", NULL },
-  { Crap8_test, NULL, NULL, NULL, 32, 32, 32, 0x743E97A1, "Crap8",
+  { Crap8_test, NULL, NULL, 32, 32, 32, 0x743E97A1, "Crap8",
       "Crap8", NULL },
   // CityHash
-  { CityHash64_test, NULL, NULL, NULL, 32, 32, 64, 0x25A20825, "City64",
+  { CityHash64_test, NULL, NULL, 32, 32, 64, 0x25A20825, "City64",
       "Google CityHash64WithSeed", NULL },
-  { CityHash128_test, NULL, NULL, NULL, 32, 32,128, 0x6531F54E, "City128",
+  { CityHash128_test, NULL, NULL, 32, 32,128, 0x6531F54E, "City128",
       "Google CityHash128WithSeed", NULL },
 
   // SpoookyHash
-  { SpookyHash32_test, NULL, NULL, NULL, 32, 32,   32, 0x3F798BBB, "Spooky32",
+  { SpookyHash32_test, NULL, NULL, 32, 32,   32, 0x3F798BBB, "Spooky32",
       "Bob Jenkins' SpookyHash, 32-bit result", NULL },
-  { SpookyHash64_test, NULL, NULL, NULL, 32, 32,   64, 0xA7F955F1, "Spooky64",
+  { SpookyHash64_test, NULL, NULL, 32, 32,   64, 0xA7F955F1, "Spooky64",
       "Bob Jenkins' SpookyHash, 64-bit result", NULL },
-  { SpookyHash128_test, NULL, NULL, NULL, 32, 32, 128, 0x8D263080, "Spooky128",
+  { SpookyHash128_test, NULL, NULL, 32, 32, 128, 0x8D263080, "Spooky128",
       "Bob Jenkins' SpookyHash, 128-bit result", NULL },
 
   // MurmurHash2
-  { MurmurHash2_test, NULL, NULL, NULL, 32, 32, 32, 0x27864C1E, "Murmur2",
+  { MurmurHash2_test, NULL, NULL, 32, 32, 32, 0x27864C1E, "Murmur2",
     "MurmurHash2 for x86, 32-bit", NULL },
-  { MurmurHash2A_test, NULL, NULL, NULL, 32, 32, 32, 0x7FBD4396, "Murmur2A",
+  { MurmurHash2A_test, NULL, NULL, 32, 32, 32, 0x7FBD4396, "Murmur2A",
       "MurmurHash2A for x86, 32-bit", NULL },
-  { MurmurHash64A_test, NULL, NULL, NULL, 32, 32, 64, 0x1F0D3804, "Murmur2B",
+  { MurmurHash64A_test, NULL, NULL, 32, 32, 64, 0x1F0D3804, "Murmur2B",
       "MurmurHash2 for x64, 64-bit", NULL },
-  { MurmurHash64B_test, NULL, NULL, NULL, 32, 32, 64, 0xDD537C05, "Murmur2C",
+  { MurmurHash64B_test, NULL, NULL, 32, 32, 64, 0xDD537C05, "Murmur2C",
       "MurmurHash2 for x86, 64-bit", NULL },
 
   // MurmurHash3
-  { MurmurHash3_x86_32, NULL, NULL, NULL, 32, 32,  32, 0xB0F57EE3, "Murmur3A",
+  { MurmurHash3_x86_32, NULL, NULL, 32, 32,  32, 0xB0F57EE3, "Murmur3A",
       "MurmurHash3 for x86, 32-bit", NULL },
-  { MurmurHash3_x86_128, NULL, NULL, NULL, 32, 32, 128, 0xB3ECE62A, "Murmur3C",
+  { MurmurHash3_x86_128, NULL, NULL, 32, 32, 128, 0xB3ECE62A, "Murmur3C",
       "MurmurHash3 for x86, 128-bit", NULL },
 #if defined(__x86_64__)
-  { MurmurHash3_x64_128, NULL, NULL, NULL, 32, 32, 128, 0x6384BA69, "Murmur3F",
+  { MurmurHash3_x64_128, NULL, NULL, 32, 32, 128, 0x6384BA69, "Murmur3F",
       "MurmurHash3 for x64, 128-bit", NULL },
 #endif
 
-  { PMurHash32_test, NULL, NULL, NULL, 32, 32,  32, 0xB0F57EE3, "PMurHash32",
+  { PMurHash32_test, NULL, NULL, 32, 32,  32, 0xB0F57EE3, "PMurHash32",
       "Shane Day's portable-ized MurmurHash3 for x86, 32-bit.", NULL },
 
   // BeagleHash_32_xx
-  { beagle_hash_32_32_a_smhasher_test, NULL, NULL, NULL, 32, 32,  32, 0x47CECE27, "BeagleHash_32_32",
+  { beagle_hash_32_32_a_smhasher_test,
+    beagle_hash_seed_prep_smhasher, beagle_hash_32_128_a_smhasher,
+    32, 128,  32, 0x47CECE27, "BeagleHash_32_32",
       "Yves Orton's hash for 64-bit reduced to 32 (32 bit seed).", NULL },
-  { beagle_hash_32_64_a_smhasher_test, NULL, NULL, NULL, 32, 32,  32, 0xC7CD22FA, "BeagleHash_32_64",
+  { beagle_hash_32_64_a_smhasher_test, NULL, NULL, 32, 32,  32, 0xC7CD22FA, "BeagleHash_32_64",
       "Yves Orton's hash for 64-bit reduced to 32 (64 bit seed).", NULL },
-  { beagle_hash_32_96_a_smhasher_test, NULL, NULL, NULL, 32, 32,  32, 0xCE38DE69, "BeagleHash_32_96",
+  { beagle_hash_32_96_a_smhasher_test, NULL, NULL, 32, 32,  32, 0xCE38DE69, "BeagleHash_32_96",
       "Yves Orton's hash for 64-bit reduced to 32 (96 bit seed).", NULL },
-  { beagle_hash_32_112_a_smhasher_test, NULL, NULL, NULL, 32, 32,  32, 0x5CCE6AC4, "BeagleHash_32_112",
+  { beagle_hash_32_112_a_smhasher_test, NULL, NULL, 32, 32,  32, 0x5CCE6AC4, "BeagleHash_32_112",
       "Yves Orton's hash for 64-bit reduced to 32 (112 bit seed).", NULL },
-  { beagle_hash_32_127_a_smhasher_test, NULL, NULL, NULL, 32, 32,  32, 0xC9134969, "BeagleHash_32_127",
+  { beagle_hash_32_127_a_smhasher_test, NULL, NULL, 32, 32,  32, 0xC9134969, "BeagleHash_32_127",
       "Yves Orton's hash for 64-bit reduced to 32 (127 bit seed).", NULL },
 
   // BeagleHash_64_xx
-  { beagle_hash_64_32_a_smhasher_test, NULL, NULL, NULL, 32, 32,   64, 0xDE789E78, "BeagleHash_64_32",
+  { beagle_hash_64_32_a_smhasher_test, NULL, NULL, 32, 32,   64, 0xDE789E78, "BeagleHash_64_32",
       "Yves Orton's hash for 64-bit. (32 bit seed)", NULL },
-  { beagle_hash_64_64_a_smhasher_test, NULL, NULL, NULL, 32, 32,   64, 0x3CDD6E7C, "BeagleHash_64_64",
+  { beagle_hash_64_64_a_smhasher_test, NULL, NULL, 32, 32,   64, 0x3CDD6E7C, "BeagleHash_64_64",
       "Yves Orton's hash for 64-bit. (64 bit seed)", NULL },
-  { beagle_hash_64_96_a_smhasher_test, NULL, NULL, NULL, 32, 32,   64, 0x40EBE522, "BeagleHash_64_96",
+  { beagle_hash_64_96_a_smhasher_test, NULL, NULL, 32, 32,   64, 0x40EBE522, "BeagleHash_64_96",
       "Yves Orton's hash for 64-bit (96 bit seed).", NULL },
-  { beagle_hash_64_112_a_smhasher_test, NULL, NULL, NULL, 32, 32,  64, 0xF91596C5, "BeagleHash_64_112",
+  { beagle_hash_64_112_a_smhasher_test, NULL, NULL, 32, 32,  64, 0xF91596C5, "BeagleHash_64_112",
       "Yves Orton's hash for 64-bit (112 bit seed).", NULL },
-  { beagle_hash_64_127_a_smhasher_test, NULL, NULL, NULL, 32, 32,  64, 0x575C6DA6, "BeagleHash_64_127",
+  { beagle_hash_64_127_a_smhasher_test, NULL, NULL, 32, 32,  64, 0x575C6DA6, "BeagleHash_64_127",
       "Yves Orton's hash for 64-bit (127 bit seed).", NULL },
 
   // ZaphodHash, Marvin32, Phat, Phat4
-  { zaphod_hash_smhasher_test, NULL, NULL, NULL, 32, 32, 32, 0x0549DFCF, "Zaphod32",
+  { zaphod_hash_smhasher_test, NULL, NULL, 32, 32, 32, 0 /* 0x0549DFCF */, "Zaphod32",
       "Marvin32 like hash", NULL },
-  { phat_hash_smhasher_test, NULL, NULL, NULL, 32, 32, 32, 0xF7C8FFE3, "Phat",
+  { phat_hash_smhasher_test, NULL, NULL, 32, 32, 32, 0xF7C8FFE3, "Phat",
       "Phat Hash", NULL },
-  { phat4_hash_smhasher_test, NULL, NULL, NULL, 32, 32, 32, 1 ? 0x0 : 0xB3A5E4A4, "Phat4",
+  { phat4_hash_smhasher_test, NULL, NULL, 32, 32, 32, 1 ? 0x0 : 0xB3A5E4A4, "Phat4",
       "Phat4 Hash", NULL },
-  { marvin_32_smhasher_test, NULL, NULL, NULL, 32, 32, 32, 0xE6711235, "Marvin32",
+  { marvin_32_smhasher_test, NULL, NULL, 32, 32, 32, 0xE6711235, "Marvin32",
       "Marvin32 from MicroSoft", NULL },
 #ifdef __SSE2__
-  { hasshe2_test, NULL, NULL, NULL, 32, 32, 256, 0xF5D39DFE, "hasshe2",     "SSE2 hasshe2, 256-bit", NULL },
+  { hasshe2_test, NULL, NULL, 32, 32, 256, 0xF5D39DFE, "hasshe2",     "SSE2 hasshe2, 256-bit", NULL },
 #endif
 
 
 #if 0
-  { fletcher2, NULL, NULL, NULL, 32, 32, 64, 0x0, "fletcher2",
+  { fletcher2, NULL, NULL, 32, 32, 64, 0x0, "fletcher2",
       "fletcher2 ZFS"} //TODO
-  { fletcher4, NULL, NULL, NULL, 32, 32, 64, 0x0, "fletcher4",
+  { fletcher4, NULL, NULL, 32, 32, 64, 0x0, "fletcher4",
       "fletcher4 ZFS"} //TODO
-  { Jesteress, NULL, NULL, NULL, 32, 32, 32, 0x0, "Jesteress",
+  { Jesteress, NULL, NULL, 32, 32, 32, 0x0, "Jesteress",
       "FNV1a-Jesteress 32-bit sanmayce", NULL },
-  { Meiyan, NULL, NULL, NULL, 32, 32, 32, 0x0, "Meiyan",
+  { Meiyan, NULL, NULL, 32, 32, 32, 0x0, "Meiyan",
       "FNV1a-Meiyan 32-bit sanmayce", NULL },
 #endif
-  { sdbm, NULL, NULL, NULL, 32, 32, 32, 0x582AF769, "sdbm",
+  { sdbm, NULL, NULL, 32, 32, 32, 0x582AF769, "sdbm",
       "sdbm as in perl5", NULL },
-  { x17_test, NULL, NULL, NULL, 32, 32, 32, 0x8128E14C, "x17",
+  { x17_test, NULL, NULL, 32, 32, 32, 0x8128E14C, "x17",
       "x17", NULL },
   // also called jhash:
-  { JenkinsOOAT, NULL, NULL, NULL, 32, 32, 32, 0x83E133DA, "JenkinsOOAT",
+  { JenkinsOOAT, NULL, NULL, 32, 32, 32, 0x83E133DA, "JenkinsOOAT",
       "Bob Jenkins' OOAT as in perl 5.18", NULL },
-  { JenkinsOOAT_perl, NULL, NULL, NULL, 32, 32, 32, 0xEE05869B, "JenkinsOOAT_perl",
+  { JenkinsOOAT_perl, NULL, NULL, 32, 32, 32, 0xEE05869B, "JenkinsOOAT_perl",
       "Bob Jenkins' OOAT as in old perl5", NULL },
-  { MicroOAAT, NULL, NULL, NULL, 32, 32, 32, 0x16F1BA97, "MicroOAAT",
+  { MicroOAAT, NULL, NULL, 32, 32, 32, 0x16F1BA97, "MicroOAAT",
       "Small non-multiplicative OAAT that passes all collision checks (by funny-falcon)", NULL },
-  { halfsiphash_test, NULL, NULL, NULL, 32, 32, 32, 0xA7A05F72, "HalfSipHash",
+  { halfsiphash_test, NULL, NULL, 32, 32, 32, 0xA7A05F72, "HalfSipHash",
       "HalfSipHash 2-4, 32bit", NULL },
 
   // and now the quality hash funcs, which mostly work
   // GoodOOAT passes whole SMHasher (by funny-falcon)
-  { GoodOAAT, NULL, NULL, NULL, 32, 32, 32, 0x7B14EEE5, "GoodOAAT",
+  { GoodOAAT, NULL, NULL, 32, 32, 32, 0x7B14EEE5, "GoodOAAT",
       "Small non-multiplicative OAAT", NULL },
-  { siphash_test, NULL, NULL, NULL, 32, 32, 64, 0xC58D7F9C, "SipHash",
+  { siphash_test, NULL, NULL, 32, 32, 64, 0xC58D7F9C, "SipHash",
       "SipHash 2-4 - SSSE3 optimized", NULL },
   // as in rust and swift
-  { siphash13_test, NULL, NULL, NULL, 32, 32, 64, 0x29C010BF, "SipHash13",
+  { siphash13_test, NULL, NULL, 32, 32, 64, 0x29C010BF, "SipHash13",
       "SipHash 1-3 - SSSE3 optimized", NULL },
 #if defined(__x86_64__)
-  { fasthash32_test, NULL, NULL, NULL, 32, 32, 32, 0xE9481AFC, "fasthash32",
+  { fasthash32_test, NULL, NULL, 32, 32, 32, 0xE9481AFC, "fasthash32",
       "fast-hash 32bit", NULL },
-  { fasthash64_test, NULL, NULL, NULL, 32, 32, 64, 0xA16231A7, "fasthash64",
+  { fasthash64_test, NULL, NULL, 32, 32, 64, 0xA16231A7, "fasthash64",
       "fast-hash 64bit", NULL },
 #endif
-  { CityHash32_test, NULL, NULL, NULL, 32, 32, 32, 0x5C28AD62, "City32",
+  { CityHash32_test, NULL, NULL, 32, 32, 32, 0x5C28AD62, "City32",
       "Google CityHash32WithSeed (old)", NULL },
-  { CityHash64_test, NULL, NULL, NULL, 32, 32, 64, 0x25A20825, "City64",
+  { CityHash64_test, NULL, NULL, 32, 32, 64, 0x25A20825, "City64",
       "Google CityHash64WithSeed (old)", NULL },
 #if defined(__SSE4_2__) && defined(__x86_64__)
-  { CityHash128_test, NULL, NULL, NULL, 32, 32, 128, 0x6531F54E, "City128",
+  { CityHash128_test, NULL, NULL, 32, 32, 128, 0x6531F54E, "City128",
       "Google CityHash128WithSeed (old)", NULL },
-  { CityHashCrc128_test, NULL, NULL, NULL, 32, 32, 128, 0xD4389C97, "CityCrc128",
+  { CityHashCrc128_test, NULL, NULL, 32, 32, 128, 0xD4389C97, "CityCrc128",
       "Google CityHashCrc128WithSeed SSE4.2 (old)", NULL },
 #endif
 #if defined(__x86_64__)
-  { FarmHash64_test, NULL, NULL, NULL, 32, 32, 64, 0x35F84A93, "FarmHash64",
+  { FarmHash64_test, NULL, NULL, 32, 32, 64, 0x35F84A93, "FarmHash64",
       "Google FarmHash64WithSeed", NULL },
-  { FarmHash128_test, NULL, NULL, NULL, 32, 32, 128, 0x9E636AAE, "FarmHash128",
+  { FarmHash128_test, NULL, NULL, 32, 32, 128, 0x9E636AAE, "FarmHash128",
       "Google FarmHash128WithSeed", NULL },
-  { farmhash64_c_test, NULL, NULL, NULL, 32, 32, 64, 0x35F84A93, "farmhash64_c",
+  { farmhash64_c_test, NULL, NULL, 32, 32, 64, 0x35F84A93, "farmhash64_c",
       "farmhash64_with_seed (C99)", NULL },
-  { farmhash128_c_test, NULL, NULL, NULL, 32, 32, 128, 0x9E636AAE, "farmhash128_c",
+  { farmhash128_c_test, NULL, NULL, 32, 32, 128, 0x9E636AAE, "farmhash128_c",
       "farmhash128_with_seed (C99)", NULL },
 #endif
 #if defined(__x86_64__)
-  { xxHash32_test, NULL, NULL, NULL, 32, 32, 32, 0xBA88B743, "xxHash32",
+  { xxHash32_test, NULL, NULL, 32, 32, 32, 0xBA88B743, "xxHash32",
       "xxHash, 32-bit for x64", NULL },
-  { xxHash64_test, NULL, NULL, NULL, 32, 32, 64, 0x024B7CF4, "xxHash64",
+  { xxHash64_test, NULL, NULL, 32, 32, 64, 0x024B7CF4, "xxHash64",
       "xxHash, 64-bit", NULL },
 #if 0
-  { xxhash256_test, NULL, NULL, NULL, 32, 32, 64, 0x024B7CF4, "xxhash256",
+  { xxhash256_test, NULL, NULL, 32, 32, 64, 0x024B7CF4, "xxhash256",
       "xxhash256, 64-bit unportable", NULL },
 #endif
 #endif
 #if defined(__x86_64__)
-  { metrohash64_1_test, NULL, NULL, NULL, 32, 32, 64, 0xEE88F7D2, "metrohash64_1",
+  { metrohash64_1_test, NULL, NULL, 32, 32, 64, 0xEE88F7D2, "metrohash64_1",
       "MetroHash64_1 for 64-bit", NULL },
-  { metrohash64_2_test, NULL, NULL, NULL, 32, 32, 64, 0xE1FC7C6E, "metrohash64_2",
+  { metrohash64_2_test, NULL, NULL, 32, 32, 64, 0xE1FC7C6E, "metrohash64_2",
       "MetroHash64_2 for 64-bit", NULL },
-  { metrohash128_1_test, NULL, NULL, NULL, 32, 32, 128, 0x20E8A1D7, "metrohash128_1",
+  { metrohash128_1_test, NULL, NULL, 32, 32, 128, 0x20E8A1D7, "metrohash128_1",
       "MetroHash128_1 for 64-bit", NULL },
-  { metrohash128_2_test, NULL, NULL, NULL, 32, 32, 128, 0x5437C684, "metrohash128_2",
+  { metrohash128_2_test, NULL, NULL, 32, 32, 128, 0x5437C684, "metrohash128_2",
       "MetroHash128_2 for 64-bit", NULL },
 #if defined(__SSE4_2__) && defined(__x86_64__)
-  { metrohash64crc_1_test, NULL, NULL, NULL, 32, 32, 64, 0x29C68A50, "metrohash64crc_1",
+  { metrohash64crc_1_test, NULL, NULL, 32, 32, 64, 0x29C68A50, "metrohash64crc_1",
       "MetroHash64crc_1 for x64", NULL },
-  { metrohash64crc_2_test, NULL, NULL, NULL, 32, 32, 64, 0x2C00BD9F, "metrohash64crc_2",
+  { metrohash64crc_2_test, NULL, NULL, 32, 32, 64, 0x2C00BD9F, "metrohash64crc_2",
       "MetroHash64crc_2 for x64", NULL },
-  { metrohash128crc_1_test, NULL, NULL, NULL, 32, 32, 128, 0x5E75144E, "metrohash128crc_1",
+  { metrohash128crc_1_test, NULL, NULL, 32, 32, 128, 0x5E75144E, "metrohash128crc_1",
       "MetroHash128crc_1 for x64", NULL },
-  { metrohash128crc_2_test, NULL, NULL, NULL, 32, 32, 128, 0x1ACF3E77, "metrohash128crc_2",
+  { metrohash128crc_2_test, NULL, NULL, 32, 32, 128, 0x1ACF3E77, "metrohash128crc_2",
       "MetroHash128crc_2 for x64", NULL },
 #endif
 #endif
 #if defined(__x86_64__)
-  { cmetrohash64_1_optshort_test, NULL, NULL, NULL, 32, 32, 64, 0xEE88F7D2, "cmetrohash64_1o",
+  { cmetrohash64_1_optshort_test, NULL, NULL, 32, 32, 64, 0xEE88F7D2, "cmetrohash64_1o",
       "cmetrohash64_1 (shorter key optimized) , 64-bit for x64", NULL },
-  { cmetrohash64_1_test, NULL, NULL, NULL, 32, 32, 64, 0xEE88F7D2, "cmetrohash64_1",
+  { cmetrohash64_1_test, NULL, NULL, 32, 32, 64, 0xEE88F7D2, "cmetrohash64_1",
       "cmetrohash64_1, 64-bit for x64", NULL },
-  { cmetrohash64_2_test, NULL, NULL, NULL, 32, 32, 64, 0xE1FC7C6E, "cmetrohash64_2",
+  { cmetrohash64_2_test, NULL, NULL, 32, 32, 64, 0xE1FC7C6E, "cmetrohash64_2",
       "cmetrohash64_2, 64-bit for x64", NULL },
 #endif
 #if defined(__SSE4_2__) && defined(__x86_64__)
-  { falkhash_test_cxx, NULL, NULL, NULL, 32, 32, 64, 0x2F99B071, "falkhash",
+  { falkhash_test_cxx, NULL, NULL, 32, 32, 64, 0x2F99B071, "falkhash",
       "falkhash.asm with aesenc, 64-bit for x64", NULL },
 #endif
-  { t1ha_test, NULL, NULL, NULL, 32, 32, 64, 0xD6836381, "t1ha",
+  { t1ha_test, NULL, NULL, 32, 32, 64, 0xD6836381, "t1ha",
       "Fast Positive Hash (portable, best for: 64-bit, little-endian)", NULL },
-  { t1ha_64be_test, NULL, NULL, NULL, 32, 32, 64, 0x93F864DE, "t1ha_64be",
+  { t1ha_64be_test, NULL, NULL, 32, 32, 64, 0x93F864DE, "t1ha_64be",
       "Fast Positive Hash (portable, best for: 64-bit, big-endian)", NULL },
-  { t1ha_32le_test, NULL, NULL, NULL, 32, 32, 64, 0xE489F366, "t1ha_32le",
+  { t1ha_32le_test, NULL, NULL, 32, 32, 64, 0xE489F366, "t1ha_32le",
       "Fast Positive Hash (portable, best for: 32-bit, little-endian)", NULL },
-  { t1ha_32be_test, NULL, NULL, NULL, 32, 32, 64, 0x71F649A9, "t1ha_32be",
+  { t1ha_32be_test, NULL, NULL, 32, 32, 64, 0x71F649A9, "t1ha_32be",
       "Fast Positive Hash (portable, best for: 32-bit, big-endian)", NULL },
 #if (defined(__SSE4_2__) && defined(__x86_64__)) || defined(_M_X64)
-  { t1ha_crc_test, NULL, NULL, NULL, 32, 32, 64, 0xA57ACE7D, "t1ha_crc",
+  { t1ha_crc_test, NULL, NULL, 32, 32, 64, 0xA57ACE7D, "t1ha_crc",
       "Fast Positive Hash (machine-specific, requires: SSE4.2 CRC32C)", NULL },
 #endif
 #if defined(__AES__) || defined(_M_X64) || defined(_M_IX86)
-  { t1ha_aes_test, NULL, NULL, NULL, 32, 32, 64, 0x54BBFF21, "t1ha_aes",
+  { t1ha_aes_test, NULL, NULL, 32, 32, 64, 0x54BBFF21, "t1ha_aes",
       "Fast Positive Hash (machine-specific, requires: AES-NI)", NULL },
 #endif
 #if defined(__GNUC__) && UINT_MAX != ULONG_MAX
@@ -338,7 +340,7 @@ HashInfo g_hashes[] =
 #else
 #define MUM_VERIFY 0xA973C6C0
 #endif
-  { mum_hash_test, NULL, NULL, NULL, 32, 32, 64, MUM_VERIFY, "MUM",
+  { mum_hash_test, NULL, NULL, 32, 32, 64, MUM_VERIFY, "MUM",
     "github.com/vnmakarov/mum-hash", NULL },
 };
 
@@ -414,7 +416,6 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
   if(g_testSpeed || g_testAll)
   {
     double sum = 0.0;
-    double t0  = 0.0;
     printf("[[[ Speed Tests ]]] - %s\n\n",info->name);
 
     BulkSpeedTest(info->hash,info->verification);
@@ -423,8 +424,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
     for(int i = 0; i < 32; i++)
     {
       sum += TinySpeedTest(hashfunc<hashtype>(info->hash),
-              sizeof(hashtype), i, info->verification, true, t0);
-      if(!i) t0 = sum;
+              sizeof(hashtype), i, info->verification, true);
     }
     sum = sum / 32.0; /* includes the empty string! */
 
@@ -476,32 +476,32 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
     bool result = true;
     const int reps = 1000000;
-    double confidence = 99.993666; /* 4-sigmas */
+    double confidence = 0.99993666; /* 4-sigmas */
     printf("Samples %d, expected error %.8f%%, confidence level %.8f%%\n\n",
-        reps, 0.00256 / ( (double)reps / 100000.0 ), confidence);
+        reps, 0.00256 / ( (double)reps / 100000.0 ), confidence * 100);
 
-    result &= AvalancheTest< Blob< 0>, hashtype > (hash, reps, confidence);
-    result &= AvalancheTest< Blob< 8>, hashtype > (hash, reps, confidence);
-    result &= AvalancheTest< Blob< 16>, hashtype > (hash, reps, confidence);
-    result &= AvalancheTest< Blob< 24>, hashtype > (hash, reps, confidence);
-    result &= AvalancheTest< Blob< 32>, hashtype > (hash, reps, confidence);
-    result &= AvalancheTest< Blob< 40>, hashtype > (hash, reps, confidence);
-    result &= AvalancheTest< Blob< 48>, hashtype > (hash, reps, confidence);
-    result &= AvalancheTest< Blob< 56>, hashtype > (hash, reps, confidence);
-    result &= AvalancheTest< Blob< 64>, hashtype > (hash, reps, confidence);
-    result &= AvalancheTest< Blob< 72>, hashtype > (hash, reps, confidence);
-    result &= AvalancheTest< Blob< 80>, hashtype > (hash, reps, confidence);
-    result &= AvalancheTest< Blob< 88>, hashtype > (hash, reps, confidence);
+    result &= AvalancheTest< Blob< 0>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< Blob< 8>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< Blob< 16>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< Blob< 24>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< Blob< 32>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< Blob< 40>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< Blob< 48>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< Blob< 56>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< Blob< 64>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< Blob< 72>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< Blob< 80>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< Blob< 88>, hashtype > (hash, reps, confidence, info->name);
 
-    result &= AvalancheTest< Blob< 96>, hashtype > (hash, reps, confidence);
-    result &= AvalancheTest< Blob<104>, hashtype > (hash, reps, confidence);
-    result &= AvalancheTest< Blob<112>, hashtype > (hash, reps, confidence);
-    result &= AvalancheTest< Blob<120>, hashtype > (hash, reps, confidence);
+    result &= AvalancheTest< Blob< 96>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< Blob<104>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< Blob<112>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< Blob<120>, hashtype > (hash, reps, confidence, info->name);
 
-    result &= AvalancheTest< Blob<128>, hashtype > (hash, reps, confidence);
-    result &= AvalancheTest< Blob<136>, hashtype > (hash, reps, confidence);
-    result &= AvalancheTest< Blob<144>, hashtype > (hash, reps, confidence);
-    result &= AvalancheTest< Blob<152>, hashtype > (hash, reps, confidence);
+    result &= AvalancheTest< Blob<128>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< Blob<136>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< Blob<144>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< Blob<152>, hashtype > (hash, reps, confidence, info->name);
 
     if(!result) printf("********* %s - FAIL *********\n", info->name);
     printf("\n");
@@ -902,7 +902,7 @@ int main ( int argc, char ** argv )
     if (strncmp(hashToTest,"--", 2) == 0) {
       if (strcmp(hashToTest,"--list") == 0) {
         for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++) {
-          printf("%-16s\t(%s)\n", g_hashes[i].name, g_hashes[i].desc);
+          printf("%-16s\t%d bit\t(%s)\n", g_hashes[i].name, g_hashes[i].hashbits, g_hashes[i].desc);
         }
         exit(0);
       }

@@ -19,7 +19,7 @@
 // differential test fails.
 
 template < class keytype >
-bool ProcessDifferentials ( std::vector<keytype> & diffs, int reps, bool dumpCollisions )
+bool ProcessDifferentials ( std::vector<keytype> & diffs, int reps, bool dumpCollisions, int maxerrors )
 {
   std::sort(diffs.begin(), diffs.end());
 
@@ -79,7 +79,8 @@ bool ProcessDifferentials ( std::vector<keytype> & diffs, int reps, bool dumpCol
     }
   }
 
-  printf("%d total collisions, of which %d single collisions were ignored",(int)diffs.size(),ignore);
+  printf("%d total collisions, of which %d single collisions were ignored",
+      (int)diffs.size(),ignore);
 
   if(result == false)
   {
@@ -101,30 +102,38 @@ bool ProcessDifferentials ( std::vector<keytype> & diffs, int reps, bool dumpCol
 // them.
 
 template < typename keytype, typename hashtype >
-void DiffTestRecurse ( pfHash hash, keytype & k1, keytype & k2, hashtype & h1, hashtype & h2, int start, int bitsleft, std::vector<keytype> & diffs )
+uint64_t DiffTestRecurse ( pfHash hash, keytype & k1, keytype & k2, hashtype & h1, hashtype & h2, int start, int bitsleft, std::vector<keytype> & diffs, uint32_t seed, int maxerrors)
 {
   const int bits = sizeof(keytype)*8;
+  uint64_t skipped = 0;
 
   for(int i = start; i < bits; i++)
   {
     flipbit(&k2,sizeof(k2),i);
     bitsleft--;
 
-    hash(&k2,sizeof(k2),0,&h2);
+    hash(&k2,sizeof(k2),seed,&h2);
+    // printf("hash2: %08x\n", *((uint32_t *)&h2));
 
     if(h1 == h2)
     {
-      diffs.push_back(k1 ^ k2);
+      /* stop collecting data at this point */
+      if (diffs.size() < maxerrors) {
+        diffs.push_back(k1 ^ k2);
+      } else {
+        skipped++;
+      }
     }
 
     if(bitsleft)
     {
-      DiffTestRecurse(hash,k1,k2,h1,h2,i+1,bitsleft,diffs);
+      skipped += DiffTestRecurse(hash,k1,k2,h1,h2,i+1,bitsleft,diffs,seed,maxerrors);
     }
 
     flipbit(&k2,sizeof(k2),i);
     bitsleft++;
   }
+  return skipped;
 }
 
 //----------
@@ -145,26 +154,39 @@ bool DiffTest ( pfHash hash, int diffbits, int reps, bool dumpCollisions )
 
   keytype k1,k2;
   hashtype h1,h2;
+  memset(&h1,0,sizeof(hashtype));
+  memset(&h2,0,sizeof(hashtype));
 
-  printf("Testing %0.f up-to-%d-bit differentials in %d-bit keys -> %d bit hashes.\n",diffcount,diffbits,keybits,hashbits);
-  printf("%d reps, %0.f total tests, expecting %2.2f random collisions",reps,testcount,expected);
+  printf("Testing %0.f up-to-%d-bit differentials in %d-bit keys -> %d bit hashes.\n",
+          diffcount,diffbits,keybits,hashbits);
+  printf("%d reps, %0.f total tests, expecting %2.2f random collisions",
+          reps,testcount,expected);
+  int maxerrors= 100000; /* we need a limit or we could run out of memory */
+  uint64_t skipped= 0;
 
   for(int i = 0; i < reps; i++)
   {
-    if(i % (reps/10) == 0) printf(".");
+    if(i % (reps/10) == 0) printf("%c",skipped ? '!' : '.');
 
     r.rand_p(&k1,sizeof(keytype));
     k2 = k1;
+    uint32_t seed= r.rand_u32();
+    hash(&k1,sizeof(k1),seed,(uint32_t*)&h1);
+    //printf("hash1: %08x\n", *((uint32_t *)&h1));
 
-    hash(&k1,sizeof(k1),0,(uint32_t*)&h1);
-
-    DiffTestRecurse<keytype,hashtype>(hash,k1,k2,h1,h2,0,diffbits,diffs);
+    skipped += DiffTestRecurse<keytype,hashtype>(hash,k1,k2,h1,h2,0,diffbits,diffs,seed,maxerrors);
   }
   printf("\n");
 
   bool result = true;
 
-  result &= ProcessDifferentials(diffs,reps,dumpCollisions);
+  if (diffs.size() >= maxerrors) {
+    printf("FAILED. Too many collisions, after %d keys, skipped %lu keys!!!\n",
+        maxerrors, skipped);
+    result= false;
+  } else {
+    result &= ProcessDifferentials(diffs,reps,dumpCollisions,maxerrors);
+  }
 
   return result;
 }
@@ -253,6 +275,8 @@ bool DiffDistTest2 ( pfHash hash  )
   
   std::vector<hashtype> hashes(keycount);
   hashtype h1,h2;
+  memset(&h1,0,sizeof(hashtype));
+  memset(&h2,0,sizeof(hashtype));
 
   bool result = true;
 
@@ -279,3 +303,4 @@ bool DiffDistTest2 ( pfHash hash  )
 }
 
 //----------------------------------------------------------------------------
+/* vim: set sts=2 sw=2 et: */

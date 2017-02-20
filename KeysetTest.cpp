@@ -22,8 +22,8 @@ bool VerificationTest ( pfHash hash, const int hashbits, uint32_t expected, bool
   memset(hashes,0,hashbytes*256);
   memset(final,0,hashbytes);
 
-  // Hash keys of the form {0}, {0,1}, {0,1,2}... up to N=255,using 256-N as
-  // the seed
+  // Hash keys of the form {0}, {0,1}, {0,1,2}... up to N=255,
+  // using 256-N as the seed
 
   for(int i = 0; i < 256; i++)
   {
@@ -50,19 +50,20 @@ bool VerificationTest ( pfHash hash, const int hashbits, uint32_t expected, bool
   if(expected != verification)
   {
     if (expected == 0) {
+      if (verbose)
         printf("Verification value 0x%08X : Testing %s!\n", verification, name);
-        return true;
+      return true;
     }
     else if(verbose) {
-        printf("Verification value 0x%08X : %s Failed! (Expected 0x%08X)\n",
-                verification, name, expected);
+      printf("Verification value 0x%08X : %s Failed! (Expected 0x%08X)\n",
+        verification, name, expected);
     }
     return false;
   }
   else
   {
     if(verbose) printf("Verification value 0x%08X : %s Passed!\n",
-            verification, name);
+        verification, name);
     return true;
   }
 }

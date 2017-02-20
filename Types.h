@@ -33,7 +33,6 @@ void MixVCode ( const void * blob, int len );
 
 //-----------------------------------------------------------------------------
 
-typedef void (*pfSeedPrep32) ( const uint32_t seed, const void *seed_prepared );
 typedef void (*pfSeedPrep) ( const int in_bits, const void *seed_base, const void *seed_prepared );
 typedef void (*pfHashWithSeed) ( const void *blob, const int len, const void *seed, void *out );
 typedef void (*pfHash) ( const void *blob, const int len, const uint32_t seed, void *out );
@@ -41,9 +40,8 @@ typedef void (*pfHash) ( const void *blob, const int len, const uint32_t seed, v
 typedef struct HashInfo
 {
   pfHash hash;
-  pfHashWithSeed hash_with_seed;
   pfSeedPrep seed_prep;
-  pfSeedPrep32 seed_prep32;
+  pfHashWithSeed hash_with_seed;
   int base_seedbits;
   int prepared_seedbits;
   int hashbits;
@@ -80,13 +78,21 @@ class hashfunc
 {
 public:
 
+  pfHash m_hash;
+  pfHashWithSeed m_hash_with_seed;
+  pfSeedPrep m_seed_prep;
+  int m_seed_bits_in;
+  int m_seed_bits_out;
+  std::vector<uint8_t> m_seed;
+
   hashfunc ( pfHash h ) : m_hash(h)
   {
   }
 
-  inline void operator () ( const void * key, const int len, const uint32_t seed, uint32_t * out )
+  hashfunc ( pfHash h, pfSeedPrep sp, pfHashWithSeed hws, int sbi, int sbo ) :
+    m_hash(h), m_seed_prep(sp), m_hash_with_seed(hws), m_seed_bits_in(sbi), m_seed_bits_out(sbo)
   {
-    m_hash(key,len,seed,out);
+    m_seed.resize(sbo/8);
   }
 
   inline operator pfHash ( void ) const
@@ -94,16 +100,48 @@ public:
     return m_hash;
   }
 
-  inline T operator () ( const void * key, const int len, const uint32_t seed ) 
+  inline T operator () ( const void * key, const int len )
   {
     T result;
 
-    m_hash(key,len,seed,(uint32_t*)&result);
+    m_hash_with_seed(key,len,&m_seed[0],&result);
 
     return result;
   }
 
-  pfHash m_hash;
+  inline void operator () ( const void * key, const int len, uint32_t * out )
+  {
+    m_hash_with_seed(key,len,&m_seed[0],out);
+  }
+
+  inline T operator () ( const void * key, const int len, const uint32_t seed ) 
+  {
+    T result;
+
+    m_hash(key,len,seed,&result);
+
+    return result;
+  }
+
+  inline void operator () ( const void * key, const int len, const void *seed, uint32_t * out )
+  {
+    m_hash_with_seed(key,len,seed,out);
+  }
+
+  inline void operator () ( const void * key, const int len, const uint32_t seed, uint32_t * out )
+  {
+    m_hash(key,len,seed,out);
+  }
+
+  inline void prepare_seed ( const int in_bits, const void *seed )
+  {
+    m_seed_prep(in_bits, seed, &m_seed[0]);
+  }
+
+  inline void prepare_seed ( const int in_bits, const void *seed, const void *seed_prep )
+  {
+    m_seed_prep(in_bits, seed, seed_prep);
+  }
 };
 
 //-----------------------------------------------------------------------------

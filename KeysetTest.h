@@ -178,7 +178,7 @@ bool SparseKeyTest ( hashfunc<hashtype> hash, const int setbits, bool inclusive,
   {
     hashtype h;
 
-    hash(&k,sizeof(keytype),0,&h);
+    hash(&k,sizeof(keytype),uint32_t(0),&h);
 
     hashes.push_back(h);
   }
@@ -229,7 +229,7 @@ bool WindowedKeyTest ( hashfunc<hashtype> hash, const int windowbits, bool testC
 
       lrot(&key,sizeof(keytype),minbit);
 
-      hash(&key,sizeof(keytype),0,&hashes[i]);
+      hash(&key,sizeof(keytype),uint32_t(0),&hashes[i]);
     }
 
     printf("Window at %3d - ",j);
@@ -354,7 +354,7 @@ bool TextKeyTest ( hashfunc<hashtype> hash, const char * prefix, const char * co
       key[prefixlen+j] = coreset[t % corecount]; t /= corecount;
     }
 
-    hash(key,keybytes,0,&hashes[i]);
+    hash(key,keybytes,uint32_t(0),&hashes[i]);
   }
 
   //----------

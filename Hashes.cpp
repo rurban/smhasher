@@ -59,13 +59,13 @@ DoNothingHash(const void *, int, uint32_t, void *)
 void
 NoopOAATReadHash(const void *key, int len, uint32_t seed, void *out)
 {
-	volatile uint8_t c;
-	const uint8_t *ptr = (uint8_t *)key;
+    volatile uint8_t c;
+    const uint8_t *ptr = (uint8_t *)key;
 
-	for(int i=0; i < len; i++)
-	{
-			c=ptr[i];
-	}
+    for(int i=0; i < len; i++)
+    {
+        c= ptr[i];
+    }
 }
 
 //-----------------------------------------------------------------------------

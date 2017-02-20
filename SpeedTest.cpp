@@ -147,16 +147,14 @@ void FilterOutliers2 ( std::vector<double> & v )
 // as possible, but that's hard to do portably. We'll try and get as close as
 // possible by marking the function as NEVER_INLINE (to keep the optimizer from
 // moving it) and marking the timing variables as "volatile register".
-
-NEVER_INLINE int64_t timehash ( pfHash hash, const void * key, int len, int seed )
+// NOTE THIS CHANGES THE KEY ON EACH CALL!
+NEVER_INLINE int64_t timehash ( pfHash hash, void * key, int len, int seed )
 {
   volatile register int64_t begin,end;
   
-  uint32_t temp[16];
-  
   begin = rdtsc();
   
-  hash(key,len,seed,temp);
+  hash(key,len,seed,key);
   
   end = rdtsc();
   
@@ -167,31 +165,21 @@ NEVER_INLINE int64_t timehash ( pfHash hash, const void * key, int len, int seed
 // Specialized procedure for small lengths. Serialize invocations of the hash
 // function, make sure they would not be computed in parallel on an out-of-order CPU.
 
-NEVER_INLINE int64_t timehash_small ( pfHash hash, const void * key, int len, int seed )
+NEVER_INLINE int64_t timehash_small ( pfHash hash, void * key, int len, int seed )
 {
   const int NUM_TRIALS = 200;
   volatile unsigned long long int begin, end;
-  uint32_t hash_temp[16] = {};
-  uint32_t *buf = new uint32_t[(len + 3) / 4];
-  memcpy(buf,key,len);
+
+  /* initialize the seed */
+  hash(key,len,seed,key);
 
   begin = rdtsc();
 
   for(int i = 0; i < NUM_TRIALS; i++) {
-    hash(buf,len,seed,hash_temp);
-    // XXX Add dependency between invocations of hash-function to prevent parallel
-    // evaluation of them. However this way the invocations still would not be
-    // fully serialized. Another option is to use lfence instruction (load-from-memory
-    // serialization instruction) or mfence (load-from-memory AND store-to-memory
-    // serialization instruction):
-    //   __asm volatile ("lfence");
-    // It's hard to say which one is the most realistic and sensible approach.
-    seed += hash_temp[0];
-    buf[0] ^= hash_temp[0];
+    hash(key,len,seed,key);
   }
 
   end = rdtsc();
-  delete[] buf;
 
   return (int64_t)((end - begin) / (double)NUM_TRIALS);
 }
@@ -214,9 +202,19 @@ double SpeedTest ( pfHash hash, uint32_t seed, const int trials, const int block
   r.rand_p(block,blocksize);
 
   //----------
+  // NOTE - All invocation of timehash and timehash_small, and thus this function
+  // modify their key argument by writing their output hash into the key.
+  // Add dependency between invocations of hash-function to prevent parallel
+  // evaluation of them. However this way the invocations still would not be
+  // fully serialized. Another option is to use lfence instruction (load-from-memory
+  // serialization instruction) or mfence (load-from-memory AND store-to-memory
+  // serialization instruction):
+  //   __asm volatile ("lfence");
+  // It's hard to say which one is the most realistic and sensible approach.
 
   std::vector<double> times;
   times.reserve(trials);
+  hash(block,blocksize,seed,buf);
 
   for(int itrial = 0; itrial < trials; itrial++)
   {
@@ -226,11 +224,11 @@ double SpeedTest ( pfHash hash, uint32_t seed, const int trials, const int block
 
     if(blocksize < 100)
     {
-      t = (double)timehash_small(hash,block,blocksize,itrial);
+      t = (double)timehash_small(hash,block,blocksize,seed);
     }
     else
     {
-      t = (double)timehash(hash,block,blocksize,itrial);
+      t = (double)timehash(hash,block,blocksize,seed);
     }
 
     if(t > 0) times.push_back(t);
@@ -277,7 +275,7 @@ void BulkSpeedTest ( pfHash hash, uint32_t seed )
 
 //-----------------------------------------------------------------------------
 
-double TinySpeedTest ( pfHash hash, int hashsize, int keysize, uint32_t seed, bool verbose, double t0 )
+double TinySpeedTest ( pfHash hash, int hashsize, int keysize, uint32_t seed, bool verbose)
 {
   const int trials = 199999;
 
@@ -285,10 +283,10 @@ double TinySpeedTest ( pfHash hash, int hashsize, int keysize, uint32_t seed, bo
   
   double cycles = SpeedTest(hash,seed,trials,keysize,0);
   
-  if (t0) {
+  if (keysize) {
     double ks= keysize;
-    printf("%6.3f cycles/hash %6.3f c/b %6.3f over\n",
-            cycles, cycles/keysize, cycles-t0);
+    printf("%6.3f cycles/hash %6.3f c/b\n",
+            cycles, cycles/keysize);
   } else {
     printf("%6.3f cycles/hash\n",cycles);
   }

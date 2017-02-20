@@ -52,6 +52,8 @@ typedef struct av_stats {
   double  err_scaled;
   double  expected_err_scaled;
   double  err_scaled_ratio;
+  int     col_errors;
+  int     row_errors;
 } av_statst;
 
 double calcBiasStats ( std::vector<int> & counts, int reps, av_statst *stats, double confidence );
@@ -120,7 +122,7 @@ void calcBiasWithSeed ( pfHash hash, std::vector<int> & counts, int reps, Rand &
 //-----------------------------------------------------------------------------
 
 template < typename keytype, typename hashtype >
-bool AvalancheTest ( pfHash hash, const int reps, double confidence )
+bool AvalancheTest ( pfHash hash, const int reps, double confidence, const char * const name )
 {
   Rand r(923145681);
   int seedbits = 32;
@@ -150,8 +152,8 @@ bool AvalancheTest ( pfHash hash, const int reps, double confidence )
     num_rows,
   };
 
-  printf("Testing %3d-bit seeds, %3d-bit keys -> %3d-bit hashes, %8d reps",
-          stats.seedbits, stats.keybits, stats.hashbits, reps);
+  printf("Testing %s with %3d-bit seeds, %3d-bit keys -> %3d-bit hashes, %8d reps",
+          name, stats.seedbits, stats.keybits, stats.hashbits, reps);
 
   //----------
 
@@ -163,71 +165,41 @@ bool AvalancheTest ( pfHash hash, const int reps, double confidence )
 
   double worst_bit_error = calcBiasStats( bins, reps, &stats, confidence );
 
-  int failed= 0;
-  int score_size= hashbits;
-  std::vector<double> scores(score_size,0);
-  std::vector<int> scores_incr(score_size,0);
-  std::vector<int> scores_count(score_size,0);
-  std::vector<int> scores_bad(score_size,0);
-  std::vector<int> scores_failed(score_size,0);
-  for (int start_p= 0; start_p < score_size; start_p++) {
-    for (int incr= hashbits - 7; incr < hashbits + 7 ; incr++) {
-      int cnt = 0;
-      int bad = 0;
-      for (int p= start_p; p < num_bits; p += incr) {
-        cnt++;
-        if (gtests[p] >= confidence) {
-          bad++;
-        }
-      }
-      double score= double(bad) / double(cnt);
-      if ( score > scores[start_p] && score >= 0.4 ){
-        scores[start_p]= score;
-        scores_incr[start_p]= incr;
-        scores_count[start_p]= cnt;
-        scores_bad[start_p]= bad;
-        scores_failed[start_p]= 1;
-        failed++;
-        if (0)
-            printf("\nfailed at start pos %d (%d,%d), increment %d, count %d bad %d score %f\n",
-              start_p, start_p/hashbits, start_p % hashbits, incr,
-              scores_count[start_p], scores_bad[start_p], scores[start_p]);
-      }
-    }
-  }
 
   if(
+    stats.gtest_prob       >= confidence              ||
     worst_bit_error        >= AVALANCHE_FAIL          ||
     stats.err_scaled_ratio >= ERROR_SCALED_RATIO_FAIL ||
-    stats.gtest_prob       >= G_TEST_P_FAIL           ||
-    failed                                            ||
+    stats.col_errors                                  ||
+    stats.row_errors                                  ||
     !result
   ) {
-    printf(" not ok!\n");
+    printf("\nnot ok!\n");
     result = false;
   } else {
-    printf(" ok\n");
+    printf("\nok\n");
   }
 
   if (!result)
-    PrintAvalancheDiagram(&stats, 3, 1, confidence);
+    PrintAvalancheDiagram(&stats, 0, 1, confidence);
 
   printf(
     "    worst bit: %5.3f%% error: %.8f error ratio: %.4f\n"
-    "    probability not-random (g-test): %12.5f%%\n",
+    "    probability not-random (g-test): %12.5f%%\n"
+    "    col_errors: %d/%d row_errors: %d/%d\n",
     worst_bit_error * 100.0,
     stats.err_scaled,
     stats.err_scaled_ratio,
-    stats.gtest_prob * 100.0
+    stats.gtest_prob * 100.0,
+    stats.col_errors,
+    stats.hashbits,
+    stats.row_errors,
+    stats.num_rows
   );
-  for (int i= 0; i < score_size; i++) {
-    if (scores_failed[i]) {
-      printf("    Striping error at bit %d increment %d, %.2f%% in error! %d/%d\n",
-        i, scores_incr[i], scores[i] * 100, scores_bad[i], scores_count[i]);
-    }
-  }
+
   if (!result)
-    printf("FAILED\n");
+    printf("%s FAILED with %3d-bit seeds, %3d-bit keys -> %3d-bit hashes, %8d reps\n",
+          name, stats.seedbits, stats.keybits, stats.hashbits, reps);
   return result;
 }
 

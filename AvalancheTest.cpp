@@ -12,62 +12,116 @@
 // shown as "#", etc.
 // A good hash function should show all "." for scale 2 at least.
 
+const char * const symbols = ".1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ[]{}()<>*&%$@#";
 void PrintAvalancheDiagram ( av_statst *stats, int mode, int scale, double confidence )
 {
   int rows = (stats->seedbits + stats->keybits);
   /*                                1         2         3         4         5    */
   /*                      0        90        90        90        90        90    */
-  const char * symbols = ".1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ[]{}()<>*&%$@#";
   if(!scale) scale = 1;
   double expect = double(stats->reps) / 4;
   int failed = 0;
   double *cursor= mode ? stats->gtests : stats->pcts;
 
+  printf("%12s |0         1         2         3         4         5|\n","");
+  printf("%12s |012345678901234567890123456789012345678901234567890|\n","");
+  printf("%12s +---------------------------------------------------+\n","");
+  printf("%-12s |%-51s|\n","Scale:",symbols);
+  printf("%12s +---------------------------------------------------+\n","");
+  if (mode) {
+    printf("%12s |%-51s|\n","",
+               "scaled p-value above confidence level (zero is ok)");
+  } else {
+    printf("%12s |%-51s|\n","",
+               "pct diff from 50%: abs(0.5-(changed/reps)) * 100");
+  }
+  int words;
+  int width;
   if (stats->hashbits == 32) {
+    printf("%12s +--------------------------------+\n","");
     printf("%12s |0         1         2         3 |\n","");
     printf("%12s |01234567890123456789012345678901|\n","");
     printf("%12s +--------------------------------+\n","");
+    width= 32;
   } else {
+    printf("%12s +----------------------------------------------------------------+\n","");
     printf("%12s |0         1         2         3         4         5         6   |\n","");
     printf("%12s |0123456789012345678901234567890123456789012345678901234567890123|\n","");
     printf("%12s +----------------------------------------------------------------+\n","");
+    width = 64;
+  }
+  words = stats->hashbits / width;
+
+  char buf[words*(width+1)*rows];
+  char *outcursor=buf;
+  char *outend= buf + (words*(width+1)*rows);
+  int dupe= 0;
+  int i;
+  int j;
+  int w;
+  for( i = 0; i < rows; i++)
+  {
+    for( w = 0; w < words; w++)
+    {
+      for( j = 0; j < width; j++, cursor++ )
+      {
+        int digit;
+        double val = *cursor;
+        if (mode == 0) {
+          digit = (int)floor( val * (50.0 * scale));   /*interval: [0, 50] */
+        } else {
+          double prob_scale= 50.0 / (1.0 - confidence);
+          digit = (int)floor(val * prob_scale);
+          digit -= confidence * prob_scale;
+        }
+        if (digit < 0) { digit = 0; }
+        else if (digit >= 50) { digit = 50; }
+        if (digit) failed ++;
+        *outcursor++ = symbols[ digit ];
+      }
+      *outcursor++ = 0;
+    }
+  }
+  char *lastrow[words];
+  outcursor= buf;
+  for (int i= 0; i < rows; i++) {
+    for (int w= 0; w < words; w++, outcursor += (width+1)) {
+      if (i && outcursor < lastrow[w])
+        continue;
+      char *scancursor= outcursor + ((width+1) * words);
+      int count = 1;
+      int nextrow= i+1;
+      while (
+          scancursor < outend
+          && nextrow != stats->seedbits
+          && strcmp(outcursor,scancursor) == 0)
+      {
+        count++;
+        scancursor += ((width+1) * words);
+        nextrow++;
+      }
+      lastrow[w]= scancursor;
+      printf("%-4s  %4d.%d |%s|", i < stats->seedbits ? "seed" : "key",
+          i < stats->seedbits ? i : i - stats->seedbits, w, outcursor);
+      if (count>1) {
+        printf(" x %d\n", count);
+      } else{
+        printf("\n");
+      }
+    }
   }
 
-  for(int i = 0; i < rows; i++)
-  {
-    if (i == stats->seedbits)
-        printf("%12s +%.*s+\n","",
-                stats->hashbits,
-                "-------------------------------------------------------------------"
-        );
-    printf("%-4s bit %3d |", i < stats->seedbits ? "seed" : "key",
-            i < stats->seedbits ? i : i - stats->seedbits);
-    for( int j = 0; j < stats->hashbits; j++, cursor++ )
-    {
-      int digit;
-      double val = *cursor;
-      if (mode == 0) {
-        digit = (int)floor( val * (50.0 * scale));   /*interval: [0, 50] */
-      } else {
-        double prob_scale= 50.0 / (1.0 - confidence);
-        digit = (int)floor(val * prob_scale);
-        digit -= confidence * prob_scale;
-      }
-      if (digit < 0) { digit = 0; }
-      else if (digit >= 50) { digit = 50; }
-      if (digit) failed ++;
-      printf("%c", symbols[ digit ]);
-    }
-    printf("|\n");
-  }
   printf("%12s +%.*s+\n","",
         stats->hashbits,
         "-------------------------------------------------------------------"
   );
   if (mode) {
-      double expect = double(stats->num_bits) * (1.0 - confidence);
-      printf("At %.2f confidence, %d failed, %.2f expected (%.2f%%)\n",
-              confidence, failed, expect, 100 * fabs(failed/expect));
+      printf( "%d of %d bits failed (%.2f%%) failed at %.6f confidence\n",
+        failed,
+        stats->num_bits,
+        100 * ( failed / double(stats->num_bits) ),
+        100 * confidence
+      );
   }
   printf("\n");
 }
@@ -137,8 +191,8 @@ double calcBiasStats ( std::vector<int> & counts, int reps, av_statst *stats, do
 
     gtest = GTEST_PROB( 2.0, gtest );
     stats->col_gtests[i/2] = gtest;
-    if ( gtest > confidence )
-      printf("Col %d failed gtest %.8f (%.0f | %.0f | %.0f)\n", i/2, gtest, l, m, r );
+    if (gtest >= confidence)
+      stats->col_errors++;
   }
   for (int i= 0; i < stats->num_rows * 2; i+=2) {
     double gtest= 0.0;
@@ -150,8 +204,8 @@ double calcBiasStats ( std::vector<int> & counts, int reps, av_statst *stats, do
 
     gtest = GTEST_PROB( 2.0, gtest );
     stats->row_gtests[i/2] = gtest;
-    if ( gtest > confidence )
-      printf("Row %d failed gtest %.8f (%.0f | %.0f | %.0f)\n", i/2, gtest, l, m, r );
+    if (gtest >= confidence)
+      stats->row_errors++;
   }
 
   stats->err_scaled = stats->err / ( double(stats->num_bits) / 1024.0 );
