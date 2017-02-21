@@ -99,6 +99,9 @@ bool SanityTest ( pfHash hash, const int hashbits )
   uint8_t * hash1 = new uint8_t[hashbytes];
   uint8_t * hash2 = new uint8_t[hashbytes];
   uint32_t seed = 0;
+  uint32_t count_inconsistent = 0;
+  uint32_t count_same = 0;
+  uint32_t count = 0;
   //----------
   
   printf("Sanity check simple key bit flips and consistency");
@@ -127,10 +130,12 @@ bool SanityTest ( pfHash hash, const int hashbits )
 
           flipbit(key2,len,bit);
           hash(key2,len,seed,hash2);
+          count++;
 
           if(memcmp(hash1,hash2,hashbytes) == 0)
           {
             result = false;
+            count_same ++;
           }
 
           // Flip it back, hash again -> we should get the original result.
@@ -140,6 +145,7 @@ bool SanityTest ( pfHash hash, const int hashbits )
 
           if(memcmp(hash1,hash2,hashbytes) != 0)
           {
+            count_inconsistent ++;
             result = false;
           }
         }
@@ -149,7 +155,8 @@ bool SanityTest ( pfHash hash, const int hashbits )
 
   if(result == false)
   {
-    printf("*********FAIL*********\n");
+    printf("*********FAIL********* collisions: %d inconsistent: %d (of %d)\n",
+        count_same, count_inconsistent, count);
   }
   else
   {
