@@ -9,41 +9,54 @@
 // See:
 // http://vigna.di.unimi.it/ftp/papers/xorshift.pdf
 // http://en.wikipedia.org/wiki/Xorshift
-
+#define RANDSTATES 16
 struct Rand
 {
-  uint64_t s[16];
+  uint64_t state[RANDSTATES];
+  uint32_t *state32;
   int p;
 
   Rand()
   {
-    reseed(uint32_t(getpid()));
+    state32= (uint32_t *)state;
+    reseed(uint64_t(0));
   }
 
   Rand( uint32_t seed32 )
   {
+    state32= (uint32_t *)state;
     reseed(seed32);
   }
 
-  void reseed ( uint32_t seed32 )
+  void reseed ( uint32_t seed )
   {
-    uint64_t seed64 = (uint64_t(0xA3614B8FUL ^ seed32) << 32) | uint64_t(seed32);
-    reseed(seed64);
+    int i= 0;
+    state32[i++] = seed;
+    if (!seed) state32[i++] = seed = 0x92d68ca2UL;
+    do {
+      seed ^= seed << 13;
+      seed ^= seed >> 17;
+      seed ^= seed << 5;
+      state32[i++] = seed;
+    } while ( i < (RANDSTATES * 2) );
+    _reseed();
   }
 
-  void reseed ( uint64_t seed64 )
+  void reseed ( uint64_t seed )
   {
-    s[0] = seed64;
-    s[1] = 0xD64242617D960D35ULL ^ seed64;
-    s[2] = 0xBBF9FD407A96A81DULL ^ (seed64 + 1);
-    s[3] = 0xEC1DE0D1163C9E99ULL ^ (seed64 - 1);
-    s[4] = seed64 + 1;
-    s[5] = seed64 - 1;
-    s[6] = 314159;
-    s[7] = 42;
-    s[8] = ~seed64;
-    s[9] = 0xEC1DE0D1163C9E99ULL ^ seed64;
-    s[10] = s[11]= s[12]= s[13]= s[14]= s[15]= 0;
+    int i = 0;
+    state[i++]= seed;
+    if (!seed) state[i++] = seed = 0x0139408dcbbf7a44ULL;
+    do {
+      seed ^= seed << 13;
+      seed ^= seed >> 7;
+      seed ^= seed << 17;
+      state[i++] = seed;
+    } while ( i < RANDSTATES );
+    _reseed();
+  }
+
+  void _reseed() {
     p= 0;
     for(int i = 0; i < 1000; i++)
       mix();
@@ -53,22 +66,25 @@ struct Rand
 
   void mix ( void )
   {
-    const uint64_t s0 = s[p];
-    uint64_t s1 = s[p = (p + 1) & 15];
+    const uint64_t s0 = state[p];
+    uint64_t s1 = state[p = (p + 1) % RANDSTATES];
     s1 ^= s1 << 31; // a
-    s[p] = s1 ^ s0 ^ (s1 >> 11) ^ (s0 >> 30); // b, c
+    state[p] = s1 ^ s0 ^ (s1 >> 11) ^ (s0 >> 30); // b, c
   }
 
   uint32_t rand_u32 ( void )
   {
-    return rand_u64() & 0xFFFFFFFF;
+    uint64_t v= rand_u64();
+    uint32_t hi= v >> 32;
+    uint32_t lo= v & 0xFFFFFFFF;
+    return hi ^ lo;
   }
 
   uint64_t rand_u64 ( void ) 
   {
     mix();
 
-    return s[p] * 1181783497276652981ULL;
+    return state[p] * 0x106689d45497fdb5ULL;
   }
 
   void rand_p ( void * blob, int bytes )
