@@ -74,10 +74,7 @@ struct Rand
 
   uint32_t rand_u32 ( void )
   {
-    uint64_t v= rand_u64();
-    uint32_t hi= v >> 32;
-    uint32_t lo= v & 0xFFFFFFFF;
-    return hi ^ lo;
+    return uint32_t(rand_u64() & 0xFFFFFFFF);
   }
 
   uint64_t rand_u64 ( void ) 
@@ -102,7 +99,7 @@ struct Rand
     uint64_t last = rand_u64();
     for(int i = 0; i < bytes; i++)
     {
-      tail[i] = uint8_t(last && 0xFF);
+      tail[i] = uint8_t(last & 0xFF);
       last = last >> 8;
     }
   }
