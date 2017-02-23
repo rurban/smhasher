@@ -170,7 +170,7 @@ double calcBiasStats ( std::vector<int> & counts, int reps, av_statst *stats, do
         stats->gtest_prob += adj;
     }
 
-    stats->gtests[i/4] = GTEST_PROB( 1, this_gtest );
+    stats->gtests[i/4] = GTEST_PROB( 2.0, this_gtest );
     stats->pcts[i/4] = d_pct;
 
     if(d_pct > worst)
