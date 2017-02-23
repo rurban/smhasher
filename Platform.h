@@ -89,6 +89,7 @@ __inline__ unsigned long long int rdtsc()
 
 #include <strings.h>
 #define _stricmp strcasecmp
+#define _strnicmp strncasecmp
 
 #endif	//	!defined(_MSC_VER)
 

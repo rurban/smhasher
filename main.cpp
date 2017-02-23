@@ -19,6 +19,8 @@ bool g_testReallyAll = false;
 
 bool g_testSanity      = false;
 bool g_testSpeed       = false;
+bool g_testBulkSpeed   = false;
+bool g_testKeySpeed    = false;
 bool g_testDiff        = false;
 bool g_testDiffDist    = false; /* only ReallyAll */
 bool g_testAvalanche   = false;
@@ -42,6 +44,8 @@ TestOpts g_testopts[] =
   { g_testAll, 		"All" },
   { g_testSanity, 	"Sanity" },
   { g_testSpeed, 	"Speed" },
+  { g_testBulkSpeed, 	"BulkSpeed" },
+  { g_testKeySpeed, 	"KeySpeed" },
   { g_testDiff, 	"Diff" },
   { g_testDiffDist, 	"DiffDist" },
   { g_testAvalanche, 	"Avalanche" },
@@ -180,39 +184,71 @@ HashInfo g_hashes[] =
 
   // BeagleHash_32_xx
   { beagle_hash_32_32_a_smhasher_test,
-    beagle_hash_seed_prep_smhasher, beagle_hash_32_128_a_smhasher,
-    32, 128,  32, 0x47CECE27, "BeagleHash_32_32",
-      "Yves Orton's hash for 64-bit reduced to 32 (32 bit seed).", NULL },
-  { beagle_hash_32_64_a_smhasher_test, NULL, NULL, 32, 32,  32, 0xC7CD22FA, "BeagleHash_32_64",
-      "Yves Orton's hash for 64-bit reduced to 32 (64 bit seed).", NULL },
-  { beagle_hash_32_96_a_smhasher_test, NULL, NULL, 32, 32,  32, 0xCE38DE69, "BeagleHash_32_96",
-      "Yves Orton's hash for 64-bit reduced to 32 (96 bit seed).", NULL },
-  { beagle_hash_32_112_a_smhasher_test, NULL, NULL, 32, 32,  32, 0x5CCE6AC4, "BeagleHash_32_112",
-      "Yves Orton's hash for 64-bit reduced to 32 (112 bit seed).", NULL },
-  { beagle_hash_32_127_a_smhasher_test, NULL, NULL, 32, 32,  32, 0xC9134969, "BeagleHash_32_127",
-      "Yves Orton's hash for 64-bit reduced to 32 (127 bit seed).", NULL },
+    beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher,
+    32, 128,  32, 0x0 /* 0x47CECE27 */,
+    "BeagleHash_32_32", "Yves Orton's hash for 64-bit in 32-bit mode (32-bit seed).",
+      NULL },
+  { beagle_hash_32_64_a_smhasher_test,
+    beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher,
+      64, 128,  32, 0x0 /* 0xC7CD22FA */,
+      "BeagleHash_32_64", "Yves Orton's hash for 64-bit in 32-bit mode (64-bit seed).",
+      NULL },
+  { beagle_hash_32_96_a_smhasher_test,
+    beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher,
+      96, 128,  32, 0x0 /* 0xCE38DE69 */,
+      "BeagleHash_32_96", "Yves Orton's hash for 64-bit in 32-bit mode (96-bit seed).",
+      NULL },
+  { beagle_hash_32_112_a_smhasher_test,
+    beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher,
+      112, 128,  32, 0x0 /* 0x5CCE6AC4 */,
+      "BeagleHash_32_112", "Yves Orton's hash for 64-bit in 32-bit mode (112-bit seed).",
+      NULL },
+  { beagle_hash_32_127_a_smhasher_test,
+    beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher,
+      127, 128,  32, 0x0 /* 0xC9134969 */,
+      "BeagleHash_32_127", "Yves Orton's hash for 64-bit in 32-bit mode (127-bit seed).",
+      NULL },
 
   // BeagleHash_64_xx
-  { beagle_hash_64_32_a_smhasher_test, NULL, NULL, 32, 32,   64, 0xDE789E78, "BeagleHash_64_32",
-      "Yves Orton's hash for 64-bit. (32 bit seed)", NULL },
-  { beagle_hash_64_64_a_smhasher_test, NULL, NULL, 32, 32,   64, 0x3CDD6E7C, "BeagleHash_64_64",
-      "Yves Orton's hash for 64-bit. (64 bit seed)", NULL },
-  { beagle_hash_64_96_a_smhasher_test, NULL, NULL, 32, 32,   64, 0x40EBE522, "BeagleHash_64_96",
-      "Yves Orton's hash for 64-bit (96 bit seed).", NULL },
-  { beagle_hash_64_112_a_smhasher_test, NULL, NULL, 32, 32,  64, 0xF91596C5, "BeagleHash_64_112",
-      "Yves Orton's hash for 64-bit (112 bit seed).", NULL },
-  { beagle_hash_64_127_a_smhasher_test, NULL, NULL, 32, 32,  64, 0x575C6DA6, "BeagleHash_64_127",
-      "Yves Orton's hash for 64-bit (127 bit seed).", NULL },
+  { beagle_hash_64_32_a_smhasher_test,
+    beagle_seed_state_128_a_smhasher, beagle_hash_with_state_64_128_a_smhasher,
+    32, 128,   64, 0xDE789E78,
+    "BeagleHash_64_32", "Yves Orton's hash for 64-bit. (32 bit seed)",
+    NULL },
+  { beagle_hash_64_64_a_smhasher_test,
+    beagle_seed_state_128_a_smhasher, beagle_hash_with_state_64_128_a_smhasher,
+    64, 128,   64, 0x3CDD6E7C,
+    "BeagleHash_64_64", "Yves Orton's hash for 64-bit. (64 bit seed)",
+    NULL },
+  { beagle_hash_64_96_a_smhasher_test,
+    beagle_seed_state_128_a_smhasher, beagle_hash_with_state_64_128_a_smhasher,
+    96, 128,   64, 0x40EBE522,
+    "BeagleHash_64_96", "Yves Orton's hash for 64-bit (96 bit seed).",
+    NULL },
+  { beagle_hash_64_112_a_smhasher_test,
+    beagle_seed_state_128_a_smhasher, beagle_hash_with_state_64_128_a_smhasher,
+    112, 128,  64, 0xF91596C5,
+    "BeagleHash_64_112", "Yves Orton's hash for 64-bit (112 bit seed).",
+    NULL },
+  { beagle_hash_64_127_a_smhasher_test,
+    beagle_seed_state_128_a_smhasher, beagle_hash_with_state_64_128_a_smhasher,
+    127, 128,  64, 0x575C6DA6,
+    "BeagleHash_64_127", "Yves Orton's hash for 64-bit (127 bit seed).",
+    NULL },
 
   // ZaphodHash, Marvin32, Phat, Phat4
-  { zaphod_hash_smhasher_test, NULL, NULL, 32, 32, 32, 0 /* 0x0549DFCF */, "Zaphod32",
-      "Marvin32 like hash", NULL },
-  { phat_hash_smhasher_test, NULL, NULL, 32, 32, 32, 0xF7C8FFE3, "Phat",
-      "Phat Hash", NULL },
-  { phat4_hash_smhasher_test, NULL, NULL, 32, 32, 32, 1 ? 0x0 : 0xB3A5E4A4, "Phat4",
-      "Phat4 Hash", NULL },
-  { marvin_32_smhasher_test, NULL, NULL, 32, 32, 32, 0xE6711235, "Marvin32",
-      "Marvin32 from MicroSoft", NULL },
+  { zaphod_hash_smhasher_test, NULL, zaphod_hash_with_state_smhasher_test,
+    96, 96, 32, 0x0,
+    "Zaphod32", "Fast 32 bit hash with 96 bit seed",
+    NULL },
+  { phat4_hash_smhasher_test, NULL, phat4_hash_with_state_smhasher_test,
+    128, 128, 32, 0x0,
+    "Phat4", "Fast 32 bit hash with 128 bit seed",
+    NULL },
+  { marvin_32_smhasher_test, NULL, NULL,
+    32, 32, 32, 0xE6711235,
+    "Marvin32", "Marvin32 from MicroSoft", NULL },
+
 #ifdef __SSE2__
   { hasshe2_test, NULL, NULL, 32, 32, 256, 0xF5D39DFE, "hasshe2",     "SSE2 hasshe2, 256-bit", NULL },
 #endif
@@ -344,13 +380,39 @@ HashInfo g_hashes[] =
     "github.com/vnmakarov/mum-hash", NULL },
 };
 
+/* length of a common prefix */
+int _strni_common_prefix_len(const char *s1, const char *s2, size_t n) {
+  int f, l;
+  int o_n= n;
+
+  do {
+    if (((f = (unsigned char)(*(s1++))) >= 'A') && (f <= 'Z')) f -= 'A' - 'a';
+    if (((l = (unsigned char)(*(s2++))) >= 'A') && (l <= 'Z')) l -= 'A' - 'a';
+  } while (--n && f && (f == l));
+  if (f != l) n++;
+  return  o_n - n;
+}
+
 HashInfo * findHash ( const char * name )
 {
   for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++)
   {
     if(_stricmp(name,g_hashes[i].name) == 0) return &g_hashes[i];
   }
-
+  printf("Invalid hash '%s' specified\n",name);
+  printf("Possible you meant...\n");
+  int longest= 0;
+  int name_len= strlen(name);
+  for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++)
+  {
+    int l= _strni_common_prefix_len(name,g_hashes[i].name,name_len);
+    if (l > longest) longest = l;
+  }
+  for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++)
+  {
+    if(_strnicmp(name,g_hashes[i].name,longest) == 0)
+      printf("%s\n",g_hashes[i].name);
+  }
   return NULL;
 }
 
@@ -365,7 +427,7 @@ void SelfTest ( void )
   {
     HashInfo * info = & g_hashes[i];
 
-    pass &= VerificationTest(info->hash,info->hashbits,info->verification,false,info->name);
+    pass &= VerificationTest(info->hash,info->hashbits,info->verification,0,info->name);
   }
 
   if(!pass)
@@ -376,8 +438,7 @@ void SelfTest ( void )
     {
       HashInfo * info = & g_hashes[i];
 
-      printf("%24s - ",info->name);
-      pass &= VerificationTest(info->hash,info->hashbits,info->verification,true,info->name);
+      pass &= VerificationTest(info->hash,info->hashbits,info->verification,1,info->name);
     }
 
     exit(1);
@@ -385,12 +446,19 @@ void SelfTest ( void )
 }
 
 //----------------------------------------------------------------------------
-
-template < typename hashtype >
-void test ( hashfunc<hashtype> hash, HashInfo * info )
+template < typename hashtype, typename seedtype >
+void testHashWithSeed ( HashInfo * info )
 {
   const int hashbits = sizeof(hashtype) * 8;
   bool pass= true;
+  hashfunc<hashtype> hash(
+      info->hash,
+      info->seed_state,
+      info->hash_with_state,
+      info->seedbits,
+      info->statebits,
+      info->name
+  );
 
   printf("-------------------------------------------------------------------------------\n");
   printf("--- Testing %s (%s)\n\n",info->name,info->desc);
@@ -413,24 +481,20 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
   //-----------------------------------------------------------------------------
   // Speed tests
 
-  if(g_testSpeed || g_testAll)
+  if(g_testSpeed || g_testBulkSpeed || g_testKeySpeed || g_testAll)
   {
-    double sum = 0.0;
     printf("[[[ Speed Tests ]]] - %s\n\n",info->name);
 
-    BulkSpeedTest(info->hash,info->verification);
-    printf("\n");
+    Rand r(info->verification);
 
-    for(int i = 0; i < 63; i++)
-    {
-      sum += TinySpeedTest(hashfunc<hashtype>(info->hash),
-              sizeof(hashtype), i, info->verification, true);
+    if (g_testSpeed || g_testBulkSpeed || g_testAll) {
+      BulkSpeedTest(hash, r);
+      printf("\n");
     }
-    sum = sum / 64.0; /* includes the empty string! */
 
-    printf("                            Average - %6.3f cycles/hash\n",sum);
-    printf("\n");
-
+    if (g_testSpeed || g_testKeySpeed || g_testAll) {
+      pass &= RunKeySpeedTests(hash,r);
+    }
   }
 
   //-----------------------------------------------------------------------------
@@ -480,29 +544,50 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
     double confidence = 0.99993666; /* 4-sigmas */
     printf("Samples %d, expected error %.8f%%, confidence level %.8f%%\n\n",
         reps, 0.00256 / ( (double)reps / 100000.0 ), confidence * 100);
-
-    result &= AvalancheTest< Blob< 0>, hashtype > (hash, reps, confidence, info->name);
-    result &= AvalancheTest< Blob< 8>, hashtype > (hash, reps, confidence, info->name);
-    result &= AvalancheTest< Blob< 16>, hashtype > (hash, reps, confidence, info->name);
-    result &= AvalancheTest< Blob< 24>, hashtype > (hash, reps, confidence, info->name);
-    result &= AvalancheTest< Blob< 32>, hashtype > (hash, reps, confidence, info->name);
-    result &= AvalancheTest< Blob< 40>, hashtype > (hash, reps, confidence, info->name);
-    result &= AvalancheTest< Blob< 48>, hashtype > (hash, reps, confidence, info->name);
-    result &= AvalancheTest< Blob< 56>, hashtype > (hash, reps, confidence, info->name);
-    result &= AvalancheTest< Blob< 64>, hashtype > (hash, reps, confidence, info->name);
-    result &= AvalancheTest< Blob< 72>, hashtype > (hash, reps, confidence, info->name);
-    result &= AvalancheTest< Blob< 80>, hashtype > (hash, reps, confidence, info->name);
-    result &= AvalancheTest< Blob< 88>, hashtype > (hash, reps, confidence, info->name);
-
-    result &= AvalancheTest< Blob< 96>, hashtype > (hash, reps, confidence, info->name);
-    result &= AvalancheTest< Blob<104>, hashtype > (hash, reps, confidence, info->name);
-    result &= AvalancheTest< Blob<112>, hashtype > (hash, reps, confidence, info->name);
-    result &= AvalancheTest< Blob<120>, hashtype > (hash, reps, confidence, info->name);
-
-    result &= AvalancheTest< Blob<128>, hashtype > (hash, reps, confidence, info->name);
-    result &= AvalancheTest< Blob<136>, hashtype > (hash, reps, confidence, info->name);
-    result &= AvalancheTest< Blob<144>, hashtype > (hash, reps, confidence, info->name);
-    result &= AvalancheTest< Blob<152>, hashtype > (hash, reps, confidence, info->name);
+    int size = 0;
+    /* this is very ugly - but we cant use a variable for the bob size.
+     * I think maybe there are ways to get rid of this. We have type explosion
+     * going on here big time. */
+    if (!size || size == 0)
+    result &= AvalancheTest< seedtype, Blob< 0>, hashtype > (hash, reps, confidence, info->name);
+    if (!size || size == 8)
+    result &= AvalancheTest< seedtype, Blob< 8>, hashtype > (hash, reps, confidence, info->name);
+    if (!size || size == 16)
+    result &= AvalancheTest< seedtype, Blob< 16>, hashtype > (hash, reps, confidence, info->name);
+    if (!size || size == 24)
+    result &= AvalancheTest< seedtype, Blob< 24>, hashtype > (hash, reps, confidence, info->name);
+    if (!size || size == 32)
+    result &= AvalancheTest< seedtype, Blob< 32>, hashtype > (hash, reps, confidence, info->name);
+    if (!size || size == 40)
+    result &= AvalancheTest< seedtype, Blob< 40>, hashtype > (hash, reps, confidence, info->name);
+    if (!size || size == 48)
+    result &= AvalancheTest< seedtype, Blob< 48>, hashtype > (hash, reps, confidence, info->name);
+    if (!size || size == 56)
+    result &= AvalancheTest< seedtype, Blob< 56>, hashtype > (hash, reps, confidence, info->name);
+    if (!size || size == 64)
+    result &= AvalancheTest< seedtype, Blob< 64>, hashtype > (hash, reps, confidence, info->name);
+    if (!size || size == 72)
+    result &= AvalancheTest< seedtype, Blob< 72>, hashtype > (hash, reps, confidence, info->name);
+    if (!size || size == 80)
+    result &= AvalancheTest< seedtype, Blob< 80>, hashtype > (hash, reps, confidence, info->name);
+    if (!size || size == 88)
+    result &= AvalancheTest< seedtype, Blob< 88>, hashtype > (hash, reps, confidence, info->name);
+    if (!size || size == 96)
+    result &= AvalancheTest< seedtype, Blob< 96>, hashtype > (hash, reps, confidence, info->name);
+    if (!size || size == 104)
+    result &= AvalancheTest< seedtype, Blob<104>, hashtype > (hash, reps, confidence, info->name);
+    if (!size || size == 112)
+    result &= AvalancheTest< seedtype, Blob<112>, hashtype > (hash, reps, confidence, info->name);
+    if (!size || size == 120)
+    result &= AvalancheTest< seedtype, Blob<120>, hashtype > (hash, reps, confidence, info->name);
+    if (!size || size == 128)
+    result &= AvalancheTest< seedtype, Blob<128>, hashtype > (hash, reps, confidence, info->name);
+    if (!size || size == 136)
+    result &= AvalancheTest< seedtype, Blob<136>, hashtype > (hash, reps, confidence, info->name);
+    if (!size || size == 144)
+    result &= AvalancheTest< seedtype, Blob<144>, hashtype > (hash, reps, confidence, info->name);
+    if (!size || size == 152)
+    result &= AvalancheTest< seedtype, Blob<152>, hashtype > (hash, reps, confidence, info->name);
 
     if(!result) printf("********* %s - FAIL *********\n", info->name);
     printf("\n");
@@ -812,6 +897,30 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
   }
 }
 
+template < typename hashtype >
+void testHash ( HashInfo * info )
+{
+  if (info->seedbits == 32) {
+    testHashWithSeed< hashtype, Blob<32> >(info);
+  } else if (info->seedbits == 64) {
+    testHashWithSeed< hashtype, Blob<64> >(info);
+  } else if (info->seedbits == 96) {
+    testHashWithSeed< hashtype, Blob<96> >(info);
+  } else if (info->seedbits == 112) {
+    testHashWithSeed< hashtype, Blob<112> >(info);
+  } else if (info->seedbits == 127) {
+    testHashWithSeed< hashtype, Blob<127> >(info);
+  } else if (info->seedbits == 128) {
+    testHashWithSeed< hashtype, Blob<128> >(info);
+  } else if (info->seedbits == 256) {
+    testHashWithSeed< hashtype, Blob<256> >(info);
+  } else {
+    printf("Invalid seed width %d for hash '%s'",
+      info->seedbits, info->name);
+  }
+}
+
+
 //-----------------------------------------------------------------------------
 
 uint32_t g_inputVCode = 1;
@@ -832,34 +941,32 @@ void VerifyHash ( const void * key, int len, uint32_t seed, void * out )
 
 //-----------------------------------------------------------------------------
 
-void testHash ( const char * name )
+void testHashByName ( const char * name )
 {
   HashInfo * pInfo = findHash(name);
 
   if(pInfo == NULL)
   {
-    printf("Invalid hash '%s' specified\n",name);
     return;
   }
   else
   {
     g_hashUnderTest = pInfo;
-
     if(pInfo->hashbits == 32)
     {
-      test<uint32_t>( pInfo->hash, pInfo );
+      testHash<uint32_t>( pInfo );
     }
     else if(pInfo->hashbits == 64)
     {
-      test<uint64_t>( pInfo->hash, pInfo );
+      testHash<uint64_t>( pInfo );
     }
     else if(pInfo->hashbits == 128)
     {
-      test<uint128_t>( pInfo->hash, pInfo );
+      testHash<uint128_t>( pInfo );
     }
     else if(pInfo->hashbits == 256)
     {
-      test<uint256_t>( pInfo->hash, pInfo );
+      testHash<uint256_t>( pInfo );
     }
     else
     {
@@ -950,30 +1057,15 @@ int main ( int argc, char ** argv )
 
   SelfTest();
 
-  clock_t timeBegin = clock();
-
-  //g_testAll = false;
-
-  //g_testSanity = true;
-  //g_testSpeed = true;
-  //g_testAvalanche = true;
-  //g_testBIC = true;
-  //g_testCyclic = true;
-  //g_testTwoBytes = true;
-  //g_testDiff = true;
-  //g_testDiffDist = true;
-  //g_testSparse = true;
-  //g_testPermutation = true;
-  //g_testWindow = true;
-  //g_testZeroes = true;
-  //g_testEffs = true;
-  //g_testSeed = true;
-
-  testHash(hashToTest);
-
   //----------
 
+  clock_t timeBegin = clock();
+
+  testHashByName(hashToTest);
+
   clock_t timeEnd = clock();
+
+  //----------
 
   printf("\n");
   printf("Input vcode 0x%08x, Output vcode 0x%08x, Result vcode 0x%08x\n",

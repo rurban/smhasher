@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Types.h"
-
+#include "HashFunc.h"
 #include <math.h>
 #include <vector>
 #include <map>

@@ -7,7 +7,7 @@
 #include <vector>
 #include <map>
 #include <set>
-
+#include <stdio.h>
 //-----------------------------------------------------------------------------
 // If the optimizer detects that a value in a speed test is constant or unused,
 // the optimizer may remove references to it or otherwise create code that
@@ -33,17 +33,17 @@ void MixVCode ( const void * blob, int len );
 
 //-----------------------------------------------------------------------------
 
-typedef void (*pfSeedPrep) ( const int in_bits, const void *seed_base, const void *seed_prepared );
-typedef void (*pfHashWithSeed) ( const void *blob, const int len, const void *seed, void *out );
+typedef void (*pfSeedState) ( const int seedbits, const void *seed, const void *state );
+typedef void (*pfHashWithState) ( const void *blob, const int len, const void *state, void *out );
 typedef void (*pfHash) ( const void *blob, const int len, const uint32_t seed, void *out );
 
 typedef struct HashInfo
 {
   pfHash hash;
-  pfSeedPrep seed_prep;
-  pfHashWithSeed hash_with_seed;
-  int base_seedbits;
-  int prepared_seedbits;
+  pfSeedState seed_state;
+  pfHashWithState hash_with_state;
+  int seedbits;
+  int statebits;
   int hashbits;
   uint32_t verification;
   const char * name;
@@ -71,78 +71,6 @@ struct HashSet : public std::set<hashtype>
 {
 };
 
-//-----------------------------------------------------------------------------
-
-template < class T >
-class hashfunc
-{
-public:
-
-  pfHash m_hash;
-  pfHashWithSeed m_hash_with_seed;
-  pfSeedPrep m_seed_prep;
-  int m_seed_bits_in;
-  int m_seed_bits_out;
-  std::vector<uint8_t> m_seed;
-
-  hashfunc ( pfHash h ) : m_hash(h)
-  {
-  }
-
-  hashfunc ( pfHash h, pfSeedPrep sp, pfHashWithSeed hws, int sbi, int sbo ) :
-    m_hash(h), m_seed_prep(sp), m_hash_with_seed(hws), m_seed_bits_in(sbi), m_seed_bits_out(sbo)
-  {
-    m_seed.resize(sbo/8);
-  }
-
-  inline operator pfHash ( void ) const
-  {
-    return m_hash;
-  }
-
-  inline T operator () ( const void * key, const int len )
-  {
-    T result;
-
-    m_hash_with_seed(key,len,&m_seed[0],&result);
-
-    return result;
-  }
-
-  inline void operator () ( const void * key, const int len, uint32_t * out )
-  {
-    m_hash_with_seed(key,len,&m_seed[0],out);
-  }
-
-  inline T operator () ( const void * key, const int len, const uint32_t seed ) 
-  {
-    T result;
-
-    m_hash(key,len,seed,&result);
-
-    return result;
-  }
-
-  inline void operator () ( const void * key, const int len, const void *seed, uint32_t * out )
-  {
-    m_hash_with_seed(key,len,seed,out);
-  }
-
-  inline void operator () ( const void * key, const int len, const uint32_t seed, uint32_t * out )
-  {
-    m_hash(key,len,seed,out);
-  }
-
-  inline void prepare_seed ( const int in_bits, const void *seed )
-  {
-    m_seed_prep(in_bits, seed, &m_seed[0]);
-  }
-
-  inline void prepare_seed ( const int in_bits, const void *seed, const void *seed_prep )
-  {
-    m_seed_prep(in_bits, seed, seed_prep);
-  }
-};
 
 //-----------------------------------------------------------------------------
 // Key-processing callback objects. Simplifies keyset testing a bit.
@@ -418,6 +346,15 @@ public:
     return *this;
   }
 
+  void print_as_hex () {
+    for (int i=0;i<sizeof(bytes);i++)
+      printf("%02x",bytes[i]);
+    printf("\n");
+
+  }
+  int bits () {
+    return _bits;
+  }
   //----------
   
 private:
@@ -426,6 +363,7 @@ private:
 };
 
 typedef Blob<128> uint128_t;
+typedef Blob<96>  uint96_t;
 typedef Blob<256> uint256_t;
 
 //-----------------------------------------------------------------------------

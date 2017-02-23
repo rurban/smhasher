@@ -10,6 +10,7 @@
 #include "Types.h"
 #include "Stats.h"
 #include "Random.h"   // for rand_p
+#include "HashFunc.h"
 
 #include <algorithm>  // for std::swap
 #include <assert.h>
@@ -17,7 +18,7 @@
 //-----------------------------------------------------------------------------
 // Sanity tests
 
-bool VerificationTest   ( pfHash hash, const int hashbits, uint32_t expected, bool verbose,
+bool VerificationTest   ( pfHash hash, const int hashbits, uint32_t expected, int verbose,
         const char *name);
 bool SanityTest         ( pfHash hash, const int hashbits );
 bool AppendedZeroesTest ( pfHash hash, const int hashbits );

@@ -11,6 +11,7 @@
 
 #include "Types.h"
 #include "Random.h"
+#include "HashFunc.h"
 
 #include <vector>
 #include <stdio.h>
@@ -61,16 +62,17 @@ void PrintAvalancheDiagram ( av_statst *stats, int mode, int scale, double confi
 
 //-----------------------------------------------------------------------------
 
-template < typename keytype, typename hashtype >
-void calcBiasWithSeed ( pfHash hash, std::vector<int> & counts, int reps, Rand & r )
+template < typename seedtype, typename keytype, typename hashtype >
+void calcBiasWithSeed ( hashfunc<hashtype> hash, std::vector<int> & counts, int reps, Rand & r )
 {
+  const int seedbytes = sizeof(seedtype);
   const int keybytes = sizeof(keytype);
   const int hashbytes = sizeof(hashtype);
 
-  const int seedbits = 32;
+  const int seedbits = seedbytes * 8;
   const int keybits = keybytes * 8;
   const int hashbits = hashbytes * 8;
-  uint32_t seed = 0;
+  seedtype seed;
   keytype K;
   hashtype A,B;
 
@@ -79,17 +81,25 @@ void calcBiasWithSeed ( pfHash hash, std::vector<int> & counts, int reps, Rand &
     if(irep % (reps/10) == 0) printf(".");
 
     r.rand_p(&K,keybytes);
-    seed = r.rand_u32();
+    r.rand_p(&seed,seedbytes);
 
-    hash(&K,keybytes,seed,&A);
+    if (0) {
+      printf("seed byte %2d:", seedbytes);
+      seed.print_as_hex();
+    }
+    hash(&K,keybytes,(void *)&seed,&A);
 
     int * cursor = &counts[0];
 
-    for(uint32_t mask= 1; mask; mask = mask << 1)
+    for(int iBit = 0; iBit < seedbits; iBit++)
     {
-      seed ^= mask;
-      hash(&K,keybytes,seed,&B);
-      seed ^= mask;
+      flipbit(&seed,seedbytes,iBit);
+      if (0) {
+        printf("seed flip %2d:",iBit);
+        seed.print_as_hex();
+      }
+      hash(&K,keybytes,(void *)&seed,&B);
+      flipbit(&seed,seedbytes,iBit);
 
       for(int iOut = 0; iOut < hashbits; iOut++)
       {
@@ -104,7 +114,7 @@ void calcBiasWithSeed ( pfHash hash, std::vector<int> & counts, int reps, Rand &
     for(int iBit = 0; iBit < keybits; iBit++)
     {
       flipbit(&K,keybytes,iBit);
-      hash(&K,keybytes,seed,&B);
+      hash(&K,keybytes,&seed,&B);
       flipbit(&K,keybytes,iBit);
 
       for(int iOut = 0; iOut < hashbits; iOut++)
@@ -121,11 +131,11 @@ void calcBiasWithSeed ( pfHash hash, std::vector<int> & counts, int reps, Rand &
 
 //-----------------------------------------------------------------------------
 
-template < typename keytype, typename hashtype >
-bool AvalancheTest ( pfHash hash, const int reps, double confidence, const char * const name )
+template < typename seedtype, typename keytype, typename hashtype >
+bool AvalancheTest ( hashfunc<hashtype> hash, const int reps, double confidence, const char * const name )
 {
   Rand r(923145681);
-  int seedbits = 32;
+  int seedbits = sizeof(seedtype) * 8;
   int keybits = sizeof(keytype) * 8;
   int hashbits = sizeof(hashtype) * 8;
   int num_rows = keybits + seedbits;
@@ -157,7 +167,7 @@ bool AvalancheTest ( pfHash hash, const int reps, double confidence, const char 
 
   //----------
 
-  calcBiasWithSeed<keytype,hashtype>(hash, bins, reps, r);
+  calcBiasWithSeed<seedtype,keytype,hashtype>(hash, bins, reps, r);
   
   //----------
 
@@ -182,6 +192,8 @@ bool AvalancheTest ( pfHash hash, const int reps, double confidence, const char 
 
   if (!result)
     PrintAvalancheDiagram(&stats, 0, 1, confidence);
+  if (!result)
+    PrintAvalancheDiagram(&stats, 1, 1, confidence);
 
   printf(
     "    worst bit: %5.3f%% error: %.8f error ratio: %.4f\n"
@@ -208,7 +220,7 @@ bool AvalancheTest ( pfHash hash, const int reps, double confidence, const char 
 // not really all that useful.
 
 template< typename keytype, typename hashtype >
-void BicTest ( pfHash hash, const int keybit, const int reps, double & maxBias, int & maxA, int & maxB, bool verbose )
+void BicTest ( hashfunc<hashtype> hash, const int keybit, const int reps, double & maxBias, int & maxA, int & maxB, bool verbose )
 {
   Rand r(11938);
   
@@ -229,10 +241,10 @@ void BicTest ( pfHash hash, const int keybit, const int reps, double & maxBias, 
     }
 
     r.rand_p(&key,keybytes);
-    hash(&key,keybytes,0,&h1);
+    hash(&key,keybytes,uint32_t(0),&h1);
 
     flipbit(key,keybit);
-    hash(&key,keybytes,0,&h2);
+    hash(&key,keybytes,uint32_t(0),&h2);
 
     hashtype d = h1 ^ h2;
 
@@ -294,7 +306,7 @@ void BicTest ( pfHash hash, const int keybit, const int reps, double & maxBias, 
 //----------
 
 template< typename keytype, typename hashtype >
-bool BicTest ( pfHash hash, const int reps )
+bool BicTest ( hashfunc<hashtype> hash, const int reps )
 {
   const int keybytes = sizeof(keytype);
   const int keybits = keybytes * 8;
@@ -336,7 +348,7 @@ bool BicTest ( pfHash hash, const int reps )
 // afterwards (much faster)
 
 template< typename keytype, typename hashtype >
-bool BicTest3 ( pfHash hash, const int reps, bool verbose = true )
+bool BicTest3 ( hashfunc<hashtype> hash, const int reps, bool verbose = true )
 {
   const int keybytes = sizeof(keytype);
   const int keybits = keybytes * 8;
@@ -365,9 +377,9 @@ bool BicTest3 ( pfHash hash, const int reps, bool verbose = true )
     for(int irep = 0; irep < reps; irep++)
     {
       r.rand_p(&key,keybytes);
-      hash(&key,keybytes,0,&h1);
+      hash(&key,keybytes,uint32_t(0),&h1);
       flipbit(key,keybit);
-      hash(&key,keybytes,0,&h2);
+      hash(&key,keybytes,uint32_t(0),&h2);
 
       hashtype d = h1 ^ h2;
 
@@ -445,7 +457,7 @@ bool BicTest3 ( pfHash hash, const int reps, bool verbose = true )
 // but slooooow
 
 template< typename keytype, typename hashtype >
-void BicTest2 ( pfHash hash, const int reps, bool verbose = true )
+void BicTest2 ( hashfunc<hashtype> hash, const int reps, bool verbose = true )
 {
   const int keybytes = sizeof(keytype);
   const int keybits = keybytes * 8;
@@ -474,9 +486,9 @@ void BicTest2 ( pfHash hash, const int reps, bool verbose = true )
       for(int irep = 0; irep < reps; irep++)
       {
         r.rand_p(&key,keybytes);
-        hash(&key,keybytes,0,&h1);
+        hash(&key,keybytes,uint32_t(0),&h1);
         flipbit(key,keybit);
-        hash(&key,keybytes,0,&h2);
+        hash(&key,keybytes,uint32_t(0),&h2);
 
         hashtype d = h1 ^ h2;
 

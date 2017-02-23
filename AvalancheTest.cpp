@@ -191,8 +191,10 @@ double calcBiasStats ( std::vector<int> & counts, int reps, av_statst *stats, do
 
     gtest = GTEST_PROB( 2.0, gtest );
     stats->col_gtests[i/2] = gtest;
-    if (gtest >= confidence)
+    if (gtest >= confidence) {
+      printf("col-error %d: %.0f/%.0f => %.20f\n", i, l, r, gtest);
       stats->col_errors++;
+    }
   }
   for (int i= 0; i < stats->num_rows * 2; i+=2) {
     double gtest= 0.0;
@@ -204,8 +206,10 @@ double calcBiasStats ( std::vector<int> & counts, int reps, av_statst *stats, do
 
     gtest = GTEST_PROB( 2.0, gtest );
     stats->row_gtests[i/2] = gtest;
-    if (gtest >= confidence)
+    if (gtest >= confidence) {
+      printf("row-error %d: %.0f/%.0f => %.20f\n", i, l, r, gtest);
       stats->row_errors++;
+    }
   }
 
   stats->err_scaled = stats->err / ( double(stats->num_bits) / 1024.0 );
