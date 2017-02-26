@@ -53,7 +53,7 @@ void CombinationKeygenRecurse ( uint32_t * key, int len, int maxlen,
 
 // used for the Permutation tests in main.cpp
 template< typename hashtype >
-bool CombinationKeyTest ( hashfunc<hashtype> hash, int maxlen, uint32_t * blocks, int blockcount, bool testColl, bool testDist, bool drawDiagram )
+bool CombinationKeyTest ( hashfunc<hashtype> hash, int maxlen, uint32_t * blocks, int blockcount, bool testColl, double confidence, bool drawDiagram )
 {
   printf("Keyset 'Combination' - up to %d blocks from a set of %d - ",maxlen,blockcount);
 
@@ -73,7 +73,7 @@ bool CombinationKeyTest ( hashfunc<hashtype> hash, int maxlen, uint32_t * blocks
 
   bool result = true;
 
-  result &= TestHashList<hashtype>(hashes,testColl,testDist,drawDiagram);
+  result &= TestHashList<hashtype>(hashes,testColl,confidence,drawDiagram);
   
   printf("\n");
 
@@ -112,9 +112,9 @@ void SparseKeygenRecurse ( pfHash hash, int start, int bitsleft, bool inclusive,
 }
 
 //----------
-
+// used by the Sparse tests in main.cpp
 template < int keybits, typename hashtype >
-bool SparseKeyTest ( hashfunc<hashtype> hash, const int setbits, bool inclusive, bool testColl, bool testDist, bool drawDiagram  )
+bool SparseKeyTest ( hashfunc<hashtype> hash, const int setbits, bool inclusive, bool testColl, double confidence, bool drawDiagram  )
 {
   printf("Keyset 'Sparse' - %d-bit keys with %s %d bits set - ",keybits, inclusive ? "up to" : "exactly", setbits);
 
@@ -140,7 +140,7 @@ bool SparseKeyTest ( hashfunc<hashtype> hash, const int setbits, bool inclusive,
 
   bool result = true;
   
-  result &= TestHashList<hashtype>(hashes,testColl,testDist,drawDiagram);
+  result &= TestHashList<hashtype>(hashes,testColl,confidence,drawDiagram);
 
   printf("\n");
 
@@ -150,9 +150,10 @@ bool SparseKeyTest ( hashfunc<hashtype> hash, const int setbits, bool inclusive,
 //-----------------------------------------------------------------------------
 // Keyset 'Windows' - for all possible N-bit windows of a K-bit key, generate
 // all possible keys with bits set in that window
-
+// this is used by the Windowed tests in main.cpp, which are disabled by default
+// and documented as less than useful.
 template < typename keytype, typename hashtype >
-bool WindowedKeyTest ( hashfunc<hashtype> hash, const int windowbits, bool testCollision, bool testDistribution, bool drawDiagram )
+bool WindowedKeyTest ( hashfunc<hashtype> hash, const int windowbits, bool testCollision, double confidence, bool drawDiagram )
 {
   const int keybits = sizeof(keytype) * 8;
   const int keycount = 1 << windowbits;
@@ -185,7 +186,7 @@ bool WindowedKeyTest ( hashfunc<hashtype> hash, const int windowbits, bool testC
 
     printf("Window at %3d - ",j);
 
-    result &= TestHashList(hashes,testCollision,testDistribution,drawDiagram);
+    result &= TestHashList(hashes,testCollision,confidence,drawDiagram);
 
     //printf("\n");
   }
@@ -200,7 +201,7 @@ bool WindowedKeyTest ( hashfunc<hashtype> hash, const int windowbits, bool testC
 // (This keyset type is designed to make MurmurHash2 fail)
 
 template < typename hashtype >
-bool CyclicKeyTest ( pfHash hash, int cycleLen, int cycleReps, const int keycount, bool drawDiagram )
+bool CyclicKeyTest ( pfHash hash, int cycleLen, int cycleReps, const int keycount, double confidence, bool drawDiagram )
 {
   printf("Keyset 'Cyclic' - %d cycles of %d bytes - %d keys\n",cycleReps,cycleLen,keycount);
 
@@ -234,7 +235,7 @@ bool CyclicKeyTest ( pfHash hash, int cycleLen, int cycleReps, const int keycoun
   
   bool result = true;
 
-  result &= TestHashList(hashes,true,true,drawDiagram);
+  result &= TestHashList(hashes,true,confidence,drawDiagram);
   printf("\n");
 
   delete [] cycle;
@@ -249,7 +250,7 @@ bool CyclicKeyTest ( pfHash hash, int cycleLen, int cycleReps, const int keycoun
 void TwoBytesKeygen ( int maxlen, KeyCallback & c );
 
 template < typename hashtype >
-bool TwoBytesTest2 ( pfHash hash, int maxlen, bool drawDiagram )
+bool TwoBytesTest2 ( pfHash hash, int maxlen, double confidence, bool drawDiagram )
 {
   std::vector<hashtype> hashes;
 
@@ -259,7 +260,7 @@ bool TwoBytesTest2 ( pfHash hash, int maxlen, bool drawDiagram )
 
   bool result = true;
 
-  result &= TestHashList(hashes,true,true,drawDiagram);
+  result &= TestHashList(hashes,true,confidence,drawDiagram);
   printf("\n");
 
   return result;
@@ -271,7 +272,7 @@ bool TwoBytesTest2 ( pfHash hash, int maxlen, bool drawDiagram )
 // set of length N.
 
 template < typename hashtype >
-bool TextKeyTest ( hashfunc<hashtype> hash, const char * prefix, const char * coreset, const int corelen, const char * suffix, bool drawDiagram )
+bool TextKeyTest ( hashfunc<hashtype> hash, const char * prefix, const char * coreset, const int corelen, const char * suffix, double confidence, bool drawDiagram )
 {
   const int prefixlen = (int)strlen(prefix);
   const int suffixlen = (int)strlen(suffix);
@@ -312,7 +313,7 @@ bool TextKeyTest ( hashfunc<hashtype> hash, const char * prefix, const char * co
 
   bool result = true;
 
-  result &= TestHashList(hashes,true,true,drawDiagram);
+  result &= TestHashList(hashes,true,confidence,drawDiagram);
 
   printf("\n");
 
@@ -327,7 +328,7 @@ bool TextKeyTest ( hashfunc<hashtype> hash, const char * prefix, const char * co
 // We reuse one block of empty bytes, otherwise the RAM cost is enormous.
 
 template < typename hashtype >
-bool ZeroKeyTest ( pfHash hash, bool drawDiagram )
+bool ZeroKeyTest ( pfHash hash, double confidence, bool drawDiagram )
 {
   int keycount = 256 * 1024;
 
@@ -349,7 +350,7 @@ bool ZeroKeyTest ( pfHash hash, bool drawDiagram )
 
   bool result = true;
 
-  result &= TestHashList(hashes,true,true,drawDiagram);
+  result &= TestHashList(hashes,true,confidence,drawDiagram);
 
   printf("\n");
 
@@ -364,11 +365,13 @@ bool ZeroKeyTest ( pfHash hash, bool drawDiagram )
 // We reuse one block of empty bytes, otherwise the RAM cost is enormous.
 
 template < typename hashtype >
-bool EffsKeyTest ( pfHash hash, bool drawDiagram )
+bool EffsKeyTest ( pfHash hash, double confidence, bool drawDiagram )
 {
   int keycount = 256 * 1024;
+  int tries = 10;
+  Rand r(48671);
 
-  printf("Keyset 'Effs' - %d keys\n",keycount);
+  printf("Keyset 'Effs' - %d keys, %d seeds",keycount, tries);
 
   unsigned char * nullblock = new unsigned char[keycount];
   memset(nullblock,0xFF,keycount);
@@ -377,17 +380,20 @@ bool EffsKeyTest ( pfHash hash, bool drawDiagram )
 
   std::vector<hashtype> hashes;
 
-  hashes.resize(keycount);
+  hashes.resize(keycount * tries);
 
-  for(int i = 0; i < keycount; i++)
-  {
-    hash(nullblock,i,0,&hashes[i]);
+  hashtype *h= &hashes[0];
+  for(int t = 0; t < tries; t++) {
+    uint32_t seed= r.rand_u32();
+
+    for(int i = 0; i < keycount; i++)
+    {
+      hash(nullblock,i,seed,h++);
+    }
+    printf(".");
   }
-
-  bool result = true;
-
-  result &= TestHashList(hashes,true,true,drawDiagram);
-
+  printf("\n");
+  bool result = TestHashList(hashes,true,confidence,drawDiagram);
   printf("\n");
 
   delete [] nullblock;
@@ -399,7 +405,7 @@ bool EffsKeyTest ( pfHash hash, bool drawDiagram )
 // Keyset 'Seed' - hash "the quick brown fox..." using different seeds
 
 template < typename hashtype >
-bool SeedTest ( pfHash hash, int count, bool drawDiagram, const char * text )
+bool SeedTest ( pfHash hash, int count, double confidence, bool drawDiagram, const char * text )
 {
   printf("Keyset 'Seed' - %d seeds, key length %d\n  Key \"%s\"\n",
           count, (int)strlen(text), text);
@@ -427,7 +433,7 @@ bool SeedTest ( pfHash hash, int count, bool drawDiagram, const char * text )
 
   bool result = true;
 
-  result &= TestHashList(hashes,true,true,drawDiagram);
+  result &= TestHashList(hashes,true,confidence,drawDiagram);
 
   printf("\n");
 

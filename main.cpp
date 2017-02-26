@@ -465,6 +465,9 @@ void testHashWithSeed ( HashInfo * info )
 {
   const int hashbits = sizeof(hashtype) * 8;
   bool pass= true;
+  double confidence = sigmasToProb(5.0);
+  // see: https://en.wikipedia.org/wiki/Standard_deviation#Rules_for_normally_distributed_data
+
   hashfunc<hashtype> hash(
       info->hash,
       info->seed_state,
@@ -539,7 +542,7 @@ void testHashWithSeed ( HashInfo * info )
 
     bool result = true;
 
-    result &= DiffDistTest2<uint64_t,hashtype>(hash);
+    result &= DiffDistTest2<uint64_t,hashtype>(hash,confidence);
 
     if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
@@ -551,57 +554,60 @@ void testHashWithSeed ( HashInfo * info )
 
   if(g_testAvalanche || g_testAll)
   {
-    printf("[[[ Avalanche Tests ]]] - %s\n\n",info->name);
+    printf("[[[ Avalanche Tests ]]] - %s seed-bits: %d hash-bits: %d\n\n",
+        info->name, info->seedbits, info->hashbits);
 
     bool result = true;
-    const int reps = 1000000;
-    double confidence = 0.99993666; /* 4-sigmas */
-    printf("Samples %d, expected error %.8f%%, confidence level %.8f%%\n\n",
-        reps, 0.00256 / ( (double)reps / 100000.0 ), confidence * 100);
+    const int reps = 32000000 / info->hashbits;
+    double max_pct_error = 1.0;
+    double max_error_ratio = 1.5;
     int size = 0;
+    Rand r(923145681);
+    printf("Samples %d, expected error %.8f, confidence level %.8f%%\n\n",
+        reps, 0.00256 / ( (double)reps / 100000.0 ), confidence * 100);
     /* this is very ugly - but we cant use a variable for the bob size.
      * I think maybe there are ways to get rid of this. We have type explosion
      * going on here big time. */
     if (!size || size == 0)
-    result &= AvalancheTest< seedtype, Blob< 0>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< seedtype, Blob< 0>, hashtype > (hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 8)
-    result &= AvalancheTest< seedtype, Blob< 8>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< seedtype, Blob< 8>, hashtype > (hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 16)
-    result &= AvalancheTest< seedtype, Blob< 16>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< seedtype, Blob< 16>, hashtype > (hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 24)
-    result &= AvalancheTest< seedtype, Blob< 24>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< seedtype, Blob< 24>, hashtype > (hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 32)
-    result &= AvalancheTest< seedtype, Blob< 32>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< seedtype, Blob< 32>, hashtype > (hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 40)
-    result &= AvalancheTest< seedtype, Blob< 40>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< seedtype, Blob< 40>, hashtype > (hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 48)
-    result &= AvalancheTest< seedtype, Blob< 48>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< seedtype, Blob< 48>, hashtype > (hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 56)
-    result &= AvalancheTest< seedtype, Blob< 56>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< seedtype, Blob< 56>, hashtype > (hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 64)
-    result &= AvalancheTest< seedtype, Blob< 64>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< seedtype, Blob< 64>, hashtype > (hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 72)
-    result &= AvalancheTest< seedtype, Blob< 72>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< seedtype, Blob< 72>, hashtype > (hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 80)
-    result &= AvalancheTest< seedtype, Blob< 80>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< seedtype, Blob< 80>, hashtype > (hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 88)
-    result &= AvalancheTest< seedtype, Blob< 88>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< seedtype, Blob< 88>, hashtype > (hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 96)
-    result &= AvalancheTest< seedtype, Blob< 96>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< seedtype, Blob< 96>, hashtype > (hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 104)
-    result &= AvalancheTest< seedtype, Blob<104>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< seedtype, Blob<104>, hashtype > (hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 112)
-    result &= AvalancheTest< seedtype, Blob<112>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< seedtype, Blob<112>, hashtype > (hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 120)
-    result &= AvalancheTest< seedtype, Blob<120>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< seedtype, Blob<120>, hashtype > (hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 128)
-    result &= AvalancheTest< seedtype, Blob<128>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< seedtype, Blob<128>, hashtype > (hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 136)
-    result &= AvalancheTest< seedtype, Blob<136>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< seedtype, Blob<136>, hashtype > (hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 144)
-    result &= AvalancheTest< seedtype, Blob<144>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< seedtype, Blob<144>, hashtype > (hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 152)
-    result &= AvalancheTest< seedtype, Blob<152>, hashtype > (hash, reps, confidence, info->name);
+    result &= AvalancheTest< seedtype, Blob<152>, hashtype > (hash, reps, r, confidence, max_pct_error, max_error_ratio);
 
     if(!result) printf("********* %s - FAIL *********\n", info->name);
     printf("\n");
@@ -636,11 +642,11 @@ void testHashWithSeed ( HashInfo * info )
     bool result = true;
     bool drawDiagram = false;
 
-    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+0,8,10000000,drawDiagram);
-    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+1,8,10000000,drawDiagram);
-    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+2,8,10000000,drawDiagram);
-    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+3,8,10000000,drawDiagram);
-    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+4,8,10000000,drawDiagram);
+    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+0,8,10000000, confidence, drawDiagram);
+    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+1,8,10000000, confidence, drawDiagram);
+    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+2,8,10000000, confidence, drawDiagram);
+    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+3,8,10000000, confidence, drawDiagram);
+    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+4,8,10000000, confidence, drawDiagram);
 
     if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
@@ -661,7 +667,7 @@ void testHashWithSeed ( HashInfo * info )
 
     for(int i = 4; i <= 20; i += 4)
     {
-      result &= TwoBytesTest2<hashtype>(hash,i,drawDiagram);
+      result &= TwoBytesTest2<hashtype>(hash,i, confidence, drawDiagram);
     }
 
     if(!result) printf("********* %s - FAIL *********\n",info->name);
@@ -679,14 +685,14 @@ void testHashWithSeed ( HashInfo * info )
     bool result = true;
     bool drawDiagram = false;
 
-    result &= SparseKeyTest<  32,hashtype>(hash,6,true,true,true,drawDiagram);
-    result &= SparseKeyTest<  40,hashtype>(hash,6,true,true,true,drawDiagram);
-    result &= SparseKeyTest<  48,hashtype>(hash,5,true,true,true,drawDiagram);
-    result &= SparseKeyTest<  56,hashtype>(hash,5,true,true,true,drawDiagram);
-    result &= SparseKeyTest<  64,hashtype>(hash,5,true,true,true,drawDiagram);
-    result &= SparseKeyTest<  96,hashtype>(hash,4,true,true,true,drawDiagram);
-    result &= SparseKeyTest< 256,hashtype>(hash,3,true,true,true,drawDiagram);
-    result &= SparseKeyTest<2048,hashtype>(hash,2,true,true,true,drawDiagram);
+    result &= SparseKeyTest<  32,hashtype>(hash,6,true,true,confidence, drawDiagram);
+    result &= SparseKeyTest<  40,hashtype>(hash,6,true,true,confidence, drawDiagram);
+    result &= SparseKeyTest<  48,hashtype>(hash,5,true,true,confidence, drawDiagram);
+    result &= SparseKeyTest<  56,hashtype>(hash,5,true,true,confidence, drawDiagram);
+    result &= SparseKeyTest<  64,hashtype>(hash,5,true,true,confidence, drawDiagram);
+    result &= SparseKeyTest<  96,hashtype>(hash,4,true,true,confidence, drawDiagram);
+    result &= SparseKeyTest< 256,hashtype>(hash,3,true,true,confidence, drawDiagram);
+    result &= SparseKeyTest<2048,hashtype>(hash,2,true,true,confidence, drawDiagram);
 
     if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
@@ -713,7 +719,7 @@ void testHashWithSeed ( HashInfo * info )
         0x00000001, 0x00000002, 0x00000003, 0x00000004, 0x00000005, 0x00000006, 0x00000007,
       };
 
-      result &= CombinationKeyTest<hashtype>(hash,8,blocks,sizeof(blocks) / sizeof(uint32_t),true,true,drawDiagram);
+      result &= CombinationKeyTest<hashtype>(hash,8,blocks,sizeof(blocks) / sizeof(uint32_t),true,confidence, drawDiagram);
 
     if(!result) printf("********* %s - FAIL *********\n",info->name);
       printf("\n");
@@ -733,7 +739,7 @@ void testHashWithSeed ( HashInfo * info )
         0x20000000, 0x40000000, 0x60000000, 0x80000000, 0xA0000000, 0xC0000000, 0xE0000000
       };
 
-      result &= CombinationKeyTest<hashtype>(hash,8,blocks,sizeof(blocks) / sizeof(uint32_t),true,true,drawDiagram);
+      result &= CombinationKeyTest<hashtype>(hash,8,blocks,sizeof(blocks) / sizeof(uint32_t),true,confidence, drawDiagram);
 
       if(!result) printf("********* %s - FAIL *********\n",info->name);
       printf("\n");
@@ -753,7 +759,7 @@ void testHashWithSeed ( HashInfo * info )
         0x80000000,
       };
 
-      result &= CombinationKeyTest<hashtype>(hash,20,blocks,sizeof(blocks) / sizeof(uint32_t),true,true,drawDiagram);
+      result &= CombinationKeyTest<hashtype>(hash,20,blocks,sizeof(blocks) / sizeof(uint32_t),true,confidence, drawDiagram);
 
       if(!result) printf("********* %s - FAIL *********\n",info->name);
       printf("\n");
@@ -773,7 +779,7 @@ void testHashWithSeed ( HashInfo * info )
         0x00000001,
       };
 
-      result &= CombinationKeyTest<hashtype>(hash,20,blocks,sizeof(blocks) / sizeof(uint32_t),true,true,drawDiagram);
+      result &= CombinationKeyTest<hashtype>(hash,20,blocks,sizeof(blocks) / sizeof(uint32_t),true,confidence, drawDiagram);
 
       if(!result) printf("********* %s - FAIL *********\n",info->name);
       printf("\n");
@@ -795,7 +801,7 @@ void testHashWithSeed ( HashInfo * info )
         0x80000000, 0x40000000, 0xC0000000, 0x20000000, 0xA0000000, 0x60000000, 0xE0000000
       };
 
-      result &= CombinationKeyTest<hashtype>(hash,6,blocks,sizeof(blocks) / sizeof(uint32_t),true,true,drawDiagram);
+      result &= CombinationKeyTest<hashtype>(hash,6,blocks,sizeof(blocks) / sizeof(uint32_t),true,confidence, drawDiagram);
 
       if(!result) printf("********* %s - FAIL *********\n",info->name);
       printf("\n");
@@ -815,10 +821,9 @@ void testHashWithSeed ( HashInfo * info )
 
     bool result = true;
     bool testCollision = true;
-    bool testDistribution = false;
     bool drawDiagram = false;
 
-    result &= WindowedKeyTest< Blob<hashbits*2>, hashtype > ( hash, 20, testCollision, testDistribution, drawDiagram );
+    result &= WindowedKeyTest< Blob<hashbits*2>, hashtype > ( hash, 20, testCollision, confidence, drawDiagram );
 
     if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
@@ -837,9 +842,9 @@ void testHashWithSeed ( HashInfo * info )
 
     const char * alnum = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-    result &= TextKeyTest( hash, "Foo",    alnum,4, "Bar",    drawDiagram );
-    result &= TextKeyTest( hash, "FooBar", alnum,4, "",       drawDiagram );
-    result &= TextKeyTest( hash, "",       alnum,4, "FooBar", drawDiagram );
+    result &= TextKeyTest( hash, "Foo",    alnum,4, "Bar",    confidence, drawDiagram );
+    result &= TextKeyTest( hash, "FooBar", alnum,4, "",       confidence, drawDiagram );
+    result &= TextKeyTest( hash, "",       alnum,4, "FooBar", confidence, drawDiagram );
 
     if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
@@ -856,7 +861,7 @@ void testHashWithSeed ( HashInfo * info )
     bool result = true;
     bool drawDiagram = false;
 
-    result &= ZeroKeyTest<hashtype>( hash, drawDiagram );
+    result &= ZeroKeyTest<hashtype>( hash, confidence, drawDiagram );
 
     if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
@@ -873,13 +878,13 @@ void testHashWithSeed ( HashInfo * info )
     bool result = true;
     bool drawDiagram = false;
 
-    result &= SeedTest<hashtype>( hash, 2000000, drawDiagram,
+    result &= SeedTest<hashtype>( hash, 2000000, confidence, drawDiagram,
         "The quick brown fox jumps over the lazy dog");
-    result &= SeedTest<hashtype>( hash, 2000000, drawDiagram,
+    result &= SeedTest<hashtype>( hash, 2000000, confidence, drawDiagram,
         "");
-    result &= SeedTest<hashtype>( hash, 2000000, drawDiagram,
+    result &= SeedTest<hashtype>( hash, 2000000, confidence, drawDiagram,
         "00101100110101101");
-    result &= SeedTest<hashtype>( hash, 2000000, drawDiagram,
+    result &= SeedTest<hashtype>( hash, 2000000, confidence, drawDiagram,
         "abcbcddbdebdcaaabaaababaaabacbeedbabseeeeeeeesssssseeeewwwww");
 
     if(!result) printf("********* %s - FAIL *********\n",info->name);
@@ -897,7 +902,7 @@ void testHashWithSeed ( HashInfo * info )
     bool result = true;
     bool drawDiagram = false;
 
-    result &= EffsKeyTest<hashtype>( hash, drawDiagram );
+    result &= EffsKeyTest<hashtype>( hash, confidence, drawDiagram );
     
     if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");

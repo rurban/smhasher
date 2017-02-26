@@ -29,44 +29,115 @@ double chooseUpToK ( int n, int k )
 
   return c;
 }
-
 //-----------------------------------------------------------------------------
-// Distribution "score"
-// TODO - big writeup of what this score means
+// Calculate a modified version of the RMS ratio for a distribution.
+//
+// This function is the "old" calcScore, which was not well explained.
+//
+// We know that the equation:
+//
+// r = ( sum * sum ) / sum_squares / count
+//
+// results in r=1 when the distribution is "perfect", and produces
+// slightly smaller
+//
+// And the further away from a perfect distribution the smaller the
+// ratio.
+//
+// This function modifies that to
+//
+// r = ( sum * sum - 1 ) / (sum_squares - sum) / count
+//
+// which means a perfect mapping gets a score of above 1.
+//
+// Honestly I don't understand this really. If I compare the g-test probability
+// on something this check would say is "bad", the g-test may be conclusive
+// and vice versa. I have a lot more trust in the g-test than in this code.
 
-// Basically, we're computing a constant that says "The test distribution is as
-// uniform, RMS-wise, as a random distribution restricted to (1-X)*100 percent of
-// the bins. This makes for a nice uniform way to rate a distribution that isn't
-// dependent on the number of bins or the number of keys
-
-// (as long as # keys > # bins * 3 or so, otherwise random fluctuations show up
-// as distribution weaknesses)
-
-double calcScore ( const int * bins, const int bincount, const int keycount )
+double calcScore_old ( const int * vals, const int count, const int sum)
 {
-  double n = bincount;
-  double k = keycount;
-
-  // compute rms value
-
-  double r = 0;
-
-  for(int i = 0; i < bincount; i++)
+  double sum_squares = 0.0;
+  for(int i = 0; i < count; i++)
   {
-    double b = bins[i];
-
-    r += b*b;
+    sum_squares += pow(double(vals[i]),2.0);
   }
+  double square_sum= pow(double(sum), 2.0);
+  return 1.0 - ( ( square_sum - 1) / (sum_squares - double(sum)) / count );
+}
+//-----------------------------------------------------------------------------
+// Calculate the likelihood that a given distribution is random, and if it is
+// return the RMS ratio for it.
+double calcScore ( const int * vals, const int icount, const int isum, double confidence )
+{
+  double sum= double(isum);
+  double count= double(icount);
+  double expected = sum / count;
+  double gtest = 0.0;
+  double score = 0.0;
+  double old_score = 0.0;
+  double stddev = 0.0;
+  int min = vals[0];
+  int max = vals[0];
+  std::vector<int> count_counts(expected * 4, 0);
 
-  r = sqrt(r / n);
+  for(int i = 0; i < count; i++)
+  {
+    double iv= vals[i];
+    double v= double(iv);
+    if (iv >= count_counts.size())
+      count_counts.resize(iv * 2,0);
+    count_counts[iv]++;
+    if (min > iv) min = iv;
+    if (max < iv) max = iv;
 
-  // compute fill factor
+    GTEST_ADD(gtest, v, expected);
+    score += ( v * ( v + 1.0 ) ) / 2.0;
+    old_score += pow( v, 2.0 );
+    stddev += pow( v - expected , 2.0 );
+  }
+  gtest = GTEST_PROB(count, gtest);
 
-  double f = (k*k - 1) / (n*r*r - k);
+  stddev = sqrt( stddev / count );
+  old_score = 1.0 - ( ( pow( sum, 2.0 ) - 1.0 ) / ( old_score - sum ) / count );
+  score = fabs( 1.0 - ( score / ( ( sum / ( 2.0 * count ) ) *
+                                  ( sum + ( 2.0 * count ) - 1.0 ) ) ) );
 
-  // rescale to (0,1) with 0 = good, 1 = bad
+  if (gtest >= confidence) {
+    printf(
+        "Failed gtest with %.6f prob, old_score = %.6f%% score = %.6f%% bins=%.0f mean=%.0f stddev=%.6f\n",
+        gtest * 100, old_score * 100, score * 100, count, expected, stddev);
+    for ( int i = min ; i <= max ; i++ )
+      printf("  count %3d = %10d\n", i, count_counts[i] );
+    return score;
+  } else {
+    if (0) printf("Passed gtest with %.6f prob, calcScore = %.6f bins=%.0f mean=%.0f\n",
+        gtest * 100, score * 100, count, expected);
+    return 0;
+  }
+}
+//-----------------------------------------------------------------------------
+// Calculate the likelihood that a given distribution is random.
+//
 
-  return 1 - (f / n);
+double calcGTestProbability ( const int * vals, const int count, const int sum )
+{
+  double expected = double(sum) / double(count);
+  double gtest = 0.0;
+
+  for(int i = 0; i < count; i++)
+  {
+    GTEST_ADD(gtest,vals[i],expected);
+  }
+  return GTEST_PROB(count, gtest);
+}
+
+double calcGTestProbability ( const int * vals, const int count)
+{
+  int sum = 0;
+  for (int i = 0; i < count; i++) {
+    sum += vals[i];
+  }
+  return calcGTestProbability(vals, count, sum);
 }
 
 

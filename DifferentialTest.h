@@ -199,7 +199,7 @@ bool DiffTest ( pfHash hash, int diffbits, int reps, bool dumpCollisions )
 // hash differentials
 
 template < typename keytype, typename hashtype >
-bool DiffDistTest2 ( pfHash hash  )
+bool DiffDistTest2 ( pfHash hash, double confidence  )
 {
   Rand r(857374);
 
@@ -229,7 +229,7 @@ bool DiffDistTest2 ( pfHash hash  )
       hashes[i] = h1 ^ h2;
     }
 
-    result &= TestHashList<hashtype>(hashes,true,true,true);
+    result &= TestHashList<hashtype>(hashes,true,confidence,true);
     printf("\n");
   }
 

@@ -8,9 +8,36 @@
 #include <algorithm>   // for std::sort
 #include <string.h>    // for memset
 #include <stdio.h>     // for printf
+#include <gsl/gsl_sf.h>
 #include <gsl/gsl_sys.h>
-double calcScore ( const int * bins, const int bincount, const int ballcount );
 
+inline double _logoe(double o, double e) {
+  double l= log(o/e);
+  double ret;
+  if (o == e) {
+    ret = 0.0;
+  } else if ( o > e ) {
+    ret= log1p((o-e)/e);
+  } else {
+    ret= l;
+  }
+  //if (ret != l) printf("ret: %+.20e l: %+.20e\n",ret,l);
+  return ret;
+}
+
+#define GTEST_PROB(bins,gval) \
+  ( 1.0 - gsl_sf_gamma_inc_Q( ( double(bins) - 1.0) / 2.0, (gval) ) )
+#define GTEST_ADD(gtest,observed,expected) \
+    if (observed) gtest += ( double(observed) * _logoe( double(observed), double(expected) ) )
+
+inline double sigmasToProb ( double sigmas ) {
+  return erf(sigmas/sqrt(2));
+}
+
+double calcScore_old ( const int * vals, const int count, const int sum);
+double calcScore ( const int * vals, const int count, const int sum, double confidence );
+double calcGTestProbability ( const int * vals, const int count, const int sum );
+double calcGTestProbability ( const int * vals, const int count);
 void plot ( double n );
 
 inline double ExpectedCollisions ( double balls, double bins )
@@ -77,10 +104,11 @@ int FindCollisions ( std::vector<hashtype> & hashes,
 // Used by TestHashList, which is widely used elsewhere.
 
 template< typename hashtype >
-bool TestDistribution ( std::vector<hashtype> & hashes, bool drawDiagram )
+bool TestDistribution ( std::vector<hashtype> & hashes, double confidence, bool drawDiagram )
 {
   printf("Testing distribution - ");
 
+  //drawDiagram = true;
   if(drawDiagram) printf("\n");
 
   const int hashbits = sizeof(hashtype) * 8;
@@ -101,6 +129,7 @@ bool TestDistribution ( std::vector<hashtype> & hashes, bool drawDiagram )
   double worst = 0;
   int worstStart = -1;
   int worstWidth = -1;
+  int scores = 0;
 
   for(int start = 0; start < hashbits; start++)
   {
@@ -113,7 +142,7 @@ bool TestDistribution ( std::vector<hashtype> & hashes, bool drawDiagram )
     {
       hashtype & hash = hashes[j];
 
-      uint32_t index = window(&hash,sizeof(hash),start,width);
+      uint32_t index = window(&hash, sizeof(hash), start, width);
 
       bins[index]++;
     }
@@ -125,8 +154,8 @@ bool TestDistribution ( std::vector<hashtype> & hashes, bool drawDiagram )
 
     while(bincount >= 256)
     {
-      double n = calcScore(&bins[0],bincount,(int)hashes.size());
-
+      double n = calcScore(&bins[0],bincount,(int)hashes.size(), confidence);
+      scores++;
       if(drawDiagram) plot(n);
 
       if(n > worst)
@@ -150,19 +179,20 @@ bool TestDistribution ( std::vector<hashtype> & hashes, bool drawDiagram )
     if(drawDiagram) printf("]\n");
   }
 
-  double pct = worst * 100.0;
-
-  printf("Worst bias is the %3d-bit window at bit %3d - %5.3f%%",worstWidth,worstStart,pct);
-  if(pct >= 1.0) printf(" !!!!! ");
-  printf("\n");
-
-  return pct < 1.0;
+  if (worst) {
+    printf("not ok! (%.6f confidence) - worst bias is the %3d-bit window at bit %3d - %5.3f%% (%d)\n",
+      confidence * 100, worstWidth, worstStart, worst * 100, scores);
+    return false;
+  } else {
+    printf("ok. (%.6f confidence)\n",confidence * 100);
+    return true;
+  }
 }
 
 //----------------------------------------------------------------------------
 
 template < typename hashtype >
-bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & collisions, bool testDist, bool drawDiagram )
+bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & collisions, double confidence , bool drawDiagram )
 {
   bool result = true;
 
@@ -212,9 +242,9 @@ bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & coll
 
   //----------
 
-  if(testDist)
+  if(confidence)
   {
-    result &= TestDistribution(hashes,drawDiagram);
+    result &= TestDistribution(hashes,confidence,drawDiagram);
   }
 
   return result;
@@ -223,11 +253,11 @@ bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & coll
 //----------
 
 template < typename hashtype >
-bool TestHashList ( std::vector<hashtype> & hashes, bool /*testColl*/, bool testDist, bool drawDiagram )
+bool TestHashList ( std::vector<hashtype> & hashes, bool /*testColl*/, double confidence, bool drawDiagram )
 {
   std::vector<hashtype> collisions;
 
-  return TestHashList(hashes,collisions,testDist,drawDiagram);
+  return TestHashList(hashes,collisions,confidence,drawDiagram);
 }
 
 //-----------------------------------------------------------------------------
