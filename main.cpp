@@ -406,7 +406,6 @@ HashInfo * findHash ( const char * name )
     if(_stricmp(name,g_hashes[i].name) == 0) return &g_hashes[i];
   }
   printf("Invalid hash '%s' specified\n",name);
-  printf("Possible you meant...\n");
   int longest= 0;
   int name_len= strlen(name);
   for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++)
@@ -414,11 +413,17 @@ HashInfo * findHash ( const char * name )
     int l= _strni_common_prefix_len(name,g_hashes[i].name,name_len);
     if (l > longest) longest = l;
   }
-  for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++)
-  {
-    if(_strnicmp(name,g_hashes[i].name,longest) == 0)
-      printf("%s\n",g_hashes[i].name);
+  if (longest) {
+    printf("Possibly you meant one of the following...\n");
+    for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++)
+    {
+      if(_strnicmp(name,g_hashes[i].name,longest) == 0)
+        printf("  %s\n",g_hashes[i].name);
+    }
+  } else {
+    printf("No hashes start with '%s'\n",name);
   }
+  printf("You can use the --list option to see what functions are available to test.\n");
   return NULL;
 }
 
