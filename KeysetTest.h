@@ -79,58 +79,6 @@ bool CombinationKeyTest ( hashfunc<hashtype> hash, int maxlen, uint32_t * blocks
   return result;
 }
 
-//----------------------------------------------------------------------------
-// Keyset 'Permutation' - given a set of 32-bit blocks, generate keys
-// consisting of all possible permutations of those blocks
-
-template< typename hashtype >
-void PermutationKeygenRecurse ( pfHash hash, uint32_t * blocks, int blockcount, int k, std::vector<hashtype> & hashes )
-{
-  if(k == blockcount-1)
-  {
-    hashtype h;
-
-    hash(blocks,blockcount * sizeof(uint32_t),0,&h);
-
-    hashes.push_back(h);
-
-    return;
-  }
-
-  for(int i = k; i < blockcount; i++)
-  {
-    std::swap(blocks[k],blocks[i]);
-
-    PermutationKeygenRecurse(hash,blocks,blockcount,k+1,hashes);
-
-    std::swap(blocks[k],blocks[i]);
-  }
-}
-
-template< typename hashtype >
-bool PermutationKeyTest ( hashfunc<hashtype> hash, uint32_t * blocks, int blockcount, bool testColl, bool testDist, bool drawDiagram )
-{
-  printf("Keyset 'Permutation' - %d blocks - ",blockcount);
-
-  //----------
-
-  std::vector<hashtype> hashes;
-
-  PermutationKeygenRecurse<hashtype>(hash,blocks,blockcount,0,hashes);
-
-  printf("%d keys\n",(int)hashes.size());
-
-  //----------
-
-  bool result = true;
-
-  result &= TestHashList<hashtype>(hashes,testColl,testDist,drawDiagram);
-  
-  printf("\n");
-
-  return result;
-}
-
 //-----------------------------------------------------------------------------
 // Keyset 'Sparse' - generate all possible N-bit keys with up to K bits set
 
