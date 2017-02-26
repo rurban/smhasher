@@ -17,6 +17,8 @@
 // Sort through the differentials, ignoring collisions that only occured once 
 // (these could be false positives). If we find collisions of 3 or more, the
 // differential test fails.
+//
+// used by DiffTest - which is widely used
 
 template < class keytype >
 bool ProcessDifferentials ( std::vector<keytype> & diffs, int reps, bool dumpCollisions, int maxerrors )
@@ -100,7 +102,7 @@ bool ProcessDifferentials ( std::vector<keytype> & diffs, int reps, bool dumpCol
 // Random collisions can happen with probability 1 in 2^32 - if we do more than
 // 2^32 tests, we'll probably see some spurious random collisions, so don't report
 // them.
-
+// used by DiffTest - which is widely used.
 template < typename keytype, typename hashtype >
 uint64_t DiffTestRecurse ( pfHash hash, keytype & k1, keytype & k2, hashtype & h1, hashtype & h2, int start, int bitsleft, std::vector<keytype> & diffs, uint32_t seed, int maxerrors)
 {
@@ -137,7 +139,7 @@ uint64_t DiffTestRecurse ( pfHash hash, keytype & k1, keytype & k2, hashtype & h
 }
 
 //----------
-
+// widely used
 template < typename keytype, typename hashtype >
 bool DiffTest ( pfHash hash, int diffbits, int reps, bool dumpCollisions )
 {

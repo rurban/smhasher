@@ -23,11 +23,12 @@ inline double BirthdayCount(double probability, int bits )
     return sqrt( 2.0 * pow(2.0,double(bits)) * ( 0 - gsl_log1p( 0 - probability ) ) );
 }
 
+// used by DiffTest in DifferentialTest.h
 double chooseK ( int b, int k );
 double chooseUpToK ( int n, int k );
 
 //-----------------------------------------------------------------------------
-
+// used by the CyclicKeyTest
 inline uint32_t f3mix ( uint32_t k )
 {
   k ^= k >> 16;
@@ -42,6 +43,8 @@ inline uint32_t f3mix ( uint32_t k )
 //-----------------------------------------------------------------------------
 // Sort the hash list, count the total number of collisions and return
 // the first N collisions for further processing
+//
+// Used by TestHashList which is widely used elsewhere.
 
 template< typename hashtype >
 int FindCollisions ( std::vector<hashtype> & hashes, 
@@ -70,6 +73,8 @@ int FindCollisions ( std::vector<hashtype> & hashes,
 
 //----------------------------------------------------------------------------
 // Measure the distribution "score" for each possible N-bit span up to 20 bits
+//
+// Used by TestHashList, which is widely used elsewhere.
 
 template< typename hashtype >
 bool TestDistribution ( std::vector<hashtype> & hashes, bool drawDiagram )

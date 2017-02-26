@@ -25,7 +25,7 @@ bool AppendedZeroesTest ( pfHash hash, const int hashbits );
 
 //-----------------------------------------------------------------------------
 // Keyset 'Combination' - all possible combinations of input blocks
-
+// used by the "permutation" tests in main.cpp via CombinationKeyTest
 template< typename hashtype >
 void CombinationKeygenRecurse ( uint32_t * key, int len, int maxlen, 
                   uint32_t * blocks, int blockcount, 
@@ -51,6 +51,7 @@ void CombinationKeygenRecurse ( uint32_t * key, int len, int maxlen,
   }
 }
 
+// used for the Permutation tests in main.cpp
 template< typename hashtype >
 bool CombinationKeyTest ( hashfunc<hashtype> hash, int maxlen, uint32_t * blocks, int blockcount, bool testColl, bool testDist, bool drawDiagram )
 {
@@ -81,6 +82,7 @@ bool CombinationKeyTest ( hashfunc<hashtype> hash, int maxlen, uint32_t * blocks
 
 //-----------------------------------------------------------------------------
 // Keyset 'Sparse' - generate all possible N-bit keys with up to K bits set
+// used by the Sparse tests in main.cpp
 
 template < typename keytype, typename hashtype >
 void SparseKeygenRecurse ( pfHash hash, int start, int bitsleft, bool inclusive, keytype & k, std::vector<hashtype> & hashes )
