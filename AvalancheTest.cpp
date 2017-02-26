@@ -11,8 +11,20 @@
 // setting to 10 shows 0.2% per character, with anything higher than 0.1 being
 // shown as "#", etc.
 // A good hash function should show all "." for scale 2 at least.
+const uint8_t digits1[101]= { 46, 49, 50, 51, 52, 53, 54, 55, 56, 57, 48, 97, 98,
+  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113,
+  114, 115, 116, 117, 118, 119, 120, 121, 122, 195, 195, 195, 195, 195,
+  195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 65, 66, 67, 68, 69, 70,
+  71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88,
+  89, 90, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195, 195,
+  195, 194, 42, 194, 194, 194, 38, 37, 64, 35 };
+const uint8_t digits2[101]= { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 163, 164,
+  165, 170, 171, 174, 175, 176, 177, 180, 181, 182, 187, 188, 191, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 130,
+  131, 132, 133, 138, 139, 145, 148, 149, 150, 155, 156, 157, 184, 164, 0,
+  169, 174, 182, 0, 0, 0, 0 };
 
-const char * const symbols = ".1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ[]{}()<>*&%$@#";
 void PrintAvalancheDiagram ( av_statst *stats, int mode, int scale, double confidence )
 {
   int rows = (stats->seedbits + stats->keybits);
@@ -23,17 +35,30 @@ void PrintAvalancheDiagram ( av_statst *stats, int mode, int scale, double confi
   int failed = 0;
   double *cursor= mode ? stats->gtests : stats->pcts;
 
-  printf("%12s |0         1         2         3         4         5|\n","");
+  printf("%12s +---------------------------------------------------+\n","");
   printf("%12s |012345678901234567890123456789012345678901234567890|\n","");
   printf("%12s +---------------------------------------------------+\n","");
-  printf("%-12s |%-51s|\n","Scale:",symbols);
+  printf("%-12s |","Scale:");
+  for (int i= 0; i <=50; i++) {
+    printf("%c",digits1[i]);
+    if(digits2[i])
+    printf("%c",digits2[i]);
+  }
+  printf("|\n");
+  printf("%-12s |","");
+  for (int i= 50; i <=100; i++) {
+    printf("%c",digits1[i]);
+    if(digits2[i])
+    printf("%c",digits2[i]);
+  }
+  printf("|\n");
   printf("%12s +---------------------------------------------------+\n","");
   if (mode) {
     printf("%12s |%-51s|\n","",
                "scaled p-value above confidence level (zero is ok)");
   } else {
-    printf("%12s |%-51s|\n","",
-               "pct diff from 50%: abs(0.5-(changed/reps)) * 100");
+    printf("%12s |%-48s%3d|\n","",
+               "pct diff from 50%: abs((0.5-(changed/reps))*2) *", scale * 100);
   }
   int words;
   int width;
@@ -52,9 +77,9 @@ void PrintAvalancheDiagram ( av_statst *stats, int mode, int scale, double confi
   }
   words = stats->hashbits / width;
 
-  char buf[words*(width+1)*rows];
-  char *outcursor=buf;
-  char *outend= buf + (words*(width+1)*rows);
+  unsigned char buf[words*(width+1)*rows];
+  unsigned char *outcursor=buf;
+  unsigned char *outend= buf + (words*(width+1)*rows);
   int dupe= 0;
   int i;
   int j;
@@ -68,45 +93,59 @@ void PrintAvalancheDiagram ( av_statst *stats, int mode, int scale, double confi
         int digit;
         double val = *cursor;
         if (mode == 0) {
-          digit = (int)floor( val * (50.0 * scale));   /*interval: [0, 50] */
+          digit = (int)floor( 0.5 + val * (100.0 * double(scale)));   /*interval: [0, 50] */
         } else {
-          double prob_scale= 50.0 / (1.0 - confidence);
-          digit = (int)floor(val * prob_scale);
-          digit -= confidence * prob_scale;
+          if (val < confidence) {
+            digit= 0;
+          } else {
+            double dscale = 100.0 / (1.0 - confidence);
+            digit= uint8_t((val - confidence) * dscale);
+          }
         }
         if (digit < 0) { digit = 0; }
-        else if (digit >= 50) { digit = 50; }
-        if (digit) failed ++;
-        *outcursor++ = symbols[ digit ];
+        else if (digit > 100) { digit = 100; }
+        if (digit)
+          failed ++;
+
+        *outcursor = uint8_t(1 + digit);
+        outcursor++;
       }
-      *outcursor++ = 0;
+      *outcursor = 0;
+      outcursor++;
     }
   }
-  char *lastrow[words];
+  unsigned char *lastrow[words];
   outcursor= buf;
   for (int i= 0; i < rows; i++) {
     for (int w= 0; w < words; w++, outcursor += (width+1)) {
       if (i && outcursor < lastrow[w])
         continue;
-      char *scancursor= outcursor + ((width+1) * words);
+      unsigned char *scancursor= outcursor + ((width+1) * words);
       int count = 1;
       int nextrow= i+1;
       while (
           scancursor < outend
           && nextrow != stats->seedbits
-          && strcmp(outcursor,scancursor) == 0)
+          && strcmp((char *)outcursor,(char *)scancursor) == 0)
       {
         count++;
         scancursor += ((width+1) * words);
         nextrow++;
       }
       lastrow[w]= scancursor;
-      printf("%-4s  %4d.%d |%s|", i < stats->seedbits ? "seed" : "key",
-          i < stats->seedbits ? i : i - stats->seedbits, w, outcursor);
+      printf("%-4s  %4d.%d |", i < stats->seedbits ? "seed" : "key",
+          i < stats->seedbits ? i : i - stats->seedbits, w);
+      for (int i= 0; i < width; i++) {
+        int digit = outcursor[i] - 1;
+        printf("%c", digits1[digit]);
+        if (digits2[digit])
+          printf("%c", digits2[digit]);
+      }
+
       if (count>1) {
-        printf(" x %d\n", count);
+        printf("| x %d\n", count);
       } else{
-        printf("\n");
+        printf("|\n");
       }
     }
   }
