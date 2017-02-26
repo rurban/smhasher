@@ -430,7 +430,7 @@ HashInfo * findHash ( const char * name )
 //-----------------------------------------------------------------------------
 // Self-test on startup - verify that all installed hashes work correctly.
 
-void SelfTest ( void )
+void SelfTest ( bool validate )
 {
   bool pass = true;
 
@@ -440,19 +440,22 @@ void SelfTest ( void )
 
     pass &= VerificationTest(info->hash,info->hashbits,info->verification,0,info->name);
   }
-
-  if(!pass)
-  {
+  if (!pass)
     printf("Self-test FAILED!\n");
 
+  if(!pass || validate)
+  {
     for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++)
     {
       HashInfo * info = & g_hashes[i];
 
       pass &= VerificationTest(info->hash,info->hashbits,info->verification,1,info->name);
     }
-
-    exit(1);
+    if (!pass) exit(1);
+    if (validate) {
+      printf("Self-test PASSED.\n");
+      exit(0);
+    }
   }
 }
 
@@ -1009,6 +1012,7 @@ int main ( int argc, char ** argv )
   const char * defaulthash = "t1ha_32le";
 #endif
   const char * hashToTest = defaulthash;
+  bool opt_validate = false;
   
   setvbuf(stdout, NULL, _IONBF, 0); /* autoflush stdout */
   if(argc < 2) {
@@ -1024,6 +1028,9 @@ int main ( int argc, char ** argv )
           printf("%-16s\t%d bit\t(%s)\n", g_hashes[i].name, g_hashes[i].hashbits, g_hashes[i].desc);
         }
         exit(0);
+      }
+      if (strcmp(hashToTest,"--validate") == 0) {
+        opt_validate = true;
       }
       /* default: --test=All. comma seperated list of options */
       if (strncmp(hashToTest,"--test=", 6) == 0) {
@@ -1066,7 +1073,7 @@ int main ( int argc, char ** argv )
 
   SetAffinity((1 << 2));
 
-  SelfTest();
+  SelfTest(opt_validate);
 
   //----------
 
