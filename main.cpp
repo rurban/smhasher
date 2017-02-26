@@ -358,8 +358,8 @@ HashInfo g_hashes[] =
       "cmetrohash64_2, 64-bit for x64", NULL },
 #endif
 #if defined(__SSE4_2__) && defined(__x86_64__)
-  { falkhash_test_cxx, NULL, NULL, 32, 32, 64, 0x2F99B071, "falkhash",
-      "falkhash.asm with aesenc, 64-bit for x64", NULL },
+  { falkhash_test_cxx, NULL, NULL, 32, 32, 64, 0x75FE3431,
+    "falkhash", "falkhash.asm with aesenc, 64-bit for x64", NULL },
 #endif
   { t1ha_test, NULL, NULL, 32, 32, 64, 0xD6836381, "t1ha",
       "Fast Positive Hash (portable, best for: 64-bit, little-endian)", NULL },

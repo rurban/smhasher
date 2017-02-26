@@ -510,10 +510,6 @@ void
 falkhash_test_cxx(const void *input, int len, uint32_t seed, void *out)
 {
   uint64_t hash[2] = {0ULL, 0ULL};
-  if (!len) {
-    *(uint32_t *) out = 0;
-    return;
-  }
   falkhash_test((uint8_t *)input, (uint64_t)len, seed, hash);
   *(uint64_t *) out = hash[0];
 }
