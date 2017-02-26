@@ -12,32 +12,22 @@
 #include "Types.h"
 #include "Random.h"
 #include "HashFunc.h"
+#include "Stats.h"
 
 #include <vector>
 #include <stdio.h>
 #include <math.h>
-#include <gsl/gsl_sf.h>
 
 // Avalanche fails if a bit is biased by more than 1%
 
-/* no bit may be more than 1% from the expected 50% changed rate */
-#define AVALANCHE_FAIL          0.01
-/* g-test probability of the table (virtual) must be below 0.95 */
-#define G_TEST_P_FAIL           0.95
-/* Fail if our standard error is more than this many times the actual error.
- * The expected error varies with seed/key/hash bitsize and reps, so
- * we normalize the error we receive to that expected for a 32x32 square
- * with the given repetions. We then compare our normalized error rate to
- * the expected to get a ratio. A good hash function should average this to
- * 1 over many reps, and should probably never be further than twice the
- * expected value. Being under occasionally is fine. */
-#define ERROR_SCALED_RATIO_FAIL 2.0
 typedef struct av_stats {
   int     *bins;
   double  *gtests;
   double  *pcts;
   double  *col_gtests;
   double  *row_gtests;
+  double  *col_bins;
+  double  *row_bins;
   int     reps;
   int     seedbits;
   int     keybits;
@@ -57,7 +47,7 @@ typedef struct av_stats {
   int     row_errors;
 } av_statst;
 
-double calcBiasStats ( std::vector<int> & counts, int reps, av_statst *stats, double confidence );
+void calcBiasStats ( std::vector<int> & counts, int reps, av_statst *stats, double confidence );
 void PrintAvalancheDiagram ( av_statst *stats, int mode, int scale, double confidence );
 
 //-----------------------------------------------------------------------------
@@ -130,22 +120,30 @@ void calcBiasWithSeed ( hashfunc<hashtype> hash, std::vector<int> & counts, int 
 }
 
 //-----------------------------------------------------------------------------
+/* no bit may be more than 1% from the expected 50% changed rate */
 
 template < typename seedtype, typename keytype, typename hashtype >
-bool AvalancheTest ( hashfunc<hashtype> hash, const int reps, double confidence, const char * const name )
-{
-  Rand r(923145681);
+bool AvalancheTest (
+  hashfunc<hashtype> hash,
+  const int reps,
+  Rand &r,
+  double confidence,
+  double max_pct_error,
+  double max_error_ratio
+) {
   int seedbits = sizeof(seedtype) * 8;
   int keybits = sizeof(keytype) * 8;
   int hashbits = sizeof(hashtype) * 8;
   int num_rows = keybits + seedbits;
   int num_bits = ( keybits + seedbits ) * hashbits;
   int num_bins = num_bits * 4;
-  std::vector<int> bins(num_bins,0);
-  std::vector<double> gtests(num_bits,0);
-  std::vector<double> pcts(num_bits,0);
-  std::vector<double> col_gtest(hashbits,0);
-  std::vector<double> row_gtest(num_rows,0);
+  std::vector<int> bins(num_bins, 0);
+  std::vector<double> gtests(num_bits, 0);
+  std::vector<double> pcts(num_bits, 0);
+  std::vector<double> col_gtest(hashbits, 0);
+  std::vector<double> row_gtest(num_rows, 0);
+  std::vector<double> col_bins(hashbits * 2, 0);
+  std::vector<double> row_bins(num_rows * 2, 0);
   
   av_statst stats = {
     &bins[0],
@@ -153,6 +151,8 @@ bool AvalancheTest ( hashfunc<hashtype> hash, const int reps, double confidence,
     &pcts[0],
     &col_gtest[0],
     &row_gtest[0],
+    &col_bins[0],
+    &row_bins[0],
     reps,
     seedbits,
     keybits,
@@ -162,57 +162,111 @@ bool AvalancheTest ( hashfunc<hashtype> hash, const int reps, double confidence,
     num_rows,
   };
 
-  printf("Testing %s with %3d-bit seeds, %3d-bit keys -> %3d-bit hashes, %8d reps",
-          name, stats.seedbits, stats.keybits, stats.hashbits, reps);
+  printf("Testing %3d-bit keys", keybits);
 
   //----------
 
   calcBiasWithSeed<seedtype,keytype,hashtype>(hash, bins, reps, r);
+  calcBiasStats( bins, reps, &stats, confidence );
   
   //----------
 
+
   bool result = true;
-
-  double worst_bit_error = calcBiasStats( bins, reps, &stats, confidence );
-
-
   if(
-    stats.gtest_prob       >= confidence              ||
-    worst_bit_error        >= AVALANCHE_FAIL          ||
-    stats.err_scaled_ratio >= ERROR_SCALED_RATIO_FAIL ||
-    stats.col_errors                                  ||
-    stats.row_errors                                  ||
-    !result
+    stats.gtest_prob       >= confidence      ||
+    stats.worst_pct        >= max_pct_error   ||
+    stats.err_scaled_ratio >= max_error_ratio ||
+    stats.col_errors                          ||
+    stats.row_errors                          ||
+    0
   ) {
-    printf("\nnot ok!\n");
+    printf(" not ok! ");
     result = false;
   } else {
-    printf("\nok\n");
+    printf(" ok.     ");
   }
 
-  if (!result)
-    PrintAvalancheDiagram(&stats, 0, 1, confidence);
-  if (!result)
-    PrintAvalancheDiagram(&stats, 1, 1, confidence);
+
+  printf("worst-bit: %7.3f%% error-ratio: %e\n",
+      stats.worst_pct * 100.0, stats.err_scaled_ratio);
+  if (result)
+    return true;
+
+
+  PrintAvalancheDiagram(&stats, 0, 1, confidence);
+  PrintAvalancheDiagram(&stats, 1, 1, confidence);
 
   printf(
-    "    worst bit: %5.3f%% error: %.8f error ratio: %.4f\n"
-    "    probability not-random (g-test): %12.5f%%\n"
-    "    col_errors: %d/%d row_errors: %d/%d\n",
-    worst_bit_error * 100.0,
-    stats.err_scaled,
-    stats.err_scaled_ratio,
-    stats.gtest_prob * 100.0,
-    stats.col_errors,
-    stats.hashbits,
-    stats.row_errors,
-    stats.num_rows
-  );
+    "    g-test: %7.6f%%\n"
+    "    sum-error-square: %.8f\n",
+    stats.gtest_prob * 100.0, stats.err_scaled );
 
-  if (!result)
-    printf("%s FAILED with %3d-bit seeds, %3d-bit keys -> %3d-bit hashes, %8d reps\n",
-          name, stats.seedbits, stats.keybits, stats.hashbits, reps);
-  return result;
+  if (stats.row_errors)
+    printf( "    key/seed errors: %d/%d\n",
+      stats.row_errors, stats.num_rows);
+
+  if (stats.row_errors) {
+    int seed_reported = 0;
+    int key_reported = 0;
+    int seed_skipped = 0;
+    int key_skipped = 0;
+    for (int i=0; i < stats.num_rows; i++) {
+      if (stats.row_gtests[i] < confidence)
+        continue;
+      if (i<stats.seedbits) {
+        if (seed_reported < 2) {
+          printf("    - seed bit %d gtest probability not random: %.4f (%.0f/%.0f)\n",
+            i, stats.row_gtests[i] * 100,
+            stats.row_bins[(i * 2) + 0], stats.row_bins[(i * 2) + 1]);
+          seed_reported++;
+        } else {
+          seed_skipped++;
+        }
+      } else {
+        if(key_reported < 2) {
+          printf("    - key bit %d gtest probability not random: %.4f (%.0f/%.0f)\n",
+            i - stats.seedbits, stats.row_gtests[i] * 100,
+            stats.row_bins[(i * 2) + 0], stats.row_bins[(i * 2) + 1]);
+          key_reported++;
+        } else {
+          key_skipped++;
+        }
+      }
+    }
+    if (seed_skipped && key_skipped)
+      printf("    - with %d more seed errors and %d more key errors not described above.\n",
+          seed_skipped, key_skipped);
+    else if (seed_skipped)
+      printf("    - with %d more seed errors not described above.\n", seed_skipped);
+    else if (key_skipped)
+      printf("    - with %d more key errors not described above.\n", key_skipped);
+  }
+
+  if (stats.col_errors)
+    printf( "    hash bit-level errors: %d/%d\n",
+      stats.col_errors, stats.hashbits );
+
+  if (stats.col_errors) {
+    int reported = 0;
+    int skipped = 0;
+    for (int i = 0; i < stats.hashbits; i++) {
+      if (stats.col_gtests[i] < confidence)
+        continue;
+      if (reported < 3) {
+        printf("    - hash bit %d gtest-prob not-random: %.4f (%.0f/%.0f)\n",
+          i, stats.col_gtests[i] * 100,
+          col_bins[(i * 2) + 0], col_bins[(i * 2) + 1]);
+        reported++;
+      } else {
+        skipped++;
+      }
+    }
+    if (skipped)
+      printf("    - with %d more hash bit errors not described above.\n", skipped);
+  }
+
+  return false;
 }
 
 //----------------------------------------------------------------------------

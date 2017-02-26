@@ -166,87 +166,79 @@ void PrintAvalancheDiagram ( av_statst *stats, int mode, int scale, double confi
 }
 
 //----------------------------------------------------------------------------
-#define GTEST_PROB(bins,gval) \
-  ( 1.0 - gsl_sf_gamma_inc_Q( ( double(bins) - 1.0) / 2.0, (gval) ) )
 
-double calcBiasStats ( std::vector<int> & counts, int reps, av_statst *stats, double confidence )
+void
+calcBiasStats ( std::vector<int> & counts, int reps, av_statst *stats, double confidence )
 {
-  double worst = 0.0;
   double dreps= double(reps);
   double expected= dreps / 2.0;
 
   stats->err= 0.0;
   stats->gtest_prob= 0.0;
   stats->worst_pct= 0.0;
-  std::vector<int> col_bins(stats->hashbits * 2,0);
-  std::vector<int> row_bins(stats->num_rows * 2,0);
 
   for(int i = 0; i < (int)counts.size(); i += 4 )
   {
-    double changed= double(counts[i + 1] + counts[i + 2]);
-    double stayed=  double(counts[i + 0] + counts[i + 3]);
-    double ratio = changed / dreps;
-    double diff = 0.5 - ratio;
-    double d_pct = fabs(diff * 2);
-    stats->err += (diff * diff);
+    double diff = double(counts[i + 1] + counts[i + 2]);
+    double same = double(counts[i + 0] + counts[i + 3]);
+    double ratio = diff / double(dreps);
+    double delta = 0.5 - ratio;
+    stats->err += pow(delta, 2.0);
+    stats->pcts[i/4] = fabs(delta * 2);
+
+    if ( stats->worst_pct < stats->pcts[i/4] )
+      stats->worst_pct = stats->pcts[i/4];
 
     int row= (i / 4) / stats->hashbits;
     int col= (i / 4) % stats->hashbits;
-    col_bins[(col * 2) + 0] += stayed;
-    col_bins[(col * 2) + 1] += changed;
-    row_bins[(row * 2) + 0] += stayed;
-    row_bins[(row * 2) + 1] += changed;
+
+    stats->col_bins[(col * 2) + 0] += diff;
+    stats->col_bins[(col * 2) + 1] += same;
+    stats->row_bins[(row * 2) + 0] += diff;
+    stats->row_bins[(row * 2) + 1] += same;
 
     double this_gtest = 0.0;
-    if ( changed ) {
-        double adj= changed * log( changed / expected );
+    if ( diff ) {
+        double adj= 0.0;
+        GTEST_ADD(adj, diff, expected );
         this_gtest += adj;
         stats->gtest_prob += adj;
     }
-    if ( stayed ) {
-        double adj= stayed * log( stayed / expected );
+    if ( same ) {
+        double adj= 0.0;
+        GTEST_ADD(adj, same, expected );
         this_gtest += adj;
         stats->gtest_prob += adj;
     }
-
     stats->gtests[i/4] = GTEST_PROB( 2.0, this_gtest );
-    stats->pcts[i/4] = d_pct;
-
-    if(d_pct > worst)
-    {
-        stats->worst_pct= d_pct;
-        worst = d_pct;
-        stats->worst_x = col;
-        stats->worst_y = row;
-    }
   }
-  for (int i= 0; i < stats->hashbits * 2; i+=2) {
-    double gtest= 0.0;
-    double l= double(col_bins[i + 0]);
-    double r= double(col_bins[i + 1]);
-    double m= (l + r) / 2;
-    if (l) gtest += l * log( l / m );
-    if (r) gtest += r * log( r / m );
 
+  for (int i= 0; i < stats->hashbits; i++) {
+    double gtest= 0.0;
+    double diff= stats->col_bins[(i * 2) + 0];
+    double same= stats->col_bins[(i * 2) + 1];
+    double avg= (same + diff) / 2;
+    GTEST_ADD(gtest,same,avg);
+    GTEST_ADD(gtest,diff,avg);
     gtest = GTEST_PROB( 2.0, gtest );
-    stats->col_gtests[i/2] = gtest;
+
+    stats->col_gtests[i] = gtest;
     if (gtest >= confidence) {
-      printf("col-error %d: %.0f/%.0f => %.20f\n", i, l, r, gtest);
       stats->col_errors++;
     }
   }
-  for (int i= 0; i < stats->num_rows * 2; i+=2) {
+  for (int i= 0; i < stats->num_rows; i++) {
     double gtest= 0.0;
-    double l= double(row_bins[i + 0]);
-    double r= double(row_bins[i + 1]);
-    double m= (l + r) / 2;
-    if (l) gtest += l * log( l / m );
-    if (r) gtest += r * log( r / m );
-
+    double diff= stats->row_bins[(i * 2) + 0];
+    double same= stats->row_bins[(i * 2) + 1];
+    double avg= (same + diff) / 2;
+    GTEST_ADD(gtest,same,avg);
+    GTEST_ADD(gtest,diff,avg);
     gtest = GTEST_PROB( 2.0, gtest );
-    stats->row_gtests[i/2] = gtest;
+
+    stats->row_gtests[i] = gtest;
     if (gtest >= confidence) {
-      printf("row-error %d: %.0f/%.0f => %.20f\n", i, l, r, gtest);
+      //printf("row-error %d: %.0f/%.0f => %.20f\n", i/2, l, r, gtest);
       stats->row_errors++;
     }
   }
@@ -255,7 +247,6 @@ double calcBiasStats ( std::vector<int> & counts, int reps, av_statst *stats, do
   stats->expected_err_scaled = (0.00256 / (stats->reps / 100000.0));
   stats->err_scaled_ratio= stats->err_scaled / stats->expected_err_scaled;
   stats->gtest_prob = GTEST_PROB( stats->num_bins / 2, stats->gtest_prob );
-  return worst;
 }
 
 //-----------------------------------------------------------------------------
