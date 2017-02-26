@@ -7,7 +7,7 @@
 #include "PMurHash.h"
 #include "beagle_hash.h"
 #include "Marvin32.h"
-
+#include "siphash.h"
 #include <stdio.h>
 #include <time.h>
 
@@ -277,18 +277,20 @@ HashInfo g_hashes[] =
       "Bob Jenkins' OOAT as in old perl5", NULL },
   { MicroOAAT, NULL, NULL, 32, 32, 32, 0x16F1BA97, "MicroOAAT",
       "Small non-multiplicative OAAT that passes all collision checks (by funny-falcon)", NULL },
-  { halfsiphash_test, NULL, NULL, 32, 32, 32, 0xA7A05F72, "HalfSipHash",
-      "HalfSipHash 2-4, 32bit", NULL },
+  { halfsiphash_test, NULL, NULL, 32, 32, 32, 0xD2BE7FD8,
+    "HalfSipHash", "HalfSipHash 2-4, 32bit", NULL },
 
   // and now the quality hash funcs, which mostly work
   // GoodOOAT passes whole SMHasher (by funny-falcon)
   { GoodOAAT, NULL, NULL, 32, 32, 32, 0x7B14EEE5, "GoodOAAT",
       "Small non-multiplicative OAAT", NULL },
-  { siphash_test, NULL, NULL, 32, 32, 64, 0xC58D7F9C, "SipHash",
-      "SipHash 2-4 - SSSE3 optimized", NULL },
+  { siphash_test, siphash_seed_state_test, siphash_with_state_test,
+    128, 256, 64, 0x57B661ED,
+    "SipHash", "SipHash 2-4", NULL },
   // as in rust and swift
-  { siphash13_test, NULL, NULL, 32, 32, 64, 0x29C010BF, "SipHash13",
-      "SipHash 1-3 - SSSE3 optimized", NULL },
+  { siphash13_test, siphash_seed_state_test, siphash13_with_state_test,
+    128, 256, 64, 0x8936B193,
+    "SipHash13", "SipHash 1-3", NULL },
 #if defined(__x86_64__)
   { fasthash32_test, NULL, NULL, 32, 32, 32, 0xE9481AFC, "fasthash32",
       "fast-hash 32bit", NULL },

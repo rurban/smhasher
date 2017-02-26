@@ -35,6 +35,7 @@ void randhash_128          ( const void * key, int len, uint32_t seed, void * ou
 
 void md5_32                ( const void * key, int len, uint32_t seed, void * out );
 void sha1_32a              ( const void * key, int len, uint32_t seed, void * out );
+void sha1_64a              ( const void * key, int len, uint32_t seed, void * out );
 void sha1_32b              ( const void * key, int len, uint32_t seed, void * out );
 #if 0
 void sha1_64a              ( const void * key, int len, uint32_t seed, void * out );
@@ -97,9 +98,11 @@ void MurmurHash2_test      ( const void * key, int len, uint32_t seed, void * ou
 void MurmurHash2A_test     ( const void * key, int len, uint32_t seed, void * out );
 
 void siphash_test          ( const void * key, int len, uint32_t seed, void * out );
+void siphash_with_state_test( const void * key, int len, const void * seed, void * out );
+void siphash13_with_state_test( const void * key, int len, const void * seed, void * out );
 void siphash13_test        ( const void * key, int len, uint32_t seed, void * out );
 void halfsiphash_test      ( const void * key, int len, uint32_t seed, void * out );
-
+void siphash_seed_state_test( int seedbits, const void *seed, const void *state);
 //-----------------------------------------------------------------------------
 // Test harnesses for Murmur1/2
 
