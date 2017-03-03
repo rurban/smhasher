@@ -1,9 +1,14 @@
-# About This Repository
+# SMHasher - A hash function test-bench in C++
 
-This is a fork of Google's "smhasher" suite. It incorperates
-changes from Reini Urban's fork as well.
+This is a fork of Google's "smhasher" suite, available here:
 
-It has been substantially extended to:
+    https://chromium.googlesource.com/external/smhasher
+
+It incorperates changes from Reini Urban's fork as well. See:
+
+    https://github.com/rurban/smhasher
+
+Compared to those versions it has been substantially extended to:
 
 * Use better stats internally (g-test)
 * Better test how the hash functions are seeded
@@ -209,4 +214,4 @@ are calculated about how input bit affects the out, and whether the
 results are random or not.
 
 
-
+# XXX: More here :-)
