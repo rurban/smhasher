@@ -1,6 +1,6 @@
 make
 rm -f doc/*.tmp
-export BITS=32
+export BITS=
 
 #BeagleHash_32_112	32 bit	(Yves Orton's hash for 64-bit reduced to 32 (112 bit seed).)
 
