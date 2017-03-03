@@ -6,6 +6,10 @@
 #include "DifferentialTest.h"
 #include "PMurHash.h"
 #include "beagle_hash.h"
+#include "phat_hash.h"
+#include "zaphod32_hash.h"
+#include "zaphod64_hash.h"
+#include "sbox_hash.h"
 #include "Marvin32.h"
 #include "siphash.h"
 #include <stdio.h>
@@ -236,21 +240,24 @@ HashInfo g_hashes[] =
     NULL },
 
   // ZaphodHash, Marvin32, Phat, Phat4
-  { ripper_hash_smhasher_test, ripper_seed_state_smhasher_test, ripper_hash_with_state_smhasher_test,
+  { sbox_hash_smhasher_test,
+    sbox_seed_state_smhasher_test, sbox_hash_with_state_smhasher_test,
     128, (32 * 256 + 3) * 64, 64, 0x0, /*0x1DF02A62,*/
-    "Ripper", "64 bit one-time pad (32 char)",
+    "SBOX", "64 bit substitution box for up to 32 char strings",
     NULL },
-  { zaphod64_hash_smhasher_test, zaphod64_seed_state_smhasher_test, zaphod64_hash_with_state_smhasher_test,
+  { zaphod64_hash_smhasher_test,
+    zaphod64_seed_state_smhasher_test, zaphod64_hash_with_state_smhasher_test,
     191, 192, 64, 0x0, /*0x1DF02A62,*/
-    "Zaphod64", "Fast 64 bit hash with 191 bit seed",
+    "Zaphod64", "64 bit hash with 191 bit seed",
     NULL },
-  { zaphod_hash_smhasher_test, zaphod_seed_state_smhasher_test, zaphod_hash_with_state_smhasher_test,
+  { zaphod32_hash_smhasher_test,
+    zaphod32_seed_state_smhasher_test, zaphod32_hash_with_state_smhasher_test,
     95, 96, 32, 0x0, /*0x1DF02A62,*/
-    "Zaphod32", "Fast 32 bit hash with 95 bit seed",
+    "Zaphod32", "32 bit hash with 95 bit seed",
     NULL },
   { phat4_hash_smhasher_test, NULL, phat4_hash_with_state_smhasher_test,
     96, 96, 32, 0x0, /*0x4BE16D5A,*/
-    "Phat4", "Fast 32 bit hash with 128 bit seed",
+    "Phat4", "32 bit hash with 96 bit seed",
     NULL },
   { marvin_32_smhasher_test, NULL, NULL,
     32, 32, 32, 0xE6711235,
