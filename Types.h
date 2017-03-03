@@ -19,6 +19,9 @@
 void     blackhole ( uint32_t x );
 uint32_t whitehole ( void );
 
+extern uint32_t g_verbose;
+extern double g_confidence;
+
 //-----------------------------------------------------------------------------
 // We want to verify that every test produces the same result on every platform
 // To do this, we hash the results of every test to produce an overall
