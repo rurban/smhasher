@@ -59,7 +59,7 @@ void calcBiasWithSeed ( hashfunc<hashtype> hash, std::vector<int> & counts, int 
   const int keybytes = sizeof(keytype);
   const int hashbytes = sizeof(hashtype);
 
-  const int seedbits = seedbytes * 8;
+  const int seedbits = hash.seedbits();
   const int keybits = keybytes * 8;
   const int hashbits = hashbytes * 8;
   seedtype seed;
@@ -101,10 +101,17 @@ void calcBiasWithSeed ( hashfunc<hashtype> hash, std::vector<int> & counts, int 
       }
     }
 
+    if (hash.can_seed_state()) {
+      hash.seed_state(&seed);
+    }
     for(int iBit = 0; iBit < keybits; iBit++)
     {
       flipbit(&K,keybytes,iBit);
-      hash(&K,keybytes,&seed,&B);
+      if (hash.can_seed_state()) {
+        hash(&K,keybytes,&B);
+      } else {
+        hash(&K,keybytes,&seed,&B);
+      }
       flipbit(&K,keybytes,iBit);
 
       for(int iOut = 0; iOut < hashbits; iOut++)
@@ -131,7 +138,7 @@ bool AvalancheTest (
   double max_pct_error,
   double max_error_ratio
 ) {
-  int seedbits = sizeof(seedtype) * 8;
+  int seedbits = hash.seedbits();
   int keybits = sizeof(keytype) * 8;
   int hashbits = sizeof(hashtype) * 8;
   int num_rows = keybits + seedbits;
