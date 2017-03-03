@@ -174,6 +174,10 @@ add_library(
   Types.cpp
   PMurHash.c
   beagle_hash.c
+  phat_hash.c
+  zaphod32_hash.c
+  zaphod64_hash.c
+  sbox_hash.c
   Marvin32.c
   ${64ONLY_SRC}
   ${METROCRC64_SRC}
