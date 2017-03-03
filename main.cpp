@@ -1141,7 +1141,9 @@ int main ( int argc, char ** argv )
         }
       } while (p);
     }
-
+    else {
+      printf("Unknown option: %s\n", arg);
+    }
   }
 
   // Code runs on the 3rd CPU by default
