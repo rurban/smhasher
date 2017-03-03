@@ -11,6 +11,11 @@
 #include <gsl/gsl_sf.h>
 #include <gsl/gsl_sys.h>
 
+// Calculate the log of the ratio o/e without
+// rounding/cancelling issues by using log1p when
+// necessary. If o is slightly bigger than e, and e
+// is big enough then log(o/e) will be 0 when it
+// should not be, whereas log1p() won't have this issue.
 inline double _logoe(double o, double e) {
   double ret;
   if (o == e) {
