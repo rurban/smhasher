@@ -125,7 +125,7 @@ double runSpeedTest ( hashfunc<hashtype> hash, const int trials, const int block
 template < typename hashtype >
 void BulkSpeedTest ( hashfunc<hashtype> hash, Rand &r )
 {
-  const int trials = 2999;
+  const int trials = 4999;
   const int blocksize = 256 * 1024;
 
   printf("Bulk speed test - %d-byte keys\n",blocksize);
@@ -194,7 +194,7 @@ bool RunKeySpeedTests(hashfunc<hashtype> hash, Rand & r)
   printf("%-20s %16s %12.3f c/h %12.3f c/b %12.3f b/c\n\n",
       hash.name(), "Average < 128",
       sum / double(count), sum / sum_key_len, sum_key_len / sum );
-  for(int key_len = 128; key_len <= 1 << 18; key_len *= 2)
+  for(int key_len = 128; key_len <= 1 << 16; key_len *= 2)
   {
     sum += TinySpeedTest(hash, key_len, 29999, r, true);
     sum_key_len += double(key_len);
