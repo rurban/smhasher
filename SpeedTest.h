@@ -11,7 +11,6 @@
 
 double CalcMean ( std::vector<double> & v );
 void FilterOutliers ( std::vector<double> & v );
-bool RunSpeedTests();
 //-----------------------------------------------------------------------------
 // We really want the rdtsc() calls to bracket the function call as tightly
 // as possible, but that's hard to do portably. We'll try and get as close as
