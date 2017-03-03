@@ -858,10 +858,11 @@ void testHashWithSeed ( HashInfo * info )
   {
     printf("[[[ Keyset 'Zeroes' Tests ]]] - %s\n\n",info->name);
 
-    bool result = true;
     bool drawDiagram = false;
+    int keycount = 256 * 1024;
 
-    result &= ZeroKeyTest<hashtype>( hash, confidence, drawDiagram );
+    bool result = RepeatedCharKeyTest<hashtype>(
+        hash, "Zeroes", 0, keycount, confidence, drawDiagram );
 
     if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
@@ -899,10 +900,11 @@ void testHashWithSeed ( HashInfo * info )
   {
     printf("[[[ Keyset 'Effs' Tests ]]] - %s\n\n",info->name);
     
-    bool result = true;
     bool drawDiagram = false;
+    int keycount = 256 * 1024;
 
-    result &= EffsKeyTest<hashtype>( hash, confidence, drawDiagram );
+    bool result = RepeatedCharKeyTest<hashtype>(
+        hash, "Effs", 0xFF, keycount, confidence, drawDiagram );
     
     if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");

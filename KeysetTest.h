@@ -323,19 +323,19 @@ bool TextKeyTest ( hashfunc<hashtype> hash, const char * prefix, const char * co
 }
 
 //-----------------------------------------------------------------------------
-// Keyset 'Zeroes' - keys consisting of all zeroes, differing only in length
+// Keyset 'RepeatedCharkeyTest' - keys consisting of all the same char,
+// differing only in length
 
 // We reuse one block of empty bytes, otherwise the RAM cost is enormous.
 
 template < typename hashtype >
-bool ZeroKeyTest ( pfHash hash, double confidence, bool drawDiagram )
+bool RepeatedCharKeyTest ( pfHash hash, const char *name, unsigned char c, int keycount, double confidence, bool drawDiagram )
 {
-  int keycount = 256 * 1024;
 
-  printf("Keyset 'Zeroes' - %d keys\n",keycount);
+  printf("Keyset '%s' - %d keys\n",name,keycount);
 
-  unsigned char * nullblock = new unsigned char[keycount];
-  memset(nullblock,0,keycount);
+  unsigned char * block = new unsigned char[keycount];
+  memset(block,c,keycount);
 
   //----------
 
@@ -345,7 +345,7 @@ bool ZeroKeyTest ( pfHash hash, double confidence, bool drawDiagram )
 
   for(int i = 0; i < keycount; i++)
   {
-    hash(nullblock,i,0,&hashes[i]);
+    hash(block,i,0,&hashes[i]);
   }
 
   bool result = true;
@@ -354,52 +354,11 @@ bool ZeroKeyTest ( pfHash hash, double confidence, bool drawDiagram )
 
   printf("\n");
 
-  delete [] nullblock;
+  delete [] block;
 
   return result;
 }
 
-//-----------------------------------------------------------------------------
-// Keyset 'Effs' - keys consisting of all 0xFF, differing only in length
-
-// We reuse one block of empty bytes, otherwise the RAM cost is enormous.
-
-template < typename hashtype >
-bool EffsKeyTest ( pfHash hash, double confidence, bool drawDiagram )
-{
-  int keycount = 256 * 1024;
-  int tries = 10;
-  Rand r(48671);
-
-  printf("Keyset 'Effs' - %d keys, %d seeds",keycount, tries);
-
-  unsigned char * nullblock = new unsigned char[keycount];
-  memset(nullblock,0xFF,keycount);
-
-  //----------
-
-  std::vector<hashtype> hashes;
-
-  hashes.resize(keycount * tries);
-
-  hashtype *h= &hashes[0];
-  for(int t = 0; t < tries; t++) {
-    uint32_t seed= r.rand_u32();
-
-    for(int i = 0; i < keycount; i++)
-    {
-      hash(nullblock,i,seed,h++);
-    }
-    printf(".");
-  }
-  printf("\n");
-  bool result = TestHashList(hashes,true,confidence,drawDiagram);
-  printf("\n");
-
-  delete [] nullblock;
-
-  return result;
-}
 
 //-----------------------------------------------------------------------------
 // Keyset 'Seed' - hash "the quick brown fox..." using different seeds
