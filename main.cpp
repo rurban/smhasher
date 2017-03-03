@@ -571,7 +571,7 @@ void testHashWithSeed ( HashInfo * info )
 
     bool result = true;
     const int reps = 32000000 / info->hashbits;
-    double max_pct_error = 1.0;
+    double max_pct_error = 1.0 / 100.00;
     double max_error_ratio = 1.5;
     int size = 0;
     Rand r(923145681);
