@@ -504,13 +504,21 @@ halfsiphash_test(const void *input, int len, uint32_t seed, void *out)
 /* https://github.com/gamozolabs/falkhash */
 #if defined(__SSE4_2__) && defined(__x86_64__)
 extern "C" {
-  uint64_t falkhash_test(uint8_t *data, uint64_t len, uint32_t seed, void *out);
+  uint64_t falkhash_test(uint8_t *data, uint64_t len, uint64_t seed, void *out);
 }
+
 void
 falkhash_test_cxx(const void *input, int len, uint32_t seed, void *out)
 {
   uint64_t hash[2] = {0ULL, 0ULL};
-  falkhash_test((uint8_t *)input, (uint64_t)len, seed, hash);
+  falkhash_test((uint8_t *)input, (uint64_t)len, (uint64_t)seed, hash);
+  *(uint64_t *) out = hash[0];
+}
+void
+falkhash_with_state_test_cxx(const void *input, int len, const void *seed, void *out)
+{
+  uint64_t hash[2] = {0ULL, 0ULL};
+  falkhash_test((uint8_t *)input, (uint64_t)len, *((uint64_t *)seed), hash);
   *(uint64_t *) out = hash[0];
 }
 #endif

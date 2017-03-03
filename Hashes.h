@@ -60,6 +60,7 @@ void crc64c_hw_test        ( const void * key, int len, uint32_t seed, void * ou
 void CityHashCrc64_test    ( const void * key, int len, uint32_t seed, void * out );
 void CityHashCrc128_test   ( const void * key, int len, uint32_t seed, void * out );
 void falkhash_test_cxx     ( const void * key, int len, uint32_t seed, void * out );
+void falkhash_with_state_test_cxx(const void *key, int len, const void *seed, void *out);
 #endif
 void FNV32a                ( const void * key, int len, uint32_t seed, void * out );
 void FNV32a_YoshimitsuTRIAD( const void * key, int len, uint32_t seed, void * out );
@@ -78,7 +79,11 @@ void Crap8_test            ( const void * key, int len, uint32_t seed, void * ou
 
 void CityHash32_test       ( const void * key, int len, uint32_t seed, void * out );
 void CityHash64_test       ( const void * key, int len, uint32_t seed, void * out );
+void CityHash64_with_state_test  ( const void * key, int len, const void * seed, void * out );
 void CityHash128_test      ( const void * key, int len, uint32_t seed, void * out );
+void CityHash128_with_state_test  ( const void * key, int len, const void * seed, void * out );
+void CityHashCrc128_test      ( const void * key, int len, uint32_t seed, void * out );
+void CityHashCrc128_with_state_test  ( const void * key, int len, const void * seed, void * out );
 void FarmHash32_test       ( const void * key, int len, uint32_t seed, void * out );
 void FarmHash64_test       ( const void * key, int len, uint32_t seed, void * out );
 void FarmHash128_test      ( const void * key, int len, uint32_t seed, void * out );
@@ -193,6 +198,11 @@ inline void t1ha_test(const void * key, int len, uint32_t seed, void * out)
   *(uint64_t*)out = t1ha(key, len, seed);
 }
 
+inline void t1ha_with_state_test(const void * key, int len, const void *seed, void * out)
+{
+  *(uint64_t*)out = t1ha(key, len, *((uint64_t*)seed));
+}
+
 void mum_hash_test(const void * key, int len, uint32_t seed, void * out);
 
 #if (defined(__SSE4_2__) && defined(__x86_64__)) || defined(_M_X64)
@@ -200,11 +210,20 @@ inline void t1ha_crc_test(const void * key, int len, uint32_t seed, void * out)
 {
   *(uint64_t*)out = t1ha_ia32crc(key, len, seed);
 }
+inline void t1ha_crc_with_state_test(const void * key, int len, const void *seed, void * out)
+{
+  *(uint64_t*)out = t1ha_ia32crc(key, len, *((uint64_t*)seed));
+}
 #endif
 
 inline void t1ha_64be_test(const void * key, int len, uint32_t seed, void * out)
 {
   *(uint64_t*)out = t1ha_64be(key, len, seed);
+}
+
+inline void t1ha_64be_with_state_test(const void * key, int len, const void* seed, void * out)
+{
+  *(uint64_t*)out = t1ha_64be(key, len, *((uint64_t*)seed));
 }
 
 inline void t1ha_32le_test(const void * key, int len, uint32_t seed, void * out)
