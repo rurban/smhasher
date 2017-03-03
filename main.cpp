@@ -473,11 +473,10 @@ void SelfTest ( bool validate )
 
 //----------------------------------------------------------------------------
 template < typename hashtype, typename seedtype >
-void testHashWithSeed ( HashInfo * info )
+void testHashWithSeed ( HashInfo * info, double confidence )
 {
   const int hashbits = sizeof(hashtype) * 8;
   bool pass= true;
-  double confidence = sigmasToProb(5.0);
   // see: https://en.wikipedia.org/wiki/Standard_deviation#Rules_for_normally_distributed_data
 
   hashfunc<hashtype> hash(
@@ -931,22 +930,26 @@ void testHashWithSeed ( HashInfo * info )
 }
 
 template < typename hashtype >
-void testHash ( HashInfo * info )
+void testHash ( HashInfo * info, double confidence )
 {
   if (info->seedbits == 32) {
-    testHashWithSeed< hashtype, Blob<32> >(info);
+    testHashWithSeed< hashtype, Blob<32> >(info, confidence);
   } else if (info->seedbits == 64) {
-    testHashWithSeed< hashtype, Blob<64> >(info);
+    testHashWithSeed< hashtype, Blob<64> >(info, confidence);
+  } else if (info->seedbits == 95) {
+    testHashWithSeed< hashtype, Blob<95> >(info, confidence);
   } else if (info->seedbits == 96) {
-    testHashWithSeed< hashtype, Blob<96> >(info);
+    testHashWithSeed< hashtype, Blob<96> >(info, confidence);
   } else if (info->seedbits == 112) {
-    testHashWithSeed< hashtype, Blob<112> >(info);
+    testHashWithSeed< hashtype, Blob<112> >(info, confidence);
   } else if (info->seedbits == 127) {
-    testHashWithSeed< hashtype, Blob<127> >(info);
+    testHashWithSeed< hashtype, Blob<127> >(info, confidence);
   } else if (info->seedbits == 128) {
-    testHashWithSeed< hashtype, Blob<128> >(info);
+    testHashWithSeed< hashtype, Blob<128> >(info, confidence);
+  } else if (info->seedbits == 191) {
+    testHashWithSeed< hashtype, Blob<191> >(info, confidence);
   } else if (info->seedbits == 256) {
-    testHashWithSeed< hashtype, Blob<256> >(info);
+    testHashWithSeed< hashtype, Blob<256> >(info, confidence);
   } else {
     printf("Invalid seed width %d for hash '%s'",
       info->seedbits, info->name);
@@ -974,7 +977,7 @@ void VerifyHash ( const void * key, int len, uint32_t seed, void * out )
 
 //-----------------------------------------------------------------------------
 
-void testHashByName ( const char * name )
+void testHashByName ( const char * name, double confidence )
 {
   HashInfo * pInfo = findHash(name);
 
@@ -987,19 +990,19 @@ void testHashByName ( const char * name )
     g_hashUnderTest = pInfo;
     if(pInfo->hashbits == 32)
     {
-      testHash<uint32_t>( pInfo );
+      testHash<uint32_t>( pInfo, confidence );
     }
     else if(pInfo->hashbits == 64)
     {
-      testHash<uint64_t>( pInfo );
+      testHash<uint64_t>( pInfo, confidence );
     }
     else if(pInfo->hashbits == 128)
     {
-      testHash<uint128_t>( pInfo );
+      testHash<uint128_t>( pInfo, confidence );
     }
     else if(pInfo->hashbits == 256)
     {
-      testHash<uint256_t>( pInfo );
+      testHash<uint256_t>( pInfo, confidence );
     }
     else
     {
@@ -1023,6 +1026,12 @@ static char* strndup(char const *s, size_t n)
 }
 #endif
 
+#define EQ(x,y) (strncmp(x,"" y "", sizeof(y)-1) == 0)
+#define NE(x,y) (strncmp(x,"" y "", sizeof(y)-1) != 0)
+
+uint32_t g_verbose;
+double   g_confidence;
+
 int main ( int argc, char ** argv )
 {
 #if (defined(__x86_64__) && __SSE4_2__) || defined(_M_X64) || defined(_X86_64_)
@@ -1034,62 +1043,98 @@ int main ( int argc, char ** argv )
   bool opt_validate = false;
   
   setvbuf(stdout, NULL, _IONBF, 0); /* autoflush stdout */
-  if(argc < 2) {
-    printf("No test hash given on command line, testing %s.\n", hashToTest);
-    printf("Usage: SMHasher --list or --test=Speed,... hash\n");
-  }
-  else {
-    hashToTest = argv[1];
+  g_verbose = 0;
+  g_confidence = sigmasToProb(5.0);
 
-    if (strncmp(hashToTest,"--", 2) == 0) {
-      if (strcmp(hashToTest,"--list") == 0) {
-        for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++) {
-          printf("%-16s\t%d bit\t(%s)\n", g_hashes[i].name, g_hashes[i].hashbits, g_hashes[i].desc);
-        }
-        exit(0);
-      }
-      if (strcmp(hashToTest,"--validate") == 0) {
-        opt_validate = true;
-      }
-      /* default: --test=All. comma seperated list of options */
-      if (strncmp(hashToTest,"--test=", 6) == 0) {
-        char *opt = (char *)&hashToTest[7];
-        char *rest = opt;
-        char *p;
-        bool found = false;
-        g_testAll = false;
-        do {
-          if ((p = strchr(rest, ','))) {
-            opt = strndup(rest, p-rest);
-            rest = p+1;
-          } else {
-            opt = rest;
-          }
-          for(size_t i = 0; i < sizeof(g_testopts) / sizeof(TestOpts); i++) {
-            if (strcmp(opt, g_testopts[i].name) == 0) {
-              g_testopts[i].var = true; found = true; break;
-            }
-          }
-          if (!found) {
-            printf("Invalid option: --test=%s\n", opt);
-            printf("Valid tests: --test=%s", g_testopts[0].name);
-            for(size_t i = 1; i < sizeof(g_testopts) / sizeof(TestOpts); i++) {
-              printf(",%s", g_testopts[i].name);
-            }
-            printf("\n");
-            exit(0);
-          }
-        } while (p);
-      }
-      if (argc > 2)
-        hashToTest = argv[2];
-      else
-        hashToTest = defaulthash;
+  for(int i = 1; i < argc; i++) {
+    char * arg= argv[i];
+    int arg_len= strlen(arg);
+
+    if (NE(arg,"--")) {
+      hashToTest = arg;
+      break;
     }
+    else
+    if (EQ(arg,"--list")) {
+      printf("%-18s|Seed|Hash|\n","");
+      printf("%-18s|%4s|%4s|%s\n","Name","Bits","Bits","Description");
+      printf("%.18s+%.4s+%.4s|%s\n",
+          "-------------------","----","----","--------------------------");
+      for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++) {
+        printf("%-18s|%4d|%4d|%s\n",
+            g_hashes[i].name, g_hashes[i].seedbits, g_hashes[i].hashbits,
+            g_hashes[i].desc);
+      }
+      exit(0);
+    }
+    else
+    if (EQ(arg,"--validate")) {
+      opt_validate = true;
+      continue;
+    }
+    else
+    if (EQ(arg,"--verbose")) {
+      g_verbose++;
+      continue;
+    }
+    else
+    if (EQ(arg,"-v")) {
+      arg+=2;
+      do {
+        g_verbose++;
+      } while ( *arg++ == 'v' );
+    }
+    else
+    if (EQ(arg,"--confidence=")){
+      arg += sizeof("--confidence=") - 1;
+      g_confidence = atof(arg);
+      if (g_confidence > 1) g_confidence /= 100;
+      if (g_verbose > 2)
+        printf("set confidence to %.6f via --confidence\n", g_confidence);
+    }
+    else
+    if (EQ(arg,"--sigmas=")){
+      arg += sizeof("--sigmas=") - 1;
+      g_confidence = sigmasToProb(atof(arg));
+      if (g_verbose > 2)
+        printf("set confidence to %.6f via --sigmas\n", g_confidence);
+    }
+    else
+    if (EQ(arg,"--test=") && arg_len > 8) {
+      /* default: --test=All. comma seperated list of options */
+      char *opt = (char *)&arg[7];
+      char *rest = opt;
+      char *p;
+      bool found = false;
+      g_testAll = false;
+
+      do {
+        if ((p = strchr(rest, ','))) {
+          opt = strndup(rest, p-rest);
+          rest = p+1;
+        } else {
+          opt = rest;
+        }
+        for(size_t i = 0; i < sizeof(g_testopts) / sizeof(TestOpts); i++) {
+          if (strcmp(opt, g_testopts[i].name) == 0) {
+            g_testopts[i].var = true; found = true; break;
+          }
+        }
+        if (!found) {
+          printf("Invalid option: --test=%s\n", opt);
+          printf("Valid tests: --test=%s", g_testopts[0].name);
+          for(size_t i = 1; i < sizeof(g_testopts) / sizeof(TestOpts); i++) {
+            printf(",%s", g_testopts[i].name);
+          }
+          printf("\n");
+          exit(0);
+        }
+      } while (p);
+    }
+
   }
 
   // Code runs on the 3rd CPU by default
-
   SetAffinity((1 << 2));
 
   SelfTest(opt_validate);
@@ -1098,7 +1143,7 @@ int main ( int argc, char ** argv )
 
   clock_t timeBegin = clock();
 
-  testHashByName(hashToTest);
+  testHashByName(hashToTest,g_confidence);
 
   clock_t timeEnd = clock();
 
