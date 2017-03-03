@@ -12,17 +12,13 @@
 #include <gsl/gsl_sys.h>
 
 inline double _logoe(double o, double e) {
-  double l= log(o/e);
   double ret;
   if (o == e) {
-    ret = 0.0;
+    return 0.0;
   } else if ( o > e ) {
-    ret= log1p((o-e)/e);
-  } else {
-    ret= l;
+    return log1p((o-e)/e);
   }
-  //if (ret != l) printf("ret: %+.20e l: %+.20e\n",ret,l);
-  return ret;
+  return log(o/e);
 }
 
 #define GTEST_PROB(bins,gval) \
