@@ -185,6 +185,7 @@ add_library(
   ${SSE4_OBJ}
   t1ha.c
   mum.cc
+  RunTests.cpp
 )
 
 add_executable(
