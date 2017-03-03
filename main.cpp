@@ -147,11 +147,6 @@ HashInfo g_hashes[] =
       "Murmur one-at-a-time", NULL },
   { Crap8_test, NULL, NULL, 32, 32, 32, 0x743E97A1, "Crap8",
       "Crap8", NULL },
-  // CityHash
-  { CityHash64_test, NULL, NULL, 32, 32, 64, 0x25A20825, "City64",
-      "Google CityHash64WithSeed", NULL },
-  { CityHash128_test, NULL, NULL, 32, 32,128, 0x6531F54E, "City128",
-      "Google CityHash128WithSeed", NULL },
 
   // SpoookyHash
   { SpookyHash32_test, NULL, NULL, 32, 32,   32, 0x3F798BBB, "Spooky32",
@@ -199,17 +194,17 @@ HashInfo g_hashes[] =
       NULL },
   { beagle_hash_32_96_a_smhasher_test,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher,
-      96, 128,  32, 0xCE38DE69,
+      96, 128,  32, 0x0, /*0xCE38DE69,*/
       "BeagleHash_32_96", "Yves Orton's hash for 64-bit in 32-bit mode (96-bit seed).",
       NULL },
   { beagle_hash_32_112_a_smhasher_test,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher,
-      112, 128,  32, 0x5CCE6AC4,
+      112, 128,  32, 0x0, /*0x5CCE6AC4,*/
       "BeagleHash_32_112", "Yves Orton's hash for 64-bit in 32-bit mode (112-bit seed).",
       NULL },
   { beagle_hash_32_127_a_smhasher_test,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher,
-      127, 128,  32, 0xC9134969,
+      127, 128,  32, 0x0, /*0xC9134969,*/
       "BeagleHash_32_127", "Yves Orton's hash for 64-bit in 32-bit mode (127-bit seed).",
       NULL },
 
@@ -226,27 +221,35 @@ HashInfo g_hashes[] =
     NULL },
   { beagle_hash_64_96_a_smhasher_test,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_64_128_a_smhasher,
-    96, 128,   64, 0x40EBE522,
+    96, 128,   64, 0x0, /*0x40EBE522,*/
     "BeagleHash_64_96", "Yves Orton's hash for 64-bit (96 bit seed).",
     NULL },
   { beagle_hash_64_112_a_smhasher_test,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_64_128_a_smhasher,
-    112, 128,  64, 0xF91596C5,
+    112, 128,  64, 0x0, /*0xF91596C5,*/
     "BeagleHash_64_112", "Yves Orton's hash for 64-bit (112 bit seed).",
     NULL },
   { beagle_hash_64_127_a_smhasher_test,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_64_128_a_smhasher,
-    127, 128,  64, 0x575C6DA6,
+    127, 128,  64, 0x0, /*0x575C6DA6,*/
     "BeagleHash_64_127", "Yves Orton's hash for 64-bit (127 bit seed).",
     NULL },
 
   // ZaphodHash, Marvin32, Phat, Phat4
-  { zaphod_hash_smhasher_test, NULL, zaphod_hash_with_state_smhasher_test,
-    96, 96, 32, 0x1DF02A62,
-    "Zaphod32", "Fast 32 bit hash with 96 bit seed",
+  { ripper_hash_smhasher_test, ripper_seed_state_smhasher_test, ripper_hash_with_state_smhasher_test,
+    128, (32 * 256 + 3) * 64, 64, 0x0, /*0x1DF02A62,*/
+    "Ripper", "64 bit one-time pad (32 char)",
+    NULL },
+  { zaphod64_hash_smhasher_test, zaphod64_seed_state_smhasher_test, zaphod64_hash_with_state_smhasher_test,
+    191, 192, 64, 0x0, /*0x1DF02A62,*/
+    "Zaphod64", "Fast 64 bit hash with 191 bit seed",
+    NULL },
+  { zaphod_hash_smhasher_test, zaphod_seed_state_smhasher_test, zaphod_hash_with_state_smhasher_test,
+    95, 96, 32, 0x0, /*0x1DF02A62,*/
+    "Zaphod32", "Fast 32 bit hash with 95 bit seed",
     NULL },
   { phat4_hash_smhasher_test, NULL, phat4_hash_with_state_smhasher_test,
-    128, 128, 32, 0x4BE16D5A,
+    96, 96, 32, 0x0, /*0x4BE16D5A,*/
     "Phat4", "Fast 32 bit hash with 128 bit seed",
     NULL },
   { marvin_32_smhasher_test, NULL, NULL,
@@ -277,8 +280,9 @@ HashInfo g_hashes[] =
       "Bob Jenkins' OOAT as in perl 5.18", NULL },
   { JenkinsOOAT_perl, NULL, NULL, 32, 32, 32, 0xEE05869B, "JenkinsOOAT_perl",
       "Bob Jenkins' OOAT as in old perl5", NULL },
-  { MicroOAAT, NULL, NULL, 32, 32, 32, 0x16F1BA97, "MicroOAAT",
-      "Small non-multiplicative OAAT that passes all collision checks (by funny-falcon)", NULL },
+  { MicroOAAT, NULL, NULL,
+    32, 32, 32, 0x16F1BA97,
+    "MicroOAAT", "Small non-mul OAAT that passes collision checks (by funny-falcon)", NULL },
   { halfsiphash_test, NULL, NULL, 32, 32, 32, 0xD2BE7FD8,
     "HalfSipHash", "HalfSipHash 2-4, 32bit", NULL },
 
@@ -299,15 +303,20 @@ HashInfo g_hashes[] =
   { fasthash64_test, NULL, NULL, 32, 32, 64, 0xA16231A7, "fasthash64",
       "fast-hash 64bit", NULL },
 #endif
+
+  // CityHash
   { CityHash32_test, NULL, NULL, 32, 32, 32, 0x5C28AD62, "City32",
       "Google CityHash32WithSeed (old)", NULL },
-  { CityHash64_test, NULL, NULL, 32, 32, 64, 0x25A20825, "City64",
-      "Google CityHash64WithSeed (old)", NULL },
+  { CityHash64_test, NULL, CityHash64_with_state_test,
+    64, 64, 64, 0x25A20825,
+    "City64", "Google CityHash64WithSeed (old)", NULL },
 #if defined(__SSE4_2__) && defined(__x86_64__)
-  { CityHash128_test, NULL, NULL, 32, 32, 128, 0x6531F54E, "City128",
-      "Google CityHash128WithSeed (old)", NULL },
-  { CityHashCrc128_test, NULL, NULL, 32, 32, 128, 0xD4389C97, "CityCrc128",
-      "Google CityHashCrc128WithSeed SSE4.2 (old)", NULL },
+  { CityHash128_test, NULL, CityHash128_with_state_test,
+    128, 128, 128, 0x6531F54E,
+    "City128", "Google CityHash128WithSeed (old)", NULL },
+  { CityHashCrc128_test, NULL, CityHashCrc128_with_state_test,
+    128, 128, 128, 0xD4389C97,
+    "CityCrc128", "Google CityHashCrc128WithSeed SSE4.2 (old)", NULL },
 #endif
 #if defined(__x86_64__)
   { FarmHash64_test, NULL, NULL, 32, 32, 64, 0x35F84A93, "FarmHash64",
@@ -358,20 +367,23 @@ HashInfo g_hashes[] =
       "cmetrohash64_2, 64-bit for x64", NULL },
 #endif
 #if defined(__SSE4_2__) && defined(__x86_64__)
-  { falkhash_test_cxx, NULL, NULL, 32, 32, 64, 0x75FE3431,
+  { falkhash_test_cxx, NULL, falkhash_with_state_test_cxx, 64, 64, 64, 0x75FE3431,
     "falkhash", "falkhash.asm with aesenc, 64-bit for x64", NULL },
 #endif
-  { t1ha_test, NULL, NULL, 32, 32, 64, 0xD6836381, "t1ha",
-      "Fast Positive Hash (portable, best for: 64-bit, little-endian)", NULL },
-  { t1ha_64be_test, NULL, NULL, 32, 32, 64, 0x93F864DE, "t1ha_64be",
-      "Fast Positive Hash (portable, best for: 64-bit, big-endian)", NULL },
+  { t1ha_test, NULL, t1ha_with_state_test,
+    64, 64, 64, 0xD6836381,
+    "t1ha", "Fast Positive Hash (portable, best for: 64-bit, little-endian)", NULL },
+  { t1ha_64be_test, NULL, t1ha_64be_with_state_test,
+    64, 64, 64, 0x93F864DE,
+    "t1ha_64be", "Fast Positive Hash (portable, best for: 64-bit, big-endian)", NULL },
   { t1ha_32le_test, NULL, NULL, 32, 32, 64, 0xE489F366, "t1ha_32le",
       "Fast Positive Hash (portable, best for: 32-bit, little-endian)", NULL },
   { t1ha_32be_test, NULL, NULL, 32, 32, 64, 0x71F649A9, "t1ha_32be",
       "Fast Positive Hash (portable, best for: 32-bit, big-endian)", NULL },
 #if (defined(__SSE4_2__) && defined(__x86_64__)) || defined(_M_X64)
-  { t1ha_crc_test, NULL, NULL, 32, 32, 64, 0xA57ACE7D, "t1ha_crc",
-      "Fast Positive Hash (machine-specific, requires: SSE4.2 CRC32C)", NULL },
+  { t1ha_crc_test, NULL, t1ha_crc_with_state_test,
+    64, 64, 64, 0xA57ACE7D,
+    "t1ha_crc", "Fast Positive Hash (machine-specific, requires: SSE4.2 CRC32C)", NULL },
 #endif
 #if defined(__AES__) || defined(_M_X64) || defined(_M_IX86)
   { t1ha_aes_test, NULL, NULL, 32, 32, 64, 0x54BBFF21, "t1ha_aes",
