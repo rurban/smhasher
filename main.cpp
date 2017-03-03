@@ -889,15 +889,18 @@ void testHashWithSeed ( HashInfo * info, double confidence )
 
     bool result = true;
     bool drawDiagram = false;
+    Rand seed_r(392612);
+    // these tests suck. the avalanche tests probably do a better job
+    // we should test way more keys than this.
 
-    result &= SeedTest<hashtype>( hash, 2000000, confidence, drawDiagram,
-        "The quick brown fox jumps over the lazy dog");
-    result &= SeedTest<hashtype>( hash, 2000000, confidence, drawDiagram,
-        "");
-    result &= SeedTest<hashtype>( hash, 2000000, confidence, drawDiagram,
-        "00101100110101101");
-    result &= SeedTest<hashtype>( hash, 2000000, confidence, drawDiagram,
-        "abcbcddbdebdcaaabaaababaaabacbeedbabseeeeeeeesssssseeeewwwww");
+    result &= SeedTest<seedtype,hashtype>( hash, 2000000, confidence, drawDiagram,
+        seed_r, "The quick brown fox jumps over the lazy dog");
+    result &= SeedTest<seedtype,hashtype>( hash, 2000000, confidence, drawDiagram,
+        seed_r, "");
+    result &= SeedTest<seedtype,hashtype>( hash, 2000000, confidence, drawDiagram,
+        seed_r, "00101100110101101");
+    result &= SeedTest<seedtype,hashtype>( hash, 2000000, confidence, drawDiagram,
+        seed_r, "abcbcddbdebdcaaabaaababaaabacbeedbabseeeeeeeesssssseeeewwwww");
 
     if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");

@@ -363,31 +363,25 @@ bool RepeatedCharKeyTest ( pfHash hash, const char *name, unsigned char c, int k
 //-----------------------------------------------------------------------------
 // Keyset 'Seed' - hash "the quick brown fox..." using different seeds
 
-template < typename hashtype >
-bool SeedTest ( pfHash hash, int count, double confidence, bool drawDiagram, const char * text )
+template < typename seedtype, typename hashtype >
+bool SeedTest ( hashfunc<hashtype> hash, int count, double confidence, bool drawDiagram,
+    Rand &seed_r, const char * text )
 {
   printf("Keyset 'Seed' - %d seeds, key length %d\n  Key \"%s\"\n",
           count, (int)strlen(text), text);
 
   const int len = (int)strlen(text);
-  uint32_t v = 0;
+  seedtype seed;
   //----------
 
   std::vector<hashtype> hashes;
+  memset(&seed,0,sizeof(seedtype));
 
   hashes.resize(count);
   for(int i = 0; i < count; i++)
   {
-    // this gives us a set of unique seeds
-    hash(text,len,v,&hashes[i]);
-    if (!i) v= 1; // start the sequence
-    // we want a "random" set of seeds, but we don't
-    // want duplicates. So we use the following from
-    // Marsaglia which gives us 2^32 unique non-zero
-    // values
-    v ^= v >> 13;
-    v ^= v << 17;
-    v ^= v >> 5;
+    hash(text, len, &seed, &hashes[i]);
+    seed_r.rand_p(&seed,sizeof(seed));
   }
 
   bool result = true;
