@@ -73,7 +73,7 @@ double calcScore ( const int * vals, const int icount, const int isum, double co
   double count= double(icount);
   double expected = sum / count;
   double gtest = 0.0;
-  double score = 0.0;
+  double quality_score = 0.0;
   double old_score = 0.0;
   double stddev = 0.0;
   int min = vals[0];
@@ -91,7 +91,7 @@ double calcScore ( const int * vals, const int icount, const int isum, double co
     if (max < iv) max = iv;
 
     GTEST_ADD(gtest, v, expected);
-    score += ( v * ( v + 1.0 ) ) / 2.0;
+    quality_score += ( v * ( v + 1.0 ) ) / 2.0;
     old_score += pow( v, 2.0 );
     stddev += pow( v - expected , 2.0 );
   }
@@ -99,19 +99,34 @@ double calcScore ( const int * vals, const int icount, const int isum, double co
 
   stddev = sqrt( stddev / count );
   old_score = 1.0 - ( ( pow( sum, 2.0 ) - 1.0 ) / ( old_score - sum ) / count );
-  score = fabs( 1.0 - ( score / ( ( sum / ( 2.0 * count ) ) *
-                                  ( sum + ( 2.0 * count ) - 1.0 ) ) ) );
+  quality_score = quality_score / ( ( sum / ( 2.0 * count ) ) *
+                                    ( sum + ( 2.0 * count ) - 1.0 ) );
+  double score = fabs( 1.0 - quality_score );
 
-  if (gtest >= confidence) {
-    printf(
-        "Failed gtest with %.6f prob, old_score = %.6f%% score = %.6f%% bins=%.0f mean=%.0f stddev=%.6f\n",
-        gtest * 100, old_score * 100, score * 100, count, expected, stddev);
-    for ( int i = min ; i <= max ; i++ )
-      printf("  count %3d = %10d\n", i, count_counts[i] );
+
+  if (gtest >= confidence && score > 0.01) {
+    if (g_verbose) {
+      printf(
+          "Failed gtest with %.6f prob\n"
+          "  old_score = %.6f%% score = %.6f%% (%.6f%%)\n"
+          "  bins=%.0f sum=%.0f mean=%.0f stddev=%.6f\n",
+          gtest * 100, old_score * 100, score * 100, quality_score * 100,
+          count, sum, expected, stddev);
+      printf("  Bucket Count Frequencies:\n");
+      for ( int i = min ; i <= max ; i++ )
+        printf("    %3d = %10d (%6.2f)\n",
+            i, count_counts[i], count_counts[i] / sum * 100.0 );
+    }
     return score;
   } else {
-    if (0) printf("Passed gtest with %.6f prob, calcScore = %.6f bins=%.0f mean=%.0f\n",
-        gtest * 100, score * 100, count, expected);
+    if (g_verbose > 1) {
+      printf(
+          "Passed gtest with %.6f prob\n"
+          "  old_score = %.6f%% score = %.6f%% (%.6f%%)\n"
+          "  bins=%.0f sum=%.0f mean=%.0f stddev=%.6f\n",
+          gtest * 100, old_score * 100, score * 100, quality_score * 100,
+          count, sum, expected, stddev);
+    }
     return 0;
   }
 }
