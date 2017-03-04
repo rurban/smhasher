@@ -244,21 +244,21 @@ HashInfo g_hashes[] =
   { sbox_hash_smhasher_test,
     sbox_seed_state_smhasher_test, sbox_hash_with_state_smhasher_test,
     128, (32 * 256 + 3) * 64, 64, 0x0, /*0x1DF02A62,*/
-    "SBOX", "64 bit substitution box for up to 32 char strings",
+    "SBOX", "Yves Orton's 64 bit substitution box hash for up to 32 char strings",
     NULL },
   { zaphod64_hash_smhasher_test,
     zaphod64_seed_state_smhasher_test, zaphod64_hash_with_state_smhasher_test,
     191, 192, 64, 0x0, /*0x1DF02A62,*/
-    "Zaphod64", "64 bit hash with 191 bit seed",
+    "Zaphod64", "Yves Orton's 64 bit hash with 191 bit seed",
     NULL },
   { zaphod32_hash_smhasher_test,
     zaphod32_seed_state_smhasher_test, zaphod32_hash_with_state_smhasher_test,
     95, 96, 32, 0x0, /*0x1DF02A62,*/
-    "Zaphod32", "32 bit hash with 95 bit seed",
+    "Zaphod32", "Yves Orton's 32 bit hash with 95 bit seed",
     NULL },
   { phat4_hash_smhasher_test, NULL, phat4_hash_with_state_smhasher_test,
     96, 96, 32, 0x0, /*0x4BE16D5A,*/
-    "Phat4", "32 bit hash with 96 bit seed",
+    "Phat4", "Yves Orton's 32 bit hash with 96 bit seed",
     NULL },
   { marvin_32_smhasher_test, NULL, NULL,
     32, 32, 32, 0xE6711235,
