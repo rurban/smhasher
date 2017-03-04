@@ -969,7 +969,7 @@ mathematical founding.
 
 The old score was
 
-<img href="https://github.com/demerphq/smhasher/blob/master/doc/old_score.png?raw=true" />
+<img src="https://github.com/demerphq/smhasher/blob/master/doc/old_score.png?raw=true" />
 
 in psuedo-code:
 
@@ -979,7 +979,7 @@ in psuedo-code:
 
 The new score is
 
-<img href="https://github.com/demerphq/smhasher/blob/master/doc/new_score.png?raw=true" />
+<img src="https://github.com/demerphq/smhasher/blob/master/doc/new_score.png?raw=true" />
 
 in pseudo-code is:
 
