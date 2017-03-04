@@ -989,7 +989,14 @@ in pseudo-code is:
                                ( sum + ( 2.0 * count ) - 1.0 ) )
     score = abs( 1.0 - quality_score )
 
-The quality score formula is from the Red Dragon book and is documented
-at http://www.strchr.com/hash_functions
+The quality score formula is from the Red Dragon book. A good hash function
+should have a quality score of close to one, with values between 0.95 to 1.05 being
+normal. In theory having a lower quality score is better, however excessively
+low values indicate non-random behavior that probably indicates some
+other weakness. Therefor our tests use the distance from 1 instead, and consider
+anything higher than 0.01 to be a failure.
 
+Further discussion on hash functions and quality scores can be found
+<a href="http://www.strchr.com/hash_functions">here</a> (along with all kinds
+of other valuable information).
 
