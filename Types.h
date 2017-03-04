@@ -43,16 +43,15 @@ typedef void (*pfHash) ( const void *blob, const int len, const uint32_t seed, v
 
 typedef struct HashInfo
 {
-  pfHash hash;
-  pfSeedState seed_state;
-  pfHashWithState hash_with_state;
+  const char * name;
+  const char * desc;
   int seedbits;
   int statebits;
   int hashbits;
   uint32_t verification;
-  const char * name;
-  const char * desc;
-  void *seed;
+  pfSeedState seed_state;
+  pfHashWithState hash_with_state;
+  pfHash hash;
 } HashInfo;
 
 
