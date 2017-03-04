@@ -141,7 +141,7 @@ uint64_t DiffTestRecurse ( hashfunc<hashtype> hash, keytype & k1, keytype & k2, 
 //----------
 // widely used
 template < typename keytype, typename hashtype >
-bool DiffTest ( hashfunc<hashtype> hash, int diffbits, int reps, bool dumpCollisions )
+bool DiffTest ( hashfunc<hashtype> hash, int diffbits, int reps, bool dumpCollisions, Rand &r )
 {
   const int keybits = sizeof(keytype) * 8;
   const int hashbits = sizeof(hashtype) * 8;
@@ -149,8 +149,6 @@ bool DiffTest ( hashfunc<hashtype> hash, int diffbits, int reps, bool dumpCollis
   double diffcount = chooseUpToK(keybits,diffbits);
   double testcount = (diffcount * double(reps));
   double expected  = testcount / pow(2.0,double(hashbits));
-
-  Rand r(100);
 
   std::vector<keytype> diffs;
 

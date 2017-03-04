@@ -1,4 +1,4 @@
 #pragma once
 void SelfTest ( bool validate );
-void testHashByInfo ( HashInfo * pInfo, double confidence );
+void testHashByInfo ( HashInfo * pInfo, int self_test, double confidence );
 

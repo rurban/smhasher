@@ -29,8 +29,8 @@ public:
   {
     if (0) printf("initializing hash object for new interface m_hash: %p m_hash_with_state:%p\n",
         m_hash, m_hash_with_state);
-    m_state.resize(statebits/8);
-    m_seed.resize(seedbits/8);
+    m_state.resize((statebits+7)/8);
+    m_seed.resize((seedbits+7)/8);
   }
 
   inline operator pfHash ( void ) const
@@ -59,7 +59,11 @@ public:
 
   inline void operator () ( const void * key, const int len, void * out )
   {
-    m_hash_with_state(key,len,&m_state[0],out);
+    if (m_hash_with_state) {
+      m_hash_with_state(key,len,&m_state[0],out);
+    } else if (m_seedbits == 32) {
+      m_hash(key,len,*((uint32_t*)&m_seed[0]),out);
+    }
   }
 
   inline T operator () ( const void * key, const int len, const uint32_t seed )

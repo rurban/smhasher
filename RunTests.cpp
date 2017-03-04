@@ -37,41 +37,10 @@ extern bool g_testEffs;
 extern bool g_testSeed;
 extern HashInfo g_hashes[];
 extern int g_hashes_sizeof;
-//-----------------------------------------------------------------------------
-// Self-test on startup - verify that all installed hashes work correctly.
-
-void SelfTest ( bool validate )
-{
-  bool pass = true;
-
-  for(size_t i = 0; i < sizeof(g_hashes_sizeof) / sizeof(HashInfo); i++)
-  {
-    HashInfo * info = & g_hashes[i];
-
-    pass &= VerificationTest(info->hash,info->hashbits,info->verification,0,info->name);
-  }
-  if (!pass)
-    printf("Self-test FAILED!\n");
-
-  if(!pass || validate)
-  {
-    for(size_t i = 0; i < g_hashes_sizeof / sizeof(HashInfo); i++)
-    {
-      HashInfo * info = & g_hashes[i];
-
-      pass &= VerificationTest(info->hash,info->hashbits,info->verification,1,info->name);
-    }
-    if (!pass) exit(1);
-    if (validate) {
-      printf("Self-test PASSED.\n");
-      exit(0);
-    }
-  }
-}
 
 //----------------------------------------------------------------------------
 template < typename hashtype, typename seedtype >
-void testHashWithSeed ( HashInfo * info, double confidence )
+bool testHashWithSeed ( HashInfo * info, int self_test, double confidence )
 {
   const int hashbits = sizeof(hashtype) * 8;
   bool pass= true;
@@ -86,22 +55,27 @@ void testHashWithSeed ( HashInfo * info, double confidence )
       info->name
   );
 
-  printf("-------------------------------------------------------------------------------\n");
-  printf("--- Testing %s (%s)\n\n",info->name,info->desc);
-
+  if (!self_test) {
+    printf("-------------------------------------------------------------------------------\n");
+    printf("--- Testing %s (%s)\n\n",info->name,info->desc);
+  }
   //-----------------------------------------------------------------------------
   // Sanity tests
 
-  if(g_testSanity || g_testAll)
+  if(self_test || g_testSanity || g_testAll)
   {
-    printf("[[[ Sanity Tests ]]] - %s\n\n",info->name);
+    if(!self_test)
+      printf("[[[ Sanity Tests ]]] - %s\n\n",info->name);
 
-    pass &= VerificationTest(hash,hashbits,info->verification,true,info->name);
-    pass &= SanityTest(hash,hashbits);
-    pass &= AppendedZeroesTest(hash,hashbits);
+    bool result = VerificationTest<hashtype>(hash, info->verification,
+        !self_test ? 1 : self_test > 1,info->name);
+    if (self_test) return result;
+    result &= SanityTest<hashtype>(hash);
+    result &= AppendedZeroesTest<hashtype>(hash);
 
-    if(!pass) printf("********* %s - FAIL *********\n",info->name);
+    if (!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
+    pass &= result;
   }
 
   //-----------------------------------------------------------------------------
@@ -132,10 +106,11 @@ void testHashWithSeed ( HashInfo * info, double confidence )
 
     bool result = true;
     bool dumpCollisions = false;
+    Rand r(100);
 
-    result &= DiffTest< Blob<64>,  hashtype >(hash,5,1000,dumpCollisions);
-    result &= DiffTest< Blob<128>, hashtype >(hash,4,1000,dumpCollisions);
-    result &= DiffTest< Blob<256>, hashtype >(hash,3,1000,dumpCollisions);
+    result &= DiffTest< Blob<64>,  hashtype >(hash,5,1000,dumpCollisions, r);
+    result &= DiffTest< Blob<128>, hashtype >(hash,4,1000,dumpCollisions, r);
+    result &= DiffTest< Blob<256>, hashtype >(hash,3,1000,dumpCollisions, r);
 
     if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
@@ -250,12 +225,14 @@ void testHashWithSeed ( HashInfo * info, double confidence )
 
     bool result = true;
     bool drawDiagram = false;
+    Rand r(910203);
+    int size = sizeof(hashtype);
 
-    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+0,8,10000000, confidence, drawDiagram);
-    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+1,8,10000000, confidence, drawDiagram);
-    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+2,8,10000000, confidence, drawDiagram);
-    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+3,8,10000000, confidence, drawDiagram);
-    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+4,8,10000000, confidence, drawDiagram);
+    result &= CyclicKeyTest<hashtype>(hash,size+0,8,10000000, confidence, drawDiagram, r);
+    result &= CyclicKeyTest<hashtype>(hash,size+1,8,10000000, confidence, drawDiagram, r);
+    result &= CyclicKeyTest<hashtype>(hash,size+2,8,10000000, confidence, drawDiagram, r);
+    result &= CyclicKeyTest<hashtype>(hash,size+3,8,10000000, confidence, drawDiagram, r);
+    result &= CyclicKeyTest<hashtype>(hash,size+4,8,10000000, confidence, drawDiagram, r);
 
     if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
@@ -293,15 +270,16 @@ void testHashWithSeed ( HashInfo * info, double confidence )
 
     bool result = true;
     bool drawDiagram = false;
+    Rand r(8075093);
 
-    result &= SparseKeyTest<  32,hashtype>(hash,6,true,true,confidence, drawDiagram);
-    result &= SparseKeyTest<  40,hashtype>(hash,6,true,true,confidence, drawDiagram);
-    result &= SparseKeyTest<  48,hashtype>(hash,5,true,true,confidence, drawDiagram);
-    result &= SparseKeyTest<  56,hashtype>(hash,5,true,true,confidence, drawDiagram);
-    result &= SparseKeyTest<  64,hashtype>(hash,5,true,true,confidence, drawDiagram);
-    result &= SparseKeyTest<  96,hashtype>(hash,4,true,true,confidence, drawDiagram);
-    result &= SparseKeyTest< 256,hashtype>(hash,3,true,true,confidence, drawDiagram);
-    result &= SparseKeyTest<2048,hashtype>(hash,2,true,true,confidence, drawDiagram);
+    result &= SparseKeyTest<  32,hashtype>(hash,6,true,true,confidence, drawDiagram, r);
+    result &= SparseKeyTest<  40,hashtype>(hash,6,true,true,confidence, drawDiagram, r);
+    result &= SparseKeyTest<  48,hashtype>(hash,5,true,true,confidence, drawDiagram, r);
+    result &= SparseKeyTest<  56,hashtype>(hash,5,true,true,confidence, drawDiagram, r);
+    result &= SparseKeyTest<  64,hashtype>(hash,5,true,true,confidence, drawDiagram, r);
+    result &= SparseKeyTest<  96,hashtype>(hash,4,true,true,confidence, drawDiagram, r);
+    result &= SparseKeyTest< 256,hashtype>(hash,3,true,true,confidence, drawDiagram, r);
+    result &= SparseKeyTest<2048,hashtype>(hash,2,true,true,confidence, drawDiagram, r);
 
     if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
@@ -318,17 +296,17 @@ void testHashWithSeed ( HashInfo * info, double confidence )
 
       printf("[[[ Keyset 'Combination Lowbits' Tests ]]] - %s\n\n",info->name);
 
-      bool result = true;
       bool drawDiagram = false;
+      Rand r(4810489);
 
       uint32_t blocks[] =
       {
         0x00000000,
-
         0x00000001, 0x00000002, 0x00000003, 0x00000004, 0x00000005, 0x00000006, 0x00000007,
       };
 
-      result &= CombinationKeyTest<hashtype>(hash,8,blocks,sizeof(blocks) / sizeof(uint32_t),true,confidence, drawDiagram);
+      bool result = CombinationKeyTest<hashtype>(
+        hash,8,blocks,sizeof(blocks) / sizeof(uint32_t),true,confidence, drawDiagram, r);
 
     if(!result) printf("********* %s - FAIL *********\n",info->name);
       printf("\n");
@@ -340,15 +318,16 @@ void testHashWithSeed ( HashInfo * info, double confidence )
 
       bool result = true;
       bool drawDiagram = false;
+      Rand r(9104174);
 
       uint32_t blocks[] =
       {
         0x00000000,
-
         0x20000000, 0x40000000, 0x60000000, 0x80000000, 0xA0000000, 0xC0000000, 0xE0000000
       };
 
-      result &= CombinationKeyTest<hashtype>(hash,8,blocks,sizeof(blocks) / sizeof(uint32_t),true,confidence, drawDiagram);
+      result &= CombinationKeyTest<hashtype>(
+          hash,8,blocks,sizeof(blocks) / sizeof(uint32_t),true,confidence, drawDiagram, r);
 
       if(!result) printf("********* %s - FAIL *********\n",info->name);
       printf("\n");
@@ -358,17 +337,17 @@ void testHashWithSeed ( HashInfo * info, double confidence )
     {
       printf("[[[ Keyset 'Combination 0x8000000' Tests ]]] - %s\n\n",info->name);
 
-      bool result = true;
       bool drawDiagram = false;
+      Rand r(183235);
 
       uint32_t blocks[] =
       {
         0x00000000,
-
         0x80000000,
       };
 
-      result &= CombinationKeyTest<hashtype>(hash,20,blocks,sizeof(blocks) / sizeof(uint32_t),true,confidence, drawDiagram);
+      bool result = CombinationKeyTest<hashtype>(
+        hash,20,blocks,sizeof(blocks) / sizeof(uint32_t),true,confidence, drawDiagram, r);
 
       if(!result) printf("********* %s - FAIL *********\n",info->name);
       printf("\n");
@@ -378,17 +357,17 @@ void testHashWithSeed ( HashInfo * info, double confidence )
     {
       printf("[[[ Keyset 'Combination 0x0000001' Tests ]]] - %s\n\n",info->name);
 
-      bool result = true;
       bool drawDiagram = false;
+      Rand r(831951);
 
       uint32_t blocks[] =
       {
         0x00000000,
-
         0x00000001,
       };
 
-      result &= CombinationKeyTest<hashtype>(hash,20,blocks,sizeof(blocks) / sizeof(uint32_t),true,confidence, drawDiagram);
+      bool result = CombinationKeyTest<hashtype>(
+        hash,20,blocks,sizeof(blocks) / sizeof(uint32_t),true,confidence, drawDiagram, r);
 
       if(!result) printf("********* %s - FAIL *********\n",info->name);
       printf("\n");
@@ -398,19 +377,18 @@ void testHashWithSeed ( HashInfo * info, double confidence )
     {
       printf("[[[ Keyset 'Combination Hi-Lo' Tests ]]] - %s\n\n",info->name);
 
-      bool result = true;
       bool drawDiagram = false;
+      Rand r(47831);
 
       uint32_t blocks[] =
       {
         0x00000000,
-
         0x00000001, 0x00000002, 0x00000003, 0x00000004, 0x00000005, 0x00000006, 0x00000007,
-
         0x80000000, 0x40000000, 0xC0000000, 0x20000000, 0xA0000000, 0x60000000, 0xE0000000
       };
 
-      result &= CombinationKeyTest<hashtype>(hash,6,blocks,sizeof(blocks) / sizeof(uint32_t),true,confidence, drawDiagram);
+      bool result = CombinationKeyTest<hashtype>(
+        hash,6,blocks,sizeof(blocks) / sizeof(uint32_t),true,confidence, drawDiagram, r);
 
       if(!result) printf("********* %s - FAIL *********\n",info->name);
       printf("\n");
@@ -428,11 +406,12 @@ void testHashWithSeed ( HashInfo * info, double confidence )
   {
     printf("[[[ Keyset 'Window' Tests ]]] - %s\n\n",info->name);
 
-    bool result = true;
     bool testCollision = true;
     bool drawDiagram = false;
+    Rand r(77589);
 
-    result &= WindowedKeyTest< Blob<hashbits*2>, hashtype > ( hash, 20, testCollision, confidence, drawDiagram );
+    bool result = WindowedKeyTest< Blob<hashbits*2>, hashtype >(
+        hash, 20, testCollision, confidence, drawDiagram, r );
 
     if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
@@ -448,12 +427,13 @@ void testHashWithSeed ( HashInfo * info, double confidence )
 
     bool result = true;
     bool drawDiagram = false;
+    Rand r(543823);
 
     const char * alnum = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-    result &= TextKeyTest( hash, "Foo",    alnum,4, "Bar",    confidence, drawDiagram );
-    result &= TextKeyTest( hash, "FooBar", alnum,4, "",       confidence, drawDiagram );
-    result &= TextKeyTest( hash, "",       alnum,4, "FooBar", confidence, drawDiagram );
+    result &= TextKeyTest( hash, "Foo",    alnum,4, "Bar",    confidence, drawDiagram, r );
+    result &= TextKeyTest( hash, "FooBar", alnum,4, "",       confidence, drawDiagram, r );
+    result &= TextKeyTest( hash, "",       alnum,4, "FooBar", confidence, drawDiagram, r );
 
     if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
@@ -469,9 +449,10 @@ void testHashWithSeed ( HashInfo * info, double confidence )
 
     bool drawDiagram = false;
     int keycount = 256 * 1024;
+    Rand r(834192);
 
     bool result = RepeatedCharKeyTest<hashtype>(
-        hash, "Zeroes", 0, keycount, confidence, drawDiagram );
+        hash, "Zeroes", 0, keycount, confidence, drawDiagram, r );
 
     if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
@@ -514,9 +495,10 @@ void testHashWithSeed ( HashInfo * info, double confidence )
 
     bool drawDiagram = false;
     int keycount = 256 * 1024;
+    Rand r(4139126);
 
     bool result = RepeatedCharKeyTest<hashtype>(
-        hash, "Effs", 0xFF, keycount, confidence, drawDiagram );
+        hash, "Effs", 0xFF, keycount, confidence, drawDiagram, r );
 
     if(!result) printf("********* %s - FAIL *********\n",info->name);
     printf("\n");
@@ -528,62 +510,99 @@ void testHashWithSeed ( HashInfo * info, double confidence )
   } else {
       printf("******* %s - TESTS FAILED *******",info->name);
   }
+  return pass;
 }
 
 template < typename hashtype >
-void testHash ( HashInfo * info, double confidence )
+bool testHash ( HashInfo * info, int self_test, double confidence )
 {
   if (info->seedbits == 32) {
-    testHashWithSeed< hashtype, Blob<32> >(info, confidence);
+    return testHashWithSeed< hashtype, Blob<32> >(info, self_test, confidence);
   } else if (info->seedbits == 64) {
-    testHashWithSeed< hashtype, Blob<64> >(info, confidence);
+    return testHashWithSeed< hashtype, Blob<64> >(info, self_test, confidence);
   } else if (info->seedbits == 95) {
-    testHashWithSeed< hashtype, Blob<95> >(info, confidence);
+    return testHashWithSeed< hashtype, Blob<95> >(info, self_test, confidence);
   } else if (info->seedbits == 96) {
-    testHashWithSeed< hashtype, Blob<96> >(info, confidence);
+    return testHashWithSeed< hashtype, Blob<96> >(info, self_test, confidence);
   } else if (info->seedbits == 112) {
-    testHashWithSeed< hashtype, Blob<112> >(info, confidence);
+    return testHashWithSeed< hashtype, Blob<112> >(info, self_test, confidence);
   } else if (info->seedbits == 127) {
-    testHashWithSeed< hashtype, Blob<127> >(info, confidence);
+    return testHashWithSeed< hashtype, Blob<127> >(info, self_test, confidence);
   } else if (info->seedbits == 128) {
-    testHashWithSeed< hashtype, Blob<128> >(info, confidence);
+    return testHashWithSeed< hashtype, Blob<128> >(info, self_test, confidence);
   } else if (info->seedbits == 191) {
-    testHashWithSeed< hashtype, Blob<191> >(info, confidence);
+    return testHashWithSeed< hashtype, Blob<191> >(info, self_test, confidence);
   } else if (info->seedbits == 256) {
-    testHashWithSeed< hashtype, Blob<256> >(info, confidence);
+    return testHashWithSeed< hashtype, Blob<256> >(info, self_test, confidence);
   } else {
     printf("Invalid seed width %d for hash '%s'",
       info->seedbits, info->name);
+    exit(1);
   }
+  return false;
 }
-
 
 //-----------------------------------------------------------------------------
 
-void testHashByInfo ( HashInfo * pInfo, double confidence )
+bool testHashByInfo ( HashInfo * pInfo, int self_test, double confidence )
 {
   const char * name = pInfo->name;
 
   g_hashUnderTest = pInfo;
   if(pInfo->hashbits == 32)
   {
-    testHash<uint32_t>( pInfo, confidence );
+    return testHash<uint32_t>( pInfo, self_test, confidence );
   }
   else if(pInfo->hashbits == 64)
   {
-    testHash<uint64_t>( pInfo, confidence );
+    return testHash<uint64_t>( pInfo, self_test, confidence );
   }
   else if(pInfo->hashbits == 128)
   {
-    testHash<uint128_t>( pInfo, confidence );
+    return testHash<uint128_t>( pInfo, self_test, confidence );
   }
   else if(pInfo->hashbits == 256)
   {
-    testHash<uint256_t>( pInfo, confidence );
+    return testHash<uint256_t>( pInfo, self_test, confidence );
   }
   else
   {
     printf("Invalid hash bit width %d for hash '%s'",pInfo->hashbits,pInfo->name);
+    exit(1);
+  }
+  return false;
+}
+
+//-----------------------------------------------------------------------------
+// Self-test on startup - verify that all installed hashes work correctly.
+
+void SelfTest ( bool validate )
+{
+  bool pass = true;
+
+  for(size_t i = 0; i < sizeof(g_hashes_sizeof) / sizeof(HashInfo); i++)
+  {
+    HashInfo * info = & g_hashes[i];
+
+    pass &= testHashByInfo( info, 1, g_confidence );
+  }
+  if (!pass)
+    printf("Self-test FAILED!\n");
+
+  if(!pass || validate)
+  {
+    for(size_t i = 0; i < g_hashes_sizeof / sizeof(HashInfo); i++)
+    {
+      HashInfo * info = & g_hashes[i];
+
+      pass &= testHashByInfo( info, 2, g_confidence );
+    }
+    if (!pass)
+      exit(1);
+    if (validate) {
+      printf("Self-test PASSED.\n");
+      exit(0);
+    }
   }
 }
 
