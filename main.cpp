@@ -199,17 +199,17 @@ HashInfo g_hashes[] =
       NULL },
   { beagle_hash_32_96_a_smhasher_test,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher,
-      96, 128,  32, 0x0, /*0xCE38DE69,*/
+      96, 128,  32, 0xCE38DE69,
       "BeagleHash_32_96", "Yves Orton's hash for 64-bit in 32-bit mode (96-bit seed).",
       NULL },
   { beagle_hash_32_112_a_smhasher_test,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher,
-      112, 128,  32, 0x0, /*0x5CCE6AC4,*/
+      112, 128,  32, 0x5D4AA95B,
       "BeagleHash_32_112", "Yves Orton's hash for 64-bit in 32-bit mode (112-bit seed).",
       NULL },
   { beagle_hash_32_127_a_smhasher_test,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher,
-      127, 128,  32, 0x0, /*0xC9134969,*/
+      127, 128,  32, 0xB621A344,
       "BeagleHash_32_127", "Yves Orton's hash for 64-bit in 32-bit mode (127-bit seed).",
       NULL },
 
@@ -226,38 +226,38 @@ HashInfo g_hashes[] =
     NULL },
   { beagle_hash_64_96_a_smhasher_test,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_64_128_a_smhasher,
-    96, 128,   64, 0x0, /*0x40EBE522,*/
+    96, 128,   64, 0x40EBE522,
     "BeagleHash_64_96", "Yves Orton's hash for 64-bit (96 bit seed).",
     NULL },
   { beagle_hash_64_112_a_smhasher_test,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_64_128_a_smhasher,
-    112, 128,  64, 0x0, /*0xF91596C5,*/
+    112, 128,  64, 0x2AA0BAAE,
     "BeagleHash_64_112", "Yves Orton's hash for 64-bit (112 bit seed).",
     NULL },
   { beagle_hash_64_127_a_smhasher_test,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_64_128_a_smhasher,
-    127, 128,  64, 0x0, /*0x575C6DA6,*/
+    127, 128,  64, 0x09548A77,
     "BeagleHash_64_127", "Yves Orton's hash for 64-bit (127 bit seed).",
     NULL },
 
   // ZaphodHash, Marvin32, Phat, Phat4
   { sbox_hash_smhasher_test,
     sbox_seed_state_smhasher_test, sbox_hash_with_state_smhasher_test,
-    128, (32 * 256 + 3) * 64, 64, 0x0, /*0x1DF02A62,*/
+    128, (32 * 256 + 3) * 64, 64, 0x4A639EDC,
     "SBOX", "Yves Orton's 64 bit substitution box hash for up to 32 char strings",
     NULL },
   { zaphod64_hash_smhasher_test,
     zaphod64_seed_state_smhasher_test, zaphod64_hash_with_state_smhasher_test,
-    191, 192, 64, 0x0, /*0x1DF02A62,*/
+    191, 192, 64, 0x938FD5BE,
     "Zaphod64", "Yves Orton's 64 bit hash with 191 bit seed",
     NULL },
   { zaphod32_hash_smhasher_test,
     zaphod32_seed_state_smhasher_test, zaphod32_hash_with_state_smhasher_test,
-    95, 96, 32, 0x0, /*0x1DF02A62,*/
+    95, 96, 32, 0x44073656,
     "Zaphod32", "Yves Orton's 32 bit hash with 95 bit seed",
     NULL },
   { phat4_hash_smhasher_test, NULL, phat4_hash_with_state_smhasher_test,
-    96, 96, 32, 0x0, /*0x4BE16D5A,*/
+    96, 96, 32, 0x10A79525,
     "Phat4", "Yves Orton's 32 bit hash with 96 bit seed",
     NULL },
   { marvin_32_smhasher_test, NULL, NULL,
