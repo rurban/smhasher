@@ -359,7 +359,19 @@ bool RepeatedCharKeyTest ( pfHash hash, const char *name, unsigned char c, int k
   return result;
 }
 
+template <typename T>
+struct IndirectComparator
+{
+  const std::vector<T> & value_vector;
 
+  IndirectComparator(const std::vector<T> & val_vec): value_vector(val_vec) {}
+
+  bool operator()(int a, int b)
+  {
+    return value_vector[a] <  value_vector[b] ? true :
+           value_vector[a] == value_vector[b] ? a < b : false;
+  }
+};
 //-----------------------------------------------------------------------------
 // Keyset 'Seed' - hash "the quick brown fox..." using different seeds
 
@@ -371,22 +383,49 @@ bool SeedTest ( hashfunc<hashtype> hash, int count, double confidence, bool draw
           count, (int)strlen(text), text);
 
   const int len = (int)strlen(text);
-  seedtype seed;
   //----------
+  // All of this palaver is to dedupe the seeds.
+  // We keep track of the seeds we used for each hash. Then
+  // we sort the index array by the seeds, and then use that
+  // to transcribe out the hashes in seed-order, while skipping
+  // any dupes that are due to dupe seeds.
 
   std::vector<hashtype> hashes;
-  memset(&seed,0,sizeof(seedtype));
+  std::vector<hashtype> sorted_hashes;
+  std::vector<seedtype> seeds;
+  std::vector<int>      indexes;
 
+  sorted_hashes.resize(count);
   hashes.resize(count);
+  seeds.resize(count);
+  indexes.resize(count);
+
   for(int i = 0; i < count; i++)
   {
-    hash(text, len, &seed, &hashes[i]);
-    seed_r.rand_p(&seed,sizeof(seed));
+    seed_r.rand_p(&seeds[i],sizeof(seedtype));
+    hash(text, len, &seeds[i], &hashes[i]);
+    indexes[i]= i;
   }
+
+  // sort the indexes by their seed
+  std::sort(indexes.begin(),indexes.end(),IndirectComparator<seedtype>(seeds));
+
+  // now loop through
+  int dupes = 0;
+  int unique = 0;
+  sorted_hashes[unique++] = hashes[indexes[0]];
+  for(size_t i = 1; i < indexes.size(); i++) {
+    if(seeds[indexes[i]] == seeds[indexes[i-1]]) {
+      dupes++;
+    } else {
+      sorted_hashes[unique++]= hashes[indexes[i]];
+    }
+  }
+  sorted_hashes.resize(unique);
 
   bool result = true;
 
-  result &= TestHashList(hashes,true,confidence,drawDiagram);
+  result &= TestHashList(sorted_hashes,true,confidence,drawDiagram);
 
   printf("\n");
 
