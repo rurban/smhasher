@@ -941,4 +941,48 @@ produces good distributions.
     Testing collisions   - Expected     8.00, actual     6.00 ( 0.75x)
     Testing distribution - ok. (99.999943 confidence)
 </pre>
-# XXX: More here :-)
+
+# Collision Tests
+
+These test that for a given set of keys the results produce the expected
+number of collissions. For instance with 262144 keys a 32 bit hash should
+produce about 8 collisions. The test will fail if the actual count exceeds
+double that of expected. This is not very sensitive, and my be adjusted later.
+
+# Distribution Tests
+
+This checks that the hashes produce reasonable distributions.
+
+XXX: Document exact rules.
+
+## Using the g-test
+
+Where possible I have changed smhasher to use the g-test for determining if
+a distribution is non-random.
+
+## Quality Score
+
+The distribution tests have always used a "score" to determine if the distribution
+was good. I did not understand the old score, and found it produced weird results,
+so I replaced it with something similar but which as far as I know has more
+mathematical founding.
+
+The old score in psuedo-code was:
+
+    count++, sum += v, sum_sq += v*v
+        for v in buckets_array
+    old_score = 1.0 - ( ( ( sum * sum )  - 1.0 ) / ( sum_sq - sum ) / count )
+
+The new score in pseudo-code is:
+
+    count++, sum += v, qs_sum += ( v * ( v + 1.0 ) ) / 2.0
+        for v in buckets_array
+
+  quality_score = qs_sum / ( ( sum / ( 2.0 * count ) ) *
+                             ( sum + ( 2.0 * count ) - 1.0 ) );
+  score = fabs( 1.0 - quality_score );
+
+The quality score formula is from the Red Dragon book and is documented
+at http://www.strchr.com/hash_functions
+
+
