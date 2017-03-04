@@ -964,36 +964,37 @@ a distribution is non-random.
 
 The distribution tests have always used a "score" to determine if the distribution
 was good. I did not understand the old score, and found it produced weird results,
-so I replaced it with something similar but which as far as I know has more
-mathematical founding.
+so I replaced it with something that seemed similar but better known to me.
+
+The following assumes we are hashing /n/ items into /m/ buckets.
 
 The old score was
 
 <img src="https://github.com/demerphq/smhasher/blob/master/doc/old_score.png?raw=true" />
 
-in psuedo-code:
+which in psuedo-code is
 
-    count++, sum += v, sum_sq += v*v
+    sum_sq += v * v
         for v in buckets_array
-    old_score = 1.0 - ( ( ( sum * sum )  - 1.0 ) / ( sum_sq - sum ) / count )
+    old_score = 1.0 - ( ( ( n * n )  - 1.0 ) / ( sum_sq - n ) / m )
 
 The new score is
 
 <img src="https://github.com/demerphq/smhasher/blob/master/doc/new_score.png?raw=true" />
 
-in pseudo-code is:
+which in pseudo-code is
 
-    count++, sum += v, qs_sum += ( v * ( v + 1.0 ) ) / 2.0
+    qs_sum += ( v * ( v + 1.0 ) ) / 2.0
         for v in buckets_array
-    quality_score = qs_sum / ( ( sum / ( 2.0 * count ) ) *
-                               ( sum + ( 2.0 * count ) - 1.0 ) )
+    quality_score = qs_sum / ( ( n / ( 2.0 * m ) ) *
+                               ( n + ( 2.0 * m ) - 1.0 ) )
     score = abs( 1.0 - quality_score )
 
 The quality score formula is from the Red Dragon book. A good hash function
 should have a quality score of close to one, with values between 0.95 to 1.05 being
 normal. In theory having a lower quality score is better, however excessively
 low values indicate non-random behavior that probably indicates some
-other weakness. Therefor our tests use the distance from 1 instead, and consider
+other weakness. Therefore our tests use the distance from 1 instead, and consider
 anything higher than 0.01 to be a failure.
 
 Further discussion on hash functions and quality scores can be found
