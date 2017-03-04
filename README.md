@@ -967,13 +967,21 @@ was good. I did not understand the old score, and found it produced weird result
 so I replaced it with something similar but which as far as I know has more
 mathematical founding.
 
-The old score in psuedo-code was:
+The old score was
+
+<img href="https://github.com/demerphq/smhasher/blob/master/doc/old_score.png?raw=true" />
+
+in psuedo-code:
 
     count++, sum += v, sum_sq += v*v
         for v in buckets_array
     old_score = 1.0 - ( ( ( sum * sum )  - 1.0 ) / ( sum_sq - sum ) / count )
 
-The new score in pseudo-code is:
+The new score is
+
+<img href="https://github.com/demerphq/smhasher/blob/master/doc/new_score.png?raw=true" />
+
+in pseudo-code is:
 
     count++, sum += v, qs_sum += ( v * ( v + 1.0 ) ) / 2.0
         for v in buckets_array
