@@ -6,7 +6,7 @@ echo "export BITS=32"
     sort -k 2n -k 1 | 
     grep -v '^crc' | 
     grep -v -i 'crap\|nothing\|bad\|sum\|sha1\|md5' |
-    perl -ane'print qq(
+    perl -ne'@F=split/[\s|]+/,$_;print qq(
 #$_
 if [ "x\$BITS" == "x" -o "x\$BITS" == "x$F[1]" ]; then    
     touch doc/$F[0]_$F[1].out &&
