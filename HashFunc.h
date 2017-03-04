@@ -74,12 +74,8 @@ public:
   inline void operator () ( const void * key, const int len, const void *seed, void *out )
   {
     if (m_hash_with_state) {
-      if (m_seed_state) {
-        m_seed_state(m_seedbits,seed,&m_state[0]);
-        m_hash_with_state(key,len,&m_state[0],out);
-      } else {
-        m_hash_with_state(key,len,seed,out);
-      }
+      _seed_state(m_seedbits,seed,&m_state[0]);
+      m_hash_with_state(key,len,&m_state[0],out);
     } else if (m_statebits == 32 && m_seedbits == 32) {
       m_hash(key,len,*((uint32_t *)seed),out);
     } else {
@@ -93,25 +89,37 @@ public:
     m_hash(key,len,seed,out);
   }
 
+  inline void _seed_state ( const int seedbits, const void *seed, void *state )
+  {
+    if (m_seed_state) {
+      m_seed_state(seedbits,seed,state);
+    } else {
+      memcpy( state, seed, sizeof(m_seed) );
+    }
+    if (state == &m_state[0]) {
+      memcpy( &m_seed[0], seed, sizeof(m_seed) );
+    }
+  }
+
   inline void seed_state ( const void *seed )
   {
-    m_seed_state(m_seedbits, seed, &m_state[0]);
+    _seed_state(m_seedbits, seed, &m_state[0]);
   }
 
   inline void seed_state ( const int seedbits, const void *seed )
   {
-    m_seed_state(seedbits, seed, &m_state[0]);
+    _seed_state(seedbits, seed, &m_state[0]);
   }
 
-  inline void seed_state ( const int seedbits, const void *seed, const void *state )
+  inline void seed_state ( const int seedbits, const void *seed, void *state )
   {
-    m_seed_state(seedbits, seed, state);
+    _seed_state(seedbits, seed, state);
   }
 
   inline void seed_state_rand ( Rand & r )
   {
     r.rand_p(&m_seed[0], m_seed.size());
-    m_seed_state(m_seedbits,&m_seed[0],&m_state[0]);
+    _seed_state(m_seedbits,&m_seed[0],&m_state[0]);
   }
 
   bool can_seed_state ()

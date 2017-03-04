@@ -104,7 +104,7 @@ bool ProcessDifferentials ( std::vector<keytype> & diffs, int reps, bool dumpCol
 // them.
 // used by DiffTest - which is widely used.
 template < typename keytype, typename hashtype >
-uint64_t DiffTestRecurse ( pfHash hash, keytype & k1, keytype & k2, hashtype & h1, hashtype & h2, int start, int bitsleft, std::vector<keytype> & diffs, uint32_t seed, int maxerrors)
+uint64_t DiffTestRecurse ( hashfunc<hashtype> hash, keytype & k1, keytype & k2, hashtype & h1, hashtype & h2, int start, int bitsleft, std::vector<keytype> & diffs, int maxerrors)
 {
   const int bits = sizeof(keytype)*8;
   uint64_t skipped = 0;
@@ -114,7 +114,7 @@ uint64_t DiffTestRecurse ( pfHash hash, keytype & k1, keytype & k2, hashtype & h
     flipbit(&k2,sizeof(k2),i);
     bitsleft--;
 
-    hash(&k2,sizeof(k2),seed,&h2);
+    hash(&k2,sizeof(k2),&h2);
     // printf("hash2: %08x\n", *((uint32_t *)&h2));
 
     if(h1 == h2)
@@ -129,7 +129,7 @@ uint64_t DiffTestRecurse ( pfHash hash, keytype & k1, keytype & k2, hashtype & h
 
     if(bitsleft)
     {
-      skipped += DiffTestRecurse(hash,k1,k2,h1,h2,i+1,bitsleft,diffs,seed,maxerrors);
+      skipped += DiffTestRecurse(hash,k1,k2,h1,h2,i+1,bitsleft,diffs,maxerrors);
     }
 
     flipbit(&k2,sizeof(k2),i);
@@ -141,7 +141,7 @@ uint64_t DiffTestRecurse ( pfHash hash, keytype & k1, keytype & k2, hashtype & h
 //----------
 // widely used
 template < typename keytype, typename hashtype >
-bool DiffTest ( pfHash hash, int diffbits, int reps, bool dumpCollisions )
+bool DiffTest ( hashfunc<hashtype> hash, int diffbits, int reps, bool dumpCollisions )
 {
   const int keybits = sizeof(keytype) * 8;
   const int hashbits = sizeof(hashtype) * 8;
@@ -172,11 +172,11 @@ bool DiffTest ( pfHash hash, int diffbits, int reps, bool dumpCollisions )
 
     r.rand_p(&k1,sizeof(keytype));
     k2 = k1;
-    uint32_t seed= r.rand_u32();
-    hash(&k1,sizeof(k1),seed,(uint32_t*)&h1);
+    hash.seed_state_rand(r);
+    hash(&k1,sizeof(k1),(uint32_t*)&h1);
     //printf("hash1: %08x\n", *((uint32_t *)&h1));
 
-    skipped += DiffTestRecurse<keytype,hashtype>(hash,k1,k2,h1,h2,0,diffbits,diffs,seed,maxerrors);
+    skipped += DiffTestRecurse<keytype,hashtype>(hash,k1,k2,h1,h2,0,diffbits,diffs,maxerrors);
   }
   printf("\n");
 
@@ -199,7 +199,7 @@ bool DiffTest ( pfHash hash, int diffbits, int reps, bool dumpCollisions )
 // hash differentials
 
 template < typename keytype, typename hashtype >
-bool DiffDistTest2 ( pfHash hash, double confidence  )
+bool DiffDistTest2 ( hashfunc<hashtype> hash, double confidence  )
 {
   Rand r(857374);
 
@@ -214,6 +214,8 @@ bool DiffDistTest2 ( pfHash hash, double confidence  )
 
   bool result = true;
 
+  hash.seed_state_rand(r);
+
   for(int keybit = 0; keybit < keybits; keybit++)
   {
     printf("Testing bit %d\n",keybit);
@@ -222,9 +224,9 @@ bool DiffDistTest2 ( pfHash hash, double confidence  )
     {
       r.rand_p(&k,sizeof(keytype));
       
-      hash(&k,sizeof(keytype),0,&h1);
+      hash(&k,sizeof(keytype),&h1);
       flipbit(&k,sizeof(keytype),keybit);
-      hash(&k,sizeof(keytype),0,&h2);
+      hash(&k,sizeof(keytype),&h2);
 
       hashes[i] = h1 ^ h2;
     }
