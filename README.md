@@ -985,10 +985,9 @@ in pseudo-code is:
 
     count++, sum += v, qs_sum += ( v * ( v + 1.0 ) ) / 2.0
         for v in buckets_array
-
-  quality_score = qs_sum / ( ( sum / ( 2.0 * count ) ) *
-                             ( sum + ( 2.0 * count ) - 1.0 ) );
-  score = fabs( 1.0 - quality_score );
+    quality_score = qs_sum / ( ( sum / ( 2.0 * count ) ) *
+                               ( sum + ( 2.0 * count ) - 1.0 ) )
+    score = abs( 1.0 - quality_score )
 
 The quality score formula is from the Red Dragon book and is documented
 at http://www.strchr.com/hash_functions
