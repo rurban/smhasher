@@ -94,8 +94,10 @@ void farmhash128_c_test      ( const void * key, int len, uint32_t seed, void * 
 void SpookyHash32_test     ( const void * key, int len, uint32_t seed, void * out );
 void SpookyHash64_test     ( const void * key, int len, uint32_t seed, void * out );
 void SpookyHash128_test    ( const void * key, int len, uint32_t seed, void * out );
-void SpookyHash64_with_state_test  ( const void * key, int len, const void * seed, void * out );
-void SpookyHash128_with_state_test ( const void * key, int len, const void * seed, void * out );
+void SpookyHash32_with_state_test ( const void * key, int len, const void * state, void * out );
+void SpookyHash64_with_state_test ( const void * key, int len, const void * state, void * out );
+void SpookyHash128_with_state_test ( const void * key, int len, const void * state, void * out );
+void SpookyHash_seed_state_test( int seedbits, const void *seed, const void *state);
 
 uint32_t MurmurOAAT ( const void * key, int len, uint32_t seed );
 

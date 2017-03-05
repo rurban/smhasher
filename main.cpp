@@ -193,15 +193,15 @@ HashInfo g_hashes[] =
     NULL, NULL, Crap8_test },
 
   // SpoookyHash
-  { "Spooky32", "Bob Jenkins' SpookyHash, 32-bit result",
-    32, 32, 32, 0xC4766A8F,
-    NULL, NULL, SpookyHash32_test },
-  { "Spooky64", "Bob Jenkins' SpookyHash, 64-bit result",
-    64, 64, 64, 0x1A6C1BDF,
-    NULL, SpookyHash64_with_state_test, SpookyHash64_test },
-  { "Spooky128", "Bob Jenkins' SpookyHash, 128-bit result",
+  { "Spooky32", "Bob Jenkins' SpookyHash, 32-bit seed, 32-bit result",
+    32, 128, 32, 0xC4766A8F,
+    SpookyHash_seed_state_test, SpookyHash32_with_state_test, SpookyHash32_test },
+  { "Spooky64", "Bob Jenkins' SpookyHash, 64-bit seed, 64-bit result",
+    64, 128, 64, 0x1A6C1BDF,
+    SpookyHash_seed_state_test, SpookyHash64_with_state_test, SpookyHash64_test },
+  { "Spooky128", "Bob Jenkins' SpookyHash, 128-bit seed, 128-bit result",
     128, 128, 128, 0xC633C71E,
-    NULL, SpookyHash128_with_state_test, SpookyHash128_test },
+    SpookyHash_seed_state_test, SpookyHash128_with_state_test, SpookyHash128_test },
 
   // MurmurHash2
   { "Murmur2", "MurmurHash2 for x86, 32-bit",
