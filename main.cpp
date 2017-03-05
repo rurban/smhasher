@@ -1,9 +1,11 @@
 #include "Platform.h"
+#include "Types.h"
+#include "HashFunc.h"
+#include "Blob.h"
+#include "Random.h"
+#include "RunTests.h"
 #include "Hashes.h"
-#include "KeysetTest.h"
-#include "SpeedTest.h"
-#include "AvalancheTest.h"
-#include "DifferentialTest.h"
+#include "SimpleStats.h"
 #include "PMurHash.h"
 #include "beagle_hash.h"
 #include "phat_hash.h"
@@ -12,7 +14,6 @@
 #include "sbox_hash.h"
 #include "Marvin32.h"
 #include "siphash.h"
-#include "RunTests.h"
 #include <stdio.h>
 #include <time.h>
 
@@ -21,6 +22,7 @@
 
 bool g_testAll         = true;
 bool g_testReallyAll   = false;
+
 
 bool g_testSanity      = false;
 bool g_testSpeed       = false;
@@ -39,6 +41,10 @@ bool g_testText        = false;
 bool g_testZeroes      = false;
 bool g_testEffs        = false;
 bool g_testSeed        = false;
+
+bool g_runCtrStream    = false; /* this is special */
+uint64_t g_rngSeed = 1234567809;
+uint64_t g_streamKeyLen = 8;
 
 struct TestOpts {
   bool         &var;
@@ -607,6 +613,10 @@ int main ( int argc, char ** argv )
       g_confidence = sigmasToProb(atof(arg));
       if (g_verbose > 2)
         printf("set confidence to %.6f via --sigmas\n", g_confidence);
+    }
+    else
+    if (EQ(arg,"--stream")) {
+      g_runCtrStream = true;
     }
     else
     if (EQ(arg,"--test=") && arg_len > 8) {

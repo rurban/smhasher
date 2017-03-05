@@ -4,6 +4,7 @@
 #include "SpeedTest.h"
 #include "AvalancheTest.h"
 #include "DifferentialTest.h"
+#include "StreamTest.h"
 #include "PMurHash.h"
 #include "beagle_hash.h"
 #include "phat_hash.h"
@@ -16,6 +17,7 @@
 #include <time.h>
 
 extern HashInfo * g_hashUnderTest;
+extern bool g_runCtrStream;
 extern bool g_testAll;
 extern bool g_testReallyAll;
 extern bool g_testSanity;
@@ -37,6 +39,8 @@ extern bool g_testEffs;
 extern bool g_testSeed;
 extern HashInfo g_hashes[];
 extern int g_hashes_sizeof;
+extern uint64_t g_rngSeed;
+extern uint64_t g_streamKeyLen;
 
 //----------------------------------------------------------------------------
 template < typename hashtype, typename seedtype >
@@ -54,6 +58,9 @@ bool testHashWithSeed ( HashInfo * info, int self_test, double confidence )
       info->statebits,
       info->name
   );
+  if (g_runCtrStream) {
+    CtrStream<hashtype>(hash, g_rngSeed, g_streamKeyLen);
+  }
 
   if (!self_test) {
     printf("-------------------------------------------------------------------------------\n");
