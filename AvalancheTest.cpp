@@ -1,16 +1,46 @@
 #include "AvalancheTest.h"
 
+// This code implements the avalanche test. For this test we do the following:
+//
+//  For a given length of key (including the empty key)
+//    For T iterations:
+//      choose a random seed and random key
+//      computer hash as h1
+//      for each bit K in seed and key
+//        flip bit
+//        compute hash as h2
+//        flip bit back
+//        for each bit H in h2
+//          if the bit is different from the corresponding bit in h1
+//            increment changed[K][H]
+//
+// We then can compute various goodness of fit statistics from the ratio of
+// the changed count and the number of iterations, with an ideal function having
+// each bit combination changing %50 of the time.
+//
+//  gtest-cell: goodness of fit estimate using the g-test for a single cell
+//  gtest-all: goodness of fit estimate using the g-test for all cells in the matrix.
+//  error: sum of the square of the error
+//  error-ratio: percentage of the expected error for this number of iterations
+//  column/row: goodness of fit estimate using the gtest for each input bit (row),
+//  and for each output bit (column).
+//  worst-bit: the input/output bit that is the furthest from the expected %50
+//
+// NB: we actually do a 3 dimensional count matrix, with four cells per input/output
+// bit combination, and count the pairs of input bit/output bit by value. We currently
+// do not use this potential fully in testing and notationally reduce the 4 cell
+// representation (00,01,10,11) to a 2 cell representation (unchanged,changed)
+// during post-processing. Once I sort out the math I plan to use this data for
+// additional tests.
+
 //-----------------------------------------------------------------------------
-// Print out a diagram in a hacked up base-51 representation.
+// Print out a diagram in a hacked up base-101 representation.
 // We are printing out counts of bit changes, where we expect to see the bits
-// change half the time. This lends itself naturally to a base-51 representation
-// which means we can use one character per bit/count.
-// The 'scale' parameter controls how magnified the data should be. So setting it
-// to 1 shows 2% per digit, with the absolute worst being "#". Setting it to 2
-// shows roughly 1% per digit with anything higher than 0.5 being shown as "#",
-// setting to 10 shows 0.2% per character, with anything higher than 0.1 being
-// shown as "#", etc.
-// A good hash function should show all "." for scale 2 at least.
+// change half the time and we want to see percentage difference, so
+// having a 100 unit scale - actually 101, as we have to deal with the closed
+// interval [0,1] and not the half-open interval [0,1).
+// The 'scale' parameter controls how magnified the data should be.
+// A good hash function should show all "." for scale 1 at least.
 const uint8_t digits1[101]= { 46, 49, 50, 51, 52, 53, 54, 55, 56, 57, 48, 97, 98,
   99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113,
   114, 115, 116, 117, 118, 119, 120, 121, 122, 195, 195, 195, 195, 195,
