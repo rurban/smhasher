@@ -541,8 +541,11 @@ static char* strndup(char const *s, size_t n)
 }
 #endif
 
-#define EQ(x,y) (strncmp(x,"" y "", sizeof(y)-1) == 0)
-#define NE(x,y) (strncmp(x,"" y "", sizeof(y)-1) != 0)
+#define PFX_EQ(x,l,y) ((l >= sizeof(y)-1) && strncmp(x,"" y "", sizeof(y)-1) == 0)
+#define PFX_NE(x,l,y) ((l < sizeof(y)-1) || strncmp(x,"" y "", sizeof(y)-1) != 0)
+#define EQ(x,l,y) ((l == sizeof(y)-1) && strncmp(x,"" y "", sizeof(y)-1) == 0)
+#define NE(x,l,y) ((l != sizeof(y)-1) || strncmp(x,"" y "", sizeof(y)-1) != 0)
+
 
 uint32_t g_verbose;
 double   g_confidence;
@@ -565,12 +568,12 @@ int main ( int argc, char ** argv )
     char * arg= argv[i];
     int arg_len= strlen(arg);
 
-    if (NE(arg,"--")) {
+    if (PFX_NE(arg,arg_len,"--")) {
       hashToTest = arg;
       break;
     }
     else
-    if (EQ(arg,"--list")) {
+    if (EQ(arg,arg_len,"--list")) {
       printf("%-18s|Seed|Hash|\n","");
       printf("%-18s|%4s|%4s|%s\n","Name","Bits","Bits","Description");
       printf("%.18s+%.4s+%.4s|%s\n",
@@ -583,24 +586,24 @@ int main ( int argc, char ** argv )
       exit(0);
     }
     else
-    if (EQ(arg,"--validate")) {
+    if (EQ(arg,arg_len,"--validate")) {
       opt_validate = true;
       continue;
     }
     else
-    if (EQ(arg,"--verbose")) {
+    if (EQ(arg,arg_len,"--verbose")) {
       g_verbose++;
       continue;
     }
     else
-    if (EQ(arg,"-v")) {
+    if (PFX_EQ(arg,arg_len,"-v")) {
       arg+=2;
       do {
         g_verbose++;
       } while ( *arg++ == 'v' );
     }
     else
-    if (EQ(arg,"--confidence=")){
+    if (PFX_EQ(arg,arg_len,"--confidence=")){
       arg += sizeof("--confidence=") - 1;
       g_confidence = atof(arg);
       if (g_confidence > 1) g_confidence /= 100;
@@ -608,18 +611,48 @@ int main ( int argc, char ** argv )
         printf("set confidence to %.6f via --confidence\n", g_confidence);
     }
     else
-    if (EQ(arg,"--sigmas=")){
+    if (PFX_EQ(arg,arg_len,"--sigmas=")){
       arg += sizeof("--sigmas=") - 1;
       g_confidence = sigmasToProb(atof(arg));
       if (g_verbose > 2)
         printf("set confidence to %.6f via --sigmas\n", g_confidence);
     }
     else
-    if (EQ(arg,"--stream")) {
+    if (EQ(arg,arg_len,"--stream")) {
       g_runCtrStream = true;
     }
     else
-    if (EQ(arg,"--test=") && arg_len > 8) {
+    if (PFX_EQ(arg,arg_len,"--stream-key-len=")) {
+      arg += sizeof("--stream-key-len=") - 1;
+      char *endptr;
+      g_streamKeyLen = strtol(arg, &endptr, 16);
+      if (endptr == arg) {
+        printf("No argument for --rng-seed\n");
+        exit(1);
+      }
+      else
+      if (endptr != '\0') {
+        printf("Bad argument for --rng-seed '%s'\n",arg);
+        exit(1);
+      }
+    }
+    else
+    if (PFX_EQ(arg,arg_len,"--rng-seed=")) {
+      arg += sizeof("--rng-seed=") - 1;
+      char *endptr;
+      g_rngSeed = strtol(arg, &endptr, 16);
+      if (endptr == arg) {
+        printf("No argument for --rng-seed\n");
+        exit(1);
+      }
+      else
+      if (endptr != '\0') {
+        printf("Bad argument for --rng-seed '%s'\n",arg);
+        exit(1);
+      }
+    }
+    else
+    if (PFX_EQ(arg,arg_len,"--test=") && arg_len > 8) {
       /* default: --test=All. comma seperated list of options */
       char *opt = (char *)&arg[7];
       char *rest = opt;
@@ -658,7 +691,10 @@ int main ( int argc, char ** argv )
       printf("--sigmas              set the confidence level as a sigma number\n");
       printf("--verbose             run verbose?\n");
       printf("--validate            validate supported hashes but do not run tests\n");
-      printf("--test=NAME1,NAME2    which tests to run? default is all, available:\n  ");
+      printf("--stream              use hash function to print random stream to stdout\n");
+      printf("--stream-key-len=NUM  set key len for stream mode (defaults to 8)\n");
+      printf("--rng-seed=NUM        seed for rng used to seed stream mode hashing\n");
+      printf("--test=NAME1,NAME2    which tests to run? default is all, available:\n");
       for(size_t i = 0; i < sizeof(g_testopts) / sizeof(TestOpts); i++)
         printf("%s%s", i ? ", " : "", g_testopts[i].name);
       printf("\n");
