@@ -25,8 +25,9 @@ FORCE_INLINE uint16_t get16bits ( const void * p )
   return *(const uint16_t*)p;
 }
 
-uint32_t SuperFastHash (const signed char * data, int len) {
-uint32_t hash = 0, tmp;
+uint32_t SuperFastHash (const signed char * data, int len, uint32_t seed) {
+uint32_t hash = seed + len;
+uint32_t tmp;
 int rem;
 
   if (len <= 0 || data == NULL) return 0;
@@ -70,7 +71,7 @@ int rem;
   return hash;
 }
 
-void SuperFastHash     ( const void * key, int len, uint32_t /*seed*/, void * out )
+void SuperFastHash     ( const void * key, int len, const void *state, void * out )
 {
-  *(uint32_t*)out = SuperFastHash((const signed char*)key,len);
+  *(uint32_t*)out = SuperFastHash((const signed char*)key, len, *((uint32_t *)state));
 }
