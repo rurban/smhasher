@@ -1,21 +1,8 @@
 #include <memory.h>
 #include "Types.h"
+#include "md5.h"
 
 // "Derived from the RSA Data Security, Inc. MD5 Message Digest Algorithm"
-
-/**
- * \brief          MD5 context structure
- */
-typedef struct
-{
-    unsigned long total[2];     /*!< number of bytes processed  */
-    unsigned long state[4];     /*!< intermediate digest state  */
-    unsigned char buffer[64];   /*!< data block being processed */
-
-    unsigned char ipad[64];     /*!< HMAC: inner padding        */
-    unsigned char opad[64];     /*!< HMAC: outer padding        */
-}
-md5_context;
 
 /**
  * \brief          MD5 context setup
@@ -347,6 +334,41 @@ void md5_finish( md5_context *ctx, unsigned char output[16] )
     PUT_ULONG_LE( ctx->state[3], output, 12 );
 }
 
+void md5_seed_state(int seedbits, const void *seed, const void *state) {
+    md5_context *ctxp= (md5_context *)state;
+
+    md5_starts( ctxp );
+    ctxp->state[0] += *((uint64_t*)seed);
+}
+
+void md5_with_state( const void*input, int ilen, const void *state, void *output)
+{
+    md5_context ctx;
+    memcpy(&ctx,state,sizeof(md5_context));
+
+    md5_update( &ctx, (unsigned char *)input, ilen );
+    md5_finish( &ctx, (unsigned char *)output );
+}
+
+void md5_test( const void *input, int ilen, uint32_t seed, void *output)
+{
+    md5_context ctx;
+
+    md5_starts( &ctx );
+    ctx.state[0] += seed;
+    md5_update( &ctx, (unsigned char *)input, ilen );
+    md5_finish( &ctx, (unsigned char *)output );
+
+    memset( &ctx, 0, sizeof( md5_context ) );
+}
+
+void md5_32_with_state( const void *input, int ilen, const void *state, void *out)
+{
+    uint32_t buf[4];
+    md5_with_state((unsigned char *)input,ilen,state,buf);
+    *((uint32_t*)out)= buf[0];
+}
+
 /*
  * output = MD5( input buffer )
  */
@@ -362,7 +384,7 @@ void md5( unsigned char *input, int ilen, unsigned char output[16], uint32_t see
     memset( &ctx, 0, sizeof( md5_context ) );
 }
 
-unsigned int md5hash ( const void * input, int len, uint32_t seed )
+unsigned int md5hash( const void * input, int len, uint32_t seed )
 {
   unsigned int hash[4];
 
@@ -373,7 +395,7 @@ unsigned int md5hash ( const void * input, int len, uint32_t seed )
   return hash[0];
 }	
 
-void md5_32            ( const void * key, int len, uint32_t seed, void * out )
+void md5_32( const void * key, int len, uint32_t seed, void * out )
 {
   unsigned int hash[4];
 
