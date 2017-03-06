@@ -11,9 +11,9 @@
 //fake / bad hashes
 
 void
-BadHash(const void *key, int len, uint32_t seed, void *out)
+BadHash_with_state(const void *key, int len, const void *state, void *out)
 {
-  uint32_t	  h = seed;
+  uint32_t	  h = *((uint32_t *)state);
   const uint8_t  *data = (const uint8_t *)key;
 
   for (int i = 0; i < len; i++) {
@@ -26,30 +26,11 @@ BadHash(const void *key, int len, uint32_t seed, void *out)
 }
 
 void
-sumhash(const void *key, int len, uint32_t seed, void *out)
+BadHash(const void *key, int len, uint32_t seed, void *out)
 {
-  uint32_t	  h = seed;
-  const uint8_t  *data = (const uint8_t *)key;
-
-  for (int i = 0; i < len; i++) {
-    h += data[i];
-  }
-
-  *(uint32_t *) out = h;
+    BadHash_with_state(key,len,&seed,out);
 }
 
-void
-sumhash32(const void *key, int len, uint32_t seed, void *out)
-{
-  uint32_t	  h = seed;
-  const uint32_t *data = (const uint32_t *)key;
-
-  for (int i = 0; i < len / 4; i++) {
-    h += data[i];
-  }
-
-  *(uint32_t *) out = h;
-}
 
 void
 DoNothingHash(const void *, int, uint32_t, void *)
@@ -57,7 +38,17 @@ DoNothingHash(const void *, int, uint32_t, void *)
 }
 
 void
-NoopOAATReadHash(const void *key, int len, uint32_t seed, void *out)
+DoNothingHash_with_state(const void *, int, const void *, void *)
+{
+}
+
+void
+DoNothingHash_seed_state(int, const void *, const void *)
+{
+}
+
+void
+NoopOAATReadHash_with_state(const void *key, int len, const void *state, void *out)
 {
     volatile uint8_t c;
     const uint8_t *ptr = (uint8_t *)key;
@@ -66,6 +57,12 @@ NoopOAATReadHash(const void *key, int len, uint32_t seed, void *out)
     {
         c= ptr[i];
     }
+}
+
+void
+NoopOAATReadHash(const void *key, int len, uint32_t seed, void *out)
+{
+    NoopOAATReadHash_with_state(key,len,&seed,out);
 }
 
 //-----------------------------------------------------------------------------
@@ -91,12 +88,17 @@ MurmurOAAT_test(const void *key, int len, uint32_t seed, void *out)
   *(uint32_t *) out = MurmurOAAT(key, len, seed);
 }
 
+void
+MurmurOAAT_with_state_test(const void *key, int len, const void *state, void *out)
+{
+  *(uint32_t *) out = MurmurOAAT(key, len, *((uint32_t*)state));
+}
 //----------------------------------------------------------------------------
 
 void
-FNV32a(const void *key, int len, uint32_t seed, void *out)
+FNV32a_with_state_test(const void *key, int len, const void *state, void *out)
 {
-  unsigned int	  h = seed;
+  uint32_t  h = *((uint32_t *)state);
   const uint8_t  *data = (const uint8_t *)key;
 
   h ^= BIG_CONSTANT(2166136261);
@@ -110,11 +112,17 @@ FNV32a(const void *key, int len, uint32_t seed, void *out)
 }
 
 void
-FNV32a_YoshimitsuTRIAD(const void *key, int len, uint32_t seed, void *out)
+FNV32a_test(const void *key, int len, uint32_t seed, void *out)
+{
+    FNV32a_with_state_test(key,len,&seed,out);
+}
+
+void
+FNV32a_YoshimitsuTRIAD_with_state_test(const void *key, int len, const void *state, void *out)
 {
   const uint8_t  *p = (const uint8_t *)key;
   const uint32_t  PRIME = 709607;
-  uint32_t	  hash32A = seed ^ BIG_CONSTANT(2166136261);
+  uint32_t	  hash32A = *((uint32_t*)state) ^ BIG_CONSTANT(2166136261);
   uint32_t	  hash32B = BIG_CONSTANT(2166136261) + len;
   uint32_t	  hash32C = BIG_CONSTANT(2166136261);
 
@@ -157,9 +165,15 @@ FNV32a_YoshimitsuTRIAD(const void *key, int len, uint32_t seed, void *out)
 }
 
 void
-FNV64a(const void *key, int len, uint32_t seed, void *out)
+FNV32a_YoshimitsuTRIAD_test(const void *key, int len, uint32_t seed, void *out)
 {
-  uint64_t	  h = (uint64_t) seed;
+    FNV32a_YoshimitsuTRIAD_with_state_test(key,len,&seed,out);
+}
+
+void
+FNV64a_with_state_test(const void *key, int len, const void *state, void *out)
+{
+  uint64_t	  h = *((uint64_t*) state);
   const uint8_t  *data = (const uint8_t *)key;
 
   h ^= BIG_CONSTANT(0xcbf29ce484222325);
@@ -172,6 +186,12 @@ FNV64a(const void *key, int len, uint32_t seed, void *out)
   *(uint64_t *) out = h;
 }
 
+void
+FNV64a_test(const void *key, int len, uint32_t seed, void *out)
+{
+    uint64_t seed64= seed;
+    FNV64a_with_state_test(key,len,&seed64,out);
+}
 //-----------------------------------------------------------------------------
 
 uint32_t x17(const void *key, int len, uint32_t h)
@@ -186,34 +206,41 @@ uint32_t x17(const void *key, int len, uint32_t h)
 }
 
 void
-x17_test(const void *key, int len, uint32_t seed, void *out)
+x17_test(const void *key, int len, const void *state, void *out)
 {
-  *(uint32_t *) out = x17(key, len, seed);
+  *(uint32_t *) out = x17(key, len, *((uint32_t*)state));
 }
 
 //-----------------------------------------------------------------------------
 
 //also used in perl5 as djb2
 void
-Bernstein(const void *key, int len, uint32_t seed, void *out)
+Bernstein_with_state(const void *key, int len, const void *state, void *out)
 {
   const uint8_t  *data = (const uint8_t *)key;
+  uint32_t hash = *((uint32_t *)state);
 
   for (int i = 0; i < len; ++i) {
-    //seed = ((seed << 5) + seed) + data[i];
-    seed = 33 * seed + data[i];
+    //hash = ((hash << 5) + hash) + data[i];
+    hash = 33 * hash + data[i];
   }
 
-  *(uint32_t *) out = seed;
+  *(uint32_t *) out = hash;
+}
+
+void
+Bernstein(const void *key, int len, uint32_t seed, void *out)
+{
+    Bernstein_with_state(key,len,&seed,out);
 }
 
 //as used in perl5
 void
-sdbm(const void *key, int len, uint32_t hash, void *out)
+sdbm(const void *key, int len, const void *state, void *out)
 {
   unsigned char  *str = (unsigned char *)key;
   const unsigned char *const end = (const unsigned char *)str + len;
-  //note that perl5 adds the seed to the end of key, which looks like cargo cult
+  uint32_t hash= *((uint32_t*)state) + len;
   while (str < end) {
     hash = (hash << 6) + (hash << 16) - hash + *str++;
   }
@@ -222,14 +249,21 @@ sdbm(const void *key, int len, uint32_t hash, void *out)
 
 //as used in perl5 as one_at_a_time_hard
 void
-JenkinsOOAT(const void *key, int len, uint32_t hash, void *out)
+JenkinsOAATH_with_state(const void *key, int len, const void *state, void *out)
 {
   unsigned char  *str = (unsigned char *)key;
   const unsigned char *const end = (const unsigned char *)str + len;
-  uint64_t	  s = (uint64_t) hash;
-  unsigned char  *seed = (unsigned char *)&s;
+  unsigned char  *seed = (unsigned char *)state;
+  uint32_t       hash = *((uint32_t *)state) + len;
   //unsigned char seed[8];
-  //note that perl5 adds the seed to the end of key, which looks like cargo cult
+  //note that perl5 adds part of the seed to the end of key, to frustrate
+  //key extension attacks, and because the last byte or so of the key is
+  //not well mixed into the final hash. Mixing four additional bytes
+  //ensures that the real key has had an opportunity to affect every bit
+  //of the output, and that the seed is well mixed before we return the
+  //hash value. Older versions of this hash had a trivial seed discovery
+  //attack, which the new one is robust to. Regardless, this is not a good
+  //choice of hash function these days.
   while (str < end) {
     hash += (hash << 10);
     hash ^= (hash >> 6);
@@ -261,11 +295,19 @@ JenkinsOOAT(const void *key, int len, uint32_t hash, void *out)
   *(uint32_t *) out = hash;
 }
 
+void
+JenkinsOAATH(const void *key, int len, uint32_t seed32, void *out)
+{
+    uint32_t seed[2]= { seed32, seed32 ^ 0x879b83d3 };
+    JenkinsOAATH_with_state(key,len,seed,out);
+}
+
 //as used in perl5 until 5.17(one_at_a_time_old)
-void JenkinsOOAT_perl(const void *key, int len, uint32_t hash, void *out)
+void JenkinsOAAT_with_state(const void *key, int len, const void *seed, void *out)
 {
   unsigned char  *str = (unsigned char *)key;
   const unsigned char *const end = (const unsigned char *)str + len;
+  uint32_t hash = *((uint32_t *)seed);
   while (str < end) {
     hash += *str++;
     hash += (hash << 10);
@@ -277,15 +319,22 @@ void JenkinsOOAT_perl(const void *key, int len, uint32_t hash, void *out)
   *(uint32_t *) out = hash;
 }
 
+void JenkinsOAAT(const void *key, int len, uint32_t hash, void *out)
+{
+    JenkinsOAAT_with_state(key, len, &hash, out);
+}
+
 //------------------------------------------------
 // One of a smallest non-multiplicative One-At-a-Time function
-// that passes whole SMHasher.
+// that passes whole SMHasher. (The old one anyway, it fails test
+// on the new one. */
 // Author: Sokolov Yura aka funny-falcon <funny.falcon@gmail.com>
-void GoodOAAT(const void *key, int len, uint32_t seed, void *out) {
+void GoodOAAT(const void *key, int len, const void *state, void *out) {
 #define grol(x,n) (((x)<<(n))|((x)>>(32-(n))))
 #define gror(x,n) (((x)>>(n))|((x)<<(32-(n))))
   unsigned char  *str = (unsigned char *)key;
   const unsigned char *const end = (const unsigned char *)str + len;
+  uint32_t seed= *((uint32_t*)state);
   uint32_t h1 = seed ^ 0x3b00;
   uint32_t h2 = grol(seed, 15);
   for (;str != end; str++) {
@@ -312,11 +361,12 @@ void GoodOAAT(const void *key, int len, uint32_t seed, void *out) {
 // MicroOAAT suitable for hash-tables using prime numbers.
 // It passes all collision checks.
 // Author: Sokolov Yura aka funny-falcon <funny.falcon@gmail.com>
-void MicroOAAT(const void *key, int len, uint32_t seed, void *out) {
+void MicroOAAT(const void *key, int len, const void *state, void *out) {
 #define grol(x,n) (((x)<<(n))|((x)>>(32-(n))))
 #define gror(x,n) (((x)>>(n))|((x)<<(32-(n))))
   unsigned char  *str = (unsigned char *)key;
   const unsigned char *const end = (const unsigned char *)str + len;
+  uint32_t seed = *((uint32_t*)state);
   uint32_t h1 = seed ^ 0x3b00;
   uint32_t h2 = grol(seed, 15);
   for (;str != end; str++) {
@@ -360,14 +410,14 @@ uint32_t Crap8(const uint8_t * key, uint32_t len, uint32_t seed)
 }
 
 void
-Crap8_test(const void *key, int len, uint32_t seed, void *out)
+Crap8_test(const void *key, int len, const void *state, void *out)
 {
-  *(uint32_t *) out = Crap8((const uint8_t *)key, len, seed);
+  *(uint32_t *) out = Crap8((const uint8_t *)key, len, *((uint32_t *)state));
 }
 
 extern		"C" {
 #ifdef __SSE2__
-  void		  hasshe2 (const void *input, int len, uint32_t seed, void *out);
+  void		  hasshe2 (const void *input, int len, const void *state, void *out);
 #endif
 #if defined(__SSE4_2__) && defined(__x86_64__)
   uint32_t	  crc32c_hw(const void *input, int len, uint32_t seed);
@@ -378,17 +428,9 @@ extern		"C" {
 
 #ifdef __SSE2__
 void
-hasshe2_test(const void *input, int len, uint32_t seed, void *out)
+hasshe2_test(const void *input, int len, const void *state, void *out)
 {
-  if (!len) {
-    *(uint32_t *) out = 0;
-    return;
-  }
-  if (len % 16) {
-    //add pad NUL
-      len += 16 - (len % 16);
-  }
-  hasshe2(input, len, seed, out);
+  hasshe2(input, len, state, out);
 }
 #endif
 
@@ -397,34 +439,54 @@ hasshe2_test(const void *input, int len, uint32_t seed, void *out)
    TODO: arm8
  */
 void
-crc32c_hw_test(const void *input, int len, uint32_t seed, void *out)
+crc32c_hw_with_state_test(const void *input, int len, const void *state, void *out)
 {
   if (!len) {
     *(uint32_t *) out = 0;
     return;
   }
-  *(uint32_t *) out = crc32c_hw(input, len, seed);
+  *(uint32_t *) out = crc32c_hw(input, len, *((uint32_t*)state));
 }
+void
+crc32c_hw_test(const void *input, int len, uint32_t seed, void *out)
+{
+    crc32c_hw_with_state_test(input, len, &seed, out);
+}
+
 /* Faster Adler SSE4.2 crc32 in HW */
+void
+crc32c_hw1_with_state_test(const void *input, int len, const void *state, void *out)
+{
+  if (!len) {
+    *(uint32_t *) out = 0;
+    return;
+  }
+  *(uint32_t *) out = crc32c(input, len, *((uint32_t*)state));
+}
+
 void
 crc32c_hw1_test(const void *input, int len, uint32_t seed, void *out)
 {
-  if (!len) {
-    *(uint32_t *) out = 0;
-    return;
-  }
-  *(uint32_t *) out = crc32c(input, len, seed);
+    crc32c_hw1_with_state_test(input, len, &seed, out);
 }
+
 #if defined(__SSE4_2__) && defined(__x86_64__)
 /* Compute CRC-64C using the Intel hardware instruction. */
 void
-crc64c_hw_test(const void *input, int len, uint32_t seed, void *out)
+crc64c_hw_with_state_test(const void *input, int len, const void *state, void *out)
 {
   if (!len) {
     *(uint64_t *) out = 0;
     return;
   }
-  *(uint64_t *) out = crc64c_hw(input, len, seed);
+  *(uint64_t *) out = crc64c_hw(input, len, *((uint64_t*)state));
+}
+
+void
+crc64c_hw_test(const void *input, int len, uint32_t seed32, void *out)
+{
+    uint64_t seed= seed32;
+    crc64c_hw_with_state_test(input, len, &seed, out);
 }
 #endif
 #endif
@@ -494,11 +556,22 @@ siphash13_with_state_test(const void *input, int len, const void *seed, void *ou
 }
 
 void
-halfsiphash_test(const void *input, int len, uint32_t seed, void *out)
+halfsiphash_seed_state_test(int seed_bits, const void * seed, const void * state)
 {
-  unsigned char	key[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  memcpy(key, &seed, sizeof(seed));
-  *(uint32_t *) out = halfsiphash(key, (const unsigned char *)input, (size_t) len);
+    halfsiphash_seed_state((const unsigned char *)seed,(unsigned char *)state);
+}
+
+void
+halfsiphash_with_state_test(const void *key, int len, const void * state, void *out)
+{
+  *(uint32_t *) out = halfsiphash_with_state((const unsigned char *)state, (const unsigned char *)key, (size_t) len);
+}
+
+void
+halfsiphash_test(const void *key, int len, uint32_t seed32, void *out)
+{
+  uint32_t seed[2] = { seed32, seed32 };
+  *(uint32_t *) out = halfsiphash((const unsigned char *)seed, (const unsigned char *)key, (size_t) len);
 }
 
 /* https://github.com/gamozolabs/falkhash */
