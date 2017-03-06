@@ -314,6 +314,11 @@ void PMurHash32_test(const void *key, int len, uint32_t seed, void *out)
   *(uint32_t*)out = h1;
 }
 
+/* Provide an API suitable for smhasher */
+void PMurHash32_with_state_test(const void *key, int len, const void *state, void *out)
+{
+    PMurHash32_test(key,len,*((uint32_t *)state),out);
+}
 /*---------------------------------------------------------------------------*/
 #ifdef TEST
 int main() {
