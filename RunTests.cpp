@@ -1,18 +1,9 @@
 #include "Platform.h"
-#include "Hashes.h"
 #include "KeysetTest.h"
 #include "SpeedTest.h"
 #include "AvalancheTest.h"
 #include "DifferentialTest.h"
 #include "StreamTest.h"
-#include "PMurHash.h"
-#include "beagle_hash.h"
-#include "phat_hash.h"
-#include "zaphod32_hash.h"
-#include "zaphod64_hash.h"
-#include "sbox_hash.h"
-#include "Marvin32.h"
-#include "siphash.h"
 #include <stdio.h>
 #include <time.h>
 
