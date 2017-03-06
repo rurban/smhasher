@@ -37,7 +37,7 @@ bool g_testCyclic      = false;
 bool g_testTwoBytes    = false;
 bool g_testSparse      = false;
 bool g_testPermutation = false;
-bool g_testWindow      = false;
+bool g_testWindow      = false; /* only ReallyAll */
 bool g_testText        = false;
 bool g_testZeroes      = false;
 bool g_testEffs        = false;
@@ -54,6 +54,7 @@ struct TestOpts {
 TestOpts g_testopts[] =
 {
   { g_testAll, 		"All" },
+  { g_testReallyAll,	"ReallyAll" },
   { g_testSanity, 	"Sanity" },
   { g_testSpeed, 	"Speed" },
   { g_testBulkSpeed, 	"BulkSpeed" },
@@ -571,15 +572,21 @@ int main ( int argc, char ** argv )
     }
     else
     if (EQ(arg,arg_len,"--list")) {
-      printf("%-18s|Seed|Hash|\n","");
-      printf("%-18s|%4s|%4s|%s\n","Name","Bits","Bits","Description");
-      printf("%.18s+%.4s+%.4s|%s\n",
-          "-------------------","----","----","--------------------------");
+      printf("%-18s|Seed|State|Hash|\n","");
+      printf("%-18s|%4s|%5s|%4s|%s\n","Name","Bits","Bits","Bits","Description");
+      printf("%.18s+%.4s+%5s+%.4s|%s\n",
+          "-------------------","----","-----","----","--------------------------");
+      int old_api= 0;
       for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++) {
-        printf("%-18s|%4d|%4d|%s\n",
-            g_hashes[i].name, g_hashes[i].seedbits, g_hashes[i].hashbits,
-            g_hashes[i].desc);
+        if (!g_hashes[i].hash_with_state) old_api++;
+        printf("%-18s|%4d|%5d|%4d|%s%s\n",
+            g_hashes[i].name, g_hashes[i].seedbits, g_hashes[i].statebits, g_hashes[i].hashbits,
+            g_hashes[i].hash_with_state ? "" : "*", g_hashes[i].desc);
       }
+      if (old_api)
+        printf(
+          "# NOTE: Hash functions whose description starts with a star (*) character\n"
+          "# are possibly not being seeded correctly and results may be misleading.\n");
       exit(0);
     }
     else
