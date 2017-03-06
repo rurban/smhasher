@@ -42,10 +42,10 @@ uint32_t crc32c_hw(const void *input, int len, uint32_t crc)
     return (crc ^ 0xFFFFFFFF);
 }
 
-uint64_t crc64c_hw(const void *input, int len, uint32_t seed)
+uint64_t crc64c_hw(const void *input, int len, uint64_t seed)
 {
     const char* buf = (const char*)input;
-    uint64_t crc = (uint64_t)seed;
+    uint64_t crc = seed;
 
     // Align the input to the word boundary
     for (; (len > 0) && ((size_t)buf & ALIGN_MASK); len--, buf++) {
