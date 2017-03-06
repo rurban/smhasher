@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <assert.h>
+#include <string.h>
 
 #ifdef __SSE2__
 #include <xmmintrin.h>
@@ -54,15 +55,14 @@ static uint32_t coeffs[12] __attribute__((aligned(16))) = {
      changed all bits in the internal state with a probability               \
      between 45% to 55%. */
 
-void hasshe2(const void *input_buf, int n_bytes, uint32_t seed, void *output_state)
+void hasshe2(const void *input_buf, int n_bytes, const void *state, void *output_state)
 {
   __m128i coeffs_1, coeffs_2, rnd_data, input, state_1, state_2;
 
-  assert(n_bytes % 16 == 0);
 
   coeffs_1 = _mm_load_si128((void *) coeffs);
   coeffs_2 = _mm_load_si128((void *) (coeffs + 4));
-  rnd_data = _mm_load_si128((void *) (coeffs + 8));
+  rnd_data = _mm_load_si128((void *) state);
 
   /* Initialize internal state to something random.  (Alternatively,
      if hashing a chain of data, read in the previous hash result from
@@ -76,6 +76,13 @@ void hasshe2(const void *input_buf, int n_bytes, uint32_t seed, void *output_sta
     input_buf += 16;
     n_bytes -= 16;
 
+    COMBINE_AND_MIX(coeffs_1, coeffs_2, state_1, state_2, input);
+  }
+  if (n_bytes) {
+    uint8_t tmp_buf[16];
+    memset(tmp_buf,n_bytes,16);
+    memcpy(tmp_buf,input_buf,n_bytes);
+    input = _mm_loadu_si128((void *) tmp_buf);
     COMBINE_AND_MIX(coeffs_1, coeffs_2, state_1, state_2, input);
   }
 
