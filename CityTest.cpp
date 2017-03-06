@@ -6,6 +6,11 @@ void CityHash32_test ( const void * key, int len, uint32_t seed, void * out )
   *(uint32*)out = CityHash32WithSeed((const char *)key,len,seed);
 }
 
+void CityHash32_with_state_test ( const void * key, int len, const void *state, void * out )
+{
+  *(uint32*)out = CityHash32WithSeed((const char *)key,len,*((uint32_t*)state));
+}
+
 void CityHash64_test ( const void * key, int len, uint32_t seed, void * out )
 {
   *(uint64*)out = CityHash64WithSeed((const char *)key,len,seed);
