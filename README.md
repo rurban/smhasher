@@ -958,7 +958,32 @@ XXX: Document exact rules.
 ## Using the g-test
 
 Where possible I have changed smhasher to use the g-test for determining if
-a distribution is non-random.
+a distribution is non-random. The test is a more accurate version of the chi-square
+test and can be used to calculate the probability that the distribution of N items
+into M buckets is "random":
+
+<img src="https://github.com/demerphq/smhasher/blob/master/doc/gtest.png?raw=true" />
+
+or in pseudo code:
+
+     g += v * log(v/(n/m))
+        for each non-zero v in buckets_array
+
+The g-value follows a chi-squared distribution with the same number of
+degress-of-freedom, so any function that can convert a chi-square value to
+a probability can be used with the g-test. We use:
+
+     1.0 - gsl_sf_gamma_inc_Q( ( double(m) - 1.0) / 2.0, g )
+
+from the gnu scientific library.
+
+See more:
+    https://en.wikipedia.org/wiki/G-test
+    https://en.wikipedia.org/wiki/Chi-squared_distribution
+
+Note that the standard C log() function suffers some interesting and subtle
+cancellation errors when its argument is very close to and above 1, so the
+actual code uses log1p() when v > n/m.
 
 ## Quality Score
 
