@@ -331,5 +331,23 @@ void MurmurHash3_x64_128 ( const void * key, const int len,
   ((uint64_t*)out)[1] = h2;
 }
 
+void MurmurHash3_x86_32_with_state ( const void * key, int len,
+                          const void *state, void * out )
+{
+    MurmurHash3_x86_32(key, len, *((uint32_t *)state), out);
+}
+
+void MurmurHash3_x86_128_with_state ( const void * key, int len,
+                          const void *state, void * out )
+{
+    MurmurHash3_x86_128(key, len, *((uint32_t *)state), out);
+}
+
+void MurmurHash3_x64_128_with_state ( const void * key, int len,
+                          const void *state, void * out )
+{
+    MurmurHash3_x64_128(key, len, *((uint32_t *)state), out);
+}
+
 //-----------------------------------------------------------------------------
 
