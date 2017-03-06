@@ -23,7 +23,7 @@ extern bool g_testCyclic;
 extern bool g_testTwoBytes;
 extern bool g_testSparse;
 extern bool g_testPermutation;
-extern bool g_testWindow;
+extern bool g_testWindow;     /* only ReallyAll */
 extern bool g_testText;
 extern bool g_testZeroes;
 extern bool g_testEffs;
@@ -400,7 +400,7 @@ bool testHashWithSeed ( HashInfo * info, int self_test, double confidence )
   // Skip distribution test for these - they're too easy to distribute well,
   // and it generates a _lot_ of testing
 
-  if(g_testWindow || g_testAll)
+  if(g_testWindow || g_testReallyAll)
   {
     printf("[[[ Keyset 'Window' Tests ]]] - %s\n\n",info->name);
 
