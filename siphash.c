@@ -28,17 +28,17 @@ do {                                    \
 } while (0)
 
 #define SIPHASH_SEED_STATE(key,v0,v1,v2,v3) \
-do {                                        \
-    v0 = U8TO64_LE(key + 0);                \
-    v1 = U8TO64_LE(key + 8);                \
-    v2 = v0 ^ 0x6c7967656e657261ull;        \
-    v3 = v1 ^ 0x7465646279746573ull;        \
-    v0 ^= 0x736f6d6570736575ull;            \
-    v1 ^= 0x646f72616e646f6dull;            \
+do {                                    \
+    v0 = v2 = U8TO64_LE(key + 0);       \
+    v1 = v3 = U8TO64_LE(key + 8);       \
+    v0 ^= 0x736f6d6570736575ull;        \
+    v1 ^= 0x646f72616e646f6dull;        \
+    v2 ^= 0x6c7967656e657261ull;        \
+    v3 ^= 0x7465646279746573ull;        \
 } while (0)
 
 void
-siphash_seed_state(const unsigned char seed[16], unsigned char state[32]) {
+siphash_seed_state(const unsigned char seed[16], const unsigned char state[32]) {
     uint64_t *v= (uint64_t*)state;
     SIPHASH_SEED_STATE(seed,v[0],v[1],v[2],v[3]);
 }
