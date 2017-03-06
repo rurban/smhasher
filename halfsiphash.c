@@ -25,24 +25,30 @@
         v2 = ROTL(v2, 16);                             \
     } while (0)
 
-/* the faster half 32bit variant for the linux kernel */
+
+inline void
+halfsiphash_seed_state(const unsigned char vseed[8], const unsigned char vstate[16]) {
+    uint32_t *state= (uint32_t *)vstate;
+    uint32_t *seed= (uint32_t *)vseed;
+
+    state[0]= seed[0];
+    state[1]= seed[1];
+    state[2]= seed[0] ^ 0x6c796765;
+    state[3]= seed[1] ^ 0x74656462;
+}
+
+/* the faster half 32bit variant for the linux kernel (with tweaks for the with state api)*/
 uint32_t
-halfsiphash(const unsigned char key[16], const unsigned char *m, size_t len) {
-    uint32_t v0 = 0;
-    uint32_t v1 = 0;
-    uint32_t v2 = 0x6c796765;
-    uint32_t v3 = 0x74656462;
-    uint32_t k0 = U8TO32_LE(key);
-    uint32_t k1 = U8TO32_LE(key + 8);
+halfsiphash_with_state(const unsigned char state[16], const unsigned char *m, size_t len) {
+    uint32_t v0 = U8TO32_LE(state);
+    uint32_t v1 = U8TO32_LE(state + 4);
+    uint32_t v2 = U8TO32_LE(state + 8);
+    uint32_t v3 = U8TO32_LE(state + 12);
     uint32_t mi;
     int i;
     const uint8_t *end = m + len - (len % sizeof(uint32_t));
     const int left = len & 3;
     uint32_t b = ((uint32_t)len) << 24;
-    v3 ^= k1;
-    v2 ^= k0;
-    v1 ^= k1;
-    v0 ^= k0;
 
     for (; m != end; m += 4) {
         mi = U8TO32_LE(m);
@@ -76,3 +82,9 @@ halfsiphash(const unsigned char key[16], const unsigned char *m, size_t len) {
     return v1 ^ v3;
 }
 
+uint32_t
+halfsiphash(const unsigned char key[8], const unsigned char *m, size_t len) {
+    uint32_t state[4];
+    halfsiphash_seed_state(key,(unsigned char *)state);
+    return halfsiphash_with_state((unsigned char *)state,m,len);
+}
