@@ -485,6 +485,39 @@ static char* strndup(char const *s, size_t n)
 uint32_t g_verbose;
 double   g_confidence;
 
+//-----------------------------------------------------------------------------
+// Self-test on startup - verify that all installed hashes work correctly.
+
+void SelfTest ( bool validate )
+{
+  bool pass = true;
+
+  for(int i = 0; i < g_hashes_sizeof / sizeof(HashInfo); i++)
+  {
+    HashInfo * info = & g_hashes[i];
+
+    pass &= testHashByInfo( info, 1, g_confidence );
+  }
+  if (!pass)
+    printf("Self-test FAILED!\n");
+
+  if(!pass || validate)
+  {
+    for(size_t i = 0; i < g_hashes_sizeof / sizeof(HashInfo); i++)
+    {
+      HashInfo * info = & g_hashes[i];
+
+      pass &= testHashByInfo( info, 2, g_confidence );
+    }
+    if (!pass)
+      exit(1);
+    if (validate) {
+      printf("Self-test PASSED.\n");
+      exit(0);
+    }
+  }
+}
+
 int main ( int argc, char ** argv )
 {
 #if (defined(__x86_64__) && __SSE4_2__) || defined(_M_X64) || defined(_X86_64_)

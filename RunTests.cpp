@@ -570,37 +570,4 @@ bool testHashByInfo ( HashInfo * pInfo, int self_test, double confidence )
   return false;
 }
 
-//-----------------------------------------------------------------------------
-// Self-test on startup - verify that all installed hashes work correctly.
-
-void SelfTest ( bool validate )
-{
-  bool pass = true;
-
-  for(size_t i = 0; i < sizeof(g_hashes_sizeof) / sizeof(HashInfo); i++)
-  {
-    HashInfo * info = & g_hashes[i];
-
-    pass &= testHashByInfo( info, 1, g_confidence );
-  }
-  if (!pass)
-    printf("Self-test FAILED!\n");
-
-  if(!pass || validate)
-  {
-    for(size_t i = 0; i < g_hashes_sizeof / sizeof(HashInfo); i++)
-    {
-      HashInfo * info = & g_hashes[i];
-
-      pass &= testHashByInfo( info, 2, g_confidence );
-    }
-    if (!pass)
-      exit(1);
-    if (validate) {
-      printf("Self-test PASSED.\n");
-      exit(0);
-    }
-  }
-}
-
 /* vim: set sts=2 sw=2 et: */
