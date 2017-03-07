@@ -151,5 +151,80 @@ public:
   }
 };
 
+//----------
+
+template<typename hashtype>
+struct HashCallback : public KeyCallback
+{
+  typedef std::vector<hashtype> hashvec;
+
+  HashCallback ( hashfunc<hashtype> hash, hashvec & hashes ) : m_hashes(hashes), m_hashfunc(hash)
+  {
+    m_hashes.clear();
+  }
+
+  virtual void operator () ( const void * key, int len )
+  {
+    size_t newsize = m_hashes.size() + 1;
+
+    m_hashes.resize(newsize);
+
+    m_hashfunc(key,len,&m_hashes.back());
+  }
+
+  virtual void reserve ( int keycount )
+  {
+    m_hashes.reserve(keycount);
+  }
+
+  hashvec & m_hashes;
+  hashfunc<hashtype> m_hashfunc;
+
+  //----------
+
+private:
+
+  HashCallback & operator = ( const HashCallback & );
+};
+
+//----------
+
+template<typename hashtype>
+struct CollisionCallback : public KeyCallback
+{
+  typedef HashSet<hashtype> hashset;
+  typedef CollisionMap<hashtype,ByteVec> collmap;
+
+  CollisionCallback ( hashfunc<hashtype>hash, hashset & collisions, collmap & cmap )
+  : m_hashfunc(hash),
+    m_collisions(collisions),
+    m_collmap(cmap)
+  {
+  }
+
+  virtual void operator () ( const void * key, int len )
+  {
+    hashtype h;
+
+    m_hashfunc(key,len,&h);
+
+    if(m_collisions.count(h))
+    {
+      m_collmap[h].push_back( ByteVec(key,len) );
+    }
+  }
+
+  //----------
+
+  hashfunc<hashtype> m_hashfunc;
+  hashset & m_collisions;
+  collmap & m_collmap;
+
+private:
+
+  CollisionCallback & operator = ( const CollisionCallback & c );
+};
+
+
 //-----------------------------------------------------------------------------
 /* vim: set sts=2 sw=2 et: */
