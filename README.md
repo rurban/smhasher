@@ -79,76 +79,76 @@ for no, shared, or unique state seeding functions.
 You will need to:
 
 1. Implement functions that match the expected API.
-2. Update main.cpp to contain a new HashInfo entry for the hash:
+2. Update main.cpp to contain a new HashInfo entry for the hash
 
-<pre>
-    typedef struct HashInfo
-    {
-      const char * name;
-      const char * desc;
-      int seedbits;
-      int statebits;
-      int hashbits;
-      uint32_t verification;
-      pfSeedState seed_state;
-      pfHashWithState hash_with_state;
-    } HashInfo;
-</pre>
+    <pre>
+        typedef struct HashInfo
+        {
+          const char * name;
+          const char * desc;
+          int seedbits;
+          int statebits;
+          int hashbits;
+          uint32_t verification;
+          pfSeedState seed_state;
+          pfHashWithState hash_with_state;
+        } HashInfo;
+    </pre>
 
-For example:
-<pre>
-  { "Spooky128", "Bob Jenkins' SpookyHash, 128-bit seed, 128-bit result",
-    128, 128, 128, 0xC633C71E,
-    SpookyHash_seed_state_test, SpookyHash128_with_state_test },
-</pre>
+    For example:
+    <pre>
+      { "Spooky128", "Bob Jenkins' SpookyHash, 128-bit seed, 128-bit result",
+        128, 128, 128, 0xC633C71E,
+        SpookyHash_seed_state_test, SpookyHash128_with_state_test },
+    </pre>
 
-The verification value can be set to 0x0, in which case failed verification
-tests will produce a warning, but allow you to continue testing, or you can
-just put whatever you like in there as we will update its value to be correct
-in a following step.
+    The verification value can be set to 0x0, in which case failed verification
+    tests will produce a warning, but allow you to continue testing, or you can
+    just put whatever you like in there as we will update its value to be correct
+    in a following step.
 
 3. Compile And Build
 
-You can run ./SMHaser --validate to see if any hashes fail test. If they
-do the test harness will not let you continue until you correct them. The
-only exceptions are for those with a verification code of 0. If everything
-is good then you should see:
+    You can run ./SMHaser --validate to see if any hashes fail test. If they
+    do the test harness will not let you continue until you correct them. The
+    only exceptions are for those with a verification code of 0. If everything
+    is good then you should see:
 
-<pre>
-Self-test PASSED.
-</pre>
+    <pre>
+    Self-test PASSED.
+    </pre>
 
-At this point if you set the verification value to 0 you are done. But you
-will want to return here later once you have finalized the implementation of
-your hash function.
+    At this point if you set the verification value to 0 you are done. But you
+    will want to return here later once you have finalized the implementation of
+    your hash function.
 
 4. Update the Verification Code for your Hash
 
-You can do this two ways, the first is run
+    You can do this two ways, the first is run
 
-    perl update_hashes.pl
+        perl update_hashes.pl
 
-which /should/ update your hashes verification code (and *only* its code)
-automagically. If it says it has updated more then there is something wrong.
-Alternatively you can do what it does manually and run
+    which /should/ update your hashes verification code (and *only* its code)
+    automagically. If it says it has updated more then there is something wrong.
+    Alternatively you can do what it does manually and run
 
+        ./SMHasher --validate
+
+    which will produce output saying what the expected, and actual verification
+    codes were, you can then C&P the corrected code into the structure. For example:
+
+    <pre>
     ./SMHasher --validate
+    Self-test FAILED!
+    Spooky128            - Verification value 0xC633C71E : Failed! (Expected 0xC633C70E)
+    </pre>
 
-which will produce output saying what the expected, and actual verification
-codes were, you can then C&P the corrected code into the structure. For example:
-
-<pre>
-./SMHasher --validate
-Self-test FAILED!
-Spooky128            - Verification value 0xC633C71E : Failed! (Expected 0xC633C70E)
-</pre>
-
-I would use the perl script personally.
+    I would use the perl script personally.
 
 5. Build Again.
 
-Once you have corrected the verifcation code you need to rebuild to bake
-it in. Once that is complete you are done. Happy testing!
+    Once you have corrected the verifcation code you need to rebuild to bake
+    it in. Once that is complete you are done. Happy testing!
 
 
 # About the tests
