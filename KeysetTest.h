@@ -586,6 +586,7 @@ bool RepeatedCharKeyTest ( hashfunc<hashtype> hash, const char *name, unsigned c
   return result;
 }
 
+/* so we can sort an array of indexes into another array */
 template <typename T>
 struct IndirectComparator
 {
@@ -615,7 +616,12 @@ bool SeedTest ( hashfunc<hashtype> hash, int count, double confidence, bool draw
   // We keep track of the seeds we used for each hash. Then
   // we sort the index array by the seeds, and then use that
   // to transcribe out the hashes in seed-order, while skipping
-  // any dupes that are due to dupe seeds.
+  // any dupes that are due to dupe seeds. Otherwise we end up
+  // with ~ twice the expected error just because the RNG will
+  // produce its own collisions. In most cases this does not matter
+  // as the expected collisions are so small (far below zero for
+  // a 64 bit seed/64 bit hash). But for small seeds and/or small
+  // hashes the problem compounds.
 
   std::vector<hashtype> hashes;
   std::vector<hashtype> sorted_hashes;
