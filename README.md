@@ -977,9 +977,8 @@ a probability can be used with the g-test. We use:
 
 from the gnu scientific library.
 
-See more:
-    https://en.wikipedia.org/wiki/G-test
-    https://en.wikipedia.org/wiki/Chi-squared_distribution
+You can read more on <a href="https://en.wikipedia.org/wiki/G-test">G-Test</a>
+and the <a href="https://en.wikipedia.org/wiki/Chi-squared_distribution">Chi-Squared Distribution</a> at wikipedia.
 
 Note that the standard C log() function suffers some interesting and subtle
 cancellation errors when its argument is very close to and above 1, so the
