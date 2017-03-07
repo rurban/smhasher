@@ -122,6 +122,8 @@ void farmhash128_c_test      ( const void * key, int len, uint32_t seed, void * 
 void farmhash128_c_with_state_test      ( const void * key, int len, const void *state, void * out );
 
 void marvin_32_with_state_test ( const void * key, int len, const void * state, void * out );
+void lua_v53_string_hash_oaat (const void *str, int len, const void *seed, void *out);
+void lua_v53_string_hash (const void *str, int len, const void *seed, void *out);
 
 
 void SpookyHash32_test     ( const void * key, int len, uint32_t seed, void * out );

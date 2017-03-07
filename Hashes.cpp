@@ -596,4 +596,19 @@ falkhash_with_state_test_cxx(const void *input, int len, const void *seed, void 
 }
 #endif
 
+void lua_v53_string_hash_oaat (const void *key, int len, const void *seed, void *out) {
+  uint8_t *str= (uint8_t *)key+len-1;
+  unsigned int h = *((uint32_t*)seed) ^ ((unsigned int)len);
+  for (; key <= str ; str--)
+    h ^= ((h<<5) + (h>>2) + *str);
+  *((uint32_t*)out)=h;
+}
 
+void lua_v53_string_hash (const void *key, int len, const void *seed, void *out) {
+  uint8_t *str= (uint8_t *)key;
+  unsigned int h = *((uint32_t*)seed) ^ ((unsigned int)len);
+  size_t step = (len >> 5) + 1;
+  for (; len >= step; len -= step)
+    h ^= ((h<<5) + (h>>2) + str[len-1]);
+  *((uint32_t*)out)=h;
+}
