@@ -35,19 +35,11 @@ NEVER_INLINE int64_t timehash ( hashfunc<hashtype> hash, void * key, int len, in
 
   int n= trials;
 
-  if (hash.can_seed_state()) {
-    begin = rdtsc();
-    do {
-      hash(key,len,key);
-    } while (--n);
-    end = rdtsc();
-  } else {
-    begin = rdtsc();
-    do {
-      hash(key,len,seed,key);
-    } while (--n);
-    end = rdtsc();
-  }
+  begin = rdtsc();
+  do {
+    hash(key,len,key);
+  } while (--n);
+  end = rdtsc();
 
   return (int64_t)((end - begin) / (double)trials);
 }
@@ -84,11 +76,7 @@ double runSpeedTest ( hashfunc<hashtype> hash, const int trials, const int block
 
   uint32_t seed = 0;
 
-  if (hash.can_seed_state()) {
-    hash.seed_state_rand(r);
-  } else {
-    seed= r.rand_u32();
-  }
+  hash.seed_state_rand(r);
 
   /* warm up */
   for(int itrial = 0; itrial < 2; itrial++)
