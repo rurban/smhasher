@@ -55,7 +55,7 @@ So where the old interface was:
 typedef void (*pfHash) ( const void *blob, const int len, const uint32_t seed, void *out );
 ```
 
-I have added a new interface with two functions like this:
+I have changed to a new interface with two functions like this:
 ```C
 typedef void (*pfSeedState) ( const int seedbits, const void *seed, const void *state );
 typedef void (*pfHashWithState) ( const void *blob, const int len, const void *state, void *out );
@@ -65,135 +65,91 @@ The seedbits argument in pfSeedState is provided to allow a single
 seed preparation function serve multiple seed sizes if required. Most
 implementations would ignore it as it would always be constant.
 
-# Anatomy of a String Hash Function
+The pfSeedState function is *optional*, and when omitted it is assumed that the input
+"state" to the hash function corresponds exactly to that of the seed. In other words
+when there is no pfSeedState function defined the configuration for the hash should set
+the "statebits" to be the same as the "seedbits", and the "state seeding" operation
+will simply pass through the seed as a pointer.
 
-A hash function can be broken down into various components. The various
-attributes of the different components influence what applications
-a hash function is useful for. A general skeleton is as follows:
+The end result of all of this is that we now support any seed size, and provide support
+for no, shared, or unique state seeding functions.
 
-    seed -> state
-    length -> state
-    while data unread:
-        data -> state
-        mix state
-    tail -> state
-    mix state
-    finalize state
+# How To Add A New Function
 
-But obviously not all hash functions have every component.
+You will need to:
 
-## The Seed
+1. Implement functions that match the expected API.
+2. Update main.cpp to contain a new HashInfo entry for the hash:
 
-The seed is used to initialize the state so that hashing a given key
-or set of keys with a different seed produces unpredictably different
-hash values.
+<pre>
+    typedef struct HashInfo
+    {
+      const char * name;
+      const char * desc;
+      int seedbits;
+      int statebits;
+      int hashbits;
+      uint32_t verification;
+      pfSeedState seed_state;
+      pfHashWithState hash_with_state;
+    } HashInfo;
+</pre>
 
-The size of the seed influences the security of the hash. An
-insufficiently large seed can be brute force attacked to determine
-the seed. This is one reason why these days 32 bit seeds are generally
-considered obsolete.
+For example:
+<pre>
+  { "Spooky128", "Bob Jenkins' SpookyHash, 128-bit seed, 128-bit result",
+    128, 128, 128, 0xC633C71E,
+    SpookyHash_seed_state_test, SpookyHash128_with_state_test },
+</pre>
 
-## The State
+The verification value can be set to 0x0, in which case failed verification
+tests will produce a warning, but allow you to continue testing, or you can
+just put whatever you like in there as we will update its value to be correct
+in a following step.
 
-The state is generally larger than the seed, often double the size,
-and is used to represent the overall state of the hashing process
-as it procedes. As each unit of data is processed by the mix function
-the state is updated, and the eventual values of the state when
-hashing is done determine the resulting hash.
+3. Compile And Build
 
-## Seeding the State
+You can run ./SMHaser --validate to see if any hashes fail test. If they
+do the test harness will not let you continue until you correct them. The
+only exceptions are for those with a verification code of 0. If everything
+is good then you should see:
 
-This is the function that maps seed into the state. It may be an
-expensive operation in some hash functions, especially if the
-state is large.
+<pre>
+Self-test PASSED.
+</pre>
 
-## Length Mixing
+At this point if you set the verification value to 0 you are done. But you
+will want to return here later once you have finalized the implementation of
+your hash function.
 
-It is common to mix the length of the key into the state before
-hashing the key data to prevent against key extension and
-multicollission attacks.
+4. Update the Verification Code for your Hash
 
-## The Mix Function
+You can do this two ways, the first is run
 
-This is a function which mixes the state together, presumably
-in an unpredictable way, and is executed, possibly more than once,
-after reading a unit of data, and sometimes in the finalizer as
-well.
+    perl update_hashes.pl
 
-## The Block Read/Mix Loop
+which /should/ update your hashes verification code (and *only* its code)
+automagically. If it says it has updated more then there is something wrong.
+Alternatively you can do what it does manually and run
 
-This is the loop that handles reading a block of data and mixing
-it into the state using the mix function.
+    ./SMHasher --validate
 
-## The Tail Reader
+which will produce output saying what the expected, and actual verification
+codes were, you can then C&P the corrected code into the structure. For example:
 
-Since most hash functions are block oriented there is a need
-for a function that that handles loading any trailing bytes
-shorter than a full block size. This code generally needs to
-be structured to avoid key extension attacks. Often even when
-there is nothing to be read this function will alter the state
-anyway as part of the finalization process. It is common to see
-similar strategies used to pad the final block of block ciphers.
+<pre>
+./SMHasher --validate
+Self-test FAILED!
+Spooky128            - Verification value 0xC633C71E : Failed! (Expected 0xC633C70E)
+</pre>
 
-Byte oriented hash functions may omit the tail reader.
+I would use the perl script personally.
 
-## The Finalizer
+5. Build Again.
 
-This is a function which does the final mix of the state after
-all the input data has been read, and which computes the final
-hash value from that state.
+Once you have corrected the verifcation code you need to rebuild to bake
+it in. Once that is complete you are done. Happy testing!
 
-Often the finalizer is implemented by executing the mix function
-multiple times without reading any further data, but it can also
-be a custom function distinct from the mix function.
-
-It is common to xor the elements of the state together to produce
-the final hash.
-
-# Design Trade Offs
-
-A major factor governing the security profile and performance of
-a hash function come down to:
-
-    1. Size of the Seed
-    2. Size of the State
-    3. Size of the read block.
-    4. Size of the hash value
-
-The following relationships tend to hold:
-
-    SeedSize <= StateSize (often 1:2)
-    BlockSize < StateSize (often 1:2 or more)
-    HashSize < StateSize  (often 1:2 or more)
-
-There are probably good reasons for this:
-
-If the state is larger than the seed then it would seem it is easier
-to make guarantees about the state, such as it being non-zero at all
-times.
-
-If the block size is not (much) smaller than the state size
-then presumably the data read might overwhelm the entropy in the state.
-
-If the hash-size is not smaller than the state-size then the hash
-value exposes information about the internal state of the hash function
-which might be used to reverse engineer the initial state and/or the
-seed. By using some kind of compression function to reduce multiple
-state vectors into a single value the actual state is obscured.
-
-An example of these kind of ratios and sizes is SipHash
-
-    SeedSize:128 <= StateSize:256
-    BlockSize:64 <  StateSize:256
-    HashSize:64  <  StateSize:256
-
-and its final compression function:
-
-    v0 ^ v1 ^ v2 ^ v3
-
-which effectively obscures the values of the state vector v0,v1,v2,v3
-and presumably makes it more difficult for a solver to reverse engineer
-what the initial state was.
 
 # About the tests
 
