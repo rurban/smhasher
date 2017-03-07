@@ -102,8 +102,8 @@ void DumpCollisionMap ( CollisionMap<hashtype,ByteVec> & cmap )
 }
 
 // test code
-
-void ReportCollisions ( pfHash hash )
+template<typename hashtype>
+void ReportCollisions ( hashfunc<hashtype> hash )
 {
   printf("Hashing keyset\n");
 
