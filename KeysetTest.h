@@ -170,12 +170,12 @@ bool SanityTest ( hashfunc<hashtype> hash )
 
   if(result == false)
   {
-    printf("*********FAIL********* collisions: %d inconsistent: %d (of %d)\n",
+    printf("not ok\n%d collisions, %d inconsistent of %d hashes.\n",
         count_same, count_inconsistent, count);
   }
   else
   {
-    printf("PASS\n");
+    printf("ok\n");
   }
 
   delete [] buffer1;
