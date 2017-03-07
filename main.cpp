@@ -192,7 +192,7 @@ HashInfo g_hashes[] =
     NULL, MurmurHash3_x86_128_with_state },
 #if defined(__x86_64__)
   { "Murmur3F", "MurmurHash3 for x64, 128-bit",
-    32, 32, 128, 0x2D086017,
+    64, 64, 128, 0x2D086017,
     NULL, MurmurHash3_x64_128_with_state },
 #endif
 

@@ -17,7 +17,7 @@ void SHA1_Init(SHA1_CTX *context);
 void SHA1_Update(SHA1_CTX *context, const uint8_t *data, const size_t len);
 void SHA1_Final(SHA1_CTX *context, uint8_t digest[SHA1_DIGEST_SIZE]);
 
-void sha1_32a(const void *key, int len, uint32_t seed, void *out);
-void sha1_64a(const void *key, int len, uint32_t seed, void *out);
-void sha1_32b(const void *key, int len, uint32_t seed, void *out);
+void sha1_32a_with_state(const void *key, int len, const void *state, void *out);
+void sha1_64a_with_state(const void *key, int len, const void *state, void *out);
+void sha1_32b_with_state(const void *key, int len, const void *state, void *out);
 

@@ -112,7 +112,6 @@ bool SanityTest ( hashfunc<hashtype> hash )
 
   uint8_t * hash1 = new uint8_t[hashbytes];
   uint8_t * hash2 = new uint8_t[hashbytes];
-  uint32_t seed = 0;
   uint32_t count_inconsistent = 0;
   uint32_t count_same = 0;
   uint32_t count = 0;
@@ -199,7 +198,6 @@ bool AppendedZeroesTest ( hashfunc<hashtype> hash )
   Rand r(173994);
 
   const int hashbytes = sizeof(hashtype);
-  uint32_t seed = 0;
 
   for(int rep = 0; rep < 100; rep++)
   {

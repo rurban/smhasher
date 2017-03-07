@@ -350,18 +350,6 @@ void md5_with_state( const void*input, int ilen, const void *state, void *output
     md5_finish( &ctx, (unsigned char *)output );
 }
 
-void md5_test( const void *input, int ilen, uint32_t seed, void *output)
-{
-    md5_context ctx;
-
-    md5_starts( &ctx );
-    ctx.state[0] += seed;
-    md5_update( &ctx, (unsigned char *)input, ilen );
-    md5_finish( &ctx, (unsigned char *)output );
-
-    memset( &ctx, 0, sizeof( md5_context ) );
-}
-
 void md5_32_with_state( const void *input, int ilen, const void *state, void *out)
 {
     uint32_t buf[4];
@@ -394,12 +382,3 @@ unsigned int md5hash( const void * input, int len, uint32_t seed )
 
   return hash[0];
 }	
-
-void md5_32( const void * key, int len, uint32_t seed, void * out )
-{
-  unsigned int hash[4];
-
-  md5((unsigned char*)key,len,(unsigned char*)hash, seed);
-
-  *(uint32_t*)out = hash[0];
-}

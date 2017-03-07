@@ -293,9 +293,9 @@ uint32_t PMurHash32(uint32_t seed, const void *key, int len)
 /*---------------------------------------------------------------------------*/
 
 /* Provide an API suitable for smhasher */
-void PMurHash32_test(const void *key, int len, uint32_t seed, void *out)
+void PMurHash32_with_state_test(const void *key, int len, const void *state, void *out)
 {
-  uint32_t h1=seed, carry=0;
+  uint32_t h1=*((uint32_t*)state), carry=0;
   const uint8_t *ptr = (uint8_t*)key;
   const uint8_t *end = ptr + len;
 
@@ -314,11 +314,6 @@ void PMurHash32_test(const void *key, int len, uint32_t seed, void *out)
   *(uint32_t*)out = h1;
 }
 
-/* Provide an API suitable for smhasher */
-void PMurHash32_with_state_test(const void *key, int len, const void *state, void *out)
-{
-    PMurHash32_test(key,len,*((uint32_t *)state),out);
-}
 /*---------------------------------------------------------------------------*/
 #ifdef TEST
 int main() {

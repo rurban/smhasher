@@ -26,18 +26,6 @@ BadHash_with_state(const void *key, int len, const void *state, void *out)
 }
 
 void
-BadHash(const void *key, int len, uint32_t seed, void *out)
-{
-    BadHash_with_state(key,len,&seed,out);
-}
-
-
-void
-DoNothingHash(const void *, int, uint32_t, void *)
-{
-}
-
-void
 DoNothingHash_with_state(const void *, int, const void *, void *)
 {
 }
@@ -59,12 +47,6 @@ NoopOAATReadHash_with_state(const void *key, int len, const void *state, void *o
     }
 }
 
-void
-NoopOAATReadHash(const void *key, int len, uint32_t seed, void *out)
-{
-    NoopOAATReadHash_with_state(key,len,&seed,out);
-}
-
 //-----------------------------------------------------------------------------
 //One - byte - at - a - time hash based on Murmur 's mix
 
@@ -80,12 +62,6 @@ uint32_t MurmurOAAT(const void *key, int len, uint32_t seed)
   }
 
   return h;
-}
-
-void
-MurmurOAAT_test(const void *key, int len, uint32_t seed, void *out)
-{
-  *(uint32_t *) out = MurmurOAAT(key, len, seed);
 }
 
 void
@@ -111,11 +87,6 @@ FNV32a_with_state_test(const void *key, int len, const void *state, void *out)
   *(uint32_t *) out = h;
 }
 
-void
-FNV32a_test(const void *key, int len, uint32_t seed, void *out)
-{
-    FNV32a_with_state_test(key,len,&seed,out);
-}
 
 void
 FNV32a_YoshimitsuTRIAD_with_state_test(const void *key, int len, const void *state, void *out)
@@ -165,12 +136,6 @@ FNV32a_YoshimitsuTRIAD_with_state_test(const void *key, int len, const void *sta
 }
 
 void
-FNV32a_YoshimitsuTRIAD_test(const void *key, int len, uint32_t seed, void *out)
-{
-    FNV32a_YoshimitsuTRIAD_with_state_test(key,len,&seed,out);
-}
-
-void
 FNV64a_with_state_test(const void *key, int len, const void *state, void *out)
 {
   uint64_t	  h = *((uint64_t*) state);
@@ -186,12 +151,6 @@ FNV64a_with_state_test(const void *key, int len, const void *state, void *out)
   *(uint64_t *) out = h;
 }
 
-void
-FNV64a_test(const void *key, int len, uint32_t seed, void *out)
-{
-    uint64_t seed64= seed;
-    FNV64a_with_state_test(key,len,&seed64,out);
-}
 //-----------------------------------------------------------------------------
 
 uint32_t x17(const void *key, int len, uint32_t h)
@@ -226,12 +185,6 @@ Bernstein_with_state(const void *key, int len, const void *state, void *out)
   }
 
   *(uint32_t *) out = hash;
-}
-
-void
-Bernstein(const void *key, int len, uint32_t seed, void *out)
-{
-    Bernstein_with_state(key,len,&seed,out);
 }
 
 //as used in perl5
@@ -293,13 +246,6 @@ JenkinsOAATH_with_state(const void *key, int len, const void *state, void *out)
   hash ^= (hash >> 11);
   hash = hash + (hash << 15);
   *(uint32_t *) out = hash;
-}
-
-void
-JenkinsOAATH(const void *key, int len, uint32_t seed32, void *out)
-{
-    uint32_t seed[2]= { seed32, seed32 ^ 0x879b83d3 };
-    JenkinsOAATH_with_state(key,len,seed,out);
 }
 
 //as used in perl5 until 5.17(one_at_a_time_old)
@@ -422,7 +368,7 @@ extern		"C" {
 #if defined(__SSE4_2__) && defined(__x86_64__)
   uint32_t	  crc32c_hw(const void *input, int len, uint32_t seed);
   uint32_t	  crc32c(const void *input, int len, uint32_t seed);
-  uint64_t	  crc64c_hw(const void *input, int len, uint32_t seed);
+  uint64_t	  crc64c_hw(const void *input, int len, uint64_t seed);
 #endif
 }
 
@@ -447,11 +393,6 @@ crc32c_hw_with_state_test(const void *input, int len, const void *state, void *o
   }
   *(uint32_t *) out = crc32c_hw(input, len, *((uint32_t*)state));
 }
-void
-crc32c_hw_test(const void *input, int len, uint32_t seed, void *out)
-{
-    crc32c_hw_with_state_test(input, len, &seed, out);
-}
 
 /* Faster Adler SSE4.2 crc32 in HW */
 void
@@ -462,12 +403,6 @@ crc32c_hw1_with_state_test(const void *input, int len, const void *state, void *
     return;
   }
   *(uint32_t *) out = crc32c(input, len, *((uint32_t*)state));
-}
-
-void
-crc32c_hw1_test(const void *input, int len, uint32_t seed, void *out)
-{
-    crc32c_hw1_with_state_test(input, len, &seed, out);
 }
 
 #if defined(__SSE4_2__) && defined(__x86_64__)
@@ -482,42 +417,11 @@ crc64c_hw_with_state_test(const void *input, int len, const void *state, void *o
   *(uint64_t *) out = crc64c_hw(input, len, *((uint64_t*)state));
 }
 
-void
-crc64c_hw_test(const void *input, int len, uint32_t seed32, void *out)
-{
-    uint64_t seed= seed32;
-    crc64c_hw_with_state_test(input, len, &seed, out);
-}
 #endif
-#endif
-
-/* Cloudflare optimized zlib crc32 with PCLMUL */
-#if 0
-void
-zlib_crc32_test(const void *input, int len, uint32_t seed, void *out)
-{
-    if (!len) {
-      *(uint32_t *) out = 0;
-      return;
-    }
-    *(uint32_t *) out = crc32(seed, input, (unsigned)len);
-}
-#endif
-
-#if 0 && defined(__x86_64__) && (defined(__linux__) || defined(__APPLE__))
-extern "C" {
-  uint64_t fhtw_test(const unsigned char key[16], const unsigned char *m, size_t len);
-  int fhtw_hash(void* key, int key_len);
-}
-/* asm */
-inline void
-fhtw_test(const void *input, int len, uint32_t seed, void *out)
-{
-  *(uint32_t *) out = fhtw_hash(input, len);
-}
 #endif
 
 #include "siphash.h"
+/* https://github.com/floodyberry/siphash */
 
 void
 siphash_seed_state_test(int seedbits, const void *seed, const void *state)
@@ -525,28 +429,10 @@ siphash_seed_state_test(int seedbits, const void *seed, const void *state)
     siphash_seed_state((unsigned char *)seed, (unsigned char *)state);
 }
 
-/* https://github.com/floodyberry/siphash */
-void
-siphash_test(const void *input, int len, uint32_t seed, void *out)
-{
-  /* 128bit state, filled with a 32bit seed */
-  unsigned char	key[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  memcpy(key, &seed, sizeof(seed));
-  *(uint64_t *) out = siphash(key, (const unsigned char *)input, (size_t) len);
-}
-
 void
 siphash_with_state_test(const void *input, int len, const void *seed, void *out)
 {
   *(uint64_t *) out = siphash_with_state((const unsigned char *)seed, (const unsigned char *)input, (size_t) len);
-}
-
-void
-siphash13_test(const void *input, int len, uint32_t seed, void *out)
-{
-  unsigned char	key[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  memcpy(key, &seed, sizeof(seed));
-  *(uint64_t *) out = siphash13(key, (const unsigned char *)input, (size_t) len);
 }
 
 void
@@ -567,12 +453,6 @@ halfsiphash_with_state_test(const void *key, int len, const void * state, void *
   *(uint32_t *) out = halfsiphash_with_state((const unsigned char *)state, (const unsigned char *)key, (size_t) len);
 }
 
-void
-halfsiphash_test(const void *key, int len, uint32_t seed32, void *out)
-{
-  uint32_t seed[2] = { seed32, seed32 };
-  *(uint32_t *) out = halfsiphash((const unsigned char *)seed, (const unsigned char *)key, (size_t) len);
-}
 
 /* https://github.com/gamozolabs/falkhash */
 #if defined(__SSE4_2__) && defined(__x86_64__)
@@ -580,13 +460,6 @@ extern "C" {
   uint64_t falkhash_test(uint8_t *data, uint64_t len, uint64_t seed, void *out);
 }
 
-void
-falkhash_test_cxx(const void *input, int len, uint32_t seed, void *out)
-{
-  uint64_t hash[2] = {0ULL, 0ULL};
-  falkhash_test((uint8_t *)input, (uint64_t)len, (uint64_t)seed, hash);
-  *(uint64_t *) out = hash[0];
-}
 void
 falkhash_with_state_test_cxx(const void *input, int len, const void *seed, void *out)
 {

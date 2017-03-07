@@ -252,10 +252,6 @@ void sha1_64a_with_state(const void *key, int len, const void *state, void *out)
   memcpy(out, digest, 8);
 }
 
-void sha1_64a(const void *key, int len, uint32_t seed, void *out) {
-    sha1_64a_with_state(key,len,&seed,out);
-}
-
 void sha1_32a_with_state(const void *key, int len, const void *state, void *out) {
   SHA1_CTX context;
 
@@ -267,10 +263,6 @@ void sha1_32a_with_state(const void *key, int len, const void *state, void *out)
   SHA1_Final(&context, digest);
 
   memcpy(out, digest, 4);
-}
-
-void sha1_32a(const void *key, int len, uint32_t seed, void *out) {
-    sha1_32a_with_state(key,len,&seed,out);
 }
 
 void sha1_32b_with_state(const void *key, int len, const void *state, void *out) {
@@ -286,10 +278,6 @@ void sha1_32b_with_state(const void *key, int len, const void *state, void *out)
   uint32_t l = *((uint32_t*)digest);
   uint32_t r = *((uint32_t*)(digest+16));
   *((uint32_t*)out)= l ^ r;
-}
-
-void sha1_32b(const void *key, int len, uint32_t seed, void *out) {
-    sha1_32b_with_state(key,len,&seed,out);
 }
 
 //-----------------------------------------------------------------------------

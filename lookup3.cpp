@@ -66,11 +66,6 @@ uint32_t lookup3 ( const void * key, int length, uint32_t initval )
   return c;
 }
 
-void lookup3_test ( const void * key, int len, uint32_t seed, void * out )
-{
-  *(uint32_t*)out = lookup3(key,len,seed);
-}
-
 void lookup3_with_state_test ( const void * key, int len, const void *state, void * out )
 {
   *(uint32_t*)out = lookup3(key,len,*((uint32_t*)state));
