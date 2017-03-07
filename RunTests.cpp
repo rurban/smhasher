@@ -42,7 +42,6 @@ bool testHashWithSeed ( HashInfo * info, int self_test, double confidence )
   // see: https://en.wikipedia.org/wiki/Standard_deviation#Rules_for_normally_distributed_data
 
   hashfunc<hashtype> hash(
-      info->hash,
       info->seed_state,
       info->hash_with_state,
       info->seedbits,

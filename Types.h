@@ -39,7 +39,6 @@ void MixVCode ( const void * blob, int len );
 
 typedef void (*pfSeedState) ( const int seedbits, const void *seed, const void *state );
 typedef void (*pfHashWithState) ( const void *blob, const int len, const void *state, void *out );
-typedef void (*pfHash) ( const void *blob, const int len, const uint32_t seed, void *out );
 
 typedef struct HashInfo
 {
@@ -51,7 +50,6 @@ typedef struct HashInfo
   uint32_t verification;
   pfSeedState seed_state;
   pfHashWithState hash_with_state;
-  pfHash hash;
 } HashInfo;
 
 

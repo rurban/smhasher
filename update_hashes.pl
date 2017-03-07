@@ -9,19 +9,19 @@ foreach my $line (@broken) {
         $fix{$1}= $2;
     }
 }
-exit 0 if !%fix;
 
 my $contents= do { local(@ARGV,$/)=("main.cpp"); <>};
 my $hashes= 
 $contents=~/HashInfo\s+g_hashes\[\]\s*=\s*\{(.*?)\};/s;
 my $inner= $1;
+my $orig_inner= $1;
 
 sub _format {
     my $hex= $fix{$_[0]} || $_[5];
     return 
   qq'{ "$_[0]", "$_[1]",\n' .
     "    $_[2], $_[3], $_[4], $hex,\n".
-    "    $_[6], $_[7], $_[8] }";
+    "    $_[6], $_[7] }";
 }
 
 # { mum_hash_test, NULL, NULL, 32, 32, 64, MUM_VERIFY, "MUM",
@@ -34,19 +34,23 @@ $inner=~s/\{
            \s*([^,]+?)\s*,
            \s*([^,]+?)\s*,
            \s*(\w+)\s*,
-           \s*(\w+)\s*,
-           \s*(\w+)\s*
+           \s*(\w+)\s*(?:,
+           \s*(\w+)\s*)?
            \}/
             _format($1,$2,$3,$4,$5,$6,$7,$8,$9)
         /xge or die "Failed!";
 
-$contents=~s/(HashInfo\s+g_hashes\[\]\s*=\s*\{)(.*?)(\};)/$1$inner$3/s;
+if ($orig_inner ne $inner)  {
+    $contents=~s/(HashInfo\s+g_hashes\[\]\s*=\s*\{)(.*?)(\};)/$1$inner$3/s;
 
-open my $fh,">", "main.cpp"
-    or die "Failed to open main.cpp for write: $!";
-print $fh $contents;
-close $fh;
-exit 0+keys %fix;
+    open my $fh,">", "main.cpp"
+        or die "Failed to open main.cpp for write: $!";
+    print $fh $contents;
+    close $fh;
+    exit 1;
+} else {
+    exit 0;
+}
 __END__
 
 sub _format {
