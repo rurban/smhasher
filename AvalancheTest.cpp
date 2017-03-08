@@ -65,44 +65,44 @@ void PrintAvalancheDiagram ( av_statst *stats, int mode, int scale, double confi
   int failed = 0;
   double *cursor= mode ? stats->gtests : stats->pcts;
 
-  printf("%12s +---------------------------------------------------+\n","");
-  printf("%12s |012345678901234567890123456789012345678901234567890|\n","");
-  printf("%12s +---------------------------------------------------+\n","");
-  printf("%-12s |","Scale:");
+  printf("# %12s +---------------------------------------------------+\n","");
+  printf("# %12s |012345678901234567890123456789012345678901234567890|\n","");
+  printf("# %12s +---------------------------------------------------+\n","");
+  printf("# %-12s |","Scale:");
   for (int i= 0; i <=50; i++) {
     printf("%c",digits1[i]);
     if(digits2[i])
     printf("%c",digits2[i]);
   }
   printf("|\n");
-  printf("%-12s |","");
+  printf("# %-12s |","");
   for (int i= 50; i <=100; i++) {
     printf("%c",digits1[i]);
     if(digits2[i])
     printf("%c",digits2[i]);
   }
   printf("|\n");
-  printf("%12s +---------------------------------------------------+\n","");
+  printf("# %12s +---------------------------------------------------+\n","");
   if (mode) {
-    printf("%12s |%-51s|\n","",
+    printf("# %12s |%-51s|\n","",
                "scaled p-value above confidence level (zero is ok)");
   } else {
-    printf("%12s |%-48s%3d|\n","",
+    printf("# %12s |%-48s%3d|\n","",
                "pct diff from 50%: abs((0.5-(changed/reps))*2) *", scale * 100);
   }
   int words;
   int width;
   if (stats->hashbits == 32) {
-    printf("%12s +--------------------------------+\n","");
-    printf("%12s |0         1         2         3 |\n","");
-    printf("%12s |01234567890123456789012345678901|\n","");
-    printf("%12s +--------------------------------+\n","");
+    printf("# %12s +--------------------------------+\n","");
+    printf("# %12s |0         1         2         3 |\n","");
+    printf("# %12s |01234567890123456789012345678901|\n","");
+    printf("# %12s +--------------------------------+\n","");
     width= 32;
   } else {
-    printf("%12s +----------------------------------------------------------------+\n","");
-    printf("%12s |0         1         2         3         4         5         6   |\n","");
-    printf("%12s |0123456789012345678901234567890123456789012345678901234567890123|\n","");
-    printf("%12s +----------------------------------------------------------------+\n","");
+    printf("# %12s +----------------------------------------------------------------+\n","");
+    printf("# %12s |0         1         2         3         4         5         6   |\n","");
+    printf("# %12s |0123456789012345678901234567890123456789012345678901234567890123|\n","");
+    printf("# %12s +----------------------------------------------------------------+\n","");
     width = 64;
   }
   words = stats->hashbits / width;
@@ -163,7 +163,7 @@ void PrintAvalancheDiagram ( av_statst *stats, int mode, int scale, double confi
         nextrow++;
       }
       lastrow[w]= scancursor;
-      printf("%-4s  %4d.%d |", i < stats->seedbits ? "seed" : "key",
+      printf("# %-4s  %4d.%d |", i < stats->seedbits ? "seed" : "key",
           i < stats->seedbits ? i : i - stats->seedbits, w);
       for (int i= 0; i < width; i++) {
         int digit = outcursor[i] - 1;
@@ -180,19 +180,18 @@ void PrintAvalancheDiagram ( av_statst *stats, int mode, int scale, double confi
     }
   }
 
-  printf("%12s +%.*s+\n","",
+  printf("# %12s +%.*s+\n","",
         stats->hashbits,
         "-------------------------------------------------------------------"
   );
   if (mode) {
-      printf( "%d of %d bits failed (%.2f%%) failed at %.6f confidence\n",
+      printf( "# %d of %d bits failed (%.2f%%) failed at %.6f confidence\n",
         failed,
         stats->num_bits,
         100 * ( failed / double(stats->num_bits) ),
         100 * confidence
       );
   }
-  printf("\n");
 }
 
 //----------------------------------------------------------------------------

@@ -4,7 +4,7 @@ use warnings;
 my %fix;
 chomp(my @broken= `./SMHasher --validate`);
 foreach my $line (@broken) {
-    if ($line=~/^(\w+)\s+- Verification value (0x\S+)/) {
+    if ($line=~/^# (\w+)\s+- Verification value (0x\S+)/) {
         print "Must update $1 to $2\n";
         $fix{$1}= $2;
     }

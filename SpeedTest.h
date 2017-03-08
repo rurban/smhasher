@@ -116,7 +116,7 @@ void BulkSpeedTest ( hashfunc<hashtype> hash, Rand &r )
   const int trials = 4999;
   const int blocksize = 256 * 1024;
 
-  printf("Bulk speed test - %d-byte keys\n",blocksize);
+  printf("## Bulk speed test - %d-byte keys\n",blocksize);
   double sumbpc = 0.0;
 
   volatile double warmup_cycles = runSpeedTest(hash,trials,blocksize,0,r);
@@ -128,11 +128,11 @@ void BulkSpeedTest ( hashfunc<hashtype> hash, Rand &r )
     double bestbpc = double(blocksize)/cycles;
 
     double bestbps = (bestbpc * 3000000000.0 / 1048576.0);
-    printf("Alignment %2d - %6.3f bytes/cycle - %7.2f MiB/sec @ 3 ghz\n",align,bestbpc,bestbps);
+    printf("# Alignment %2d - %6.3f bytes/cycle - %7.2f MiB/sec @ 3 ghz\n",align,bestbpc,bestbps);
     sumbpc += bestbpc;
   }
   sumbpc = sumbpc / 8.0;
-  printf("Average      - %6.3f bytes/cycle - %7.2f MiB/sec @ 3 ghz\n",
+  printf("# Average      - %6.3f bytes/cycle - %7.2f MiB/sec @ 3 ghz\n",
           sumbpc,(sumbpc * 3000000000.0 / 1048576.0));
 }
 
@@ -147,10 +147,10 @@ double TinySpeedTest ( hashfunc<hashtype> hash, int keysize, int trials, Rand &r
   if (verbose) {
     if (keysize) {
       double ks= keysize;
-      printf("%-20s %6d byte keys %12.3f c/h %12.3f c/b %12.3f b/c\n",
+      printf("# %-20s %6d byte keys %12.3f c/h %12.3f c/b %12.3f b/c\n",
           hash.name(), keysize, cycles, cycles/ks, ks/cycles);
     } else {
-      printf("%-20s %6d byte keys %12.3f c/h\n",
+      printf("# %-20s %6d byte keys %12.3f c/h\n",
           hash.name(), keysize, cycles);
     }
   }
@@ -164,14 +164,15 @@ bool RunKeySpeedTests(hashfunc<hashtype> hash, Rand & r)
   double sum = 0.0;
   double sum_key_len = 0.0;
 
+  printf("## KeySpeed tests\n");
   for(int key_len = 0; key_len < 32; key_len++)
   {
     sum += TinySpeedTest(hash, key_len, 99999, r, true);
     sum_key_len += double(key_len);
     count++;
   }
-  printf("%-20s %16s %12.3f c/h %12.3f c/b %12.3f b/c\n\n",
-      hash.name(), "Average < 32",
+  printf("# %-20s %16s %12.3f c/h %12.3f c/b %12.3f b/c\n",
+      "", "Average < 32",
       sum / double(count), sum / sum_key_len, sum_key_len / sum );
   for(int key_len = 32; key_len < 128; key_len+=4)
   {
@@ -179,8 +180,8 @@ bool RunKeySpeedTests(hashfunc<hashtype> hash, Rand & r)
     sum_key_len += double(key_len);
     count++;
   }
-  printf("%-20s %16s %12.3f c/h %12.3f c/b %12.3f b/c\n\n",
-      hash.name(), "Average < 128",
+  printf("# %-20s %16s %12.3f c/h %12.3f c/b %12.3f b/c\n",
+      "", "Average < 128",
       sum / double(count), sum / sum_key_len, sum_key_len / sum );
   for(int key_len = 128; key_len <= 1 << 16; key_len *= 2)
   {
@@ -188,10 +189,9 @@ bool RunKeySpeedTests(hashfunc<hashtype> hash, Rand & r)
     sum_key_len += double(key_len);
     count++;
   }
-  printf("%-20s %16s %12.3f c/h %12.3f c/b %12.3f b/c\n\n",
-      hash.name(), "Average Bulk",
+  printf("# %-20s %16s %12.3f c/h %12.3f c/b %12.3f b/c\n",
+      "", "Overall Average",
       sum / double(count), sum / sum_key_len, sum_key_len / sum );
-  printf("\n");
   return true;
 }
 

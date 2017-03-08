@@ -11,6 +11,7 @@
 #include "Stats.h"
 #include "Random.h"   // for rand_p
 #include "HashFunc.h"
+#include "TAP.h"
 
 #include <algorithm>  // for std::swap
 #include <assert.h>
@@ -57,28 +58,30 @@ bool VerificationTest ( hashfunc<hashtype> hash, uint32_t expected, int verbose,
   delete [] key;
   delete [] hashes;
   delete [] final;
+  bool result = true;
 
   //----------
-#define _NAMEFMT "%-20s"
+#define _NAMEFMT "# %-20s"
   if(expected != verification)
   {
     if (expected == 0) {
       if (verbose)
         printf(_NAMEFMT " - Verification value 0x%08X : Testing!\n", name, verification);
-      return true;
+      result = true;
     }
     else if(verbose) {
       printf(_NAMEFMT " - Verification value 0x%08X : Failed! (Expected 0x%08X)\n",
         name, verification, expected);
     }
-    return false;
+    result = false;
   }
   else
   {
-    if(verbose>1) printf(_NAMEFMT " - Verification value 0x%08X : Passed!\n",
-        name, verification);
-    return true;
+    result = true;
   }
+  if (verbose>1)
+    ok(result, "Verification code", name);
+  return result;
 }
 
 //----------------------------------------------------------------------------
@@ -117,7 +120,7 @@ bool SanityTest ( hashfunc<hashtype> hash )
   uint32_t count = 0;
   //----------
 
-  printf("Sanity check simple key bit flips and consistency");
+  printf("# Sanity check simple key bit flips and consistency");
 
   for(int irep = 0; irep < reps; irep++)
   {
@@ -166,16 +169,10 @@ bool SanityTest ( hashfunc<hashtype> hash )
       }
     }
   }
-
-  if(result == false)
-  {
-    printf("not ok\n%d collisions, %d inconsistent of %d hashes.\n",
-        count_same, count_inconsistent, count);
-  }
-  else
-  {
-    printf("ok\n");
-  }
+  printf("\n"); // nl ok
+  if (!ok(result,"SanityTest", hash.name()))
+    printf("# from %d hashes there were %d inconsistent of %d collisions.\n",
+        count, count_inconsistent, count_same);
 
   delete [] buffer1;
   delete [] buffer2;
@@ -193,15 +190,16 @@ bool SanityTest ( hashfunc<hashtype> hash )
 template <typename hashtype>
 bool AppendedZeroesTest ( hashfunc<hashtype> hash )
 {
-  printf("Sanity check null suffixes change the hash (simple)");
+  printf("# Sanity check null suffixes change the hash (simple)");
 
   Rand r(173994);
 
   const int hashbytes = sizeof(hashtype);
+  int failed = 0;
 
-  for(int rep = 0; rep < 100; rep++)
+  for(int rep = 0; rep < 1000; rep++)
   {
-    if(rep % 10 == 0) printf(".");
+    if(rep % 100 == 0) printf(".");
 
     /* Very crude test - check that a 32 byte random string
      * has a different hash compared to the same string suffixed
@@ -210,7 +208,6 @@ bool AppendedZeroesTest ( hashfunc<hashtype> hash )
 
     memset(key,0,sizeof(key));
 
-    r.rand_p(key,32);
     hash.seed_state_rand(r);
 
     uint32_t h1[16];
@@ -225,17 +222,18 @@ bool AppendedZeroesTest ( hashfunc<hashtype> hash )
 
       if(i && memcmp(h1,h2,hashbytes) == 0)
       {
-        printf("\n*********FAIL*********\n");
-
-        return false;
+        failed++;
       }
 
       memcpy(h2,h1,hashbytes);
     }
+    r.rand_p(key,32);
   }
+  printf("\n"); // nl ok
+  ok(failed == 0,"Appended Zeroes Test",hash.name());
+  if (failed) printf("# There were %d collisions\n", failed);
 
-  printf("PASS\n");
-  return true;
+  return failed == 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -270,9 +268,9 @@ void CombinationKeygenRecurse ( uint32_t * key, int len, int maxlen,
 
 // used for the Permutation tests in main.cpp
 template< typename hashtype >
-bool CombinationKeyTest ( hashfunc<hashtype> hash, int maxlen, uint32_t * blocks, int blockcount, bool testColl, double confidence, bool drawDiagram, Rand &r )
+bool CombinationKeyTest ( hashfunc<hashtype> hash, int maxlen, uint32_t * blocks, int blockcount, bool testColl, double confidence, bool drawDiagram, Rand &r, const char *name )
 {
-  printf("Keyset 'Combination' - up to %d blocks from a set of %d - ",maxlen,blockcount);
+  printf("# Keyset 'Combination' - up to %d blocks from a set of %d - ",maxlen,blockcount);
 
   //----------
 
@@ -290,10 +288,8 @@ bool CombinationKeyTest ( hashfunc<hashtype> hash, int maxlen, uint32_t * blocks
 
   bool result = true;
 
-  result &= TestHashList<hashtype>(hashes,testColl,confidence,drawDiagram);
+  result &= TestHashList<hashtype>(hashes,testColl,confidence,drawDiagram,name);
   
-  printf("\n");
-
   return result;
 }
 
@@ -334,7 +330,10 @@ void SparseKeygenRecurse ( hashfunc<hashtype> hash, int start, int bitsleft, boo
 template < int keybits, typename hashtype >
 bool SparseKeyTest ( hashfunc<hashtype> hash, const int setbits, bool inclusive, bool testColl, double confidence, bool drawDiagram, Rand &r )
 {
-  printf("Keyset 'Sparse' - %d-bit keys with %s %d bits set - ",keybits, inclusive ? "up to" : "exactly", setbits);
+  char name[1024];
+  snprintf(name,1024,"Keyset 'Sparse' - %d-bit keys with %s %d bits set",
+      keybits, inclusive ? "up to" : "exactly", setbits);
+  printf("# %s - ", name);
 
   typedef Blob<keybits> keytype;
 
@@ -360,9 +359,7 @@ bool SparseKeyTest ( hashfunc<hashtype> hash, const int setbits, bool inclusive,
 
   bool result = true;
   
-  result &= TestHashList<hashtype>(hashes,testColl,confidence,drawDiagram);
-
-  printf("\n");
+  result &= TestHashList<hashtype>(hashes,testColl,confidence,drawDiagram,name);
 
   return result;
 }
@@ -387,7 +384,7 @@ bool WindowedKeyTest ( hashfunc<hashtype> hash, const int windowbits, bool testC
 
   hash.seed_state_rand(r);
 
-  printf("Keyset 'Windowed' - %3d-bit key, %3d-bit window - %d tests, %d keys per test\n",
+  printf("# Keyset 'Windowed' - %3d-bit key, %3d-bit window - %d tests, %d keys per test\n",
           keybits,windowbits,testcount,keycount);
 
   for(int j = 0; j <= testcount; j++)
@@ -406,11 +403,11 @@ bool WindowedKeyTest ( hashfunc<hashtype> hash, const int windowbits, bool testC
       hash(&key,sizeof(keytype),&hashes[i]);
     }
 
-    printf("Window at %3d - ",j);
+    char name[1024];
+    snprintf(name,1024,"Window at %3d",j);
 
-    result &= TestHashList(hashes,testCollision,confidence,drawDiagram);
+    result &= TestHashList(hashes,testCollision,confidence,drawDiagram,name);
 
-    //printf("\n");
   }
 
   return result;
@@ -425,7 +422,10 @@ bool WindowedKeyTest ( hashfunc<hashtype> hash, const int windowbits, bool testC
 template < typename hashtype >
 bool CyclicKeyTest ( hashfunc<hashtype> hash, int cycleLen, int cycleReps, const int keycount, double confidence, bool drawDiagram, Rand &r )
 {
-  printf("Keyset 'Cyclic' - %d cycles of %d bytes - %d keys\n",cycleReps,cycleLen,keycount);
+  char name[1024];
+  snprintf(name,1024,"Keyset 'Cyclic' - %d cycles of %d bytes - %d keys",
+      cycleReps,cycleLen,keycount);
+  printf("# %s\n",name);
 
   std::vector<hashtype> hashes;
   hashes.resize(keycount);
@@ -456,8 +456,7 @@ bool CyclicKeyTest ( hashfunc<hashtype> hash, int cycleLen, int cycleReps, const
   
   bool result = true;
 
-  result &= TestHashList(hashes,true,confidence,drawDiagram);
-  printf("\n");
+  result &= TestHashList(hashes,true,confidence,drawDiagram,name);
 
   delete [] cycle;
   delete [] key;
@@ -468,21 +467,21 @@ bool CyclicKeyTest ( hashfunc<hashtype> hash, int cycleLen, int cycleReps, const
 //-----------------------------------------------------------------------------
 // Keyset 'TwoBytes' - generate all keys up to length N with two non-zero bytes
 
-void TwoBytesKeygen ( int maxlen, KeyCallback & c );
+void TwoBytesKeygen ( int maxlen, KeyCallback & c, char *name );
 
 template < typename hashtype >
 bool TwoBytesTest2 ( hashfunc<hashtype> hash, int maxlen, double confidence, bool drawDiagram )
 {
+  char name[1024];
   std::vector<hashtype> hashes;
 
   HashCallback<hashtype> c(hash,hashes);
 
-  TwoBytesKeygen(maxlen,c);
+  TwoBytesKeygen(maxlen,c,name);
 
   bool result = true;
 
-  result &= TestHashList(hashes,true,confidence,drawDiagram);
-  printf("\n");
+  result &= TestHashList(hashes,true,confidence,drawDiagram,name);
 
   return result;
 }
@@ -502,9 +501,10 @@ bool TextKeyTest ( hashfunc<hashtype> hash, const char * prefix, const char * co
   const int keybytes = prefixlen + corelen + suffixlen;
   const int keycount = (int)pow(double(corecount),double(corelen));
 
-  printf("Keyset 'Text' - keys of form \"%s[",prefix);
-  for(int i = 0; i < corelen; i++) printf("X");		
-  printf("]%s\" - %d keys\n",suffix,keycount);
+  char name[1024];
+  snprintf(name,1024,"Keyset 'Text' - keys of form \"%s[%.*s]%s\" - %d keys",
+      prefix,corelen,"XXXXXXXXXXXXXXXX",suffix,keycount);
+  printf("# %s\n",name);
 
   uint8_t * key = new uint8_t[keybytes+1];
 
@@ -536,9 +536,7 @@ bool TextKeyTest ( hashfunc<hashtype> hash, const char * prefix, const char * co
 
   bool result = true;
 
-  result &= TestHashList(hashes,true,confidence,drawDiagram);
-
-  printf("\n");
+  result &= TestHashList(hashes,true,confidence,drawDiagram,name);
 
   delete [] key;
 
@@ -554,8 +552,9 @@ bool TextKeyTest ( hashfunc<hashtype> hash, const char * prefix, const char * co
 template < typename hashtype >
 bool RepeatedCharKeyTest ( hashfunc<hashtype> hash, const char *name, unsigned char c, int keycount, double confidence, bool drawDiagram, Rand &r )
 {
-
-  printf("Keyset '%s' - %d keys\n",name,keycount);
+  char fullname[1024];
+  snprintf(fullname,1024,"Keyset '%s' - %d keys",name,keycount);
+  printf("# %s\n", fullname);
 
   unsigned char * block = new unsigned char[keycount];
   memset(block,c,keycount);
@@ -566,7 +565,12 @@ bool RepeatedCharKeyTest ( hashfunc<hashtype> hash, const char *name, unsigned c
 
   hashes.resize(keycount);
 
-  hash.seed_state_rand(r);
+  if (hash.seedbits() == 64) {
+    uint64_t s= 0xffffffff9d66d03f;
+    hash.seed_state(&s);
+  } else {
+    hash.seed_state_rand(r);
+  }
 
   for(int i = 0; i < keycount; i++)
   {
@@ -575,9 +579,7 @@ bool RepeatedCharKeyTest ( hashfunc<hashtype> hash, const char *name, unsigned c
 
   bool result = true;
 
-  result &= TestHashList(hashes,true,confidence,drawDiagram);
-
-  printf("\n");
+  result &= TestHashList(hashes,true,confidence,drawDiagram,fullname);
 
   delete [] block;
 
@@ -605,8 +607,10 @@ template < typename seedtype, typename hashtype >
 bool SeedTest ( hashfunc<hashtype> hash, int count, double confidence, bool drawDiagram,
     Rand &seed_r, const char * text )
 {
-  printf("Keyset 'Seed' - %d seeds, key length %d\n  Key \"%s\"\n",
-          count, (int)strlen(text), text);
+  char name[1024];
+  snprintf(name,1024,"Keyset 'Seed' - %d seeds, Key \"%.20s\"%s",
+          count, text, strlen(text)>20 ? "..." : "");
+  printf("# %s\n",name);
 
   const int len = (int)strlen(text);
   //----------
@@ -656,9 +660,7 @@ bool SeedTest ( hashfunc<hashtype> hash, int count, double confidence, bool draw
 
   bool result = true;
 
-  result &= TestHashList(sorted_hashes,true,confidence,drawDiagram);
-
-  printf("\n");
+  result &= TestHashList(sorted_hashes,true,confidence,drawDiagram,name);
 
   return result;
 }

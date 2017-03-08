@@ -659,7 +659,7 @@ bool test_shift ( void )
     }
   }
 
-  printf("PASS\n");
+  printf("ok\n");
   return true;
 }
 
@@ -700,7 +700,7 @@ bool test_window2 ( void )
     }
   }
 
-  printf("PASS %d\n",nbits);
+  printf("ok %d\n",nbits);
 
   return true;
 }
@@ -740,7 +740,7 @@ bool test_window ( void )
     }
   }
 
-  printf("PASS 64\n");
+  printf("ok 64\n");
 
   test_window2<8>();
   test_window2<16>();

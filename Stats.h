@@ -3,7 +3,7 @@
 #include "Types.h"
 #include "HashFunc.h"
 #include "SimpleStats.h"
-
+#include "TAP.h"
 //-----------------------------------------------------------------------------
 // Sort the hash list, count the total number of collisions and return
 // the first N collisions for further processing
@@ -41,12 +41,12 @@ int FindCollisions ( std::vector<hashtype> & hashes,
 // Used by TestHashList, which is widely used elsewhere.
 
 template< typename hashtype >
-bool TestDistribution ( std::vector<hashtype> & hashes, double confidence, bool drawDiagram )
+bool TestDistribution ( std::vector<hashtype> & hashes, double confidence, bool drawDiagram, const char *name )
 {
-  printf("Testing distribution - ");
+  //printf("# Testing distribution - ");
 
   //drawDiagram = true;
-  if(drawDiagram) printf("\n");
+  if(drawDiagram) printf("\n"); // nl ok
 
   const int hashbits = sizeof(hashtype) * 8;
 
@@ -115,21 +115,18 @@ bool TestDistribution ( std::vector<hashtype> & hashes, double confidence, bool 
 
     if(drawDiagram) printf("]\n");
   }
+  bool result = !worst;
 
-  if (worst) {
-    printf("not ok! (%.6f confidence) - worst bias is the %3d-bit window at bit %3d - %5.3f%% (%d)\n",
-      confidence * 100, worstWidth, worstStart, worst * 100, scores);
-    return false;
-  } else {
-    printf("ok. (%.6f confidence)\n",confidence * 100);
-    return true;
-  }
+  if (worst)
+    printf("# worst bias is the %3d-bit window at bit %3d - %5.3f%% (%d)\n",
+      worstWidth, worstStart, worst * 100, scores);
+  return okf(result, "Distribution Bias Check for %s", name);
 }
 
 //----------------------------------------------------------------------------
 
 template < typename hashtype >
-bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & collisions, double confidence , bool drawDiagram )
+bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & collisions, double confidence , bool drawDiagram, const char *name )
 {
   bool result = true;
 
@@ -138,7 +135,7 @@ bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & coll
 
     double expected = (double(count) * double(count-1)) / pow(2.0,double(sizeof(hashtype) * 8 + 1));
 
-    printf("Testing collisions   - Expected %8.2f, ",expected);
+    printf("# Testing collisions   - Expected %8.2f, ",expected);
 
     double collcount = 0;
 
@@ -174,15 +171,13 @@ bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & coll
       }
     }
 
-    printf("\n");
+    printf("\n"); // nl ok
   }
-
+  okf(result,"Collision Rate for %s",name);
   //----------
 
   if(confidence)
-  {
-    result &= TestDistribution(hashes,confidence,drawDiagram);
-  }
+    result &= TestDistribution<hashtype>(hashes,confidence,drawDiagram, name);
 
   return result;
 }
@@ -190,11 +185,11 @@ bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & coll
 //----------
 
 template < typename hashtype >
-bool TestHashList ( std::vector<hashtype> & hashes, bool /*testColl*/, double confidence, bool drawDiagram )
+bool TestHashList ( std::vector<hashtype> & hashes, bool /*testColl*/, double confidence, bool drawDiagram, const char *name )
 {
   std::vector<hashtype> collisions;
 
-  return TestHashList(hashes,collisions,confidence,drawDiagram);
+  return TestHashList<hashtype>(hashes,collisions,confidence,drawDiagram,name);
 }
 
 //-----------------------------------------------------------------------------

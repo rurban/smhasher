@@ -180,7 +180,7 @@ public:
   void print_as_hex () {
     for (int i=0;i<sizeof(bytes);i++)
       printf("%02x",bytes[i]);
-    printf("\n");
+    printf("\n"); // nl ok
 
   }
   int bits () {

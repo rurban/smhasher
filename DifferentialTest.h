@@ -52,7 +52,7 @@ bool ProcessDifferentials ( std::vector<keytype> & diffs, int reps, bool dumpCol
           if(dumpCollisions)
           {
             printbits((unsigned char*)&kp,sizeof(kp));
-            printf(" - %4.2f%%\n", pct );
+            printf("# - %4.2f%%\n", pct );
           }
         }
         else 
@@ -72,7 +72,7 @@ bool ProcessDifferentials ( std::vector<keytype> & diffs, int reps, bool dumpCol
       if(dumpCollisions)
       {
         printbits((unsigned char*)&kp,sizeof(kp));
-        printf(" - %4.2f%%\n", pct );
+        printf("# - %4.2f%%\n", pct );
       }
     }
     else 
@@ -81,18 +81,10 @@ bool ProcessDifferentials ( std::vector<keytype> & diffs, int reps, bool dumpCol
     }
   }
 
-  printf("%d total collisions, of which %d single collisions were ignored",
+  printf("# %d total collisions, of which %d single collisions were ignored\n",
       (int)diffs.size(),ignore);
 
-  if(result == false)
-  {
-    printf(" !!!!! ");
-  }
-
-  printf("\n");
-  printf("\n");
-
-  return result;
+  return ok(result,"ProcessDifferentials");
 }
 
 //-----------------------------------------------------------------------------
@@ -157,9 +149,9 @@ bool DiffTest ( hashfunc<hashtype> hash, int diffbits, int reps, bool dumpCollis
   memset(&h1,0,sizeof(hashtype));
   memset(&h2,0,sizeof(hashtype));
 
-  printf("Testing %0.f up-to-%d-bit differentials in %d-bit keys -> %d bit hashes.\n",
+  printf("# Testing %0.f up-to-%d-bit differentials in %d-bit keys -> %d bit hashes.\n",
           diffcount,diffbits,keybits,hashbits);
-  printf("%d reps, %0.f total tests, expecting %2.2f random collisions",
+  printf("# %d reps, %0.f total tests, expecting %2.2f random collisions",
           reps,testcount,expected);
   int maxerrors= 100000; /* we need a limit or we could run out of memory */
   uint64_t skipped= 0;
@@ -176,19 +168,10 @@ bool DiffTest ( hashfunc<hashtype> hash, int diffbits, int reps, bool dumpCollis
 
     skipped += DiffTestRecurse<keytype,hashtype>(hash,k1,k2,h1,h2,0,diffbits,diffs,maxerrors);
   }
-  printf("\n");
-
-  bool result = true;
-
-  if (diffs.size() >= maxerrors) {
-    printf("FAILED. Too many collisions, after %d keys, skipped %lu keys!!!\n",
-        maxerrors, skipped);
-    result= false;
-  } else {
-    result &= ProcessDifferentials(diffs,reps,dumpCollisions,maxerrors);
-  }
-
-  return result;
+  printf("\n"); // nl ok
+  bool result = ok(diffs.size() < maxerrors,"Differential collisions",hash.name());
+  result &= ok(skipped==0,"Nothing skipped during differential collision check",hash.name());
+  return result && ProcessDifferentials(diffs,reps,dumpCollisions,maxerrors);
 }
 
 //-----------------------------------------------------------------------------
@@ -216,7 +199,8 @@ bool DiffDistTest2 ( hashfunc<hashtype> hash, double confidence  )
 
   for(int keybit = 0; keybit < keybits; keybit++)
   {
-    printf("Testing bit %d\n",keybit);
+    char name[1024];
+    snprintf(name,1024,"differential distribution - bit %d\n",keybit);
 
     for(int i = 0; i < keycount; i++)
     {
@@ -229,8 +213,7 @@ bool DiffDistTest2 ( hashfunc<hashtype> hash, double confidence  )
       hashes[i] = h1 ^ h2;
     }
 
-    result &= TestHashList<hashtype>(hashes,true,confidence,true);
-    printf("\n");
+    result &= TestHashList<hashtype>(hashes,true,confidence,true,name);
   }
 
   return result;

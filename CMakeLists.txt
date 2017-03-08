@@ -186,6 +186,7 @@ add_library(
   t1ha.c
   mum.cc
   RunTests.cpp
+  TAP.cpp
 )
 
 add_executable(

@@ -169,7 +169,7 @@ bool AvalancheTest (
     num_rows,
   };
 
-  printf("Testing %3d-bit keys", keybits);
+  printf("# Testing %3d-bit keys", keybits);
 
   //----------
 
@@ -195,22 +195,22 @@ bool AvalancheTest (
   }
 
 
-  printf("worst-bit: %7.3f%% error-ratio: %e\n",
+  printf("# worst-bit: %7.3f%% error-ratio: %e\n",
       stats.worst_pct * 100.0, stats.err_scaled_ratio);
   if (result)
-    return true;
+    return result;
 
 
   PrintAvalancheDiagram(&stats, 0, 1, confidence);
   PrintAvalancheDiagram(&stats, 1, 1, confidence);
 
   printf(
-    "    g-test: %7.6f%%\n"
-    "    sum-error-square: %.8f\n",
+    "#     g-test: %7.6f%%\n"
+    "#     sum-error-square: %.8f\n",
     stats.gtest_prob * 100.0, stats.err_scaled );
 
   if (stats.row_errors)
-    printf( "    key/seed errors: %d/%d\n",
+    printf( "#     key/seed errors: %d/%d\n",
       stats.row_errors, stats.num_rows);
 
   if (stats.row_errors) {
@@ -223,7 +223,7 @@ bool AvalancheTest (
         continue;
       if (i<stats.seedbits) {
         if (seed_reported < 2) {
-          printf("    - seed bit %d gtest probability not random: %.4f (%.0f/%.0f)\n",
+          printf("#     - seed bit %d gtest probability not random: %.4f (%.0f/%.0f)\n",
             i, stats.row_gtests[i] * 100,
             stats.row_bins[(i * 2) + 0], stats.row_bins[(i * 2) + 1]);
           seed_reported++;
@@ -232,7 +232,7 @@ bool AvalancheTest (
         }
       } else {
         if(key_reported < 2) {
-          printf("    - key bit %d gtest probability not random: %.4f (%.0f/%.0f)\n",
+          printf("#     - key bit %d gtest probability not random: %.4f (%.0f/%.0f)\n",
             i - stats.seedbits, stats.row_gtests[i] * 100,
             stats.row_bins[(i * 2) + 0], stats.row_bins[(i * 2) + 1]);
           key_reported++;
@@ -242,16 +242,16 @@ bool AvalancheTest (
       }
     }
     if (seed_skipped && key_skipped)
-      printf("    - with %d more seed errors and %d more key errors not described above.\n",
+      printf("#     - with %d more seed errors and %d more key errors not described above.\n",
           seed_skipped, key_skipped);
     else if (seed_skipped)
-      printf("    - with %d more seed errors not described above.\n", seed_skipped);
+      printf("#     - with %d more seed errors not described above.\n", seed_skipped);
     else if (key_skipped)
-      printf("    - with %d more key errors not described above.\n", key_skipped);
+      printf("#     - with %d more key errors not described above.\n", key_skipped);
   }
 
   if (stats.col_errors)
-    printf( "    hash bit-level errors: %d/%d\n",
+    printf( "#     hash bit-level errors: %d/%d\n",
       stats.col_errors, stats.hashbits );
 
   if (stats.col_errors) {
@@ -261,7 +261,7 @@ bool AvalancheTest (
       if (stats.col_gtests[i] < confidence)
         continue;
       if (reported < 3) {
-        printf("    - hash bit %d gtest-prob not-random: %.4f (%.0f/%.0f)\n",
+        printf("#     - hash bit %d gtest-prob not-random: %.4f (%.0f/%.0f)\n",
           i, stats.col_gtests[i] * 100,
           col_bins[(i * 2) + 0], col_bins[(i * 2) + 1]);
         reported++;
@@ -270,7 +270,7 @@ bool AvalancheTest (
       }
     }
     if (skipped)
-      printf("    - with %d more hash bit errors not described above.\n", skipped);
+      printf("#     - with %d more hash bit errors not described above.\n", skipped);
   }
 
   return false;
@@ -320,7 +320,7 @@ void BicTest ( hashfunc<hashtype> hash, const int keybit, const int reps, double
     }
   }
 
-  if(verbose) printf("\n");
+  if(verbose) printf("\n"); // nl maybe
 
   maxBias = 0;
 
@@ -360,7 +360,7 @@ void BicTest ( hashfunc<hashtype> hash, const int keybit, const int reps, double
       }
     }
 
-    if(verbose) printf("\n");
+    if(verbose) printf("\n"); // nl ok
   }
 }
 
@@ -456,7 +456,7 @@ bool BicTest3 ( hashfunc<hashtype> hash, const int reps, bool verbose = true )
     }
   }
 
-  printf("\n");
+  printf("\n"); // nl maybe
 
   for(int out1 = 0; out1 < hashbits-1; out1++)
   {
@@ -498,17 +498,17 @@ bool BicTest3 ( hashfunc<hashtype> hash, const int reps, bool verbose = true )
 
       // Finished keybit
 
-      if(verbose) printf("\n");
+      if(verbose) printf("\n"); // nl ok
     }
 
     if(verbose)
     {
       for(int i = 0; i < keybits+12; i++) printf("-");
-      printf("\n");
+      printf("\n"); // nl ok
     }
   }
 
-  printf("Max bias %f - (%3d : %3d,%3d)\n",maxBias,maxK,maxA,maxB);
+  printf("# Max bias %f - (%3d : %3d,%3d)\n",maxBias,maxK,maxA,maxB);
   return true;
 }
 
@@ -587,7 +587,7 @@ void BicTest2 ( hashfunc<hashtype> hash, const int reps, bool verbose = true )
 
     // Finished keybit
 
-    if(verbose) printf("\n");
+    if(verbose) printf("\n"); // nl ok
   }
 
   printf("Max bias %f - (%3d : %3d,%3d)\n",maxBias,maxK,maxA,maxB);

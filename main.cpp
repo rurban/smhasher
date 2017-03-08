@@ -493,6 +493,8 @@ double   g_confidence;
 void SelfTest ( bool validate )
 {
   bool pass = true;
+  char name[1024];
+  snprintf(name,1024,"Self Test - Verify %d Hashes",(int)(g_hashes_sizeof/sizeof(HashInfo)));
 
   for(int i = 0; i < g_hashes_sizeof / sizeof(HashInfo); i++)
   {
@@ -500,8 +502,7 @@ void SelfTest ( bool validate )
 
     pass &= testHashByInfo( info, 1, g_confidence );
   }
-  if (!pass)
-    printf("Self-test FAILED!\n");
+  ok(pass,name);
 
   if(!pass || validate)
   {
@@ -511,12 +512,8 @@ void SelfTest ( bool validate )
 
       pass &= testHashByInfo( info, 2, g_confidence );
     }
-    if (!pass)
-      exit(1);
-    if (validate) {
-      printf("Self-test PASSED.\n");
-      exit(0);
-    }
+    done_testing();
+
   }
 }
 
@@ -530,7 +527,6 @@ int main ( int argc, char ** argv )
   const char * hashToTest = defaulthash;
   bool opt_validate = false;
   
-  setvbuf(stdout, NULL, _IONBF, 0); /* autoflush stdout */
   g_verbose = 0;
   g_confidence = sigmasToProb(5.0);
 
@@ -654,7 +650,7 @@ int main ( int argc, char ** argv )
           for(size_t i = 1; i < sizeof(g_testopts) / sizeof(TestOpts); i++) {
             printf(",%s", g_testopts[i].name);
           }
-          printf("\n");
+          printf("\n"); // nl ok
           exit(0);
         }
       } while (p);
@@ -673,7 +669,7 @@ int main ( int argc, char ** argv )
       printf("--test=NAME1,NAME2    which tests to run? default is all, available:\n");
       for(size_t i = 0; i < sizeof(g_testopts) / sizeof(TestOpts); i++)
         printf("%s%s", i ? ", " : "", g_testopts[i].name);
-      printf("\n");
+      printf("\n"); // nl ok
       exit(1);
     }
   }
@@ -685,23 +681,13 @@ int main ( int argc, char ** argv )
 
   //----------
   HashInfo * pInfo = findHash(hashToTest);
-  if (!pInfo) {
-    printf("Unknown hash '%s'\n",hashToTest);
-    exit(1);
-  }
+  if (ok(pInfo!=NULL,"Found Hash",pInfo->name))
+    ok(testHashByInfo(pInfo,0,g_confidence),"all tests passed",pInfo->name);
 
-  clock_t timeBegin = clock();
-
-  testHashByInfo(pInfo,0,g_confidence);
-
-  clock_t timeEnd = clock();
+  done_testing();
 
   //----------
 
-  printf("\n");
-  printf( "Verification value is 0x%08x - Testing took %f seconds\n",
-          g_verify, double(timeEnd - timeBegin) / double(CLOCKS_PER_SEC) );
-  printf("-------------------------------------------------------------------------------\n");
   return 0;
 }
 /* vim: set sts=2 sw=2 et: */

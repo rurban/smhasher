@@ -10,7 +10,7 @@
 //-----------------------------------------------------------------------------
 // Generate all keys of up to N bytes containing two non-zero bytes
 
-void TwoBytesKeygen ( int maxlen, KeyCallback & c )
+void TwoBytesKeygen ( int maxlen, KeyCallback & c, char *name )
 {
   //----------
   // Compute # of keys
@@ -23,7 +23,8 @@ void TwoBytesKeygen ( int maxlen, KeyCallback & c )
 
   for(int i = 2; i <= maxlen; i++) keycount += i*255;
 
-  printf("Keyset 'TwoBytes' - up-to-%d-byte keys, %d total keys\n",maxlen, keycount);
+  snprintf(name,1024,"Keyset 'TwoBytes' - up-to-%d-byte keys, %d total keys",
+      maxlen, keycount);
 
   c.reserve(keycount);
 
@@ -82,9 +83,9 @@ void DumpCollisionMap ( CollisionMap<hashtype,ByteVec> & cmap )
   {
     const hashtype & hash = (*it).first;
 
-    printf("Hash - ");
+    printf("### Hash - ");
     printbytes(&hash,sizeof(hashtype));
-    printf("\n");
+    printf("\n"); // nl ok
 
     std::vector<ByteVec> & keys = (*it).second;
 
@@ -92,11 +93,10 @@ void DumpCollisionMap ( CollisionMap<hashtype,ByteVec> & cmap )
     {
       ByteVec & key = keys[i];
 
-      printf("Key  - ");
+      printf("#   Key  - ");
       printbytes(&key[0],(int)key.size());
-      printf("\n");
+      printf("\n"); // nl ok
     }
-    printf("\n");
   }
 
 }
@@ -105,33 +105,33 @@ void DumpCollisionMap ( CollisionMap<hashtype,ByteVec> & cmap )
 template<typename hashtype>
 void ReportCollisions ( hashfunc<hashtype> hash )
 {
-  printf("Hashing keyset\n");
+  printf("# Hashing keyset\n");
 
   std::vector<uint128_t> hashes;
 
   HashCallback<uint128_t> c(hash,hashes);
 
-  TwoBytesKeygen(20,c);
+  TwoBytesKeygen(20,c,"ReportCollisions");
 
-  printf("%d hashes\n",(int)hashes.size());
+  printf("# %d hashes\n",(int)hashes.size());
 
-  printf("Finding collisions\n");
+  printf("# Finding collisions\n");
 
   HashSet<uint128_t> collisions;
 
   FindCollisions(hashes,collisions,1000);
 
-  printf("%d collisions\n",(int)collisions.size());
+  printf("# %d collisions\n",(int)collisions.size());
 
-  printf("Mapping collisions\n");
+  printf("# Mapping collisions\n");
 
   CollisionMap<uint128_t,ByteVec> cmap;
 
   CollisionCallback<uint128_t> c2(hash,collisions,cmap);
 
-  TwoBytesKeygen(20,c2);
+  TwoBytesKeygen(20,c2,"Mapping collisions");
 
-  printf("Dumping collisions\n");
+  printf("# Dumping collisions\n");
 
   DumpCollisionMap(cmap);
 }
