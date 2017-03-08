@@ -44,12 +44,7 @@ public:
   {
     T result;
 
-    if (m_hash_with_state) {
-      m_hash_with_state(key,len,&m_state[0],&result);
-    } else if (m_seedbits == 32) {
-      m_hash(key,len,*((uint32_t*)&m_seed[0]),&result);
-    }
-
+    m_hash_with_state(key,len,&m_state[0],&result);
     return result;
   }
 
