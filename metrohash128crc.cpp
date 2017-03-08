@@ -28,7 +28,7 @@
 #include <nmmintrin.h>
 
 
-void metrohash128crc_1(const uint8_t * key, uint64_t len, uint32_t seed, uint8_t * out)
+void metrohash128crc_1(const uint8_t * key, uint64_t len, uint64_t seed, uint8_t * out)
 {
     static const uint64_t k0 = 0xC83A91E1;
     static const uint64_t k1 = 0x8648DBDB;
@@ -104,7 +104,7 @@ void metrohash128crc_1(const uint8_t * key, uint64_t len, uint32_t seed, uint8_t
 }
 
 
-void metrohash128crc_2(const uint8_t * key, uint64_t len, uint32_t seed, uint8_t * out)
+void metrohash128crc_2(const uint8_t * key, uint64_t len, uint64_t seed, uint8_t * out)
 {
     static const uint64_t k0 = 0xEE783E2F;
     static const uint64_t k1 = 0xAD07C493;
