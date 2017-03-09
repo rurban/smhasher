@@ -4,7 +4,7 @@ This is a fork of Google's "smhasher" suite, available here:
 
     https://chromium.googlesource.com/external/smhasher
 
-It incorperates changes from Reini Urban's fork as well. See:
+It incorporates changes from Reini Urban's fork as well. See:
 
     https://github.com/rurban/smhasher
 
@@ -109,7 +109,7 @@ You will need to:
 
 3. Compile And Build
 
-    You can run ./SMHaser --validate to see if any hashes fail test. If they
+    You can run ./SMHasher --validate to see if any hashes fail test. If they
     do the test harness will not let you continue until you correct them. The
     only exceptions are for those with a verification code of 0. If everything
     is good then you should see:
@@ -147,7 +147,7 @@ You will need to:
 
 5. Build Again.
 
-    Once you have corrected the verifcation code you need to rebuild to bake
+    Once you have corrected the verification code you need to rebuild to bake
     it in. Once that is complete you are done. Happy testing!
 
 
@@ -161,7 +161,7 @@ If it is not documented below then I have not gotten around to it yet.
 
 ## Sanity Test
 
-This does some very basic tests. It verifys that the hash is consistent
+This does some very basic tests. It verifies that the hash is consistent
 and that simple key changes produce changed hashes. It also verifies that
 the hash is capable of hashing a string of nulls without producing excess
 collisions, this is a simpler version of the "Zeroes" test.
@@ -180,7 +180,7 @@ This test actually contains two subtests which can be run independently.
 
 ### BulkSpeed Test
 
-Times hasing very long keys at different alignments. Architectures that
+Times hashing very long keys at different alignments. Architectures that
 allow unaligned access will probably not see much difference at the different
 alignments.
 
@@ -632,7 +632,7 @@ other tests do not, especially when a hash has a weak mixing function.
 
 ## Combination tests
 
-I dont know what these tests do in detail yet.
+I don't know what these tests do in detail yet.
 
 <pre>
     [[[ Keyset 'Combination Lowbits' Tests ]]] - BeagleHash_32_112
@@ -886,8 +886,8 @@ then ensures that the result has a good distribution, and collision rate.
 
 ## Effs Test
 
-Similar to the Zeros test, this verifies that hashings keys of ever
-longer sequences of 0xFF bytes does not produces excess collisions and
+Similar to the Zeros test, this verifies that hashing keys of ever
+longer sequences of 0xFF bytes does not produce excess collisions and
 produces good distributions.
 
 <pre>
@@ -926,12 +926,12 @@ or in pseudo code:
         for each non-zero v in buckets_array
 
 The g-value follows a chi-squared distribution with the same number of
-degress-of-freedom, so any function that can convert a chi-square value to
+degrees-of-freedom, so any function that can convert a chi-square value to
 a probability can be used with the g-test. We use:
 
      1.0 - gsl_sf_gamma_inc_Q( ( double(m) - 1.0) / 2.0, g )
 
-from the gnu scientific library.
+from the GNU scientific library.
 
 Wikipedia has more info on the <a href="https://en.wikipedia.org/wiki/G-test">G-Test</a>
 and the <a href="https://en.wikipedia.org/wiki/Chi-squared_distribution">Chi-Squared Distribution</a>.
