@@ -29,6 +29,14 @@ public:
     m_state.resize((statebits+7)/8);
     m_seed.resize((seedbits+7)/8);
   }
+  void dump_state () {
+    printf("Hash: %s seedbits:%d statebits: %d hashbits %d\n",
+        m_name, m_seedbits, m_statebits, (int)sizeof(T));
+    printf("seed: 0x");
+    for (int i= 0; i < m_seed.size(); i++)
+      printf("%02x", m_seed[i]);
+    printf("\n");
+  }
 
   inline operator pfSeedState ( void ) const
   {
