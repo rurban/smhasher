@@ -74,7 +74,7 @@ public:
     } else {
       memcpy( state, seed, sizeof(m_seed) );
     }
-    if (state == &m_state[0]) {
+    if (state == (void *)&m_state[0]) {
       memcpy( &m_seed[0], seed, sizeof(m_seed) );
     }
   }
@@ -96,10 +96,9 @@ public:
 
   inline void seed_state_rand ( Rand & r )
   {
-    printf("seed_state_rand start\n");
     r.rand_p(&m_seed[0], m_seed.size());
     _seed_state(m_seedbits,&m_seed[0],&m_state[0]);
-    printf("seed_state_rand done\n");
+    dump_state();
   }
 
   bool can_seed_state ()

@@ -68,7 +68,6 @@ struct Rand
     mix();
 
     uint64_t v = state[p] * 0x106689d45497fdb5ULL;
-    printf("rand_u64: 0x%016lx\n", v);
     return v;
   }
 
