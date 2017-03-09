@@ -242,11 +242,9 @@ bool AppendedZeroesTest ( hashfunc<hashtype> hash )
 template< typename hashtype >
 void CombinationKeygenRecurse ( uint32_t * key, int len, int maxlen, 
                   uint32_t * blocks, int blockcount, 
-                hashfunc<hashtype> hash, std::vector<hashtype> & hashes, Rand &r )
+                hashfunc<hashtype> hash, std::vector<hashtype> & hashes)
 {
   if(len == maxlen) return;
-
-  hash.seed_state_rand(r);
 
   for(int i = 0; i < blockcount; i++)
   {
@@ -261,7 +259,7 @@ void CombinationKeygenRecurse ( uint32_t * key, int len, int maxlen,
 
     //else
     {
-      CombinationKeygenRecurse(key,len+1,maxlen,blocks,blockcount,hash,hashes,r);
+      CombinationKeygenRecurse(key,len+1,maxlen,blocks,blockcount,hash,hashes);
     }
   }
 }
@@ -277,8 +275,9 @@ bool CombinationKeyTest ( hashfunc<hashtype> hash, int maxlen, uint32_t * blocks
   std::vector<hashtype> hashes;
 
   uint32_t * key = new uint32_t[maxlen];
+  hash.seed_state_rand(r);
 
-  CombinationKeygenRecurse<hashtype>(key,0,maxlen,blocks,blockcount,hash,hashes,r);
+  CombinationKeygenRecurse<hashtype>(key,0,maxlen,blocks,blockcount,hash,hashes);
 
   delete [] key;
 
