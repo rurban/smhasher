@@ -81,12 +81,14 @@ struct Rand
       bytes -= 8;
     }
 
-    uint8_t * tail = reinterpret_cast<uint8_t*>(blocks);
-    uint64_t last = rand_u64();
-    for(int i = 0; i < bytes; i++)
-    {
-      tail[i] = uint8_t(last & 0xFF);
-      last = last >> 8;
+    if (bytes) {
+      uint8_t * tail = reinterpret_cast<uint8_t*>(blocks);
+      uint64_t last = rand_u64();
+      for(int i = 0; i < bytes; i++)
+      {
+        tail[i] = uint8_t(last & 0xFF);
+        last = last >> 8;
+      }
     }
   }
 };
