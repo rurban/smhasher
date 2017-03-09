@@ -294,6 +294,8 @@ void BicTest ( hashfunc<hashtype> hash, const int keybit, const int reps, double
   keytype key;
   hashtype h1,h2;
 
+  hash.seed_state_rand(r);
+
   for(int irep = 0; irep < reps; irep++)
   {
     if(verbose)
@@ -302,10 +304,10 @@ void BicTest ( hashfunc<hashtype> hash, const int keybit, const int reps, double
     }
 
     r.rand_p(&key,keybytes);
-    hash(&key,keybytes,uint32_t(0),&h1);
+    hash(&key,keybytes,&h1);
 
     flipbit(key,keybit);
-    hash(&key,keybytes,uint32_t(0),&h2);
+    hash(&key,keybytes,&h2);
 
     hashtype d = h1 ^ h2;
 
@@ -427,6 +429,8 @@ bool BicTest3 ( hashfunc<hashtype> hash, const int reps, bool verbose = true )
   keytype key;
   hashtype h1,h2;
 
+  hash.seed_state_rand(r);
+
   std::vector<int> bins(keybits*pagesize,0);
 
   for(int keybit = 0; keybit < keybits; keybit++)
@@ -438,9 +442,9 @@ bool BicTest3 ( hashfunc<hashtype> hash, const int reps, bool verbose = true )
     for(int irep = 0; irep < reps; irep++)
     {
       r.rand_p(&key,keybytes);
-      hash(&key,keybytes,uint32_t(0),&h1);
+      hash(&key,keybytes,&h1);
       flipbit(key,keybit);
-      hash(&key,keybytes,uint32_t(0),&h2);
+      hash(&key,keybytes,&h2);
 
       hashtype d = h1 ^ h2;
 
@@ -535,6 +539,8 @@ void BicTest2 ( hashfunc<hashtype> hash, const int reps, bool verbose = true )
   keytype key;
   hashtype h1,h2;
 
+  hash.seed_state_rand(r);
+
   for(int out1 = 0; out1 < hashbits-1; out1++)
   for(int out2 = out1+1; out2 < hashbits; out2++)
   {
@@ -547,9 +553,9 @@ void BicTest2 ( hashfunc<hashtype> hash, const int reps, bool verbose = true )
       for(int irep = 0; irep < reps; irep++)
       {
         r.rand_p(&key,keybytes);
-        hash(&key,keybytes,uint32_t(0),&h1);
+        hash(&key,keybytes,&h1);
         flipbit(key,keybit);
-        hash(&key,keybytes,uint32_t(0),&h2);
+        hash(&key,keybytes,&h2);
 
         hashtype d = h1 ^ h2;
 

@@ -148,7 +148,7 @@ bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & coll
       // of collisions
 
       if(double(collcount) / double(expected) > 2.0 &&
-         abs(double(collcount) - double(expected)) > 1)
+         fabs(double(collcount) - double(expected)) > 1)
       {
         result = false;
       }
