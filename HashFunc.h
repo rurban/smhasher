@@ -72,10 +72,10 @@ public:
     if (m_seed_state) {
       m_seed_state(seedbits,seed,state);
     } else {
-      memcpy( state, seed, sizeof(m_seed) );
+      memcpy( state, seed, m_seed.size() );
     }
     if (state == (void *)&m_state[0]) {
-      memcpy( &m_seed[0], seed, sizeof(m_seed) );
+      memcpy( &m_seed[0], seed, m_seed.size() );
     }
   }
 
