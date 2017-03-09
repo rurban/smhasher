@@ -7,7 +7,6 @@
 #include "MurmurHash3.h"
 
 #if defined(__x86_64__)
-#include "Marvin32.h"
 #include "xxhash.h"
 #include "metrohash.h"
 #include "cmetrohash.h"
