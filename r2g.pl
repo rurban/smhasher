@@ -20,7 +20,7 @@ sub graph {
             unless @key_bytes;
         $name //= $key;
     }
-    warn "@key_bytes";
+    return unless @key_bytes;
     my $min= $key_bytes[0];
     my $max= $key_bytes[-1];
 
