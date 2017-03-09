@@ -67,7 +67,9 @@ struct Rand
   {
     mix();
 
-    return state[p] * 0x106689d45497fdb5ULL;
+    uint64_t v = state[p] * 0x106689d45497fdb5ULL;
+    printf("rand_u64: 0x%016llx\n", v);
+    return v;
   }
 
   void rand_p ( void * blob, int bytes )

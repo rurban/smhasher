@@ -31,7 +31,7 @@ public:
   }
   void dump_state () {
     printf("Hash: %s seedbits:%d statebits: %d hashbits %d\n",
-        m_name, m_seedbits, m_statebits, (int)sizeof(T));
+        m_name, m_seedbits, m_statebits, (int)sizeof(T) * 8);
     printf("seed: 0x");
     for (int i= 0; i < m_seed.size(); i++)
       printf("%02x", m_seed[i]);
@@ -96,8 +96,10 @@ public:
 
   inline void seed_state_rand ( Rand & r )
   {
+    printf("seed_state_rand start\n");
     r.rand_p(&m_seed[0], m_seed.size());
     _seed_state(m_seedbits,&m_seed[0],&m_state[0]);
+    printf("seed_state_rand done\n");
   }
 
   bool can_seed_state ()
