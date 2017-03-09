@@ -281,7 +281,7 @@ relatively long strings.
 ## Differential Tests
 
 This hashes strings of various sizes with relatively few bits set,
-and then looks for excess collissions. Hash functions with a weak mix
+and then looks for excess collisions. Hash functions with a weak mix
 function, or weak seeding will often fail these tests.
 
 (NB: I don't know too much about these tests. More to come later.)
@@ -825,7 +825,7 @@ further mathematical rigour.
 
 This tests various simple string keys of specific forms
 at different lengths and ensures they do not produce excessive
-collissions or bad distributions.
+collisions or bad distributions.
 
 <pre>
     [[[ Keyset 'Text' Tests ]]] - BeagleHash_32_112
@@ -887,7 +887,7 @@ then ensures that the result has a good distribution, and collision rate.
 ## Effs Test
 
 Similar to the Zeros test, this verifies that hashings keys of ever
-longer sequences of 0xFF bytes does not produces excess collissions and
+longer sequences of 0xFF bytes does not produces excess collisions and
 produces good distributions.
 
 <pre>
@@ -901,7 +901,7 @@ produces good distributions.
 # Collision Tests
 
 These test that for a given set of keys the results produce the expected
-number of collissions. For instance with 262144 keys a 32 bit hash should
+number of collisions. For instance with 262144 keys a 32 bit hash should
 produce about 8 collisions. The test will fail if the actual count exceeds
 double that of expected. This is not very sensitive, and my be adjusted later.
 
