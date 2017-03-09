@@ -23,8 +23,9 @@ void TwoBytesKeygen ( int maxlen, KeyCallback & c, char *name )
 
   for(int i = 2; i <= maxlen; i++) keycount += i*255;
 
-  snprintf(name,1024,"Keyset 'TwoBytes' - up-to-%d-byte keys, %d total keys",
-      maxlen, keycount);
+  if (name)
+    snprintf(name,1024,"Keyset 'TwoBytes' - up-to-%d-byte keys, %d total keys",
+        maxlen, keycount);
 
   c.reserve(keycount);
 
@@ -111,7 +112,7 @@ void ReportCollisions ( hashfunc<hashtype> hash )
 
   HashCallback<uint128_t> c(hash,hashes);
 
-  TwoBytesKeygen(20,c,"ReportCollisions");
+  TwoBytesKeygen(20,c,NULL);
 
   printf("# %d hashes\n",(int)hashes.size());
 
@@ -129,7 +130,7 @@ void ReportCollisions ( hashfunc<hashtype> hash )
 
   CollisionCallback<uint128_t> c2(hash,collisions,cmap);
 
-  TwoBytesKeygen(20,c2,"Mapping collisions");
+  TwoBytesKeygen(20,c2,NULL);
 
   printf("# Dumping collisions\n");
 
