@@ -130,48 +130,45 @@ bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & coll
 {
   bool result = true;
 
+  size_t count = hashes.size();
+
+  double expected = (double(count) * double(count-1)) / pow(2.0,double(sizeof(hashtype) * 8 + 1));
+
+  printf("# Testing collisions   - Expected %8.2f, ",expected);
+
+  HashSet<hashtype> my_collisions;
+  double collcount = FindCollisions(hashes,my_collisions,1000);
+
+  if( sizeof(hashtype) == sizeof(uint32_t) )
   {
-    size_t count = hashes.size();
+      // 2x expected collisions = fail
 
-    double expected = (double(count) * double(count-1)) / pow(2.0,double(sizeof(hashtype) * 8 + 1));
+      // #TODO - collision failure cutoff needs to be expressed as a standard deviation instead
+      // of a scale factor, otherwise we fail erroneously if there are a small expected number
+      // of collisions
 
-    printf("# Testing collisions   - Expected %8.2f, ",expected);
-
-    double collcount = 0;
-
-    HashSet<hashtype> collisions;
-
-    collcount = FindCollisions(hashes,collisions,1000);
-
-    printf("actual %8.2f (%5.2fx)",collcount, collcount / expected);
-
-    if(sizeof(hashtype) == sizeof(uint32_t))
-    {
-        // 2x expected collisions = fail
-
-        // #TODO - collision failure cutoff needs to be expressed as a standard deviation instead
-        // of a scale factor, otherwise we fail erroneously if there are a small expected number
-        // of collisions
-
-        if(double(collcount) / double(expected) > 2.0 &&
-           abs(double(collcount) - double(expected)) > 1)
-        {
-          printf(" !!!!! ");
-          result = false;
-        }
-    }
-    else
-    {
-      // For all hashes larger than 32 bits, _any_ collisions are a failure.
-      
-      if(collcount > 0)
+      if(double(collcount) / double(expected) > 2.0 &&
+         abs(double(collcount) - double(expected)) > 1)
       {
-        printf(" !!!!! ");
         result = false;
       }
-    }
+  }
+  else
+  if(collcount > 0) {
+    // For all hashes larger than 32 bits, _any_ collisions are a failure.
+    // not sure this is right really. but for now we will live with it
+      result = false;
+  }
 
-    printf("\n"); // nl ok
+  if (collcount / expected < 1000) {
+    printf("actual %8.0f (%5.2fx) - %s\n",collcount, collcount / expected,
+        result ? "passed" : "failed");
+  } else if (collcount == count - 1) {
+    printf("actual %8.0f - ALL keys were in collision - %s\n",collcount,
+        result ? "passed" : "failed" );
+  } else {
+    printf("actual %8.0f - Excessive keys in collision - %s\n",collcount,
+        result ? "passed" : "failed");
   }
   okf(result,"Collision Rate for %s",name);
   //----------
