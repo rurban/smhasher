@@ -61,7 +61,6 @@ bool VerificationTest ( hashfunc<hashtype> hash, uint32_t expected, int verbose,
   bool result = true;
 
   //----------
-  hash.dump_state();
 #define _NAMEFMT "# %-20s"
   if(expected != verification)
   {
