@@ -952,7 +952,7 @@ The old score was
 
 <img src="https://github.com/demerphq/smhasher/blob/master/doc/old_score.png?raw=true" />
 
-which in psuedo-code is
+which in pseudo-code is
 
     sum_sq += v * v
         for v in buckets_array
