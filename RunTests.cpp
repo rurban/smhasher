@@ -16,6 +16,7 @@ extern bool g_testReallyAll;
 extern bool g_testSanity;
 extern bool g_testSpeed;
 extern bool g_testBulkSpeed;
+extern bool g_testCrcCollision;
 extern bool g_testKeySpeed;
 extern bool g_testDiff;
 extern bool g_testDiffDist;   /* only ReallyAll */
@@ -321,6 +322,13 @@ bool testHashWithSeed ( HashInfo * info, int self_test, double confidence )
     pass &= ok(result, "Keyset 'Sparse'", info->name);
   }
 
+  if(g_testCrcCollision || g_testAll)
+  {
+    Rand r(1810489);
+
+    pass &= CrcCollisionKeyTest<hashtype>(hash, r);
+
+  }
   //-----------------------------------------------------------------------------
   // Keyset 'Permutation' - all possible combinations of a set of blocks
 

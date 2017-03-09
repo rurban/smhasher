@@ -44,6 +44,7 @@ bool g_testText        = false;
 bool g_testZeroes      = false;
 bool g_testEffs        = false;
 bool g_testSeed        = false;
+bool g_testCrcCollision= false;
 
 bool g_runCtrStream    = false; /* this is special */
 uint64_t g_rngSeed = 1234567809;
@@ -73,7 +74,8 @@ TestOpts g_testopts[] =
   { g_testText,		"Text" },
   { g_testZeroes,	"Zeroes" },
   { g_testEffs,	        "Effs" },
-  { g_testSeed,		"Seed" }
+  { g_testSeed,		"Seed" },
+  { g_testCrcCollision, "CRC" },
 };
 
 //-----------------------------------------------------------------------------

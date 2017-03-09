@@ -363,6 +363,80 @@ bool SparseKeyTest ( hashfunc<hashtype> hash, const int setbits, bool inclusive,
   return result;
 }
 
+//----------
+// The purpose of this test is break hash functions which use the
+// intel crc sse4 intrinsic _mm_crc32_u64() by generating an arbitrary
+// set of keys composed of blocks which have the same CRC value. Any
+// decent hash function should have no problem here, but one that tries
+// to "optimize" by using crc will hit a wall. The blocks were found by
+// brute forcing a set of colliding blocks, and just to make life interesting
+// I used 4 different blocks, but two would do just as well. (You can brute
+// force a collision after inspecting about 200k randomly selected blocks.)
+// We then compose an arbitrary set of unique keys by permuting a set of the
+// colliding blocks. The resulting keys have the same length, and will be
+// unique, but when fed to a naive CRC based hash function will all produce
+// the same hash value.
+template < typename hashtype >
+bool CrcCollisionKeyTest ( hashfunc<hashtype> hash, Rand &r )
+{
+  const int seeds= 10;
+  const int num_key_blocks= 16;
+  int count = 100 * 1000;
+  int key_bytes= num_key_blocks * sizeof(uint64_t);
+  uint64_t key[num_key_blocks];
+  char name[1024];
+  snprintf(name,1024,"Keyset 'CRC-MultiCollision' - %d x %d block keys - %d-bytes long",
+      count, num_key_blocks, key_bytes);
+  printf("# %s - %d seeds\n", name, seeds);
+  int name_len= strlen(name);
+
+  std::vector<hashtype> hashes;
+  // The following blocks all have a crc of 57c58437
+  const int num_src_blocks= 4;
+  const int shift_bits= 2;
+  const int mask= num_src_blocks - 1;
+  const uint64_t blocks[num_src_blocks]= {
+    0x4bb53c935d7bc565UL,
+    0x53fa1f51857fa7f4UL,
+    0x6caeaca38c4a8764UL,
+    0xf9e0603f18749bf3UL,
+  };
+  // Alternatively we could use:
+  // 5a476a7f 020d080728338f41 9a36026fdc10f1e0 c5e5a331ecf163dc c9f6d7755f81beca
+
+  hashes.resize(count);
+
+  bool result= true;
+
+  uint32_t block_template = 1;
+
+  for (int i= 0; i < seeds; i++) {
+    hash.seed_state_rand(r);
+    for(int j=0; j < count; j++) {
+      uint64_t *cursor= &key[0];
+      uint32_t template_bits = block_template;
+      for (int c = 0; c < (sizeof(uint32_t)*8)/shift_bits; c++) {
+        *cursor = blocks[template_bits & mask];
+        //printf("%016lx\n",*cursor);
+        cursor++;
+        template_bits >>= shift_bits;
+      }
+      // marsaglia 32-bit permutation - we could use simple increment
+      // also, but this makes the keys look "random" at a block level.
+      block_template ^= block_template << 13;
+      block_template ^= block_template >> 3;
+      block_template ^= block_template << 17;
+
+      // and then hash the result
+      hash(&key[0],key_bytes,&hashes[j]);
+      //printf("hash=%016lx",*((uint64_t*)&hashes[j]));
+    }
+    snprintf(name,1024,"Keyset 'CRC-MultiCollision' - seed %d # %s", i+1,hash.name());
+    result &= TestHashList<hashtype>(hashes,true,false,false,name);
+  }
+  return result;
+}
+
 //-----------------------------------------------------------------------------
 // Keyset 'Windows' - for all possible N-bit windows of a K-bit key, generate
 // all possible keys with bits set in that window
