@@ -37,8 +37,8 @@ extern uint64_t g_rngSeed;
 extern uint64_t g_streamKeyLen;
 
 //----------------------------------------------------------------------------
-template < typename hashtype, typename seedtype >
-bool testHashWithSeed ( HashInfo * info, int self_test, double confidence )
+template < typename hashtype >
+bool testHash ( HashInfo * info, int self_test, double confidence )
 {
   const int hashbits = sizeof(hashtype) * 8;
   bool pass= true;
@@ -523,13 +523,13 @@ bool testHashWithSeed ( HashInfo * info, int self_test, double confidence )
     // these tests suck. the avalanche tests probably do a better job
     // we should test way more keys than this.
 
-    result &= SeedTest<seedtype,hashtype>( hash, 2000000, confidence, drawDiagram,
+    result &= SeedTest<hashtype>( hash, 2000000, confidence, drawDiagram,
         seed_r, "The quick brown fox jumps over the lazy dog");
-    result &= SeedTest<seedtype,hashtype>( hash, 2000000, confidence, drawDiagram,
+    result &= SeedTest<hashtype>( hash, 2000000, confidence, drawDiagram,
         seed_r, "");
-    result &= SeedTest<seedtype,hashtype>( hash, 2000000, confidence, drawDiagram,
+    result &= SeedTest<hashtype>( hash, 2000000, confidence, drawDiagram,
         seed_r, "00101100110101101");
-    result &= SeedTest<seedtype,hashtype>( hash, 2000000, confidence, drawDiagram,
+    result &= SeedTest<hashtype>( hash, 2000000, confidence, drawDiagram,
         seed_r, "abcbcddbdebdcaaabaaababaaabacbeedbabseeeeeeeesssssseeeewwwww");
 
     pass &= ok(result, "Keyset 'Seed'", info->name);
@@ -553,35 +553,6 @@ bool testHashWithSeed ( HashInfo * info, int self_test, double confidence )
   }
 
   return pass;
-}
-
-template < typename hashtype >
-bool testHash ( HashInfo * info, int self_test, double confidence )
-{
-  if (info->seedbits == 32) {
-    return testHashWithSeed< hashtype, Blob<32> >(info, self_test, confidence);
-  } else if (info->seedbits == 64) {
-    return testHashWithSeed< hashtype, Blob<64> >(info, self_test, confidence);
-  } else if (info->seedbits == 95) {
-    return testHashWithSeed< hashtype, Blob<95> >(info, self_test, confidence);
-  } else if (info->seedbits == 96) {
-    return testHashWithSeed< hashtype, Blob<96> >(info, self_test, confidence);
-  } else if (info->seedbits == 112) {
-    return testHashWithSeed< hashtype, Blob<112> >(info, self_test, confidence);
-  } else if (info->seedbits == 127) {
-    return testHashWithSeed< hashtype, Blob<127> >(info, self_test, confidence);
-  } else if (info->seedbits == 128) {
-    return testHashWithSeed< hashtype, Blob<128> >(info, self_test, confidence);
-  } else if (info->seedbits == 191) {
-    return testHashWithSeed< hashtype, Blob<191> >(info, self_test, confidence);
-  } else if (info->seedbits == 256) {
-    return testHashWithSeed< hashtype, Blob<256> >(info, self_test, confidence);
-  } else {
-    printf("Invalid seed width %d for hash '%s'",
-      info->seedbits, info->name);
-    exit(1);
-  }
-  return false;
 }
 
 //-----------------------------------------------------------------------------

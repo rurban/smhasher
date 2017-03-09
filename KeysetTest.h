@@ -660,23 +660,24 @@ bool RepeatedCharKeyTest ( hashfunc<hashtype> hash, const char *name, unsigned c
 }
 
 /* so we can sort an array of indexes into another array */
-template <typename T>
 struct IndirectComparator
 {
-  const std::vector<T> & value_vector;
+  const std::vector<uint8_t> & value_vector;
+  int seedbytes;
 
-  IndirectComparator(const std::vector<T> & val_vec): value_vector(val_vec) {}
+  IndirectComparator(const std::vector<uint8_t> & val_vec, int sb):
+    seedbytes(sb), value_vector(val_vec) {}
 
   bool operator()(int a, int b)
   {
-    return value_vector[a] <  value_vector[b] ? true :
-           value_vector[a] == value_vector[b] ? a < b : false;
+    int c = memcmp(&value_vector[a * seedbytes],&value_vector[b * seedbytes], seedbytes);
+    return c < 0 ? true : c == 0 ? a < b : false;
   }
 };
 //-----------------------------------------------------------------------------
 // Keyset 'Seed' - hash "the quick brown fox..." using different seeds
 
-template < typename seedtype, typename hashtype >
+template < typename hashtype >
 bool SeedTest ( hashfunc<hashtype> hash, int count, double confidence, bool drawDiagram,
     Rand &seed_r, const char * text )
 {
@@ -700,30 +701,32 @@ bool SeedTest ( hashfunc<hashtype> hash, int count, double confidence, bool draw
 
   std::vector<hashtype> hashes;
   std::vector<hashtype> sorted_hashes;
-  std::vector<seedtype> seeds;
+  std::vector<uint8_t>  seeds;
   std::vector<int>      indexes;
 
+  seeds.resize( count * hash.seedbytes() );
   sorted_hashes.resize(count);
   hashes.resize(count);
-  seeds.resize(count);
   indexes.resize(count);
+  int seedbytes = hash.seedbytes();
 
   for(int i = 0; i < count; i++)
   {
-    seed_r.rand_p(&seeds[i],sizeof(seedtype));
-    hash(text, len, &seeds[i], &hashes[i]);
+    seed_r.rand_p(&seeds[ i * seedbytes ], seedbytes);
+    hash(text, len, &seeds[i * seedbytes ], &hashes[i]);
     indexes[i]= i;
   }
 
   // sort the indexes by their seed
-  std::sort(indexes.begin(),indexes.end(),IndirectComparator<seedtype>(seeds));
+  std::sort(indexes.begin(),indexes.end(),IndirectComparator(seeds,seedbytes));
 
   // now loop through
   int dupes = 0;
   int unique = 0;
   sorted_hashes[unique++] = hashes[indexes[0]];
   for(size_t i = 1; i < indexes.size(); i++) {
-    if(seeds[indexes[i]] == seeds[indexes[i-1]]) {
+    int c = memcmp(&seeds[indexes[i] * seedbytes],&seeds[indexes[i-1] * seedbytes],seedbytes);
+    if ( c == 0 ) {
       dupes++;
     } else {
       sorted_hashes[unique++]= hashes[indexes[i]];
@@ -733,7 +736,7 @@ bool SeedTest ( hashfunc<hashtype> hash, int count, double confidence, bool draw
 
   bool result = true;
 
-  result &= TestHashList(sorted_hashes,true,confidence,drawDiagram,name);
+  result &= TestHashList<hashtype>(sorted_hashes,true,confidence,drawDiagram,name);
 
   return result;
 }
