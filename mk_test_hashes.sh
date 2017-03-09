@@ -1,8 +1,8 @@
 #!/bin/bash
 echo "make"
 echo "rm -f doc/*.tmp"
-echo "export BITS=32"
-./SMHasher --list | sort -k 5n -k 3n -k 4n -k 1 |
+echo "export BITS="
+./SMHasher --list | sort -R |
     perl -ne'@F=split/[\s|]+/,$_; /[A-Z]/ and $F[2]=~/\d/ and print qq(
 #$_
 if [ "x\$BITS" == "x" -o "x\$BITS" == "x$F[2]" ]; then

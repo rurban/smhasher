@@ -104,6 +104,7 @@ while (<>) {
         (?<cycles_per_hash>\S+)\s+c/h(?:\s+(?<cycles_per_byte>\S+)\s+c/b\s+(?<bytes_per_cycle>\S+)\s+b/c)?!x) {
         my $info= { %+ };
         my $name= $info->{name};
+        next if $info->{key_bytes} > 128; # skip the long stuff for now
         if (!$hash{$name}{key_bytes}{ $info->{key_bytes} }) {
             push @{$hash{$name}{ array }}, $info;
             $hash{$name}{key_bytes}{ $info->{key_bytes} }= $info;
