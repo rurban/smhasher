@@ -178,6 +178,7 @@ add_library(
   zaphod32_hash.c
   zaphod64_hash.c
   sbox_hash.c
+  marsaglia64_hash.c
   Marvin32.c
   ${64ONLY_SRC}
   ${METROCRC64_SRC}

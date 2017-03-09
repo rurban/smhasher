@@ -72,8 +72,8 @@ bool VerificationTest ( hashfunc<hashtype> hash, uint32_t expected, int verbose,
     else if(verbose) {
       printf(_NAMEFMT " - Verification value 0x%08X : Failed! (Expected 0x%08X)\n",
         name, verification, expected);
+      result = false;
     }
-    result = false;
   }
   else
   {
