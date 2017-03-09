@@ -12,7 +12,6 @@
 #include "zaphod32_hash.h"
 #include "zaphod64_hash.h"
 #include "sbox_hash.h"
-#include "Marvin32.h"
 #include "md5.h"
 #include "siphash.h"
 #include <stdio.h>
@@ -259,9 +258,6 @@ HashInfo g_hashes[] =
   { "Lua53", "Hash function from Lua53, (skip forward)",
     32, 32, 32, 0xCDA7039F,
     NULL, lua_v53_string_hash },
-  { "Marvin32", "Marvin32 from MicroSoft",
-    64, 64, 32, 0x27BA096C,
-    NULL, marvin_32_smhasher_test },
 
 #ifdef __SSE2__
   { "hasshe2", "SSE2 hasshe2, 256-bit",
