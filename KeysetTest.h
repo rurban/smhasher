@@ -37,7 +37,7 @@ bool VerificationTest ( hashfunc<hashtype> hash, uint32_t expected, int verbose,
   memset(final,0,hashbytes);
 
   // Hash keys of the form {0}, {0,1}, {0,1,2}... up to N=255,
-  // using the RNG for seeding. The exact seeds used
+  // using the RNG for seeding.
 
   for(int i = 0; i < 256; i++)
   {
