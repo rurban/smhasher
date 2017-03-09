@@ -98,7 +98,7 @@ public:
   {
     r.rand_p(&m_seed[0], m_seed.size());
     _seed_state(m_seedbits,&m_seed[0],&m_state[0]);
-    dump_state();
+    //dump_state();
   }
 
   bool can_seed_state ()
