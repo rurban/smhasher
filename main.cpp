@@ -528,7 +528,6 @@ int main ( int argc, char ** argv )
   const char * hashToTest = defaulthash;
   bool opt_validate = false;
 
-  printf("sizeof uint64_t: %d\n", (int)sizeof(uint64_t));
   g_verbose = 0;
   g_confidence = sigmasToProb(5.0);
 

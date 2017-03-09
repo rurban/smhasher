@@ -54,11 +54,11 @@ void done_testing() {
     int exitcode;
     if (failed_count) {
         printf("# Tests failed. %s failed %d of %d tests.\n",
-            g_hashUnderTest->name, failed_count, test_count);
+            g_hashUnderTest ? g_hashUnderTest->name : "Self-Test", failed_count, test_count);
         exitcode= 1;
     } else {
         printf("# All tests passed. %s passed %d tests.\n",
-            g_hashUnderTest->name, test_count);
+            g_hashUnderTest ? g_hashUnderTest->name : "Self-Test", test_count);
         exitcode= 0;
     }
     printf( "# Testing took %f seconds\n", double(timeEnd - timeBegin) / double(CLOCKS_PER_SEC) );

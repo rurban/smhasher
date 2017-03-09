@@ -589,30 +589,33 @@ bool testHash ( HashInfo * info, int self_test, double confidence )
 bool testHashByInfo ( HashInfo * pInfo, int self_test, double confidence )
 {
   const char * name = pInfo->name;
+  HashInfo *oldval = g_hashUnderTest;
 
   g_hashUnderTest = pInfo;
+  bool result= false;
   if(pInfo->hashbits == 32)
   {
-    return testHash<uint32_t>( pInfo, self_test, confidence );
+    result= testHash<uint32_t>( pInfo, self_test, confidence );
   }
   else if(pInfo->hashbits == 64)
   {
-    return testHash<uint64_t>( pInfo, self_test, confidence );
+    result= testHash<uint64_t>( pInfo, self_test, confidence );
   }
   else if(pInfo->hashbits == 128)
   {
-    return testHash<uint128_t>( pInfo, self_test, confidence );
+    result= testHash<uint128_t>( pInfo, self_test, confidence );
   }
   else if(pInfo->hashbits == 256)
   {
-    return testHash<uint256_t>( pInfo, self_test, confidence );
+    result= testHash<uint256_t>( pInfo, self_test, confidence );
   }
   else
   {
     printf("Invalid hash bit width %d for hash '%s'",pInfo->hashbits,pInfo->name);
     exit(1);
   }
-  return false;
+  g_hashUnderTest = oldval;
+  return result;
 }
 
 /* vim: set sts=2 sw=2 et: */
