@@ -202,9 +202,6 @@ HashInfo g_hashes[] =
     NULL, PMurHash32_with_state_test },
 
   // BeagleHash_32_xx
-  { "BeagleHash_32_32", "Yves Orton's hash for 64-bit in 32-bit mode (32-bit seed).",
-    32, 128, 32, 0xCE2B0329,
-    beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher },
   { "BeagleHash_32_64", "Yves Orton's hash for 64-bit in 32-bit mode (64-bit seed).",
     64, 128, 32, 0xF47C019F,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher },
@@ -219,9 +216,6 @@ HashInfo g_hashes[] =
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher },
 
   // BeagleHash_64_xx
-  { "BeagleHash_64_32", "Yves Orton's hash for 64-bit. (32 bit seed)",
-    32, 128, 64, 0x61CA1652,
-    beagle_seed_state_128_a_smhasher, beagle_hash_with_state_64_128_a_smhasher },
   { "BeagleHash_64_64", "Yves Orton's hash for 64-bit. (64 bit seed)",
     64, 128, 64, 0xFDBD2E90,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_64_128_a_smhasher },
