@@ -6,5 +6,6 @@ bool ok( bool result );
 bool ok();
 bool failed();
 void done_testing();
+bool all_tests_ok();
 
 

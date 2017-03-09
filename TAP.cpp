@@ -65,4 +65,5 @@ void done_testing() {
     exit(exitcode);
 }
 
+bool all_tests_ok() { return failed_count == 0; }
 
