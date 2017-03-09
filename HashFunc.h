@@ -102,6 +102,16 @@ public:
     return m_seedbits;
   }
 
+  int seedbytes ()
+  {
+    return (m_seedbits+7)/8;
+  }
+
+  int statebytes ()
+  {
+    return (m_statebits+7)/8;
+  }
+
   int statebits ()
   {
     return m_statebits;
