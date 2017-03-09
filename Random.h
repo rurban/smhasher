@@ -19,27 +19,13 @@ struct Rand
   Rand()
   {
     state32= (uint32_t *)state;
-    reseed(uint64_t(0));
+    reseed(0);
   }
 
-  Rand( uint32_t seed32 )
+  Rand( uint64_t seed )
   {
     state32= (uint32_t *)state;
-    reseed(seed32);
-  }
-
-  void reseed ( uint32_t seed )
-  {
-    int i= 0;
-    state32[i++] = seed;
-    if (!seed) state32[i++] = seed = 0x92d68ca2UL;
-    do {
-      seed ^= seed << 13;
-      seed ^= seed >> 17;
-      seed ^= seed << 5;
-      state32[i++] = seed;
-    } while ( i < (RANDSTATES * 2) );
-    _reseed();
+    reseed(seed);
   }
 
   void reseed ( uint64_t seed )

@@ -61,6 +61,7 @@ bool VerificationTest ( hashfunc<hashtype> hash, uint32_t expected, int verbose,
   bool result = true;
 
   //----------
+  hash.dump_state();
 #define _NAMEFMT "# %-20s"
   if(expected != verification)
   {
@@ -72,7 +73,6 @@ bool VerificationTest ( hashfunc<hashtype> hash, uint32_t expected, int verbose,
     else if(verbose) {
       printf(_NAMEFMT " - Verification value 0x%08X : Failed! (Expected 0x%08X)\n",
         name, verification, expected);
-      hash.dump_state();
       result = false;
     }
   }
