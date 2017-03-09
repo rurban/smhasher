@@ -2,57 +2,17 @@ make
 rm -f doc/*.tmp
 export BITS=
 
-#BeagleHash_32_112 | 112|  32|Yves Orton's hash for 64-bit in 32-bit mode (112-bit seed).
+#BadHash           |  32|   32|  32|very simple XOR shift
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
-    touch doc/BeagleHash_32_112.32.out &&
-    ./SMHasher BeagleHash_32_112 2>&1 | tee doc/BeagleHash_32_112.32.tmp &&
-    mv doc/BeagleHash_32_112.32.out doc/BeagleHash_32_112.32.bak &&
-    mv doc/BeagleHash_32_112.32.tmp doc/BeagleHash_32_112.32.out
+    touch doc/BadHash.32.out &&
+    ./SMHasher BadHash 2>&1 | tee doc/BadHash.32.tmp &&
+    mv doc/BadHash.32.out doc/BadHash.32.bak &&
+    mv doc/BadHash.32.tmp doc/BadHash.32.out
 fi
 
 
-#BeagleHash_32_127 | 127|  32|Yves Orton's hash for 64-bit in 32-bit mode (127-bit seed).
-
-if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
-    touch doc/BeagleHash_32_127.32.out &&
-    ./SMHasher BeagleHash_32_127 2>&1 | tee doc/BeagleHash_32_127.32.tmp &&
-    mv doc/BeagleHash_32_127.32.out doc/BeagleHash_32_127.32.bak &&
-    mv doc/BeagleHash_32_127.32.tmp doc/BeagleHash_32_127.32.out
-fi
-
-
-#BeagleHash_32_32  |  32|  32|Yves Orton's hash for 64-bit in 32-bit mode (32-bit seed).
-
-if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
-    touch doc/BeagleHash_32_32.32.out &&
-    ./SMHasher BeagleHash_32_32 2>&1 | tee doc/BeagleHash_32_32.32.tmp &&
-    mv doc/BeagleHash_32_32.32.out doc/BeagleHash_32_32.32.bak &&
-    mv doc/BeagleHash_32_32.32.tmp doc/BeagleHash_32_32.32.out
-fi
-
-
-#BeagleHash_32_64  |  64|  32|Yves Orton's hash for 64-bit in 32-bit mode (64-bit seed).
-
-if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
-    touch doc/BeagleHash_32_64.32.out &&
-    ./SMHasher BeagleHash_32_64 2>&1 | tee doc/BeagleHash_32_64.32.tmp &&
-    mv doc/BeagleHash_32_64.32.out doc/BeagleHash_32_64.32.bak &&
-    mv doc/BeagleHash_32_64.32.tmp doc/BeagleHash_32_64.32.out
-fi
-
-
-#BeagleHash_32_96  |  96|  32|Yves Orton's hash for 64-bit in 32-bit mode (96-bit seed).
-
-if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
-    touch doc/BeagleHash_32_96.32.out &&
-    ./SMHasher BeagleHash_32_96 2>&1 | tee doc/BeagleHash_32_96.32.tmp &&
-    mv doc/BeagleHash_32_96.32.out doc/BeagleHash_32_96.32.bak &&
-    mv doc/BeagleHash_32_96.32.tmp doc/BeagleHash_32_96.32.out
-fi
-
-
-#bernstein         |  32|  32|Bernstein, 32-bit
+#bernstein         |  32|   32|  32|Bernstein, 32-bit
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
     touch doc/bernstein.32.out &&
@@ -62,7 +22,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
 fi
 
 
-#City32            |  32|  32|Google CityHash32WithSeed (old)
+#City32            |  32|   32|  32|Google CityHash32WithSeed (old)
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
     touch doc/City32.32.out &&
@@ -72,7 +32,57 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
 fi
 
 
-#FNV1a             |  32|  32|Fowler-Noll-Vo hash, 32-bit
+#Crap8             |  32|   32|  32|Crap8
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
+    touch doc/Crap8.32.out &&
+    ./SMHasher Crap8 2>&1 | tee doc/Crap8.32.tmp &&
+    mv doc/Crap8.32.out doc/Crap8.32.bak &&
+    mv doc/Crap8.32.tmp doc/Crap8.32.out
+fi
+
+
+#crc32             |  32|   32|  32|CRC-32
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
+    touch doc/crc32.32.out &&
+    ./SMHasher crc32 2>&1 | tee doc/crc32.32.tmp &&
+    mv doc/crc32.32.out doc/crc32.32.bak &&
+    mv doc/crc32.32.tmp doc/crc32.32.out
+fi
+
+
+#crc32_hw1         |  32|   32|  32|Faster Adler SSE4.2 crc32 in HW
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
+    touch doc/crc32_hw1.32.out &&
+    ./SMHasher crc32_hw1 2>&1 | tee doc/crc32_hw1.32.tmp &&
+    mv doc/crc32_hw1.32.out doc/crc32_hw1.32.bak &&
+    mv doc/crc32_hw1.32.tmp doc/crc32_hw1.32.out
+fi
+
+
+#crc32_hw          |  32|   32|  32|SSE4.2 crc32 in HW
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
+    touch doc/crc32_hw.32.out &&
+    ./SMHasher crc32_hw 2>&1 | tee doc/crc32_hw.32.tmp &&
+    mv doc/crc32_hw.32.out doc/crc32_hw.32.bak &&
+    mv doc/crc32_hw.32.tmp doc/crc32_hw.32.out
+fi
+
+
+#donothing32       |  32|   32|  32|Do-Nothing function (only valid for measuring call overhead)
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
+    touch doc/donothing32.32.out &&
+    ./SMHasher donothing32 2>&1 | tee doc/donothing32.32.tmp &&
+    mv doc/donothing32.32.out doc/donothing32.32.bak &&
+    mv doc/donothing32.32.tmp doc/donothing32.32.out
+fi
+
+
+#FNV1a             |  32|   32|  32|Fowler-Noll-Vo hash, 32-bit
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
     touch doc/FNV1a.32.out &&
@@ -82,7 +92,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
 fi
 
 
-#FNV1a_YT          |  32|  32|FNV1a-YoshimitsuTRIAD 32-bit sanmayce
+#FNV1a_YT          |  32|   32|  32|FNV1a-YoshimitsuTRIAD 32-bit sanmayce
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
     touch doc/FNV1a_YT.32.out &&
@@ -92,7 +102,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
 fi
 
 
-#GoodOAAT          |  32|  32|Small non-multiplicative OAAT
+#GoodOAAT          |  32|   32|  32|Small non-multiplicative OAAT
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
     touch doc/GoodOAAT.32.out &&
@@ -102,37 +112,17 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
 fi
 
 
-#HalfSipHash       |  32|  32|HalfSipHash 2-4, 32bit
+#JenkinsOAAT       |  32|   32|  32|Bob Jenkins' one-at-a-time as in old perl5
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
-    touch doc/HalfSipHash.32.out &&
-    ./SMHasher HalfSipHash 2>&1 | tee doc/HalfSipHash.32.tmp &&
-    mv doc/HalfSipHash.32.out doc/HalfSipHash.32.bak &&
-    mv doc/HalfSipHash.32.tmp doc/HalfSipHash.32.out
+    touch doc/JenkinsOAAT.32.out &&
+    ./SMHasher JenkinsOAAT 2>&1 | tee doc/JenkinsOAAT.32.tmp &&
+    mv doc/JenkinsOAAT.32.out doc/JenkinsOAAT.32.bak &&
+    mv doc/JenkinsOAAT.32.tmp doc/JenkinsOAAT.32.out
 fi
 
 
-#JenkinsOOAT       |  32|  32|Bob Jenkins' OOAT as in perl 5.18
-
-if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
-    touch doc/JenkinsOOAT.32.out &&
-    ./SMHasher JenkinsOOAT 2>&1 | tee doc/JenkinsOOAT.32.tmp &&
-    mv doc/JenkinsOOAT.32.out doc/JenkinsOOAT.32.bak &&
-    mv doc/JenkinsOOAT.32.tmp doc/JenkinsOOAT.32.out
-fi
-
-
-#JenkinsOOAT_perl  |  32|  32|Bob Jenkins' OOAT as in old perl5
-
-if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
-    touch doc/JenkinsOOAT_perl.32.out &&
-    ./SMHasher JenkinsOOAT_perl 2>&1 | tee doc/JenkinsOOAT_perl.32.tmp &&
-    mv doc/JenkinsOOAT_perl.32.out doc/JenkinsOOAT_perl.32.bak &&
-    mv doc/JenkinsOOAT_perl.32.tmp doc/JenkinsOOAT_perl.32.out
-fi
-
-
-#lookup3           |  32|  32|Bob Jenkins' lookup3
+#lookup3           |  32|   32|  32|Bob Jenkins' lookup3
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
     touch doc/lookup3.32.out &&
@@ -142,17 +132,27 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
 fi
 
 
-#Marvin32          |  32|  32|Marvin32 from MicroSoft
+#Lua53             |  32|   32|  32|Hash function from Lua53, (skip forward)
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
-    touch doc/Marvin32.32.out &&
-    ./SMHasher Marvin32 2>&1 | tee doc/Marvin32.32.tmp &&
-    mv doc/Marvin32.32.out doc/Marvin32.32.bak &&
-    mv doc/Marvin32.32.tmp doc/Marvin32.32.out
+    touch doc/Lua53.32.out &&
+    ./SMHasher Lua53 2>&1 | tee doc/Lua53.32.tmp &&
+    mv doc/Lua53.32.out doc/Lua53.32.bak &&
+    mv doc/Lua53.32.tmp doc/Lua53.32.out
 fi
 
 
-#MicroOAAT         |  32|  32|Small non-mul OAAT that passes collision checks (by funny-falcon)
+#Lua53oaat         |  32|   32|  32|Hash function from Lua53, pure one-at-a-time
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
+    touch doc/Lua53oaat.32.out &&
+    ./SMHasher Lua53oaat 2>&1 | tee doc/Lua53oaat.32.tmp &&
+    mv doc/Lua53oaat.32.out doc/Lua53oaat.32.bak &&
+    mv doc/Lua53oaat.32.tmp doc/Lua53oaat.32.out
+fi
+
+
+#MicroOAAT         |  32|   32|  32|Small non-mul OAAT that passes collision checks (by funny-falcon)
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
     touch doc/MicroOAAT.32.out &&
@@ -162,7 +162,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
 fi
 
 
-#Murmur2           |  32|  32|MurmurHash2 for x86, 32-bit
+#Murmur2           |  32|   32|  32|MurmurHash2 for x86, 32-bit
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
     touch doc/Murmur2.32.out &&
@@ -172,7 +172,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
 fi
 
 
-#Murmur2A          |  32|  32|MurmurHash2A for x86, 32-bit
+#Murmur2A          |  32|   32|  32|MurmurHash2A for x86, 32-bit
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
     touch doc/Murmur2A.32.out &&
@@ -182,7 +182,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
 fi
 
 
-#Murmur3A          |  32|  32|MurmurHash3 for x86, 32-bit
+#Murmur3A          |  32|   32|  32|MurmurHash3 for x86, 32-bit
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
     touch doc/Murmur3A.32.out &&
@@ -192,7 +192,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
 fi
 
 
-#MurmurOAAT        |  32|  32|Murmur one-at-a-time
+#MurmurOAAT        |  32|   32|  32|Murmur one-at-a-time
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
     touch doc/MurmurOAAT.32.out &&
@@ -202,17 +202,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
 fi
 
 
-#Phat4             |  96|  32|Yves Orton's 32 bit hash with 96 bit seed
-
-if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
-    touch doc/Phat4.32.out &&
-    ./SMHasher Phat4 2>&1 | tee doc/Phat4.32.tmp &&
-    mv doc/Phat4.32.out doc/Phat4.32.bak &&
-    mv doc/Phat4.32.tmp doc/Phat4.32.out
-fi
-
-
-#PMurHash32        |  32|  32|Shane Day's portable-ized MurmurHash3 for x86, 32-bit.
+#PMurHash32        |  32|   32|  32|Shane Day's portable-ized MurmurHash3 for x86, 32-bit.
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
     touch doc/PMurHash32.32.out &&
@@ -222,17 +212,27 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
 fi
 
 
-#Spooky32          |  32|  32|Bob Jenkins' SpookyHash, 32-bit result
+#sha1_32a          |  32|   32|  32|SHA1, 32 bit seed, returning first 32 bits
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
-    touch doc/Spooky32.32.out &&
-    ./SMHasher Spooky32 2>&1 | tee doc/Spooky32.32.tmp &&
-    mv doc/Spooky32.32.out doc/Spooky32.32.bak &&
-    mv doc/Spooky32.32.tmp doc/Spooky32.32.out
+    touch doc/sha1_32a.32.out &&
+    ./SMHasher sha1_32a 2>&1 | tee doc/sha1_32a.32.tmp &&
+    mv doc/sha1_32a.32.out doc/sha1_32a.32.bak &&
+    mv doc/sha1_32a.32.tmp doc/sha1_32a.32.out
 fi
 
 
-#superfast         |  32|  32|Paul Hsieh's SuperFastHash
+#sha1_32b          |  32|   32|  32|SHA1, 32 bit seed, first 32 bits xored with last 32 bits
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
+    touch doc/sha1_32b.32.out &&
+    ./SMHasher sha1_32b 2>&1 | tee doc/sha1_32b.32.tmp &&
+    mv doc/sha1_32b.32.out doc/sha1_32b.32.bak &&
+    mv doc/sha1_32b.32.tmp doc/sha1_32b.32.out
+fi
+
+
+#superfast         |  32|   32|  32|Paul Hsieh's SuperFastHash
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
     touch doc/superfast.32.out &&
@@ -242,7 +242,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
 fi
 
 
-#xxHash32          |  32|  32|xxHash, 32-bit for x64
+#xxHash32          |  32|   32|  32|xxHash, 32-bit for x64
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
     touch doc/xxHash32.32.out &&
@@ -252,67 +252,157 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
 fi
 
 
-#Zaphod32          |  95|  32|Yves Orton's 32 bit hash with 95 bit seed
+#BeagleHash_32_32  |  32|  128|  32|Yves Orton's hash for 64-bit in 32-bit mode (32-bit seed).
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
+    touch doc/BeagleHash_32_32.128.out &&
+    ./SMHasher BeagleHash_32_32 2>&1 | tee doc/BeagleHash_32_32.128.tmp &&
+    mv doc/BeagleHash_32_32.128.out doc/BeagleHash_32_32.128.bak &&
+    mv doc/BeagleHash_32_32.128.tmp doc/BeagleHash_32_32.128.out
+fi
+
+
+#Spooky32          |  32|  128|  32|Bob Jenkins' SpookyHash, 32-bit seed, 32-bit result
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
+    touch doc/Spooky32.128.out &&
+    ./SMHasher Spooky32 2>&1 | tee doc/Spooky32.128.tmp &&
+    mv doc/Spooky32.128.out doc/Spooky32.128.bak &&
+    mv doc/Spooky32.128.tmp doc/Spooky32.128.out
+fi
+
+
+#JenkinsOAATH      |  64|   64|  32|Bob Jenkins' one-at-a-time with hardening (as in perl 5.18)
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
+    touch doc/JenkinsOAATH.64.out &&
+    ./SMHasher JenkinsOAATH 2>&1 | tee doc/JenkinsOAATH.64.tmp &&
+    mv doc/JenkinsOAATH.64.out doc/JenkinsOAATH.64.bak &&
+    mv doc/JenkinsOAATH.64.tmp doc/JenkinsOAATH.64.out
+fi
+
+
+#Marvin32          |  64|   64|  32|Marvin32 from MicroSoft
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
+    touch doc/Marvin32.64.out &&
+    ./SMHasher Marvin32 2>&1 | tee doc/Marvin32.64.tmp &&
+    mv doc/Marvin32.64.out doc/Marvin32.64.bak &&
+    mv doc/Marvin32.64.tmp doc/Marvin32.64.out
+fi
+
+
+#BeagleHash_32_64  |  64|  128|  32|Yves Orton's hash for 64-bit in 32-bit mode (64-bit seed).
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
+    touch doc/BeagleHash_32_64.128.out &&
+    ./SMHasher BeagleHash_32_64 2>&1 | tee doc/BeagleHash_32_64.128.tmp &&
+    mv doc/BeagleHash_32_64.128.out doc/BeagleHash_32_64.128.bak &&
+    mv doc/BeagleHash_32_64.128.tmp doc/BeagleHash_32_64.128.out
+fi
+
+
+#HalfSipHash       |  64|  128|  32|HalfSipHash 2-4, 32bit
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
+    touch doc/HalfSipHash.128.out &&
+    ./SMHasher HalfSipHash 2>&1 | tee doc/HalfSipHash.128.tmp &&
+    mv doc/HalfSipHash.128.out doc/HalfSipHash.128.bak &&
+    mv doc/HalfSipHash.128.tmp doc/HalfSipHash.128.out
+fi
+
+
+#md5_32a           |  64| 1920|  32|MD5, first 32 bits, with a 64 bit seed of the start start
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x1920" ]; then
+    touch doc/md5_32a.1920.out &&
+    ./SMHasher md5_32a 2>&1 | tee doc/md5_32a.1920.tmp &&
+    mv doc/md5_32a.1920.out doc/md5_32a.1920.bak &&
+    mv doc/md5_32a.1920.tmp doc/md5_32a.1920.out
+fi
+
+
+#Zaphod32          |  95|   96|  32|Yves Orton's 32 bit hash with 95 bit seed
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x96" ]; then
+    touch doc/Zaphod32.96.out &&
+    ./SMHasher Zaphod32 2>&1 | tee doc/Zaphod32.96.tmp &&
+    mv doc/Zaphod32.96.out doc/Zaphod32.96.bak &&
+    mv doc/Zaphod32.96.tmp doc/Zaphod32.96.out
+fi
+
+
+#Phat4             |  96|   96|  32|Yves Orton's 32 bit hash with 96 bit seed
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x96" ]; then
+    touch doc/Phat4.96.out &&
+    ./SMHasher Phat4 2>&1 | tee doc/Phat4.96.tmp &&
+    mv doc/Phat4.96.out doc/Phat4.96.bak &&
+    mv doc/Phat4.96.tmp doc/Phat4.96.out
+fi
+
+
+#BeagleHash_32_96  |  96|  128|  32|Yves Orton's hash for 64-bit in 32-bit mode (96-bit seed).
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
+    touch doc/BeagleHash_32_96.128.out &&
+    ./SMHasher BeagleHash_32_96 2>&1 | tee doc/BeagleHash_32_96.128.tmp &&
+    mv doc/BeagleHash_32_96.128.out doc/BeagleHash_32_96.128.bak &&
+    mv doc/BeagleHash_32_96.128.tmp doc/BeagleHash_32_96.128.out
+fi
+
+
+#BeagleHash_32_112 | 112|  128|  32|Yves Orton's hash for 64-bit in 32-bit mode (112-bit seed).
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
+    touch doc/BeagleHash_32_112.128.out &&
+    ./SMHasher BeagleHash_32_112 2>&1 | tee doc/BeagleHash_32_112.128.tmp &&
+    mv doc/BeagleHash_32_112.128.out doc/BeagleHash_32_112.128.bak &&
+    mv doc/BeagleHash_32_112.128.tmp doc/BeagleHash_32_112.128.out
+fi
+
+
+#BeagleHash_32_127 | 127|  128|  32|Yves Orton's hash for 64-bit in 32-bit mode (127-bit seed).
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
+    touch doc/BeagleHash_32_127.128.out &&
+    ./SMHasher BeagleHash_32_127 2>&1 | tee doc/BeagleHash_32_127.128.tmp &&
+    mv doc/BeagleHash_32_127.128.out doc/BeagleHash_32_127.128.bak &&
+    mv doc/BeagleHash_32_127.128.tmp doc/BeagleHash_32_127.128.out
+fi
+
+
+#NOP_OAAT_read64   |  32|   32|  64|Noop function (only valid for measuring call + OAAT reading overhead)
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
-    touch doc/Zaphod32.32.out &&
-    ./SMHasher Zaphod32 2>&1 | tee doc/Zaphod32.32.tmp &&
-    mv doc/Zaphod32.32.out doc/Zaphod32.32.bak &&
-    mv doc/Zaphod32.32.tmp doc/Zaphod32.32.out
+    touch doc/NOP_OAAT_read64.32.out &&
+    ./SMHasher NOP_OAAT_read64 2>&1 | tee doc/NOP_OAAT_read64.32.tmp &&
+    mv doc/NOP_OAAT_read64.32.out doc/NOP_OAAT_read64.32.bak &&
+    mv doc/NOP_OAAT_read64.32.tmp doc/NOP_OAAT_read64.32.out
 fi
 
 
-#BeagleHash_64_112 | 112|  64|Yves Orton's hash for 64-bit (112 bit seed).
+#sha1_64a          |  32|   32|  64|SHA1, 32 bit seed, returning first 64 bits
 
-if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
-    touch doc/BeagleHash_64_112.64.out &&
-    ./SMHasher BeagleHash_64_112 2>&1 | tee doc/BeagleHash_64_112.64.tmp &&
-    mv doc/BeagleHash_64_112.64.out doc/BeagleHash_64_112.64.bak &&
-    mv doc/BeagleHash_64_112.64.tmp doc/BeagleHash_64_112.64.out
+if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
+    touch doc/sha1_64a.32.out &&
+    ./SMHasher sha1_64a 2>&1 | tee doc/sha1_64a.32.tmp &&
+    mv doc/sha1_64a.32.out doc/sha1_64a.32.bak &&
+    mv doc/sha1_64a.32.tmp doc/sha1_64a.32.out
 fi
 
 
-#BeagleHash_64_127 | 127|  64|Yves Orton's hash for 64-bit (127 bit seed).
+#BeagleHash_64_32  |  32|  128|  64|Yves Orton's hash for 64-bit. (32 bit seed)
 
-if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
-    touch doc/BeagleHash_64_127.64.out &&
-    ./SMHasher BeagleHash_64_127 2>&1 | tee doc/BeagleHash_64_127.64.tmp &&
-    mv doc/BeagleHash_64_127.64.out doc/BeagleHash_64_127.64.bak &&
-    mv doc/BeagleHash_64_127.64.tmp doc/BeagleHash_64_127.64.out
+if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
+    touch doc/BeagleHash_64_32.128.out &&
+    ./SMHasher BeagleHash_64_32 2>&1 | tee doc/BeagleHash_64_32.128.tmp &&
+    mv doc/BeagleHash_64_32.128.out doc/BeagleHash_64_32.128.bak &&
+    mv doc/BeagleHash_64_32.128.tmp doc/BeagleHash_64_32.128.out
 fi
 
 
-#BeagleHash_64_32  |  32|  64|Yves Orton's hash for 64-bit. (32 bit seed)
-
-if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
-    touch doc/BeagleHash_64_32.64.out &&
-    ./SMHasher BeagleHash_64_32 2>&1 | tee doc/BeagleHash_64_32.64.tmp &&
-    mv doc/BeagleHash_64_32.64.out doc/BeagleHash_64_32.64.bak &&
-    mv doc/BeagleHash_64_32.64.tmp doc/BeagleHash_64_32.64.out
-fi
-
-
-#BeagleHash_64_64  |  64|  64|Yves Orton's hash for 64-bit. (64 bit seed)
-
-if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
-    touch doc/BeagleHash_64_64.64.out &&
-    ./SMHasher BeagleHash_64_64 2>&1 | tee doc/BeagleHash_64_64.64.tmp &&
-    mv doc/BeagleHash_64_64.64.out doc/BeagleHash_64_64.64.bak &&
-    mv doc/BeagleHash_64_64.64.tmp doc/BeagleHash_64_64.64.out
-fi
-
-
-#BeagleHash_64_96  |  96|  64|Yves Orton's hash for 64-bit (96 bit seed).
-
-if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
-    touch doc/BeagleHash_64_96.64.out &&
-    ./SMHasher BeagleHash_64_96 2>&1 | tee doc/BeagleHash_64_96.64.tmp &&
-    mv doc/BeagleHash_64_96.64.out doc/BeagleHash_64_96.64.bak &&
-    mv doc/BeagleHash_64_96.64.tmp doc/BeagleHash_64_96.64.out
-fi
-
-
-#City64            |  64|  64|Google CityHash64WithSeed (old)
+#City64            |  64|   64|  64|Google CityHash64WithSeed (old)
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
     touch doc/City64.64.out &&
@@ -322,7 +412,27 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
 fi
 
 
-#FarmHash64        |  32|  64|Google FarmHash64WithSeed
+#crc64_hw          |  64|   64|  64|SSE4.2 crc64 in HW
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
+    touch doc/crc64_hw.64.out &&
+    ./SMHasher crc64_hw 2>&1 | tee doc/crc64_hw.64.tmp &&
+    mv doc/crc64_hw.64.out doc/crc64_hw.64.bak &&
+    mv doc/crc64_hw.64.tmp doc/crc64_hw.64.out
+fi
+
+
+#donothing64       |  64|   64|  64|Do-Nothing function (only valid for measuring call overhead)
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
+    touch doc/donothing64.64.out &&
+    ./SMHasher donothing64 2>&1 | tee doc/donothing64.64.tmp &&
+    mv doc/donothing64.64.out doc/donothing64.64.bak &&
+    mv doc/donothing64.64.tmp doc/donothing64.64.out
+fi
+
+
+#FarmHash64        |  64|   64|  64|Google FarmHash64WithSeed
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
     touch doc/FarmHash64.64.out &&
@@ -332,7 +442,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
 fi
 
 
-#farmhash64_c      |  32|  64|farmhash64_with_seed (C99)
+#farmhash64_c      |  64|   64|  64|farmhash64_with_seed (C99)
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
     touch doc/farmhash64_c.64.out &&
@@ -342,7 +452,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
 fi
 
 
-#FNV64             |  32|  64|Fowler-Noll-Vo hash, 64-bit
+#FNV64             |  64|   64|  64|Fowler-Noll-Vo hash, 64-bit
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
     touch doc/FNV64.64.out &&
@@ -352,7 +462,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
 fi
 
 
-#metrohash64_1     |  32|  64|MetroHash64_1 for 64-bit
+#metrohash64_1     |  64|   64|  64|MetroHash64_1 for 64-bit
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
     touch doc/metrohash64_1.64.out &&
@@ -362,7 +472,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
 fi
 
 
-#metrohash64_2     |  32|  64|MetroHash64_2 for 64-bit
+#metrohash64_2     |  64|   64|  64|MetroHash64_2 for 64-bit
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
     touch doc/metrohash64_2.64.out &&
@@ -372,7 +482,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
 fi
 
 
-#metrohash64crc_1  |  32|  64|MetroHash64crc_1 for x64
+#metrohash64crc_1  |  64|   64|  64|MetroHash64crc_1 for x64
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
     touch doc/metrohash64crc_1.64.out &&
@@ -382,7 +492,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
 fi
 
 
-#metrohash64crc_2  |  32|  64|MetroHash64crc_2 for x64
+#metrohash64crc_2  |  64|   64|  64|MetroHash64crc_2 for x64
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
     touch doc/metrohash64crc_2.64.out &&
@@ -392,7 +502,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
 fi
 
 
-#MUM               |  32|  64|github.com/vnmakarov/mum-hash
+#MUM               |  64|   64|  64|github.com/vnmakarov/mum-hash
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
     touch doc/MUM.64.out &&
@@ -402,7 +512,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
 fi
 
 
-#Murmur2B          |  32|  64|MurmurHash2 for x64, 64-bit
+#Murmur2B          |  64|   64|  64|MurmurHash2 for x64, 64-bit
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
     touch doc/Murmur2B.64.out &&
@@ -412,7 +522,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
 fi
 
 
-#Murmur2C          |  32|  64|MurmurHash2 for x86, 64-bit
+#Murmur2C          |  64|   64|  64|MurmurHash2 for x86, 64-bit
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
     touch doc/Murmur2C.64.out &&
@@ -422,57 +532,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
 fi
 
 
-#NOP_OAAT_read64   |  32|  64|Noop function (only valid for measuring call + OAAT reading overhead)
-
-if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
-    touch doc/NOP_OAAT_read64.64.out &&
-    ./SMHasher NOP_OAAT_read64 2>&1 | tee doc/NOP_OAAT_read64.64.tmp &&
-    mv doc/NOP_OAAT_read64.64.out doc/NOP_OAAT_read64.64.bak &&
-    mv doc/NOP_OAAT_read64.64.tmp doc/NOP_OAAT_read64.64.out
-fi
-
-
-#SBOX              | 128|  64|Yves Orton's 64 bit substitution box hash for up to 32 char strings
-
-if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
-    touch doc/SBOX.64.out &&
-    ./SMHasher SBOX 2>&1 | tee doc/SBOX.64.tmp &&
-    mv doc/SBOX.64.out doc/SBOX.64.bak &&
-    mv doc/SBOX.64.tmp doc/SBOX.64.out
-fi
-
-
-#SipHash           | 128|  64|SipHash 2-4
-
-if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
-    touch doc/SipHash.64.out &&
-    ./SMHasher SipHash 2>&1 | tee doc/SipHash.64.tmp &&
-    mv doc/SipHash.64.out doc/SipHash.64.bak &&
-    mv doc/SipHash.64.tmp doc/SipHash.64.out
-fi
-
-
-#SipHash13         | 128|  64|SipHash 1-3
-
-if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
-    touch doc/SipHash13.64.out &&
-    ./SMHasher SipHash13 2>&1 | tee doc/SipHash13.64.tmp &&
-    mv doc/SipHash13.64.out doc/SipHash13.64.bak &&
-    mv doc/SipHash13.64.tmp doc/SipHash13.64.out
-fi
-
-
-#Spooky64          |  64|  64|Bob Jenkins' SpookyHash, 64-bit result
-
-if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
-    touch doc/Spooky64.64.out &&
-    ./SMHasher Spooky64 2>&1 | tee doc/Spooky64.64.tmp &&
-    mv doc/Spooky64.64.out doc/Spooky64.64.bak &&
-    mv doc/Spooky64.64.tmp doc/Spooky64.64.out
-fi
-
-
-#t1ha_32be         |  32|  64|Fast Positive Hash (portable, best for: 32-bit, big-endian)
+#t1ha_32be         |  64|   64|  64|Fast Positive Hash (portable, best for: 32-bit, big-endian)
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
     touch doc/t1ha_32be.64.out &&
@@ -482,7 +542,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
 fi
 
 
-#t1ha_32le         |  32|  64|Fast Positive Hash (portable, best for: 32-bit, little-endian)
+#t1ha_32le         |  64|   64|  64|Fast Positive Hash (portable, best for: 32-bit, little-endian)
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
     touch doc/t1ha_32le.64.out &&
@@ -492,7 +552,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
 fi
 
 
-#t1ha              |  64|  64|Fast Positive Hash (portable, best for: 64-bit, little-endian)
+#t1ha              |  64|   64|  64|Fast Positive Hash (portable, best for: 64-bit, little-endian)
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
     touch doc/t1ha.64.out &&
@@ -502,7 +562,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
 fi
 
 
-#t1ha_64be         |  64|  64|Fast Positive Hash (portable, best for: 64-bit, big-endian)
+#t1ha_64be         |  64|   64|  64|Fast Positive Hash (portable, best for: 64-bit, big-endian)
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
     touch doc/t1ha_64be.64.out &&
@@ -512,7 +572,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
 fi
 
 
-#t1ha_aes          |  32|  64|Fast Positive Hash (machine-specific, requires: AES-NI)
+#t1ha_aes          |  64|   64|  64|Fast Positive Hash (machine-specific, requires: AES-NI)
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
     touch doc/t1ha_aes.64.out &&
@@ -522,7 +582,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
 fi
 
 
-#t1ha_crc          |  64|  64|Fast Positive Hash (machine-specific, requires: SSE4.2 CRC32C)
+#t1ha_crc          |  64|   64|  64|Fast Positive Hash (machine-specific, requires: SSE4.2 CRC32C)
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
     touch doc/t1ha_crc.64.out &&
@@ -532,7 +592,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
 fi
 
 
-#xxHash64          |  32|  64|xxHash, 64-bit
+#xxHash64          |  64|   64|  64|xxHash, 64-bit
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
     touch doc/xxHash64.64.out &&
@@ -542,17 +602,167 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
 fi
 
 
-#Zaphod64          | 191|  64|Yves Orton's 64 bit hash with 191 bit seed
+#BeagleHash_64_64  |  64|  128|  64|Yves Orton's hash for 64-bit. (64 bit seed)
 
-if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
-    touch doc/Zaphod64.64.out &&
-    ./SMHasher Zaphod64 2>&1 | tee doc/Zaphod64.64.tmp &&
-    mv doc/Zaphod64.64.out doc/Zaphod64.64.bak &&
-    mv doc/Zaphod64.64.tmp doc/Zaphod64.64.out
+if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
+    touch doc/BeagleHash_64_64.128.out &&
+    ./SMHasher BeagleHash_64_64 2>&1 | tee doc/BeagleHash_64_64.128.tmp &&
+    mv doc/BeagleHash_64_64.128.out doc/BeagleHash_64_64.128.bak &&
+    mv doc/BeagleHash_64_64.128.tmp doc/BeagleHash_64_64.128.out
 fi
 
 
-#City128           | 128| 128|Google CityHash128WithSeed (old)
+#Spooky64          |  64|  128|  64|Bob Jenkins' SpookyHash, 64-bit seed, 64-bit result
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
+    touch doc/Spooky64.128.out &&
+    ./SMHasher Spooky64 2>&1 | tee doc/Spooky64.128.tmp &&
+    mv doc/Spooky64.128.out doc/Spooky64.128.bak &&
+    mv doc/Spooky64.128.tmp doc/Spooky64.128.out
+fi
+
+
+#BeagleHash_64_96  |  96|  128|  64|Yves Orton's hash for 64-bit (96 bit seed).
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
+    touch doc/BeagleHash_64_96.128.out &&
+    ./SMHasher BeagleHash_64_96 2>&1 | tee doc/BeagleHash_64_96.128.tmp &&
+    mv doc/BeagleHash_64_96.128.out doc/BeagleHash_64_96.128.bak &&
+    mv doc/BeagleHash_64_96.128.tmp doc/BeagleHash_64_96.128.out
+fi
+
+
+#BeagleHash_64_112 | 112|  128|  64|Yves Orton's hash for 64-bit (112 bit seed).
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
+    touch doc/BeagleHash_64_112.128.out &&
+    ./SMHasher BeagleHash_64_112 2>&1 | tee doc/BeagleHash_64_112.128.tmp &&
+    mv doc/BeagleHash_64_112.128.out doc/BeagleHash_64_112.128.bak &&
+    mv doc/BeagleHash_64_112.128.tmp doc/BeagleHash_64_112.128.out
+fi
+
+
+#BeagleHash_64_127 | 127|  128|  64|Yves Orton's hash for 64-bit (127 bit seed).
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
+    touch doc/BeagleHash_64_127.128.out &&
+    ./SMHasher BeagleHash_64_127 2>&1 | tee doc/BeagleHash_64_127.128.tmp &&
+    mv doc/BeagleHash_64_127.128.out doc/BeagleHash_64_127.128.bak &&
+    mv doc/BeagleHash_64_127.128.tmp doc/BeagleHash_64_127.128.out
+fi
+
+
+#Marsaglia64       | 128|  256|  64|Yves Orton's 64 bit hash with 128 bit seed
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x256" ]; then
+    touch doc/Marsaglia64.256.out &&
+    ./SMHasher Marsaglia64 2>&1 | tee doc/Marsaglia64.256.tmp &&
+    mv doc/Marsaglia64.256.out doc/Marsaglia64.256.bak &&
+    mv doc/Marsaglia64.256.tmp doc/Marsaglia64.256.out
+fi
+
+
+#SipHash           | 128|  256|  64|SipHash 2-4
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x256" ]; then
+    touch doc/SipHash.256.out &&
+    ./SMHasher SipHash 2>&1 | tee doc/SipHash.256.tmp &&
+    mv doc/SipHash.256.out doc/SipHash.256.bak &&
+    mv doc/SipHash.256.tmp doc/SipHash.256.out
+fi
+
+
+#SipHash13         | 128|  256|  64|SipHash 1-3
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x256" ]; then
+    touch doc/SipHash13.256.out &&
+    ./SMHasher SipHash13 2>&1 | tee doc/SipHash13.256.tmp &&
+    mv doc/SipHash13.256.out doc/SipHash13.256.bak &&
+    mv doc/SipHash13.256.tmp doc/SipHash13.256.out
+fi
+
+
+#Zaphod64          | 191|  192|  64|Yves Orton's 64 bit hash with 191 bit seed
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x192" ]; then
+    touch doc/Zaphod64.192.out &&
+    ./SMHasher Zaphod64 2>&1 | tee doc/Zaphod64.192.tmp &&
+    mv doc/Zaphod64.192.out doc/Zaphod64.192.bak &&
+    mv doc/Zaphod64.192.tmp doc/Zaphod64.192.out
+fi
+
+
+#Murmur3C          |  32|   32| 128|MurmurHash3 for x86, 128-bit
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x32" ]; then
+    touch doc/Murmur3C.32.out &&
+    ./SMHasher Murmur3C 2>&1 | tee doc/Murmur3C.32.tmp &&
+    mv doc/Murmur3C.32.out doc/Murmur3C.32.bak &&
+    mv doc/Murmur3C.32.tmp doc/Murmur3C.32.out
+fi
+
+
+#metrohash128_1    |  64|   64| 128|MetroHash128_1 for 64-bit
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
+    touch doc/metrohash128_1.64.out &&
+    ./SMHasher metrohash128_1 2>&1 | tee doc/metrohash128_1.64.tmp &&
+    mv doc/metrohash128_1.64.out doc/metrohash128_1.64.bak &&
+    mv doc/metrohash128_1.64.tmp doc/metrohash128_1.64.out
+fi
+
+
+#metrohash128_2    |  64|   64| 128|MetroHash128_2 for 64-bit
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
+    touch doc/metrohash128_2.64.out &&
+    ./SMHasher metrohash128_2 2>&1 | tee doc/metrohash128_2.64.tmp &&
+    mv doc/metrohash128_2.64.out doc/metrohash128_2.64.bak &&
+    mv doc/metrohash128_2.64.tmp doc/metrohash128_2.64.out
+fi
+
+
+#metrohash128crc_1 |  64|   64| 128|MetroHash128crc_1 for x64
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
+    touch doc/metrohash128crc_1.64.out &&
+    ./SMHasher metrohash128crc_1 2>&1 | tee doc/metrohash128crc_1.64.tmp &&
+    mv doc/metrohash128crc_1.64.out doc/metrohash128crc_1.64.bak &&
+    mv doc/metrohash128crc_1.64.tmp doc/metrohash128crc_1.64.out
+fi
+
+
+#metrohash128crc_2 |  64|   64| 128|MetroHash128crc_2 for x64
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
+    touch doc/metrohash128crc_2.64.out &&
+    ./SMHasher metrohash128crc_2 2>&1 | tee doc/metrohash128crc_2.64.tmp &&
+    mv doc/metrohash128crc_2.64.out doc/metrohash128crc_2.64.bak &&
+    mv doc/metrohash128crc_2.64.tmp doc/metrohash128crc_2.64.out
+fi
+
+
+#Murmur3F          |  64|   64| 128|MurmurHash3 for x64, 128-bit
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x64" ]; then
+    touch doc/Murmur3F.64.out &&
+    ./SMHasher Murmur3F 2>&1 | tee doc/Murmur3F.64.tmp &&
+    mv doc/Murmur3F.64.out doc/Murmur3F.64.bak &&
+    mv doc/Murmur3F.64.tmp doc/Murmur3F.64.out
+fi
+
+
+#md5_128a          |  64| 1920| 128|MD5, with a 64 bit seed of the start state
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x1920" ]; then
+    touch doc/md5_128a.1920.out &&
+    ./SMHasher md5_128a 2>&1 | tee doc/md5_128a.1920.tmp &&
+    mv doc/md5_128a.1920.out doc/md5_128a.1920.bak &&
+    mv doc/md5_128a.1920.tmp doc/md5_128a.1920.out
+fi
+
+
+#City128           | 128|  128| 128|Google CityHash128WithSeed (old)
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
     touch doc/City128.128.out &&
@@ -562,7 +772,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
 fi
 
 
-#CityCrc128        | 128| 128|Google CityHashCrc128WithSeed SSE4.2 (old)
+#CityCrc128        | 128|  128| 128|Google CityHashCrc128WithSeed SSE4.2 (old)
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
     touch doc/CityCrc128.128.out &&
@@ -572,7 +782,17 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
 fi
 
 
-#FarmHash128       |  32| 128|Google FarmHash128WithSeed
+#donothing128      | 128|  128| 128|Do-Nothing function (only valid for measuring call overhead)
+
+if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
+    touch doc/donothing128.128.out &&
+    ./SMHasher donothing128 2>&1 | tee doc/donothing128.128.tmp &&
+    mv doc/donothing128.128.out doc/donothing128.128.bak &&
+    mv doc/donothing128.128.tmp doc/donothing128.128.out
+fi
+
+
+#FarmHash128       | 128|  128| 128|Google FarmHash128WithSeed
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
     touch doc/FarmHash128.128.out &&
@@ -582,7 +802,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
 fi
 
 
-#farmhash128_c     |  32| 128|farmhash128_with_seed (C99)
+#farmhash128_c     | 128|  128| 128|farmhash128_with_seed (C99)
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
     touch doc/farmhash128_c.128.out &&
@@ -592,67 +812,7 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
 fi
 
 
-#metrohash128_1    |  32| 128|MetroHash128_1 for 64-bit
-
-if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
-    touch doc/metrohash128_1.128.out &&
-    ./SMHasher metrohash128_1 2>&1 | tee doc/metrohash128_1.128.tmp &&
-    mv doc/metrohash128_1.128.out doc/metrohash128_1.128.bak &&
-    mv doc/metrohash128_1.128.tmp doc/metrohash128_1.128.out
-fi
-
-
-#metrohash128_2    |  32| 128|MetroHash128_2 for 64-bit
-
-if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
-    touch doc/metrohash128_2.128.out &&
-    ./SMHasher metrohash128_2 2>&1 | tee doc/metrohash128_2.128.tmp &&
-    mv doc/metrohash128_2.128.out doc/metrohash128_2.128.bak &&
-    mv doc/metrohash128_2.128.tmp doc/metrohash128_2.128.out
-fi
-
-
-#metrohash128crc_1 |  32| 128|MetroHash128crc_1 for x64
-
-if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
-    touch doc/metrohash128crc_1.128.out &&
-    ./SMHasher metrohash128crc_1 2>&1 | tee doc/metrohash128crc_1.128.tmp &&
-    mv doc/metrohash128crc_1.128.out doc/metrohash128crc_1.128.bak &&
-    mv doc/metrohash128crc_1.128.tmp doc/metrohash128crc_1.128.out
-fi
-
-
-#metrohash128crc_2 |  32| 128|MetroHash128crc_2 for x64
-
-if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
-    touch doc/metrohash128crc_2.128.out &&
-    ./SMHasher metrohash128crc_2 2>&1 | tee doc/metrohash128crc_2.128.tmp &&
-    mv doc/metrohash128crc_2.128.out doc/metrohash128crc_2.128.bak &&
-    mv doc/metrohash128crc_2.128.tmp doc/metrohash128crc_2.128.out
-fi
-
-
-#Murmur3C          |  32| 128|MurmurHash3 for x86, 128-bit
-
-if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
-    touch doc/Murmur3C.128.out &&
-    ./SMHasher Murmur3C 2>&1 | tee doc/Murmur3C.128.tmp &&
-    mv doc/Murmur3C.128.out doc/Murmur3C.128.bak &&
-    mv doc/Murmur3C.128.tmp doc/Murmur3C.128.out
-fi
-
-
-#Murmur3F          |  32| 128|MurmurHash3 for x64, 128-bit
-
-if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
-    touch doc/Murmur3F.128.out &&
-    ./SMHasher Murmur3F 2>&1 | tee doc/Murmur3F.128.tmp &&
-    mv doc/Murmur3F.128.out doc/Murmur3F.128.bak &&
-    mv doc/Murmur3F.128.tmp doc/Murmur3F.128.out
-fi
-
-
-#Spooky128         | 128| 128|Bob Jenkins' SpookyHash, 128-bit result
+#Spooky128         | 128|  128| 128|Bob Jenkins' SpookyHash, 128-bit seed, 128-bit result
 
 if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
     touch doc/Spooky128.128.out &&
@@ -662,12 +822,12 @@ if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
 fi
 
 
-#hasshe2           |  32| 256|SSE2 hasshe2, 256-bit
+#hasshe2           | 128|  128| 256|SSE2 hasshe2, 256-bit
 
-if [ "x$BITS" == "x" -o "x$BITS" == "x256" ]; then
-    touch doc/hasshe2.256.out &&
-    ./SMHasher hasshe2 2>&1 | tee doc/hasshe2.256.tmp &&
-    mv doc/hasshe2.256.out doc/hasshe2.256.bak &&
-    mv doc/hasshe2.256.tmp doc/hasshe2.256.out
+if [ "x$BITS" == "x" -o "x$BITS" == "x128" ]; then
+    touch doc/hasshe2.128.out &&
+    ./SMHasher hasshe2 2>&1 | tee doc/hasshe2.128.tmp &&
+    mv doc/hasshe2.128.out doc/hasshe2.128.bak &&
+    mv doc/hasshe2.128.tmp doc/hasshe2.128.out
 fi
 

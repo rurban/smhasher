@@ -2,9 +2,7 @@
 echo "make"
 echo "rm -f doc/*.tmp"
 echo "export BITS=32"
-./SMHasher --list | sort -k 4n -k 1 |
-    grep -v '^crc' | 
-    grep -v -i 'crap\|nothing\|bad\|sum\|sha1\|md5' |
+./SMHasher --list | sort -k 5n -k 3n -k 4n -k 1 |
     perl -ne'@F=split/[\s|]+/,$_; /[A-Z]/ and $F[2]=~/\d/ and print qq(
 #$_
 if [ "x\$BITS" == "x" -o "x\$BITS" == "x$F[2]" ]; then
