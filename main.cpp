@@ -241,9 +241,9 @@ HashInfo g_hashes[] =
     128, (32 * 256 + 3) * 64, 64, 0xEF32DD9E,
     sbox_seed_state_smhasher_test, sbox_hash_with_state_smhasher_test },
 #endif
-  { "Marsaglia64", "Yves Orton's 64 bit hash with 128 bit seed",
-    128, 256, 64, 0x0,
-    marsaglia64_seed_state_smhasher_test, marsaglia64_hash_with_state_smhasher_test },
+  //{ "Marsaglia64", "Yves Orton's 64 bit hash with 128 bit seed",
+  //  128, 256, 64, 0x0,
+  //  stadt64_seed_state_smhasher_test, stadt64_hash_with_state_smhasher_test },
   { "Zaphod64", "Yves Orton's 64 bit hash with 191 bit seed",
     191, 192, 64, 0x7D5312CC,
     zaphod64_seed_state_smhasher_test, zaphod64_hash_with_state_smhasher_test },
