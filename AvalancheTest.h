@@ -52,17 +52,17 @@ void PrintAvalancheDiagram ( av_statst *stats, int mode, int scale, double confi
 
 //-----------------------------------------------------------------------------
 
-template < typename seedtype, typename keytype, typename hashtype >
+template < typename keytype, typename hashtype >
 void calcBiasWithSeed ( hashfunc<hashtype> hash, std::vector<int> & counts, int reps, Rand & r )
 {
-  const int seedbytes = sizeof(seedtype);
+  const int seedbytes = hash.seedbytes();
   const int keybytes = sizeof(keytype);
   const int hashbytes = sizeof(hashtype);
 
   const int seedbits = hash.seedbits();
   const int keybits = keybytes * 8;
   const int hashbits = hashbytes * 8;
-  seedtype seed;
+  std::vector<uint8_t> seed(seedbytes);
   keytype K;
   hashtype A,B;
 
@@ -71,25 +71,18 @@ void calcBiasWithSeed ( hashfunc<hashtype> hash, std::vector<int> & counts, int 
     if(irep % (reps/10) == 0) printf(".");
 
     r.rand_p(&K,keybytes);
-    r.rand_p(&seed,seedbytes);
+    r.rand_p(&seed[0],seedbytes);
 
-    if (0) {
-      printf("seed byte %2d:", seedbytes);
-      seed.print_as_hex();
-    }
     hash(&K,keybytes,(void *)&seed,&A);
 
     int * cursor = &counts[0];
 
     for(int iBit = 0; iBit < seedbits; iBit++)
     {
-      flipbit(&seed,seedbytes,iBit);
-      if (0) {
-        printf("seed flip %2d:",iBit);
-        seed.print_as_hex();
-      }
-      hash(&K,keybytes,(void *)&seed,&B);
-      flipbit(&seed,seedbytes,iBit);
+      flipbit(&seed[0],seedbytes,iBit);
+      hash.seed_state(&seed[0]);
+      hash(&K,keybytes,&B);
+      flipbit(&seed[0],seedbytes,iBit);
 
       for(int iOut = 0; iOut < hashbits; iOut++)
       {
@@ -101,17 +94,11 @@ void calcBiasWithSeed ( hashfunc<hashtype> hash, std::vector<int> & counts, int 
       }
     }
 
-    if (hash.can_seed_state()) {
-      hash.seed_state(&seed);
-    }
+    hash.seed_state(&seed[0]);
     for(int iBit = 0; iBit < keybits; iBit++)
     {
       flipbit(&K,keybytes,iBit);
-      if (hash.can_seed_state()) {
-        hash(&K,keybytes,&B);
-      } else {
-        hash(&K,keybytes,&seed,&B);
-      }
+      hash(&K,keybytes,&B);
       flipbit(&K,keybytes,iBit);
 
       for(int iOut = 0; iOut < hashbits; iOut++)
@@ -129,7 +116,7 @@ void calcBiasWithSeed ( hashfunc<hashtype> hash, std::vector<int> & counts, int 
 //-----------------------------------------------------------------------------
 /* no bit may be more than 1% from the expected 50% changed rate */
 
-template < typename seedtype, typename keytype, typename hashtype >
+template < typename keytype, typename hashtype >
 bool AvalancheTest (
   hashfunc<hashtype> hash,
   const int reps,
@@ -173,7 +160,7 @@ bool AvalancheTest (
 
   //----------
 
-  calcBiasWithSeed<seedtype,keytype,hashtype>(hash, bins, reps, r);
+  calcBiasWithSeed<keytype,hashtype>(hash, bins, reps, r);
   calcBiasStats( bins, reps, &stats, confidence );
   
   //----------
