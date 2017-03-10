@@ -31,7 +31,7 @@ DoNothingHash_with_state(const void *, int, const void *, void *)
 }
 
 void
-DoNothingHash_seed_state(int, const void *, const void *)
+DoNothingHash_seed_state(int, const void *, void *)
 {
 }
 
@@ -424,7 +424,7 @@ crc64c_hw_with_state_test(const void *input, int len, const void *state, void *o
 /* https://github.com/floodyberry/siphash */
 
 void
-siphash_seed_state_test(int seedbits, const void *seed, const void *state)
+siphash_seed_state_test(int seedbits, const void *seed, void *state)
 {
     siphash_seed_state((unsigned char *)seed, (unsigned char *)state);
 }
@@ -442,7 +442,7 @@ siphash13_with_state_test(const void *input, int len, const void *seed, void *ou
 }
 
 void
-halfsiphash_seed_state_test(int seed_bits, const void * seed, const void * state)
+halfsiphash_seed_state_test(int seed_bits, const void * seed, void *state)
 {
     halfsiphash_seed_state((const unsigned char *)seed,(unsigned char *)state);
 }

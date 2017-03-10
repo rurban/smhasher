@@ -21,14 +21,14 @@
 void BadHash_with_state    ( const void * key, int len, const void *state, void * out );
 
 void DoNothingHash_with_state( const void * key, int len, const void *state, void * out );
-void DoNothingHash_seed_state( int seedbits, const void *seed, const void *state);
+void DoNothingHash_seed_state( int seedbits, const void *seed, void *state);
 void NoopOAATReadHash_with_state( const void * key, int len, const void *state, void * out );
 void crc32_with_state_test ( const void * key, int len, const void *state, void * out );
 
 //----------
 // Cryptographic hashes
 
-void md5_seed_state        ( int seedbits, const void *seed, const void *state);
+void md5_seed_state        ( int seedbits, const void *seed, void *state);
 void md5_32_with_state     ( const void * key, int len, const void *state, void * out );
 void md5_with_state        ( const void * key, int len, const void *state, void * out );
 void sha1_32a_with_state   ( const void * key, int len, const void *state, void * out );
@@ -82,15 +82,15 @@ void lua_v53_string_hash (const void *str, int len, const void *seed, void *out)
 void SpookyHash32_with_state_test ( const void * key, int len, const void * state, void * out );
 void SpookyHash64_with_state_test ( const void * key, int len, const void * state, void * out );
 void SpookyHash128_with_state_test ( const void * key, int len, const void * state, void * out );
-void SpookyHash_seed_state_test( int seedbits, const void *seed, const void *state);
+void SpookyHash_seed_state_test( int seedbits, const void *seed, void *state);
 
 
 //----------
 void siphash_with_state_test( const void * key, int len, const void * seed, void * out );
 void siphash13_with_state_test( const void * key, int len, const void * seed, void * out );
-void siphash_seed_state_test( int seedbits, const void *seed, const void *state);
+void siphash_seed_state_test( int seedbits, const void *seed, void *state);
 void halfsiphash_with_state_test( const void * key, int len, const void * seed, void * out );
-void halfsiphash_seed_state_test( int seedbits, const void *seed, const void *state);
+void halfsiphash_seed_state_test( int seedbits, const void *seed, void *state);
 //-----------------------------------------------------------------------------
 // Test harnesses for Murmur1/2
 

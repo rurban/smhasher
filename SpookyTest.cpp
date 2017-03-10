@@ -25,7 +25,7 @@ void SpookyHash128_with_state_test(const void *key, int len, const void *state, 
   SpookyHash::Hash128(key, len, out64, out64+1);
 }
 
-void SpookyHash_seed_state_test(int in_bits, const void *seed, const void *state) {
+void SpookyHash_seed_state_test(int in_bits, const void *seed, void *state) {
     uint64_t *state64= (uint64_t *)state;
     if (in_bits == 32) {
         state64[0]= state64[1]= ((uint32_t*)seed)[0];

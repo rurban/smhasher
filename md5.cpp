@@ -334,18 +334,19 @@ void md5_finish( md5_context *ctx, unsigned char output[16] )
     PUT_ULONG_LE( ctx->state[3], output, 12 );
 }
 
-void md5_seed_state(int seedbits, const void *seed, const void *state) {
-    md5_context *ctxp= (md5_context *)state;
+void md5_seed_state(int seedbits, const void *seed, void *state) {
+    md5_context ctx;
 
-    md5_starts( ctxp );
-    ctxp->state[0] += *((uint64_t*)seed);
+    md5_starts( &ctx );
+    ctx.state[0] += *((uint64_t*)seed);
+    memcpy(state, &ctx, sizeof(unsigned long)*4);
 }
 
 void md5_with_state( const void*input, int ilen, const void *state, void *output)
 {
     md5_context ctx;
+    memcpy(&ctx, state, sizeof(unsigned long) * 4);
     ctx.total[0] = ctx.total[1] = 0;
-    memcpy(&ctx.state[0], state, sizeof(unsigned long) * 4);
 
     md5_update( &ctx, (unsigned char *)input, ilen );
     md5_finish( &ctx, (unsigned char *)output );

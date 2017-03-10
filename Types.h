@@ -37,7 +37,7 @@ void MixVCode ( const void * blob, int len );
 
 //-----------------------------------------------------------------------------
 
-typedef void (*pfSeedState) ( const int seedbits, const void *seed, const void *state );
+typedef void (*pfSeedState) ( const int seedbits, const void *seed, void *state );
 typedef void (*pfHashWithState) ( const void *blob, const int len, const void *state, void *out );
 
 typedef struct HashInfo
