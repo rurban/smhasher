@@ -489,7 +489,7 @@ void SelfTest ( bool validate )
 {
   bool pass = true;
   char name[1024];
-  snprintf(name,1024,"Self Test - Verify %d Hashes",(int)(g_hashes_sizeof/sizeof(HashInfo)));
+  snprintf(name,1024,"SelfTest - Verify %d Hashes",(int)(g_hashes_sizeof/sizeof(HashInfo)));
 
   for(int i = 0; i < g_hashes_sizeof / sizeof(HashInfo); i++)
   {

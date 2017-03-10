@@ -51,16 +51,24 @@ bool failed() {
 void done_testing() {
     timeEnd = clock();
     printf("1..%d\n",test_count);
-    int exitcode;
+    int exitcode= failed_count ? 1 : 0;
+    const char *name= g_hashUnderTest ? g_hashUnderTest->name : "SelfTest";
+
     if (failed_count) {
-        printf("# Tests failed. %s failed %d of %d tests.\n",
-            g_hashUnderTest ? g_hashUnderTest->name : "Self-Test", failed_count, test_count);
-        exitcode= 1;
+        printf("# Tests Failed. %s failed", name);
     } else {
-        printf("# All tests passed. %s passed %d tests.\n",
-            g_hashUnderTest ? g_hashUnderTest->name : "Self-Test", test_count);
-        exitcode= 0;
+        printf("# All Tests Passed. %s passed", name);
     }
+    if (!failed_count || failed_count == test_count) {
+        if (test_count > 1) {
+            printf(" all %d tests.\n", test_count);
+        } else {
+            printf(".\n");
+        }
+    } else {
+        printf(" %d of %d tests.\n", failed_count, test_count);
+    }
+
     printf( "# Testing took %f seconds\n", double(timeEnd - timeBegin) / double(CLOCKS_PER_SEC) );
     exit(exitcode);
 }
