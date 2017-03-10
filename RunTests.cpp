@@ -562,7 +562,8 @@ bool testHashByInfo ( HashInfo * pInfo, int self_test, double confidence )
   const char * name = pInfo->name;
   HashInfo *oldval = g_hashUnderTest;
 
-  g_hashUnderTest = pInfo;
+  if (!self_test)
+    g_hashUnderTest = pInfo;
   bool result= false;
   if(pInfo->hashbits == 32)
   {
@@ -585,7 +586,6 @@ bool testHashByInfo ( HashInfo * pInfo, int self_test, double confidence )
     printf("Invalid hash bit width %d for hash '%s'",pInfo->hashbits,pInfo->name);
     exit(1);
   }
-  g_hashUnderTest = oldval;
   return result;
 }
 

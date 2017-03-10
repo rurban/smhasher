@@ -238,7 +238,7 @@ HashInfo g_hashes[] =
   //  128, 256, 64, 0x0,
   //  stadt64_seed_state_smhasher_test, stadt64_hash_with_state_smhasher_test },
   { "Zaphod64", "Yves Orton's 64 bit hash with 191 bit seed",
-    191, 192, 64, 0xC0CA33C4,
+    191, 192, 64, 0x557DE342,
     zaphod64_seed_state_smhasher_test, zaphod64_hash_with_state_smhasher_test },
   { "Zaphod32", "Yves Orton's 32 bit hash with 95 bit seed",
     95, 96, 32, 0x39CA924F,
