@@ -118,10 +118,10 @@ HashInfo g_hashes[] =
 
   // -- Message Digests/NIST Hash Functions.
   { "md5_128a", "MD5, with a 64 bit seed of the start state",
-    64, bitsizeof(md5_context), 128, 0x92912D2E,
+    64, bitsizeof(unsigned long) * 4, 128, 0x92912D2E,
     md5_seed_state, md5_with_state },
   { "md5_32a", "MD5, first 32 bits, seeding of md5 start state",
-    64, bitsizeof(md5_context), 32, 0x4B2DAA7D,
+    64, bitsizeof(unsigned long) * 4, 32, 0x4B2DAA7D,
     md5_seed_state, md5_32_with_state },
   { "sha1_32a", "SHA1, 32 bit seed, returning first 32 bits",
     32, 32, 32, 0xED4CCEA0,

@@ -344,7 +344,8 @@ void md5_seed_state(int seedbits, const void *seed, const void *state) {
 void md5_with_state( const void*input, int ilen, const void *state, void *output)
 {
     md5_context ctx;
-    memcpy(&ctx,state,sizeof(md5_context));
+    ctx.total[0] = ctx.total[1] = 0;
+    memcpy(&ctx.state[0], state, sizeof(unsigned long) * 4);
 
     md5_update( &ctx, (unsigned char *)input, ilen );
     md5_finish( &ctx, (unsigned char *)output );
