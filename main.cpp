@@ -84,16 +84,16 @@ TestOpts g_testopts[] =
 HashInfo g_hashes[] =
 {
   // -- No-op hashes
-  { "donothing32", "Do-Nothing function (only valid for measuring call overhead)",
+  { "donothing32", "Do-Nothing function - measure call overhead",
     32, 32, 32, 0x00000000,
     DoNothingHash_seed_state, DoNothingHash_with_state },
-  { "donothing64", "Do-Nothing function (only valid for measuring call overhead)",
+  { "donothing64", "Do-Nothing function - measure call overhead",
     64, 64, 64, 0x00000000,
     DoNothingHash_seed_state, DoNothingHash_with_state },
-  { "donothing128", "Do-Nothing function (only valid for measuring call overhead)",
+  { "donothing128", "Do-Nothing function - measure call overhead",
     128, 128, 128, 0x00000000,
     DoNothingHash_seed_state, DoNothingHash_with_state },
-  { "NOP_OAAT_read64", "Noop function (only valid for measuring call + OAAT reading overhead)",
+  { "NOP_OAAT_read64", "Noop function - measure one-at-a-time baseline",
     32, 32, 64, 0x00000000,
     NULL, NoopOAATReadHash_with_state },
   // -- Crap hashes
@@ -120,7 +120,7 @@ HashInfo g_hashes[] =
   { "md5_128a", "MD5, with a 64 bit seed of the start state",
     64, bitsizeof(md5_context), 128, 0x92912D2E,
     md5_seed_state, md5_with_state },
-  { "md5_32a", "MD5, first 32 bits, with a 64 bit seed of the start start",
+  { "md5_32a", "MD5, first 32 bits, seeding of md5 start state",
     64, bitsizeof(md5_context), 32, 0x4B2DAA7D,
     md5_seed_state, md5_32_with_state },
   { "sha1_32a", "SHA1, 32 bit seed, returning first 32 bits",
@@ -202,31 +202,31 @@ HashInfo g_hashes[] =
     NULL, PMurHash32_with_state_test },
 
   // BeagleHash_32_xx
-  { "BeagleHash_32_64", "Yves Orton's hash for 64-bit in 32-bit mode (64-bit seed).",
-    64, 128, 32, 0xF47C019F,
+  { "BeagleHash_32_64", "Evolved hash with 128-bit state (2x64) - Yves Orton",
+    64, 128, 32, 0x19497BA9,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher },
-  { "BeagleHash_32_96", "Yves Orton's hash for 64-bit in 32-bit mode (96-bit seed).",
-    96, 128, 32, 0x5A0F7E13,
+  { "BeagleHash_32_96", "Evolved hash with 128-bit state (2x64) - Yves Orton",
+    96, 128, 32, 0xD5C2C298,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher },
-  { "BeagleHash_32_112", "Yves Orton's hash for 64-bit in 32-bit mode (112-bit seed).",
-    112, 128, 32, 0x293F1FFD,
+  { "BeagleHash_32_112", "Evolved hash with 128-bit state (2x64) - Yves Orton",
+    112, 128, 32, 0x6183E6D2,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher },
-  { "BeagleHash_32_127", "Yves Orton's hash for 64-bit in 32-bit mode (127-bit seed).",
-    127, 128, 32, 0x556FEDF5,
+  { "BeagleHash_32_127", "Evolved hash with 128-bit state (2x64) - Yves Orton",
+    127, 128, 32, 0x947BE1A8,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher },
 
   // BeagleHash_64_xx
-  { "BeagleHash_64_64", "Yves Orton's hash for 64-bit. (64 bit seed)",
-    64, 128, 64, 0xFDBD2E90,
+  { "BeagleHash_64_64", "Evolved hash with 128-bit state (2x64) - Yves Orton",
+    64, 128, 64, 0x3A032FB5,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_64_128_a_smhasher },
-  { "BeagleHash_64_96", "Yves Orton's hash for 64-bit (96 bit seed).",
-    96, 128, 64, 0x5C10352B,
+  { "BeagleHash_64_96", "Evolved hash with 128-bit state (2x64) - Yves Orton",
+    96, 128, 64, 0x48DA826D,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_64_128_a_smhasher },
-  { "BeagleHash_64_112", "Yves Orton's hash for 64-bit (112 bit seed).",
-    112, 128, 64, 0x92CBB964,
+  { "BeagleHash_64_112", "Evolved hash with 128-bit state (2x64) - Yves Orton",
+    112, 128, 64, 0x43B42DC9,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_64_128_a_smhasher },
-  { "BeagleHash_64_127", "Yves Orton's hash for 64-bit (127 bit seed).",
-    127, 128, 64, 0x32F92681,
+  { "BeagleHash_64_127", "Evolved hash with 128-bit state (2x64) - Yves Orton",
+    127, 128, 64, 0x058739DC,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_64_128_a_smhasher },
 #if 0
   // very very slow seeding process, huge state, etc. not suitable for day-to-day testing
@@ -237,14 +237,14 @@ HashInfo g_hashes[] =
   //{ "Marsaglia64", "Yves Orton's 64 bit hash with 128 bit seed",
   //  128, 256, 64, 0x0,
   //  stadt64_seed_state_smhasher_test, stadt64_hash_with_state_smhasher_test },
-  { "Zaphod64", "Yves Orton's 64 bit hash with 191 bit seed",
-    191, 192, 64, 0x557DE342,
+  { "Zaphod64", "Evolved hash with 192-bit state (3x64) - Yves Orton",
+    191, 192, 64, 0xDD90BE2E,
     zaphod64_seed_state_smhasher_test, zaphod64_hash_with_state_smhasher_test },
-  { "Zaphod32", "Yves Orton's 32 bit hash with 95 bit seed",
-    95, 96, 32, 0x39CA924F,
+  { "Zaphod32", "Evolved hash with  96-bit state (3x32) - Yves Orton",
+    95, 96, 32, 0x802E4AF6,
     zaphod32_seed_state_smhasher_test, zaphod32_hash_with_state_smhasher_test },
-  { "Phat4", "Yves Orton's 32 bit hash with 96 bit seed",
-    96, 96, 32, 0xE1C39C99,
+  { "Phat4", "Evolved hash with 128-bit state (4x32) - Yves Orton",
+    96, 96, 32, 0xD3C0D0D5,
     NULL, phat4_hash_with_state_smhasher_test },
   { "Lua53oaat", "Hash function from Lua53, pure one-at-a-time",
     32, 32, 32, 0x072086C1,
@@ -267,13 +267,13 @@ HashInfo g_hashes[] =
     32, 32, 32, 0x1A7639D5,
     NULL, x17_test },
   // also called jhash:
-  { "JenkinsOAATH", "Bob Jenkins' one-at-a-time with hardening (as in perl 5.18)",
+  { "JenkinsOAATH", "Bob Jenkins' one-at-a-time 'hardened' -as in perl 5.18",
     64, 64, 32, 0x89132BD1,
     NULL, JenkinsOAATH_with_state },
   { "JenkinsOAAT", "Bob Jenkins' one-at-a-time as in old perl5",
     32, 32, 32, 0xCE081D30,
     NULL, JenkinsOAAT_with_state },
-  { "MicroOAAT", "Small non-mul OAAT that passes collision checks (by funny-falcon)",
+  { "MicroOAAT", "Small non-mul one-at-a-time by funny-falcon",
     32, 32, 32, 0x9735B83E,
     NULL, MicroOAAT },
   { "HalfSipHash", "HalfSipHash 2-4, 32bit",
@@ -282,7 +282,7 @@ HashInfo g_hashes[] =
 
   // and now the quality hash funcs, which mostly work
   // GoodOOAT passes whole SMHasher (by funny-falcon)
-  { "GoodOAAT", "Small non-multiplicative OAAT",
+  { "GoodOAAT", "Small non-multiplicative one-at-a-time",
     32, 32, 32, 0xF447CE02,
     NULL, GoodOAAT },
   { "SipHash", "SipHash 2-4",
@@ -382,25 +382,25 @@ HashInfo g_hashes[] =
     64, 64, 64, 0x211CE75E,
     NULL, falkhash_with_state_test_cxx },
 #endif
-  { "t1ha", "Fast Positive Hash (portable, best for: 64-bit, little-endian)",
+  { "t1ha", "Fast Positive Hash - portable, 64-bit, little-endian",
     64, 64, 64, 0xA18A4E0E,
     NULL, t1ha_with_state_test },
-  { "t1ha_64be", "Fast Positive Hash (portable, best for: 64-bit, big-endian)",
+  { "t1ha_64be", "Fast Positive Hash - portable, 64-bit, big-endian",
     64, 64, 64, 0xF8FFDED6,
     NULL, t1ha_64be_with_state_test },
-  { "t1ha_32le", "Fast Positive Hash (portable, best for: 32-bit, little-endian)",
+  { "t1ha_32le", "Fast Positive Hash - portable, 32-bit, little-endian",
     64, 64, 64, 0xE42B362F,
     NULL, t1ha_32le_with_state_test },
-  { "t1ha_32be", "Fast Positive Hash (portable, best for: 32-bit, big-endian)",
+  { "t1ha_32be", "Fast Positive Hash - portable, 32-bit, big-endian",
     64, 64, 64, 0xF0C501EB,
     NULL, t1ha_32be_with_state_test },
 #if (defined(__SSE4_2__) && defined(__x86_64__)) || defined(_M_X64)
-  { "t1ha_crc", "Fast Positive Hash (machine-specific, requires: SSE4.2 CRC32C)",
+  { "t1ha_crc", "Fast Positive Hash - requires SSE4.2 CRC32C",
     64, 64, 64, 0x20BD585A,
     NULL, t1ha_crc_with_state_test },
 #endif
 #if defined(__AES__) || defined(_M_X64) || defined(_M_IX86)
-  { "t1ha_aes", "Fast Positive Hash (machine-specific, requires: AES-NI)",
+  { "t1ha_aes", "Fast Positive Hash - requires: AES-NI",
     64, 64, 64, 0x62ACCBC1,
     NULL, t1ha_aes_with_state_test },
 #endif
@@ -534,22 +534,24 @@ int main ( int argc, char ** argv )
       break;
     }
     else
-    if (EQ(arg,arg_len,"--list")) {
-      printf("%-18s|Seed|State|Hash|\n","");
-      printf("%-18s|%4s|%5s|%4s|%s\n","Name","Bits","Bits","Bits","Description");
-      printf("%.18s+%.4s+%5s+%.4s|%s\n",
-          "-------------------","----","-----","----","--------------------------");
-      int old_api= 0;
+    if (EQ(arg,arg_len,"--mlist")) {
       for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++) {
-        if (!g_hashes[i].hash_with_state) old_api++;
-        printf("%-18s|%4d|%5d|%4d|%s%s\n",
+        printf("%s\t%d\t%d\t%d\t%s\n",
             g_hashes[i].name, g_hashes[i].seedbits, g_hashes[i].statebits, g_hashes[i].hashbits,
-            g_hashes[i].hash_with_state ? "" : "*", g_hashes[i].desc);
+            g_hashes[i].desc);
       }
-      if (old_api)
-        printf(
-          "# NOTE: Hash functions whose description starts with a star (*) character\n"
-          "# are possibly not being seeded correctly and results may be misleading.\n");
+      exit(0);
+    }
+    if (EQ(arg,arg_len,"--list")) {
+      printf("%-18s | Seed | State | Hash |\n","");
+      printf("%-18s | %4s | %5s | %4s | %s\n","Name","Bits","Bits","Bits","Description");
+      printf("%.18s-+-%.4s-+-%5s-+-%.4s-+-%s\n",
+          "-------------------","----","-----","----","--------------------------");
+      for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++) {
+        printf("%-18s | %4d | %5d | %4d | %s\n",
+            g_hashes[i].name, g_hashes[i].seedbits, g_hashes[i].statebits, g_hashes[i].hashbits,
+            g_hashes[i].desc);
+      }
       exit(0);
     }
     else
@@ -651,9 +653,15 @@ int main ( int argc, char ** argv )
       } while (p);
     }
     else {
-      printf("SMHasher: unknown option: %s\n", arg);
+      if (EQ(arg,arg_len,"--help")) {
+        printf("SMHasher [--test=TESTNAME] HASHNAME\n");
+      } else {
+        printf("SMHasher: unknown option: %s\n", arg);
+      }
       printf("Valid options:\n");
+      printf("--help                show the help (what you are looking at now)\n");
       printf("--list                list hashes available for testing\n");
+      printf("--mlist               machine readable list of hashes available for testing\n");
       printf("--confidence          set the confidence level as a percentage\n");
       printf("--sigmas              set the confidence level as a sigma number\n");
       printf("--verbose             run verbose?\n");
