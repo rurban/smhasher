@@ -62,7 +62,7 @@ void done_testing() {
     }
     if (!failed_count || failed_count == test_count) {
         if (test_count > 1) {
-            printf(" all %d tests.\n", test_count);
+            printf(" all %d tests run.\n", test_count);
         } else {
             printf(".\n");
         }

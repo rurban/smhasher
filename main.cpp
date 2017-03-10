@@ -84,16 +84,16 @@ TestOpts g_testopts[] =
 HashInfo g_hashes[] =
 {
   // -- No-op hashes
-  { "donothing32", "Do-Nothing function - measure call overhead",
+  { "DoNothing32", "Do-Nothing function - measure call overhead",
     32, 32, 32, 0x00000000,
     DoNothingHash_seed_state, DoNothingHash_with_state },
-  { "donothing64", "Do-Nothing function - measure call overhead",
+  { "DoNothing64", "Do-Nothing function - measure call overhead",
     64, 64, 64, 0x00000000,
     DoNothingHash_seed_state, DoNothingHash_with_state },
-  { "donothing128", "Do-Nothing function - measure call overhead",
+  { "DoNothing128", "Do-Nothing function - measure call overhead",
     128, 128, 128, 0x00000000,
     DoNothingHash_seed_state, DoNothingHash_with_state },
-  { "NOP_OAAT_read64", "Noop function - measure one-at-a-time baseline",
+  { "DoNothingOAAT", "Noop function - measure one-at-a-time baseline",
     32, 32, 64, 0x00000000,
     NULL, NoopOAATReadHash_with_state },
   // -- Crap hashes

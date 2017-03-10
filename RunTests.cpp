@@ -58,7 +58,11 @@ bool testHash ( HashInfo * info, int self_test, double confidence )
 
   if (!self_test) {
     printf("###################################################################\n");
-    printf("### Testing %s (%s)\n",info->name,info->desc);
+    printf("### Testing %s - %s seed_state\n",
+        info->name, info->seed_state ? "with" : "no" );
+    printf("### - %s -\n", info->desc);
+    printf("### seedbits: %d statebits: %d hashbits: %d\n",
+        info->seedbits,info->statebits,info->hashbits);
     printf("###################################################################\n");
   }
   //-----------------------------------------------------------------------------
