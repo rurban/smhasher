@@ -1,0 +1,7 @@
+#!/bin/bash
+echo "#ifndef SMHASHER_VERSION" > VERSION.h
+echo "#define GITDESC \"$(git describe --long --always --dirty)\"" >> VERSION.h
+echo "#endif" >> VERSION.h
+echo "inline void print_version () { printf(\"This is SMHasher version %s - built on %s.\n\", GITDESC, __DATE__ ); }" >> VERSION.h
+touch main.cpp TAP.cpp
+make && ./SMHasher --validate

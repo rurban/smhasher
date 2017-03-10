@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "Types.h"
+#include "VERSION.h"
 extern HashInfo *g_hashUnderTest;
 int test_count = 0;
 int failed_count = 0;
@@ -68,8 +69,9 @@ void done_testing() {
     } else {
         printf(" %d of %d tests.\n", failed_count, test_count);
     }
-
     printf( "# Testing took %f seconds\n", double(timeEnd - timeBegin) / double(CLOCKS_PER_SEC) );
+    printf( "# ");
+    print_version();
     exit(exitcode);
 }
 

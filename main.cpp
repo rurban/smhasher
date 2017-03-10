@@ -16,7 +16,7 @@
 #include "siphash.h"
 #include <stdio.h>
 #include <time.h>
-
+#include "VERSION.h"
 //-----------------------------------------------------------------------------
 // Configuration. This are defaults.
 
@@ -512,6 +512,7 @@ void SelfTest ( bool validate )
   }
 }
 
+
 int main ( int argc, char ** argv )
 {
 #if (defined(__x86_64__) && __SSE4_2__) || defined(_M_X64) || defined(_X86_64_)
@@ -555,6 +556,10 @@ int main ( int argc, char ** argv )
       exit(0);
     }
     else
+    if (EQ(arg,arg_len,"--version")) {
+      print_version();
+      exit(0);
+    }
     if (EQ(arg,arg_len,"--validate")) {
       opt_validate = true;
       continue;
@@ -653,11 +658,15 @@ int main ( int argc, char ** argv )
       } while (p);
     }
     else {
+      int exit_code;
       if (EQ(arg,arg_len,"--help")) {
         printf("SMHasher [--test=TESTNAME] HASHNAME\n");
+        exit_code= 0;
       } else {
         printf("SMHasher: unknown option: %s\n", arg);
+        exit_code=1;
       }
+      print_version();
       printf("Valid options:\n");
       printf("--help                show the help (what you are looking at now)\n");
       printf("--list                list hashes available for testing\n");
@@ -673,7 +682,7 @@ int main ( int argc, char ** argv )
       for(size_t i = 0; i < sizeof(g_testopts) / sizeof(TestOpts); i++)
         printf("%s%s", i ? ", " : "", g_testopts[i].name);
       printf("\n"); // nl ok
-      exit(1);
+      exit(exit_code);
     }
   }
 
