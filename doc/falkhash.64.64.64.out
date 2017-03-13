@@ -1,0 +1,342 @@
+ok 1 - Found Hash # falkhash
+###################################################################
+### Testing falkhash - no seed_state
+### - falkhash.asm with aesenc, 64-bit for x64 -
+### seedbits: 64 statebits: 64 hashbits: 64
+###################################################################
+ok 2 - Verification code # falkhash
+# falkhash             - Verification value 0x211CE75E : Passed.
+### Sanity Tests ###
+# Sanity check simple key bit flips and consistency..........
+ok 3 - SanityTest # falkhash
+# Sanity check null suffixes change the hash (simple)..........
+ok 4 - Appended Zeroes Test # falkhash
+ok 5 - Sanity Test # falkhash
+### Speed Tests ###
+## Bulk speed test - 262144-byte keys
+# Alignment  7 - 15.029 bytes/cycle - 42997.02 MiB/sec @ 3 ghz
+# Alignment  6 - 15.020 bytes/cycle - 42973.32 MiB/sec @ 3 ghz
+# Alignment  5 - 15.018 bytes/cycle - 42965.77 MiB/sec @ 3 ghz
+# Alignment  4 - 15.047 bytes/cycle - 43048.86 MiB/sec @ 3 ghz
+# Alignment  3 - 15.041 bytes/cycle - 43032.46 MiB/sec @ 3 ghz
+# Alignment  2 - 15.042 bytes/cycle - 43034.76 MiB/sec @ 3 ghz
+# Alignment  1 - 14.923 bytes/cycle - 42695.92 MiB/sec @ 3 ghz
+# Alignment  0 - 12.817 bytes/cycle - 36668.59 MiB/sec @ 3 ghz
+# Average      - 14.742 bytes/cycle - 42177.09 MiB/sec @ 3 ghz
+## KeySpeed tests
+# falkhash                  0 byte keys      116.638 c/h
+# falkhash                  1 byte keys       95.744 c/h       95.744 c/b        0.010 b/c
+# falkhash                  2 byte keys       95.750 c/h       47.875 c/b        0.021 b/c
+# falkhash                  3 byte keys       95.738 c/h       31.913 c/b        0.031 b/c
+# falkhash                  4 byte keys       95.739 c/h       23.935 c/b        0.042 b/c
+# falkhash                  5 byte keys       95.746 c/h       19.149 c/b        0.052 b/c
+# falkhash                  6 byte keys       95.745 c/h       15.958 c/b        0.063 b/c
+# falkhash                  7 byte keys       95.747 c/h       13.678 c/b        0.073 b/c
+# falkhash                  8 byte keys       95.759 c/h       11.970 c/b        0.084 b/c
+# falkhash                  9 byte keys       95.761 c/h       10.640 c/b        0.094 b/c
+# falkhash                 10 byte keys       95.754 c/h        9.575 c/b        0.104 b/c
+# falkhash                 11 byte keys       95.758 c/h        8.705 c/b        0.115 b/c
+# falkhash                 12 byte keys       95.754 c/h        7.979 c/b        0.125 b/c
+# falkhash                 13 byte keys       95.753 c/h        7.366 c/b        0.136 b/c
+# falkhash                 14 byte keys       96.242 c/h        6.874 c/b        0.145 b/c
+# falkhash                 15 byte keys       95.755 c/h        6.384 c/b        0.157 b/c
+# falkhash                 16 byte keys       71.305 c/h        4.457 c/b        0.224 b/c
+# falkhash                 17 byte keys       95.757 c/h        5.633 c/b        0.178 b/c
+# falkhash                 18 byte keys       96.649 c/h        5.369 c/b        0.186 b/c
+# falkhash                 19 byte keys       95.765 c/h        5.040 c/b        0.198 b/c
+# falkhash                 20 byte keys       95.765 c/h        4.788 c/b        0.209 b/c
+# falkhash                 21 byte keys       95.769 c/h        4.560 c/b        0.219 b/c
+# falkhash                 22 byte keys       95.770 c/h        4.353 c/b        0.230 b/c
+# falkhash                 23 byte keys       95.773 c/h        4.164 c/b        0.240 b/c
+# falkhash                 24 byte keys       95.773 c/h        3.991 c/b        0.251 b/c
+# falkhash                 25 byte keys       95.771 c/h        3.831 c/b        0.261 b/c
+# falkhash                 26 byte keys       96.547 c/h        3.713 c/b        0.269 b/c
+# falkhash                 27 byte keys       95.778 c/h        3.547 c/b        0.282 b/c
+# falkhash                 28 byte keys       95.779 c/h        3.421 c/b        0.292 b/c
+# falkhash                 29 byte keys       95.778 c/h        3.303 c/b        0.303 b/c
+# falkhash                 30 byte keys       95.783 c/h        3.193 c/b        0.313 b/c
+# falkhash                 31 byte keys       95.788 c/h        3.090 c/b        0.324 b/c
+#                          Average < 32       95.717 c/h        6.175 c/b        0.162 b/c
+# falkhash                 32 byte keys       71.657 c/h        2.239 c/b        0.447 b/c
+# falkhash                 36 byte keys       93.000 c/h        2.583 c/b        0.387 b/c
+# falkhash                 40 byte keys       93.000 c/h        2.325 c/b        0.430 b/c
+# falkhash                 44 byte keys       93.000 c/h        2.114 c/b        0.473 b/c
+# falkhash                 48 byte keys       71.659 c/h        1.493 c/b        0.670 b/c
+# falkhash                 52 byte keys       90.871 c/h        1.748 c/b        0.572 b/c
+# falkhash                 56 byte keys       91.815 c/h        1.640 c/b        0.610 b/c
+# falkhash                 60 byte keys       91.391 c/h        1.523 c/b        0.657 b/c
+# falkhash                 64 byte keys       71.690 c/h        1.120 c/b        0.893 b/c
+# falkhash                 68 byte keys       92.000 c/h        1.353 c/b        0.739 b/c
+# falkhash                 72 byte keys       92.000 c/h        1.278 c/b        0.783 b/c
+# falkhash                 76 byte keys       92.000 c/h        1.211 c/b        0.826 b/c
+# falkhash                 80 byte keys       50.921 c/h        0.637 c/b        1.571 b/c
+# falkhash                 84 byte keys      115.000 c/h        1.369 c/b        0.730 b/c
+# falkhash                 88 byte keys      115.000 c/h        1.307 c/b        0.765 b/c
+# falkhash                 92 byte keys      115.000 c/h        1.250 c/b        0.800 b/c
+# falkhash                 96 byte keys       77.568 c/h        0.808 c/b        1.238 b/c
+# falkhash                100 byte keys      115.000 c/h        1.150 c/b        0.870 b/c
+# falkhash                104 byte keys      115.000 c/h        1.106 c/b        0.904 b/c
+# falkhash                108 byte keys      115.000 c/h        1.065 c/b        0.939 b/c
+# falkhash                112 byte keys       77.777 c/h        0.694 c/b        1.440 b/c
+# falkhash                116 byte keys      112.312 c/h        0.968 c/b        1.033 b/c
+# falkhash                120 byte keys      112.348 c/h        0.936 c/b        1.068 b/c
+# falkhash                124 byte keys      112.374 c/h        0.906 c/b        1.103 b/c
+#                         Average < 128       95.363 c/h        2.255 c/b        0.443 b/c
+# falkhash                128 byte keys       77.998 c/h        0.609 c/b        1.641 b/c
+# falkhash                256 byte keys       91.602 c/h        0.358 c/b        2.795 b/c
+# falkhash                512 byte keys      100.848 c/h        0.197 c/b        5.077 b/c
+# falkhash               1024 byte keys      126.071 c/h        0.123 c/b        8.122 b/c
+# falkhash               2048 byte keys      212.401 c/h        0.104 c/b        9.642 b/c
+# falkhash               4096 byte keys      343.118 c/h        0.084 c/b       11.938 b/c
+# falkhash               8192 byte keys      598.733 c/h        0.073 c/b       13.682 b/c
+# falkhash              16384 byte keys     1119.499 c/h        0.068 c/b       14.635 b/c
+# falkhash              32768 byte keys     2143.806 c/h        0.065 c/b       15.285 b/c
+# falkhash              65536 byte keys     4198.236 c/h        0.064 c/b       15.610 b/c
+#                       Overall Average      217.464 c/h        0.108 c/b        9.288 b/c
+ok 6 - Speed (always passes) # falkhash
+### Differential Tests ###
+# Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 64 bit hashes.
+# 1000 reps, 8303632000 total tests, expecting 0.00 random collisions..........
+ok 7 - Differential collisions # falkhash
+ok 8 - Nothing skipped during differential collision check # falkhash
+# 0 total collisions, of which 0 single collisions were ignored
+ok 9 - ProcessDifferentials
+# Testing 11017632 up-to-4-bit differentials in 128-bit keys -> 64 bit hashes.
+# 1000 reps, 11017632000 total tests, expecting 0.00 random collisions..........
+ok 10 - Differential collisions # falkhash
+ok 11 - Nothing skipped during differential collision check # falkhash
+# 0 total collisions, of which 0 single collisions were ignored
+ok 12 - ProcessDifferentials
+# Testing 2796416 up-to-3-bit differentials in 256-bit keys -> 64 bit hashes.
+# 1000 reps, 2796416000 total tests, expecting 0.00 random collisions..........
+ok 13 - Differential collisions # falkhash
+ok 14 - Nothing skipped during differential collision check # falkhash
+# 0 total collisions, of which 0 single collisions were ignored
+ok 15 - ProcessDifferentials
+ok 16 - Differential # falkhash
+### Avalanche Tests ### - seed-bits: 64 hash-bits: 64
+# Samples 500000, expected error 0.00051200, confidence level 99.99994267%
+# Testing   0-bit keys.......... ok.     # worst-bit:   0.592% error-ratio: 9.758095e-01
+ok 17 - Strict Avalanche Criteria - 0 bit keys
+# Testing   8-bit keys.......... ok.     # worst-bit:   0.489% error-ratio: 9.716015e-01
+ok 18 - Strict Avalanche Criteria - 8 bit keys
+# Testing  16-bit keys.......... ok.     # worst-bit:   0.621% error-ratio: 1.001402e+00
+ok 19 - Strict Avalanche Criteria - 16 bit keys
+# Testing  24-bit keys.......... ok.     # worst-bit:   0.544% error-ratio: 1.027287e+00
+ok 20 - Strict Avalanche Criteria - 24 bit keys
+# Testing  32-bit keys.......... ok.     # worst-bit:   0.574% error-ratio: 9.699400e-01
+ok 21 - Strict Avalanche Criteria - 32 bit keys
+# Testing  40-bit keys.......... ok.     # worst-bit:   0.583% error-ratio: 1.008538e+00
+ok 22 - Strict Avalanche Criteria - 40 bit keys
+# Testing  48-bit keys.......... ok.     # worst-bit:   0.572% error-ratio: 9.734966e-01
+ok 23 - Strict Avalanche Criteria - 48 bit keys
+# Testing  56-bit keys.......... ok.     # worst-bit:   0.550% error-ratio: 9.919303e-01
+ok 24 - Strict Avalanche Criteria - 56 bit keys
+# Testing  64-bit keys.......... ok.     # worst-bit:   0.620% error-ratio: 9.670206e-01
+ok 25 - Strict Avalanche Criteria - 64 bit keys
+# Testing  72-bit keys.......... ok.     # worst-bit:   0.566% error-ratio: 1.014629e+00
+ok 26 - Strict Avalanche Criteria - 72 bit keys
+# Testing  80-bit keys.......... ok.     # worst-bit:   0.482% error-ratio: 9.991042e-01
+ok 27 - Strict Avalanche Criteria - 80 bit keys
+# Testing  88-bit keys.......... ok.     # worst-bit:   0.614% error-ratio: 9.941479e-01
+ok 28 - Strict Avalanche Criteria - 88 bit keys
+# Testing  96-bit keys.......... ok.     # worst-bit:   0.555% error-ratio: 1.023983e+00
+ok 29 - Strict Avalanche Criteria - 96 bit keys
+# Testing 104-bit keys.......... ok.     # worst-bit:   0.559% error-ratio: 1.008103e+00
+ok 30 - Strict Avalanche Criteria - 104 bit keys
+# Testing 112-bit keys.......... ok.     # worst-bit:   0.532% error-ratio: 9.902688e-01
+ok 31 - Strict Avalanche Criteria - 112 bit keys
+# Testing 120-bit keys.......... ok.     # worst-bit:   0.531% error-ratio: 1.003027e+00
+ok 32 - Strict Avalanche Criteria - 120 bit keys
+# Testing 128-bit keys.......... ok.     # worst-bit:   0.609% error-ratio: 1.004566e+00
+ok 33 - Strict Avalanche Criteria - 128 bit keys
+# Testing 136-bit keys.......... ok.     # worst-bit:   0.529% error-ratio: 1.001781e+00
+ok 34 - Strict Avalanche Criteria - 136 bit keys
+# Testing 144-bit keys.......... ok.     # worst-bit:   0.521% error-ratio: 1.013258e+00
+ok 35 - Strict Avalanche Criteria - 144 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.544% error-ratio: 1.017616e+00
+ok 36 - Strict Avalanche Criteria - 152 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.660% error-ratio: 1.009721e+00
+ok 37 - Strict Avalanche Criteria - 160 bit keys
+# Testing 256-bit keys.......... ok.     # worst-bit:   0.570% error-ratio: 1.003607e+00
+ok 38 - Strict Avalanche Criteria - 256 bit keys
+ok 39 - Strict Avalanche Criteria # falkhash
+### Keyset 'Cyclic' Tests ###
+# Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 40 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+ok 41 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 42 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
+ok 43 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 44 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
+ok 45 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 46 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
+ok 47 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 48 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
+ok 49 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
+ok 50 - Keyset 'Cyclic' # falkhash
+### Keyset 'TwoBytes' Tests ###
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 51 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+ok 52 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 53 - Collision Rate for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+ok 54 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 55 - Collision Rate for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+ok 56 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 57 - Collision Rate for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+ok 58 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 59 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+ok 60 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+ok 61 - Keyset 'TwoBytes' # falkhash
+### Keyset 'Sparse' Tests ###
+# Keyset 'Sparse' - 32-bit keys with up to 6 bits set - 1149017 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 62 - Collision Rate for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+ok 63 - Distribution Bias Check for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+# Keyset 'Sparse' - 40-bit keys with up to 6 bits set - 4598479 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 64 - Collision Rate for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+ok 65 - Distribution Bias Check for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+# Keyset 'Sparse' - 48-bit keys with up to 5 bits set - 1925357 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 66 - Collision Rate for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+ok 67 - Distribution Bias Check for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 56-bit keys with up to 5 bits set - 4216423 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 68 - Collision Rate for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+ok 69 - Distribution Bias Check for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 64-bit keys with up to 5 bits set - 8303633 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 70 - Collision Rate for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+ok 71 - Distribution Bias Check for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 96-bit keys with up to 4 bits set - 3469497 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 72 - Collision Rate for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+ok 73 - Distribution Bias Check for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+# Keyset 'Sparse' - 256-bit keys with up to 3 bits set - 2796417 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 74 - Collision Rate for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+ok 75 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+# Keyset 'Sparse' - 2048-bit keys with up to 2 bits set - 2098177 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 76 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 77 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 78 - Keyset 'Sparse' # falkhash
+# Keyset 'CRC-MultiCollision' - 1048575 x 16 block keys - 128-bytes long - 10 seeds
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 79 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 1 # falkhash
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 80 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 2 # falkhash
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 81 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 3 # falkhash
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 82 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 4 # falkhash
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 83 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 5 # falkhash
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 84 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 6 # falkhash
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 85 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 7 # falkhash
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 86 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 8 # falkhash
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 87 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 9 # falkhash
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 88 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 10 # falkhash
+### Keyset 'Combination Lowbits' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 89 - Collision Rate for Keyset 'Combination Lowbits'
+ok 90 - Distribution Bias Check for Keyset 'Combination Lowbits'
+ok 91 - Keyset 'Combination Lowbits' # falkhash
+### Keyset 'Combination Highbits' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 92 - Collision Rate for Keyset 'Combination Highbits'
+ok 93 - Distribution Bias Check for Keyset 'Combination Highbits'
+ok 94 - Keyset 'Combination Highbits' # falkhash
+### Keyset 'Combination Highbits2' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 95 - Collision Rate for Keyset 'Combination Highbits2'
+ok 96 - Distribution Bias Check for Keyset 'Combination Highbits2'
+ok 97 - Keyset 'Combination Highbits2' # falkhash
+### Keyset 'Combination 0x80000000' Tests ###
+# Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 98 - Collision Rate for Keyset 'Combination 0x80000000'
+ok 99 - Distribution Bias Check for Keyset 'Combination 0x80000000'
+ok 100 - Keyset 'Combination 0x80000000' # falkhash
+### Keyset 'Combination 0x00000001' Tests ###
+# Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 101 - Collision Rate for Keyset 'Combination 0x00000001'
+ok 102 - Distribution Bias Check for Keyset 'Combination 0x00000001'
+ok 103 - Keyset 'Combination 0x00000001' # falkhash
+### Keyset 'Combination Hi-Lo' Tests ###
+# Keyset 'Combination' - up to 6 blocks from a set of 15 - 12204240 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 104 - Collision Rate for Keyset 'Combination Hi-Lo'
+ok 105 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
+ok 106 - Keyset 'Combination Hi-Lo' # falkhash
+### Keyset 'Text' Tests ###
+# Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 107 - Collision Rate for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+ok 108 - Distribution Bias Check for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 109 - Collision Rate for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+ok 110 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 111 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 112 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 113 - Keyset 'Text' # falkhash
+### Keyset 'Zeroes' Tests ###
+# Keyset 'Zeroes' - 262144 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 114 - Collision Rate for Keyset 'Zeroes' - 262144 keys
+ok 115 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys
+ok 116 - Keyset 'Zeroes' # falkhash
+### Keyset 'Seed' Tests ###
+# Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 117 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+ok 118 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# Keyset 'Seed' - 2000000 seeds, Key ""
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 119 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
+ok 120 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
+# Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 121 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+ok 122 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 123 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 124 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 125 - Keyset 'Seed' # falkhash
+### Keyset 'Effs' Tests ###
+# Keyset 'Effs' - 262144 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 126 - Collision Rate for Keyset 'Effs' - 262144 keys
+ok 127 - Distribution Bias Check for Keyset 'Effs' - 262144 keys
+ok 128 - Keyset 'Effs' # falkhash
+ok 129 - all tests passed # falkhash
+1..129
+# All Tests Passed. falkhash passed all 129 tests run.
+# Testing took 2167.549048 seconds
+# This is SMHasher version v1.0-demerphq-5-g86440f3 - built on Mar 10 2017.

@@ -1,0 +1,1159 @@
+ok 1 - SelfTest - Verify 89 Hashes
+ok 2 - Found Hash # sdbm
+###################################################################
+### Testing sdbm - no seed_state
+### - sdbm - with seeding (as in perl5) -
+### seedbits: 32 statebits: 32 hashbits: 32
+###################################################################
+### Sanity Tests ###
+ok 3 - Verification code # sdbm
+# Sanity check simple key bit flips and consistency..........
+ok 4 - SanityTest # sdbm
+# Sanity check null suffixes change the hash (simple)..........
+ok 5 - Appended Zeroes Test # sdbm
+ok 6 - Sanity Test # sdbm
+### Speed Tests ###
+## Bulk speed test - 262144-byte keys
+# Alignment  7 -  0.300 bytes/cycle -  857.64 MiB/sec @ 3 ghz
+# Alignment  6 -  0.300 bytes/cycle -  857.64 MiB/sec @ 3 ghz
+# Alignment  5 -  0.300 bytes/cycle -  857.64 MiB/sec @ 3 ghz
+# Alignment  4 -  0.300 bytes/cycle -  857.64 MiB/sec @ 3 ghz
+# Alignment  3 -  0.300 bytes/cycle -  857.64 MiB/sec @ 3 ghz
+# Alignment  2 -  0.300 bytes/cycle -  857.64 MiB/sec @ 3 ghz
+# Alignment  1 -  0.300 bytes/cycle -  857.64 MiB/sec @ 3 ghz
+# Alignment  0 -  0.300 bytes/cycle -  857.64 MiB/sec @ 3 ghz
+# Average      -  0.300 bytes/cycle -  857.64 MiB/sec @ 3 ghz
+## KeySpeed tests
+# sdbm                      0 byte keys        5.000 c/h
+# sdbm                      1 byte keys        7.596 c/h        7.596 c/b        0.132 b/c
+# sdbm                      2 byte keys        6.291 c/h        3.145 c/b        0.318 b/c
+# sdbm                      3 byte keys       10.000 c/h        3.333 c/b        0.300 b/c
+# sdbm                      4 byte keys       13.000 c/h        3.250 c/b        0.308 b/c
+# sdbm                      5 byte keys       16.000 c/h        3.200 c/b        0.312 b/c
+# sdbm                      6 byte keys       20.000 c/h        3.333 c/b        0.300 b/c
+# sdbm                      7 byte keys       23.000 c/h        3.286 c/b        0.304 b/c
+# sdbm                      8 byte keys       26.612 c/h        3.326 c/b        0.301 b/c
+# sdbm                      9 byte keys       30.000 c/h        3.333 c/b        0.300 b/c
+# sdbm                     10 byte keys       33.000 c/h        3.300 c/b        0.303 b/c
+# sdbm                     11 byte keys       36.000 c/h        3.273 c/b        0.306 b/c
+# sdbm                     12 byte keys       40.000 c/h        3.333 c/b        0.300 b/c
+# sdbm                     13 byte keys       43.000 c/h        3.308 c/b        0.302 b/c
+# sdbm                     14 byte keys       46.000 c/h        3.286 c/b        0.304 b/c
+# sdbm                     15 byte keys       50.000 c/h        3.333 c/b        0.300 b/c
+# sdbm                     16 byte keys       53.000 c/h        3.312 c/b        0.302 b/c
+# sdbm                     17 byte keys       56.543 c/h        3.326 c/b        0.301 b/c
+# sdbm                     18 byte keys       60.000 c/h        3.333 c/b        0.300 b/c
+# sdbm                     19 byte keys       63.000 c/h        3.316 c/b        0.302 b/c
+# sdbm                     20 byte keys       66.000 c/h        3.300 c/b        0.303 b/c
+# sdbm                     21 byte keys       70.000 c/h        3.333 c/b        0.300 b/c
+# sdbm                     22 byte keys       73.000 c/h        3.318 c/b        0.301 b/c
+# sdbm                     23 byte keys       76.377 c/h        3.321 c/b        0.301 b/c
+# sdbm                     24 byte keys       80.000 c/h        3.333 c/b        0.300 b/c
+# sdbm                     25 byte keys       83.000 c/h        3.320 c/b        0.301 b/c
+# sdbm                     26 byte keys       86.259 c/h        3.318 c/b        0.301 b/c
+# sdbm                     27 byte keys       90.000 c/h        3.333 c/b        0.300 b/c
+# sdbm                     28 byte keys       93.000 c/h        3.321 c/b        0.301 b/c
+# sdbm                     29 byte keys       99.973 c/h        3.447 c/b        0.290 b/c
+# sdbm                     30 byte keys      102.098 c/h        3.403 c/b        0.294 b/c
+# sdbm                     31 byte keys      103.000 c/h        3.323 c/b        0.301 b/c
+#                          Average < 32       51.898 c/h        3.348 c/b        0.299 b/c
+# sdbm                     32 byte keys      107.696 c/h        3.365 c/b        0.297 b/c
+# sdbm                     36 byte keys      120.000 c/h        3.333 c/b        0.300 b/c
+# sdbm                     40 byte keys      133.000 c/h        3.325 c/b        0.301 b/c
+# sdbm                     44 byte keys      146.428 c/h        3.328 c/b        0.300 b/c
+# sdbm                     48 byte keys      160.000 c/h        3.333 c/b        0.300 b/c
+# sdbm                     52 byte keys      173.000 c/h        3.327 c/b        0.301 b/c
+# sdbm                     56 byte keys      186.745 c/h        3.335 c/b        0.300 b/c
+# sdbm                     60 byte keys      200.000 c/h        3.333 c/b        0.300 b/c
+# sdbm                     64 byte keys      213.000 c/h        3.328 c/b        0.300 b/c
+# sdbm                     68 byte keys      226.624 c/h        3.333 c/b        0.300 b/c
+# sdbm                     72 byte keys      240.000 c/h        3.333 c/b        0.300 b/c
+# sdbm                     76 byte keys      253.342 c/h        3.333 c/b        0.300 b/c
+# sdbm                     80 byte keys      266.577 c/h        3.332 c/b        0.300 b/c
+# sdbm                     84 byte keys      280.000 c/h        3.333 c/b        0.300 b/c
+# sdbm                     88 byte keys      293.000 c/h        3.330 c/b        0.300 b/c
+# sdbm                     92 byte keys      306.720 c/h        3.334 c/b        0.300 b/c
+# sdbm                     96 byte keys      320.000 c/h        3.333 c/b        0.300 b/c
+# sdbm                    100 byte keys      335.147 c/h        3.351 c/b        0.298 b/c
+# sdbm                    104 byte keys      346.635 c/h        3.333 c/b        0.300 b/c
+# sdbm                    108 byte keys      360.232 c/h        3.335 c/b        0.300 b/c
+# sdbm                    112 byte keys      373.509 c/h        3.335 c/b        0.300 b/c
+# sdbm                    116 byte keys      386.996 c/h        3.336 c/b        0.300 b/c
+# sdbm                    120 byte keys      400.294 c/h        3.336 c/b        0.300 b/c
+# sdbm                    124 byte keys      413.567 c/h        3.335 c/b        0.300 b/c
+#                         Average < 128      141.130 c/h        3.338 c/b        0.300 b/c
+# sdbm                    128 byte keys      426.702 c/h        3.334 c/b        0.300 b/c
+# sdbm                    256 byte keys      878.532 c/h        3.432 c/b        0.291 b/c
+# sdbm                    512 byte keys     1742.519 c/h        3.403 c/b        0.294 b/c
+# sdbm                   1024 byte keys     3440.416 c/h        3.360 c/b        0.298 b/c
+# sdbm                   2048 byte keys     6856.237 c/h        3.348 c/b        0.299 b/c
+# sdbm                   4096 byte keys    13687.896 c/h        3.342 c/b        0.299 b/c
+# sdbm                   8192 byte keys    27634.953 c/h        3.373 c/b        0.296 b/c
+# sdbm                  16384 byte keys    54677.742 c/h        3.337 c/b        0.300 b/c
+# sdbm                  32768 byte keys   109331.354 c/h        3.337 c/b        0.300 b/c
+# sdbm                  65536 byte keys   218638.197 c/h        3.336 c/b        0.300 b/c
+#                       Overall Average     6745.724 c/h        3.340 c/b        0.299 b/c
+ok 7 - Speed (always passes) # sdbm
+### Differential Tests ###
+# Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 32 bit hashes.
+# 1000 reps, 8303632000 total tests, expecting 1.93 random collisions..........
+ok 8 - Differential collisions # sdbm
+ok 9 - Nothing skipped during differential collision check # sdbm
+# 0 total collisions, of which 0 single collisions were ignored
+ok 10 - ProcessDifferentials
+# Testing 11017632 up-to-4-bit differentials in 128-bit keys -> 32 bit hashes.
+# 1000 reps, 11017632000 total tests, expecting 2.57 random collisions..........
+ok 11 - Differential collisions # sdbm
+ok 12 - Nothing skipped during differential collision check # sdbm
+# 0 total collisions, of which 0 single collisions were ignored
+ok 13 - ProcessDifferentials
+# Testing 2796416 up-to-3-bit differentials in 256-bit keys -> 32 bit hashes.
+# 1000 reps, 2796416000 total tests, expecting 0.65 random collisions..........
+ok 14 - Differential collisions # sdbm
+ok 15 - Nothing skipped during differential collision check # sdbm
+# 0 total collisions, of which 0 single collisions were ignored
+ok 16 - ProcessDifferentials
+ok 17 - Differential # sdbm
+### Avalanche Tests ### - seed-bits: 32 hash-bits: 32
+# Samples 1000000, expected error 0.00025600, confidence level 99.99994267%
+# Testing   0-bit keys.......... not ok! # worst-bit:   0.268% error-ratio: 1.043114e+00
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+#              +--------------------------------+
+# 0 of 1024 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00026704
+#     hash bit-level errors: 12/32
+#     - hash bit 1 gtest-prob not-random: 100.0000 (15976390/16023610)
+#     - hash bit 3 gtest-prob not-random: 100.0000 (16015030/15984970)
+#     - hash bit 4 gtest-prob not-random: 100.0000 (16018900/15981100)
+#     - with 9 more hash bit errors not described above.
+not ok 18 - Strict Avalanche Criteria - 0 bit keys
+# Testing   8-bit keys.......... not ok! # worst-bit:   0.237% error-ratio: 1.034881e+00
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 8
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 8
+#              +--------------------------------+
+# 0 of 1280 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00026493
+#     hash bit-level errors: 12/32
+#     - hash bit 5 gtest-prob not-random: 100.0000 (19980138/20019862)
+#     - hash bit 6 gtest-prob not-random: 100.0000 (20020084/19979916)
+#     - hash bit 7 gtest-prob not-random: 100.0000 (19984012/20015988)
+#     - with 9 more hash bit errors not described above.
+not ok 19 - Strict Avalanche Criteria - 8 bit keys
+# Testing  16-bit keys.......... not ok! # worst-bit:   0.392% error-ratio: 1.144258e+00
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 16
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 16
+#              +--------------------------------+
+# 0 of 1536 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00029293
+#     hash bit-level errors: 9/32
+#     - hash bit 0 gtest-prob not-random: 100.0000 (24023058/23976942)
+#     - hash bit 2 gtest-prob not-random: 100.0000 (24042933/23957067)
+#     - hash bit 3 gtest-prob not-random: 100.0000 (24022795/23977205)
+#     - with 6 more hash bit errors not described above.
+not ok 20 - Strict Avalanche Criteria - 16 bit keys
+# Testing  24-bit keys.......... not ok! # worst-bit:   0.361% error-ratio: 9.203586e-01
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 24
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 24
+#              +--------------------------------+
+# 0 of 1792 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00023561
+#     hash bit-level errors: 7/32
+#     - hash bit 1 gtest-prob not-random: 100.0000 (27968034/28031966)
+#     - hash bit 6 gtest-prob not-random: 100.0000 (27979042/28020958)
+#     - hash bit 9 gtest-prob not-random: 100.0000 (27975646/28024354)
+#     - with 4 more hash bit errors not described above.
+not ok 21 - Strict Avalanche Criteria - 24 bit keys
+# Testing  32-bit keys.......... not ok! # worst-bit:   0.286% error-ratio: 8.646703e-01
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 32
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 32
+#              +--------------------------------+
+# 0 of 2048 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00022136
+#     hash bit-level errors: 7/32
+#     - hash bit 0 gtest-prob not-random: 100.0000 (31976132/32023868)
+#     - hash bit 1 gtest-prob not-random: 100.0000 (31970952/32029048)
+#     - hash bit 4 gtest-prob not-random: 100.0000 (32039083/31960917)
+#     - with 4 more hash bit errors not described above.
+not ok 22 - Strict Avalanche Criteria - 32 bit keys
+# Testing  40-bit keys.......... not ok! # worst-bit:   0.344% error-ratio: 1.070700e+00
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 40
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 40
+#              +--------------------------------+
+# 0 of 2304 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00027410
+#     hash bit-level errors: 7/32
+#     - hash bit 3 gtest-prob not-random: 100.0000 (35969618/36030382)
+#     - hash bit 6 gtest-prob not-random: 100.0000 (36057139/35942861)
+#     - hash bit 7 gtest-prob not-random: 100.0000 (35968165/36031835)
+#     - with 4 more hash bit errors not described above.
+not ok 23 - Strict Avalanche Criteria - 40 bit keys
+# Testing  48-bit keys.......... not ok! # worst-bit:   0.324% error-ratio: 9.360149e-01
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 48
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 48
+#              +--------------------------------+
+# 0 of 2560 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00023962
+#     hash bit-level errors: 4/32
+#     - hash bit 0 gtest-prob not-random: 100.0000 (39937630/40062370)
+#     - hash bit 1 gtest-prob not-random: 100.0000 (39952936/40047064)
+#     - hash bit 2 gtest-prob not-random: 100.0000 (39960775/40039225)
+#     - with 1 more hash bit errors not described above.
+not ok 24 - Strict Avalanche Criteria - 48 bit keys
+# Testing  56-bit keys.......... not ok! # worst-bit:   0.290% error-ratio: 8.487998e-01
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 56
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 56
+#              +--------------------------------+
+# 0 of 2816 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00021729
+#     hash bit-level errors: 7/32
+#     - hash bit 0 gtest-prob not-random: 100.0000 (44053712/43946288)
+#     - hash bit 2 gtest-prob not-random: 100.0000 (43969172/44030828)
+#     - hash bit 9 gtest-prob not-random: 100.0000 (44028516/43971484)
+#     - with 4 more hash bit errors not described above.
+not ok 25 - Strict Avalanche Criteria - 56 bit keys
+# Testing  64-bit keys.......... not ok! # worst-bit:   0.397% error-ratio: 9.483456e-01
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 64
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 64
+#              +--------------------------------+
+# 0 of 3072 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00024278
+#     hash bit-level errors: 9/32
+#     - hash bit 1 gtest-prob not-random: 100.0000 (47972638/48027362)
+#     - hash bit 2 gtest-prob not-random: 100.0000 (47959084/48040916)
+#     - hash bit 3 gtest-prob not-random: 100.0000 (48049297/47950703)
+#     - with 6 more hash bit errors not described above.
+not ok 26 - Strict Avalanche Criteria - 64 bit keys
+# Testing  72-bit keys.......... not ok! # worst-bit:   0.353% error-ratio: 9.655780e-01
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 72
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 72
+#              +--------------------------------+
+# 0 of 3328 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00024719
+#     hash bit-level errors: 7/32
+#     - hash bit 2 gtest-prob not-random: 100.0000 (52059615/51940385)
+#     - hash bit 4 gtest-prob not-random: 100.0000 (51942641/52057359)
+#     - hash bit 6 gtest-prob not-random: 100.0000 (52038441/51961559)
+#     - with 4 more hash bit errors not described above.
+not ok 27 - Strict Avalanche Criteria - 72 bit keys
+# Testing  80-bit keys.......... not ok! # worst-bit:   0.293% error-ratio: 8.677555e-01
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 80
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 80
+#              +--------------------------------+
+# 0 of 3584 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00022215
+#     hash bit-level errors: 4/32
+#     - hash bit 2 gtest-prob not-random: 100.0000 (56039313/55960687)
+#     - hash bit 3 gtest-prob not-random: 100.0000 (56066757/55933243)
+#     - hash bit 4 gtest-prob not-random: 100.0000 (55958343/56041657)
+#     - with 1 more hash bit errors not described above.
+not ok 28 - Strict Avalanche Criteria - 80 bit keys
+# Testing  88-bit keys.......... not ok! # worst-bit:   0.326% error-ratio: 9.560031e-01
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 88
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 88
+#              +--------------------------------+
+# 0 of 3840 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00024474
+#     hash bit-level errors: 5/32
+#     - hash bit 1 gtest-prob not-random: 100.0000 (59946682/60053318)
+#     - hash bit 3 gtest-prob not-random: 100.0000 (59942915/60057085)
+#     - hash bit 5 gtest-prob not-random: 100.0000 (59959635/60040365)
+#     - with 2 more hash bit errors not described above.
+not ok 29 - Strict Avalanche Criteria - 88 bit keys
+# Testing  96-bit keys.......... not ok! # worst-bit:   0.407% error-ratio: 1.183769e+00
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 96
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 96
+#              +--------------------------------+
+# 0 of 4096 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00030304
+#     hash bit-level errors: 6/32
+#     - hash bit 0 gtest-prob not-random: 100.0000 (64069054/63930946)
+#     - hash bit 2 gtest-prob not-random: 100.0000 (63932446/64067554)
+#     - hash bit 4 gtest-prob not-random: 100.0000 (64103956/63896044)
+#     - with 3 more hash bit errors not described above.
+not ok 30 - Strict Avalanche Criteria - 96 bit keys
+# Testing 104-bit keys.......... not ok! # worst-bit:   0.398% error-ratio: 9.332906e-01
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 104
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 104
+#              +--------------------------------+
+# 0 of 4352 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00023892
+#     hash bit-level errors: 3/32
+#     - hash bit 1 gtest-prob not-random: 100.0000 (68061371/67938629)
+#     - hash bit 4 gtest-prob not-random: 100.0000 (67940346/68059654)
+#     - hash bit 11 gtest-prob not-random: 100.0000 (67968860/68031140)
+not ok 31 - Strict Avalanche Criteria - 104 bit keys
+# Testing 112-bit keys.......... not ok! # worst-bit:   0.360% error-ratio: 8.717035e-01
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 112
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 112
+#              +--------------------------------+
+# 0 of 4608 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00022316
+#     hash bit-level errors: 7/32
+#     - hash bit 0 gtest-prob not-random: 100.0000 (72048450/71951550)
+#     - hash bit 2 gtest-prob not-random: 100.0000 (72034862/71965138)
+#     - hash bit 3 gtest-prob not-random: 100.0000 (71947326/72052674)
+#     - with 4 more hash bit errors not described above.
+not ok 32 - Strict Avalanche Criteria - 112 bit keys
+# Testing 120-bit keys.......... not ok! # worst-bit:   0.374% error-ratio: 9.869559e-01
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 120
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 120
+#              +--------------------------------+
+# 0 of 4864 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00025266
+#     hash bit-level errors: 7/32
+#     - hash bit 0 gtest-prob not-random: 100.0000 (76036840/75963160)
+#     - hash bit 2 gtest-prob not-random: 100.0000 (75943377/76056623)
+#     - hash bit 3 gtest-prob not-random: 100.0000 (76064299/75935701)
+#     - with 4 more hash bit errors not described above.
+not ok 33 - Strict Avalanche Criteria - 120 bit keys
+# Testing 128-bit keys.......... not ok! # worst-bit:   0.353% error-ratio: 1.069598e+00
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 128
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 128
+#              +--------------------------------+
+# 0 of 5120 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00027382
+#     hash bit-level errors: 9/32
+#     - hash bit 1 gtest-prob not-random: 100.0000 (80107700/79892300)
+#     - hash bit 4 gtest-prob not-random: 100.0000 (79953065/80046935)
+#     - hash bit 6 gtest-prob not-random: 100.0000 (79909413/80090587)
+#     - with 6 more hash bit errors not described above.
+not ok 34 - Strict Avalanche Criteria - 128 bit keys
+# Testing 136-bit keys.......... not ok! # worst-bit:   0.400% error-ratio: 1.108096e+00
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 136
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 136
+#              +--------------------------------+
+# 0 of 5376 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00028367
+#     hash bit-level errors: 8/32
+#     - hash bit 2 gtest-prob not-random: 100.0000 (84065364/83934636)
+#     - hash bit 4 gtest-prob not-random: 100.0000 (83940322/84059678)
+#     - hash bit 5 gtest-prob not-random: 100.0000 (83955943/84044057)
+#     - with 5 more hash bit errors not described above.
+not ok 35 - Strict Avalanche Criteria - 136 bit keys
+# Testing 144-bit keys.......... not ok! # worst-bit:   0.375% error-ratio: 9.696004e-01
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 144
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 144
+#              +--------------------------------+
+# 0 of 5632 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00024822
+#     hash bit-level errors: 5/32
+#     - hash bit 0 gtest-prob not-random: 100.0000 (87937900/88062100)
+#     - hash bit 2 gtest-prob not-random: 100.0000 (87942139/88057861)
+#     - hash bit 3 gtest-prob not-random: 100.0000 (87875140/88124860)
+#     - with 2 more hash bit errors not described above.
+not ok 36 - Strict Avalanche Criteria - 144 bit keys
+# Testing 152-bit keys.......... not ok! # worst-bit:   0.423% error-ratio: 1.443614e+00
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 152
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 152
+#              +--------------------------------+
+# 0 of 5888 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00036957
+#     hash bit-level errors: 10/32
+#     - hash bit 0 gtest-prob not-random: 100.0000 (91890992/92109008)
+#     - hash bit 1 gtest-prob not-random: 100.0000 (92058983/91941017)
+#     - hash bit 2 gtest-prob not-random: 100.0000 (91881545/92118455)
+#     - with 7 more hash bit errors not described above.
+not ok 37 - Strict Avalanche Criteria - 152 bit keys
+# Testing 152-bit keys.......... not ok! # worst-bit:   0.334% error-ratio: 1.055529e+00
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 152
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 152
+#              +--------------------------------+
+# 0 of 5888 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00027022
+#     hash bit-level errors: 4/32
+#     - hash bit 0 gtest-prob not-random: 100.0000 (91868528/92131472)
+#     - hash bit 4 gtest-prob not-random: 100.0000 (91909945/92090055)
+#     - hash bit 7 gtest-prob not-random: 100.0000 (91941515/92058485)
+#     - with 1 more hash bit errors not described above.
+not ok 38 - Strict Avalanche Criteria - 160 bit keys
+# Testing 256-bit keys.......... not ok! # worst-bit:   0.403% error-ratio: 1.141160e+00
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 256
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 256
+#              +--------------------------------+
+# 0 of 9216 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00029214
+#     hash bit-level errors: 8/32
+#     - hash bit 0 gtest-prob not-random: 100.0000 (143819070/144180930)
+#     - hash bit 2 gtest-prob not-random: 100.0000 (144073479/143926521)
+#     - hash bit 3 gtest-prob not-random: 100.0000 (144111400/143888600)
+#     - with 5 more hash bit errors not described above.
+not ok 39 - Strict Avalanche Criteria - 256 bit keys
+not ok 40 - Strict Avalanche Criteria # sdbm
+### Keyset 'Cyclic' Tests ###
+# Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual   274568 (23.59x) - failed
+not ok 41 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
+# worst bias is the   8-bit window at bit  28 - 699.964% (416)
+not ok 42 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual  2467839 (211.99x) - failed
+not ok 43 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
+# worst bias is the   8-bit window at bit   0 - 25498.694% (416)
+not ok 44 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    92913 ( 7.98x) - failed
+not ok 45 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
+# worst bias is the   8-bit window at bit   0 - 699.964% (416)
+not ok 46 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual  2467256 (211.94x) - failed
+not ok 47 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
+# worst bias is the   8-bit window at bit   0 - 25498.694% (416)
+not ok 48 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    92844 ( 7.98x) - failed
+not ok 49 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+# worst bias is the   8-bit window at bit  30 - 699.964% (416)
+not ok 50 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+not ok 51 - Keyset 'Cyclic' # sdbm
+### Keyset 'TwoBytes' Tests ###
+# Testing collisions   - Expected    49.57, actual        0 ( 0.00x) - passed
+ok 52 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+# worst bias is the  16-bit window at bit  10 - 1324.890% (288)
+not ok 53 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+# Testing collisions   - Expected  3484.56, actual     3509 ( 1.01x) - passed
+ok 54 - Collision Rate for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+# worst bias is the  20-bit window at bit  12 - 1155.492% (416)
+not ok 55 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+# Testing collisions   - Expected 40347.77, actual    36898 ( 0.91x) - passed
+ok 56 - Collision Rate for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+# worst bias is the  20-bit window at bit  12 - 291.150% (416)
+not ok 57 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+# Testing collisions   - Expected 227963.15, actual   223696 ( 0.98x) - passed
+ok 58 - Collision Rate for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+# worst bias is the  20-bit window at bit  12 - 99.488% (416)
+not ok 59 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+# Testing collisions   - Expected 871784.70, actual   875607 ( 1.00x) - passed
+ok 60 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+# worst bias is the  20-bit window at bit  12 - 42.496% (416)
+not ok 61 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+not ok 62 - Keyset 'TwoBytes' # sdbm
+### Keyset 'Sparse' Tests ###
+# Keyset 'Sparse' - 32-bit keys with up to 6 bits set - 1149017 keys
+# Testing collisions   - Expected   153.70, actual      168 ( 1.09x) - passed
+ok 63 - Collision Rate for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+# worst bias is the  17-bit window at bit  15 - 39.389% (320)
+not ok 64 - Distribution Bias Check for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+# Keyset 'Sparse' - 40-bit keys with up to 6 bits set - 4598479 keys
+# Testing collisions   - Expected  2461.72, actual     2493 ( 1.01x) - passed
+ok 65 - Collision Rate for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+# worst bias is the  19-bit window at bit  13 - 38.339% (384)
+not ok 66 - Distribution Bias Check for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+# Keyset 'Sparse' - 48-bit keys with up to 5 bits set - 1925357 keys
+# Testing collisions   - Expected   431.55, actual      474 ( 1.10x) - passed
+ok 67 - Collision Rate for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+# worst bias is the  18-bit window at bit  13 - 39.174% (352)
+not ok 68 - Distribution Bias Check for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 56-bit keys with up to 5 bits set - 4216423 keys
+# Testing collisions   - Expected  2069.66, actual     2044 ( 0.99x) - passed
+ok 69 - Collision Rate for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+# worst bias is the  19-bit window at bit  13 - 33.146% (384)
+not ok 70 - Distribution Bias Check for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 64-bit keys with up to 5 bits set - 8303633 keys
+# Testing collisions   - Expected  8026.87, actual     8106 ( 1.01x) - passed
+ok 71 - Collision Rate for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+# worst bias is the  20-bit window at bit  12 - 30.871% (416)
+not ok 72 - Distribution Bias Check for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 96-bit keys with up to 4 bits set - 3469497 keys
+# Testing collisions   - Expected  1401.34, actual     1368 ( 0.98x) - passed
+ok 73 - Collision Rate for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+# worst bias is the  19-bit window at bit  13 - 22.575% (384)
+not ok 74 - Distribution Bias Check for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+# Keyset 'Sparse' - 256-bit keys with up to 3 bits set - 2796417 keys
+# Testing collisions   - Expected   910.36, actual      913 ( 1.00x) - passed
+ok 75 - Collision Rate for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+# worst bias is the  19-bit window at bit  13 - 8.641% (384)
+not ok 76 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+# Keyset 'Sparse' - 2048-bit keys with up to 2 bits set - 2098177 keys
+# Testing collisions   - Expected   512.50, actual      503 ( 0.98x) - passed
+ok 77 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+# worst bias is the  14-bit window at bit   0 - 15.792% (352)
+not ok 78 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+not ok 79 - Keyset 'Sparse' # sdbm
+# Keyset 'CRC-MultiCollision' - 100000 x 16 block keys - 128-bytes long - 10 seeds
+# Testing collisions   - Expected     1.16, actual        2 ( 1.72x) - passed
+ok 80 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 1 # sdbm
+# Testing collisions   - Expected     1.16, actual        2 ( 1.72x) - passed
+ok 81 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 2 # sdbm
+# Testing collisions   - Expected     1.16, actual        3 ( 2.58x) - failed
+not ok 82 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 3 # sdbm
+# Testing collisions   - Expected     1.16, actual        2 ( 1.72x) - passed
+ok 83 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 4 # sdbm
+# Testing collisions   - Expected     1.16, actual        1 ( 0.86x) - passed
+ok 84 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 5 # sdbm
+# Testing collisions   - Expected     1.16, actual        5 ( 4.30x) - failed
+not ok 85 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 6 # sdbm
+# Testing collisions   - Expected     1.16, actual        4 ( 3.44x) - failed
+not ok 86 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 7 # sdbm
+# Testing collisions   - Expected     1.16, actual        2 ( 1.72x) - passed
+ok 87 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 8 # sdbm
+# Testing collisions   - Expected     1.16, actual        5 ( 4.30x) - failed
+not ok 88 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 9 # sdbm
+# Testing collisions   - Expected     1.16, actual        4 ( 3.44x) - failed
+not ok 89 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 10 # sdbm
+### Keyset 'Combination Lowbits' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected 42799.01, actual 13594023 (317.62x) - failed
+not ok 90 - Collision Rate for Keyset 'Combination Lowbits'
+# worst bias is the  16-bit window at bit   0 - 3912.471% (416)
+not ok 91 - Distribution Bias Check for Keyset 'Combination Lowbits'
+not ok 92 - Keyset 'Combination Lowbits' # sdbm
+### Keyset 'Combination Highbits' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected 42799.01, actual 17137484 (400.42x) - failed
+not ok 93 - Collision Rate for Keyset 'Combination Highbits'
+# worst bias is the  20-bit window at bit   0 - 58114.496% (416)
+not ok 94 - Distribution Bias Check for Keyset 'Combination Highbits'
+not ok 95 - Keyset 'Combination Highbits' # sdbm
+### Keyset 'Combination Highbits2' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected 42799.01, actual 15765599 (368.36x) - failed
+not ok 96 - Collision Rate for Keyset 'Combination Highbits2'
+# worst bias is the  20-bit window at bit   0 - 58114.508% (416)
+not ok 97 - Distribution Bias Check for Keyset 'Combination Highbits2'
+not ok 98 - Keyset 'Combination Highbits2' # sdbm
+### Keyset 'Combination 0x80000000' Tests ###
+# Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
+# Testing collisions   - Expected   512.00, actual  1699262 - Excessive keys in collision - failed
+not ok 99 - Collision Rate for Keyset 'Combination 0x80000000'
+# worst bias is the  15-bit window at bit   0 - 133857.603% (352)
+not ok 100 - Distribution Bias Check for Keyset 'Combination 0x80000000'
+not ok 101 - Keyset 'Combination 0x80000000' # sdbm
+### Keyset 'Combination 0x00000001' Tests ###
+# Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
+# Testing collisions   - Expected   512.00, actual   232145 (453.41x) - failed
+not ok 102 - Collision Rate for Keyset 'Combination 0x00000001'
+# worst bias is the  17-bit window at bit   0 - 5799.683% (352)
+not ok 103 - Distribution Bias Check for Keyset 'Combination 0x00000001'
+not ok 104 - Keyset 'Combination 0x00000001' # sdbm
+### Keyset 'Combination Hi-Lo' Tests ###
+# Keyset 'Combination' - up to 6 blocks from a set of 15 - 12204240 keys
+# Testing collisions   - Expected 17339.30, actual   325532 (18.77x) - failed
+not ok 105 - Collision Rate for Keyset 'Combination Hi-Lo'
+# worst bias is the  20-bit window at bit   1 - 184.808% (416)
+not ok 106 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
+not ok 107 - Keyset 'Combination Hi-Lo' # sdbm
+### Keyset 'Text' Tests ###
+# Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# Testing collisions   - Expected 25418.13, actual   722750 (28.43x) - failed
+not ok 108 - Collision Rate for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# worst bias is the  20-bit window at bit  21 - 18.671% (416)
+not ok 109 - Distribution Bias Check for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# Testing collisions   - Expected 25418.13, actual   722750 (28.43x) - failed
+not ok 110 - Collision Rate for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# worst bias is the  19-bit window at bit   9 - 1176.251% (416)
+not ok 111 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+# Testing collisions   - Expected 25418.13, actual   722750 (28.43x) - failed
+not ok 112 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+# worst bias is the  20-bit window at bit   7 - 48.773% (416)
+not ok 113 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+not ok 114 - Keyset 'Text' # sdbm
+### Keyset 'Zeroes' Tests ###
+# Keyset 'Zeroes' - 262144 keys
+# Testing collisions   - Expected     8.00, actual        0 ( 0.00x) - passed
+ok 115 - Collision Rate for Keyset 'Zeroes' - 262144 keys
+ok 116 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys
+ok 117 - Keyset 'Zeroes' # sdbm
+### Keyset 'Seed' Tests ###
+# Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# Testing collisions   - Expected   465.46, actual        0 ( 0.00x) - passed
+ok 118 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+ok 119 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# Keyset 'Seed' - 2000000 seeds, Key ""
+# Testing collisions   - Expected   465.44, actual        0 ( 0.00x) - passed
+ok 120 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
+ok 121 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
+# Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# Testing collisions   - Expected   465.46, actual        0 ( 0.00x) - passed
+ok 122 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+ok 123 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+# Testing collisions   - Expected   465.45, actual        0 ( 0.00x) - passed
+ok 124 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 125 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 126 - Keyset 'Seed' # sdbm
+### Keyset 'Effs' Tests ###
+# Keyset 'Effs' - 262144 keys
+# Testing collisions   - Expected     8.00, actual        7 ( 0.88x) - passed
+ok 127 - Collision Rate for Keyset 'Effs' - 262144 keys
+# worst bias is the   8-bit window at bit  27 - 99.799% (256)
+not ok 128 - Distribution Bias Check for Keyset 'Effs' - 262144 keys
+not ok 129 - Keyset 'Effs' # sdbm
+not ok 130 - all tests passed # sdbm
+1..130
+# Tests Failed. sdbm failed 82 of 130 tests.
+# Testing took 1280.217326 seconds
+# This is SMHasher version v1.0-demerphq-5-g86440f3 - built on Mar 10 2017.

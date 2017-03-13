@@ -1,0 +1,381 @@
+ok 1 - SelfTest - Verify 89 Hashes
+ok 2 - Found Hash # MurmurOAAT
+###################################################################
+### Testing MurmurOAAT - no seed_state
+### - Murmur one-at-a-time -
+### seedbits: 32 statebits: 32 hashbits: 32
+###################################################################
+### Sanity Tests ###
+ok 3 - Verification code # MurmurOAAT
+# Sanity check simple key bit flips and consistency..........
+ok 4 - SanityTest # MurmurOAAT
+# Sanity check null suffixes change the hash (simple)..........
+ok 5 - Appended Zeroes Test # MurmurOAAT
+ok 6 - Sanity Test # MurmurOAAT
+### Speed Tests ###
+## Bulk speed test - 262144-byte keys
+# Alignment  7 -  0.200 bytes/cycle -  571.77 MiB/sec @ 3 ghz
+# Alignment  6 -  0.200 bytes/cycle -  571.77 MiB/sec @ 3 ghz
+# Alignment  5 -  0.200 bytes/cycle -  571.77 MiB/sec @ 3 ghz
+# Alignment  4 -  0.200 bytes/cycle -  571.77 MiB/sec @ 3 ghz
+# Alignment  3 -  0.200 bytes/cycle -  571.77 MiB/sec @ 3 ghz
+# Alignment  2 -  0.198 bytes/cycle -  567.67 MiB/sec @ 3 ghz
+# Alignment  1 -  0.200 bytes/cycle -  571.77 MiB/sec @ 3 ghz
+# Alignment  0 -  0.200 bytes/cycle -  571.77 MiB/sec @ 3 ghz
+# Average      -  0.200 bytes/cycle -  571.26 MiB/sec @ 3 ghz
+## KeySpeed tests
+# MurmurOAAT                0 byte keys        8.000 c/h
+# MurmurOAAT                1 byte keys        8.000 c/h        8.000 c/b        0.125 b/c
+# MurmurOAAT                2 byte keys       12.000 c/h        6.000 c/b        0.167 b/c
+# MurmurOAAT                3 byte keys       17.000 c/h        5.667 c/b        0.176 b/c
+# MurmurOAAT                4 byte keys       22.000 c/h        5.500 c/b        0.182 b/c
+# MurmurOAAT                5 byte keys       27.000 c/h        5.400 c/b        0.185 b/c
+# MurmurOAAT                6 byte keys       32.000 c/h        5.333 c/b        0.188 b/c
+# MurmurOAAT                7 byte keys       37.000 c/h        5.286 c/b        0.189 b/c
+# MurmurOAAT                8 byte keys       42.000 c/h        5.250 c/b        0.190 b/c
+# MurmurOAAT                9 byte keys       47.000 c/h        5.222 c/b        0.191 b/c
+# MurmurOAAT               10 byte keys       52.000 c/h        5.200 c/b        0.192 b/c
+# MurmurOAAT               11 byte keys       57.308 c/h        5.210 c/b        0.192 b/c
+# MurmurOAAT               12 byte keys       62.442 c/h        5.204 c/b        0.192 b/c
+# MurmurOAAT               13 byte keys       67.000 c/h        5.154 c/b        0.194 b/c
+# MurmurOAAT               14 byte keys       72.000 c/h        5.143 c/b        0.194 b/c
+# MurmurOAAT               15 byte keys       77.000 c/h        5.133 c/b        0.195 b/c
+# MurmurOAAT               16 byte keys       82.391 c/h        5.149 c/b        0.194 b/c
+# MurmurOAAT               17 byte keys       87.612 c/h        5.154 c/b        0.194 b/c
+# MurmurOAAT               18 byte keys       92.358 c/h        5.131 c/b        0.195 b/c
+# MurmurOAAT               19 byte keys       97.783 c/h        5.146 c/b        0.194 b/c
+# MurmurOAAT               20 byte keys      102.809 c/h        5.140 c/b        0.195 b/c
+# MurmurOAAT               21 byte keys      107.725 c/h        5.130 c/b        0.195 b/c
+# MurmurOAAT               22 byte keys      115.287 c/h        5.240 c/b        0.191 b/c
+# MurmurOAAT               23 byte keys      121.867 c/h        5.299 c/b        0.189 b/c
+# MurmurOAAT               24 byte keys      126.984 c/h        5.291 c/b        0.189 b/c
+# MurmurOAAT               25 byte keys      131.992 c/h        5.280 c/b        0.189 b/c
+# MurmurOAAT               26 byte keys      136.999 c/h        5.269 c/b        0.190 b/c
+# MurmurOAAT               27 byte keys      142.369 c/h        5.273 c/b        0.190 b/c
+# MurmurOAAT               28 byte keys      147.662 c/h        5.274 c/b        0.190 b/c
+# MurmurOAAT               29 byte keys      152.934 c/h        5.274 c/b        0.190 b/c
+# MurmurOAAT               30 byte keys      157.994 c/h        5.266 c/b        0.190 b/c
+# MurmurOAAT               31 byte keys      162.983 c/h        5.258 c/b        0.190 b/c
+#                          Average < 32       81.484 c/h        5.257 c/b        0.190 b/c
+# MurmurOAAT               32 byte keys      168.327 c/h        5.260 c/b        0.190 b/c
+# MurmurOAAT               36 byte keys      188.719 c/h        5.242 c/b        0.191 b/c
+# MurmurOAAT               40 byte keys      209.541 c/h        5.239 c/b        0.191 b/c
+# MurmurOAAT               44 byte keys      230.266 c/h        5.233 c/b        0.191 b/c
+# MurmurOAAT               48 byte keys      250.768 c/h        5.224 c/b        0.191 b/c
+# MurmurOAAT               52 byte keys      262.000 c/h        5.038 c/b        0.198 b/c
+# MurmurOAAT               56 byte keys      282.000 c/h        5.036 c/b        0.199 b/c
+# MurmurOAAT               60 byte keys      302.437 c/h        5.041 c/b        0.198 b/c
+# MurmurOAAT               64 byte keys      322.490 c/h        5.039 c/b        0.198 b/c
+# MurmurOAAT               68 byte keys      351.409 c/h        5.168 c/b        0.194 b/c
+# MurmurOAAT               72 byte keys      374.999 c/h        5.208 c/b        0.192 b/c
+# MurmurOAAT               76 byte keys      395.712 c/h        5.207 c/b        0.192 b/c
+# MurmurOAAT               80 byte keys      416.467 c/h        5.206 c/b        0.192 b/c
+# MurmurOAAT               84 byte keys      436.999 c/h        5.202 c/b        0.192 b/c
+# MurmurOAAT               88 byte keys      457.860 c/h        5.203 c/b        0.192 b/c
+# MurmurOAAT               92 byte keys      478.571 c/h        5.202 c/b        0.192 b/c
+# MurmurOAAT               96 byte keys      499.328 c/h        5.201 c/b        0.192 b/c
+# MurmurOAAT              100 byte keys      519.999 c/h        5.200 c/b        0.192 b/c
+# MurmurOAAT              104 byte keys      540.662 c/h        5.199 c/b        0.192 b/c
+# MurmurOAAT              108 byte keys      561.474 c/h        5.199 c/b        0.192 b/c
+# MurmurOAAT              112 byte keys      582.246 c/h        5.199 c/b        0.192 b/c
+# MurmurOAAT              116 byte keys      602.770 c/h        5.196 c/b        0.192 b/c
+# MurmurOAAT              120 byte keys      623.742 c/h        5.198 c/b        0.192 b/c
+# MurmurOAAT              124 byte keys      644.396 c/h        5.197 c/b        0.192 b/c
+#                         Average < 128      219.834 c/h        5.199 c/b        0.192 b/c
+# MurmurOAAT              128 byte keys      665.099 c/h        5.196 c/b        0.192 b/c
+# MurmurOAAT              256 byte keys     1349.951 c/h        5.273 c/b        0.190 b/c
+# MurmurOAAT              512 byte keys     2675.420 c/h        5.225 c/b        0.191 b/c
+# MurmurOAAT             1024 byte keys     5326.220 c/h        5.201 c/b        0.192 b/c
+# MurmurOAAT             2048 byte keys    10626.226 c/h        5.189 c/b        0.193 b/c
+# MurmurOAAT             4096 byte keys    21227.345 c/h        5.182 c/b        0.193 b/c
+# MurmurOAAT             8192 byte keys    42431.436 c/h        5.180 c/b        0.193 b/c
+# MurmurOAAT            16384 byte keys    84832.308 c/h        5.178 c/b        0.193 b/c
+# MurmurOAAT            32768 byte keys   169639.239 c/h        5.177 c/b        0.193 b/c
+# MurmurOAAT            65536 byte keys   340175.776 c/h        5.191 c/b        0.193 b/c
+#                       Overall Average    10473.632 c/h        5.185 c/b        0.193 b/c
+ok 7 - Speed (always passes) # MurmurOAAT
+### Differential Tests ###
+# Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 32 bit hashes.
+# 1000 reps, 8303632000 total tests, expecting 1.93 random collisions..........
+ok 8 - Differential collisions # MurmurOAAT
+ok 9 - Nothing skipped during differential collision check # MurmurOAAT
+# 1 total collisions, of which 1 single collisions were ignored
+ok 10 - ProcessDifferentials
+# Testing 11017632 up-to-4-bit differentials in 128-bit keys -> 32 bit hashes.
+# 1000 reps, 11017632000 total tests, expecting 2.57 random collisions..........
+ok 11 - Differential collisions # MurmurOAAT
+ok 12 - Nothing skipped during differential collision check # MurmurOAAT
+# 1 total collisions, of which 1 single collisions were ignored
+ok 13 - ProcessDifferentials
+# Testing 2796416 up-to-3-bit differentials in 256-bit keys -> 32 bit hashes.
+# 1000 reps, 2796416000 total tests, expecting 0.65 random collisions..........
+ok 14 - Differential collisions # MurmurOAAT
+ok 15 - Nothing skipped during differential collision check # MurmurOAAT
+# 1 total collisions, of which 1 single collisions were ignored
+ok 16 - ProcessDifferentials
+ok 17 - Differential # MurmurOAAT
+### Avalanche Tests ### - seed-bits: 32 hash-bits: 32
+# Samples 1000000, expected error 0.00025600, confidence level 99.99994267%
+# Testing   0-bit keys.......... not ok! # worst-bit:   0.268% error-ratio: 1.043114e+00
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+#              +--------------------------------+
+# 0 of 1024 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00026704
+#     hash bit-level errors: 12/32
+#     - hash bit 1 gtest-prob not-random: 100.0000 (15976390/16023610)
+#     - hash bit 3 gtest-prob not-random: 100.0000 (16015030/15984970)
+#     - hash bit 4 gtest-prob not-random: 100.0000 (16018900/15981100)
+#     - with 9 more hash bit errors not described above.
+not ok 18 - Strict Avalanche Criteria - 0 bit keys
+# Testing   8-bit keys.......... ok.     # worst-bit:   0.356% error-ratio: 1.027559e+00
+ok 19 - Strict Avalanche Criteria - 8 bit keys
+# Testing  16-bit keys.......... ok.     # worst-bit:   0.373% error-ratio: 1.089324e+00
+ok 20 - Strict Avalanche Criteria - 16 bit keys
+# Testing  24-bit keys.......... ok.     # worst-bit:   0.383% error-ratio: 1.080467e+00
+ok 21 - Strict Avalanche Criteria - 24 bit keys
+# Testing  32-bit keys.......... ok.     # worst-bit:   0.334% error-ratio: 9.508183e-01
+ok 22 - Strict Avalanche Criteria - 32 bit keys
+# Testing  40-bit keys.......... ok.     # worst-bit:   0.363% error-ratio: 9.890672e-01
+ok 23 - Strict Avalanche Criteria - 40 bit keys
+# Testing  48-bit keys.......... ok.     # worst-bit:   0.335% error-ratio: 9.967170e-01
+ok 24 - Strict Avalanche Criteria - 48 bit keys
+# Testing  56-bit keys.......... ok.     # worst-bit:   0.448% error-ratio: 1.007212e+00
+ok 25 - Strict Avalanche Criteria - 56 bit keys
+# Testing  64-bit keys.......... ok.     # worst-bit:   0.395% error-ratio: 1.012412e+00
+ok 26 - Strict Avalanche Criteria - 64 bit keys
+# Testing  72-bit keys.......... ok.     # worst-bit:   0.346% error-ratio: 1.030310e+00
+ok 27 - Strict Avalanche Criteria - 72 bit keys
+# Testing  80-bit keys.......... ok.     # worst-bit:   0.400% error-ratio: 9.163651e-01
+ok 28 - Strict Avalanche Criteria - 80 bit keys
+# Testing  88-bit keys.......... ok.     # worst-bit:   0.371% error-ratio: 9.731296e-01
+ok 29 - Strict Avalanche Criteria - 88 bit keys
+# Testing  96-bit keys.......... ok.     # worst-bit:   0.352% error-ratio: 1.029549e+00
+ok 30 - Strict Avalanche Criteria - 96 bit keys
+# Testing 104-bit keys.......... ok.     # worst-bit:   0.363% error-ratio: 1.010339e+00
+ok 31 - Strict Avalanche Criteria - 104 bit keys
+# Testing 112-bit keys.......... ok.     # worst-bit:   0.408% error-ratio: 1.024248e+00
+ok 32 - Strict Avalanche Criteria - 112 bit keys
+# Testing 120-bit keys.......... ok.     # worst-bit:   0.396% error-ratio: 9.924788e-01
+ok 33 - Strict Avalanche Criteria - 120 bit keys
+# Testing 128-bit keys.......... ok.     # worst-bit:   0.418% error-ratio: 1.013080e+00
+ok 34 - Strict Avalanche Criteria - 128 bit keys
+# Testing 136-bit keys.......... ok.     # worst-bit:   0.373% error-ratio: 1.001291e+00
+ok 35 - Strict Avalanche Criteria - 136 bit keys
+# Testing 144-bit keys.......... ok.     # worst-bit:   0.397% error-ratio: 1.015408e+00
+ok 36 - Strict Avalanche Criteria - 144 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.416% error-ratio: 1.013475e+00
+ok 37 - Strict Avalanche Criteria - 152 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.401% error-ratio: 1.046084e+00
+ok 38 - Strict Avalanche Criteria - 160 bit keys
+# Testing 256-bit keys.......... ok.     # worst-bit:   0.409% error-ratio: 1.001230e+00
+ok 39 - Strict Avalanche Criteria - 256 bit keys
+not ok 40 - Strict Avalanche Criteria # MurmurOAAT
+### Keyset 'Cyclic' Tests ###
+# Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    11662 ( 1.00x) - passed
+ok 41 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
+ok 42 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    11447 ( 0.98x) - passed
+ok 43 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
+ok 44 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    11746 ( 1.01x) - passed
+ok 45 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
+ok 46 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    11611 ( 1.00x) - passed
+ok 47 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
+ok 48 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    11592 ( 1.00x) - passed
+ok 49 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+ok 50 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+ok 51 - Keyset 'Cyclic' # MurmurOAAT
+### Keyset 'TwoBytes' Tests ###
+# Testing collisions   - Expected    49.57, actual   261390 - Excessive keys in collision - failed
+not ok 52 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+# worst bias is the  16-bit window at bit  16 - 9.124% (288)
+not ok 53 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+# Testing collisions   - Expected  3484.56, actual  3648657 - Excessive keys in collision - failed
+not ok 54 - Collision Rate for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+# worst bias is the  20-bit window at bit  11 - 42.108% (416)
+not ok 55 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+# Testing collisions   - Expected 40347.77, actual 14324082 (355.02x) - failed
+not ok 56 - Collision Rate for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+# worst bias is the  20-bit window at bit   8 - 25.558% (416)
+not ok 57 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+# Testing collisions   - Expected 227963.15, actual 36451074 (159.90x) - failed
+not ok 58 - Collision Rate for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+# worst bias is the  20-bit window at bit   8 - 15.941% (416)
+not ok 59 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+# Testing collisions   - Expected 871784.70, actual 74193579 (85.11x) - failed
+not ok 60 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+# worst bias is the  20-bit window at bit   8 - 10.699% (416)
+not ok 61 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+not ok 62 - Keyset 'TwoBytes' # MurmurOAAT
+### Keyset 'Sparse' Tests ###
+# Keyset 'Sparse' - 32-bit keys with up to 6 bits set - 1149017 keys
+# Testing collisions   - Expected   153.70, actual      163 ( 1.06x) - passed
+ok 63 - Collision Rate for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+ok 64 - Distribution Bias Check for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+# Keyset 'Sparse' - 40-bit keys with up to 6 bits set - 4598479 keys
+# Testing collisions   - Expected  2461.72, actual     2491 ( 1.01x) - passed
+ok 65 - Collision Rate for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+ok 66 - Distribution Bias Check for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+# Keyset 'Sparse' - 48-bit keys with up to 5 bits set - 1925357 keys
+# Testing collisions   - Expected   431.55, actual      448 ( 1.04x) - passed
+ok 67 - Collision Rate for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+ok 68 - Distribution Bias Check for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 56-bit keys with up to 5 bits set - 4216423 keys
+# Testing collisions   - Expected  2069.66, actual     2136 ( 1.03x) - passed
+ok 69 - Collision Rate for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+ok 70 - Distribution Bias Check for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 64-bit keys with up to 5 bits set - 8303633 keys
+# Testing collisions   - Expected  8026.87, actual     7966 ( 0.99x) - passed
+ok 71 - Collision Rate for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+ok 72 - Distribution Bias Check for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 96-bit keys with up to 4 bits set - 3469497 keys
+# Testing collisions   - Expected  1401.34, actual     1447 ( 1.03x) - passed
+ok 73 - Collision Rate for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+ok 74 - Distribution Bias Check for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+# Keyset 'Sparse' - 256-bit keys with up to 3 bits set - 2796417 keys
+# Testing collisions   - Expected   910.36, actual      886 ( 0.97x) - passed
+ok 75 - Collision Rate for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+ok 76 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+# Keyset 'Sparse' - 2048-bit keys with up to 2 bits set - 2098177 keys
+# Testing collisions   - Expected   512.50, actual      540 ( 1.05x) - passed
+ok 77 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 78 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 79 - Keyset 'Sparse' # MurmurOAAT
+# Keyset 'CRC-MultiCollision' - 1048575 x 16 block keys - 128-bytes long - 10 seeds
+# Testing collisions   - Expected   128.00, actual      144 ( 1.13x) - passed
+ok 80 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 1 # MurmurOAAT
+# Testing collisions   - Expected   128.00, actual      127 ( 0.99x) - passed
+ok 81 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 2 # MurmurOAAT
+# Testing collisions   - Expected   128.00, actual      142 ( 1.11x) - passed
+ok 82 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 3 # MurmurOAAT
+# Testing collisions   - Expected   128.00, actual      140 ( 1.09x) - passed
+ok 83 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 4 # MurmurOAAT
+# Testing collisions   - Expected   128.00, actual      141 ( 1.10x) - passed
+ok 84 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 5 # MurmurOAAT
+# Testing collisions   - Expected   128.00, actual      128 ( 1.00x) - passed
+ok 85 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 6 # MurmurOAAT
+# Testing collisions   - Expected   128.00, actual      113 ( 0.88x) - passed
+ok 86 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 7 # MurmurOAAT
+# Testing collisions   - Expected   128.00, actual      119 ( 0.93x) - passed
+ok 87 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 8 # MurmurOAAT
+# Testing collisions   - Expected   128.00, actual      134 ( 1.05x) - passed
+ok 88 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 9 # MurmurOAAT
+# Testing collisions   - Expected   128.00, actual      139 ( 1.09x) - passed
+ok 89 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 10 # MurmurOAAT
+### Keyset 'Combination Lowbits' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected 42799.01, actual    40408 ( 0.94x) - passed
+ok 90 - Collision Rate for Keyset 'Combination Lowbits'
+ok 91 - Distribution Bias Check for Keyset 'Combination Lowbits'
+ok 92 - Keyset 'Combination Lowbits' # MurmurOAAT
+### Keyset 'Combination Highbits' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected 42799.01, actual    44704 ( 1.04x) - passed
+ok 93 - Collision Rate for Keyset 'Combination Highbits'
+ok 94 - Distribution Bias Check for Keyset 'Combination Highbits'
+ok 95 - Keyset 'Combination Highbits' # MurmurOAAT
+### Keyset 'Combination Highbits2' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected 42799.01, actual    41648 ( 0.97x) - passed
+ok 96 - Collision Rate for Keyset 'Combination Highbits2'
+ok 97 - Distribution Bias Check for Keyset 'Combination Highbits2'
+ok 98 - Keyset 'Combination Highbits2' # MurmurOAAT
+### Keyset 'Combination 0x80000000' Tests ###
+# Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
+# Testing collisions   - Expected   512.00, actual      460 ( 0.90x) - passed
+ok 99 - Collision Rate for Keyset 'Combination 0x80000000'
+ok 100 - Distribution Bias Check for Keyset 'Combination 0x80000000'
+ok 101 - Keyset 'Combination 0x80000000' # MurmurOAAT
+### Keyset 'Combination 0x00000001' Tests ###
+# Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
+# Testing collisions   - Expected   512.00, actual      462 ( 0.90x) - passed
+ok 102 - Collision Rate for Keyset 'Combination 0x00000001'
+ok 103 - Distribution Bias Check for Keyset 'Combination 0x00000001'
+ok 104 - Keyset 'Combination 0x00000001' # MurmurOAAT
+### Keyset 'Combination Hi-Lo' Tests ###
+# Keyset 'Combination' - up to 6 blocks from a set of 15 - 12204240 keys
+# Testing collisions   - Expected 17339.30, actual    16724 ( 0.96x) - passed
+ok 105 - Collision Rate for Keyset 'Combination Hi-Lo'
+ok 106 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
+ok 107 - Keyset 'Combination Hi-Lo' # MurmurOAAT
+### Keyset 'Text' Tests ###
+# Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# Testing collisions   - Expected 25418.13, actual    23272 ( 0.92x) - passed
+ok 108 - Collision Rate for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+ok 109 - Distribution Bias Check for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# Testing collisions   - Expected 25418.13, actual    27162 ( 1.07x) - passed
+ok 110 - Collision Rate for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+ok 111 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+# Testing collisions   - Expected 25418.13, actual    16894 ( 0.66x) - passed
+ok 112 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 113 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 114 - Keyset 'Text' # MurmurOAAT
+### Keyset 'Zeroes' Tests ###
+# Keyset 'Zeroes' - 262144 keys
+# Testing collisions   - Expected     8.00, actual        0 ( 0.00x) - passed
+ok 115 - Collision Rate for Keyset 'Zeroes' - 262144 keys
+ok 116 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys
+ok 117 - Keyset 'Zeroes' # MurmurOAAT
+### Keyset 'Seed' Tests ###
+# Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# Testing collisions   - Expected   465.46, actual        0 ( 0.00x) - passed
+ok 118 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+ok 119 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# Keyset 'Seed' - 2000000 seeds, Key ""
+# Testing collisions   - Expected   465.44, actual        0 ( 0.00x) - passed
+ok 120 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
+ok 121 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
+# Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# Testing collisions   - Expected   465.46, actual        0 ( 0.00x) - passed
+ok 122 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+ok 123 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+# Testing collisions   - Expected   465.45, actual        0 ( 0.00x) - passed
+ok 124 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 125 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 126 - Keyset 'Seed' # MurmurOAAT
+### Keyset 'Effs' Tests ###
+# Keyset 'Effs' - 262144 keys
+# Testing collisions   - Expected     8.00, actual        0 ( 0.00x) - passed
+ok 127 - Collision Rate for Keyset 'Effs' - 262144 keys
+ok 128 - Distribution Bias Check for Keyset 'Effs' - 262144 keys
+ok 129 - Keyset 'Effs' # MurmurOAAT
+not ok 130 - all tests passed # MurmurOAAT
+1..130
+# Tests Failed. MurmurOAAT failed 14 of 130 tests.
+# Testing took 1685.848134 seconds
+# This is SMHasher version v1.0-demerphq-5-g86440f3 - built on Mar 10 2017.

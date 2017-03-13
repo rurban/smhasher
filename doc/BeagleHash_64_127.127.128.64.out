@@ -1,0 +1,342 @@
+ok 1 - SelfTest - Verify 89 Hashes
+ok 2 - Found Hash # BeagleHash_64_127
+###################################################################
+### Testing BeagleHash_64_127 - with seed_state
+### - Evolved hash with 128-bit state (2x64) - Yves Orton -
+### seedbits: 127 statebits: 128 hashbits: 64
+###################################################################
+### Sanity Tests ###
+ok 3 - Verification code # BeagleHash_64_127
+# Sanity check simple key bit flips and consistency..........
+ok 4 - SanityTest # BeagleHash_64_127
+# Sanity check null suffixes change the hash (simple)..........
+ok 5 - Appended Zeroes Test # BeagleHash_64_127
+ok 6 - Sanity Test # BeagleHash_64_127
+### Speed Tests ###
+## Bulk speed test - 262144-byte keys
+# Alignment  7 -  1.899 bytes/cycle - 5432.20 MiB/sec @ 3 ghz
+# Alignment  6 -  1.899 bytes/cycle - 5431.99 MiB/sec @ 3 ghz
+# Alignment  5 -  1.899 bytes/cycle - 5432.21 MiB/sec @ 3 ghz
+# Alignment  4 -  1.899 bytes/cycle - 5432.24 MiB/sec @ 3 ghz
+# Alignment  3 -  1.899 bytes/cycle - 5432.28 MiB/sec @ 3 ghz
+# Alignment  2 -  1.899 bytes/cycle - 5432.12 MiB/sec @ 3 ghz
+# Alignment  1 -  1.899 bytes/cycle - 5432.22 MiB/sec @ 3 ghz
+# Alignment  0 -  1.915 bytes/cycle - 5479.02 MiB/sec @ 3 ghz
+# Average      -  1.901 bytes/cycle - 5438.04 MiB/sec @ 3 ghz
+## KeySpeed tests
+# BeagleHash_64_127         0 byte keys       16.857 c/h
+# BeagleHash_64_127         1 byte keys       30.036 c/h       30.036 c/b        0.033 b/c
+# BeagleHash_64_127         2 byte keys       33.252 c/h       16.626 c/b        0.060 b/c
+# BeagleHash_64_127         3 byte keys       33.292 c/h       11.097 c/b        0.090 b/c
+# BeagleHash_64_127         4 byte keys       34.320 c/h        8.580 c/b        0.117 b/c
+# BeagleHash_64_127         5 byte keys       35.000 c/h        7.000 c/b        0.143 b/c
+# BeagleHash_64_127         6 byte keys       37.102 c/h        6.184 c/b        0.162 b/c
+# BeagleHash_64_127         7 byte keys       37.000 c/h        5.286 c/b        0.189 b/c
+# BeagleHash_64_127         8 byte keys       35.112 c/h        4.389 c/b        0.228 b/c
+# BeagleHash_64_127         9 byte keys       35.000 c/h        3.889 c/b        0.257 b/c
+# BeagleHash_64_127        10 byte keys       35.000 c/h        3.500 c/b        0.286 b/c
+# BeagleHash_64_127        11 byte keys       34.999 c/h        3.182 c/b        0.314 b/c
+# BeagleHash_64_127        12 byte keys       35.000 c/h        2.917 c/b        0.343 b/c
+# BeagleHash_64_127        13 byte keys       35.000 c/h        2.692 c/b        0.371 b/c
+# BeagleHash_64_127        14 byte keys       35.000 c/h        2.500 c/b        0.400 b/c
+# BeagleHash_64_127        15 byte keys       35.000 c/h        2.333 c/b        0.429 b/c
+# BeagleHash_64_127        16 byte keys       38.614 c/h        2.413 c/b        0.414 b/c
+# BeagleHash_64_127        17 byte keys       38.000 c/h        2.235 c/b        0.447 b/c
+# BeagleHash_64_127        18 byte keys       38.000 c/h        2.111 c/b        0.474 b/c
+# BeagleHash_64_127        19 byte keys       38.000 c/h        2.000 c/b        0.500 b/c
+# BeagleHash_64_127        20 byte keys       38.000 c/h        1.900 c/b        0.526 b/c
+# BeagleHash_64_127        21 byte keys       38.000 c/h        1.810 c/b        0.553 b/c
+# BeagleHash_64_127        22 byte keys       38.277 c/h        1.740 c/b        0.575 b/c
+# BeagleHash_64_127        23 byte keys       38.403 c/h        1.670 c/b        0.599 b/c
+# BeagleHash_64_127        24 byte keys       44.688 c/h        1.862 c/b        0.537 b/c
+# BeagleHash_64_127        25 byte keys       44.000 c/h        1.760 c/b        0.568 b/c
+# BeagleHash_64_127        26 byte keys       44.000 c/h        1.692 c/b        0.591 b/c
+# BeagleHash_64_127        27 byte keys       45.013 c/h        1.667 c/b        0.600 b/c
+# BeagleHash_64_127        28 byte keys       44.000 c/h        1.571 c/b        0.636 b/c
+# BeagleHash_64_127        29 byte keys       44.865 c/h        1.547 c/b        0.646 b/c
+# BeagleHash_64_127        30 byte keys       44.224 c/h        1.474 c/b        0.678 b/c
+# BeagleHash_64_127        31 byte keys       44.918 c/h        1.449 c/b        0.690 b/c
+#                          Average < 32       37.437 c/h        2.415 c/b        0.414 b/c
+# BeagleHash_64_127        32 byte keys       47.427 c/h        1.482 c/b        0.675 b/c
+# BeagleHash_64_127        36 byte keys       46.000 c/h        1.278 c/b        0.783 b/c
+# BeagleHash_64_127        40 byte keys       52.996 c/h        1.325 c/b        0.755 b/c
+# BeagleHash_64_127        44 byte keys       52.989 c/h        1.204 c/b        0.830 b/c
+# BeagleHash_64_127        48 byte keys       54.872 c/h        1.143 c/b        0.875 b/c
+# BeagleHash_64_127        52 byte keys       55.356 c/h        1.065 c/b        0.939 b/c
+# BeagleHash_64_127        56 byte keys       60.882 c/h        1.087 c/b        0.920 b/c
+# BeagleHash_64_127        60 byte keys       60.000 c/h        1.000 c/b        1.000 b/c
+# BeagleHash_64_127        64 byte keys       61.987 c/h        0.969 c/b        1.032 b/c
+# BeagleHash_64_127        68 byte keys       61.982 c/h        0.912 c/b        1.097 b/c
+# BeagleHash_64_127        72 byte keys       67.991 c/h        0.944 c/b        1.059 b/c
+# BeagleHash_64_127        76 byte keys       67.994 c/h        0.895 c/b        1.118 b/c
+# BeagleHash_64_127        80 byte keys       70.640 c/h        0.883 c/b        1.133 b/c
+# BeagleHash_64_127        84 byte keys       69.998 c/h        0.833 c/b        1.200 b/c
+# BeagleHash_64_127        88 byte keys       77.570 c/h        0.881 c/b        1.134 b/c
+# BeagleHash_64_127        92 byte keys       76.764 c/h        0.834 c/b        1.198 b/c
+# BeagleHash_64_127        96 byte keys       79.851 c/h        0.832 c/b        1.202 b/c
+# BeagleHash_64_127       100 byte keys       78.962 c/h        0.790 c/b        1.266 b/c
+# BeagleHash_64_127       104 byte keys       87.152 c/h        0.838 c/b        1.193 b/c
+# BeagleHash_64_127       108 byte keys       86.963 c/h        0.805 c/b        1.242 b/c
+# BeagleHash_64_127       112 byte keys       88.954 c/h        0.794 c/b        1.259 b/c
+# BeagleHash_64_127       116 byte keys       88.076 c/h        0.759 c/b        1.317 b/c
+# BeagleHash_64_127       120 byte keys       95.070 c/h        0.792 c/b        1.262 b/c
+# BeagleHash_64_127       124 byte keys       94.767 c/h        0.764 c/b        1.308 b/c
+#                         Average < 128       51.486 c/h        1.218 c/b        0.821 b/c
+# BeagleHash_64_127       128 byte keys       96.854 c/h        0.757 c/b        1.322 b/c
+# BeagleHash_64_127       256 byte keys      149.467 c/h        0.584 c/b        1.713 b/c
+# BeagleHash_64_127       512 byte keys      302.060 c/h        0.590 c/b        1.695 b/c
+# BeagleHash_64_127      1024 byte keys      572.414 c/h        0.559 c/b        1.789 b/c
+# BeagleHash_64_127      2048 byte keys     1102.011 c/h        0.538 c/b        1.858 b/c
+# BeagleHash_64_127      4096 byte keys     2169.797 c/h        0.530 c/b        1.888 b/c
+# BeagleHash_64_127      8192 byte keys     4306.967 c/h        0.526 c/b        1.902 b/c
+# BeagleHash_64_127     16384 byte keys     8582.544 c/h        0.524 c/b        1.909 b/c
+# BeagleHash_64_127     32768 byte keys    17137.775 c/h        0.523 c/b        1.912 b/c
+# BeagleHash_64_127     65536 byte keys    34243.026 c/h        0.523 c/b        1.914 b/c
+#                       Overall Average     1084.032 c/h        0.537 c/b        1.863 b/c
+ok 7 - Speed (always passes) # BeagleHash_64_127
+### Differential Tests ###
+# Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 64 bit hashes.
+# 1000 reps, 8303632000 total tests, expecting 0.00 random collisions..........
+ok 8 - Differential collisions # BeagleHash_64_127
+ok 9 - Nothing skipped during differential collision check # BeagleHash_64_127
+# 0 total collisions, of which 0 single collisions were ignored
+ok 10 - ProcessDifferentials
+# Testing 11017632 up-to-4-bit differentials in 128-bit keys -> 64 bit hashes.
+# 1000 reps, 11017632000 total tests, expecting 0.00 random collisions..........
+ok 11 - Differential collisions # BeagleHash_64_127
+ok 12 - Nothing skipped during differential collision check # BeagleHash_64_127
+# 0 total collisions, of which 0 single collisions were ignored
+ok 13 - ProcessDifferentials
+# Testing 2796416 up-to-3-bit differentials in 256-bit keys -> 64 bit hashes.
+# 1000 reps, 2796416000 total tests, expecting 0.00 random collisions..........
+ok 14 - Differential collisions # BeagleHash_64_127
+ok 15 - Nothing skipped during differential collision check # BeagleHash_64_127
+# 0 total collisions, of which 0 single collisions were ignored
+ok 16 - ProcessDifferentials
+ok 17 - Differential # BeagleHash_64_127
+### Avalanche Tests ### - seed-bits: 127 hash-bits: 64
+# Samples 500000, expected error 0.00051200, confidence level 99.99994267%
+# Testing   0-bit keys.......... ok.     # worst-bit:   0.520% error-ratio: 1.003675e+00
+ok 18 - Strict Avalanche Criteria - 0 bit keys
+# Testing   8-bit keys.......... ok.     # worst-bit:   0.549% error-ratio: 9.982720e-01
+ok 19 - Strict Avalanche Criteria - 8 bit keys
+# Testing  16-bit keys.......... ok.     # worst-bit:   0.589% error-ratio: 1.006833e+00
+ok 20 - Strict Avalanche Criteria - 16 bit keys
+# Testing  24-bit keys.......... ok.     # worst-bit:   0.514% error-ratio: 9.974935e-01
+ok 21 - Strict Avalanche Criteria - 24 bit keys
+# Testing  32-bit keys.......... ok.     # worst-bit:   0.576% error-ratio: 1.034565e+00
+ok 22 - Strict Avalanche Criteria - 32 bit keys
+# Testing  40-bit keys.......... ok.     # worst-bit:   0.607% error-ratio: 1.000600e+00
+ok 23 - Strict Avalanche Criteria - 40 bit keys
+# Testing  48-bit keys.......... ok.     # worst-bit:   0.606% error-ratio: 1.007426e+00
+ok 24 - Strict Avalanche Criteria - 48 bit keys
+# Testing  56-bit keys.......... ok.     # worst-bit:   0.615% error-ratio: 9.942581e-01
+ok 25 - Strict Avalanche Criteria - 56 bit keys
+# Testing  64-bit keys.......... ok.     # worst-bit:   0.600% error-ratio: 1.013452e+00
+ok 26 - Strict Avalanche Criteria - 64 bit keys
+# Testing  72-bit keys.......... ok.     # worst-bit:   0.541% error-ratio: 9.955324e-01
+ok 27 - Strict Avalanche Criteria - 72 bit keys
+# Testing  80-bit keys.......... ok.     # worst-bit:   0.654% error-ratio: 9.942471e-01
+ok 28 - Strict Avalanche Criteria - 80 bit keys
+# Testing  88-bit keys.......... ok.     # worst-bit:   0.567% error-ratio: 1.012393e+00
+ok 29 - Strict Avalanche Criteria - 88 bit keys
+# Testing  96-bit keys.......... ok.     # worst-bit:   0.591% error-ratio: 1.001108e+00
+ok 30 - Strict Avalanche Criteria - 96 bit keys
+# Testing 104-bit keys.......... ok.     # worst-bit:   0.598% error-ratio: 1.008733e+00
+ok 31 - Strict Avalanche Criteria - 104 bit keys
+# Testing 112-bit keys.......... ok.     # worst-bit:   0.521% error-ratio: 9.965300e-01
+ok 32 - Strict Avalanche Criteria - 112 bit keys
+# Testing 120-bit keys.......... ok.     # worst-bit:   0.602% error-ratio: 1.009780e+00
+ok 33 - Strict Avalanche Criteria - 120 bit keys
+# Testing 128-bit keys.......... ok.     # worst-bit:   0.637% error-ratio: 9.852061e-01
+ok 34 - Strict Avalanche Criteria - 128 bit keys
+# Testing 136-bit keys.......... ok.     # worst-bit:   0.614% error-ratio: 9.903159e-01
+ok 35 - Strict Avalanche Criteria - 136 bit keys
+# Testing 144-bit keys.......... ok.     # worst-bit:   0.562% error-ratio: 9.942962e-01
+ok 36 - Strict Avalanche Criteria - 144 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.576% error-ratio: 1.011361e+00
+ok 37 - Strict Avalanche Criteria - 152 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.541% error-ratio: 9.975015e-01
+ok 38 - Strict Avalanche Criteria - 160 bit keys
+# Testing 256-bit keys.......... ok.     # worst-bit:   0.639% error-ratio: 9.939560e-01
+ok 39 - Strict Avalanche Criteria - 256 bit keys
+ok 40 - Strict Avalanche Criteria # BeagleHash_64_127
+### Keyset 'Cyclic' Tests ###
+# Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 41 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+ok 42 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 43 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
+ok 44 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 45 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
+ok 46 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 47 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
+ok 48 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 49 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
+ok 50 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
+ok 51 - Keyset 'Cyclic' # BeagleHash_64_127
+### Keyset 'TwoBytes' Tests ###
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 52 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+ok 53 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 54 - Collision Rate for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+ok 55 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 56 - Collision Rate for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+ok 57 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 58 - Collision Rate for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+ok 59 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 60 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+ok 61 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+ok 62 - Keyset 'TwoBytes' # BeagleHash_64_127
+### Keyset 'Sparse' Tests ###
+# Keyset 'Sparse' - 32-bit keys with up to 6 bits set - 1149017 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 63 - Collision Rate for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+ok 64 - Distribution Bias Check for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+# Keyset 'Sparse' - 40-bit keys with up to 6 bits set - 4598479 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 65 - Collision Rate for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+ok 66 - Distribution Bias Check for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+# Keyset 'Sparse' - 48-bit keys with up to 5 bits set - 1925357 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 67 - Collision Rate for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+ok 68 - Distribution Bias Check for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 56-bit keys with up to 5 bits set - 4216423 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 69 - Collision Rate for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+ok 70 - Distribution Bias Check for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 64-bit keys with up to 5 bits set - 8303633 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 71 - Collision Rate for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+ok 72 - Distribution Bias Check for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 96-bit keys with up to 4 bits set - 3469497 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 73 - Collision Rate for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+ok 74 - Distribution Bias Check for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+# Keyset 'Sparse' - 256-bit keys with up to 3 bits set - 2796417 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 75 - Collision Rate for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+ok 76 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+# Keyset 'Sparse' - 2048-bit keys with up to 2 bits set - 2098177 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 77 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 78 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 79 - Keyset 'Sparse' # BeagleHash_64_127
+# Keyset 'CRC-MultiCollision' - 1048575 x 16 block keys - 128-bytes long - 10 seeds
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 80 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 1 # BeagleHash_64_127
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 81 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 2 # BeagleHash_64_127
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 82 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 3 # BeagleHash_64_127
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 83 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 4 # BeagleHash_64_127
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 84 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 5 # BeagleHash_64_127
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 85 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 6 # BeagleHash_64_127
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 86 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 7 # BeagleHash_64_127
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 87 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 8 # BeagleHash_64_127
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 88 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 9 # BeagleHash_64_127
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 89 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 10 # BeagleHash_64_127
+### Keyset 'Combination Lowbits' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 90 - Collision Rate for Keyset 'Combination Lowbits'
+ok 91 - Distribution Bias Check for Keyset 'Combination Lowbits'
+ok 92 - Keyset 'Combination Lowbits' # BeagleHash_64_127
+### Keyset 'Combination Highbits' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 93 - Collision Rate for Keyset 'Combination Highbits'
+ok 94 - Distribution Bias Check for Keyset 'Combination Highbits'
+ok 95 - Keyset 'Combination Highbits' # BeagleHash_64_127
+### Keyset 'Combination Highbits2' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 96 - Collision Rate for Keyset 'Combination Highbits2'
+ok 97 - Distribution Bias Check for Keyset 'Combination Highbits2'
+ok 98 - Keyset 'Combination Highbits2' # BeagleHash_64_127
+### Keyset 'Combination 0x80000000' Tests ###
+# Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 99 - Collision Rate for Keyset 'Combination 0x80000000'
+ok 100 - Distribution Bias Check for Keyset 'Combination 0x80000000'
+ok 101 - Keyset 'Combination 0x80000000' # BeagleHash_64_127
+### Keyset 'Combination 0x00000001' Tests ###
+# Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 102 - Collision Rate for Keyset 'Combination 0x00000001'
+ok 103 - Distribution Bias Check for Keyset 'Combination 0x00000001'
+ok 104 - Keyset 'Combination 0x00000001' # BeagleHash_64_127
+### Keyset 'Combination Hi-Lo' Tests ###
+# Keyset 'Combination' - up to 6 blocks from a set of 15 - 12204240 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 105 - Collision Rate for Keyset 'Combination Hi-Lo'
+ok 106 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
+ok 107 - Keyset 'Combination Hi-Lo' # BeagleHash_64_127
+### Keyset 'Text' Tests ###
+# Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 108 - Collision Rate for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+ok 109 - Distribution Bias Check for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 110 - Collision Rate for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+ok 111 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 112 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 113 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 114 - Keyset 'Text' # BeagleHash_64_127
+### Keyset 'Zeroes' Tests ###
+# Keyset 'Zeroes' - 262144 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 115 - Collision Rate for Keyset 'Zeroes' - 262144 keys
+ok 116 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys
+ok 117 - Keyset 'Zeroes' # BeagleHash_64_127
+### Keyset 'Seed' Tests ###
+# Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 118 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+ok 119 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# Keyset 'Seed' - 2000000 seeds, Key ""
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 120 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
+ok 121 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
+# Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 122 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+ok 123 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 124 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 125 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 126 - Keyset 'Seed' # BeagleHash_64_127
+### Keyset 'Effs' Tests ###
+# Keyset 'Effs' - 262144 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 127 - Collision Rate for Keyset 'Effs' - 262144 keys
+ok 128 - Distribution Bias Check for Keyset 'Effs' - 262144 keys
+ok 129 - Keyset 'Effs' # BeagleHash_64_127
+ok 130 - all tests passed # BeagleHash_64_127
+1..130
+# All Tests Passed. BeagleHash_64_127 passed all 130 tests run.
+# Testing took 2042.136270 seconds
+# This is SMHasher version v1.0-demerphq-5-g86440f3 - built on Mar 10 2017.

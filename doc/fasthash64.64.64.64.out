@@ -1,0 +1,417 @@
+ok 1 - SelfTest - Verify 89 Hashes
+ok 2 - Found Hash # fasthash64
+###################################################################
+### Testing fasthash64 - no seed_state
+### - fast-hash 64bit -
+### seedbits: 64 statebits: 64 hashbits: 64
+###################################################################
+### Sanity Tests ###
+ok 3 - Verification code # fasthash64
+# Sanity check simple key bit flips and consistency..........
+ok 4 - SanityTest # fasthash64
+# Sanity check null suffixes change the hash (simple)..........
+ok 5 - Appended Zeroes Test # fasthash64
+ok 6 - Sanity Test # fasthash64
+### Speed Tests ###
+## Bulk speed test - 262144-byte keys
+# Alignment  7 -  2.397 bytes/cycle - 6858.20 MiB/sec @ 3 ghz
+# Alignment  6 -  2.397 bytes/cycle - 6858.22 MiB/sec @ 3 ghz
+# Alignment  5 -  2.397 bytes/cycle - 6858.19 MiB/sec @ 3 ghz
+# Alignment  4 -  2.397 bytes/cycle - 6858.18 MiB/sec @ 3 ghz
+# Alignment  3 -  2.397 bytes/cycle - 6858.20 MiB/sec @ 3 ghz
+# Alignment  2 -  2.397 bytes/cycle - 6858.17 MiB/sec @ 3 ghz
+# Alignment  1 -  2.397 bytes/cycle - 6858.17 MiB/sec @ 3 ghz
+# Alignment  0 -  2.397 bytes/cycle - 6858.41 MiB/sec @ 3 ghz
+# Average      -  2.397 bytes/cycle - 6858.22 MiB/sec @ 3 ghz
+## KeySpeed tests
+# fasthash64                0 byte keys       10.173 c/h
+# fasthash64                1 byte keys       17.796 c/h       17.796 c/b        0.056 b/c
+# fasthash64                2 byte keys       21.000 c/h       10.500 c/b        0.095 b/c
+# fasthash64                3 byte keys       22.000 c/h        7.333 c/b        0.136 b/c
+# fasthash64                4 byte keys       22.635 c/h        5.659 c/b        0.177 b/c
+# fasthash64                5 byte keys       23.000 c/h        4.600 c/b        0.217 b/c
+# fasthash64                6 byte keys       24.900 c/h        4.150 c/b        0.241 b/c
+# fasthash64                7 byte keys       25.000 c/h        3.571 c/b        0.280 b/c
+# fasthash64                8 byte keys       17.000 c/h        2.125 c/b        0.471 b/c
+# fasthash64                9 byte keys       22.000 c/h        2.444 c/b        0.409 b/c
+# fasthash64               10 byte keys       21.924 c/h        2.192 c/b        0.456 b/c
+# fasthash64               11 byte keys       21.851 c/h        1.986 c/b        0.503 b/c
+# fasthash64               12 byte keys       21.924 c/h        1.827 c/b        0.547 b/c
+# fasthash64               13 byte keys       22.000 c/h        1.692 c/b        0.591 b/c
+# fasthash64               14 byte keys       21.961 c/h        1.569 c/b        0.637 b/c
+# fasthash64               15 byte keys       21.998 c/h        1.467 c/b        0.682 b/c
+# fasthash64               16 byte keys       21.000 c/h        1.312 c/b        0.762 b/c
+# fasthash64               17 byte keys       25.000 c/h        1.471 c/b        0.680 b/c
+# fasthash64               18 byte keys       25.000 c/h        1.389 c/b        0.720 b/c
+# fasthash64               19 byte keys       25.000 c/h        1.316 c/b        0.760 b/c
+# fasthash64               20 byte keys       28.410 c/h        1.421 c/b        0.704 b/c
+# fasthash64               21 byte keys       28.000 c/h        1.333 c/b        0.750 b/c
+# fasthash64               22 byte keys       25.000 c/h        1.136 c/b        0.880 b/c
+# fasthash64               23 byte keys       25.000 c/h        1.087 c/b        0.920 b/c
+# fasthash64               24 byte keys       24.000 c/h        1.000 c/b        1.000 b/c
+# fasthash64               25 byte keys       28.000 c/h        1.120 c/b        0.893 b/c
+# fasthash64               26 byte keys       28.000 c/h        1.077 c/b        0.929 b/c
+# fasthash64               27 byte keys       28.000 c/h        1.037 c/b        0.964 b/c
+# fasthash64               28 byte keys       28.000 c/h        1.000 c/b        1.000 b/c
+# fasthash64               29 byte keys       28.000 c/h        0.966 c/b        1.036 b/c
+# fasthash64               30 byte keys       28.200 c/h        0.940 c/b        1.064 b/c
+# fasthash64               31 byte keys       28.000 c/h        0.903 c/b        1.107 b/c
+#                          Average < 32       23.743 c/h        1.532 c/b        0.653 b/c
+# fasthash64               32 byte keys       27.000 c/h        0.844 c/b        1.185 b/c
+# fasthash64               36 byte keys       31.943 c/h        0.887 c/b        1.127 b/c
+# fasthash64               40 byte keys       31.000 c/h        0.775 c/b        1.290 b/c
+# fasthash64               44 byte keys       35.000 c/h        0.795 c/b        1.257 b/c
+# fasthash64               48 byte keys       34.754 c/h        0.724 c/b        1.381 b/c
+# fasthash64               52 byte keys       38.000 c/h        0.731 c/b        1.368 b/c
+# fasthash64               56 byte keys       37.000 c/h        0.661 c/b        1.514 b/c
+# fasthash64               60 byte keys       41.888 c/h        0.698 c/b        1.432 b/c
+# fasthash64               64 byte keys       41.000 c/h        0.641 c/b        1.561 b/c
+# fasthash64               68 byte keys       45.000 c/h        0.662 c/b        1.511 b/c
+# fasthash64               72 byte keys       44.000 c/h        0.611 c/b        1.636 b/c
+# fasthash64               76 byte keys       48.000 c/h        0.632 c/b        1.583 b/c
+# fasthash64               80 byte keys       47.000 c/h        0.588 c/b        1.702 b/c
+# fasthash64               84 byte keys       51.833 c/h        0.617 c/b        1.621 b/c
+# fasthash64               88 byte keys       50.999 c/h        0.580 c/b        1.726 b/c
+# fasthash64               92 byte keys       55.000 c/h        0.598 c/b        1.673 b/c
+# fasthash64               96 byte keys       54.000 c/h        0.562 c/b        1.778 b/c
+# fasthash64              100 byte keys       58.000 c/h        0.580 c/b        1.724 b/c
+# fasthash64              104 byte keys       57.000 c/h        0.548 c/b        1.825 b/c
+# fasthash64              108 byte keys       61.849 c/h        0.573 c/b        1.746 b/c
+# fasthash64              112 byte keys       61.000 c/h        0.545 c/b        1.836 b/c
+# fasthash64              116 byte keys       65.000 c/h        0.560 c/b        1.785 b/c
+# fasthash64              120 byte keys       64.000 c/h        0.533 c/b        1.875 b/c
+# fasthash64              124 byte keys       68.298 c/h        0.551 c/b        1.816 b/c
+#                         Average < 128       34.077 c/h        0.806 c/b        1.241 b/c
+# fasthash64              128 byte keys       67.918 c/h        0.531 c/b        1.885 b/c
+# fasthash64              256 byte keys      180.685 c/h        0.706 c/b        1.417 b/c
+# fasthash64              512 byte keys      257.578 c/h        0.503 c/b        1.988 b/c
+# fasthash64             1024 byte keys      479.351 c/h        0.468 c/b        2.136 b/c
+# fasthash64             2048 byte keys      920.973 c/h        0.450 c/b        2.224 b/c
+# fasthash64             4096 byte keys     1744.063 c/h        0.426 c/b        2.349 b/c
+# fasthash64             8192 byte keys     3451.946 c/h        0.421 c/b        2.373 b/c
+# fasthash64            16384 byte keys     6867.775 c/h        0.419 c/b        2.386 b/c
+# fasthash64            32768 byte keys    13697.387 c/h        0.418 c/b        2.392 b/c
+# fasthash64            65536 byte keys    27364.959 c/h        0.418 c/b        2.395 b/c
+#                       Overall Average      862.742 c/h        0.427 c/b        2.341 b/c
+ok 7 - Speed (always passes) # fasthash64
+### Differential Tests ###
+# Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 64 bit hashes.
+# 1000 reps, 8303632000 total tests, expecting 0.00 random collisions..........
+ok 8 - Differential collisions # fasthash64
+ok 9 - Nothing skipped during differential collision check # fasthash64
+# 0 total collisions, of which 0 single collisions were ignored
+ok 10 - ProcessDifferentials
+# Testing 11017632 up-to-4-bit differentials in 128-bit keys -> 64 bit hashes.
+# 1000 reps, 11017632000 total tests, expecting 0.00 random collisions..........
+ok 11 - Differential collisions # fasthash64
+ok 12 - Nothing skipped during differential collision check # fasthash64
+# 0 total collisions, of which 0 single collisions were ignored
+ok 13 - ProcessDifferentials
+# Testing 2796416 up-to-3-bit differentials in 256-bit keys -> 64 bit hashes.
+# 1000 reps, 2796416000 total tests, expecting 0.00 random collisions..........
+ok 14 - Differential collisions # fasthash64
+ok 15 - Nothing skipped during differential collision check # fasthash64
+# 0 total collisions, of which 0 single collisions were ignored
+ok 16 - ProcessDifferentials
+ok 17 - Differential # fasthash64
+### Avalanche Tests ### - seed-bits: 64 hash-bits: 64
+# Samples 500000, expected error 0.00051200, confidence level 99.99994267%
+# Testing   0-bit keys.......... not ok! # worst-bit:   0.519% error-ratio: 1.137976e+00
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 37
+# seed    37.0 |........................................1.......................|
+# seed    38.0 |................................................................| x 22
+# seed    60.0 |........................................1.......................|
+# seed    61.0 |................................................................| x 3
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 64
+#              +----------------------------------------------------------------+
+# 0 of 4096 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00058264
+#     hash bit-level errors: 2/64
+#     - hash bit 17 gtest-prob not-random: 100.0000 (16014292/15985708)
+#     - hash bit 20 gtest-prob not-random: 100.0000 (16019218/15980782)
+not ok 18 - Strict Avalanche Criteria - 0 bit keys
+# Testing   8-bit keys.......... ok.     # worst-bit:   0.573% error-ratio: 1.019399e+00
+ok 19 - Strict Avalanche Criteria - 8 bit keys
+# Testing  16-bit keys.......... ok.     # worst-bit:   0.549% error-ratio: 1.053428e+00
+ok 20 - Strict Avalanche Criteria - 16 bit keys
+# Testing  24-bit keys.......... ok.     # worst-bit:   0.567% error-ratio: 9.834081e-01
+ok 21 - Strict Avalanche Criteria - 24 bit keys
+# Testing  32-bit keys.......... ok.     # worst-bit:   0.531% error-ratio: 1.003695e+00
+ok 22 - Strict Avalanche Criteria - 32 bit keys
+# Testing  40-bit keys.......... not ok! # worst-bit:   0.593% error-ratio: 1.041640e+00
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 3
+# seed     3.0 |...............................1................................|
+# seed     4.0 |................................................................| x 40
+# seed    44.0 |.........................................................1......|
+# seed    45.0 |................................................................| x 19
+# key      0.0 |................................................................| x 2
+# key      2.0 |.....................................................1..........|
+# key      3.0 |................................................................| x 37
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 64
+# key      0.0 |................................................................| x 40
+#              +----------------------------------------------------------------+
+# 0 of 6656 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00053332
+#     hash bit-level errors: 1/64
+#     - hash bit 18 gtest-prob not-random: 100.0000 (26020925/25979075)
+not ok 23 - Strict Avalanche Criteria - 40 bit keys
+# Testing  48-bit keys.......... ok.     # worst-bit:   0.560% error-ratio: 1.022748e+00
+ok 24 - Strict Avalanche Criteria - 48 bit keys
+# Testing  56-bit keys.......... ok.     # worst-bit:   0.601% error-ratio: 9.904799e-01
+ok 25 - Strict Avalanche Criteria - 56 bit keys
+# Testing  64-bit keys.......... ok.     # worst-bit:   0.564% error-ratio: 9.775562e-01
+ok 26 - Strict Avalanche Criteria - 64 bit keys
+# Testing  72-bit keys.......... ok.     # worst-bit:   0.597% error-ratio: 1.005473e+00
+ok 27 - Strict Avalanche Criteria - 72 bit keys
+# Testing  80-bit keys.......... ok.     # worst-bit:   0.620% error-ratio: 1.030380e+00
+ok 28 - Strict Avalanche Criteria - 80 bit keys
+# Testing  88-bit keys.......... ok.     # worst-bit:   0.520% error-ratio: 1.041191e+00
+ok 29 - Strict Avalanche Criteria - 88 bit keys
+# Testing  96-bit keys.......... ok.     # worst-bit:   0.555% error-ratio: 9.842601e-01
+ok 30 - Strict Avalanche Criteria - 96 bit keys
+# Testing 104-bit keys.......... ok.     # worst-bit:   0.526% error-ratio: 9.969116e-01
+ok 31 - Strict Avalanche Criteria - 104 bit keys
+# Testing 112-bit keys.......... ok.     # worst-bit:   0.534% error-ratio: 9.876995e-01
+ok 32 - Strict Avalanche Criteria - 112 bit keys
+# Testing 120-bit keys.......... ok.     # worst-bit:   0.547% error-ratio: 1.015818e+00
+ok 33 - Strict Avalanche Criteria - 120 bit keys
+# Testing 128-bit keys.......... ok.     # worst-bit:   0.637% error-ratio: 9.939632e-01
+ok 34 - Strict Avalanche Criteria - 128 bit keys
+# Testing 136-bit keys.......... ok.     # worst-bit:   0.656% error-ratio: 1.011674e+00
+ok 35 - Strict Avalanche Criteria - 136 bit keys
+# Testing 144-bit keys.......... ok.     # worst-bit:   0.502% error-ratio: 1.024242e+00
+ok 36 - Strict Avalanche Criteria - 144 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.548% error-ratio: 1.027812e+00
+ok 37 - Strict Avalanche Criteria - 152 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.599% error-ratio: 1.001741e+00
+ok 38 - Strict Avalanche Criteria - 160 bit keys
+# Testing 256-bit keys.......... ok.     # worst-bit:   0.582% error-ratio: 9.890028e-01
+ok 39 - Strict Avalanche Criteria - 256 bit keys
+not ok 40 - Strict Avalanche Criteria # fasthash64
+### Keyset 'Cyclic' Tests ###
+# Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 41 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+ok 42 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 43 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
+ok 44 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 45 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
+ok 46 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 47 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
+ok 48 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 49 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
+ok 50 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
+ok 51 - Keyset 'Cyclic' # fasthash64
+### Keyset 'TwoBytes' Tests ###
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 52 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+ok 53 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 54 - Collision Rate for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+ok 55 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 56 - Collision Rate for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+ok 57 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 58 - Collision Rate for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+ok 59 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 60 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+ok 61 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+ok 62 - Keyset 'TwoBytes' # fasthash64
+### Keyset 'Sparse' Tests ###
+# Keyset 'Sparse' - 32-bit keys with up to 6 bits set - 1149017 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 63 - Collision Rate for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+ok 64 - Distribution Bias Check for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+# Keyset 'Sparse' - 40-bit keys with up to 6 bits set - 4598479 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 65 - Collision Rate for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+ok 66 - Distribution Bias Check for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+# Keyset 'Sparse' - 48-bit keys with up to 5 bits set - 1925357 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 67 - Collision Rate for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+ok 68 - Distribution Bias Check for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 56-bit keys with up to 5 bits set - 4216423 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 69 - Collision Rate for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+ok 70 - Distribution Bias Check for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 64-bit keys with up to 5 bits set - 8303633 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 71 - Collision Rate for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+ok 72 - Distribution Bias Check for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 96-bit keys with up to 4 bits set - 3469497 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 73 - Collision Rate for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+ok 74 - Distribution Bias Check for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+# Keyset 'Sparse' - 256-bit keys with up to 3 bits set - 2796417 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 75 - Collision Rate for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+ok 76 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+# Keyset 'Sparse' - 2048-bit keys with up to 2 bits set - 2098177 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 77 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 78 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 79 - Keyset 'Sparse' # fasthash64
+# Keyset 'CRC-MultiCollision' - 100000 x 16 block keys - 128-bytes long - 10 seeds
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 80 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 1 # fasthash64
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 81 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 2 # fasthash64
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 82 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 3 # fasthash64
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 83 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 4 # fasthash64
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 84 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 5 # fasthash64
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 85 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 6 # fasthash64
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 86 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 7 # fasthash64
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 87 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 8 # fasthash64
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 88 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 9 # fasthash64
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 89 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 10 # fasthash64
+### Keyset 'Combination Lowbits' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 90 - Collision Rate for Keyset 'Combination Lowbits'
+ok 91 - Distribution Bias Check for Keyset 'Combination Lowbits'
+ok 92 - Keyset 'Combination Lowbits' # fasthash64
+### Keyset 'Combination Highbits' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 93 - Collision Rate for Keyset 'Combination Highbits'
+ok 94 - Distribution Bias Check for Keyset 'Combination Highbits'
+ok 95 - Keyset 'Combination Highbits' # fasthash64
+### Keyset 'Combination Highbits2' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 96 - Collision Rate for Keyset 'Combination Highbits2'
+ok 97 - Distribution Bias Check for Keyset 'Combination Highbits2'
+ok 98 - Keyset 'Combination Highbits2' # fasthash64
+### Keyset 'Combination 0x80000000' Tests ###
+# Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 99 - Collision Rate for Keyset 'Combination 0x80000000'
+ok 100 - Distribution Bias Check for Keyset 'Combination 0x80000000'
+ok 101 - Keyset 'Combination 0x80000000' # fasthash64
+### Keyset 'Combination 0x00000001' Tests ###
+# Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 102 - Collision Rate for Keyset 'Combination 0x00000001'
+ok 103 - Distribution Bias Check for Keyset 'Combination 0x00000001'
+ok 104 - Keyset 'Combination 0x00000001' # fasthash64
+### Keyset 'Combination Hi-Lo' Tests ###
+# Keyset 'Combination' - up to 6 blocks from a set of 15 - 12204240 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 105 - Collision Rate for Keyset 'Combination Hi-Lo'
+ok 106 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
+ok 107 - Keyset 'Combination Hi-Lo' # fasthash64
+### Keyset 'Text' Tests ###
+# Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 108 - Collision Rate for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+ok 109 - Distribution Bias Check for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 110 - Collision Rate for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+ok 111 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 112 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 113 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 114 - Keyset 'Text' # fasthash64
+### Keyset 'Zeroes' Tests ###
+# Keyset 'Zeroes' - 262144 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 115 - Collision Rate for Keyset 'Zeroes' - 262144 keys
+ok 116 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys
+ok 117 - Keyset 'Zeroes' # fasthash64
+### Keyset 'Seed' Tests ###
+# Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 118 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+ok 119 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# Keyset 'Seed' - 2000000 seeds, Key ""
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 120 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
+ok 121 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
+# Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 122 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+ok 123 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 124 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 125 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 126 - Keyset 'Seed' # fasthash64
+### Keyset 'Effs' Tests ###
+# Keyset 'Effs' - 262144 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 127 - Collision Rate for Keyset 'Effs' - 262144 keys
+ok 128 - Distribution Bias Check for Keyset 'Effs' - 262144 keys
+ok 129 - Keyset 'Effs' # fasthash64
+not ok 130 - all tests passed # fasthash64
+1..130
+# Tests Failed. fasthash64 failed 4 of 130 tests.
+# Testing took 1611.122814 seconds
+# This is SMHasher version v1.0-demerphq-5-g86440f3 - built on Mar 10 2017.

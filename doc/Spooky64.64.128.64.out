@@ -1,0 +1,342 @@
+ok 1 - SelfTest - Verify 89 Hashes
+ok 2 - Found Hash # Spooky64
+###################################################################
+### Testing Spooky64 - with seed_state
+### - Bob Jenkins' SpookyHash, 64-bit seed, 64-bit result -
+### seedbits: 64 statebits: 128 hashbits: 64
+###################################################################
+### Sanity Tests ###
+ok 3 - Verification code # Spooky64
+# Sanity check simple key bit flips and consistency..........
+ok 4 - SanityTest # Spooky64
+# Sanity check null suffixes change the hash (simple)..........
+ok 5 - Appended Zeroes Test # Spooky64
+ok 6 - Sanity Test # Spooky64
+### Speed Tests ###
+## Bulk speed test - 262144-byte keys
+# Alignment  7 -  4.990 bytes/cycle - 14275.96 MiB/sec @ 3 ghz
+# Alignment  6 -  4.986 bytes/cycle - 14264.73 MiB/sec @ 3 ghz
+# Alignment  5 -  4.981 bytes/cycle - 14250.26 MiB/sec @ 3 ghz
+# Alignment  4 -  4.991 bytes/cycle - 14278.80 MiB/sec @ 3 ghz
+# Alignment  3 -  4.999 bytes/cycle - 14302.34 MiB/sec @ 3 ghz
+# Alignment  2 -  5.008 bytes/cycle - 14328.52 MiB/sec @ 3 ghz
+# Alignment  1 -  5.008 bytes/cycle - 14327.17 MiB/sec @ 3 ghz
+# Alignment  0 -  5.031 bytes/cycle - 14393.34 MiB/sec @ 3 ghz
+# Average      -  4.999 bytes/cycle - 14302.64 MiB/sec @ 3 ghz
+## KeySpeed tests
+# Spooky64                  0 byte keys       21.481 c/h
+# Spooky64                  1 byte keys       21.739 c/h       21.739 c/b        0.046 b/c
+# Spooky64                  2 byte keys       22.138 c/h       11.069 c/b        0.090 b/c
+# Spooky64                  3 byte keys       23.296 c/h        7.765 c/b        0.129 b/c
+# Spooky64                  4 byte keys       21.755 c/h        5.439 c/b        0.184 b/c
+# Spooky64                  5 byte keys       22.220 c/h        4.444 c/b        0.225 b/c
+# Spooky64                  6 byte keys       23.238 c/h        3.873 c/b        0.258 b/c
+# Spooky64                  7 byte keys       23.000 c/h        3.286 c/b        0.304 b/c
+# Spooky64                  8 byte keys       21.292 c/h        2.661 c/b        0.376 b/c
+# Spooky64                  9 byte keys       21.459 c/h        2.384 c/b        0.419 b/c
+# Spooky64                 10 byte keys       22.653 c/h        2.265 c/b        0.441 b/c
+# Spooky64                 11 byte keys       23.000 c/h        2.091 c/b        0.478 b/c
+# Spooky64                 12 byte keys       21.459 c/h        1.788 c/b        0.559 b/c
+# Spooky64                 13 byte keys       22.681 c/h        1.745 c/b        0.573 b/c
+# Spooky64                 14 byte keys       31.589 c/h        2.256 c/b        0.443 b/c
+# Spooky64                 15 byte keys       24.000 c/h        1.600 c/b        0.625 b/c
+# Spooky64                 16 byte keys       37.000 c/h        2.312 c/b        0.432 b/c
+# Spooky64                 17 byte keys       36.991 c/h        2.176 c/b        0.460 b/c
+# Spooky64                 18 byte keys       37.720 c/h        2.096 c/b        0.477 b/c
+# Spooky64                 19 byte keys       37.978 c/h        1.999 c/b        0.500 b/c
+# Spooky64                 20 byte keys       37.000 c/h        1.850 c/b        0.541 b/c
+# Spooky64                 21 byte keys       41.596 c/h        1.981 c/b        0.505 b/c
+# Spooky64                 22 byte keys       37.999 c/h        1.727 c/b        0.579 b/c
+# Spooky64                 23 byte keys       38.999 c/h        1.696 c/b        0.590 b/c
+# Spooky64                 24 byte keys       37.000 c/h        1.542 c/b        0.649 b/c
+# Spooky64                 25 byte keys       36.981 c/h        1.479 c/b        0.676 b/c
+# Spooky64                 26 byte keys       37.000 c/h        1.423 c/b        0.703 b/c
+# Spooky64                 27 byte keys       36.990 c/h        1.370 c/b        0.730 b/c
+# Spooky64                 28 byte keys       36.956 c/h        1.320 c/b        0.758 b/c
+# Spooky64                 29 byte keys       36.983 c/h        1.275 c/b        0.784 b/c
+# Spooky64                 30 byte keys       37.000 c/h        1.233 c/b        0.811 b/c
+# Spooky64                 31 byte keys       40.658 c/h        1.312 c/b        0.762 b/c
+#                          Average < 32       30.370 c/h        1.959 c/b        0.510 b/c
+# Spooky64                 32 byte keys       39.655 c/h        1.239 c/b        0.807 b/c
+# Spooky64                 36 byte keys       38.999 c/h        1.083 c/b        0.923 b/c
+# Spooky64                 40 byte keys       39.223 c/h        0.981 c/b        1.020 b/c
+# Spooky64                 44 byte keys       39.794 c/h        0.904 c/b        1.106 b/c
+# Spooky64                 48 byte keys       59.980 c/h        1.250 c/b        0.800 b/c
+# Spooky64                 52 byte keys       66.576 c/h        1.280 c/b        0.781 b/c
+# Spooky64                 56 byte keys       59.772 c/h        1.067 c/b        0.937 b/c
+# Spooky64                 60 byte keys       63.954 c/h        1.066 c/b        0.938 b/c
+# Spooky64                 64 byte keys       63.998 c/h        1.000 c/b        1.000 b/c
+# Spooky64                 68 byte keys       63.999 c/h        0.941 c/b        1.063 b/c
+# Spooky64                 72 byte keys       64.527 c/h        0.896 c/b        1.116 b/c
+# Spooky64                 76 byte keys       64.000 c/h        0.842 c/b        1.188 b/c
+# Spooky64                 80 byte keys       83.988 c/h        1.050 c/b        0.953 b/c
+# Spooky64                 84 byte keys       84.949 c/h        1.011 c/b        0.989 b/c
+# Spooky64                 88 byte keys       84.823 c/h        0.964 c/b        1.037 b/c
+# Spooky64                 92 byte keys       84.586 c/h        0.919 c/b        1.088 b/c
+# Spooky64                 96 byte keys       86.840 c/h        0.905 c/b        1.105 b/c
+# Spooky64                100 byte keys       87.979 c/h        0.880 c/b        1.137 b/c
+# Spooky64                104 byte keys       87.244 c/h        0.839 c/b        1.192 b/c
+# Spooky64                108 byte keys       86.818 c/h        0.804 c/b        1.244 b/c
+# Spooky64                112 byte keys      107.292 c/h        0.958 c/b        1.044 b/c
+# Spooky64                116 byte keys      107.003 c/h        0.922 c/b        1.084 b/c
+# Spooky64                120 byte keys      107.002 c/h        0.892 c/b        1.121 b/c
+# Spooky64                124 byte keys      107.241 c/h        0.865 c/b        1.156 b/c
+#                         Average < 128       49.144 c/h        1.162 c/b        0.860 b/c
+# Spooky64                128 byte keys      108.896 c/h        0.851 c/b        1.175 b/c
+# Spooky64                256 byte keys      149.366 c/h        0.583 c/b        1.714 b/c
+# Spooky64                512 byte keys      202.704 c/h        0.396 c/b        2.526 b/c
+# Spooky64               1024 byte keys      297.050 c/h        0.290 c/b        3.447 b/c
+# Spooky64               2048 byte keys      506.460 c/h        0.247 c/b        4.044 b/c
+# Spooky64               4096 byte keys      901.062 c/h        0.220 c/b        4.546 b/c
+# Spooky64               8192 byte keys     1714.501 c/h        0.209 c/b        4.778 b/c
+# Spooky64              16384 byte keys     3371.215 c/h        0.206 c/b        4.860 b/c
+# Spooky64              32768 byte keys     6576.179 c/h        0.201 c/b        4.983 b/c
+# Spooky64              65536 byte keys    13013.659 c/h        0.199 c/b        5.036 b/c
+#                       Overall Average      448.382 c/h        0.222 c/b        4.505 b/c
+ok 7 - Speed (always passes) # Spooky64
+### Differential Tests ###
+# Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 64 bit hashes.
+# 1000 reps, 8303632000 total tests, expecting 0.00 random collisions..........
+ok 8 - Differential collisions # Spooky64
+ok 9 - Nothing skipped during differential collision check # Spooky64
+# 0 total collisions, of which 0 single collisions were ignored
+ok 10 - ProcessDifferentials
+# Testing 11017632 up-to-4-bit differentials in 128-bit keys -> 64 bit hashes.
+# 1000 reps, 11017632000 total tests, expecting 0.00 random collisions..........
+ok 11 - Differential collisions # Spooky64
+ok 12 - Nothing skipped during differential collision check # Spooky64
+# 0 total collisions, of which 0 single collisions were ignored
+ok 13 - ProcessDifferentials
+# Testing 2796416 up-to-3-bit differentials in 256-bit keys -> 64 bit hashes.
+# 1000 reps, 2796416000 total tests, expecting 0.00 random collisions..........
+ok 14 - Differential collisions # Spooky64
+ok 15 - Nothing skipped during differential collision check # Spooky64
+# 0 total collisions, of which 0 single collisions were ignored
+ok 16 - ProcessDifferentials
+ok 17 - Differential # Spooky64
+### Avalanche Tests ### - seed-bits: 64 hash-bits: 64
+# Samples 500000, expected error 0.00051200, confidence level 99.99994267%
+# Testing   0-bit keys.......... ok.     # worst-bit:   0.542% error-ratio: 9.666503e-01
+ok 18 - Strict Avalanche Criteria - 0 bit keys
+# Testing   8-bit keys.......... ok.     # worst-bit:   0.476% error-ratio: 1.017992e+00
+ok 19 - Strict Avalanche Criteria - 8 bit keys
+# Testing  16-bit keys.......... ok.     # worst-bit:   0.538% error-ratio: 9.767241e-01
+ok 20 - Strict Avalanche Criteria - 16 bit keys
+# Testing  24-bit keys.......... ok.     # worst-bit:   0.536% error-ratio: 1.033615e+00
+ok 21 - Strict Avalanche Criteria - 24 bit keys
+# Testing  32-bit keys.......... ok.     # worst-bit:   0.527% error-ratio: 9.952304e-01
+ok 22 - Strict Avalanche Criteria - 32 bit keys
+# Testing  40-bit keys.......... ok.     # worst-bit:   0.580% error-ratio: 9.953177e-01
+ok 23 - Strict Avalanche Criteria - 40 bit keys
+# Testing  48-bit keys.......... ok.     # worst-bit:   0.473% error-ratio: 9.984117e-01
+ok 24 - Strict Avalanche Criteria - 48 bit keys
+# Testing  56-bit keys.......... ok.     # worst-bit:   0.587% error-ratio: 1.000334e+00
+ok 25 - Strict Avalanche Criteria - 56 bit keys
+# Testing  64-bit keys.......... ok.     # worst-bit:   0.554% error-ratio: 9.890033e-01
+ok 26 - Strict Avalanche Criteria - 64 bit keys
+# Testing  72-bit keys.......... ok.     # worst-bit:   0.554% error-ratio: 9.933516e-01
+ok 27 - Strict Avalanche Criteria - 72 bit keys
+# Testing  80-bit keys.......... ok.     # worst-bit:   0.514% error-ratio: 1.001464e+00
+ok 28 - Strict Avalanche Criteria - 80 bit keys
+# Testing  88-bit keys.......... ok.     # worst-bit:   0.582% error-ratio: 1.002160e+00
+ok 29 - Strict Avalanche Criteria - 88 bit keys
+# Testing  96-bit keys.......... ok.     # worst-bit:   0.567% error-ratio: 9.945007e-01
+ok 30 - Strict Avalanche Criteria - 96 bit keys
+# Testing 104-bit keys.......... ok.     # worst-bit:   0.565% error-ratio: 9.933457e-01
+ok 31 - Strict Avalanche Criteria - 104 bit keys
+# Testing 112-bit keys.......... ok.     # worst-bit:   0.545% error-ratio: 1.002166e+00
+ok 32 - Strict Avalanche Criteria - 112 bit keys
+# Testing 120-bit keys.......... ok.     # worst-bit:   0.560% error-ratio: 9.732095e-01
+ok 33 - Strict Avalanche Criteria - 120 bit keys
+# Testing 128-bit keys.......... ok.     # worst-bit:   0.573% error-ratio: 9.945573e-01
+ok 34 - Strict Avalanche Criteria - 128 bit keys
+# Testing 136-bit keys.......... ok.     # worst-bit:   0.585% error-ratio: 1.008183e+00
+ok 35 - Strict Avalanche Criteria - 136 bit keys
+# Testing 144-bit keys.......... ok.     # worst-bit:   0.558% error-ratio: 9.998083e-01
+ok 36 - Strict Avalanche Criteria - 144 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.544% error-ratio: 9.938980e-01
+ok 37 - Strict Avalanche Criteria - 152 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.596% error-ratio: 1.019948e+00
+ok 38 - Strict Avalanche Criteria - 160 bit keys
+# Testing 256-bit keys.......... ok.     # worst-bit:   0.544% error-ratio: 1.018500e+00
+ok 39 - Strict Avalanche Criteria - 256 bit keys
+ok 40 - Strict Avalanche Criteria # Spooky64
+### Keyset 'Cyclic' Tests ###
+# Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 41 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+ok 42 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 43 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
+ok 44 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 45 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
+ok 46 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 47 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
+ok 48 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 49 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
+ok 50 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
+ok 51 - Keyset 'Cyclic' # Spooky64
+### Keyset 'TwoBytes' Tests ###
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 52 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+ok 53 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 54 - Collision Rate for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+ok 55 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 56 - Collision Rate for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+ok 57 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 58 - Collision Rate for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+ok 59 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 60 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+ok 61 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+ok 62 - Keyset 'TwoBytes' # Spooky64
+### Keyset 'Sparse' Tests ###
+# Keyset 'Sparse' - 32-bit keys with up to 6 bits set - 1149017 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 63 - Collision Rate for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+ok 64 - Distribution Bias Check for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+# Keyset 'Sparse' - 40-bit keys with up to 6 bits set - 4598479 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 65 - Collision Rate for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+ok 66 - Distribution Bias Check for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+# Keyset 'Sparse' - 48-bit keys with up to 5 bits set - 1925357 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 67 - Collision Rate for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+ok 68 - Distribution Bias Check for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 56-bit keys with up to 5 bits set - 4216423 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 69 - Collision Rate for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+ok 70 - Distribution Bias Check for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 64-bit keys with up to 5 bits set - 8303633 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 71 - Collision Rate for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+ok 72 - Distribution Bias Check for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 96-bit keys with up to 4 bits set - 3469497 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 73 - Collision Rate for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+ok 74 - Distribution Bias Check for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+# Keyset 'Sparse' - 256-bit keys with up to 3 bits set - 2796417 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 75 - Collision Rate for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+ok 76 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+# Keyset 'Sparse' - 2048-bit keys with up to 2 bits set - 2098177 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 77 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 78 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 79 - Keyset 'Sparse' # Spooky64
+# Keyset 'CRC-MultiCollision' - 100000 x 16 block keys - 128-bytes long - 10 seeds
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 80 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 1 # Spooky64
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 81 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 2 # Spooky64
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 82 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 3 # Spooky64
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 83 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 4 # Spooky64
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 84 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 5 # Spooky64
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 85 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 6 # Spooky64
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 86 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 7 # Spooky64
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 87 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 8 # Spooky64
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 88 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 9 # Spooky64
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 89 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 10 # Spooky64
+### Keyset 'Combination Lowbits' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 90 - Collision Rate for Keyset 'Combination Lowbits'
+ok 91 - Distribution Bias Check for Keyset 'Combination Lowbits'
+ok 92 - Keyset 'Combination Lowbits' # Spooky64
+### Keyset 'Combination Highbits' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 93 - Collision Rate for Keyset 'Combination Highbits'
+ok 94 - Distribution Bias Check for Keyset 'Combination Highbits'
+ok 95 - Keyset 'Combination Highbits' # Spooky64
+### Keyset 'Combination Highbits2' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 96 - Collision Rate for Keyset 'Combination Highbits2'
+ok 97 - Distribution Bias Check for Keyset 'Combination Highbits2'
+ok 98 - Keyset 'Combination Highbits2' # Spooky64
+### Keyset 'Combination 0x80000000' Tests ###
+# Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 99 - Collision Rate for Keyset 'Combination 0x80000000'
+ok 100 - Distribution Bias Check for Keyset 'Combination 0x80000000'
+ok 101 - Keyset 'Combination 0x80000000' # Spooky64
+### Keyset 'Combination 0x00000001' Tests ###
+# Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 102 - Collision Rate for Keyset 'Combination 0x00000001'
+ok 103 - Distribution Bias Check for Keyset 'Combination 0x00000001'
+ok 104 - Keyset 'Combination 0x00000001' # Spooky64
+### Keyset 'Combination Hi-Lo' Tests ###
+# Keyset 'Combination' - up to 6 blocks from a set of 15 - 12204240 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 105 - Collision Rate for Keyset 'Combination Hi-Lo'
+ok 106 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
+ok 107 - Keyset 'Combination Hi-Lo' # Spooky64
+### Keyset 'Text' Tests ###
+# Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 108 - Collision Rate for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+ok 109 - Distribution Bias Check for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 110 - Collision Rate for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+ok 111 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 112 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 113 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 114 - Keyset 'Text' # Spooky64
+### Keyset 'Zeroes' Tests ###
+# Keyset 'Zeroes' - 262144 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 115 - Collision Rate for Keyset 'Zeroes' - 262144 keys
+ok 116 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys
+ok 117 - Keyset 'Zeroes' # Spooky64
+### Keyset 'Seed' Tests ###
+# Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 118 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+ok 119 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# Keyset 'Seed' - 2000000 seeds, Key ""
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 120 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
+ok 121 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
+# Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 122 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+ok 123 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 124 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 125 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 126 - Keyset 'Seed' # Spooky64
+### Keyset 'Effs' Tests ###
+# Keyset 'Effs' - 262144 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 127 - Collision Rate for Keyset 'Effs' - 262144 keys
+ok 128 - Distribution Bias Check for Keyset 'Effs' - 262144 keys
+ok 129 - Keyset 'Effs' # Spooky64
+ok 130 - all tests passed # Spooky64
+1..130
+# All Tests Passed. Spooky64 passed all 130 tests run.
+# Testing took 1773.478640 seconds
+# This is SMHasher version v1.0-demerphq-5-g86440f3 - built on Mar 10 2017.

@@ -1,0 +1,342 @@
+ok 1 - SelfTest - Verify 89 Hashes
+ok 2 - Found Hash # HalfSipHash
+###################################################################
+### Testing HalfSipHash - with seed_state
+### - HalfSipHash 2-4, 32bit -
+### seedbits: 64 statebits: 128 hashbits: 32
+###################################################################
+### Sanity Tests ###
+ok 3 - Verification code # HalfSipHash
+# Sanity check simple key bit flips and consistency..........
+ok 4 - SanityTest # HalfSipHash
+# Sanity check null suffixes change the hash (simple)..........
+ok 5 - Appended Zeroes Test # HalfSipHash
+ok 6 - Sanity Test # HalfSipHash
+### Speed Tests ###
+## Bulk speed test - 262144-byte keys
+# Alignment  7 -  0.360 bytes/cycle - 1031.10 MiB/sec @ 3 ghz
+# Alignment  6 -  0.360 bytes/cycle - 1031.00 MiB/sec @ 3 ghz
+# Alignment  5 -  0.360 bytes/cycle - 1031.04 MiB/sec @ 3 ghz
+# Alignment  4 -  0.360 bytes/cycle - 1031.01 MiB/sec @ 3 ghz
+# Alignment  3 -  0.360 bytes/cycle - 1031.00 MiB/sec @ 3 ghz
+# Alignment  2 -  0.360 bytes/cycle - 1030.97 MiB/sec @ 3 ghz
+# Alignment  1 -  0.360 bytes/cycle - 1031.09 MiB/sec @ 3 ghz
+# Alignment  0 -  0.360 bytes/cycle - 1031.10 MiB/sec @ 3 ghz
+# Average      -  0.360 bytes/cycle - 1031.04 MiB/sec @ 3 ghz
+## KeySpeed tests
+# HalfSipHash               0 byte keys       36.000 c/h
+# HalfSipHash               1 byte keys       36.993 c/h       36.993 c/b        0.027 b/c
+# HalfSipHash               2 byte keys       39.570 c/h       19.785 c/b        0.051 b/c
+# HalfSipHash               3 byte keys       40.000 c/h       13.333 c/b        0.075 b/c
+# HalfSipHash               4 byte keys       50.997 c/h       12.749 c/b        0.078 b/c
+# HalfSipHash               5 byte keys       52.519 c/h       10.504 c/b        0.095 b/c
+# HalfSipHash               6 byte keys       52.992 c/h        8.832 c/b        0.113 b/c
+# HalfSipHash               7 byte keys       54.000 c/h        7.714 c/b        0.130 b/c
+# HalfSipHash               8 byte keys       62.271 c/h        7.784 c/b        0.128 b/c
+# HalfSipHash               9 byte keys       64.767 c/h        7.196 c/b        0.139 b/c
+# HalfSipHash              10 byte keys       65.759 c/h        6.576 c/b        0.152 b/c
+# HalfSipHash              11 byte keys       67.189 c/h        6.108 c/b        0.164 b/c
+# HalfSipHash              12 byte keys       72.999 c/h        6.083 c/b        0.164 b/c
+# HalfSipHash              13 byte keys       74.984 c/h        5.768 c/b        0.173 b/c
+# HalfSipHash              14 byte keys       76.656 c/h        5.475 c/b        0.183 b/c
+# HalfSipHash              15 byte keys       77.600 c/h        5.173 c/b        0.193 b/c
+# HalfSipHash              16 byte keys       83.971 c/h        5.248 c/b        0.191 b/c
+# HalfSipHash              17 byte keys       85.995 c/h        5.059 c/b        0.198 b/c
+# HalfSipHash              18 byte keys       86.992 c/h        4.833 c/b        0.207 b/c
+# HalfSipHash              19 byte keys       88.222 c/h        4.643 c/b        0.215 b/c
+# HalfSipHash              20 byte keys       94.776 c/h        4.739 c/b        0.211 b/c
+# HalfSipHash              21 byte keys       96.929 c/h        4.616 c/b        0.217 b/c
+# HalfSipHash              22 byte keys       98.514 c/h        4.478 c/b        0.223 b/c
+# HalfSipHash              23 byte keys       99.455 c/h        4.324 c/b        0.231 b/c
+# HalfSipHash              24 byte keys      105.495 c/h        4.396 c/b        0.227 b/c
+# HalfSipHash              25 byte keys      107.919 c/h        4.317 c/b        0.232 b/c
+# HalfSipHash              26 byte keys      109.511 c/h        4.212 c/b        0.237 b/c
+# HalfSipHash              27 byte keys      110.432 c/h        4.090 c/b        0.244 b/c
+# HalfSipHash              28 byte keys      116.000 c/h        4.143 c/b        0.241 b/c
+# HalfSipHash              29 byte keys      118.811 c/h        4.097 c/b        0.244 b/c
+# HalfSipHash              30 byte keys      120.565 c/h        4.019 c/b        0.249 b/c
+# HalfSipHash              31 byte keys      121.498 c/h        3.919 c/b        0.255 b/c
+#                          Average < 32       80.324 c/h        5.182 c/b        0.193 b/c
+# HalfSipHash              32 byte keys      126.978 c/h        3.968 c/b        0.252 b/c
+# HalfSipHash              36 byte keys      137.882 c/h        3.830 c/b        0.261 b/c
+# HalfSipHash              40 byte keys      148.733 c/h        3.718 c/b        0.269 b/c
+# HalfSipHash              44 byte keys      158.999 c/h        3.614 c/b        0.277 b/c
+# HalfSipHash              48 byte keys      170.219 c/h        3.546 c/b        0.282 b/c
+# HalfSipHash              52 byte keys      180.947 c/h        3.480 c/b        0.287 b/c
+# HalfSipHash              56 byte keys      191.865 c/h        3.426 c/b        0.292 b/c
+# HalfSipHash              60 byte keys      206.745 c/h        3.446 c/b        0.290 b/c
+# HalfSipHash              64 byte keys      213.451 c/h        3.335 c/b        0.300 b/c
+# HalfSipHash              68 byte keys      224.254 c/h        3.298 c/b        0.303 b/c
+# HalfSipHash              72 byte keys      243.388 c/h        3.380 c/b        0.296 b/c
+# HalfSipHash              76 byte keys      252.963 c/h        3.328 c/b        0.300 b/c
+# HalfSipHash              80 byte keys      265.011 c/h        3.313 c/b        0.302 b/c
+# HalfSipHash              84 byte keys      275.601 c/h        3.281 c/b        0.305 b/c
+# HalfSipHash              88 byte keys      287.786 c/h        3.270 c/b        0.306 b/c
+# HalfSipHash              92 byte keys      297.960 c/h        3.239 c/b        0.309 b/c
+# HalfSipHash              96 byte keys      309.418 c/h        3.223 c/b        0.310 b/c
+# HalfSipHash             100 byte keys      321.535 c/h        3.215 c/b        0.311 b/c
+# HalfSipHash             104 byte keys      332.424 c/h        3.196 c/b        0.313 b/c
+# HalfSipHash             108 byte keys      342.262 c/h        3.169 c/b        0.316 b/c
+# HalfSipHash             112 byte keys      353.471 c/h        3.156 c/b        0.317 b/c
+# HalfSipHash             116 byte keys      365.079 c/h        3.147 c/b        0.318 b/c
+# HalfSipHash             120 byte keys      375.088 c/h        3.126 c/b        0.320 b/c
+# HalfSipHash             124 byte keys      386.099 c/h        3.114 c/b        0.321 b/c
+#                         Average < 128      156.045 c/h        3.690 c/b        0.271 b/c
+# HalfSipHash             128 byte keys      398.295 c/h        3.112 c/b        0.321 b/c
+# HalfSipHash             256 byte keys      766.907 c/h        2.996 c/b        0.334 b/c
+# HalfSipHash             512 byte keys     1476.274 c/h        2.883 c/b        0.347 b/c
+# HalfSipHash            1024 byte keys     2926.015 c/h        2.857 c/b        0.350 b/c
+# HalfSipHash            2048 byte keys     5932.980 c/h        2.897 c/b        0.345 b/c
+# HalfSipHash            4096 byte keys    11421.702 c/h        2.789 c/b        0.359 b/c
+# HalfSipHash            8192 byte keys    22785.735 c/h        2.781 c/b        0.360 b/c
+# HalfSipHash           16384 byte keys    45518.248 c/h        2.778 c/b        0.360 b/c
+# HalfSipHash           32768 byte keys    91379.609 c/h        2.789 c/b        0.359 b/c
+# HalfSipHash           65536 byte keys   181901.715 c/h        2.776 c/b        0.360 b/c
+#                       Overall Average     5655.243 c/h        2.800 c/b        0.357 b/c
+ok 7 - Speed (always passes) # HalfSipHash
+### Differential Tests ###
+# Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 32 bit hashes.
+# 1000 reps, 8303632000 total tests, expecting 1.93 random collisions..........
+ok 8 - Differential collisions # HalfSipHash
+ok 9 - Nothing skipped during differential collision check # HalfSipHash
+# 2 total collisions, of which 2 single collisions were ignored
+ok 10 - ProcessDifferentials
+# Testing 11017632 up-to-4-bit differentials in 128-bit keys -> 32 bit hashes.
+# 1000 reps, 11017632000 total tests, expecting 2.57 random collisions..........
+ok 11 - Differential collisions # HalfSipHash
+ok 12 - Nothing skipped during differential collision check # HalfSipHash
+# 1 total collisions, of which 1 single collisions were ignored
+ok 13 - ProcessDifferentials
+# Testing 2796416 up-to-3-bit differentials in 256-bit keys -> 32 bit hashes.
+# 1000 reps, 2796416000 total tests, expecting 0.65 random collisions..........
+ok 14 - Differential collisions # HalfSipHash
+ok 15 - Nothing skipped during differential collision check # HalfSipHash
+# 1 total collisions, of which 1 single collisions were ignored
+ok 16 - ProcessDifferentials
+ok 17 - Differential # HalfSipHash
+### Avalanche Tests ### - seed-bits: 64 hash-bits: 32
+# Samples 1000000, expected error 0.00025600, confidence level 99.99994267%
+# Testing   0-bit keys.......... ok.     # worst-bit:   0.400% error-ratio: 9.565231e-01
+ok 18 - Strict Avalanche Criteria - 0 bit keys
+# Testing   8-bit keys.......... ok.     # worst-bit:   0.347% error-ratio: 1.000989e+00
+ok 19 - Strict Avalanche Criteria - 8 bit keys
+# Testing  16-bit keys.......... ok.     # worst-bit:   0.368% error-ratio: 1.072976e+00
+ok 20 - Strict Avalanche Criteria - 16 bit keys
+# Testing  24-bit keys.......... ok.     # worst-bit:   0.454% error-ratio: 1.034709e+00
+ok 21 - Strict Avalanche Criteria - 24 bit keys
+# Testing  32-bit keys.......... ok.     # worst-bit:   0.393% error-ratio: 1.014048e+00
+ok 22 - Strict Avalanche Criteria - 32 bit keys
+# Testing  40-bit keys.......... ok.     # worst-bit:   0.381% error-ratio: 9.920248e-01
+ok 23 - Strict Avalanche Criteria - 40 bit keys
+# Testing  48-bit keys.......... ok.     # worst-bit:   0.324% error-ratio: 1.013529e+00
+ok 24 - Strict Avalanche Criteria - 48 bit keys
+# Testing  56-bit keys.......... ok.     # worst-bit:   0.419% error-ratio: 1.013967e+00
+ok 25 - Strict Avalanche Criteria - 56 bit keys
+# Testing  64-bit keys.......... ok.     # worst-bit:   0.369% error-ratio: 1.029495e+00
+ok 26 - Strict Avalanche Criteria - 64 bit keys
+# Testing  72-bit keys.......... ok.     # worst-bit:   0.391% error-ratio: 9.951210e-01
+ok 27 - Strict Avalanche Criteria - 72 bit keys
+# Testing  80-bit keys.......... ok.     # worst-bit:   0.373% error-ratio: 1.014130e+00
+ok 28 - Strict Avalanche Criteria - 80 bit keys
+# Testing  88-bit keys.......... ok.     # worst-bit:   0.393% error-ratio: 9.605882e-01
+ok 29 - Strict Avalanche Criteria - 88 bit keys
+# Testing  96-bit keys.......... ok.     # worst-bit:   0.332% error-ratio: 9.951823e-01
+ok 30 - Strict Avalanche Criteria - 96 bit keys
+# Testing 104-bit keys.......... ok.     # worst-bit:   0.398% error-ratio: 9.801752e-01
+ok 31 - Strict Avalanche Criteria - 104 bit keys
+# Testing 112-bit keys.......... ok.     # worst-bit:   0.385% error-ratio: 1.009091e+00
+ok 32 - Strict Avalanche Criteria - 112 bit keys
+# Testing 120-bit keys.......... ok.     # worst-bit:   0.418% error-ratio: 9.966483e-01
+ok 33 - Strict Avalanche Criteria - 120 bit keys
+# Testing 128-bit keys.......... ok.     # worst-bit:   0.338% error-ratio: 1.010895e+00
+ok 34 - Strict Avalanche Criteria - 128 bit keys
+# Testing 136-bit keys.......... ok.     # worst-bit:   0.399% error-ratio: 9.956944e-01
+ok 35 - Strict Avalanche Criteria - 136 bit keys
+# Testing 144-bit keys.......... ok.     # worst-bit:   0.377% error-ratio: 9.862610e-01
+ok 36 - Strict Avalanche Criteria - 144 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.442% error-ratio: 9.839626e-01
+ok 37 - Strict Avalanche Criteria - 152 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.389% error-ratio: 9.905224e-01
+ok 38 - Strict Avalanche Criteria - 160 bit keys
+# Testing 256-bit keys.......... ok.     # worst-bit:   0.369% error-ratio: 1.028654e+00
+ok 39 - Strict Avalanche Criteria - 256 bit keys
+ok 40 - Strict Avalanche Criteria # HalfSipHash
+### Keyset 'Cyclic' Tests ###
+# Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    11647 ( 1.00x) - passed
+ok 41 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
+ok 42 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    11723 ( 1.01x) - passed
+ok 43 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
+ok 44 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    11440 ( 0.98x) - passed
+ok 45 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
+ok 46 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    11620 ( 1.00x) - passed
+ok 47 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
+ok 48 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    11656 ( 1.00x) - passed
+ok 49 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+ok 50 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+ok 51 - Keyset 'Cyclic' # HalfSipHash
+### Keyset 'TwoBytes' Tests ###
+# Testing collisions   - Expected    49.57, actual       63 ( 1.27x) - passed
+ok 52 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+ok 53 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+# Testing collisions   - Expected  3484.56, actual     3479 ( 1.00x) - passed
+ok 54 - Collision Rate for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+ok 55 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+# Testing collisions   - Expected 40347.77, actual    40038 ( 0.99x) - passed
+ok 56 - Collision Rate for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+ok 57 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+# Testing collisions   - Expected 227963.15, actual   226110 ( 0.99x) - passed
+ok 58 - Collision Rate for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+ok 59 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+# Testing collisions   - Expected 871784.70, actual   863638 ( 0.99x) - passed
+ok 60 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+ok 61 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+ok 62 - Keyset 'TwoBytes' # HalfSipHash
+### Keyset 'Sparse' Tests ###
+# Keyset 'Sparse' - 32-bit keys with up to 6 bits set - 1149017 keys
+# Testing collisions   - Expected   153.70, actual      143 ( 0.93x) - passed
+ok 63 - Collision Rate for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+ok 64 - Distribution Bias Check for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+# Keyset 'Sparse' - 40-bit keys with up to 6 bits set - 4598479 keys
+# Testing collisions   - Expected  2461.72, actual     2490 ( 1.01x) - passed
+ok 65 - Collision Rate for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+ok 66 - Distribution Bias Check for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+# Keyset 'Sparse' - 48-bit keys with up to 5 bits set - 1925357 keys
+# Testing collisions   - Expected   431.55, actual      442 ( 1.02x) - passed
+ok 67 - Collision Rate for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+ok 68 - Distribution Bias Check for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 56-bit keys with up to 5 bits set - 4216423 keys
+# Testing collisions   - Expected  2069.66, actual     1995 ( 0.96x) - passed
+ok 69 - Collision Rate for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+ok 70 - Distribution Bias Check for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 64-bit keys with up to 5 bits set - 8303633 keys
+# Testing collisions   - Expected  8026.87, actual     8085 ( 1.01x) - passed
+ok 71 - Collision Rate for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+ok 72 - Distribution Bias Check for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 96-bit keys with up to 4 bits set - 3469497 keys
+# Testing collisions   - Expected  1401.34, actual     1441 ( 1.03x) - passed
+ok 73 - Collision Rate for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+ok 74 - Distribution Bias Check for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+# Keyset 'Sparse' - 256-bit keys with up to 3 bits set - 2796417 keys
+# Testing collisions   - Expected   910.36, actual      886 ( 0.97x) - passed
+ok 75 - Collision Rate for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+ok 76 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+# Keyset 'Sparse' - 2048-bit keys with up to 2 bits set - 2098177 keys
+# Testing collisions   - Expected   512.50, actual      528 ( 1.03x) - passed
+ok 77 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 78 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 79 - Keyset 'Sparse' # HalfSipHash
+# Keyset 'CRC-MultiCollision' - 1048575 x 16 block keys - 128-bytes long - 10 seeds
+# Testing collisions   - Expected   128.00, actual      131 ( 1.02x) - passed
+ok 80 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 1 # HalfSipHash
+# Testing collisions   - Expected   128.00, actual      139 ( 1.09x) - passed
+ok 81 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 2 # HalfSipHash
+# Testing collisions   - Expected   128.00, actual      149 ( 1.16x) - passed
+ok 82 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 3 # HalfSipHash
+# Testing collisions   - Expected   128.00, actual      130 ( 1.02x) - passed
+ok 83 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 4 # HalfSipHash
+# Testing collisions   - Expected   128.00, actual      123 ( 0.96x) - passed
+ok 84 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 5 # HalfSipHash
+# Testing collisions   - Expected   128.00, actual      128 ( 1.00x) - passed
+ok 85 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 6 # HalfSipHash
+# Testing collisions   - Expected   128.00, actual      123 ( 0.96x) - passed
+ok 86 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 7 # HalfSipHash
+# Testing collisions   - Expected   128.00, actual      156 ( 1.22x) - passed
+ok 87 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 8 # HalfSipHash
+# Testing collisions   - Expected   128.00, actual      115 ( 0.90x) - passed
+ok 88 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 9 # HalfSipHash
+# Testing collisions   - Expected   128.00, actual      127 ( 0.99x) - passed
+ok 89 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 10 # HalfSipHash
+### Keyset 'Combination Lowbits' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected 42799.01, actual    42868 ( 1.00x) - passed
+ok 90 - Collision Rate for Keyset 'Combination Lowbits'
+ok 91 - Distribution Bias Check for Keyset 'Combination Lowbits'
+ok 92 - Keyset 'Combination Lowbits' # HalfSipHash
+### Keyset 'Combination Highbits' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected 42799.01, actual    42621 ( 1.00x) - passed
+ok 93 - Collision Rate for Keyset 'Combination Highbits'
+ok 94 - Distribution Bias Check for Keyset 'Combination Highbits'
+ok 95 - Keyset 'Combination Highbits' # HalfSipHash
+### Keyset 'Combination Highbits2' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected 42799.01, actual    42942 ( 1.00x) - passed
+ok 96 - Collision Rate for Keyset 'Combination Highbits2'
+ok 97 - Distribution Bias Check for Keyset 'Combination Highbits2'
+ok 98 - Keyset 'Combination Highbits2' # HalfSipHash
+### Keyset 'Combination 0x80000000' Tests ###
+# Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
+# Testing collisions   - Expected   512.00, actual      485 ( 0.95x) - passed
+ok 99 - Collision Rate for Keyset 'Combination 0x80000000'
+ok 100 - Distribution Bias Check for Keyset 'Combination 0x80000000'
+ok 101 - Keyset 'Combination 0x80000000' # HalfSipHash
+### Keyset 'Combination 0x00000001' Tests ###
+# Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
+# Testing collisions   - Expected   512.00, actual      499 ( 0.97x) - passed
+ok 102 - Collision Rate for Keyset 'Combination 0x00000001'
+ok 103 - Distribution Bias Check for Keyset 'Combination 0x00000001'
+ok 104 - Keyset 'Combination 0x00000001' # HalfSipHash
+### Keyset 'Combination Hi-Lo' Tests ###
+# Keyset 'Combination' - up to 6 blocks from a set of 15 - 12204240 keys
+# Testing collisions   - Expected 17339.30, actual    17399 ( 1.00x) - passed
+ok 105 - Collision Rate for Keyset 'Combination Hi-Lo'
+ok 106 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
+ok 107 - Keyset 'Combination Hi-Lo' # HalfSipHash
+### Keyset 'Text' Tests ###
+# Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# Testing collisions   - Expected 25418.13, actual    25611 ( 1.01x) - passed
+ok 108 - Collision Rate for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+ok 109 - Distribution Bias Check for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# Testing collisions   - Expected 25418.13, actual    25455 ( 1.00x) - passed
+ok 110 - Collision Rate for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+ok 111 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+# Testing collisions   - Expected 25418.13, actual    25484 ( 1.00x) - passed
+ok 112 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 113 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 114 - Keyset 'Text' # HalfSipHash
+### Keyset 'Zeroes' Tests ###
+# Keyset 'Zeroes' - 262144 keys
+# Testing collisions   - Expected     8.00, actual        6 ( 0.75x) - passed
+ok 115 - Collision Rate for Keyset 'Zeroes' - 262144 keys
+ok 116 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys
+ok 117 - Keyset 'Zeroes' # HalfSipHash
+### Keyset 'Seed' Tests ###
+# Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# Testing collisions   - Expected   465.66, actual      464 ( 1.00x) - passed
+ok 118 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+ok 119 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# Keyset 'Seed' - 2000000 seeds, Key ""
+# Testing collisions   - Expected   465.66, actual      469 ( 1.01x) - passed
+ok 120 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
+ok 121 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
+# Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# Testing collisions   - Expected   465.66, actual      438 ( 0.94x) - passed
+ok 122 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+ok 123 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+# Testing collisions   - Expected   465.66, actual      483 ( 1.04x) - passed
+ok 124 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 125 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 126 - Keyset 'Seed' # HalfSipHash
+### Keyset 'Effs' Tests ###
+# Keyset 'Effs' - 262144 keys
+# Testing collisions   - Expected     8.00, actual        9 ( 1.13x) - passed
+ok 127 - Collision Rate for Keyset 'Effs' - 262144 keys
+ok 128 - Distribution Bias Check for Keyset 'Effs' - 262144 keys
+ok 129 - Keyset 'Effs' # HalfSipHash
+ok 130 - all tests passed # HalfSipHash
+1..130
+# All Tests Passed. HalfSipHash passed all 130 tests run.
+# Testing took 1964.376913 seconds
+# This is SMHasher version v1.0-demerphq-5-g86440f3 - built on Mar 10 2017.

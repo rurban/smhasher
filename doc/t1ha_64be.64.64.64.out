@@ -1,0 +1,342 @@
+ok 1 - SelfTest - Verify 89 Hashes
+ok 2 - Found Hash # t1ha_64be
+###################################################################
+### Testing t1ha_64be - no seed_state
+### - Fast Positive Hash - portable, 64-bit, big-endian -
+### seedbits: 64 statebits: 64 hashbits: 64
+###################################################################
+### Sanity Tests ###
+ok 3 - Verification code # t1ha_64be
+# Sanity check simple key bit flips and consistency..........
+ok 4 - SanityTest # t1ha_64be
+# Sanity check null suffixes change the hash (simple)..........
+ok 5 - Appended Zeroes Test # t1ha_64be
+ok 6 - Sanity Test # t1ha_64be
+### Speed Tests ###
+## Bulk speed test - 262144-byte keys
+# Alignment  7 -  4.196 bytes/cycle - 12004.52 MiB/sec @ 3 ghz
+# Alignment  6 -  4.197 bytes/cycle - 12006.75 MiB/sec @ 3 ghz
+# Alignment  5 -  4.196 bytes/cycle - 12004.83 MiB/sec @ 3 ghz
+# Alignment  4 -  4.196 bytes/cycle - 12005.86 MiB/sec @ 3 ghz
+# Alignment  3 -  4.196 bytes/cycle - 12004.98 MiB/sec @ 3 ghz
+# Alignment  2 -  4.196 bytes/cycle - 12005.76 MiB/sec @ 3 ghz
+# Alignment  1 -  4.196 bytes/cycle - 12005.53 MiB/sec @ 3 ghz
+# Alignment  0 -  4.259 bytes/cycle - 12184.75 MiB/sec @ 3 ghz
+# Average      -  4.204 bytes/cycle - 12027.87 MiB/sec @ 3 ghz
+## KeySpeed tests
+# t1ha_64be                 0 byte keys       11.319 c/h
+# t1ha_64be                 1 byte keys       15.000 c/h       15.000 c/b        0.067 b/c
+# t1ha_64be                 2 byte keys       17.000 c/h        8.500 c/b        0.118 b/c
+# t1ha_64be                 3 byte keys       18.252 c/h        6.084 c/b        0.164 b/c
+# t1ha_64be                 4 byte keys       20.000 c/h        5.000 c/b        0.200 b/c
+# t1ha_64be                 5 byte keys       21.000 c/h        4.200 c/b        0.238 b/c
+# t1ha_64be                 6 byte keys       22.000 c/h        3.667 c/b        0.273 b/c
+# t1ha_64be                 7 byte keys       23.000 c/h        3.286 c/b        0.304 b/c
+# t1ha_64be                 8 byte keys       23.223 c/h        2.903 c/b        0.344 b/c
+# t1ha_64be                 9 byte keys       16.000 c/h        1.778 c/b        0.562 b/c
+# t1ha_64be                10 byte keys       16.000 c/h        1.600 c/b        0.625 b/c
+# t1ha_64be                11 byte keys       18.000 c/h        1.636 c/b        0.611 b/c
+# t1ha_64be                12 byte keys       18.126 c/h        1.511 c/b        0.662 b/c
+# t1ha_64be                13 byte keys       18.000 c/h        1.385 c/b        0.722 b/c
+# t1ha_64be                14 byte keys       19.000 c/h        1.357 c/b        0.737 b/c
+# t1ha_64be                15 byte keys       20.000 c/h        1.333 c/b        0.750 b/c
+# t1ha_64be                16 byte keys       20.000 c/h        1.250 c/b        0.800 b/c
+# t1ha_64be                17 byte keys       18.000 c/h        1.059 c/b        0.944 b/c
+# t1ha_64be                18 byte keys       18.000 c/h        1.000 c/b        1.000 b/c
+# t1ha_64be                19 byte keys       20.000 c/h        1.053 c/b        0.950 b/c
+# t1ha_64be                20 byte keys       20.000 c/h        1.000 c/b        1.000 b/c
+# t1ha_64be                21 byte keys       20.000 c/h        0.952 c/b        1.050 b/c
+# t1ha_64be                22 byte keys       21.000 c/h        0.955 c/b        1.048 b/c
+# t1ha_64be                23 byte keys       21.000 c/h        0.913 c/b        1.095 b/c
+# t1ha_64be                24 byte keys       22.137 c/h        0.922 c/b        1.084 b/c
+# t1ha_64be                25 byte keys       19.000 c/h        0.760 c/b        1.316 b/c
+# t1ha_64be                26 byte keys       19.000 c/h        0.731 c/b        1.368 b/c
+# t1ha_64be                27 byte keys       20.909 c/h        0.774 c/b        1.291 b/c
+# t1ha_64be                28 byte keys       21.000 c/h        0.750 c/b        1.333 b/c
+# t1ha_64be                29 byte keys       21.000 c/h        0.724 c/b        1.381 b/c
+# t1ha_64be                30 byte keys       21.193 c/h        0.706 c/b        1.416 b/c
+# t1ha_64be                31 byte keys       22.000 c/h        0.710 c/b        1.409 b/c
+#                          Average < 32       19.380 c/h        1.250 c/b        0.800 b/c
+# t1ha_64be                32 byte keys       23.000 c/h        0.719 c/b        1.391 b/c
+# t1ha_64be                36 byte keys       27.998 c/h        0.778 c/b        1.286 b/c
+# t1ha_64be                40 byte keys       30.847 c/h        0.771 c/b        1.297 b/c
+# t1ha_64be                44 byte keys       29.998 c/h        0.682 c/b        1.467 b/c
+# t1ha_64be                48 byte keys       31.244 c/h        0.651 c/b        1.536 b/c
+# t1ha_64be                52 byte keys       31.129 c/h        0.599 c/b        1.670 b/c
+# t1ha_64be                56 byte keys       33.000 c/h        0.589 c/b        1.697 b/c
+# t1ha_64be                60 byte keys       32.998 c/h        0.550 c/b        1.818 b/c
+# t1ha_64be                64 byte keys       29.000 c/h        0.453 c/b        2.207 b/c
+# t1ha_64be                68 byte keys       34.000 c/h        0.500 c/b        2.000 b/c
+# t1ha_64be                72 byte keys       36.732 c/h        0.510 c/b        1.960 b/c
+# t1ha_64be                76 byte keys       36.000 c/h        0.474 c/b        2.111 b/c
+# t1ha_64be                80 byte keys       38.000 c/h        0.475 c/b        2.105 b/c
+# t1ha_64be                84 byte keys       37.993 c/h        0.452 c/b        2.211 b/c
+# t1ha_64be                88 byte keys       40.799 c/h        0.464 c/b        2.157 b/c
+# t1ha_64be                92 byte keys       39.731 c/h        0.432 c/b        2.316 b/c
+# t1ha_64be                96 byte keys       36.924 c/h        0.385 c/b        2.600 b/c
+# t1ha_64be               100 byte keys       41.000 c/h        0.410 c/b        2.439 b/c
+# t1ha_64be               104 byte keys       43.976 c/h        0.423 c/b        2.365 b/c
+# t1ha_64be               108 byte keys       43.971 c/h        0.407 c/b        2.456 b/c
+# t1ha_64be               112 byte keys       46.000 c/h        0.411 c/b        2.435 b/c
+# t1ha_64be               116 byte keys       45.118 c/h        0.389 c/b        2.571 b/c
+# t1ha_64be               120 byte keys       47.987 c/h        0.400 c/b        2.501 b/c
+# t1ha_64be               124 byte keys       47.000 c/h        0.379 c/b        2.638 b/c
+#                         Average < 128       26.868 c/h        0.635 c/b        1.574 b/c
+# t1ha_64be               128 byte keys       44.000 c/h        0.344 c/b        2.909 b/c
+# t1ha_64be               256 byte keys       82.686 c/h        0.323 c/b        3.096 b/c
+# t1ha_64be               512 byte keys      145.225 c/h        0.284 c/b        3.526 b/c
+# t1ha_64be              1024 byte keys      286.401 c/h        0.280 c/b        3.575 b/c
+# t1ha_64be              2048 byte keys      532.325 c/h        0.260 c/b        3.847 b/c
+# t1ha_64be              4096 byte keys     1004.984 c/h        0.245 c/b        4.076 b/c
+# t1ha_64be              8192 byte keys     1962.736 c/h        0.240 c/b        4.174 b/c
+# t1ha_64be             16384 byte keys     3929.910 c/h        0.240 c/b        4.169 b/c
+# t1ha_64be             32768 byte keys     7723.768 c/h        0.236 c/b        4.242 b/c
+# t1ha_64be             65536 byte keys    15395.525 c/h        0.235 c/b        4.257 b/c
+#                       Overall Average      494.124 c/h        0.245 c/b        4.088 b/c
+ok 7 - Speed (always passes) # t1ha_64be
+### Differential Tests ###
+# Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 64 bit hashes.
+# 1000 reps, 8303632000 total tests, expecting 0.00 random collisions..........
+ok 8 - Differential collisions # t1ha_64be
+ok 9 - Nothing skipped during differential collision check # t1ha_64be
+# 0 total collisions, of which 0 single collisions were ignored
+ok 10 - ProcessDifferentials
+# Testing 11017632 up-to-4-bit differentials in 128-bit keys -> 64 bit hashes.
+# 1000 reps, 11017632000 total tests, expecting 0.00 random collisions..........
+ok 11 - Differential collisions # t1ha_64be
+ok 12 - Nothing skipped during differential collision check # t1ha_64be
+# 0 total collisions, of which 0 single collisions were ignored
+ok 13 - ProcessDifferentials
+# Testing 2796416 up-to-3-bit differentials in 256-bit keys -> 64 bit hashes.
+# 1000 reps, 2796416000 total tests, expecting 0.00 random collisions..........
+ok 14 - Differential collisions # t1ha_64be
+ok 15 - Nothing skipped during differential collision check # t1ha_64be
+# 0 total collisions, of which 0 single collisions were ignored
+ok 16 - ProcessDifferentials
+ok 17 - Differential # t1ha_64be
+### Avalanche Tests ### - seed-bits: 64 hash-bits: 64
+# Samples 500000, expected error 0.00051200, confidence level 99.99994267%
+# Testing   0-bit keys.......... ok.     # worst-bit:   0.498% error-ratio: 1.011477e+00
+ok 18 - Strict Avalanche Criteria - 0 bit keys
+# Testing   8-bit keys.......... ok.     # worst-bit:   0.480% error-ratio: 9.644758e-01
+ok 19 - Strict Avalanche Criteria - 8 bit keys
+# Testing  16-bit keys.......... ok.     # worst-bit:   0.510% error-ratio: 1.024041e+00
+ok 20 - Strict Avalanche Criteria - 16 bit keys
+# Testing  24-bit keys.......... ok.     # worst-bit:   0.546% error-ratio: 9.913873e-01
+ok 21 - Strict Avalanche Criteria - 24 bit keys
+# Testing  32-bit keys.......... ok.     # worst-bit:   0.532% error-ratio: 1.018346e+00
+ok 22 - Strict Avalanche Criteria - 32 bit keys
+# Testing  40-bit keys.......... ok.     # worst-bit:   0.502% error-ratio: 1.017738e+00
+ok 23 - Strict Avalanche Criteria - 40 bit keys
+# Testing  48-bit keys.......... ok.     # worst-bit:   0.494% error-ratio: 1.044257e+00
+ok 24 - Strict Avalanche Criteria - 48 bit keys
+# Testing  56-bit keys.......... ok.     # worst-bit:   0.584% error-ratio: 1.011993e+00
+ok 25 - Strict Avalanche Criteria - 56 bit keys
+# Testing  64-bit keys.......... ok.     # worst-bit:   0.573% error-ratio: 9.699047e-01
+ok 26 - Strict Avalanche Criteria - 64 bit keys
+# Testing  72-bit keys.......... ok.     # worst-bit:   0.527% error-ratio: 1.005210e+00
+ok 27 - Strict Avalanche Criteria - 72 bit keys
+# Testing  80-bit keys.......... ok.     # worst-bit:   0.516% error-ratio: 1.004669e+00
+ok 28 - Strict Avalanche Criteria - 80 bit keys
+# Testing  88-bit keys.......... ok.     # worst-bit:   0.550% error-ratio: 9.983298e-01
+ok 29 - Strict Avalanche Criteria - 88 bit keys
+# Testing  96-bit keys.......... ok.     # worst-bit:   0.594% error-ratio: 9.970607e-01
+ok 30 - Strict Avalanche Criteria - 96 bit keys
+# Testing 104-bit keys.......... ok.     # worst-bit:   0.554% error-ratio: 1.007642e+00
+ok 31 - Strict Avalanche Criteria - 104 bit keys
+# Testing 112-bit keys.......... ok.     # worst-bit:   0.532% error-ratio: 9.991097e-01
+ok 32 - Strict Avalanche Criteria - 112 bit keys
+# Testing 120-bit keys.......... ok.     # worst-bit:   0.632% error-ratio: 9.916896e-01
+ok 33 - Strict Avalanche Criteria - 120 bit keys
+# Testing 128-bit keys.......... ok.     # worst-bit:   0.600% error-ratio: 9.726781e-01
+ok 34 - Strict Avalanche Criteria - 128 bit keys
+# Testing 136-bit keys.......... ok.     # worst-bit:   0.612% error-ratio: 1.000617e+00
+ok 35 - Strict Avalanche Criteria - 136 bit keys
+# Testing 144-bit keys.......... ok.     # worst-bit:   0.618% error-ratio: 9.874429e-01
+ok 36 - Strict Avalanche Criteria - 144 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.537% error-ratio: 9.930083e-01
+ok 37 - Strict Avalanche Criteria - 152 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.590% error-ratio: 1.003498e+00
+ok 38 - Strict Avalanche Criteria - 160 bit keys
+# Testing 256-bit keys.......... ok.     # worst-bit:   0.578% error-ratio: 9.929076e-01
+ok 39 - Strict Avalanche Criteria - 256 bit keys
+ok 40 - Strict Avalanche Criteria # t1ha_64be
+### Keyset 'Cyclic' Tests ###
+# Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 41 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+ok 42 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 43 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
+ok 44 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 45 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
+ok 46 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 47 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
+ok 48 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 49 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
+ok 50 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
+ok 51 - Keyset 'Cyclic' # t1ha_64be
+### Keyset 'TwoBytes' Tests ###
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 52 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+ok 53 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 54 - Collision Rate for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+ok 55 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 56 - Collision Rate for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+ok 57 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 58 - Collision Rate for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+ok 59 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 60 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+ok 61 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+ok 62 - Keyset 'TwoBytes' # t1ha_64be
+### Keyset 'Sparse' Tests ###
+# Keyset 'Sparse' - 32-bit keys with up to 6 bits set - 1149017 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 63 - Collision Rate for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+ok 64 - Distribution Bias Check for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+# Keyset 'Sparse' - 40-bit keys with up to 6 bits set - 4598479 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 65 - Collision Rate for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+ok 66 - Distribution Bias Check for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+# Keyset 'Sparse' - 48-bit keys with up to 5 bits set - 1925357 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 67 - Collision Rate for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+ok 68 - Distribution Bias Check for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 56-bit keys with up to 5 bits set - 4216423 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 69 - Collision Rate for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+ok 70 - Distribution Bias Check for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 64-bit keys with up to 5 bits set - 8303633 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 71 - Collision Rate for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+ok 72 - Distribution Bias Check for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 96-bit keys with up to 4 bits set - 3469497 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 73 - Collision Rate for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+ok 74 - Distribution Bias Check for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+# Keyset 'Sparse' - 256-bit keys with up to 3 bits set - 2796417 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 75 - Collision Rate for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+ok 76 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+# Keyset 'Sparse' - 2048-bit keys with up to 2 bits set - 2098177 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 77 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 78 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 79 - Keyset 'Sparse' # t1ha_64be
+# Keyset 'CRC-MultiCollision' - 100000 x 16 block keys - 128-bytes long - 10 seeds
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 80 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 1 # t1ha_64be
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 81 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 2 # t1ha_64be
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 82 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 3 # t1ha_64be
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 83 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 4 # t1ha_64be
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 84 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 5 # t1ha_64be
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 85 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 6 # t1ha_64be
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 86 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 7 # t1ha_64be
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 87 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 8 # t1ha_64be
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 88 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 9 # t1ha_64be
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 89 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 10 # t1ha_64be
+### Keyset 'Combination Lowbits' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 90 - Collision Rate for Keyset 'Combination Lowbits'
+ok 91 - Distribution Bias Check for Keyset 'Combination Lowbits'
+ok 92 - Keyset 'Combination Lowbits' # t1ha_64be
+### Keyset 'Combination Highbits' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 93 - Collision Rate for Keyset 'Combination Highbits'
+ok 94 - Distribution Bias Check for Keyset 'Combination Highbits'
+ok 95 - Keyset 'Combination Highbits' # t1ha_64be
+### Keyset 'Combination Highbits2' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 96 - Collision Rate for Keyset 'Combination Highbits2'
+ok 97 - Distribution Bias Check for Keyset 'Combination Highbits2'
+ok 98 - Keyset 'Combination Highbits2' # t1ha_64be
+### Keyset 'Combination 0x80000000' Tests ###
+# Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 99 - Collision Rate for Keyset 'Combination 0x80000000'
+ok 100 - Distribution Bias Check for Keyset 'Combination 0x80000000'
+ok 101 - Keyset 'Combination 0x80000000' # t1ha_64be
+### Keyset 'Combination 0x00000001' Tests ###
+# Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 102 - Collision Rate for Keyset 'Combination 0x00000001'
+ok 103 - Distribution Bias Check for Keyset 'Combination 0x00000001'
+ok 104 - Keyset 'Combination 0x00000001' # t1ha_64be
+### Keyset 'Combination Hi-Lo' Tests ###
+# Keyset 'Combination' - up to 6 blocks from a set of 15 - 12204240 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 105 - Collision Rate for Keyset 'Combination Hi-Lo'
+ok 106 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
+ok 107 - Keyset 'Combination Hi-Lo' # t1ha_64be
+### Keyset 'Text' Tests ###
+# Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 108 - Collision Rate for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+ok 109 - Distribution Bias Check for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 110 - Collision Rate for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+ok 111 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 112 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 113 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 114 - Keyset 'Text' # t1ha_64be
+### Keyset 'Zeroes' Tests ###
+# Keyset 'Zeroes' - 262144 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 115 - Collision Rate for Keyset 'Zeroes' - 262144 keys
+ok 116 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys
+ok 117 - Keyset 'Zeroes' # t1ha_64be
+### Keyset 'Seed' Tests ###
+# Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 118 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+ok 119 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# Keyset 'Seed' - 2000000 seeds, Key ""
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 120 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
+ok 121 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
+# Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 122 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+ok 123 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 124 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 125 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 126 - Keyset 'Seed' # t1ha_64be
+### Keyset 'Effs' Tests ###
+# Keyset 'Effs' - 262144 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 127 - Collision Rate for Keyset 'Effs' - 262144 keys
+ok 128 - Distribution Bias Check for Keyset 'Effs' - 262144 keys
+ok 129 - Keyset 'Effs' # t1ha_64be
+ok 130 - all tests passed # t1ha_64be
+1..130
+# All Tests Passed. t1ha_64be passed all 130 tests run.
+# Testing took 1540.257668 seconds
+# This is SMHasher version v1.0-demerphq-5-g86440f3 - built on Mar 10 2017.

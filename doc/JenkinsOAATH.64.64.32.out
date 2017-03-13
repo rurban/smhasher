@@ -1,0 +1,342 @@
+ok 1 - SelfTest - Verify 89 Hashes
+ok 2 - Found Hash # JenkinsOAATH
+###################################################################
+### Testing JenkinsOAATH - no seed_state
+### - Bob Jenkins' one-at-a-time 'hardened' -as in perl 5.18 -
+### seedbits: 64 statebits: 64 hashbits: 32
+###################################################################
+### Sanity Tests ###
+ok 3 - Verification code # JenkinsOAATH
+# Sanity check simple key bit flips and consistency..........
+ok 4 - SanityTest # JenkinsOAATH
+# Sanity check null suffixes change the hash (simple)..........
+ok 5 - Appended Zeroes Test # JenkinsOAATH
+ok 6 - Sanity Test # JenkinsOAATH
+### Speed Tests ###
+## Bulk speed test - 262144-byte keys
+# Alignment  7 -  0.240 bytes/cycle -  686.13 MiB/sec @ 3 ghz
+# Alignment  6 -  0.240 bytes/cycle -  686.13 MiB/sec @ 3 ghz
+# Alignment  5 -  0.240 bytes/cycle -  686.13 MiB/sec @ 3 ghz
+# Alignment  4 -  0.240 bytes/cycle -  686.13 MiB/sec @ 3 ghz
+# Alignment  3 -  0.240 bytes/cycle -  686.13 MiB/sec @ 3 ghz
+# Alignment  2 -  0.240 bytes/cycle -  686.13 MiB/sec @ 3 ghz
+# Alignment  1 -  0.240 bytes/cycle -  686.13 MiB/sec @ 3 ghz
+# Alignment  0 -  0.240 bytes/cycle -  686.13 MiB/sec @ 3 ghz
+# Average      -  0.240 bytes/cycle -  686.13 MiB/sec @ 3 ghz
+## KeySpeed tests
+# JenkinsOAATH              0 byte keys       12.972 c/h
+# JenkinsOAATH              1 byte keys       28.478 c/h       28.478 c/b        0.035 b/c
+# JenkinsOAATH              2 byte keys       32.000 c/h       16.000 c/b        0.062 b/c
+# JenkinsOAATH              3 byte keys       36.950 c/h       12.317 c/b        0.081 b/c
+# JenkinsOAATH              4 byte keys       41.000 c/h       10.250 c/b        0.098 b/c
+# JenkinsOAATH              5 byte keys       45.000 c/h        9.000 c/b        0.111 b/c
+# JenkinsOAATH              6 byte keys       49.000 c/h        8.167 c/b        0.122 b/c
+# JenkinsOAATH              7 byte keys       53.000 c/h        7.571 c/b        0.132 b/c
+# JenkinsOAATH              8 byte keys       57.252 c/h        7.157 c/b        0.140 b/c
+# JenkinsOAATH              9 byte keys       62.474 c/h        6.942 c/b        0.144 b/c
+# JenkinsOAATH             10 byte keys       66.000 c/h        6.600 c/b        0.152 b/c
+# JenkinsOAATH             11 byte keys       70.000 c/h        6.364 c/b        0.157 b/c
+# JenkinsOAATH             12 byte keys       74.000 c/h        6.167 c/b        0.162 b/c
+# JenkinsOAATH             13 byte keys       78.000 c/h        6.000 c/b        0.167 b/c
+# JenkinsOAATH             14 byte keys       82.681 c/h        5.906 c/b        0.169 b/c
+# JenkinsOAATH             15 byte keys       86.832 c/h        5.789 c/b        0.173 b/c
+# JenkinsOAATH             16 byte keys       91.000 c/h        5.688 c/b        0.176 b/c
+# JenkinsOAATH             17 byte keys       95.000 c/h        5.588 c/b        0.179 b/c
+# JenkinsOAATH             18 byte keys       99.739 c/h        5.541 c/b        0.180 b/c
+# JenkinsOAATH             19 byte keys      103.000 c/h        5.421 c/b        0.184 b/c
+# JenkinsOAATH             20 byte keys      107.521 c/h        5.376 c/b        0.186 b/c
+# JenkinsOAATH             21 byte keys      111.878 c/h        5.328 c/b        0.188 b/c
+# JenkinsOAATH             22 byte keys      116.000 c/h        5.273 c/b        0.190 b/c
+# JenkinsOAATH             23 byte keys      120.000 c/h        5.217 c/b        0.192 b/c
+# JenkinsOAATH             24 byte keys      124.000 c/h        5.167 c/b        0.194 b/c
+# JenkinsOAATH             25 byte keys      128.000 c/h        5.120 c/b        0.195 b/c
+# JenkinsOAATH             26 byte keys      132.565 c/h        5.099 c/b        0.196 b/c
+# JenkinsOAATH             27 byte keys      136.890 c/h        5.070 c/b        0.197 b/c
+# JenkinsOAATH             28 byte keys      141.000 c/h        5.036 c/b        0.199 b/c
+# JenkinsOAATH             29 byte keys      145.000 c/h        5.000 c/b        0.200 b/c
+# JenkinsOAATH             30 byte keys      149.000 c/h        4.967 c/b        0.201 b/c
+# JenkinsOAATH             31 byte keys      153.379 c/h        4.948 c/b        0.202 b/c
+#                          Average < 32       88.425 c/h        5.705 c/b        0.175 b/c
+# JenkinsOAATH             32 byte keys      157.639 c/h        4.926 c/b        0.203 b/c
+# JenkinsOAATH             36 byte keys      178.130 c/h        4.948 c/b        0.202 b/c
+# JenkinsOAATH             40 byte keys      191.000 c/h        4.775 c/b        0.209 b/c
+# JenkinsOAATH             44 byte keys      207.715 c/h        4.721 c/b        0.212 b/c
+# JenkinsOAATH             48 byte keys      224.482 c/h        4.677 c/b        0.214 b/c
+# JenkinsOAATH             52 byte keys      248.648 c/h        4.782 c/b        0.209 b/c
+# JenkinsOAATH             56 byte keys      257.839 c/h        4.604 c/b        0.217 b/c
+# JenkinsOAATH             60 byte keys      282.964 c/h        4.716 c/b        0.212 b/c
+# JenkinsOAATH             64 byte keys      291.000 c/h        4.547 c/b        0.220 b/c
+# JenkinsOAATH             68 byte keys      307.924 c/h        4.528 c/b        0.221 b/c
+# JenkinsOAATH             72 byte keys      325.813 c/h        4.525 c/b        0.221 b/c
+# JenkinsOAATH             76 byte keys      348.068 c/h        4.580 c/b        0.218 b/c
+# JenkinsOAATH             80 byte keys      357.987 c/h        4.475 c/b        0.223 b/c
+# JenkinsOAATH             84 byte keys      382.626 c/h        4.555 c/b        0.220 b/c
+# JenkinsOAATH             88 byte keys      391.442 c/h        4.448 c/b        0.225 b/c
+# JenkinsOAATH             92 byte keys      418.848 c/h        4.553 c/b        0.220 b/c
+# JenkinsOAATH             96 byte keys      424.836 c/h        4.425 c/b        0.226 b/c
+# JenkinsOAATH            100 byte keys      441.533 c/h        4.415 c/b        0.226 b/c
+# JenkinsOAATH            104 byte keys      458.317 c/h        4.407 c/b        0.227 b/c
+# JenkinsOAATH            108 byte keys      482.514 c/h        4.468 c/b        0.224 b/c
+# JenkinsOAATH            112 byte keys      491.632 c/h        4.390 c/b        0.228 b/c
+# JenkinsOAATH            116 byte keys      515.488 c/h        4.444 c/b        0.225 b/c
+# JenkinsOAATH            120 byte keys      525.376 c/h        4.378 c/b        0.228 b/c
+# JenkinsOAATH            124 byte keys      551.274 c/h        4.446 c/b        0.225 b/c
+#                         Average < 128      201.656 c/h        4.769 c/b        0.210 b/c
+# JenkinsOAATH            128 byte keys      558.542 c/h        4.364 c/b        0.229 b/c
+# JenkinsOAATH            256 byte keys     1165.894 c/h        4.554 c/b        0.220 b/c
+# JenkinsOAATH            512 byte keys     2315.753 c/h        4.523 c/b        0.221 b/c
+# JenkinsOAATH           1024 byte keys     4581.572 c/h        4.474 c/b        0.224 b/c
+# JenkinsOAATH           2048 byte keys     9134.982 c/h        4.460 c/b        0.224 b/c
+# JenkinsOAATH           4096 byte keys    18242.133 c/h        4.454 c/b        0.225 b/c
+# JenkinsOAATH           8192 byte keys    36453.696 c/h        4.450 c/b        0.225 b/c
+# JenkinsOAATH          16384 byte keys    72863.318 c/h        4.447 c/b        0.225 b/c
+# JenkinsOAATH          32768 byte keys   145669.450 c/h        4.445 c/b        0.225 b/c
+# JenkinsOAATH          65536 byte keys   291010.765 c/h        4.440 c/b        0.225 b/c
+#                       Overall Average     8989.224 c/h        4.450 c/b        0.225 b/c
+ok 7 - Speed (always passes) # JenkinsOAATH
+### Differential Tests ###
+# Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 32 bit hashes.
+# 1000 reps, 8303632000 total tests, expecting 1.93 random collisions..........
+ok 8 - Differential collisions # JenkinsOAATH
+ok 9 - Nothing skipped during differential collision check # JenkinsOAATH
+# 9 total collisions, of which 9 single collisions were ignored
+ok 10 - ProcessDifferentials
+# Testing 11017632 up-to-4-bit differentials in 128-bit keys -> 32 bit hashes.
+# 1000 reps, 11017632000 total tests, expecting 2.57 random collisions..........
+ok 11 - Differential collisions # JenkinsOAATH
+ok 12 - Nothing skipped during differential collision check # JenkinsOAATH
+# 3 total collisions, of which 3 single collisions were ignored
+ok 13 - ProcessDifferentials
+# Testing 2796416 up-to-3-bit differentials in 256-bit keys -> 32 bit hashes.
+# 1000 reps, 2796416000 total tests, expecting 0.65 random collisions..........
+ok 14 - Differential collisions # JenkinsOAATH
+ok 15 - Nothing skipped during differential collision check # JenkinsOAATH
+# 2 total collisions, of which 2 single collisions were ignored
+ok 16 - ProcessDifferentials
+ok 17 - Differential # JenkinsOAATH
+### Avalanche Tests ### - seed-bits: 64 hash-bits: 32
+# Samples 1000000, expected error 0.00025600, confidence level 99.99994267%
+# Testing   0-bit keys.......... ok.     # worst-bit:   0.346% error-ratio: 1.009193e+00
+ok 18 - Strict Avalanche Criteria - 0 bit keys
+# Testing   8-bit keys.......... ok.     # worst-bit:   0.325% error-ratio: 9.609772e-01
+ok 19 - Strict Avalanche Criteria - 8 bit keys
+# Testing  16-bit keys.......... ok.     # worst-bit:   0.358% error-ratio: 1.010421e+00
+ok 20 - Strict Avalanche Criteria - 16 bit keys
+# Testing  24-bit keys.......... ok.     # worst-bit:   0.353% error-ratio: 9.505098e-01
+ok 21 - Strict Avalanche Criteria - 24 bit keys
+# Testing  32-bit keys.......... ok.     # worst-bit:   0.358% error-ratio: 9.817661e-01
+ok 22 - Strict Avalanche Criteria - 32 bit keys
+# Testing  40-bit keys.......... ok.     # worst-bit:   0.383% error-ratio: 1.007579e+00
+ok 23 - Strict Avalanche Criteria - 40 bit keys
+# Testing  48-bit keys.......... ok.     # worst-bit:   0.412% error-ratio: 1.024788e+00
+ok 24 - Strict Avalanche Criteria - 48 bit keys
+# Testing  56-bit keys.......... ok.     # worst-bit:   0.382% error-ratio: 9.843181e-01
+ok 25 - Strict Avalanche Criteria - 56 bit keys
+# Testing  64-bit keys.......... ok.     # worst-bit:   0.395% error-ratio: 9.924775e-01
+ok 26 - Strict Avalanche Criteria - 64 bit keys
+# Testing  72-bit keys.......... ok.     # worst-bit:   0.366% error-ratio: 1.012513e+00
+ok 27 - Strict Avalanche Criteria - 72 bit keys
+# Testing  80-bit keys.......... ok.     # worst-bit:   0.371% error-ratio: 9.778626e-01
+ok 28 - Strict Avalanche Criteria - 80 bit keys
+# Testing  88-bit keys.......... ok.     # worst-bit:   0.393% error-ratio: 1.004797e+00
+ok 29 - Strict Avalanche Criteria - 88 bit keys
+# Testing  96-bit keys.......... ok.     # worst-bit:   0.433% error-ratio: 1.008737e+00
+ok 30 - Strict Avalanche Criteria - 96 bit keys
+# Testing 104-bit keys.......... ok.     # worst-bit:   0.369% error-ratio: 1.003268e+00
+ok 31 - Strict Avalanche Criteria - 104 bit keys
+# Testing 112-bit keys.......... ok.     # worst-bit:   0.379% error-ratio: 1.009252e+00
+ok 32 - Strict Avalanche Criteria - 112 bit keys
+# Testing 120-bit keys.......... ok.     # worst-bit:   0.361% error-ratio: 9.743813e-01
+ok 33 - Strict Avalanche Criteria - 120 bit keys
+# Testing 128-bit keys.......... ok.     # worst-bit:   0.375% error-ratio: 1.004851e+00
+ok 34 - Strict Avalanche Criteria - 128 bit keys
+# Testing 136-bit keys.......... ok.     # worst-bit:   0.382% error-ratio: 9.950553e-01
+ok 35 - Strict Avalanche Criteria - 136 bit keys
+# Testing 144-bit keys.......... ok.     # worst-bit:   0.388% error-ratio: 9.853935e-01
+ok 36 - Strict Avalanche Criteria - 144 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.400% error-ratio: 1.009560e+00
+ok 37 - Strict Avalanche Criteria - 152 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.373% error-ratio: 9.737145e-01
+ok 38 - Strict Avalanche Criteria - 160 bit keys
+# Testing 256-bit keys.......... ok.     # worst-bit:   0.372% error-ratio: 9.993658e-01
+ok 39 - Strict Avalanche Criteria - 256 bit keys
+ok 40 - Strict Avalanche Criteria # JenkinsOAATH
+### Keyset 'Cyclic' Tests ###
+# Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    11549 ( 0.99x) - passed
+ok 41 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
+ok 42 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    11648 ( 1.00x) - passed
+ok 43 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
+ok 44 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    11470 ( 0.99x) - passed
+ok 45 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
+ok 46 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    11723 ( 1.01x) - passed
+ok 47 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
+ok 48 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    11772 ( 1.01x) - passed
+ok 49 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+ok 50 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+ok 51 - Keyset 'Cyclic' # JenkinsOAATH
+### Keyset 'TwoBytes' Tests ###
+# Testing collisions   - Expected    49.57, actual      837 (16.88x) - failed
+not ok 52 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+ok 53 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+# Testing collisions   - Expected  3484.56, actual     6389 ( 1.83x) - passed
+ok 54 - Collision Rate for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+ok 55 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+# Testing collisions   - Expected 40347.77, actual    43945 ( 1.09x) - passed
+ok 56 - Collision Rate for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+ok 57 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+# Testing collisions   - Expected 227963.15, actual   236433 ( 1.04x) - passed
+ok 58 - Collision Rate for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+ok 59 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+# Testing collisions   - Expected 871784.70, actual   882456 ( 1.01x) - passed
+ok 60 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+ok 61 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+not ok 62 - Keyset 'TwoBytes' # JenkinsOAATH
+### Keyset 'Sparse' Tests ###
+# Keyset 'Sparse' - 32-bit keys with up to 6 bits set - 1149017 keys
+# Testing collisions   - Expected   153.70, actual      162 ( 1.05x) - passed
+ok 63 - Collision Rate for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+ok 64 - Distribution Bias Check for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+# Keyset 'Sparse' - 40-bit keys with up to 6 bits set - 4598479 keys
+# Testing collisions   - Expected  2461.72, actual     2411 ( 0.98x) - passed
+ok 65 - Collision Rate for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+ok 66 - Distribution Bias Check for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+# Keyset 'Sparse' - 48-bit keys with up to 5 bits set - 1925357 keys
+# Testing collisions   - Expected   431.55, actual      439 ( 1.02x) - passed
+ok 67 - Collision Rate for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+ok 68 - Distribution Bias Check for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 56-bit keys with up to 5 bits set - 4216423 keys
+# Testing collisions   - Expected  2069.66, actual     2093 ( 1.01x) - passed
+ok 69 - Collision Rate for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+ok 70 - Distribution Bias Check for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 64-bit keys with up to 5 bits set - 8303633 keys
+# Testing collisions   - Expected  8026.87, actual     7972 ( 0.99x) - passed
+ok 71 - Collision Rate for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+ok 72 - Distribution Bias Check for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 96-bit keys with up to 4 bits set - 3469497 keys
+# Testing collisions   - Expected  1401.34, actual     1367 ( 0.98x) - passed
+ok 73 - Collision Rate for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+ok 74 - Distribution Bias Check for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+# Keyset 'Sparse' - 256-bit keys with up to 3 bits set - 2796417 keys
+# Testing collisions   - Expected   910.36, actual      942 ( 1.03x) - passed
+ok 75 - Collision Rate for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+ok 76 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+# Keyset 'Sparse' - 2048-bit keys with up to 2 bits set - 2098177 keys
+# Testing collisions   - Expected   512.50, actual      532 ( 1.04x) - passed
+ok 77 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 78 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 79 - Keyset 'Sparse' # JenkinsOAATH
+# Keyset 'CRC-MultiCollision' - 100000 x 16 block keys - 128-bytes long - 10 seeds
+# Testing collisions   - Expected     1.16, actual        1 ( 0.86x) - passed
+ok 80 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 1 # JenkinsOAATH
+# Testing collisions   - Expected     1.16, actual        0 ( 0.00x) - passed
+ok 81 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 2 # JenkinsOAATH
+# Testing collisions   - Expected     1.16, actual        1 ( 0.86x) - passed
+ok 82 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 3 # JenkinsOAATH
+# Testing collisions   - Expected     1.16, actual        2 ( 1.72x) - passed
+ok 83 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 4 # JenkinsOAATH
+# Testing collisions   - Expected     1.16, actual        4 ( 3.44x) - failed
+not ok 84 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 5 # JenkinsOAATH
+# Testing collisions   - Expected     1.16, actual        1 ( 0.86x) - passed
+ok 85 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 6 # JenkinsOAATH
+# Testing collisions   - Expected     1.16, actual        1 ( 0.86x) - passed
+ok 86 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 7 # JenkinsOAATH
+# Testing collisions   - Expected     1.16, actual        0 ( 0.00x) - passed
+ok 87 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 8 # JenkinsOAATH
+# Testing collisions   - Expected     1.16, actual        1 ( 0.86x) - passed
+ok 88 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 9 # JenkinsOAATH
+# Testing collisions   - Expected     1.16, actual        0 ( 0.00x) - passed
+ok 89 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 10 # JenkinsOAATH
+### Keyset 'Combination Lowbits' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected 42799.01, actual    42990 ( 1.00x) - passed
+ok 90 - Collision Rate for Keyset 'Combination Lowbits'
+ok 91 - Distribution Bias Check for Keyset 'Combination Lowbits'
+ok 92 - Keyset 'Combination Lowbits' # JenkinsOAATH
+### Keyset 'Combination Highbits' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected 42799.01, actual    42177 ( 0.99x) - passed
+ok 93 - Collision Rate for Keyset 'Combination Highbits'
+ok 94 - Distribution Bias Check for Keyset 'Combination Highbits'
+ok 95 - Keyset 'Combination Highbits' # JenkinsOAATH
+### Keyset 'Combination Highbits2' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected 42799.01, actual    42611 ( 1.00x) - passed
+ok 96 - Collision Rate for Keyset 'Combination Highbits2'
+ok 97 - Distribution Bias Check for Keyset 'Combination Highbits2'
+ok 98 - Keyset 'Combination Highbits2' # JenkinsOAATH
+### Keyset 'Combination 0x80000000' Tests ###
+# Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
+# Testing collisions   - Expected   512.00, actual      485 ( 0.95x) - passed
+ok 99 - Collision Rate for Keyset 'Combination 0x80000000'
+ok 100 - Distribution Bias Check for Keyset 'Combination 0x80000000'
+ok 101 - Keyset 'Combination 0x80000000' # JenkinsOAATH
+### Keyset 'Combination 0x00000001' Tests ###
+# Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
+# Testing collisions   - Expected   512.00, actual      516 ( 1.01x) - passed
+ok 102 - Collision Rate for Keyset 'Combination 0x00000001'
+ok 103 - Distribution Bias Check for Keyset 'Combination 0x00000001'
+ok 104 - Keyset 'Combination 0x00000001' # JenkinsOAATH
+### Keyset 'Combination Hi-Lo' Tests ###
+# Keyset 'Combination' - up to 6 blocks from a set of 15 - 12204240 keys
+# Testing collisions   - Expected 17339.30, actual    18293 ( 1.06x) - passed
+ok 105 - Collision Rate for Keyset 'Combination Hi-Lo'
+ok 106 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
+ok 107 - Keyset 'Combination Hi-Lo' # JenkinsOAATH
+### Keyset 'Text' Tests ###
+# Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# Testing collisions   - Expected 25418.13, actual   183069 ( 7.20x) - failed
+not ok 108 - Collision Rate for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+ok 109 - Distribution Bias Check for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# Testing collisions   - Expected 25418.13, actual   361847 (14.24x) - failed
+not ok 110 - Collision Rate for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+ok 111 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+# Testing collisions   - Expected 25418.13, actual   269453 (10.60x) - failed
+not ok 112 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 113 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+not ok 114 - Keyset 'Text' # JenkinsOAATH
+### Keyset 'Zeroes' Tests ###
+# Keyset 'Zeroes' - 262144 keys
+# Testing collisions   - Expected     8.00, actual       11 ( 1.38x) - passed
+ok 115 - Collision Rate for Keyset 'Zeroes' - 262144 keys
+ok 116 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys
+ok 117 - Keyset 'Zeroes' # JenkinsOAATH
+### Keyset 'Seed' Tests ###
+# Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# Testing collisions   - Expected   465.66, actual      472 ( 1.01x) - passed
+ok 118 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+ok 119 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# Keyset 'Seed' - 2000000 seeds, Key ""
+# Testing collisions   - Expected   465.66, actual      412 ( 0.88x) - passed
+ok 120 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
+ok 121 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
+# Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# Testing collisions   - Expected   465.66, actual      451 ( 0.97x) - passed
+ok 122 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+ok 123 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+# Testing collisions   - Expected   465.66, actual      504 ( 1.08x) - passed
+ok 124 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 125 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 126 - Keyset 'Seed' # JenkinsOAATH
+### Keyset 'Effs' Tests ###
+# Keyset 'Effs' - 262144 keys
+# Testing collisions   - Expected     8.00, actual        7 ( 0.88x) - passed
+ok 127 - Collision Rate for Keyset 'Effs' - 262144 keys
+ok 128 - Distribution Bias Check for Keyset 'Effs' - 262144 keys
+ok 129 - Keyset 'Effs' # JenkinsOAATH
+not ok 130 - all tests passed # JenkinsOAATH
+1..130
+# Tests Failed. JenkinsOAATH failed 8 of 130 tests.
+# Testing took 1864.626419 seconds
+# This is SMHasher version v1.0-demerphq-5-g86440f3 - built on Mar 10 2017.

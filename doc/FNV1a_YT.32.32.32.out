@@ -1,0 +1,586 @@
+ok 1 - SelfTest - Verify 89 Hashes
+ok 2 - Found Hash # FNV1a_YT
+###################################################################
+### Testing FNV1a_YT - no seed_state
+### - FNV1a-YoshimitsuTRIAD 32-bit sanmayce -
+### seedbits: 32 statebits: 32 hashbits: 32
+###################################################################
+### Sanity Tests ###
+ok 3 - Verification code # FNV1a_YT
+# Sanity check simple key bit flips and consistency..........
+ok 4 - SanityTest # FNV1a_YT
+# Sanity check null suffixes change the hash (simple)..........
+ok 5 - Appended Zeroes Test # FNV1a_YT
+ok 6 - Sanity Test # FNV1a_YT
+### Speed Tests ###
+## Bulk speed test - 262144-byte keys
+# Alignment  7 -  5.351 bytes/cycle - 15309.62 MiB/sec @ 3 ghz
+# Alignment  6 -  5.352 bytes/cycle - 15311.64 MiB/sec @ 3 ghz
+# Alignment  5 -  5.352 bytes/cycle - 15310.85 MiB/sec @ 3 ghz
+# Alignment  4 -  5.518 bytes/cycle - 15786.28 MiB/sec @ 3 ghz
+# Alignment  3 -  5.413 bytes/cycle - 15486.47 MiB/sec @ 3 ghz
+# Alignment  2 -  5.412 bytes/cycle - 15484.69 MiB/sec @ 3 ghz
+# Alignment  1 -  5.412 bytes/cycle - 15485.25 MiB/sec @ 3 ghz
+# Alignment  0 -  5.531 bytes/cycle - 15824.49 MiB/sec @ 3 ghz
+# Average      -  5.418 bytes/cycle - 15499.91 MiB/sec @ 3 ghz
+## KeySpeed tests
+# FNV1a_YT                  0 byte keys       10.000 c/h
+# FNV1a_YT                  1 byte keys       10.000 c/h       10.000 c/b        0.100 b/c
+# FNV1a_YT                  2 byte keys       10.521 c/h        5.260 c/b        0.190 b/c
+# FNV1a_YT                  3 byte keys       14.000 c/h        4.667 c/b        0.214 b/c
+# FNV1a_YT                  4 byte keys       13.000 c/h        3.250 c/b        0.308 b/c
+# FNV1a_YT                  5 byte keys       14.000 c/h        2.800 c/b        0.357 b/c
+# FNV1a_YT                  6 byte keys       14.000 c/h        2.333 c/b        0.429 b/c
+# FNV1a_YT                  7 byte keys       17.000 c/h        2.429 c/b        0.412 b/c
+# FNV1a_YT                  8 byte keys       10.985 c/h        1.373 c/b        0.728 b/c
+# FNV1a_YT                  9 byte keys       14.000 c/h        1.556 c/b        0.643 b/c
+# FNV1a_YT                 10 byte keys       14.000 c/h        1.400 c/b        0.714 b/c
+# FNV1a_YT                 11 byte keys       17.000 c/h        1.545 c/b        0.647 b/c
+# FNV1a_YT                 12 byte keys       14.000 c/h        1.167 c/b        0.857 b/c
+# FNV1a_YT                 13 byte keys       17.000 c/h        1.308 c/b        0.765 b/c
+# FNV1a_YT                 14 byte keys       17.462 c/h        1.247 c/b        0.802 b/c
+# FNV1a_YT                 15 byte keys       20.000 c/h        1.333 c/b        0.750 b/c
+# FNV1a_YT                 16 byte keys       11.274 c/h        0.705 c/b        1.419 b/c
+# FNV1a_YT                 17 byte keys       15.000 c/h        0.882 c/b        1.133 b/c
+# FNV1a_YT                 18 byte keys       15.000 c/h        0.833 c/b        1.200 b/c
+# FNV1a_YT                 19 byte keys       18.000 c/h        0.947 c/b        1.056 b/c
+# FNV1a_YT                 20 byte keys       15.000 c/h        0.750 c/b        1.333 b/c
+# FNV1a_YT                 21 byte keys       18.285 c/h        0.871 c/b        1.148 b/c
+# FNV1a_YT                 22 byte keys       18.180 c/h        0.826 c/b        1.210 b/c
+# FNV1a_YT                 23 byte keys       21.159 c/h        0.920 c/b        1.087 b/c
+# FNV1a_YT                 24 byte keys       15.992 c/h        0.666 c/b        1.501 b/c
+# FNV1a_YT                 25 byte keys       19.000 c/h        0.760 c/b        1.316 b/c
+# FNV1a_YT                 26 byte keys       19.000 c/h        0.731 c/b        1.368 b/c
+# FNV1a_YT                 27 byte keys       22.000 c/h        0.815 c/b        1.227 b/c
+# FNV1a_YT                 28 byte keys       19.000 c/h        0.679 c/b        1.474 b/c
+# FNV1a_YT                 29 byte keys       22.000 c/h        0.759 c/b        1.318 b/c
+# FNV1a_YT                 30 byte keys       22.000 c/h        0.733 c/b        1.364 b/c
+# FNV1a_YT                 31 byte keys       25.765 c/h        0.831 c/b        1.203 b/c
+#                          Average < 32       16.363 c/h        1.056 c/b        0.947 b/c
+# FNV1a_YT                 32 byte keys       19.000 c/h        0.594 c/b        1.684 b/c
+# FNV1a_YT                 36 byte keys       22.000 c/h        0.611 c/b        1.636 b/c
+# FNV1a_YT                 40 byte keys       20.000 c/h        0.500 c/b        2.000 b/c
+# FNV1a_YT                 44 byte keys       23.281 c/h        0.529 c/b        1.890 b/c
+# FNV1a_YT                 48 byte keys       19.000 c/h        0.396 c/b        2.526 b/c
+# FNV1a_YT                 52 byte keys       22.000 c/h        0.423 c/b        2.364 b/c
+# FNV1a_YT                 56 byte keys       22.000 c/h        0.393 c/b        2.545 b/c
+# FNV1a_YT                 60 byte keys       26.000 c/h        0.433 c/b        2.308 b/c
+# FNV1a_YT                 64 byte keys       23.000 c/h        0.359 c/b        2.783 b/c
+# FNV1a_YT                 68 byte keys       27.000 c/h        0.397 c/b        2.519 b/c
+# FNV1a_YT                 72 byte keys       22.000 c/h        0.306 c/b        3.273 b/c
+# FNV1a_YT                 76 byte keys       26.000 c/h        0.342 c/b        2.923 b/c
+# FNV1a_YT                 80 byte keys       26.000 c/h        0.325 c/b        3.077 b/c
+# FNV1a_YT                 84 byte keys       29.351 c/h        0.349 c/b        2.862 b/c
+# FNV1a_YT                 88 byte keys       26.915 c/h        0.306 c/b        3.270 b/c
+# FNV1a_YT                 92 byte keys       30.000 c/h        0.326 c/b        3.067 b/c
+# FNV1a_YT                 96 byte keys       26.000 c/h        0.271 c/b        3.692 b/c
+# FNV1a_YT                100 byte keys       29.974 c/h        0.300 c/b        3.336 b/c
+# FNV1a_YT                104 byte keys       30.000 c/h        0.288 c/b        3.467 b/c
+# FNV1a_YT                108 byte keys       33.777 c/h        0.313 c/b        3.197 b/c
+# FNV1a_YT                112 byte keys       30.000 c/h        0.268 c/b        3.733 b/c
+# FNV1a_YT                116 byte keys       33.578 c/h        0.289 c/b        3.455 b/c
+# FNV1a_YT                120 byte keys       30.000 c/h        0.250 c/b        4.000 b/c
+# FNV1a_YT                124 byte keys       33.000 c/h        0.266 c/b        3.758 b/c
+#                         Average < 128       20.598 c/h        0.487 c/b        2.053 b/c
+# FNV1a_YT                128 byte keys       33.000 c/h        0.258 c/b        3.879 b/c
+# FNV1a_YT                256 byte keys       57.515 c/h        0.225 c/b        4.451 b/c
+# FNV1a_YT                512 byte keys      128.592 c/h        0.251 c/b        3.982 b/c
+# FNV1a_YT               1024 byte keys      218.605 c/h        0.213 c/b        4.684 b/c
+# FNV1a_YT               2048 byte keys      399.501 c/h        0.195 c/b        5.126 b/c
+# FNV1a_YT               4096 byte keys      761.908 c/h        0.186 c/b        5.376 b/c
+# FNV1a_YT               8192 byte keys     1486.958 c/h        0.182 c/b        5.509 b/c
+# FNV1a_YT              16384 byte keys     2936.544 c/h        0.179 c/b        5.579 b/c
+# FNV1a_YT              32768 byte keys     5871.310 c/h        0.179 c/b        5.581 b/c
+# FNV1a_YT              65536 byte keys    11729.919 c/h        0.179 c/b        5.587 b/c
+#                       Overall Average      375.414 c/h        0.186 c/b        5.380 b/c
+ok 7 - Speed (always passes) # FNV1a_YT
+### Differential Tests ###
+# Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 32 bit hashes.
+# 1000 reps, 8303632000 total tests, expecting 1.93 random collisions..........
+ok 8 - Differential collisions # FNV1a_YT
+ok 9 - Nothing skipped during differential collision check # FNV1a_YT
+# 7334 total collisions, of which 571 single collisions were ignored
+not ok 10 - ProcessDifferentials
+# Testing 11017632 up-to-4-bit differentials in 128-bit keys -> 32 bit hashes.
+# 1000 reps, 11017632000 total tests, expecting 2.57 random collisions.!!!!!!!!!
+not ok 11 - Differential collisions # FNV1a_YT
+not ok 12 - Nothing skipped during differential collision check # FNV1a_YT
+# Testing 2796416 up-to-3-bit differentials in 256-bit keys -> 32 bit hashes.
+# 1000 reps, 2796416000 total tests, expecting 0.65 random collisions.......!!!
+not ok 13 - Differential collisions # FNV1a_YT
+not ok 14 - Nothing skipped during differential collision check # FNV1a_YT
+not ok 15 - Differential # FNV1a_YT
+### Avalanche Tests ### - seed-bits: 32 hash-bits: 32
+# Samples 1000000, expected error 0.00025600, confidence level 99.99994267%
+# Testing   0-bit keys.......... ok.     # worst-bit:   0.326% error-ratio: 9.973345e-01
+ok 16 - Strict Avalanche Criteria - 0 bit keys
+# Testing   8-bit keys.......... ok.     # worst-bit:   0.318% error-ratio: 9.463394e-01
+ok 17 - Strict Avalanche Criteria - 8 bit keys
+# Testing  16-bit keys.......... not ok! # worst-bit:   0.354% error-ratio: 9.449081e-01
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 16
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 16
+#              +--------------------------------+
+# 0 of 1536 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00024190
+#     hash bit-level errors: 1/32
+#     - hash bit 2 gtest-prob not-random: 100.0000 (24020501/23979499)
+not ok 18 - Strict Avalanche Criteria - 16 bit keys
+# Testing  24-bit keys.......... ok.     # worst-bit:   0.320% error-ratio: 9.662982e-01
+ok 19 - Strict Avalanche Criteria - 24 bit keys
+# Testing  32-bit keys.......... ok.     # worst-bit:   0.357% error-ratio: 9.165478e-01
+ok 20 - Strict Avalanche Criteria - 32 bit keys
+# Testing  40-bit keys.......... ok.     # worst-bit:   0.362% error-ratio: 9.659048e-01
+ok 21 - Strict Avalanche Criteria - 40 bit keys
+# Testing  48-bit keys.......... ok.     # worst-bit:   0.333% error-ratio: 1.018022e+00
+ok 22 - Strict Avalanche Criteria - 48 bit keys
+# Testing  56-bit keys.......... ok.     # worst-bit:   0.355% error-ratio: 1.060582e+00
+ok 23 - Strict Avalanche Criteria - 56 bit keys
+# Testing  64-bit keys.......... ok.     # worst-bit:   0.323% error-ratio: 8.790343e-01
+ok 24 - Strict Avalanche Criteria - 64 bit keys
+# Testing  72-bit keys.......... ok.     # worst-bit:   0.350% error-ratio: 9.676941e-01
+ok 25 - Strict Avalanche Criteria - 72 bit keys
+# Testing  80-bit keys.......... ok.     # worst-bit:   0.357% error-ratio: 9.970906e-01
+ok 26 - Strict Avalanche Criteria - 80 bit keys
+# Testing  88-bit keys.......... not ok! # worst-bit:   0.355% error-ratio: 1.038787e+00
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 88
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 88
+#              +--------------------------------+
+# 0 of 3840 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00026593
+#     hash bit-level errors: 1/32
+#     - hash bit 1 gtest-prob not-random: 100.0000 (60030083/59969917)
+not ok 27 - Strict Avalanche Criteria - 88 bit keys
+# Testing  96-bit keys.......... ok.     # worst-bit:   0.390% error-ratio: 9.452877e-01
+ok 28 - Strict Avalanche Criteria - 96 bit keys
+# Testing 104-bit keys.......... not ok! # worst-bit:   0.386% error-ratio: 1.044845e+00
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 104
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 104
+#              +--------------------------------+
+# 0 of 4352 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00026748
+#     hash bit-level errors: 1/32
+#     - hash bit 9 gtest-prob not-random: 100.0000 (67969541/68030459)
+not ok 29 - Strict Avalanche Criteria - 104 bit keys
+# Testing 112-bit keys.......... not ok! # worst-bit:   0.405% error-ratio: 9.796219e-01
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 112
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 112
+#              +--------------------------------+
+# 0 of 4608 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00025078
+#     hash bit-level errors: 1/32
+#     - hash bit 1 gtest-prob not-random: 100.0000 (72030214/71969786)
+not ok 30 - Strict Avalanche Criteria - 112 bit keys
+# Testing 120-bit keys.......... ok.     # worst-bit:   0.344% error-ratio: 9.678542e-01
+ok 31 - Strict Avalanche Criteria - 120 bit keys
+# Testing 128-bit keys.......... not ok! # worst-bit:   0.410% error-ratio: 1.065133e+00
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 128
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 128
+#              +--------------------------------+
+# 0 of 5120 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00027267
+#     hash bit-level errors: 3/32
+#     - hash bit 0 gtest-prob not-random: 100.0000 (80045874/79954126)
+#     - hash bit 17 gtest-prob not-random: 100.0000 (80035047/79964953)
+#     - hash bit 20 gtest-prob not-random: 100.0000 (79947325/80052675)
+not ok 32 - Strict Avalanche Criteria - 128 bit keys
+# Testing 136-bit keys.......... not ok! # worst-bit:   0.362% error-ratio: 9.903441e-01
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 136
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 136
+#              +--------------------------------+
+# 0 of 5376 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00025353
+#     hash bit-level errors: 1/32
+#     - hash bit 27 gtest-prob not-random: 100.0000 (83966550/84033450)
+not ok 33 - Strict Avalanche Criteria - 136 bit keys
+# Testing 144-bit keys.......... ok.     # worst-bit:   0.336% error-ratio: 9.063669e-01
+ok 34 - Strict Avalanche Criteria - 144 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.351% error-ratio: 9.575853e-01
+ok 35 - Strict Avalanche Criteria - 152 bit keys
+# Testing 152-bit keys.......... not ok! # worst-bit:   0.448% error-ratio: 9.767552e-01
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 152
+#              +--------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +--------------------------------+
+#              |0         1         2         3 |
+#              |01234567890123456789012345678901|
+#              +--------------------------------+
+# seed     0.0 |................................| x 32
+# key      0.0 |................................| x 152
+#              +--------------------------------+
+# 0 of 5888 bits failed (0.00%) failed at 99.999943 confidence
+#     g-test: 0.000000%
+#     sum-error-square: 0.00025005
+#     hash bit-level errors: 2/32
+#     - hash bit 21 gtest-prob not-random: 100.0000 (91964382/92035618)
+#     - hash bit 22 gtest-prob not-random: 100.0000 (92041640/91958360)
+not ok 36 - Strict Avalanche Criteria - 160 bit keys
+# Testing 256-bit keys.......... ok.     # worst-bit:   0.380% error-ratio: 9.248174e-01
+ok 37 - Strict Avalanche Criteria - 256 bit keys
+not ok 38 - Strict Avalanche Criteria # FNV1a_YT
+### Keyset 'Cyclic' Tests ###
+# Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    11858 ( 1.02x) - passed
+ok 39 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
+ok 40 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    11728 ( 1.01x) - passed
+ok 41 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
+ok 42 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    11755 ( 1.01x) - passed
+ok 43 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
+ok 44 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    11635 ( 1.00x) - passed
+ok 45 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
+ok 46 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    22977 ( 1.97x) - passed
+ok 47 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+ok 48 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+ok 49 - Keyset 'Cyclic' # FNV1a_YT
+### Keyset 'TwoBytes' Tests ###
+# Testing collisions   - Expected    49.57, actual     1223 (24.67x) - failed
+not ok 50 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+ok 51 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+# Testing collisions   - Expected  3484.56, actual   618251 (177.43x) - failed
+not ok 52 - Collision Rate for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+# worst bias is the  20-bit window at bit  17 - 11.753% (416)
+not ok 53 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+# Testing collisions   - Expected 40347.77, actual  2536571 (62.87x) - failed
+not ok 54 - Collision Rate for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+# worst bias is the  20-bit window at bit   0 - 9.051% (416)
+not ok 55 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+# Testing collisions   - Expected 227963.15, actual  7064798 (30.99x) - failed
+not ok 56 - Collision Rate for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+# worst bias is the  20-bit window at bit   0 - 9.132% (416)
+not ok 57 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+# Testing collisions   - Expected 871784.70, actual 22225688 (25.49x) - failed
+not ok 58 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+# worst bias is the  20-bit window at bit   0 - 9.228% (416)
+not ok 59 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+not ok 60 - Keyset 'TwoBytes' # FNV1a_YT
+### Keyset 'Sparse' Tests ###
+# Keyset 'Sparse' - 32-bit keys with up to 6 bits set - 1149017 keys
+# Testing collisions   - Expected   153.70, actual      131 ( 0.85x) - passed
+ok 61 - Collision Rate for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+ok 62 - Distribution Bias Check for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+# Keyset 'Sparse' - 40-bit keys with up to 6 bits set - 4598479 keys
+# Testing collisions   - Expected  2461.72, actual     2407 ( 0.98x) - passed
+ok 63 - Collision Rate for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+ok 64 - Distribution Bias Check for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+# Keyset 'Sparse' - 48-bit keys with up to 5 bits set - 1925357 keys
+# Testing collisions   - Expected   431.55, actual      430 ( 1.00x) - passed
+ok 65 - Collision Rate for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+ok 66 - Distribution Bias Check for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 56-bit keys with up to 5 bits set - 4216423 keys
+# Testing collisions   - Expected  2069.66, actual     2022 ( 0.98x) - passed
+ok 67 - Collision Rate for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+ok 68 - Distribution Bias Check for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 64-bit keys with up to 5 bits set - 8303633 keys
+# Testing collisions   - Expected  8026.87, actual     8028 ( 1.00x) - passed
+ok 69 - Collision Rate for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+ok 70 - Distribution Bias Check for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 96-bit keys with up to 4 bits set - 3469497 keys
+# Testing collisions   - Expected  1401.34, actual     1613 ( 1.15x) - passed
+ok 71 - Collision Rate for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+ok 72 - Distribution Bias Check for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+# Keyset 'Sparse' - 256-bit keys with up to 3 bits set - 2796417 keys
+# Testing collisions   - Expected   910.36, actual   464578 (510.32x) - failed
+not ok 73 - Collision Rate for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+# worst bias is the  19-bit window at bit  21 - 4.685% (384)
+not ok 74 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+# Keyset 'Sparse' - 2048-bit keys with up to 2 bits set - 2098177 keys
+# Testing collisions   - Expected   512.50, actual  1134789 - Excessive keys in collision - failed
+not ok 75 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+# worst bias is the  18-bit window at bit   8 - 19.368% (352)
+not ok 76 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+not ok 77 - Keyset 'Sparse' # FNV1a_YT
+# Keyset 'CRC-MultiCollision' - 1048575 x 16 block keys - 128-bytes long - 10 seeds
+# Testing collisions   - Expected   128.00, actual      142 ( 1.11x) - passed
+ok 78 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 1 # FNV1a_YT
+# Testing collisions   - Expected   128.00, actual      125 ( 0.98x) - passed
+ok 79 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 2 # FNV1a_YT
+# Testing collisions   - Expected   128.00, actual      131 ( 1.02x) - passed
+ok 80 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 3 # FNV1a_YT
+# Testing collisions   - Expected   128.00, actual      137 ( 1.07x) - passed
+ok 81 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 4 # FNV1a_YT
+# Testing collisions   - Expected   128.00, actual      106 ( 0.83x) - passed
+ok 82 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 5 # FNV1a_YT
+# Testing collisions   - Expected   128.00, actual      126 ( 0.98x) - passed
+ok 83 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 6 # FNV1a_YT
+# Testing collisions   - Expected   128.00, actual      144 ( 1.13x) - passed
+ok 84 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 7 # FNV1a_YT
+# Testing collisions   - Expected   128.00, actual      124 ( 0.97x) - passed
+ok 85 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 8 # FNV1a_YT
+# Testing collisions   - Expected   128.00, actual      133 ( 1.04x) - passed
+ok 86 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 9 # FNV1a_YT
+# Testing collisions   - Expected   128.00, actual      131 ( 1.02x) - passed
+ok 87 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 10 # FNV1a_YT
+### Keyset 'Combination Lowbits' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected 42799.01, actual  2149893 (50.23x) - failed
+not ok 88 - Collision Rate for Keyset 'Combination Lowbits'
+# worst bias is the  20-bit window at bit   1 - 1.841% (416)
+not ok 89 - Distribution Bias Check for Keyset 'Combination Lowbits'
+not ok 90 - Keyset 'Combination Lowbits' # FNV1a_YT
+### Keyset 'Combination Highbits' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected 42799.01, actual 16779009 (392.04x) - failed
+not ok 91 - Collision Rate for Keyset 'Combination Highbits'
+# worst bias is the  20-bit window at bit  17 - 285.411% (416)
+not ok 92 - Distribution Bias Check for Keyset 'Combination Highbits'
+not ok 93 - Keyset 'Combination Highbits' # FNV1a_YT
+### Keyset 'Combination Highbits2' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected 42799.01, actual 15730136 (367.54x) - failed
+not ok 94 - Collision Rate for Keyset 'Combination Highbits2'
+# worst bias is the  20-bit window at bit   0 - 87.542% (416)
+not ok 95 - Distribution Bias Check for Keyset 'Combination Highbits2'
+not ok 96 - Keyset 'Combination Highbits2' # FNV1a_YT
+### Keyset 'Combination 0x80000000' Tests ###
+# Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
+# Testing collisions   - Expected   512.00, actual  2070336 - Excessive keys in collision - failed
+not ok 97 - Collision Rate for Keyset 'Combination 0x80000000'
+# worst bias is the  18-bit window at bit   3 - 1553.757% (352)
+not ok 98 - Distribution Bias Check for Keyset 'Combination 0x80000000'
+not ok 99 - Keyset 'Combination 0x80000000' # FNV1a_YT
+### Keyset 'Combination 0x00000001' Tests ###
+# Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
+# Testing collisions   - Expected   512.00, actual      515 ( 1.01x) - passed
+ok 100 - Collision Rate for Keyset 'Combination 0x00000001'
+ok 101 - Distribution Bias Check for Keyset 'Combination 0x00000001'
+ok 102 - Keyset 'Combination 0x00000001' # FNV1a_YT
+### Keyset 'Combination Hi-Lo' Tests ###
+# Keyset 'Combination' - up to 6 blocks from a set of 15 - 12204240 keys
+# Testing collisions   - Expected 17339.30, actual  4428542 (255.40x) - failed
+not ok 103 - Collision Rate for Keyset 'Combination Hi-Lo'
+# worst bias is the  20-bit window at bit  16 - 11.256% (416)
+not ok 104 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
+not ok 105 - Keyset 'Combination Hi-Lo' # FNV1a_YT
+### Keyset 'Text' Tests ###
+# Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# Testing collisions   - Expected 25418.13, actual   129614 ( 5.10x) - failed
+not ok 106 - Collision Rate for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# worst bias is the  20-bit window at bit  14 - 1.090% (416)
+not ok 107 - Distribution Bias Check for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# Testing collisions   - Expected 25418.13, actual        0 ( 0.00x) - passed
+ok 108 - Collision Rate for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# worst bias is the  20-bit window at bit  28 - 2.270% (416)
+not ok 109 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+# Testing collisions   - Expected 25418.13, actual        0 ( 0.00x) - passed
+ok 110 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+# worst bias is the  20-bit window at bit   4 - 11.176% (416)
+not ok 111 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+not ok 112 - Keyset 'Text' # FNV1a_YT
+### Keyset 'Zeroes' Tests ###
+# Keyset 'Zeroes' - 262144 keys
+# Testing collisions   - Expected     8.00, actual       11 ( 1.38x) - passed
+ok 113 - Collision Rate for Keyset 'Zeroes' - 262144 keys
+ok 114 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys
+ok 115 - Keyset 'Zeroes' # FNV1a_YT
+### Keyset 'Seed' Tests ###
+# Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# Testing collisions   - Expected   465.46, actual        0 ( 0.00x) - passed
+ok 116 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+ok 117 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# Keyset 'Seed' - 2000000 seeds, Key ""
+# Testing collisions   - Expected   465.44, actual        0 ( 0.00x) - passed
+ok 118 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
+ok 119 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
+# Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# Testing collisions   - Expected   465.46, actual        0 ( 0.00x) - passed
+ok 120 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+ok 121 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+# Testing collisions   - Expected   465.45, actual        0 ( 0.00x) - passed
+ok 122 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 123 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 124 - Keyset 'Seed' # FNV1a_YT
+### Keyset 'Effs' Tests ###
+# Keyset 'Effs' - 262144 keys
+# Testing collisions   - Expected     8.00, actual       13 ( 1.63x) - passed
+ok 125 - Collision Rate for Keyset 'Effs' - 262144 keys
+ok 126 - Distribution Bias Check for Keyset 'Effs' - 262144 keys
+ok 127 - Keyset 'Effs' # FNV1a_YT
+not ok 128 - all tests passed # FNV1a_YT
+1..128
+# Tests Failed. FNV1a_YT failed 50 of 128 tests.
+# Testing took 1104.423081 seconds
+# This is SMHasher version v1.0-demerphq-5-g86440f3 - built on Mar 10 2017.

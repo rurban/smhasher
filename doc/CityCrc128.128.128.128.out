@@ -1,0 +1,342 @@
+ok 1 - Found Hash # CityCrc128
+###################################################################
+### Testing CityCrc128 - no seed_state
+### - Google CityHashCrc128WithSeed SSE4.2 (old) -
+### seedbits: 128 statebits: 128 hashbits: 128
+###################################################################
+ok 2 - Verification code # CityCrc128
+# CityCrc128           - Verification value 0x10AC3095 : Passed.
+### Sanity Tests ###
+# Sanity check simple key bit flips and consistency..........
+ok 3 - SanityTest # CityCrc128
+# Sanity check null suffixes change the hash (simple)..........
+ok 4 - Appended Zeroes Test # CityCrc128
+ok 5 - Sanity Test # CityCrc128
+### Speed Tests ###
+## Bulk speed test - 262144-byte keys
+# Alignment  7 -  6.369 bytes/cycle - 18222.48 MiB/sec @ 3 ghz
+# Alignment  6 -  6.369 bytes/cycle - 18222.83 MiB/sec @ 3 ghz
+# Alignment  5 -  6.369 bytes/cycle - 18222.68 MiB/sec @ 3 ghz
+# Alignment  4 -  6.369 bytes/cycle - 18222.08 MiB/sec @ 3 ghz
+# Alignment  3 -  6.327 bytes/cycle - 18100.95 MiB/sec @ 3 ghz
+# Alignment  2 -  6.369 bytes/cycle - 18222.97 MiB/sec @ 3 ghz
+# Alignment  1 -  6.370 bytes/cycle - 18223.86 MiB/sec @ 3 ghz
+# Alignment  0 -  6.371 bytes/cycle - 18228.73 MiB/sec @ 3 ghz
+# Average      -  6.364 bytes/cycle - 18208.32 MiB/sec @ 3 ghz
+## KeySpeed tests
+# CityCrc128                0 byte keys       29.000 c/h
+# CityCrc128                1 byte keys       33.000 c/h       33.000 c/b        0.030 b/c
+# CityCrc128                2 byte keys       33.949 c/h       16.975 c/b        0.059 b/c
+# CityCrc128                3 byte keys       34.467 c/h       11.489 c/b        0.087 b/c
+# CityCrc128                4 byte keys       34.000 c/h        8.500 c/b        0.118 b/c
+# CityCrc128                5 byte keys       34.000 c/h        6.800 c/b        0.147 b/c
+# CityCrc128                6 byte keys       34.000 c/h        5.667 c/b        0.176 b/c
+# CityCrc128                7 byte keys       34.000 c/h        4.857 c/b        0.206 b/c
+# CityCrc128                8 byte keys       32.540 c/h        4.067 c/b        0.246 b/c
+# CityCrc128                9 byte keys       51.781 c/h        5.753 c/b        0.174 b/c
+# CityCrc128               10 byte keys       51.747 c/h        5.175 c/b        0.193 b/c
+# CityCrc128               11 byte keys       51.827 c/h        4.712 c/b        0.212 b/c
+# CityCrc128               12 byte keys       52.271 c/h        4.356 c/b        0.230 b/c
+# CityCrc128               13 byte keys       51.796 c/h        3.984 c/b        0.251 b/c
+# CityCrc128               14 byte keys       51.824 c/h        3.702 c/b        0.270 b/c
+# CityCrc128               15 byte keys       51.706 c/h        3.447 c/b        0.290 b/c
+# CityCrc128               16 byte keys       41.785 c/h        2.612 c/b        0.383 b/c
+# CityCrc128               17 byte keys       67.983 c/h        3.999 c/b        0.250 b/c
+# CityCrc128               18 byte keys       67.983 c/h        3.777 c/b        0.265 b/c
+# CityCrc128               19 byte keys       68.579 c/h        3.609 c/b        0.277 b/c
+# CityCrc128               20 byte keys       67.984 c/h        3.399 c/b        0.294 b/c
+# CityCrc128               21 byte keys       67.984 c/h        3.237 c/b        0.309 b/c
+# CityCrc128               22 byte keys       67.983 c/h        3.090 c/b        0.324 b/c
+# CityCrc128               23 byte keys       67.984 c/h        2.956 c/b        0.338 b/c
+# CityCrc128               24 byte keys       47.773 c/h        1.991 c/b        0.502 b/c
+# CityCrc128               25 byte keys       55.000 c/h        2.200 c/b        0.455 b/c
+# CityCrc128               26 byte keys       55.000 c/h        2.115 c/b        0.473 b/c
+# CityCrc128               27 byte keys       55.000 c/h        2.037 c/b        0.491 b/c
+# CityCrc128               28 byte keys       55.000 c/h        1.964 c/b        0.509 b/c
+# CityCrc128               29 byte keys       55.000 c/h        1.897 c/b        0.527 b/c
+# CityCrc128               30 byte keys       58.263 c/h        1.942 c/b        0.515 b/c
+# CityCrc128               31 byte keys       55.000 c/h        1.774 c/b        0.564 b/c
+#                          Average < 32       50.506 c/h        3.258 c/b        0.307 b/c
+# CityCrc128               32 byte keys       47.000 c/h        1.469 c/b        0.681 b/c
+# CityCrc128               36 byte keys       53.234 c/h        1.479 c/b        0.676 b/c
+# CityCrc128               40 byte keys       52.000 c/h        1.300 c/b        0.769 b/c
+# CityCrc128               44 byte keys       52.392 c/h        1.191 c/b        0.840 b/c
+# CityCrc128               48 byte keys       52.390 c/h        1.091 c/b        0.916 b/c
+# CityCrc128               52 byte keys       56.992 c/h        1.096 c/b        0.912 b/c
+# CityCrc128               56 byte keys       56.992 c/h        1.018 c/b        0.983 b/c
+# CityCrc128               60 byte keys       56.993 c/h        0.950 c/b        1.053 b/c
+# CityCrc128               64 byte keys       56.993 c/h        0.891 c/b        1.123 b/c
+# CityCrc128               68 byte keys       64.815 c/h        0.953 c/b        1.049 b/c
+# CityCrc128               72 byte keys       61.907 c/h        0.860 c/b        1.163 b/c
+# CityCrc128               76 byte keys       62.663 c/h        0.825 c/b        1.213 b/c
+# CityCrc128               80 byte keys       61.917 c/h        0.774 c/b        1.292 b/c
+# CityCrc128               84 byte keys       66.708 c/h        0.794 c/b        1.259 b/c
+# CityCrc128               88 byte keys       66.724 c/h        0.758 c/b        1.319 b/c
+# CityCrc128               92 byte keys       66.743 c/h        0.725 c/b        1.378 b/c
+# CityCrc128               96 byte keys       68.720 c/h        0.716 c/b        1.397 b/c
+# CityCrc128              100 byte keys       71.720 c/h        0.717 c/b        1.394 b/c
+# CityCrc128              104 byte keys       71.714 c/h        0.690 c/b        1.450 b/c
+# CityCrc128              108 byte keys       71.757 c/h        0.664 c/b        1.505 b/c
+# CityCrc128              112 byte keys       71.802 c/h        0.641 c/b        1.560 b/c
+# CityCrc128              116 byte keys       76.290 c/h        0.658 c/b        1.521 b/c
+# CityCrc128              120 byte keys       76.310 c/h        0.636 c/b        1.573 b/c
+# CityCrc128              124 byte keys       76.337 c/h        0.616 c/b        1.624 b/c
+#                         Average < 128       56.024 c/h        1.325 c/b        0.755 b/c
+# CityCrc128              128 byte keys       62.998 c/h        0.492 c/b        2.032 b/c
+# CityCrc128              256 byte keys       88.677 c/h        0.346 c/b        2.887 b/c
+# CityCrc128              512 byte keys      136.779 c/h        0.267 c/b        3.743 b/c
+# CityCrc128             1024 byte keys      257.384 c/h        0.251 c/b        3.978 b/c
+# CityCrc128             2048 byte keys      424.211 c/h        0.207 c/b        4.828 b/c
+# CityCrc128             4096 byte keys      736.513 c/h        0.180 c/b        5.561 b/c
+# CityCrc128             8192 byte keys     1374.226 c/h        0.168 c/b        5.961 b/c
+# CityCrc128            16384 byte keys     2658.855 c/h        0.162 c/b        6.162 b/c
+# CityCrc128            32768 byte keys     5235.022 c/h        0.160 c/b        6.259 b/c
+# CityCrc128            65536 byte keys    10351.860 c/h        0.158 c/b        6.331 b/c
+#                       Overall Average      370.664 c/h        0.184 c/b        5.449 b/c
+ok 6 - Speed (always passes) # CityCrc128
+### Differential Tests ###
+# Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 128 bit hashes.
+# 1000 reps, 8303632000 total tests, expecting 0.00 random collisions..........
+ok 7 - Differential collisions # CityCrc128
+ok 8 - Nothing skipped during differential collision check # CityCrc128
+# 0 total collisions, of which 0 single collisions were ignored
+ok 9 - ProcessDifferentials
+# Testing 11017632 up-to-4-bit differentials in 128-bit keys -> 128 bit hashes.
+# 1000 reps, 11017632000 total tests, expecting 0.00 random collisions..........
+ok 10 - Differential collisions # CityCrc128
+ok 11 - Nothing skipped during differential collision check # CityCrc128
+# 0 total collisions, of which 0 single collisions were ignored
+ok 12 - ProcessDifferentials
+# Testing 2796416 up-to-3-bit differentials in 256-bit keys -> 128 bit hashes.
+# 1000 reps, 2796416000 total tests, expecting 0.00 random collisions..........
+ok 13 - Differential collisions # CityCrc128
+ok 14 - Nothing skipped during differential collision check # CityCrc128
+# 0 total collisions, of which 0 single collisions were ignored
+ok 15 - ProcessDifferentials
+ok 16 - Differential # CityCrc128
+### Avalanche Tests ### - seed-bits: 128 hash-bits: 128
+# Samples 250000, expected error 0.00102400, confidence level 99.99994267%
+# Testing   0-bit keys.......... ok.     # worst-bit:   0.790% error-ratio: 1.005229e+00
+ok 17 - Strict Avalanche Criteria - 0 bit keys
+# Testing   8-bit keys.......... ok.     # worst-bit:   0.830% error-ratio: 9.926433e-01
+ok 18 - Strict Avalanche Criteria - 8 bit keys
+# Testing  16-bit keys.......... ok.     # worst-bit:   0.782% error-ratio: 1.013447e+00
+ok 19 - Strict Avalanche Criteria - 16 bit keys
+# Testing  24-bit keys.......... ok.     # worst-bit:   0.843% error-ratio: 1.003144e+00
+ok 20 - Strict Avalanche Criteria - 24 bit keys
+# Testing  32-bit keys.......... ok.     # worst-bit:   0.853% error-ratio: 1.016291e+00
+ok 21 - Strict Avalanche Criteria - 32 bit keys
+# Testing  40-bit keys.......... ok.     # worst-bit:   0.810% error-ratio: 9.913139e-01
+ok 22 - Strict Avalanche Criteria - 40 bit keys
+# Testing  48-bit keys.......... ok.     # worst-bit:   0.812% error-ratio: 1.003673e+00
+ok 23 - Strict Avalanche Criteria - 48 bit keys
+# Testing  56-bit keys.......... ok.     # worst-bit:   0.847% error-ratio: 1.003550e+00
+ok 24 - Strict Avalanche Criteria - 56 bit keys
+# Testing  64-bit keys.......... ok.     # worst-bit:   0.862% error-ratio: 9.906555e-01
+ok 25 - Strict Avalanche Criteria - 64 bit keys
+# Testing  72-bit keys.......... ok.     # worst-bit:   0.854% error-ratio: 1.012678e+00
+ok 26 - Strict Avalanche Criteria - 72 bit keys
+# Testing  80-bit keys.......... ok.     # worst-bit:   0.898% error-ratio: 1.013442e+00
+ok 27 - Strict Avalanche Criteria - 80 bit keys
+# Testing  88-bit keys.......... ok.     # worst-bit:   0.790% error-ratio: 9.936680e-01
+ok 28 - Strict Avalanche Criteria - 88 bit keys
+# Testing  96-bit keys.......... ok.     # worst-bit:   0.791% error-ratio: 9.832206e-01
+ok 29 - Strict Avalanche Criteria - 96 bit keys
+# Testing 104-bit keys.......... ok.     # worst-bit:   0.774% error-ratio: 1.008955e+00
+ok 30 - Strict Avalanche Criteria - 104 bit keys
+# Testing 112-bit keys.......... ok.     # worst-bit:   0.766% error-ratio: 1.006258e+00
+ok 31 - Strict Avalanche Criteria - 112 bit keys
+# Testing 120-bit keys.......... ok.     # worst-bit:   0.842% error-ratio: 9.994658e-01
+ok 32 - Strict Avalanche Criteria - 120 bit keys
+# Testing 128-bit keys.......... ok.     # worst-bit:   0.859% error-ratio: 1.006210e+00
+ok 33 - Strict Avalanche Criteria - 128 bit keys
+# Testing 136-bit keys.......... ok.     # worst-bit:   0.928% error-ratio: 9.927355e-01
+ok 34 - Strict Avalanche Criteria - 136 bit keys
+# Testing 144-bit keys.......... ok.     # worst-bit:   0.849% error-ratio: 9.965751e-01
+ok 35 - Strict Avalanche Criteria - 144 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.845% error-ratio: 9.932321e-01
+ok 36 - Strict Avalanche Criteria - 152 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.881% error-ratio: 9.924949e-01
+ok 37 - Strict Avalanche Criteria - 160 bit keys
+# Testing 256-bit keys.......... ok.     # worst-bit:   0.875% error-ratio: 1.002091e+00
+ok 38 - Strict Avalanche Criteria - 256 bit keys
+ok 39 - Strict Avalanche Criteria # CityCrc128
+### Keyset 'Cyclic' Tests ###
+# Keyset 'Cyclic' - 8 cycles of 16 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 40 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 16 bytes - 10000000 keys
+ok 41 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 16 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 17 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 42 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 17 bytes - 10000000 keys
+ok 43 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 17 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 18 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 44 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 18 bytes - 10000000 keys
+ok 45 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 18 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 19 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 46 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 19 bytes - 10000000 keys
+ok 47 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 19 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 20 bytes - 10000000 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 48 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 20 bytes - 10000000 keys
+ok 49 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 20 bytes - 10000000 keys
+ok 50 - Keyset 'Cyclic' # CityCrc128
+### Keyset 'TwoBytes' Tests ###
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 51 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+ok 52 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 53 - Collision Rate for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+ok 54 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 55 - Collision Rate for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+ok 56 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 57 - Collision Rate for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+ok 58 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 59 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+ok 60 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+ok 61 - Keyset 'TwoBytes' # CityCrc128
+### Keyset 'Sparse' Tests ###
+# Keyset 'Sparse' - 32-bit keys with up to 6 bits set - 1149017 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 62 - Collision Rate for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+ok 63 - Distribution Bias Check for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+# Keyset 'Sparse' - 40-bit keys with up to 6 bits set - 4598479 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 64 - Collision Rate for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+ok 65 - Distribution Bias Check for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+# Keyset 'Sparse' - 48-bit keys with up to 5 bits set - 1925357 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 66 - Collision Rate for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+ok 67 - Distribution Bias Check for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 56-bit keys with up to 5 bits set - 4216423 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 68 - Collision Rate for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+ok 69 - Distribution Bias Check for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 64-bit keys with up to 5 bits set - 8303633 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 70 - Collision Rate for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+ok 71 - Distribution Bias Check for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 96-bit keys with up to 4 bits set - 3469497 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 72 - Collision Rate for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+ok 73 - Distribution Bias Check for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+# Keyset 'Sparse' - 256-bit keys with up to 3 bits set - 2796417 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 74 - Collision Rate for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+ok 75 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+# Keyset 'Sparse' - 2048-bit keys with up to 2 bits set - 2098177 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 76 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 77 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 78 - Keyset 'Sparse' # CityCrc128
+# Keyset 'CRC-MultiCollision' - 1048575 x 16 block keys - 128-bytes long - 10 seeds
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 79 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 1 # CityCrc128
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 80 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 2 # CityCrc128
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 81 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 3 # CityCrc128
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 82 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 4 # CityCrc128
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 83 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 5 # CityCrc128
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 84 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 6 # CityCrc128
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 85 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 7 # CityCrc128
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 86 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 8 # CityCrc128
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 87 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 9 # CityCrc128
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 88 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 10 # CityCrc128
+### Keyset 'Combination Lowbits' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 89 - Collision Rate for Keyset 'Combination Lowbits'
+ok 90 - Distribution Bias Check for Keyset 'Combination Lowbits'
+ok 91 - Keyset 'Combination Lowbits' # CityCrc128
+### Keyset 'Combination Highbits' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 92 - Collision Rate for Keyset 'Combination Highbits'
+ok 93 - Distribution Bias Check for Keyset 'Combination Highbits'
+ok 94 - Keyset 'Combination Highbits' # CityCrc128
+### Keyset 'Combination Highbits2' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 95 - Collision Rate for Keyset 'Combination Highbits2'
+ok 96 - Distribution Bias Check for Keyset 'Combination Highbits2'
+ok 97 - Keyset 'Combination Highbits2' # CityCrc128
+### Keyset 'Combination 0x80000000' Tests ###
+# Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 98 - Collision Rate for Keyset 'Combination 0x80000000'
+ok 99 - Distribution Bias Check for Keyset 'Combination 0x80000000'
+ok 100 - Keyset 'Combination 0x80000000' # CityCrc128
+### Keyset 'Combination 0x00000001' Tests ###
+# Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 101 - Collision Rate for Keyset 'Combination 0x00000001'
+ok 102 - Distribution Bias Check for Keyset 'Combination 0x00000001'
+ok 103 - Keyset 'Combination 0x00000001' # CityCrc128
+### Keyset 'Combination Hi-Lo' Tests ###
+# Keyset 'Combination' - up to 6 blocks from a set of 15 - 12204240 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 104 - Collision Rate for Keyset 'Combination Hi-Lo'
+ok 105 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
+ok 106 - Keyset 'Combination Hi-Lo' # CityCrc128
+### Keyset 'Text' Tests ###
+# Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 107 - Collision Rate for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+ok 108 - Distribution Bias Check for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 109 - Collision Rate for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+ok 110 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 111 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 112 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 113 - Keyset 'Text' # CityCrc128
+### Keyset 'Zeroes' Tests ###
+# Keyset 'Zeroes' - 262144 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 114 - Collision Rate for Keyset 'Zeroes' - 262144 keys
+ok 115 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys
+ok 116 - Keyset 'Zeroes' # CityCrc128
+### Keyset 'Seed' Tests ###
+# Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 117 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+ok 118 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# Keyset 'Seed' - 2000000 seeds, Key ""
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 119 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
+ok 120 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
+# Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 121 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+ok 122 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 123 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 124 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 125 - Keyset 'Seed' # CityCrc128
+### Keyset 'Effs' Tests ###
+# Keyset 'Effs' - 262144 keys
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 126 - Collision Rate for Keyset 'Effs' - 262144 keys
+ok 127 - Distribution Bias Check for Keyset 'Effs' - 262144 keys
+ok 128 - Keyset 'Effs' # CityCrc128
+ok 129 - all tests passed # CityCrc128
+1..129
+# All Tests Passed. CityCrc128 passed all 129 tests run.
+# Testing took 2946.032773 seconds
+# This is SMHasher version v1.0-demerphq-5-g86440f3 - built on Mar 10 2017.
