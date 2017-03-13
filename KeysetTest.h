@@ -379,7 +379,11 @@ bool CrcCollisionKeyTest ( hashfunc<hashtype> hash, Rand &r )
 {
   const int seeds= 10;
   const int num_key_blocks= 16;
-  int count = 100 * 1000;
+  // count needs to be high enough that we expect a reasonable number
+  // of collisions for 32 bit, otherwise normal expected random fluctuation
+  // breaks the percentage tests. IOW, its better to expect 100 collisions than
+  // to expect 1.
+  int count = 1024 * 1024 - 1;
   int key_bytes= num_key_blocks * sizeof(uint64_t);
   uint64_t key[num_key_blocks];
   char name[1024];
