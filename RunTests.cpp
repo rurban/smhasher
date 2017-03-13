@@ -51,7 +51,7 @@ bool testHash ( HashInfo * info, int self_test, double confidence )
       info->statebits,
       info->name
   );
-  if (!self_test and g_runCtrStream) {
+  if (!self_test && g_runCtrStream) {
     CtrStream<hashtype>(hash, g_rngSeed, g_streamKeyLen);
   }
   setvbuf(stdout, NULL, _IONBF, 0); /* autoflush stdout */
@@ -566,7 +566,7 @@ bool testHashByInfo ( HashInfo * pInfo, int self_test, double confidence )
 
   if (!self_test)
     g_hashUnderTest = pInfo;
-  bool result= false;
+  bool result= true;
   if(pInfo->hashbits == 32)
   {
     result= testHash<uint32_t>( pInfo, self_test, confidence );

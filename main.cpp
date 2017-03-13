@@ -11,6 +11,7 @@
 #include "phat_hash.h"
 #include "zaphod32_hash.h"
 #include "zaphod64_hash.h"
+#include "stadtx_hash.h"
 #include "sbox_hash.h"
 #include "md5.h"
 #include "siphash.h"
@@ -206,13 +207,13 @@ HashInfo g_hashes[] =
     64, 128, 32, 0x19497BA9,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher },
   { "BeagleHash_32_96", "Evolved hash with 128-bit state (2x64) - Yves Orton",
-    96, 128, 32, 0xD5C2C298,
+    96, 128, 32, 0x3E14AEAB,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher },
   { "BeagleHash_32_112", "Evolved hash with 128-bit state (2x64) - Yves Orton",
-    112, 128, 32, 0x6183E6D2,
+    112, 128, 32, 0x2B3B14A3,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher },
   { "BeagleHash_32_127", "Evolved hash with 128-bit state (2x64) - Yves Orton",
-    127, 128, 32, 0x947BE1A8,
+    127, 128, 32, 0x717B18E6,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher },
 
   // BeagleHash_64_xx
@@ -220,13 +221,13 @@ HashInfo g_hashes[] =
     64, 128, 64, 0x3A032FB5,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_64_128_a_smhasher },
   { "BeagleHash_64_96", "Evolved hash with 128-bit state (2x64) - Yves Orton",
-    96, 128, 64, 0x48DA826D,
+    96, 128, 64, 0xB501F0C6,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_64_128_a_smhasher },
   { "BeagleHash_64_112", "Evolved hash with 128-bit state (2x64) - Yves Orton",
-    112, 128, 64, 0x43B42DC9,
+    112, 128, 64, 0xF17F3234,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_64_128_a_smhasher },
   { "BeagleHash_64_127", "Evolved hash with 128-bit state (2x64) - Yves Orton",
-    127, 128, 64, 0x058739DC,
+    127, 128, 64, 0x77E1EF21,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_64_128_a_smhasher },
 #if 0
   // very very slow seeding process, huge state, etc. not suitable for day-to-day testing
@@ -234,9 +235,9 @@ HashInfo g_hashes[] =
     128, (32 * 256 + 3) * 64, 64, 0xEF32DD9E,
     sbox_seed_state_smhasher_test, sbox_hash_with_state_smhasher_test },
 #endif
-  //{ "Marsaglia64", "Yves Orton's 64 bit hash with 128 bit seed",
-  //  128, 256, 64, 0x0,
-  //  stadt64_seed_state_smhasher_test, stadt64_hash_with_state_smhasher_test },
+  { "StadtX", "Evolved hash with 256-bit state (4x64) inspired my Metrohash - Yves Orton",
+    128, 256, 64, 0x4A1ABB67,
+    stadtx_seed_state_smhasher_test, stadtx_hash_with_state_smhasher_test },
   { "Zaphod64", "Evolved hash with 192-bit state (3x64) - Yves Orton",
     191, 192, 64, 0xDD90BE2E,
     zaphod64_seed_state_smhasher_test, zaphod64_hash_with_state_smhasher_test },

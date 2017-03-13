@@ -177,6 +177,7 @@ add_library(
   phat_hash.c
   zaphod32_hash.c
   zaphod64_hash.c
+  stadtx_hash.c
   sbox_hash.c
   ${64ONLY_SRC}
   ${METROCRC64_SRC}
