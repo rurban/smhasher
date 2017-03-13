@@ -1,164 +1,166 @@
-ok 1 - SelfTest - Verify 89 Hashes
-ok 2 - Found Hash # SipHash
+ok 1 - Found Hash # SipHash
 ###################################################################
 ### Testing SipHash - with seed_state
 ### - SipHash 2-4 -
 ### seedbits: 128 statebits: 256 hashbits: 64
 ###################################################################
+ok 2 - Verification code # SipHash
+# SipHash              - Verification value 0x5F4173E0 : Passed.
 ### Sanity Tests ###
-ok 3 - Verification code # SipHash
 # Sanity check simple key bit flips and consistency..........
-ok 4 - SanityTest # SipHash
+ok 3 - SanityTest # SipHash
 # Sanity check null suffixes change the hash (simple)..........
-ok 5 - Appended Zeroes Test # SipHash
-ok 6 - Sanity Test # SipHash
+ok 4 - Appended Zeroes Test # SipHash
+ok 5 - Sanity Test # SipHash
 ### Speed Tests ###
 ## Bulk speed test - 262144-byte keys
-# Alignment  7 -  0.821 bytes/cycle - 2349.16 MiB/sec @ 3 ghz
-# Alignment  6 -  0.821 bytes/cycle - 2349.23 MiB/sec @ 3 ghz
-# Alignment  5 -  0.821 bytes/cycle - 2349.20 MiB/sec @ 3 ghz
-# Alignment  4 -  0.814 bytes/cycle - 2329.55 MiB/sec @ 3 ghz
-# Alignment  3 -  0.821 bytes/cycle - 2349.21 MiB/sec @ 3 ghz
-# Alignment  2 -  0.821 bytes/cycle - 2349.19 MiB/sec @ 3 ghz
-# Alignment  1 -  0.821 bytes/cycle - 2349.18 MiB/sec @ 3 ghz
-# Alignment  0 -  0.821 bytes/cycle - 2349.57 MiB/sec @ 3 ghz
-# Average      -  0.820 bytes/cycle - 2346.79 MiB/sec @ 3 ghz
+# Alignment  7 -  0.809 bytes/cycle - 2314.00 MiB/sec @ 3 ghz
+# Alignment  6 -  0.817 bytes/cycle - 2336.25 MiB/sec @ 3 ghz
+# Alignment  5 -  0.821 bytes/cycle - 2349.48 MiB/sec @ 3 ghz
+# Alignment  4 -  0.821 bytes/cycle - 2349.51 MiB/sec @ 3 ghz
+# Alignment  3 -  0.821 bytes/cycle - 2349.48 MiB/sec @ 3 ghz
+# Alignment  2 -  0.810 bytes/cycle - 2316.87 MiB/sec @ 3 ghz
+# Alignment  1 -  0.821 bytes/cycle - 2349.51 MiB/sec @ 3 ghz
+# Alignment  0 -  0.821 bytes/cycle - 2349.87 MiB/sec @ 3 ghz
+# Average      -  0.818 bytes/cycle - 2339.37 MiB/sec @ 3 ghz
 ## KeySpeed tests
-# SipHash                   0 byte keys       29.104 c/h
-# SipHash                   1 byte keys       33.367 c/h       33.367 c/b        0.030 b/c
-# SipHash                   2 byte keys       36.993 c/h       18.496 c/b        0.054 b/c
+# SipHash                   0 byte keys       29.398 c/h
+# SipHash                   1 byte keys       34.696 c/h       34.696 c/b        0.029 b/c
+# SipHash                   2 byte keys       37.625 c/h       18.813 c/b        0.053 b/c
 # SipHash                   3 byte keys       38.000 c/h       12.667 c/b        0.079 b/c
-# SipHash                   4 byte keys       38.993 c/h        9.748 c/b        0.103 b/c
-# SipHash                   5 byte keys       40.216 c/h        8.043 c/b        0.124 b/c
-# SipHash                   6 byte keys       41.962 c/h        6.994 c/b        0.143 b/c
-# SipHash                   7 byte keys       41.975 c/h        5.996 c/b        0.167 b/c
-# SipHash                   8 byte keys       42.756 c/h        5.344 c/b        0.187 b/c
-# SipHash                   9 byte keys       41.950 c/h        4.661 c/b        0.215 b/c
-# SipHash                  10 byte keys       42.193 c/h        4.219 c/b        0.237 b/c
-# SipHash                  11 byte keys       42.780 c/h        3.889 c/b        0.257 b/c
-# SipHash                  12 byte keys       43.000 c/h        3.583 c/b        0.279 b/c
-# SipHash                  13 byte keys       43.758 c/h        3.366 c/b        0.297 b/c
-# SipHash                  14 byte keys       44.646 c/h        3.189 c/b        0.314 b/c
-# SipHash                  15 byte keys       45.171 c/h        3.011 c/b        0.332 b/c
-# SipHash                  16 byte keys       52.546 c/h        3.284 c/b        0.304 b/c
-# SipHash                  17 byte keys       52.636 c/h        3.096 c/b        0.323 b/c
-# SipHash                  18 byte keys       52.200 c/h        2.900 c/b        0.345 b/c
-# SipHash                  19 byte keys       52.999 c/h        2.789 c/b        0.358 b/c
-# SipHash                  20 byte keys       53.978 c/h        2.699 c/b        0.371 b/c
-# SipHash                  21 byte keys       54.949 c/h        2.617 c/b        0.382 b/c
-# SipHash                  22 byte keys       55.520 c/h        2.524 c/b        0.396 b/c
-# SipHash                  23 byte keys       56.843 c/h        2.471 c/b        0.405 b/c
-# SipHash                  24 byte keys       61.999 c/h        2.583 c/b        0.387 b/c
-# SipHash                  25 byte keys       61.999 c/h        2.480 c/b        0.403 b/c
-# SipHash                  26 byte keys       62.752 c/h        2.414 c/b        0.414 b/c
-# SipHash                  27 byte keys       62.968 c/h        2.332 c/b        0.429 b/c
-# SipHash                  28 byte keys       64.024 c/h        2.287 c/b        0.437 b/c
-# SipHash                  29 byte keys       63.997 c/h        2.207 c/b        0.453 b/c
-# SipHash                  30 byte keys       64.995 c/h        2.166 c/b        0.462 b/c
-# SipHash                  31 byte keys       65.978 c/h        2.128 c/b        0.470 b/c
-#                          Average < 32       49.601 c/h        3.200 c/b        0.312 b/c
-# SipHash                  32 byte keys       72.872 c/h        2.277 c/b        0.439 b/c
-# SipHash                  36 byte keys       73.000 c/h        2.028 c/b        0.493 b/c
-# SipHash                  40 byte keys       82.327 c/h        2.058 c/b        0.486 b/c
-# SipHash                  44 byte keys       82.996 c/h        1.886 c/b        0.530 b/c
-# SipHash                  48 byte keys       92.858 c/h        1.935 c/b        0.517 b/c
-# SipHash                  52 byte keys       92.987 c/h        1.788 c/b        0.559 b/c
-# SipHash                  56 byte keys      103.829 c/h        1.854 c/b        0.539 b/c
-# SipHash                  60 byte keys      102.955 c/h        1.716 c/b        0.583 b/c
-# SipHash                  64 byte keys      113.041 c/h        1.766 c/b        0.566 b/c
-# SipHash                  68 byte keys      112.900 c/h        1.660 c/b        0.602 b/c
-# SipHash                  72 byte keys      122.905 c/h        1.707 c/b        0.586 b/c
-# SipHash                  76 byte keys      122.822 c/h        1.616 c/b        0.619 b/c
-# SipHash                  80 byte keys      134.211 c/h        1.678 c/b        0.596 b/c
-# SipHash                  84 byte keys      132.749 c/h        1.580 c/b        0.633 b/c
-# SipHash                  88 byte keys      144.630 c/h        1.644 c/b        0.608 b/c
-# SipHash                  92 byte keys      142.688 c/h        1.551 c/b        0.645 b/c
-# SipHash                  96 byte keys      152.771 c/h        1.591 c/b        0.628 b/c
-# SipHash                 100 byte keys      152.603 c/h        1.526 c/b        0.655 b/c
-# SipHash                 104 byte keys      162.556 c/h        1.563 c/b        0.640 b/c
-# SipHash                 108 byte keys      162.564 c/h        1.505 c/b        0.664 b/c
-# SipHash                 112 byte keys      172.868 c/h        1.543 c/b        0.648 b/c
-# SipHash                 116 byte keys      172.489 c/h        1.487 c/b        0.673 b/c
-# SipHash                 120 byte keys      185.260 c/h        1.544 c/b        0.648 b/c
-# SipHash                 124 byte keys      182.482 c/h        1.472 c/b        0.680 b/c
-#                         Average < 128       83.225 c/h        1.968 c/b        0.508 b/c
-# SipHash                 128 byte keys      192.740 c/h        1.506 c/b        0.664 b/c
-# SipHash                 256 byte keys      362.663 c/h        1.417 c/b        0.706 b/c
-# SipHash                 512 byte keys      675.581 c/h        1.319 c/b        0.758 b/c
-# SipHash                1024 byte keys     1296.668 c/h        1.266 c/b        0.790 b/c
-# SipHash                2048 byte keys     2549.227 c/h        1.245 c/b        0.803 b/c
-# SipHash                4096 byte keys     5035.166 c/h        1.229 c/b        0.813 b/c
-# SipHash                8192 byte keys    10024.593 c/h        1.224 c/b        0.817 b/c
-# SipHash               16384 byte keys    19992.946 c/h        1.220 c/b        0.819 b/c
-# SipHash               32768 byte keys    39936.702 c/h        1.219 c/b        0.820 b/c
-# SipHash               65536 byte keys    79826.554 c/h        1.218 c/b        0.821 b/c
-#                       Overall Average     2493.234 c/h        1.234 c/b        0.810 b/c
-ok 7 - Speed (always passes) # SipHash
+# SipHash                   4 byte keys       39.929 c/h        9.982 c/b        0.100 b/c
+# SipHash                   5 byte keys       40.000 c/h        8.000 c/b        0.125 b/c
+# SipHash                   6 byte keys       41.709 c/h        6.952 c/b        0.144 b/c
+# SipHash                   7 byte keys       42.202 c/h        6.029 c/b        0.166 b/c
+# SipHash                   8 byte keys       42.620 c/h        5.327 c/b        0.188 b/c
+# SipHash                   9 byte keys       42.582 c/h        4.731 c/b        0.211 b/c
+# SipHash                  10 byte keys       43.394 c/h        4.339 c/b        0.230 b/c
+# SipHash                  11 byte keys       43.000 c/h        3.909 c/b        0.256 b/c
+# SipHash                  12 byte keys       43.833 c/h        3.653 c/b        0.274 b/c
+# SipHash                  13 byte keys       43.835 c/h        3.372 c/b        0.297 b/c
+# SipHash                  14 byte keys       44.249 c/h        3.161 c/b        0.316 b/c
+# SipHash                  15 byte keys       45.358 c/h        3.024 c/b        0.331 b/c
+# SipHash                  16 byte keys       51.999 c/h        3.250 c/b        0.308 b/c
+# SipHash                  17 byte keys       52.000 c/h        3.059 c/b        0.327 b/c
+# SipHash                  18 byte keys       53.289 c/h        2.961 c/b        0.338 b/c
+# SipHash                  19 byte keys       53.596 c/h        2.821 c/b        0.355 b/c
+# SipHash                  20 byte keys       54.567 c/h        2.728 c/b        0.367 b/c
+# SipHash                  21 byte keys       54.865 c/h        2.613 c/b        0.383 b/c
+# SipHash                  22 byte keys       55.661 c/h        2.530 c/b        0.395 b/c
+# SipHash                  23 byte keys       55.999 c/h        2.435 c/b        0.411 b/c
+# SipHash                  24 byte keys       62.822 c/h        2.618 c/b        0.382 b/c
+# SipHash                  25 byte keys       63.240 c/h        2.530 c/b        0.395 b/c
+# SipHash                  26 byte keys       62.928 c/h        2.420 c/b        0.413 b/c
+# SipHash                  27 byte keys       62.913 c/h        2.330 c/b        0.429 b/c
+# SipHash                  28 byte keys       64.807 c/h        2.315 c/b        0.432 b/c
+# SipHash                  29 byte keys       63.978 c/h        2.206 c/b        0.453 b/c
+# SipHash                  30 byte keys       64.990 c/h        2.166 c/b        0.462 b/c
+# SipHash                  31 byte keys       67.086 c/h        2.164 c/b        0.462 b/c
+#                          Average < 32       49.912 c/h        3.220 c/b        0.311 b/c
+# SipHash                  32 byte keys       73.397 c/h        2.294 c/b        0.436 b/c
+# SipHash                  36 byte keys       74.115 c/h        2.059 c/b        0.486 b/c
+# SipHash                  40 byte keys       82.349 c/h        2.059 c/b        0.486 b/c
+# SipHash                  44 byte keys       82.999 c/h        1.886 c/b        0.530 b/c
+# SipHash                  48 byte keys       92.031 c/h        1.917 c/b        0.522 b/c
+# SipHash                  52 byte keys       94.003 c/h        1.808 c/b        0.553 b/c
+# SipHash                  56 byte keys      101.888 c/h        1.819 c/b        0.550 b/c
+# SipHash                  60 byte keys      104.063 c/h        1.734 c/b        0.577 b/c
+# SipHash                  64 byte keys      113.008 c/h        1.766 c/b        0.566 b/c
+# SipHash                  68 byte keys      112.903 c/h        1.660 c/b        0.602 b/c
+# SipHash                  72 byte keys      120.913 c/h        1.679 c/b        0.595 b/c
+# SipHash                  76 byte keys      122.825 c/h        1.616 c/b        0.619 b/c
+# SipHash                  80 byte keys      131.721 c/h        1.647 c/b        0.607 b/c
+# SipHash                  84 byte keys      132.770 c/h        1.581 c/b        0.633 b/c
+# SipHash                  88 byte keys      141.537 c/h        1.608 c/b        0.622 b/c
+# SipHash                  92 byte keys      142.698 c/h        1.551 c/b        0.645 b/c
+# SipHash                  96 byte keys      150.446 c/h        1.567 c/b        0.638 b/c
+# SipHash                 100 byte keys      152.636 c/h        1.526 c/b        0.655 b/c
+# SipHash                 104 byte keys      161.437 c/h        1.552 c/b        0.644 b/c
+# SipHash                 108 byte keys      162.581 c/h        1.505 c/b        0.664 b/c
+# SipHash                 112 byte keys      172.878 c/h        1.544 c/b        0.648 b/c
+# SipHash                 116 byte keys      172.526 c/h        1.487 c/b        0.672 b/c
+# SipHash                 120 byte keys      180.073 c/h        1.501 c/b        0.666 b/c
+# SipHash                 124 byte keys      181.962 c/h        1.467 c/b        0.681 b/c
+#                         Average < 128       83.124 c/h        1.966 c/b        0.509 b/c
+# SipHash                 128 byte keys      189.925 c/h        1.484 c/b        0.674 b/c
+# SipHash                 256 byte keys      366.681 c/h        1.432 c/b        0.698 b/c
+# SipHash                 512 byte keys      678.028 c/h        1.324 c/b        0.755 b/c
+# SipHash                1024 byte keys     1301.120 c/h        1.271 c/b        0.787 b/c
+# SipHash                2048 byte keys     2547.739 c/h        1.244 c/b        0.804 b/c
+# SipHash                4096 byte keys     5041.056 c/h        1.231 c/b        0.813 b/c
+# SipHash                8192 byte keys    10026.788 c/h        1.224 c/b        0.817 b/c
+# SipHash               16384 byte keys    19997.927 c/h        1.221 c/b        0.819 b/c
+# SipHash               32768 byte keys    39941.389 c/h        1.219 c/b        0.820 b/c
+# SipHash               65536 byte keys    79832.410 c/h        1.218 c/b        0.821 b/c
+#                       Overall Average     2493.606 c/h        1.235 c/b        0.810 b/c
+ok 6 - Speed (always passes) # SipHash
 ### Differential Tests ###
 # Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 64 bit hashes.
 # 1000 reps, 8303632000 total tests, expecting 0.00 random collisions..........
-ok 8 - Differential collisions # SipHash
-ok 9 - Nothing skipped during differential collision check # SipHash
+ok 7 - Differential collisions # SipHash
+ok 8 - Nothing skipped during differential collision check # SipHash
 # 0 total collisions, of which 0 single collisions were ignored
-ok 10 - ProcessDifferentials
+ok 9 - ProcessDifferentials
 # Testing 11017632 up-to-4-bit differentials in 128-bit keys -> 64 bit hashes.
 # 1000 reps, 11017632000 total tests, expecting 0.00 random collisions..........
-ok 11 - Differential collisions # SipHash
-ok 12 - Nothing skipped during differential collision check # SipHash
+ok 10 - Differential collisions # SipHash
+ok 11 - Nothing skipped during differential collision check # SipHash
 # 0 total collisions, of which 0 single collisions were ignored
-ok 13 - ProcessDifferentials
+ok 12 - ProcessDifferentials
 # Testing 2796416 up-to-3-bit differentials in 256-bit keys -> 64 bit hashes.
 # 1000 reps, 2796416000 total tests, expecting 0.00 random collisions..........
-ok 14 - Differential collisions # SipHash
-ok 15 - Nothing skipped during differential collision check # SipHash
+ok 13 - Differential collisions # SipHash
+ok 14 - Nothing skipped during differential collision check # SipHash
 # 0 total collisions, of which 0 single collisions were ignored
-ok 16 - ProcessDifferentials
-ok 17 - Differential # SipHash
+ok 15 - ProcessDifferentials
+ok 16 - Differential # SipHash
 ### Avalanche Tests ### - seed-bits: 128 hash-bits: 64
 # Samples 500000, expected error 0.00051200, confidence level 99.99994267%
-# Testing   0-bit keys.......... ok.     # worst-bit:   0.559% error-ratio: 1.020995e+00
-ok 18 - Strict Avalanche Criteria - 0 bit keys
-# Testing   8-bit keys.......... ok.     # worst-bit:   0.525% error-ratio: 1.007426e+00
-ok 19 - Strict Avalanche Criteria - 8 bit keys
-# Testing  16-bit keys.......... ok.     # worst-bit:   0.534% error-ratio: 9.969354e-01
-ok 20 - Strict Avalanche Criteria - 16 bit keys
-# Testing  24-bit keys.......... ok.     # worst-bit:   0.543% error-ratio: 9.938111e-01
-ok 21 - Strict Avalanche Criteria - 24 bit keys
-# Testing  32-bit keys.......... ok.     # worst-bit:   0.553% error-ratio: 9.880552e-01
-ok 22 - Strict Avalanche Criteria - 32 bit keys
-# Testing  40-bit keys.......... ok.     # worst-bit:   0.548% error-ratio: 9.971417e-01
-ok 23 - Strict Avalanche Criteria - 40 bit keys
-# Testing  48-bit keys.......... ok.     # worst-bit:   0.550% error-ratio: 1.013375e+00
-ok 24 - Strict Avalanche Criteria - 48 bit keys
-# Testing  56-bit keys.......... ok.     # worst-bit:   0.537% error-ratio: 1.002053e+00
-ok 25 - Strict Avalanche Criteria - 56 bit keys
-# Testing  64-bit keys.......... ok.     # worst-bit:   0.569% error-ratio: 1.001144e+00
-ok 26 - Strict Avalanche Criteria - 64 bit keys
-# Testing  72-bit keys.......... ok.     # worst-bit:   0.628% error-ratio: 9.881236e-01
-ok 27 - Strict Avalanche Criteria - 72 bit keys
-# Testing  80-bit keys.......... ok.     # worst-bit:   0.627% error-ratio: 9.938734e-01
-ok 28 - Strict Avalanche Criteria - 80 bit keys
-# Testing  88-bit keys.......... ok.     # worst-bit:   0.580% error-ratio: 9.924737e-01
-ok 29 - Strict Avalanche Criteria - 88 bit keys
-# Testing  96-bit keys.......... ok.     # worst-bit:   0.551% error-ratio: 9.850692e-01
-ok 30 - Strict Avalanche Criteria - 96 bit keys
-# Testing 104-bit keys.......... ok.     # worst-bit:   0.583% error-ratio: 9.993635e-01
-ok 31 - Strict Avalanche Criteria - 104 bit keys
-# Testing 112-bit keys.......... ok.     # worst-bit:   0.568% error-ratio: 1.011494e+00
-ok 32 - Strict Avalanche Criteria - 112 bit keys
-# Testing 120-bit keys.......... ok.     # worst-bit:   0.596% error-ratio: 9.942395e-01
-ok 33 - Strict Avalanche Criteria - 120 bit keys
-# Testing 128-bit keys.......... ok.     # worst-bit:   0.558% error-ratio: 9.928136e-01
-ok 34 - Strict Avalanche Criteria - 128 bit keys
-# Testing 136-bit keys.......... ok.     # worst-bit:   0.585% error-ratio: 1.003564e+00
-ok 35 - Strict Avalanche Criteria - 136 bit keys
-# Testing 144-bit keys.......... ok.     # worst-bit:   0.616% error-ratio: 1.003767e+00
-ok 36 - Strict Avalanche Criteria - 144 bit keys
-# Testing 152-bit keys.......... ok.     # worst-bit:   0.574% error-ratio: 9.995498e-01
-ok 37 - Strict Avalanche Criteria - 152 bit keys
-# Testing 152-bit keys.......... ok.     # worst-bit:   0.600% error-ratio: 9.901344e-01
-ok 38 - Strict Avalanche Criteria - 160 bit keys
-# Testing 256-bit keys.......... ok.     # worst-bit:   0.597% error-ratio: 1.009914e+00
+# Testing   0-bit keys.......... ok.     # worst-bit:   0.555% error-ratio: 1.003290e+00
+ok 17 - Strict Avalanche Criteria - 0 bit keys
+# Testing   8-bit keys.......... ok.     # worst-bit:   0.542% error-ratio: 1.004359e+00
+ok 18 - Strict Avalanche Criteria - 8 bit keys
+# Testing  16-bit keys.......... ok.     # worst-bit:   0.539% error-ratio: 1.000760e+00
+ok 19 - Strict Avalanche Criteria - 16 bit keys
+# Testing  24-bit keys.......... ok.     # worst-bit:   0.599% error-ratio: 9.829748e-01
+ok 20 - Strict Avalanche Criteria - 24 bit keys
+# Testing  32-bit keys.......... ok.     # worst-bit:   0.541% error-ratio: 9.862310e-01
+ok 21 - Strict Avalanche Criteria - 32 bit keys
+# Testing  40-bit keys.......... ok.     # worst-bit:   0.582% error-ratio: 1.005106e+00
+ok 22 - Strict Avalanche Criteria - 40 bit keys
+# Testing  48-bit keys.......... ok.     # worst-bit:   0.646% error-ratio: 9.999640e-01
+ok 23 - Strict Avalanche Criteria - 48 bit keys
+# Testing  56-bit keys.......... ok.     # worst-bit:   0.556% error-ratio: 9.848309e-01
+ok 24 - Strict Avalanche Criteria - 56 bit keys
+# Testing  64-bit keys.......... ok.     # worst-bit:   0.578% error-ratio: 1.007170e+00
+ok 25 - Strict Avalanche Criteria - 64 bit keys
+# Testing  72-bit keys.......... ok.     # worst-bit:   0.528% error-ratio: 9.823010e-01
+ok 26 - Strict Avalanche Criteria - 72 bit keys
+# Testing  80-bit keys.......... ok.     # worst-bit:   0.577% error-ratio: 1.003006e+00
+ok 27 - Strict Avalanche Criteria - 80 bit keys
+# Testing  88-bit keys.......... ok.     # worst-bit:   0.560% error-ratio: 9.934587e-01
+ok 28 - Strict Avalanche Criteria - 88 bit keys
+# Testing  96-bit keys.......... ok.     # worst-bit:   0.625% error-ratio: 1.003428e+00
+ok 29 - Strict Avalanche Criteria - 96 bit keys
+# Testing 104-bit keys.......... ok.     # worst-bit:   0.590% error-ratio: 9.751068e-01
+ok 30 - Strict Avalanche Criteria - 104 bit keys
+# Testing 112-bit keys.......... ok.     # worst-bit:   0.570% error-ratio: 9.943254e-01
+ok 31 - Strict Avalanche Criteria - 112 bit keys
+# Testing 120-bit keys.......... ok.     # worst-bit:   0.662% error-ratio: 1.005747e+00
+ok 32 - Strict Avalanche Criteria - 120 bit keys
+# Testing 128-bit keys.......... ok.     # worst-bit:   0.577% error-ratio: 1.002042e+00
+ok 33 - Strict Avalanche Criteria - 128 bit keys
+# Testing 136-bit keys.......... ok.     # worst-bit:   0.612% error-ratio: 1.013549e+00
+ok 34 - Strict Avalanche Criteria - 136 bit keys
+# Testing 144-bit keys.......... ok.     # worst-bit:   0.617% error-ratio: 1.008424e+00
+ok 35 - Strict Avalanche Criteria - 144 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.589% error-ratio: 9.861765e-01
+ok 36 - Strict Avalanche Criteria - 152 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.640% error-ratio: 1.010826e+00
+ok 37 - Strict Avalanche Criteria - 160 bit keys
+# Testing 200-bit keys.......... ok.     # worst-bit:   0.659% error-ratio: 9.900601e-01
+ok 38 - Strict Avalanche Criteria - 200 bit keys
+# Testing 256-bit keys.......... ok.     # worst-bit:   0.596% error-ratio: 1.005889e+00
 ok 39 - Strict Avalanche Criteria - 256 bit keys
 ok 40 - Strict Avalanche Criteria # SipHash
 ### Keyset 'Cyclic' Tests ###
@@ -338,5 +340,5 @@ ok 129 - Keyset 'Effs' # SipHash
 ok 130 - all tests passed # SipHash
 1..130
 # All Tests Passed. SipHash passed all 130 tests run.
-# Testing took 2197.105659 seconds
-# This is SMHasher version v1.0-demerphq-5-g86440f3 - built on Mar 10 2017.
+# Testing took 2276.293670 seconds
+# This is SMHasher version v1.0-demerphq-15-geac5db9 - built on Mar 13 2017.

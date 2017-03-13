@@ -1,164 +1,166 @@
-ok 1 - SelfTest - Verify 89 Hashes
-ok 2 - Found Hash # BeagleHash_64_112
+ok 1 - Found Hash # BeagleHash_64_112
 ###################################################################
 ### Testing BeagleHash_64_112 - with seed_state
 ### - Evolved hash with 128-bit state (2x64) - Yves Orton -
 ### seedbits: 112 statebits: 128 hashbits: 64
 ###################################################################
+not ok 2 - Verification code # BeagleHash_64_112
+# BeagleHash_64_112    - Verification value 0xDB96477A : Failed! (Expected 0xF17F3234)
 ### Sanity Tests ###
-ok 3 - Verification code # BeagleHash_64_112
 # Sanity check simple key bit flips and consistency..........
-ok 4 - SanityTest # BeagleHash_64_112
+ok 3 - SanityTest # BeagleHash_64_112
 # Sanity check null suffixes change the hash (simple)..........
-ok 5 - Appended Zeroes Test # BeagleHash_64_112
-ok 6 - Sanity Test # BeagleHash_64_112
+ok 4 - Appended Zeroes Test # BeagleHash_64_112
+ok 5 - Sanity Test # BeagleHash_64_112
 ### Speed Tests ###
 ## Bulk speed test - 262144-byte keys
-# Alignment  7 -  1.899 bytes/cycle - 5432.13 MiB/sec @ 3 ghz
-# Alignment  6 -  1.899 bytes/cycle - 5432.05 MiB/sec @ 3 ghz
-# Alignment  5 -  1.899 bytes/cycle - 5431.97 MiB/sec @ 3 ghz
-# Alignment  4 -  1.899 bytes/cycle - 5432.09 MiB/sec @ 3 ghz
-# Alignment  3 -  1.899 bytes/cycle - 5431.92 MiB/sec @ 3 ghz
-# Alignment  2 -  1.899 bytes/cycle - 5431.90 MiB/sec @ 3 ghz
-# Alignment  1 -  1.899 bytes/cycle - 5432.11 MiB/sec @ 3 ghz
-# Alignment  0 -  1.915 bytes/cycle - 5479.11 MiB/sec @ 3 ghz
-# Average      -  1.901 bytes/cycle - 5437.91 MiB/sec @ 3 ghz
+# Alignment  7 -  1.899 bytes/cycle - 5432.66 MiB/sec @ 3 ghz
+# Alignment  6 -  1.887 bytes/cycle - 5399.63 MiB/sec @ 3 ghz
+# Alignment  5 -  1.899 bytes/cycle - 5432.84 MiB/sec @ 3 ghz
+# Alignment  4 -  1.899 bytes/cycle - 5432.70 MiB/sec @ 3 ghz
+# Alignment  3 -  1.899 bytes/cycle - 5432.68 MiB/sec @ 3 ghz
+# Alignment  2 -  1.899 bytes/cycle - 5432.80 MiB/sec @ 3 ghz
+# Alignment  1 -  1.899 bytes/cycle - 5432.55 MiB/sec @ 3 ghz
+# Alignment  0 -  1.915 bytes/cycle - 5479.83 MiB/sec @ 3 ghz
+# Average      -  1.899 bytes/cycle - 5434.46 MiB/sec @ 3 ghz
 ## KeySpeed tests
-# BeagleHash_64_112         0 byte keys       16.907 c/h
-# BeagleHash_64_112         1 byte keys       29.910 c/h       29.910 c/b        0.033 b/c
+# BeagleHash_64_112         0 byte keys       16.204 c/h
+# BeagleHash_64_112         1 byte keys       29.918 c/h       29.918 c/b        0.033 b/c
 # BeagleHash_64_112         2 byte keys       33.000 c/h       16.500 c/b        0.061 b/c
 # BeagleHash_64_112         3 byte keys       33.000 c/h       11.000 c/b        0.091 b/c
-# BeagleHash_64_112         4 byte keys       35.043 c/h        8.761 c/b        0.114 b/c
+# BeagleHash_64_112         4 byte keys       34.000 c/h        8.500 c/b        0.118 b/c
 # BeagleHash_64_112         5 byte keys       35.000 c/h        7.000 c/b        0.143 b/c
 # BeagleHash_64_112         6 byte keys       36.000 c/h        6.000 c/b        0.167 b/c
 # BeagleHash_64_112         7 byte keys       37.000 c/h        5.286 c/b        0.189 b/c
-# BeagleHash_64_112         8 byte keys       34.998 c/h        4.375 c/b        0.229 b/c
-# BeagleHash_64_112         9 byte keys       35.000 c/h        3.889 c/b        0.257 b/c
-# BeagleHash_64_112        10 byte keys       35.000 c/h        3.500 c/b        0.286 b/c
-# BeagleHash_64_112        11 byte keys       34.999 c/h        3.182 c/b        0.314 b/c
+# BeagleHash_64_112         8 byte keys       35.737 c/h        4.467 c/b        0.224 b/c
+# BeagleHash_64_112         9 byte keys       35.459 c/h        3.940 c/b        0.254 b/c
+# BeagleHash_64_112        10 byte keys       35.797 c/h        3.580 c/b        0.279 b/c
+# BeagleHash_64_112        11 byte keys       36.392 c/h        3.308 c/b        0.302 b/c
 # BeagleHash_64_112        12 byte keys       35.000 c/h        2.917 c/b        0.343 b/c
 # BeagleHash_64_112        13 byte keys       35.000 c/h        2.692 c/b        0.371 b/c
-# BeagleHash_64_112        14 byte keys       35.511 c/h        2.536 c/b        0.394 b/c
-# BeagleHash_64_112        15 byte keys       35.000 c/h        2.333 c/b        0.429 b/c
-# BeagleHash_64_112        16 byte keys       37.989 c/h        2.374 c/b        0.421 b/c
-# BeagleHash_64_112        17 byte keys       38.000 c/h        2.235 c/b        0.447 b/c
-# BeagleHash_64_112        18 byte keys       38.000 c/h        2.111 c/b        0.474 b/c
-# BeagleHash_64_112        19 byte keys       38.000 c/h        2.000 c/b        0.500 b/c
+# BeagleHash_64_112        14 byte keys       35.534 c/h        2.538 c/b        0.394 b/c
+# BeagleHash_64_112        15 byte keys       35.218 c/h        2.348 c/b        0.426 b/c
+# BeagleHash_64_112        16 byte keys       37.987 c/h        2.374 c/b        0.421 b/c
+# BeagleHash_64_112        17 byte keys       38.769 c/h        2.281 c/b        0.438 b/c
+# BeagleHash_64_112        18 byte keys       38.540 c/h        2.141 c/b        0.467 b/c
+# BeagleHash_64_112        19 byte keys       39.549 c/h        2.082 c/b        0.480 b/c
 # BeagleHash_64_112        20 byte keys       38.000 c/h        1.900 c/b        0.526 b/c
-# BeagleHash_64_112        21 byte keys       38.000 c/h        1.810 c/b        0.553 b/c
-# BeagleHash_64_112        22 byte keys       38.000 c/h        1.727 c/b        0.579 b/c
-# BeagleHash_64_112        23 byte keys       38.000 c/h        1.652 c/b        0.605 b/c
-# BeagleHash_64_112        24 byte keys       45.054 c/h        1.877 c/b        0.533 b/c
-# BeagleHash_64_112        25 byte keys       44.000 c/h        1.760 c/b        0.568 b/c
-# BeagleHash_64_112        26 byte keys       44.000 c/h        1.692 c/b        0.591 b/c
-# BeagleHash_64_112        27 byte keys       44.877 c/h        1.662 c/b        0.602 b/c
-# BeagleHash_64_112        28 byte keys       44.000 c/h        1.571 c/b        0.636 b/c
-# BeagleHash_64_112        29 byte keys       44.765 c/h        1.544 c/b        0.648 b/c
-# BeagleHash_64_112        30 byte keys       44.000 c/h        1.467 c/b        0.682 b/c
-# BeagleHash_64_112        31 byte keys       44.799 c/h        1.445 c/b        0.692 b/c
-#                          Average < 32       37.370 c/h        2.411 c/b        0.415 b/c
-# BeagleHash_64_112        32 byte keys       46.878 c/h        1.465 c/b        0.683 b/c
-# BeagleHash_64_112        36 byte keys       46.000 c/h        1.278 c/b        0.783 b/c
-# BeagleHash_64_112        40 byte keys       54.280 c/h        1.357 c/b        0.737 b/c
-# BeagleHash_64_112        44 byte keys       52.988 c/h        1.204 c/b        0.830 b/c
-# BeagleHash_64_112        48 byte keys       54.726 c/h        1.140 c/b        0.877 b/c
+# BeagleHash_64_112        21 byte keys       38.600 c/h        1.838 c/b        0.544 b/c
+# BeagleHash_64_112        22 byte keys       39.175 c/h        1.781 c/b        0.562 b/c
+# BeagleHash_64_112        23 byte keys       39.801 c/h        1.730 c/b        0.578 b/c
+# BeagleHash_64_112        24 byte keys       47.151 c/h        1.965 c/b        0.509 b/c
+# BeagleHash_64_112        25 byte keys       47.361 c/h        1.894 c/b        0.528 b/c
+# BeagleHash_64_112        26 byte keys       48.037 c/h        1.848 c/b        0.541 b/c
+# BeagleHash_64_112        27 byte keys       46.415 c/h        1.719 c/b        0.582 b/c
+# BeagleHash_64_112        28 byte keys       46.224 c/h        1.651 c/b        0.606 b/c
+# BeagleHash_64_112        29 byte keys       46.142 c/h        1.591 c/b        0.628 b/c
+# BeagleHash_64_112        30 byte keys       46.224 c/h        1.541 c/b        0.649 b/c
+# BeagleHash_64_112        31 byte keys       44.925 c/h        1.449 c/b        0.690 b/c
+#                          Average < 32       38.161 c/h        2.462 c/b        0.406 b/c
+# BeagleHash_64_112        32 byte keys       48.005 c/h        1.500 c/b        0.667 b/c
+# BeagleHash_64_112        36 byte keys       47.242 c/h        1.312 c/b        0.762 b/c
+# BeagleHash_64_112        40 byte keys       52.909 c/h        1.323 c/b        0.756 b/c
+# BeagleHash_64_112        44 byte keys       52.991 c/h        1.204 c/b        0.830 b/c
+# BeagleHash_64_112        48 byte keys       56.649 c/h        1.180 c/b        0.847 b/c
 # BeagleHash_64_112        52 byte keys       53.998 c/h        1.038 c/b        0.963 b/c
-# BeagleHash_64_112        56 byte keys       60.894 c/h        1.087 c/b        0.920 b/c
-# BeagleHash_64_112        60 byte keys       60.000 c/h        1.000 c/b        1.000 b/c
-# BeagleHash_64_112        64 byte keys       61.986 c/h        0.969 c/b        1.032 b/c
-# BeagleHash_64_112        68 byte keys       61.981 c/h        0.911 c/b        1.097 b/c
-# BeagleHash_64_112        72 byte keys       67.992 c/h        0.944 c/b        1.059 b/c
-# BeagleHash_64_112        76 byte keys       68.624 c/h        0.903 c/b        1.107 b/c
-# BeagleHash_64_112        80 byte keys       70.258 c/h        0.878 c/b        1.139 b/c
-# BeagleHash_64_112        84 byte keys       69.998 c/h        0.833 c/b        1.200 b/c
-# BeagleHash_64_112        88 byte keys       76.702 c/h        0.872 c/b        1.147 b/c
-# BeagleHash_64_112        92 byte keys       76.555 c/h        0.832 c/b        1.202 b/c
-# BeagleHash_64_112        96 byte keys       81.797 c/h        0.852 c/b        1.174 b/c
-# BeagleHash_64_112       100 byte keys       78.961 c/h        0.790 c/b        1.266 b/c
-# BeagleHash_64_112       104 byte keys       86.286 c/h        0.830 c/b        1.205 b/c
-# BeagleHash_64_112       108 byte keys       85.656 c/h        0.793 c/b        1.261 b/c
-# BeagleHash_64_112       112 byte keys       89.337 c/h        0.798 c/b        1.254 b/c
-# BeagleHash_64_112       116 byte keys       88.063 c/h        0.759 c/b        1.317 b/c
-# BeagleHash_64_112       120 byte keys       95.073 c/h        0.792 c/b        1.262 b/c
-# BeagleHash_64_112       124 byte keys       93.873 c/h        0.757 c/b        1.321 b/c
-#                         Average < 128       51.406 c/h        1.216 c/b        0.823 b/c
-# BeagleHash_64_112       128 byte keys       96.888 c/h        0.757 c/b        1.321 b/c
-# BeagleHash_64_112       256 byte keys      148.515 c/h        0.580 c/b        1.724 b/c
-# BeagleHash_64_112       512 byte keys      298.224 c/h        0.582 c/b        1.717 b/c
-# BeagleHash_64_112      1024 byte keys      565.725 c/h        0.552 c/b        1.810 b/c
-# BeagleHash_64_112      2048 byte keys     1100.497 c/h        0.537 c/b        1.861 b/c
-# BeagleHash_64_112      4096 byte keys     2169.233 c/h        0.530 c/b        1.888 b/c
-# BeagleHash_64_112      8192 byte keys     4306.590 c/h        0.526 c/b        1.902 b/c
-# BeagleHash_64_112     16384 byte keys     8581.831 c/h        0.524 c/b        1.909 b/c
-# BeagleHash_64_112     32768 byte keys    17134.884 c/h        0.523 c/b        1.912 b/c
-# BeagleHash_64_112     65536 byte keys    34243.340 c/h        0.523 c/b        1.914 b/c
-#                       Overall Average     1083.704 c/h        0.537 c/b        1.864 b/c
-ok 7 - Speed (always passes) # BeagleHash_64_112
+# BeagleHash_64_112        56 byte keys       61.863 c/h        1.105 c/b        0.905 b/c
+# BeagleHash_64_112        60 byte keys       62.576 c/h        1.043 c/b        0.959 b/c
+# BeagleHash_64_112        64 byte keys       64.642 c/h        1.010 c/b        0.990 b/c
+# BeagleHash_64_112        68 byte keys       63.242 c/h        0.930 c/b        1.075 b/c
+# BeagleHash_64_112        72 byte keys       67.998 c/h        0.944 c/b        1.059 b/c
+# BeagleHash_64_112        76 byte keys       68.746 c/h        0.905 c/b        1.106 b/c
+# BeagleHash_64_112        80 byte keys       70.272 c/h        0.878 c/b        1.138 b/c
+# BeagleHash_64_112        84 byte keys       69.999 c/h        0.833 c/b        1.200 b/c
+# BeagleHash_64_112        88 byte keys       76.736 c/h        0.872 c/b        1.147 b/c
+# BeagleHash_64_112        92 byte keys       76.612 c/h        0.833 c/b        1.201 b/c
+# BeagleHash_64_112        96 byte keys       84.938 c/h        0.885 c/b        1.130 b/c
+# BeagleHash_64_112       100 byte keys       82.269 c/h        0.823 c/b        1.216 b/c
+# BeagleHash_64_112       104 byte keys       87.122 c/h        0.838 c/b        1.194 b/c
+# BeagleHash_64_112       108 byte keys       91.772 c/h        0.850 c/b        1.177 b/c
+# BeagleHash_64_112       112 byte keys       88.984 c/h        0.794 c/b        1.259 b/c
+# BeagleHash_64_112       116 byte keys       88.414 c/h        0.762 c/b        1.312 b/c
+# BeagleHash_64_112       120 byte keys       97.405 c/h        0.812 c/b        1.232 b/c
+# BeagleHash_64_112       124 byte keys       93.903 c/h        0.757 c/b        1.321 b/c
+#                         Average < 128       52.329 c/h        1.238 c/b        0.808 b/c
+# BeagleHash_64_112       128 byte keys      100.766 c/h        0.787 c/b        1.270 b/c
+# BeagleHash_64_112       256 byte keys      155.319 c/h        0.607 c/b        1.648 b/c
+# BeagleHash_64_112       512 byte keys      311.124 c/h        0.608 c/b        1.646 b/c
+# BeagleHash_64_112      1024 byte keys      588.083 c/h        0.574 c/b        1.741 b/c
+# BeagleHash_64_112      2048 byte keys     1183.801 c/h        0.578 c/b        1.730 b/c
+# BeagleHash_64_112      4096 byte keys     2302.019 c/h        0.562 c/b        1.779 b/c
+# BeagleHash_64_112      8192 byte keys     4484.584 c/h        0.547 c/b        1.827 b/c
+# BeagleHash_64_112     16384 byte keys     9343.564 c/h        0.570 c/b        1.754 b/c
+# BeagleHash_64_112     32768 byte keys    18157.560 c/h        0.554 c/b        1.805 b/c
+# BeagleHash_64_112     65536 byte keys    34755.479 c/h        0.530 c/b        1.886 b/c
+#                       Overall Average     1125.951 c/h        0.557 c/b        1.794 b/c
+ok 6 - Speed (always passes) # BeagleHash_64_112
 ### Differential Tests ###
 # Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 64 bit hashes.
 # 1000 reps, 8303632000 total tests, expecting 0.00 random collisions..........
-ok 8 - Differential collisions # BeagleHash_64_112
-ok 9 - Nothing skipped during differential collision check # BeagleHash_64_112
+ok 7 - Differential collisions # BeagleHash_64_112
+ok 8 - Nothing skipped during differential collision check # BeagleHash_64_112
 # 0 total collisions, of which 0 single collisions were ignored
-ok 10 - ProcessDifferentials
+ok 9 - ProcessDifferentials
 # Testing 11017632 up-to-4-bit differentials in 128-bit keys -> 64 bit hashes.
 # 1000 reps, 11017632000 total tests, expecting 0.00 random collisions..........
-ok 11 - Differential collisions # BeagleHash_64_112
-ok 12 - Nothing skipped during differential collision check # BeagleHash_64_112
+ok 10 - Differential collisions # BeagleHash_64_112
+ok 11 - Nothing skipped during differential collision check # BeagleHash_64_112
 # 0 total collisions, of which 0 single collisions were ignored
-ok 13 - ProcessDifferentials
+ok 12 - ProcessDifferentials
 # Testing 2796416 up-to-3-bit differentials in 256-bit keys -> 64 bit hashes.
 # 1000 reps, 2796416000 total tests, expecting 0.00 random collisions..........
-ok 14 - Differential collisions # BeagleHash_64_112
-ok 15 - Nothing skipped during differential collision check # BeagleHash_64_112
+ok 13 - Differential collisions # BeagleHash_64_112
+ok 14 - Nothing skipped during differential collision check # BeagleHash_64_112
 # 0 total collisions, of which 0 single collisions were ignored
-ok 16 - ProcessDifferentials
-ok 17 - Differential # BeagleHash_64_112
+ok 15 - ProcessDifferentials
+ok 16 - Differential # BeagleHash_64_112
 ### Avalanche Tests ### - seed-bits: 112 hash-bits: 64
 # Samples 500000, expected error 0.00051200, confidence level 99.99994267%
-# Testing   0-bit keys.......... ok.     # worst-bit:   0.566% error-ratio: 1.011293e+00
-ok 18 - Strict Avalanche Criteria - 0 bit keys
-# Testing   8-bit keys.......... ok.     # worst-bit:   0.540% error-ratio: 1.043408e+00
-ok 19 - Strict Avalanche Criteria - 8 bit keys
-# Testing  16-bit keys.......... ok.     # worst-bit:   0.608% error-ratio: 9.839027e-01
-ok 20 - Strict Avalanche Criteria - 16 bit keys
-# Testing  24-bit keys.......... ok.     # worst-bit:   0.526% error-ratio: 9.834376e-01
-ok 21 - Strict Avalanche Criteria - 24 bit keys
-# Testing  32-bit keys.......... ok.     # worst-bit:   0.578% error-ratio: 1.038367e+00
-ok 22 - Strict Avalanche Criteria - 32 bit keys
-# Testing  40-bit keys.......... ok.     # worst-bit:   0.585% error-ratio: 1.008461e+00
-ok 23 - Strict Avalanche Criteria - 40 bit keys
-# Testing  48-bit keys.......... ok.     # worst-bit:   0.592% error-ratio: 9.848511e-01
-ok 24 - Strict Avalanche Criteria - 48 bit keys
-# Testing  56-bit keys.......... ok.     # worst-bit:   0.610% error-ratio: 9.840930e-01
-ok 25 - Strict Avalanche Criteria - 56 bit keys
-# Testing  64-bit keys.......... ok.     # worst-bit:   0.614% error-ratio: 9.898095e-01
-ok 26 - Strict Avalanche Criteria - 64 bit keys
-# Testing  72-bit keys.......... ok.     # worst-bit:   0.630% error-ratio: 9.982247e-01
-ok 27 - Strict Avalanche Criteria - 72 bit keys
-# Testing  80-bit keys.......... ok.     # worst-bit:   0.604% error-ratio: 9.770595e-01
-ok 28 - Strict Avalanche Criteria - 80 bit keys
-# Testing  88-bit keys.......... ok.     # worst-bit:   0.616% error-ratio: 9.846032e-01
-ok 29 - Strict Avalanche Criteria - 88 bit keys
-# Testing  96-bit keys.......... ok.     # worst-bit:   0.618% error-ratio: 1.022281e+00
-ok 30 - Strict Avalanche Criteria - 96 bit keys
-# Testing 104-bit keys.......... ok.     # worst-bit:   0.511% error-ratio: 1.009406e+00
-ok 31 - Strict Avalanche Criteria - 104 bit keys
-# Testing 112-bit keys.......... ok.     # worst-bit:   0.554% error-ratio: 9.878224e-01
-ok 32 - Strict Avalanche Criteria - 112 bit keys
-# Testing 120-bit keys.......... ok.     # worst-bit:   0.556% error-ratio: 1.004096e+00
-ok 33 - Strict Avalanche Criteria - 120 bit keys
-# Testing 128-bit keys.......... ok.     # worst-bit:   0.540% error-ratio: 1.004715e+00
-ok 34 - Strict Avalanche Criteria - 128 bit keys
-# Testing 136-bit keys.......... ok.     # worst-bit:   0.588% error-ratio: 1.005586e+00
-ok 35 - Strict Avalanche Criteria - 136 bit keys
-# Testing 144-bit keys.......... ok.     # worst-bit:   0.605% error-ratio: 1.011367e+00
-ok 36 - Strict Avalanche Criteria - 144 bit keys
-# Testing 152-bit keys.......... ok.     # worst-bit:   0.675% error-ratio: 9.926865e-01
-ok 37 - Strict Avalanche Criteria - 152 bit keys
-# Testing 152-bit keys.......... ok.     # worst-bit:   0.558% error-ratio: 1.012777e+00
-ok 38 - Strict Avalanche Criteria - 160 bit keys
-# Testing 256-bit keys.......... ok.     # worst-bit:   0.683% error-ratio: 1.002077e+00
+# Testing   0-bit keys.......... ok.     # worst-bit:   0.567% error-ratio: 1.005387e+00
+ok 17 - Strict Avalanche Criteria - 0 bit keys
+# Testing   8-bit keys.......... ok.     # worst-bit:   0.527% error-ratio: 1.000117e+00
+ok 18 - Strict Avalanche Criteria - 8 bit keys
+# Testing  16-bit keys.......... ok.     # worst-bit:   0.588% error-ratio: 9.951669e-01
+ok 19 - Strict Avalanche Criteria - 16 bit keys
+# Testing  24-bit keys.......... ok.     # worst-bit:   0.516% error-ratio: 9.778356e-01
+ok 20 - Strict Avalanche Criteria - 24 bit keys
+# Testing  32-bit keys.......... ok.     # worst-bit:   0.638% error-ratio: 1.005193e+00
+ok 21 - Strict Avalanche Criteria - 32 bit keys
+# Testing  40-bit keys.......... ok.     # worst-bit:   0.564% error-ratio: 1.026045e+00
+ok 22 - Strict Avalanche Criteria - 40 bit keys
+# Testing  48-bit keys.......... ok.     # worst-bit:   0.708% error-ratio: 9.854375e-01
+ok 23 - Strict Avalanche Criteria - 48 bit keys
+# Testing  56-bit keys.......... ok.     # worst-bit:   0.539% error-ratio: 9.794235e-01
+ok 24 - Strict Avalanche Criteria - 56 bit keys
+# Testing  64-bit keys.......... ok.     # worst-bit:   0.569% error-ratio: 9.991648e-01
+ok 25 - Strict Avalanche Criteria - 64 bit keys
+# Testing  72-bit keys.......... ok.     # worst-bit:   0.535% error-ratio: 9.924812e-01
+ok 26 - Strict Avalanche Criteria - 72 bit keys
+# Testing  80-bit keys.......... ok.     # worst-bit:   0.568% error-ratio: 1.010549e+00
+ok 27 - Strict Avalanche Criteria - 80 bit keys
+# Testing  88-bit keys.......... ok.     # worst-bit:   0.559% error-ratio: 1.001552e+00
+ok 28 - Strict Avalanche Criteria - 88 bit keys
+# Testing  96-bit keys.......... ok.     # worst-bit:   0.600% error-ratio: 9.957309e-01
+ok 29 - Strict Avalanche Criteria - 96 bit keys
+# Testing 104-bit keys.......... ok.     # worst-bit:   0.588% error-ratio: 9.861728e-01
+ok 30 - Strict Avalanche Criteria - 104 bit keys
+# Testing 112-bit keys.......... ok.     # worst-bit:   0.567% error-ratio: 1.012089e+00
+ok 31 - Strict Avalanche Criteria - 112 bit keys
+# Testing 120-bit keys.......... ok.     # worst-bit:   0.554% error-ratio: 9.890984e-01
+ok 32 - Strict Avalanche Criteria - 120 bit keys
+# Testing 128-bit keys.......... ok.     # worst-bit:   0.622% error-ratio: 9.811309e-01
+ok 33 - Strict Avalanche Criteria - 128 bit keys
+# Testing 136-bit keys.......... ok.     # worst-bit:   0.557% error-ratio: 9.989680e-01
+ok 34 - Strict Avalanche Criteria - 136 bit keys
+# Testing 144-bit keys.......... ok.     # worst-bit:   0.610% error-ratio: 9.937313e-01
+ok 35 - Strict Avalanche Criteria - 144 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.551% error-ratio: 9.935820e-01
+ok 36 - Strict Avalanche Criteria - 152 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.652% error-ratio: 9.876370e-01
+ok 37 - Strict Avalanche Criteria - 160 bit keys
+# Testing 200-bit keys.......... ok.     # worst-bit:   0.545% error-ratio: 1.003508e+00
+ok 38 - Strict Avalanche Criteria - 200 bit keys
+# Testing 256-bit keys.......... ok.     # worst-bit:   0.605% error-ratio: 9.972741e-01
 ok 39 - Strict Avalanche Criteria - 256 bit keys
 ok 40 - Strict Avalanche Criteria # BeagleHash_64_112
 ### Keyset 'Cyclic' Tests ###
@@ -335,8 +337,8 @@ ok 126 - Keyset 'Seed' # BeagleHash_64_112
 ok 127 - Collision Rate for Keyset 'Effs' - 262144 keys
 ok 128 - Distribution Bias Check for Keyset 'Effs' - 262144 keys
 ok 129 - Keyset 'Effs' # BeagleHash_64_112
-ok 130 - all tests passed # BeagleHash_64_112
+not ok 130 - all tests passed # BeagleHash_64_112
 1..130
-# All Tests Passed. BeagleHash_64_112 passed all 130 tests run.
-# Testing took 2016.576343 seconds
-# This is SMHasher version v1.0-demerphq-5-g86440f3 - built on Mar 10 2017.
+# Tests Failed. BeagleHash_64_112 failed 2 of 130 tests.
+# Testing took 2068.624846 seconds
+# This is SMHasher version v1.0-demerphq-15-geac5db9 - built on Mar 13 2017.
