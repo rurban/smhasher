@@ -235,8 +235,8 @@ HashInfo g_hashes[] =
     128, (32 * 256 + 3) * 64, 64, 0xEF32DD9E,
     sbox_seed_state_smhasher_test, sbox_hash_with_state_smhasher_test },
 #endif
-  { "StadtX", "Evolved hash with 256-bit state (4x64) inspired my Metrohash - Yves Orton",
-    128, 256, 64, 0x59C91B3E,
+  { "StadtX", "Evolved hash with 4x64 state - inspired by Metrohash - Yves Orton",
+    128, 256, 64, 0x382380AF,
     stadtx_seed_state_smhasher_test, stadtx_hash_with_state_smhasher_test },
   { "Zaphod64", "Evolved hash with 192-bit state (3x64) - Yves Orton",
     191, 192, 64, 0xDD90BE2E,
