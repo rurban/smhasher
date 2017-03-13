@@ -54,6 +54,8 @@ sub graph {
     }
     say $out qq(set key below);
     say $out qq(set xtics 4);
+    say $out qq(set ytics);
+    say $out qq(set yrange [0:*]);
     say $out qq(set xlabel "Key Length");
     say $out qq(set ylabel "cycles/hash");
     my $long_title= "$title - Hash Speed for Short Keys";
@@ -76,8 +78,10 @@ sub graph {
         say $out qq(set output "$file"); 
         say qq(writing '$file');
     }
+    say $out qq(set yrange [1:*]);
     say $out qq(set logscale xy);
     say $out qq(set xtics);
+    say $out qq(set ytics);
     $long_title= "$title - Hash Speed for Long Keys (Log Scale)";
     $file_titles{$file}=$long_title;
     say $out qq(set title "$long_title");
