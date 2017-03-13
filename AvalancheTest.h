@@ -73,7 +73,7 @@ void calcBiasWithSeed ( hashfunc<hashtype> hash, std::vector<int> & counts, int 
     r.rand_p(&K,keybytes);
     r.rand_p(&seed[0],seedbytes);
 
-    hash(&K,keybytes,(void *)&seed,&A);
+    hash(&K,keybytes,&seed[0],&A);
 
     int * cursor = &counts[0];
 
