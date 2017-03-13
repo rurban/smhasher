@@ -58,29 +58,27 @@ bool VerificationTest ( hashfunc<hashtype> hash, uint32_t expected, int verbose,
   delete [] key;
   delete [] hashes;
   delete [] final;
-  bool result = true;
+  bool different = expected != verification;
+  bool result = !different || !verification;
+
+  if (verbose>1)
+    ok(result, "Verification code", name);
 
   //----------
 #define _NAMEFMT "# %-20s"
-  if(expected != verification)
-  {
-    if (expected == 0) {
-      if (verbose)
-        printf(_NAMEFMT " - Verification value 0x%08X : Testing!\n", name, verification);
-      result = true;
-    }
-    else if(verbose) {
-      printf(_NAMEFMT " - Verification value 0x%08X : Failed! (Expected 0x%08X)\n",
-        name, verification, expected);
-      result = false;
+  if (verbose) {
+    if (different) {
+      if (result) {
+        printf(_NAMEFMT " - Verification value 0x%08X : Failed! (Dev-Mode)\n", name, verification);
+      } else {
+        printf(_NAMEFMT " - Verification value 0x%08X : Failed! (Expected 0x%08X)\n",
+          name, verification, expected);
+      }
+    } else if (verbose > 1) {
+      printf(_NAMEFMT " - Verification value 0x%08X : Passed.\n",
+        name, verification);
     }
   }
-  else
-  {
-    result = true;
-  }
-  if (verbose>1)
-    ok(result, "Verification code", name);
   return result;
 }
 

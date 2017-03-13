@@ -67,17 +67,15 @@ bool testHash ( HashInfo * info, int self_test, double confidence )
   }
   //-----------------------------------------------------------------------------
   // Sanity tests
+  pass &= VerificationTest<hashtype>(hash, info->verification,
+      !self_test ? 2 : self_test > 1,info->name);
+  if (self_test) return pass;
 
-  if(self_test || g_testSanity || g_testAll)
+  if(g_testSanity || g_testAll)
   {
-    if(!self_test)
-      printf("### Sanity Tests ###\n");
+    printf("### Sanity Tests ###\n");
 
-    bool result = VerificationTest<hashtype>(hash, info->verification,
-        !self_test ? 2 : self_test > 1,info->name);
-    if (self_test) return result;
-
-    result &= SanityTest<hashtype>(hash);
+    bool result= SanityTest<hashtype>(hash);
     result &= AppendedZeroesTest<hashtype>(hash);
 
     pass &= ok(result, "Sanity Test", info->name);

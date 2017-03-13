@@ -485,7 +485,7 @@ double   g_confidence;
 //-----------------------------------------------------------------------------
 // Self-test on startup - verify that all installed hashes work correctly.
 
-void SelfTest ( bool validate )
+void SelfTest ()
 {
   bool pass = true;
   char name[1024];
@@ -499,7 +499,7 @@ void SelfTest ( bool validate )
   }
   ok(pass,name);
 
-  if(!pass || validate)
+  if(!pass)
   {
     for(size_t i = 0; i < g_hashes_sizeof / sizeof(HashInfo); i++)
     {
@@ -507,9 +507,8 @@ void SelfTest ( bool validate )
 
       pass &= testHashByInfo( info, 2, g_confidence );
     }
-    done_testing();
-
   }
+  done_testing();
 }
 
 
@@ -561,8 +560,8 @@ int main ( int argc, char ** argv )
       exit(0);
     }
     if (EQ(arg,arg_len,"--validate")) {
-      opt_validate = true;
-      continue;
+      SelfTest();
+      /* not reached */
     }
     else
     if (EQ(arg,arg_len,"--verbose")) {
@@ -689,7 +688,6 @@ int main ( int argc, char ** argv )
   // Code runs on the 3rd CPU by default
   SetAffinity((1 << 2));
 
-  SelfTest(opt_validate);
 
   //----------
   HashInfo * pInfo = findHash(hashToTest);
