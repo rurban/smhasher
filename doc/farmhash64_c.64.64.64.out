@@ -1,342 +1,2203 @@
-ok 1 - SelfTest - Verify 89 Hashes
-ok 2 - Found Hash # farmhash64_c
+ok 1 - Found Hash # farmhash64_c
 ###################################################################
 ### Testing farmhash64_c - no seed_state
 ### - farmhash64_with_seed (C99) -
 ### seedbits: 64 statebits: 64 hashbits: 64
 ###################################################################
+ok 2 - Verification code # farmhash64_c
+# farmhash64_c         - Verification value 0x96461B3D : Passed.
 ### Sanity Tests ###
-ok 3 - Verification code # farmhash64_c
 # Sanity check simple key bit flips and consistency..........
-ok 4 - SanityTest # farmhash64_c
+ok 3 - SanityTest # farmhash64_c
 # Sanity check null suffixes change the hash (simple)..........
-ok 5 - Appended Zeroes Test # farmhash64_c
-ok 6 - Sanity Test # farmhash64_c
+ok 4 - Appended Zeroes Test # farmhash64_c
+ok 5 - Sanity Test # farmhash64_c
 ### Speed Tests ###
 ## Bulk speed test - 262144-byte keys
-# Alignment  7 -  5.021 bytes/cycle - 14363.94 MiB/sec @ 3 ghz
-# Alignment  6 -  5.021 bytes/cycle - 14364.23 MiB/sec @ 3 ghz
-# Alignment  5 -  5.021 bytes/cycle - 14364.83 MiB/sec @ 3 ghz
-# Alignment  4 -  5.021 bytes/cycle - 14365.16 MiB/sec @ 3 ghz
-# Alignment  3 -  5.020 bytes/cycle - 14363.54 MiB/sec @ 3 ghz
-# Alignment  2 -  5.021 bytes/cycle - 14364.09 MiB/sec @ 3 ghz
-# Alignment  1 -  5.021 bytes/cycle - 14364.04 MiB/sec @ 3 ghz
-# Alignment  0 -  5.144 bytes/cycle - 14718.25 MiB/sec @ 3 ghz
-# Average      -  5.036 bytes/cycle - 14408.51 MiB/sec @ 3 ghz
+# Alignment  7 -  5.068 bytes/cycle - 14500.25 MiB/sec @ 3 ghz
+# Alignment  6 -  5.068 bytes/cycle - 14500.07 MiB/sec @ 3 ghz
+# Alignment  5 -  5.068 bytes/cycle - 14499.31 MiB/sec @ 3 ghz
+# Alignment  4 -  5.068 bytes/cycle - 14499.03 MiB/sec @ 3 ghz
+# Alignment  3 -  5.068 bytes/cycle - 14500.06 MiB/sec @ 3 ghz
+# Alignment  2 -  5.068 bytes/cycle - 14500.39 MiB/sec @ 3 ghz
+# Alignment  1 -  5.068 bytes/cycle - 14500.58 MiB/sec @ 3 ghz
+# Alignment  0 -  5.187 bytes/cycle - 14841.10 MiB/sec @ 3 ghz
+# Average      -  5.083 bytes/cycle - 14542.60 MiB/sec @ 3 ghz
 ## KeySpeed tests
-# farmhash64_c              0 byte keys       23.000 c/h
-# farmhash64_c              1 byte keys       38.248 c/h       38.248 c/b        0.026 b/c
+# farmhash64_c              0 byte keys       24.237 c/h
+# farmhash64_c              1 byte keys       38.586 c/h       38.586 c/b        0.026 b/c
 # farmhash64_c              2 byte keys       39.000 c/h       19.500 c/b        0.051 b/c
-# farmhash64_c              3 byte keys       43.046 c/h       14.349 c/b        0.070 b/c
-# farmhash64_c              4 byte keys       41.459 c/h       10.365 c/b        0.096 b/c
+# farmhash64_c              3 byte keys       39.000 c/h       13.000 c/b        0.077 b/c
+# farmhash64_c              4 byte keys       41.000 c/h       10.250 c/b        0.098 b/c
 # farmhash64_c              5 byte keys       42.000 c/h        8.400 c/b        0.119 b/c
-# farmhash64_c              6 byte keys       42.000 c/h        7.000 c/b        0.143 b/c
-# farmhash64_c              7 byte keys       43.958 c/h        6.280 c/b        0.159 b/c
-# farmhash64_c              8 byte keys       44.000 c/h        5.500 c/b        0.182 b/c
-# farmhash64_c              9 byte keys       53.867 c/h        5.985 c/b        0.167 b/c
-# farmhash64_c             10 byte keys       53.836 c/h        5.384 c/b        0.186 b/c
-# farmhash64_c             11 byte keys       53.863 c/h        4.897 c/b        0.204 b/c
-# farmhash64_c             12 byte keys       53.846 c/h        4.487 c/b        0.223 b/c
-# farmhash64_c             13 byte keys       53.872 c/h        4.144 c/b        0.241 b/c
-# farmhash64_c             14 byte keys       54.263 c/h        3.876 c/b        0.258 b/c
-# farmhash64_c             15 byte keys       53.857 c/h        3.590 c/b        0.279 b/c
-# farmhash64_c             16 byte keys       43.996 c/h        2.750 c/b        0.364 b/c
-# farmhash64_c             17 byte keys       54.669 c/h        3.216 c/b        0.311 b/c
-# farmhash64_c             18 byte keys       53.446 c/h        2.969 c/b        0.337 b/c
-# farmhash64_c             19 byte keys       53.381 c/h        2.810 c/b        0.356 b/c
-# farmhash64_c             20 byte keys       53.453 c/h        2.673 c/b        0.374 b/c
-# farmhash64_c             21 byte keys       53.688 c/h        2.557 c/b        0.391 b/c
-# farmhash64_c             22 byte keys       53.199 c/h        2.418 c/b        0.414 b/c
-# farmhash64_c             23 byte keys       53.444 c/h        2.324 c/b        0.430 b/c
-# farmhash64_c             24 byte keys       46.005 c/h        1.917 c/b        0.522 b/c
+# farmhash64_c              6 byte keys       42.143 c/h        7.024 c/b        0.142 b/c
+# farmhash64_c              7 byte keys       42.145 c/h        6.021 c/b        0.166 b/c
+# farmhash64_c              8 byte keys       44.689 c/h        5.586 c/b        0.179 b/c
+# farmhash64_c              9 byte keys       55.657 c/h        6.184 c/b        0.162 b/c
+# farmhash64_c             10 byte keys       53.890 c/h        5.389 c/b        0.186 b/c
+# farmhash64_c             11 byte keys       53.902 c/h        4.900 c/b        0.204 b/c
+# farmhash64_c             12 byte keys       53.903 c/h        4.492 c/b        0.223 b/c
+# farmhash64_c             13 byte keys       54.149 c/h        4.165 c/b        0.240 b/c
+# farmhash64_c             14 byte keys       53.828 c/h        3.845 c/b        0.260 b/c
+# farmhash64_c             15 byte keys       53.899 c/h        3.593 c/b        0.278 b/c
+# farmhash64_c             16 byte keys       44.768 c/h        2.798 c/b        0.357 b/c
+# farmhash64_c             17 byte keys       53.000 c/h        3.118 c/b        0.321 b/c
+# farmhash64_c             18 byte keys       53.000 c/h        2.944 c/b        0.340 b/c
+# farmhash64_c             19 byte keys       53.197 c/h        2.800 c/b        0.357 b/c
+# farmhash64_c             20 byte keys       53.371 c/h        2.669 c/b        0.375 b/c
+# farmhash64_c             21 byte keys       53.791 c/h        2.561 c/b        0.390 b/c
+# farmhash64_c             22 byte keys       53.202 c/h        2.418 c/b        0.414 b/c
+# farmhash64_c             23 byte keys       54.058 c/h        2.350 c/b        0.425 b/c
+# farmhash64_c             24 byte keys       45.000 c/h        1.875 c/b        0.533 b/c
 # farmhash64_c             25 byte keys       45.000 c/h        1.800 c/b        0.556 b/c
 # farmhash64_c             26 byte keys       45.000 c/h        1.731 c/b        0.578 b/c
 # farmhash64_c             27 byte keys       45.000 c/h        1.667 c/b        0.600 b/c
 # farmhash64_c             28 byte keys       45.000 c/h        1.607 c/b        0.622 b/c
-# farmhash64_c             29 byte keys       45.000 c/h        1.552 c/b        0.644 b/c
+# farmhash64_c             29 byte keys       47.830 c/h        1.649 c/b        0.606 b/c
 # farmhash64_c             30 byte keys       45.000 c/h        1.500 c/b        0.667 b/c
 # farmhash64_c             31 byte keys       45.000 c/h        1.452 c/b        0.689 b/c
-#                          Average < 32       47.325 c/h        3.053 c/b        0.328 b/c
-# farmhash64_c             32 byte keys       45.234 c/h        1.414 c/b        0.707 b/c
-# farmhash64_c             36 byte keys       63.690 c/h        1.769 c/b        0.565 b/c
-# farmhash64_c             40 byte keys       62.568 c/h        1.564 c/b        0.639 b/c
-# farmhash64_c             44 byte keys       62.240 c/h        1.415 c/b        0.707 b/c
-# farmhash64_c             48 byte keys       62.230 c/h        1.296 c/b        0.771 b/c
+#                          Average < 32       47.289 c/h        3.051 c/b        0.328 b/c
+# farmhash64_c             32 byte keys       45.000 c/h        1.406 c/b        0.711 b/c
+# farmhash64_c             36 byte keys       63.842 c/h        1.773 c/b        0.564 b/c
+# farmhash64_c             40 byte keys       62.000 c/h        1.550 c/b        0.645 b/c
+# farmhash64_c             44 byte keys       62.000 c/h        1.409 c/b        0.710 b/c
+# farmhash64_c             48 byte keys       62.287 c/h        1.298 c/b        0.771 b/c
 # farmhash64_c             52 byte keys       62.000 c/h        1.192 c/b        0.839 b/c
 # farmhash64_c             56 byte keys       62.000 c/h        1.107 c/b        0.903 b/c
 # farmhash64_c             60 byte keys       62.000 c/h        1.033 c/b        0.968 b/c
-# farmhash64_c             64 byte keys       62.256 c/h        0.973 c/b        1.028 b/c
-# farmhash64_c             68 byte keys       74.489 c/h        1.095 c/b        0.913 b/c
-# farmhash64_c             72 byte keys       75.621 c/h        1.050 c/b        0.952 b/c
-# farmhash64_c             76 byte keys       74.566 c/h        0.981 c/b        1.019 b/c
-# farmhash64_c             80 byte keys       74.809 c/h        0.935 c/b        1.069 b/c
-# farmhash64_c             84 byte keys       74.785 c/h        0.890 c/b        1.123 b/c
-# farmhash64_c             88 byte keys       76.254 c/h        0.867 c/b        1.154 b/c
-# farmhash64_c             92 byte keys       74.899 c/h        0.814 c/b        1.228 b/c
-# farmhash64_c             96 byte keys       74.855 c/h        0.780 c/b        1.282 b/c
-# farmhash64_c            100 byte keys       74.608 c/h        0.746 c/b        1.340 b/c
-# farmhash64_c            104 byte keys       74.620 c/h        0.718 c/b        1.394 b/c
-# farmhash64_c            108 byte keys       75.524 c/h        0.699 c/b        1.430 b/c
-# farmhash64_c            112 byte keys       74.885 c/h        0.669 c/b        1.496 b/c
-# farmhash64_c            116 byte keys       74.751 c/h        0.644 c/b        1.552 b/c
-# farmhash64_c            120 byte keys       74.732 c/h        0.623 c/b        1.606 b/c
-# farmhash64_c            124 byte keys       74.800 c/h        0.603 c/b        1.658 b/c
-#                         Average < 128       56.836 c/h        1.344 c/b        0.744 b/c
-# farmhash64_c            128 byte keys       93.196 c/h        0.728 c/b        1.373 b/c
-# farmhash64_c            256 byte keys       94.191 c/h        0.368 c/b        2.718 b/c
-# farmhash64_c            512 byte keys      142.637 c/h        0.279 c/b        3.590 b/c
-# farmhash64_c           1024 byte keys      239.316 c/h        0.234 c/b        4.279 b/c
-# farmhash64_c           2048 byte keys      444.948 c/h        0.217 c/b        4.603 b/c
-# farmhash64_c           4096 byte keys      840.481 c/h        0.205 c/b        4.873 b/c
-# farmhash64_c           8192 byte keys     1611.886 c/h        0.197 c/b        5.082 b/c
-# farmhash64_c          16384 byte keys     3130.483 c/h        0.191 c/b        5.234 b/c
-# farmhash64_c          32768 byte keys     6231.655 c/h        0.190 c/b        5.258 b/c
-# farmhash64_c          65536 byte keys    12543.292 c/h        0.191 c/b        5.225 b/c
-#                       Overall Average      432.650 c/h        0.214 c/b        4.669 b/c
-ok 7 - Speed (always passes) # farmhash64_c
+# farmhash64_c             64 byte keys       62.000 c/h        0.969 c/b        1.032 b/c
+# farmhash64_c             68 byte keys       75.293 c/h        1.107 c/b        0.903 b/c
+# farmhash64_c             72 byte keys       74.000 c/h        1.028 c/b        0.973 b/c
+# farmhash64_c             76 byte keys       74.996 c/h        0.987 c/b        1.013 b/c
+# farmhash64_c             80 byte keys       74.435 c/h        0.930 c/b        1.075 b/c
+# farmhash64_c             84 byte keys       76.363 c/h        0.909 c/b        1.100 b/c
+# farmhash64_c             88 byte keys       74.762 c/h        0.850 c/b        1.177 b/c
+# farmhash64_c             92 byte keys       74.671 c/h        0.812 c/b        1.232 b/c
+# farmhash64_c             96 byte keys       74.814 c/h        0.779 c/b        1.283 b/c
+# farmhash64_c            100 byte keys       74.871 c/h        0.749 c/b        1.336 b/c
+# farmhash64_c            104 byte keys       74.793 c/h        0.719 c/b        1.391 b/c
+# farmhash64_c            108 byte keys       74.636 c/h        0.691 c/b        1.447 b/c
+# farmhash64_c            112 byte keys       74.641 c/h        0.666 c/b        1.501 b/c
+# farmhash64_c            116 byte keys       74.713 c/h        0.644 c/b        1.553 b/c
+# farmhash64_c            120 byte keys       75.247 c/h        0.627 c/b        1.595 b/c
+# farmhash64_c            124 byte keys       76.662 c/h        0.618 c/b        1.617 b/c
+#                         Average < 128       56.808 c/h        1.343 c/b        0.744 b/c
+# farmhash64_c            128 byte keys       75.673 c/h        0.591 c/b        1.691 b/c
+# farmhash64_c            256 byte keys       91.164 c/h        0.356 c/b        2.808 b/c
+# farmhash64_c            512 byte keys      140.041 c/h        0.274 c/b        3.656 b/c
+# farmhash64_c           1024 byte keys      239.750 c/h        0.234 c/b        4.271 b/c
+# farmhash64_c           2048 byte keys      442.404 c/h        0.216 c/b        4.629 b/c
+# farmhash64_c           4096 byte keys      830.318 c/h        0.203 c/b        4.933 b/c
+# farmhash64_c           8192 byte keys     1600.922 c/h        0.195 c/b        5.117 b/c
+# farmhash64_c          16384 byte keys     3125.447 c/h        0.191 c/b        5.242 b/c
+# farmhash64_c          32768 byte keys     6314.437 c/h        0.193 c/b        5.189 b/c
+# farmhash64_c          65536 byte keys    12464.227 c/h        0.190 c/b        5.258 b/c
+#                       Overall Average      431.904 c/h        0.214 c/b        4.677 b/c
+ok 6 - Speed (always passes) # farmhash64_c
 ### Differential Tests ###
 # Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 64 bit hashes.
 # 1000 reps, 8303632000 total tests, expecting 0.00 random collisions..........
-ok 8 - Differential collisions # farmhash64_c
-ok 9 - Nothing skipped during differential collision check # farmhash64_c
+ok 7 - Differential collisions # farmhash64_c
+ok 8 - Nothing skipped during differential collision check # farmhash64_c
 # 0 total collisions, of which 0 single collisions were ignored
-ok 10 - ProcessDifferentials
+ok 9 - ProcessDifferentials
 # Testing 11017632 up-to-4-bit differentials in 128-bit keys -> 64 bit hashes.
 # 1000 reps, 11017632000 total tests, expecting 0.00 random collisions..........
-ok 11 - Differential collisions # farmhash64_c
-ok 12 - Nothing skipped during differential collision check # farmhash64_c
+ok 10 - Differential collisions # farmhash64_c
+ok 11 - Nothing skipped during differential collision check # farmhash64_c
 # 0 total collisions, of which 0 single collisions were ignored
-ok 13 - ProcessDifferentials
+ok 12 - ProcessDifferentials
 # Testing 2796416 up-to-3-bit differentials in 256-bit keys -> 64 bit hashes.
 # 1000 reps, 2796416000 total tests, expecting 0.00 random collisions..........
-ok 14 - Differential collisions # farmhash64_c
-ok 15 - Nothing skipped during differential collision check # farmhash64_c
+ok 13 - Differential collisions # farmhash64_c
+ok 14 - Nothing skipped during differential collision check # farmhash64_c
 # 0 total collisions, of which 0 single collisions were ignored
-ok 16 - ProcessDifferentials
-ok 17 - Differential # farmhash64_c
+ok 15 - ProcessDifferentials
+ok 16 - Differential # farmhash64_c
 ### Avalanche Tests ### - seed-bits: 64 hash-bits: 64
 # Samples 500000, expected error 0.00051200, confidence level 99.99994267%
-# Testing   0-bit keys.......... ok.     # worst-bit:   0.515% error-ratio: 9.776446e-01
-ok 18 - Strict Avalanche Criteria - 0 bit keys
-# Testing   8-bit keys.......... ok.     # worst-bit:   0.498% error-ratio: 1.012551e+00
-ok 19 - Strict Avalanche Criteria - 8 bit keys
-# Testing  16-bit keys.......... ok.     # worst-bit:   0.509% error-ratio: 1.029483e+00
-ok 20 - Strict Avalanche Criteria - 16 bit keys
-# Testing  24-bit keys.......... ok.     # worst-bit:   0.489% error-ratio: 1.012043e+00
-ok 21 - Strict Avalanche Criteria - 24 bit keys
-# Testing  32-bit keys.......... ok.     # worst-bit:   0.614% error-ratio: 9.942463e-01
-ok 22 - Strict Avalanche Criteria - 32 bit keys
-# Testing  40-bit keys.......... ok.     # worst-bit:   0.558% error-ratio: 1.007795e+00
-ok 23 - Strict Avalanche Criteria - 40 bit keys
-# Testing  48-bit keys.......... ok.     # worst-bit:   0.499% error-ratio: 1.023603e+00
-ok 24 - Strict Avalanche Criteria - 48 bit keys
-# Testing  56-bit keys.......... ok.     # worst-bit:   0.502% error-ratio: 9.816956e-01
-ok 25 - Strict Avalanche Criteria - 56 bit keys
-# Testing  64-bit keys.......... ok.     # worst-bit:   0.600% error-ratio: 9.807745e-01
-ok 26 - Strict Avalanche Criteria - 64 bit keys
-# Testing  72-bit keys.......... ok.     # worst-bit:   0.512% error-ratio: 1.006792e+00
-ok 27 - Strict Avalanche Criteria - 72 bit keys
-# Testing  80-bit keys.......... ok.     # worst-bit:   0.630% error-ratio: 9.898313e-01
-ok 28 - Strict Avalanche Criteria - 80 bit keys
-# Testing  88-bit keys.......... ok.     # worst-bit:   0.570% error-ratio: 9.689981e-01
-ok 29 - Strict Avalanche Criteria - 88 bit keys
-# Testing  96-bit keys.......... ok.     # worst-bit:   0.529% error-ratio: 9.984622e-01
-ok 30 - Strict Avalanche Criteria - 96 bit keys
-# Testing 104-bit keys.......... ok.     # worst-bit:   0.572% error-ratio: 1.033501e+00
-ok 31 - Strict Avalanche Criteria - 104 bit keys
-# Testing 112-bit keys.......... ok.     # worst-bit:   0.620% error-ratio: 9.895577e-01
-ok 32 - Strict Avalanche Criteria - 112 bit keys
-# Testing 120-bit keys.......... ok.     # worst-bit:   0.636% error-ratio: 1.003742e+00
-ok 33 - Strict Avalanche Criteria - 120 bit keys
-# Testing 128-bit keys.......... ok.     # worst-bit:   0.642% error-ratio: 1.025218e+00
-ok 34 - Strict Avalanche Criteria - 128 bit keys
-# Testing 136-bit keys.......... ok.     # worst-bit:   0.640% error-ratio: 9.999283e-01
-ok 35 - Strict Avalanche Criteria - 136 bit keys
-# Testing 144-bit keys.......... ok.     # worst-bit:   0.568% error-ratio: 9.972651e-01
-ok 36 - Strict Avalanche Criteria - 144 bit keys
-# Testing 152-bit keys.......... ok.     # worst-bit:   0.659% error-ratio: 9.944986e-01
-ok 37 - Strict Avalanche Criteria - 152 bit keys
-# Testing 152-bit keys.......... ok.     # worst-bit:   0.574% error-ratio: 1.004308e+00
-ok 38 - Strict Avalanche Criteria - 160 bit keys
-# Testing 256-bit keys.......... ok.     # worst-bit:   0.581% error-ratio: 1.002643e+00
-ok 39 - Strict Avalanche Criteria - 256 bit keys
-ok 40 - Strict Avalanche Criteria # farmhash64_c
+# Testing   0-bit keys.......... not ok! # worst-bit:  83.712% error-ratio: 3.481515e+02
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 11
+# seed    11.0 |..............................1.................................|
+# seed    12.0 |................................................................| x 35
+# seed    47.0 |........................................................11......| x 2
+# seed    49.0 |..........................................................1.....|
+# seed    50.0 |........................................................2.11....|
+# seed    51.0 |........................................................12.11...|
+# seed    52.0 |.........................................................12.1...|
+# seed    53.0 |........................................................4..2....|
+# seed    54.0 |........................................................34.1.111|
+# seed    55.0 |................................................3.1.....243.1232|
+# seed    56.0 |................................................23......8241.232|
+# seed    57.0 |........................................................993..14.|
+# seed    58.0 |....1...................................................1071.131|
+# seed    59.0 |1...............................................1..1....ö49b2151|
+# seed    60.0 |.1..........11..................................11..1...qA7eh222|
+# seed    61.0 |..13..1.....151....1.......1....11.....1.1.1.1..7.0.2....qz22337|
+# seed    62.0 |...13..1......4.............1...111.........1.1.58.9....Y.62.38a|
+# seed    63.0 |....15...11....7.....1...1.111..1..........1.3.1c70.b.11PÑ.m6198|
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 47
+# seed    47.0 |........................................................R.......|
+# seed    48.0 |........................................................@@......|
+# seed    49.0 |................................................................|
+# seed    50.0 |........................................................#.......|
+# seed    51.0 |........................................................@#.@s...|
+# seed    52.0 |..........................................................#.....|
+# seed    53.0 |........................................................#..#....|
+# seed    54.0 |........................................................##...6@@|
+# seed    55.0 |................................................#.......###.####|
+# seed    56.0 |................................................##......####.###|
+# seed    57.0 |........................................................###..@#.|
+# seed    58.0 |....@...................................................Ñ##@.###|
+# seed    59.0 |#.......................................................#####Ý##|
+# seed    60.0 |.............@...................................@..@...########|
+# seed    61.0 |..@#........@#.....@.............@.....#.%.S....#.#.#....#######|
+# seed    62.0 |...##.........#.............Z.....Ý.............##.#....#.##.###|
+# seed    63.0 |....¶#...h.....#.....@...@...@..@............#.@###.#.@###.##@##|
+#              +----------------------------------------------------------------+
+# 122 of 4096 bits failed (2.98%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 0.17825357
+#     key/seed errors: 11/64
+#     - seed bit 51 gtest probability not random: 100.0000 (15985250/16014750)
+#     - seed bit 54 gtest probability not random: 100.0000 (15972185/16027815)
+#     - with 9 more seed errors not described above.
+#     hash bit-level errors: 11/64
+#     - hash bit 15 gtest-prob not-random: 100.0000 (15983432/16016568)
+#     - hash bit 48 gtest-prob not-random: 100.0000 (16019324/15980676)
+#     - hash bit 50 gtest-prob not-random: 100.0000 (15952555/16047445)
+#     - with 8 more hash bit errors not described above.
+not ok 17 - Strict Avalanche Criteria - 0 bit keys
+# Testing   8-bit keys.......... not ok! # worst-bit:  83.730% error-ratio: 3.097151e+02
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 46
+# seed    46.0 |........................................................1.......|
+# seed    47.0 |................................................................| x 2
+# seed    49.0 |.........................................................1......|
+# seed    50.0 |........................................................1.......|
+# seed    51.0 |........................................................12.1....|
+# seed    52.0 |.........................................................12.....|
+# seed    53.0 |........................................................4.12....|
+# seed    54.0 |........................................................34.1.111|
+# seed    55.0 |................................................3.1.....233.1132|
+# seed    56.0 |................................................23......8331.232|
+# seed    57.0 |........................................................992..14.|
+# seed    58.0 |....1..........1.................................1......1061.131|
+# seed    59.0 |1...............................................1..1....ö49b2151|
+# seed    60.0 |.1..........11..................................111.1...qA7eh221|
+# seed    61.0 |..13..1.....15....11.......1.....1.....1.1.1.1..7.0.2....qz22337|
+# seed    62.0 |...13....1...14.............1...1.1.........1.1.68.9....Y.62.38a|
+# seed    63.0 |....15........17.....1...1...1..1.1........1.3.1c80.b.11PÑ.m6198|
+# key      0.0 |................................................................| x 8
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 50
+# seed    50.0 |........................................................#.......|
+# seed    51.0 |.........................................................#.@....|
+# seed    52.0 |..........................................................#.....|
+# seed    53.0 |........................................................#..#....|
+# seed    54.0 |........................................................##.@.Â@.|
+# seed    55.0 |................................................#.¶.....###.####|
+# seed    56.0 |................................................##......###@.###|
+# seed    57.0 |........................................................###..@#.|
+# seed    58.0 |....Ä..........%........................................Q##@.###|
+# seed    59.0 |@...............................................%.......#####@#@|
+# seed    60.0 |.............@...................................@..@...########|
+# seed    61.0 |..@#........@#.....@.......@.....#.....#.....Ê..#.#.#....#######|
+# seed    62.0 |...@#.........#.............................V.@.##.#....#.##.###|
+# seed    63.0 |....@#.........#.....#...#...@..@..........Ê.#.@###.#.@###.##%##|
+# key      0.0 |................................................................| x 8
+#              +----------------------------------------------------------------+
+# 120 of 4608 bits failed (2.60%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 0.15857414
+#     key/seed errors: 9/72
+#     - seed bit 54 gtest probability not random: 100.0000 (15972995/16027005)
+#     - seed bit 55 gtest probability not random: 100.0000 (15969865/16030135)
+#     - with 7 more seed errors not described above.
+#     hash bit-level errors: 12/64
+#     - hash bit 15 gtest-prob not-random: 100.0000 (17983980/18016020)
+#     - hash bit 48 gtest-prob not-random: 100.0000 (18018493/17981507)
+#     - hash bit 50 gtest-prob not-random: 100.0000 (17960638/18039362)
+#     - with 9 more hash bit errors not described above.
+not ok 18 - Strict Avalanche Criteria - 8 bit keys
+# Testing  16-bit keys.......... not ok! # worst-bit:  83.664% error-ratio: 2.791024e+02
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 49
+# seed    49.0 |..........................................................1.....|
+# seed    50.0 |........................................................2.1.....|
+# seed    51.0 |........................................................12.1....|
+# seed    52.0 |.........................................................12.1...|
+# seed    53.0 |........................................................4..2....|
+# seed    54.0 |........................................................34.1.111|
+# seed    55.0 |................................................3.1.....233.1232|
+# seed    56.0 |..............................................1.23......8231.232|
+# seed    57.0 |........................................................993..14.|
+# seed    58.0 |....1..........1.................................1......1071.131|
+# seed    59.0 |1...............................................1..1....ö49b2151|
+# seed    60.0 |.11..........1..................................11..1...qA7eh221|
+# seed    61.0 |..14..1.....151....1.......1....11.....2.1.1.1..7.0.2....qz22337|
+# seed    62.0 |...13....1....4.....1.......1...1.............1.68.9....Y.62.48a|
+# seed    63.0 |....15....1...17.....1...1...1..1.1..........3.1c70.b.11PÑ.m6198|
+# key      0.0 |................................................................| x 16
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 50
+# seed    50.0 |........................................................#.......|
+# seed    51.0 |.........................................................#.J....|
+# seed    52.0 |.........................................................®#.....|
+# seed    53.0 |........................................................#..#....|
+# seed    54.0 |........................................................##...©@@|
+# seed    55.0 |................................................#.@.....###.####|
+# seed    56.0 |................................................##......###@.###|
+# seed    57.0 |........................................................###..&#.|
+# seed    58.0 |....@...................................................@##@.###|
+# seed    59.0 |#...............................................@..®....#####@#@|
+# seed    60.0 |.Ë...........@..................................ñ@..@...########|
+# seed    61.0 |..@#........@#.....@.......@.....#.....#.....ã..#.#.#....#######|
+# seed    62.0 |...##.........#.............v.................@.##.#....#.##.###|
+# seed    63.0 |....@#.........#.....@...#...@..@.t..........#.@###.#.#@##.##&##|
+# key      0.0 |................................................................| x 16
+#              +----------------------------------------------------------------+
+# 123 of 5120 bits failed (2.40%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 0.14290043
+#     key/seed errors: 9/80
+#     - seed bit 54 gtest probability not random: 100.0000 (15971694/16028306)
+#     - seed bit 55 gtest probability not random: 100.0000 (15967782/16032218)
+#     - with 7 more seed errors not described above.
+#     hash bit-level errors: 12/64
+#     - hash bit 5 gtest-prob not-random: 100.0000 (19983975/20016025)
+#     - hash bit 14 gtest-prob not-random: 100.0000 (19983975/20016025)
+#     - hash bit 48 gtest-prob not-random: 100.0000 (20027073/19972927)
+#     - with 9 more hash bit errors not described above.
+not ok 19 - Strict Avalanche Criteria - 16 bit keys
+# Testing  24-bit keys.......... not ok! # worst-bit:  83.640% error-ratio: 2.535318e+02
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 47
+# seed    47.0 |.........................................................1......|
+# seed    48.0 |................................................................| x 2
+# seed    50.0 |........................................................1.1.....|
+# seed    51.0 |........................................................12.1....|
+# seed    52.0 |.........................................................12.....|
+# seed    53.0 |........................................................4..2....|
+# seed    54.0 |........................................................34.1.111|
+# seed    55.0 |................................................3.......233.2232|
+# seed    56.0 |................................................24......8341.132|
+# seed    57.0 |........................................................992..14.|
+# seed    58.0 |....1............................................1......10711131|
+# seed    59.0 |1...............................................1..1....ö39b2141|
+# seed    60.0 |.1..........11..................................11..1...qA7fh232|
+# seed    61.0 |..13........15.....1.......1....11.....2...1.1..7.0.21...qz22237|
+# seed    62.0 |...13.........41....1.......1....11.........1.1.68.9..1.Y.62.38a|
+# seed    63.0 |....15...1....18.....1...2...1..1.1........1.3.1b80.b.11PÑ.m6198|
+# key      0.0 |................................................................| x 24
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 50
+# seed    50.0 |........................................................#.......|
+# seed    51.0 |........................................................@#.#....|
+# seed    52.0 |.........................................................@#.....|
+# seed    53.0 |........................................................#..#....|
+# seed    54.0 |........................................................##...@@@|
+# seed    55.0 |................................................#.......###.####|
+# seed    56.0 |................................................##......####.###|
+# seed    57.0 |........................................................###..@#.|
+# seed    58.0 |....Ã...................................................@##@.###|
+# seed    59.0 |#...............................................@..Ü....#####Ô##|
+# seed    60.0 |.%..........@@..................................@@..@...########|
+# seed    61.0 |..@#........@#.....@.......@.....#.....#........#.#.#....#######|
+# seed    62.0 |...##.........#...................&...........ø.##.#....#.##.###|
+# seed    63.0 |....@#...@.....#.....@...#...@..@.Õ..........#.####.#.%@##.##@##|
+# key      0.0 |................................................................| x 24
+#              +----------------------------------------------------------------+
+# 124 of 5632 bits failed (2.20%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 0.12980826
+#     key/seed errors: 10/88
+#     - seed bit 54 gtest probability not random: 100.0000 (15974832/16025168)
+#     - seed bit 55 gtest probability not random: 100.0000 (15963502/16036498)
+#     - with 8 more seed errors not described above.
+#     hash bit-level errors: 11/64
+#     - hash bit 5 gtest-prob not-random: 100.0000 (21982569/22017431)
+#     - hash bit 48 gtest-prob not-random: 100.0000 (22024601/21975399)
+#     - hash bit 50 gtest-prob not-random: 100.0000 (21954959/22045041)
+#     - with 8 more hash bit errors not described above.
+not ok 20 - Strict Avalanche Criteria - 24 bit keys
+# Testing  32-bit keys.......... not ok! # worst-bit:  83.757% error-ratio: 2.331588e+02
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 18
+# seed    18.0 |........................................1.......................|
+# seed    19.0 |................................................................| x 20
+# seed    39.0 |...............................................1................|
+# seed    40.0 |................................................................| x 8
+# seed    48.0 |........................................................11......|
+# seed    49.0 |.........................................................1......|
+# seed    50.0 |........................................................1.......|
+# seed    51.0 |........................................................12.11...|
+# seed    52.0 |.........................................................12.....|
+# seed    53.0 |........................................................4..2....|
+# seed    54.0 |........................................................34....11|
+# seed    55.0 |................................................3.1.....243.2132|
+# seed    56.0 |................................................23......8331.232|
+# seed    57.0 |.................................................1......993..14.|
+# seed    58.0 |....1............................................11.....10711131|
+# seed    59.0 |1...............................................1..1....ö49b2141|
+# seed    60.0 |.11..........1...................................1..1...qA7eh232|
+# seed    61.0 |..14........15.....1.......1....11.....1...1.1..7.0.21...qz22337|
+# seed    62.0 |...13........15.............1...111.........1.1.68.9..1.Y.62.48a|
+# seed    63.0 |....15....1....7.....1...1...1..1..........1.3.1c80.b.11QÑ.m6198|
+# key      0.0 |................................................................| x 2
+# key      2.0 |..........................1.....................................|
+# key      3.0 |................................................................| x 5
+# key      8.0 |..............................................1.................|
+# key      9.0 |................................................................| x 23
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 50
+# seed    50.0 |........................................................#.......|
+# seed    51.0 |........................................................@#.¶....|
+# seed    52.0 |.........................................................@#.....|
+# seed    53.0 |........................................................#..#....|
+# seed    54.0 |........................................................##....@Ô|
+# seed    55.0 |................................................#.......###.####|
+# seed    56.0 |................................................##......####.###|
+# seed    57.0 |........................................................###..@#.|
+# seed    58.0 |....Ö...................................................S##@.###|
+# seed    59.0 |#...............................................@..¤....#####@##|
+# seed    60.0 |.............@...................................@..@...########|
+# seed    61.0 |..@#........%#.....@.......Â.....@.....#.....@..#.#.#....#######|
+# seed    62.0 |...@#.........#...................@.............##.#....#.##.###|
+# seed    63.0 |....%#.........#.....@...#...@..@..........¤.#.####.#.@###.##@##|
+# key      0.0 |................................................................| x 32
+#              +----------------------------------------------------------------+
+# 119 of 6144 bits failed (1.94%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 0.11937733
+#     key/seed errors: 9/96
+#     - seed bit 54 gtest probability not random: 100.0000 (15976049/16023951)
+#     - seed bit 55 gtest probability not random: 100.0000 (15965758/16034242)
+#     - with 7 more seed errors not described above.
+#     hash bit-level errors: 9/64
+#     - hash bit 50 gtest-prob not-random: 100.0000 (23950654/24049346)
+#     - hash bit 51 gtest-prob not-random: 100.0000 (24034135/23965865)
+#     - hash bit 52 gtest-prob not-random: 100.0000 (24038001/23961999)
+#     - with 6 more hash bit errors not described above.
+not ok 21 - Strict Avalanche Criteria - 32 bit keys
+# Testing  40-bit keys.......... not ok! # worst-bit:  83.610% error-ratio: 2.140868e+02
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 2
+# seed     2.0 |...............................................1................|
+# seed     3.0 |................................................................| x 15
+# seed    18.0 |......1.........................................................|
+# seed    19.0 |................................................................| x 28
+# seed    47.0 |........................................................1.......|
+# seed    48.0 |................................................................| x 2
+# seed    50.0 |........................................................2.1.....|
+# seed    51.0 |........................................................12.11...|
+# seed    52.0 |.........................................................12.....|
+# seed    53.0 |........................................................4..2....|
+# seed    54.0 |.................................................1......34.1.111|
+# seed    55.0 |................................................3.1.....233.2232|
+# seed    56.0 |................................................23......8231.232|
+# seed    57.0 |........................................................992..14.|
+# seed    58.0 |....1............................................1......1071.131|
+# seed    59.0 |1...............................................1..1....ö49b2151|
+# seed    60.0 |.1...........1.......................1..........11..1...qA7eh222|
+# seed    61.0 |..13..1.....15.....1.......1....11.....2.1.1.1..7.0.2....qz22337|
+# seed    62.0 |...13........14.....1.......1...1...........1.1.68.9....Y.62.37a|
+# seed    63.0 |....15...11...17.....1...1...1..1.1........1.3.1c80.b.11PÑ.m6198|
+# key      0.0 |................................................................| x 13
+# key     13.0 |...........1....................................................|
+# key     14.0 |................................................................| x 26
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 50
+# seed    50.0 |........................................................#.......|
+# seed    51.0 |........................................................ñ#.@....|
+# seed    52.0 |..........................................................#.....|
+# seed    53.0 |........................................................#..#....|
+# seed    54.0 |........................................................##....@@|
+# seed    55.0 |................................................#.......###.####|
+# seed    56.0 |................................................##......####.###|
+# seed    57.0 |........................................................###..%#.|
+# seed    58.0 |....ë...................................................Õ###.##@|
+# seed    59.0 |#...............................................¤..&....#####¤#@|
+# seed    60.0 |.Ö...........@...................................@......########|
+# seed    61.0 |..@#........@#.....%.............@.....#...c.@..#.#.#....#######|
+# seed    62.0 |...Ý#.........#.................@...............##.#....#.##.###|
+# seed    63.0 |....##...Å....©#.....@...#...@..@............#.@###.#.@@##.##.##|
+# key      0.0 |................................................................| x 40
+#              +----------------------------------------------------------------+
+# 118 of 6656 bits failed (1.77%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 0.10961242
+#     key/seed errors: 11/104
+#     - seed bit 51 gtest probability not random: 100.0000 (15980436/16019564)
+#     - seed bit 54 gtest probability not random: 100.0000 (15974484/16025516)
+#     - with 9 more seed errors not described above.
+#     hash bit-level errors: 9/64
+#     - hash bit 50 gtest-prob not-random: 100.0000 (25955456/26044544)
+#     - hash bit 51 gtest-prob not-random: 100.0000 (26021926/25978074)
+#     - hash bit 52 gtest-prob not-random: 100.0000 (26043598/25956402)
+#     - with 6 more hash bit errors not described above.
+not ok 22 - Strict Avalanche Criteria - 40 bit keys
+# Testing  48-bit keys.......... not ok! # worst-bit:  83.906% error-ratio: 2.006963e+02
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 16
+# seed    16.0 |.......................1........................................|
+# seed    17.0 |................................................................| x 4
+# seed    21.0 |..............1.................................................|
+# seed    22.0 |................................................................| x 25
+# seed    47.0 |.........................................................1......|
+# seed    48.0 |................................................................| x 2
+# seed    50.0 |........................................................2.1.....|
+# seed    51.0 |........................................................12.1....|
+# seed    52.0 |.........................................................12.1...|
+# seed    53.0 |........................................................4..2..1.|
+# seed    54.0 |........................................................34.1.111|
+# seed    55.0 |................................................3.1.....233.1232|
+# seed    56.0 |................................................23......8231.242|
+# seed    57.0 |........................................................993..14.|
+# seed    58.0 |....1............................................1......10711131|
+# seed    59.0 |1...1...........................................1..1....ö49b2151|
+# seed    60.0 |.11.........11..................................11..1...qA7fh231|
+# seed    61.0 |..13........15....11.......1....11.....1...1.1..7.0.21...qz22337|
+# seed    62.0 |...13........15.............1...1.1.......1...1.58.9....Y.62.48a|
+# seed    63.0 |....15...1.....7.....1...1...1..1.1........1.3.1c80.b.11QÑ.m6198|
+# key      0.0 |................................................................| x 38
+# key     38.0 |..................................1.............................|
+# key     39.0 |................................................................| x 9
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 50
+# seed    50.0 |........................................................#.......|
+# seed    51.0 |........................................................Ü#.@....|
+# seed    52.0 |.........................................................@#.....|
+# seed    53.0 |........................................................#..#....|
+# seed    54.0 |........................................................##...Ü@@|
+# seed    55.0 |................................................#.......###.####|
+# seed    56.0 |................................................##......####.###|
+# seed    57.0 |........................................................###..@#.|
+# seed    58.0 |....@...................................................@##@.###|
+# seed    59.0 |#...............................................@.......#####@#@|
+# seed    60.0 |............@#..................................@#..@...########|
+# seed    61.0 |..@#........@#.....@.......@....@#.....#.....&..#.#.#@...#######|
+# seed    62.0 |...@#.........#.............k...%.........Ê...@.##.#....#.##.###|
+# seed    63.0 |....@#...I.....#.....#...#...@..@............#.@###.#.@###.##@##|
+# key      0.0 |................................................................| x 48
+#              +----------------------------------------------------------------+
+# 126 of 7168 bits failed (1.76%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 0.10275651
+#     key/seed errors: 10/112
+#     - seed bit 54 gtest probability not random: 100.0000 (15978265/16021735)
+#     - seed bit 55 gtest probability not random: 100.0000 (15968893/16031107)
+#     - with 8 more seed errors not described above.
+#     hash bit-level errors: 10/64
+#     - hash bit 50 gtest-prob not-random: 100.0000 (27959896/28040104)
+#     - hash bit 51 gtest-prob not-random: 100.0000 (28026423/27973577)
+#     - hash bit 52 gtest-prob not-random: 100.0000 (28036890/27963110)
+#     - with 7 more hash bit errors not described above.
+not ok 23 - Strict Avalanche Criteria - 48 bit keys
+# Testing  56-bit keys.......... not ok! # worst-bit:  83.752% error-ratio: 1.867683e+02
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 46
+# seed    46.0 |........................................................1.......|
+# seed    47.0 |................................................................| x 3
+# seed    50.0 |........................................................2.1.....|
+# seed    51.0 |........................................................12.11...|
+# seed    52.0 |.........................................................13.....|
+# seed    53.0 |........................................................4..1..1.|
+# seed    54.0 |........................................................34.1.111|
+# seed    55.0 |................................................3.1.....233.1232|
+# seed    56.0 |................................................23......8231.232|
+# seed    57.0 |........................................................993.114.|
+# seed    58.0 |....1...................................................1071.231|
+# seed    59.0 |1......................1.......................11..1....ö49b2151|
+# seed    60.0 |.11..1......11..............................1....1..1...qA7eh222|
+# seed    61.0 |..14..1.....15.....1.......1....11.....2...1.1..7.0.21...qz22327|
+# seed    62.0 |...13........14.............1.....1.........1.1.68.9..1.Y.62.38a|
+# seed    63.0 |....15....1....7.....1...1...1..1..........1.3.1c80.b.12QÑ.m6198|
+# key      0.0 |................................................................| x 34
+# key     34.0 |.......................1........................................|
+# key     35.0 |................................................................| x 7
+# key     42.0 |.......................................................1........|
+# key     43.0 |................................................................| x 4
+# key     47.0 |............................................................1...|
+# key     48.0 |................................................................| x 8
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 50
+# seed    50.0 |........................................................#.......|
+# seed    51.0 |.........................................................#.#....|
+# seed    52.0 |..........................................................#.....|
+# seed    53.0 |........................................................#..#....|
+# seed    54.0 |........................................................##...Ê@@|
+# seed    55.0 |................................................#.......###.@###|
+# seed    56.0 |................................................##......####.###|
+# seed    57.0 |........................................................###..@#.|
+# seed    58.0 |....@...................................................@##*.###|
+# seed    59.0 |#...............................................@.......#####@##|
+# seed    60.0 |............¶@...................................@..@...########|
+# seed    61.0 |..##........##.....&.......@....3@.....#.....@..#.#.#....#######|
+# seed    62.0 |...##.........#.............%.....©...........w.##.#....#.##.###|
+# seed    63.0 |....@#.........#.....#...#...@..@..........p.#.####.#.@###.##O##|
+# key      0.0 |................................................................| x 56
+#              +----------------------------------------------------------------+
+# 121 of 7680 bits failed (1.58%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 0.09562535
+#     key/seed errors: 9/120
+#     - seed bit 54 gtest probability not random: 100.0000 (15971666/16028334)
+#     - seed bit 55 gtest probability not random: 100.0000 (15972257/16027743)
+#     - with 7 more seed errors not described above.
+#     hash bit-level errors: 9/64
+#     - hash bit 50 gtest-prob not-random: 100.0000 (29960548/30039452)
+#     - hash bit 51 gtest-prob not-random: 100.0000 (30026213/29973787)
+#     - hash bit 52 gtest-prob not-random: 100.0000 (30042869/29957131)
+#     - with 6 more hash bit errors not described above.
+not ok 24 - Strict Avalanche Criteria - 56 bit keys
+# Testing  64-bit keys.......... not ok! # worst-bit:  83.681% error-ratio: 1.747940e+02
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 7
+# seed     7.0 |...........1....................................................|
+# seed     8.0 |................................................................| x 19
+# seed    27.0 |..............................1.................................|
+# seed    28.0 |................................................................| x 4
+# seed    32.0 |.......................1........................................|
+# seed    33.0 |................................................................| x 8
+# seed    41.0 |....................................................1...........|
+# seed    42.0 |................................................................| x 8
+# seed    50.0 |........................................................2.......|
+# seed    51.0 |........................................................12.1....|
+# seed    52.0 |.........................1...............................12.....|
+# seed    53.0 |........................................................4..1....|
+# seed    54.0 |........................................................34...111|
+# seed    55.0 |................................................3.1.....233.1232|
+# seed    56.0 |................................................24......8231.242|
+# seed    57.0 |........................................................993..14.|
+# seed    58.0 |....1............................................11.....1071.131|
+# seed    59.0 |1...............................................1..1....ö39b2141|
+# seed    60.0 |.11..........1......1...........................11..1...qA7eh221|
+# seed    61.0 |..14........15.....1.......1.....1.....2.1.1.1.17.0.21...qz22237|
+# seed    62.0 |...13........14.....1...1...1...1.1.........1.1.67.9....Y.62.38a|
+# seed    63.0 |....15...11....7.....1...1...1..1.1........1.3.1b80.b.11PÑ.m6198|
+# key      0.0 |................................................................| x 3
+# key      3.0 |.......................................................1........|
+# key      4.0 |................................................................| x 31
+# key     35.0 |........................................................1.......|
+# key     36.0 |................................................................| x 5
+# key     41.0 |........................1.......................................|
+# key     42.0 |................................................................| x 18
+# key     60.0 |................1...............................................|
+# key     61.0 |................................................................| x 3
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 50
+# seed    50.0 |........................................................#.......|
+# seed    51.0 |........................................................@#.@....|
+# seed    52.0 |.........................................................@#.....|
+# seed    53.0 |........................................................#..#....|
+# seed    54.0 |........................................................##...@@@|
+# seed    55.0 |................................................#.......###.####|
+# seed    56.0 |................................................##......####.###|
+# seed    57.0 |........................................................###..##.|
+# seed    58.0 |........................................................@##@.###|
+# seed    59.0 |@...............................................@..@....#####@#@|
+# seed    60.0 |.............@..................................@@..@...########|
+# seed    61.0 |..@#........@#.....Õ.......%.....#.....#.@......#.#.#....#######|
+# seed    62.0 |...##.........#...................J.............##.#....#.##.###|
+# seed    63.0 |....@#....ã....#.....@...#...@..@............#.@###.#.@Ü##.##@##|
+# key      0.0 |................................................................| x 64
+#              +----------------------------------------------------------------+
+# 120 of 8192 bits failed (1.46%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 0.08949454
+#     key/seed errors: 9/128
+#     - seed bit 54 gtest probability not random: 100.0000 (15973189/16026811)
+#     - seed bit 55 gtest probability not random: 100.0000 (15961192/16038808)
+#     - with 7 more seed errors not described above.
+#     hash bit-level errors: 9/64
+#     - hash bit 48 gtest-prob not-random: 100.0000 (32021180/31978820)
+#     - hash bit 50 gtest-prob not-random: 100.0000 (31959818/32040182)
+#     - hash bit 52 gtest-prob not-random: 100.0000 (32042191/31957809)
+#     - with 6 more hash bit errors not described above.
+not ok 25 - Strict Avalanche Criteria - 64 bit keys
+# Testing  72-bit keys.......... not ok! # worst-bit:  83.699% error-ratio: 1.645019e+02
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 27
+# seed    27.0 |.............................1..................................|
+# seed    28.0 |................................................................| x 8
+# seed    36.0 |.............................................................1..|
+# seed    37.0 |................................................................| x 12
+# seed    49.0 |.........................................................1......|
+# seed    50.0 |........................................................2.......|
+# seed    51.0 |........................................................12.1....|
+# seed    52.0 |.........................................................12.....|
+# seed    53.0 |........................................................4.12....|
+# seed    54.0 |........................................................34.1.111|
+# seed    55.0 |................................................3.1.....233.1232|
+# seed    56.0 |................................................24......8231.233|
+# seed    57.0 |........................................................992..14.|
+# seed    58.0 |....1............................................11.....1071.131|
+# seed    59.0 |1...............................................1..1....ö49b2151|
+# seed    60.0 |.1..........11..................................11..1...qA7eh221|
+# seed    61.0 |..14..1.....15.....1.......1....11.....2.1.1.1..7.0.21...qz22337|
+# seed    62.0 |...13........14.............1...1...........1.1.58.9..1.X.62.48a|
+# seed    63.0 |....15...1....17.....1...1...1..1.1........1.3.1c80.b.11PÑ.m6198|
+# key      0.0 |................................................................| x 38
+# key     38.0 |....................................1...........................|
+# key     39.0 |................................................................| x 30
+# key     69.0 |.......................................................1........|
+# key     70.0 |................................................................| x 2
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 50
+# seed    50.0 |........................................................#.......|
+# seed    51.0 |.........................................................#.@....|
+# seed    52.0 |..........................................................#.....|
+# seed    53.0 |........................................................#..#....|
+# seed    54.0 |........................................................##....@@|
+# seed    55.0 |................................................#.&.....###.####|
+# seed    56.0 |................................................##......####.###|
+# seed    57.0 |........................................................###..@#.|
+# seed    58.0 |........................................................@##@.###|
+# seed    59.0 |#...............................................&..Å....#####@##|
+# seed    60.0 |.n...........#...................................@..@...########|
+# seed    61.0 |..##........@#.....@.......*.....#.....#...@.*..#.#.#....#######|
+# seed    62.0 |...@#.........#.............@...............q.L.##.#....#.##.###|
+# seed    63.0 |....©#.........#.....@...#...@...............#.####.#.@###.##@##|
+# key      0.0 |................................................................| x 72
+#              +----------------------------------------------------------------+
+# 119 of 8704 bits failed (1.37%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 0.08422498
+#     key/seed errors: 9/136
+#     - seed bit 54 gtest probability not random: 100.0000 (15977612/16022388)
+#     - seed bit 55 gtest probability not random: 100.0000 (15966376/16033624)
+#     - with 7 more seed errors not described above.
+#     hash bit-level errors: 9/64
+#     - hash bit 50 gtest-prob not-random: 100.0000 (33953213/34046787)
+#     - hash bit 51 gtest-prob not-random: 100.0000 (34022520/33977480)
+#     - hash bit 52 gtest-prob not-random: 100.0000 (34042078/33957922)
+#     - with 6 more hash bit errors not described above.
+not ok 26 - Strict Avalanche Criteria - 72 bit keys
+# Testing  80-bit keys.......... not ok! # worst-bit:  83.740% error-ratio: 1.557766e+02
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 5
+# seed     5.0 |............................1...................................|
+# seed     6.0 |................................................................| x 38
+# seed    44.0 |............................................................1...|
+# seed    45.0 |............................1...................................|
+# seed    46.0 |................................................................|
+# seed    47.0 |........................................................1.......|
+# seed    48.0 |................................................................| x 2
+# seed    50.0 |........................................................2..1....|
+# seed    51.0 |........................................................12.11...|
+# seed    52.0 |.........................................................12.....|
+# seed    53.0 |........................................................4..2....|
+# seed    54.0 |........................................................44.1.111|
+# seed    55.0 |................................................3.1.....233.1232|
+# seed    56.0 |................................................23......8231.232|
+# seed    57.0 |........................................................993..14.|
+# seed    58.0 |....1............................................1.1....1071.131|
+# seed    59.0 |2...............................................1..1....ö49b2141|
+# seed    60.0 |.11.........11..................................11..1...qA7eh221|
+# seed    61.0 |..14........15.....1.......1....11.....2.1.1.1..7.0.2....qz22337|
+# seed    62.0 |...13........14.....1.......1...1...........1.1.68.9....Y.62.48a|
+# seed    63.0 |....15....1....7.....1...1...1..1..........1.3.1c70.b.11QÑ.m6198|
+# key      0.0 |................................................................| x 80
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 50
+# seed    50.0 |........................................................#.......|
+# seed    51.0 |........................................................W#.@....|
+# seed    52.0 |..........................................................#.....|
+# seed    53.0 |........................................................#..#....|
+# seed    54.0 |........................................................##....@@|
+# seed    55.0 |................................................#.......###.####|
+# seed    56.0 |................................................##......####.###|
+# seed    57.0 |........................................................###..@#.|
+# seed    58.0 |........................................................@##@.###|
+# seed    59.0 |#...............................................@..@....#####@##|
+# seed    60.0 |.............@...................................@..@...########|
+# seed    61.0 |..@#........@#.....@.......¤....X#.....#...@.¤..#.#.#....#######|
+# seed    62.0 |...@#.........#.................@.............%.##.#....#.##.###|
+# seed    63.0 |....@#.........#.....#...#...@..@............#.@###.#.@###.##®##|
+# key      0.0 |................................................................| x 80
+#              +----------------------------------------------------------------+
+# 119 of 9216 bits failed (1.29%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 0.07975759
+#     key/seed errors: 10/144
+#     - seed bit 54 gtest probability not random: 100.0000 (15976378/16023622)
+#     - seed bit 55 gtest probability not random: 100.0000 (15975586/16024414)
+#     - with 8 more seed errors not described above.
+#     hash bit-level errors: 9/64
+#     - hash bit 50 gtest-prob not-random: 100.0000 (35947243/36052757)
+#     - hash bit 51 gtest-prob not-random: 100.0000 (36023897/35976103)
+#     - hash bit 52 gtest-prob not-random: 100.0000 (36040501/35959499)
+#     - with 6 more hash bit errors not described above.
+not ok 27 - Strict Avalanche Criteria - 80 bit keys
+# Testing  88-bit keys.......... not ok! # worst-bit:  83.784% error-ratio: 1.473087e+02
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 27
+# seed    27.0 |.....1..........................................................|
+# seed    28.0 |................................................................| x 11
+# seed    39.0 |...........................1....................................|
+# seed    40.0 |................................................................| x 7
+# seed    47.0 |.........................................................1......|
+# seed    48.0 |................................................................| x 2
+# seed    50.0 |........................................................1.1.....|
+# seed    51.0 |........................................................12.11...|
+# seed    52.0 |.........................................................12.1...|
+# seed    53.0 |........................................................4..2....|
+# seed    54.0 |........................................................34.1.111|
+# seed    55.0 |................................................3.......233.1232|
+# seed    56.0 |................................................23......8231.232|
+# seed    57.0 |........................................................993..14.|
+# seed    58.0 |....1..........1........................................1071.131|
+# seed    59.0 |1...............................................1..11...ö39b2141|
+# seed    60.0 |..1..........1......1...........................11..1...qA7eh222|
+# seed    61.0 |..13........15.....1.......1.....1.....1.1.1.1..7.0.21...qz32337|
+# seed    62.0 |...13........14.................1...........1.1.68.9..1.X.62.38a|
+# seed    63.0 |....15........17.....1...1...1..1.1..........3.1c70.b.11QÑ.m6198|
+# key      0.0 |................................................................| x 66
+# key     66.0 |.....................................................1..........|
+# key     67.0 |................................................................| x 21
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 50
+# seed    50.0 |........................................................#.......|
+# seed    51.0 |........................................................¤#.@....|
+# seed    52.0 |.........................................................Õ#.....|
+# seed    53.0 |........................................................#..#....|
+# seed    54.0 |........................................................##....@@|
+# seed    55.0 |................................................#.......###.####|
+# seed    56.0 |................................................##......###@.###|
+# seed    57.0 |........................................................###..@#.|
+# seed    58.0 |....Q...................................................Ü##@.###|
+# seed    59.0 |#...............................................Û.......#####@#@|
+# seed    60.0 |.............@..................................@#..®...########|
+# seed    61.0 |..@#........%#.....@.......@.....@.....#...@.@..#.#.#....#######|
+# seed    62.0 |...@#.........#.................................##.#....#.##.###|
+# seed    63.0 |....@#.........#.....@...#...@..@............#.@###.#.@@##.##.##|
+# key      0.0 |................................................................| x 88
+#              +----------------------------------------------------------------+
+# 117 of 9728 bits failed (1.20%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 0.07542204
+#     key/seed errors: 9/152
+#     - seed bit 54 gtest probability not random: 100.0000 (15975124/16024876)
+#     - seed bit 55 gtest probability not random: 100.0000 (15969328/16030672)
+#     - with 7 more seed errors not described above.
+#     hash bit-level errors: 9/64
+#     - hash bit 50 gtest-prob not-random: 100.0000 (37950656/38049344)
+#     - hash bit 51 gtest-prob not-random: 100.0000 (38024426/37975574)
+#     - hash bit 52 gtest-prob not-random: 100.0000 (38041494/37958506)
+#     - with 6 more hash bit errors not described above.
+not ok 28 - Strict Avalanche Criteria - 88 bit keys
+# Testing  96-bit keys.......... not ok! # worst-bit:  83.710% error-ratio: 1.400019e+02
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 48
+# seed    48.0 |.........................................................1......| x 2
+# seed    50.0 |........................................................2.......|
+# seed    51.0 |........................................................12.11...|
+# seed    52.0 |.........................................................12.1...|
+# seed    53.0 |........................................................4..2....|
+# seed    54.0 |........................................................34.1.111|
+# seed    55.0 |................................................3.1.....233.2132|
+# seed    56.0 |................................................24......8231.232|
+# seed    57.0 |........................................................993..14.|
+# seed    58.0 |....1.............................................1.....1061.131|
+# seed    59.0 |1...............................................1..1....ö49b2151|
+# seed    60.0 |.1..........11......1...........................11..1...qA7eh222|
+# seed    61.0 |..14........15.....1.......1.....1.....1...1.1..7.0.21...qz22327|
+# seed    62.0 |...13........15.....1...1...1...111.......1.1.1.68.9....Y.61.48a|
+# seed    63.0 |....15...11....7.....1...1...1..1.1........1.3.1c80.b.11QÑ.m6198|
+# key      0.0 |................................................................| x 34
+# key     34.0 |....................1...........................................|
+# key     35.0 |................................................................| x 61
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 50
+# seed    50.0 |........................................................#.......|
+# seed    51.0 |........................................................Ë#.@....|
+# seed    52.0 |.........................................................@#.....|
+# seed    53.0 |........................................................#..#....|
+# seed    54.0 |........................................................##....@.|
+# seed    55.0 |................................................#.Q.....###.####|
+# seed    56.0 |................................................##......####.###|
+# seed    57.0 |........................................................###..@#.|
+# seed    58.0 |....@...................................................@##@.###|
+# seed    59.0 |#...............................................@.......#####@##|
+# seed    60.0 |.............@...................................@......########|
+# seed    61.0 |..©#........@#.....@.......@.....#.....#...@.@..#.#.#....#######|
+# seed    62.0 |...ã#........Y#...................W...........@.##.#....#.##.###|
+# seed    63.0 |....@#.........#.....@...#...@..@.@........Ã.#.@###.#.@###.##@##|
+# key      0.0 |................................................................| x 96
+#              +----------------------------------------------------------------+
+# 121 of 10240 bits failed (1.18%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 0.07168095
+#     key/seed errors: 9/160
+#     - seed bit 54 gtest probability not random: 100.0000 (15981070/16018930)
+#     - seed bit 55 gtest probability not random: 100.0000 (15970821/16029179)
+#     - with 7 more seed errors not described above.
+#     hash bit-level errors: 9/64
+#     - hash bit 50 gtest-prob not-random: 100.0000 (39953963/40046037)
+#     - hash bit 51 gtest-prob not-random: 100.0000 (40024580/39975420)
+#     - hash bit 52 gtest-prob not-random: 100.0000 (40040884/39959116)
+#     - with 6 more hash bit errors not described above.
+not ok 29 - Strict Avalanche Criteria - 96 bit keys
+# Testing 104-bit keys.......... not ok! # worst-bit:  83.728% error-ratio: 1.333894e+02
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................|
+# seed     1.0 |.........................................1......................|
+# seed     2.0 |................................................................| x 45
+# seed    47.0 |.........................................................1......|
+# seed    48.0 |................................................................| x 2
+# seed    50.0 |........................................................1.11....|
+# seed    51.0 |........................................................12.1....|
+# seed    52.0 |.........................................................12.....|
+# seed    53.0 |........................................................4..2....|
+# seed    54.0 |........................................................34.1.111|
+# seed    55.0 |................................................3.......233.1232|
+# seed    56.0 |................................................23......8231.232|
+# seed    57.0 |........................................................993..14.|
+# seed    58.0 |....1..........1.................................1......10711131|
+# seed    59.0 |1...............................................1..1....ö49b2151|
+# seed    60.0 |.11.........11..................................11..1...qA6eh222|
+# seed    61.0 |..13..1.....15....11.......1....11.....2.1.1.1.17.0.21...qz22337|
+# seed    62.0 |...13........14.............1...............1.1.68.9....Y.62.48a|
+# seed    63.0 |....15....11...7.....1...2.1.1..1.1........1.3.1c80.b.11PÑ.m6198|
+# key      0.0 |................................................................| x 44
+# key     44.0 |............................................................1...|
+# key     45.0 |................................................................| x 59
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 47
+# seed    47.0 |.........................................................ÿ......|
+# seed    48.0 |................................................................| x 2
+# seed    50.0 |........................................................#.......|
+# seed    51.0 |.........................................................#.@....|
+# seed    52.0 |.........................................................P#.....|
+# seed    53.0 |........................................................#..#....|
+# seed    54.0 |........................................................##....@@|
+# seed    55.0 |................................................#.......###.####|
+# seed    56.0 |................................................##......####.###|
+# seed    57.0 |........................................................###..@#.|
+# seed    58.0 |....*...................................................@##@.##@|
+# seed    59.0 |@...............................................@.......#####@##|
+# seed    60.0 |.............@..................................¶@..@...########|
+# seed    61.0 |..@#........@#.....%.......@.....#.....#.....@..#.#.#....#######|
+# seed    62.0 |...@#........¶#...............................w.##.#....#.##.###|
+# seed    63.0 |....¤#.........#.....@...#...@..#..........E.#.####.#.@###.#####|
+# key      0.0 |................................................................| x 104
+#              +----------------------------------------------------------------+
+# 120 of 10752 bits failed (1.12%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 0.06829540
+#     key/seed errors: 10/168
+#     - seed bit 54 gtest probability not random: 100.0000 (15981429/16018571)
+#     - seed bit 55 gtest probability not random: 100.0000 (15965218/16034782)
+#     - with 8 more seed errors not described above.
+#     hash bit-level errors: 9/64
+#     - hash bit 50 gtest-prob not-random: 100.0000 (41951936/42048064)
+#     - hash bit 51 gtest-prob not-random: 100.0000 (42035723/41964277)
+#     - hash bit 52 gtest-prob not-random: 100.0000 (42044840/41955160)
+#     - with 6 more hash bit errors not described above.
+not ok 30 - Strict Avalanche Criteria - 104 bit keys
+# Testing 112-bit keys.......... not ok! # worst-bit:  84.020% error-ratio: 1.280805e+02
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 50
+# seed    50.0 |........................................................2.1.....|
+# seed    51.0 |........................................................12.1....|
+# seed    52.0 |.........................................................12.....|
+# seed    53.0 |........................................................4.12....|
+# seed    54.0 |........................................................34.1.111|
+# seed    55.0 |................................................3.1.....232.2232|
+# seed    56.0 |................................................23......8231.232|
+# seed    57.0 |........................................................993..14.|
+# seed    58.0 |....1............................................11.....1071.131|
+# seed    59.0 |1...............................................11.1....ö39b2151|
+# seed    60.0 |.1..........11..............................1...11..1...qA7fh222|
+# seed    61.0 |..13........151....1.......1....11.....2...1.1..7.0.21...qz22337|
+# seed    62.0 |...13..1.....15.............1...1.............1.68.9..1.Y.62.48a|
+# seed    63.0 |....15....1....7.....1...1...1..1.1........1.3.1c80.b.11QÑ.m6198|
+# key      0.0 |................................................................| x 18
+# key     18.0 |..................1.............................................|
+# key     19.0 |................................................................| x 40
+# key     59.0 |......................................................1.........|
+# key     60.0 |................................................................| x 52
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 50
+# seed    50.0 |........................................................#.......|
+# seed    51.0 |.........................................................#.@....|
+# seed    52.0 |.........................................................X#.....|
+# seed    53.0 |........................................................#.&#....|
+# seed    54.0 |........................................................##...@@@|
+# seed    55.0 |................................................#.......###.####|
+# seed    56.0 |................................................##......####.###|
+# seed    57.0 |........................................................###..@#.|
+# seed    58.0 |....®...................................................Ü##@.###|
+# seed    59.0 |#...............................................@..¶....#####@#@|
+# seed    60.0 |............&@..................................@@..@...########|
+# seed    61.0 |..@#........@#.....&.......@.....@.....#...@.Õ..#.#.#*...#######|
+# seed    62.0 |...##.........#...............................%.##.#....#.##.###|
+# seed    63.0 |....@#....*....#.....#...#...@..@............#.####.#.@###.##@##|
+# key      0.0 |................................................................| x 112
+#              +----------------------------------------------------------------+
+# 124 of 11264 bits failed (1.10%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 0.06557720
+#     key/seed errors: 9/176
+#     - seed bit 54 gtest probability not random: 100.0000 (15968729/16031271)
+#     - seed bit 55 gtest probability not random: 100.0000 (15970025/16029975)
+#     - with 7 more seed errors not described above.
+#     hash bit-level errors: 9/64
+#     - hash bit 50 gtest-prob not-random: 100.0000 (43950797/44049203)
+#     - hash bit 51 gtest-prob not-random: 100.0000 (44024464/43975536)
+#     - hash bit 52 gtest-prob not-random: 100.0000 (44038610/43961390)
+#     - with 6 more hash bit errors not described above.
+not ok 31 - Strict Avalanche Criteria - 112 bit keys
+# Testing 120-bit keys.......... not ok! # worst-bit:  83.780% error-ratio: 1.217454e+02
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 46
+# seed    46.0 |...............1................................................|
+# seed    47.0 |................................................................| x 3
+# seed    50.0 |........................................................2.1.....|
+# seed    51.0 |........................................................12.11...|
+# seed    52.0 |.........................................................12.....|
+# seed    53.0 |........................................................4.12....|
+# seed    54.0 |........................................................34.1.111|
+# seed    55.0 |................................................3.1.....243.1232|
+# seed    56.0 |................................................24......8331.232|
+# seed    57.0 |........................................................992..14.|
+# seed    58.0 |....1............................................11.....1071.131|
+# seed    59.0 |2...............................................1..1....ö39b2142|
+# seed    60.0 |.11..........11.............................1...11..1...qA7eh222|
+# seed    61.0 |..14........151....1.......1.....1.....2.1.1.1..7.0.21...qz22337|
+# seed    62.0 |...13........14.....1.......1...111.........1.1.58.9....Y.62.48a|
+# seed    63.0 |....15...1.....7.....1...1...1..1............3.1c80.b.11PÑ.m6198|
+# key      0.0 |................................................................| x 46
+# key     46.0 |.........................................1......................|
+# key     47.0 |................................................................| x 37
+# key     84.0 |.................................1..............................|
+# key     85.0 |................................................................| x 21
+# key    106.0 |.........1......................................................|
+# key    107.0 |................................................................| x 13
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 50
+# seed    50.0 |........................................................#.@.....|
+# seed    51.0 |.........................................................#.@....|
+# seed    52.0 |..........................................................#.....|
+# seed    53.0 |........................................................#..#....|
+# seed    54.0 |........................................................##...¶@%|
+# seed    55.0 |................................................#.......###.####|
+# seed    56.0 |................................................##......####.###|
+# seed    57.0 |........................................................###..@#.|
+# seed    58.0 |....T...................................................%##@.###|
+# seed    59.0 |#...............................................@.......#####@##|
+# seed    60.0 |.............@..................................@©..@...########|
+# seed    61.0 |..@#........Õ#.....@.......&.....@.....#.....@..#.#.#....#######|
+# seed    62.0 |...##........&#...............................@.##.#....#.##.###|
+# seed    63.0 |....@#...@.....#.....#...#...@..@............#.####.#.@###.##@##|
+# key      0.0 |................................................................| x 120
+#              +----------------------------------------------------------------+
+# 120 of 11776 bits failed (1.02%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 0.06233362
+#     key/seed errors: 10/184
+#     - seed bit 54 gtest probability not random: 100.0000 (15980104/16019896)
+#     - seed bit 55 gtest probability not random: 100.0000 (15971949/16028051)
+#     - with 8 more seed errors not described above.
+#     hash bit-level errors: 8/64
+#     - hash bit 50 gtest-prob not-random: 100.0000 (45958155/46041845)
+#     - hash bit 52 gtest-prob not-random: 100.0000 (46037585/45962415)
+#     - hash bit 56 gtest-prob not-random: 100.0000 (45847448/46152552)
+#     - with 5 more hash bit errors not described above.
+not ok 32 - Strict Avalanche Criteria - 120 bit keys
+# Testing 128-bit keys.......... not ok! # worst-bit:  83.752% error-ratio: 1.172454e+02
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 47
+# seed    47.0 |........................................................1.......|
+# seed    48.0 |................................................................| x 2
+# seed    50.0 |........................................................2.......|
+# seed    51.0 |........................................................12.1....|
+# seed    52.0 |.........................................................12.1...|
+# seed    53.0 |.................................................1......4.12....|
+# seed    54.0 |........................................................34.1.111|
+# seed    55.0 |................................................3.1.....233.1232|
+# seed    56.0 |................................................23......8331.232|
+# seed    57.0 |........................................................993..14.|
+# seed    58.0 |....1.............................................1.....1061.131|
+# seed    59.0 |1...............................................1..1....ö39b2151|
+# seed    60.0 |.11.........11..................................11..1...qA7fh222|
+# seed    61.0 |..14....1...15.....1.......1....11.....2.1.1.1..7.0.21...qz22337|
+# seed    62.0 |...13....1...14.........1...1...1......1......1.68.9..1.Y.62.38a|
+# seed    63.0 |....15...1.....7.....1...1.1.1..1.1........1.3.1b80.b.11QÑ.m6198|
+# key      0.0 |................................................................| x 5
+# key      5.0 |........................................................1.......|
+# key      6.0 |................................................................| x 86
+# key     92.0 |.................1..............................................|
+# key     93.0 |................................................................| x 26
+# key    119.0 |......................................................1.........|
+# key    120.0 |................................................................| x 2
+# key    122.0 |.....................................1..........................|
+# key    123.0 |................................................................| x 4
+# key    127.0 |.......................................................1........|
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 50
+# seed    50.0 |........................................................#.......|
+# seed    51.0 |........................................................@#.@....|
+# seed    52.0 |.........................................................@#.....|
+# seed    53.0 |........................................................#..#....|
+# seed    54.0 |........................................................##...Õ@@|
+# seed    55.0 |................................................#.......###.@###|
+# seed    56.0 |................................................##......####.###|
+# seed    57.0 |........................................................###..%#.|
+# seed    58.0 |....@...................................................@##@.##@|
+# seed    59.0 |#...............................................@..&....#####@##|
+# seed    60.0 |.*e..........@..................................@#..Â...########|
+# seed    61.0 |..@#........##.....@.......@.....@.....#.C...@..#.#.#....#######|
+# seed    62.0 |...@#.........#.................@.............@.##.#....#.##.###|
+# seed    63.0 |....@#.........#.....@...#...@..@.@..........#.@###.#.@###.##@##|
+# key      0.0 |................................................................| x 128
+#              +----------------------------------------------------------------+
+# 125 of 12288 bits failed (1.02%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 0.06002964
+#     key/seed errors: 9/192
+#     - seed bit 54 gtest probability not random: 100.0000 (15975674/16024326)
+#     - seed bit 55 gtest probability not random: 100.0000 (15968556/16031444)
+#     - with 7 more seed errors not described above.
+#     hash bit-level errors: 10/64
+#     - hash bit 48 gtest-prob not-random: 100.0000 (48025901/47974099)
+#     - hash bit 50 gtest-prob not-random: 100.0000 (47958332/48041668)
+#     - hash bit 51 gtest-prob not-random: 100.0000 (48032196/47967804)
+#     - with 7 more hash bit errors not described above.
+not ok 33 - Strict Avalanche Criteria - 128 bit keys
+# Testing 136-bit keys.......... not ok! # worst-bit:  83.716% error-ratio: 1.123869e+02
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 21
+# seed    21.0 |....................1...........................................|
+# seed    22.0 |................................................................| x 27
+# seed    49.0 |.........................................................1......|
+# seed    50.0 |........................................................2.1.....|
+# seed    51.0 |........................................................11.11...|
+# seed    52.0 |.........................................................12.1...|
+# seed    53.0 |........................................................4..1....|
+# seed    54.0 |........................................................34...111|
+# seed    55.0 |................................................3.1.....233.1232|
+# seed    56.0 |................................................24......8241.232|
+# seed    57.0 |........................................................993..14.|
+# seed    58.0 |....1..........1........................................1061.131|
+# seed    59.0 |1...............................................1..1....ö49b2141|
+# seed    60.0 |.11.........11..................................11..1...qA7eh222|
+# seed    61.0 |..14..1.....15.....1.......1....11.....2.1.1.1..7.0.2....qz22327|
+# seed    62.0 |...13.........4.....1.......1...1.1.........1.1.58.9..1.Y.62.38a|
+# seed    63.0 |....15...1.....7.....1...1...1..1.1........1.3.1c80.b.11QÑ.m6198|
+# key      0.0 |................................................................| x 19
+# key     19.0 |............................................1...................|
+# key     20.0 |................................................................| x 38
+# key     58.0 |.............1..................................................|
+# key     59.0 |................................................................| x 77
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 50
+# seed    50.0 |........................................................#.......|
+# seed    51.0 |........................................................Ë#.#M...|
+# seed    52.0 |.........................................................@#.....|
+# seed    53.0 |........................................................#..#....|
+# seed    54.0 |........................................................##...@@@|
+# seed    55.0 |................................................#.Ü.....###.####|
+# seed    56.0 |................................................##......###@.###|
+# seed    57.0 |........................................................###..##.|
+# seed    58.0 |.........................................................##L.###|
+# seed    59.0 |@...............................................@..Õ....#####.#@|
+# seed    60.0 |.............@...................................@..Ö...########|
+# seed    61.0 |..##........@#.....@.......@.....@.....#.%.Õ.@..#.#.#....#######|
+# seed    62.0 |...@#.........#.................V.x...........¤.##.#....#.##.###|
+# seed    63.0 |....@#...Ã.....#.....@...#...@..@............#.@###.#.@###.##@##|
+# key      0.0 |................................................................| x 136
+#              +----------------------------------------------------------------+
+# 123 of 12800 bits failed (0.96%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 0.05754210
+#     key/seed errors: 10/200
+#     - seed bit 54 gtest probability not random: 100.0000 (15976036/16023964)
+#     - seed bit 55 gtest probability not random: 100.0000 (15969205/16030795)
+#     - with 8 more seed errors not described above.
+#     hash bit-level errors: 8/64
+#     - hash bit 50 gtest-prob not-random: 100.0000 (49949874/50050126)
+#     - hash bit 52 gtest-prob not-random: 100.0000 (50034506/49965494)
+#     - hash bit 56 gtest-prob not-random: 100.0000 (49848296/50151704)
+#     - with 5 more hash bit errors not described above.
+not ok 34 - Strict Avalanche Criteria - 136 bit keys
+# Testing 144-bit keys.......... not ok! # worst-bit:  83.759% error-ratio: 1.081104e+02
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 30
+# seed    30.0 |...................1............................................|
+# seed    31.0 |................................................................| x 4
+# seed    35.0 |.......................1........................................|
+# seed    36.0 |................................................................| x 10
+# seed    46.0 |........................................................1.......|
+# seed    47.0 |................................................................| x 3
+# seed    50.0 |........................................................1.......|
+# seed    51.0 |........................................................12.1....|
+# seed    52.0 |.........................................................12.1...|
+# seed    53.0 |........................................................4..2..1.|
+# seed    54.0 |...............1........................................34.1.111|
+# seed    55.0 |....................................1...........3.1.....233.1232|
+# seed    56.0 |................................................23......8241.232|
+# seed    57.0 |........................................................993..14.|
+# seed    58.0 |....1..............................................1....1071.131|
+# seed    59.0 |1...............................................1..1....ö49b2141|
+# seed    60.0 |.11..........1..............................1...11..1...qA6fh222|
+# seed    61.0 |..13....1...15.....1.......1....11.....2.1.1.1..7.0.21...qz22337|
+# seed    62.0 |...13.........4.....1.......1....11.........1.1.58.9....Y.62.38a|
+# seed    63.0 |....15....1...17.....1...1.1.1..1.1........1.3.1c80.b.11QÑ.m6198|
+# key      0.0 |................................................................| x 34
+# key     34.0 |.........................1......................................|
+# key     35.0 |................................................................| x 21
+# key     56.0 |................1...............................................|
+# key     57.0 |................................................................| x 2
+# key     59.0 |...........................................1....................|
+# key     60.0 |................................................................| x 8
+# key     68.0 |.................................................1..............|
+# key     69.0 |................................................................| x 3
+# key     72.0 |.........................................1......................|
+# key     73.0 |................................................................| x 7
+# key     80.0 |..............................................................1.|
+# key     81.0 |................................................................| x 37
+# key    118.0 |..............1.................................................|
+# key    119.0 |................................................................| x 25
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 50
+# seed    50.0 |........................................................#.......|
+# seed    51.0 |.........................................................#.%....|
+# seed    52.0 |..........................................................#.....|
+# seed    53.0 |........................................................#..#....|
+# seed    54.0 |........................................................##.@.&#@|
+# seed    55.0 |................................................#.......###.####|
+# seed    56.0 |................................................##......####.###|
+# seed    57.0 |........................................................###..@#.|
+# seed    58.0 |...................................................@....@##@.@#@|
+# seed    59.0 |#...............................................@..ø....#####@##|
+# seed    60.0 |.............@..................................ã#..@...########|
+# seed    61.0 |..@#........@#.............@.....@.....#.....@..#.#.#....#######|
+# seed    62.0 |...##.........#...............................@.##.#....#.##.###|
+# seed    63.0 |....@#.........#.....#...#...@..@............#.@###.#.@@##.##%##|
+# key      0.0 |................................................................| x 144
+#              +----------------------------------------------------------------+
+# 118 of 13312 bits failed (0.89%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 0.05535251
+#     key/seed errors: 9/208
+#     - seed bit 54 gtest probability not random: 100.0000 (15968543/16031457)
+#     - seed bit 55 gtest probability not random: 100.0000 (15965275/16034725)
+#     - with 7 more seed errors not described above.
+#     hash bit-level errors: 9/64
+#     - hash bit 48 gtest-prob not-random: 100.0000 (52028688/51971312)
+#     - hash bit 50 gtest-prob not-random: 100.0000 (51958627/52041373)
+#     - hash bit 52 gtest-prob not-random: 100.0000 (52035476/51964524)
+#     - with 6 more hash bit errors not described above.
+not ok 35 - Strict Avalanche Criteria - 144 bit keys
+# Testing 152-bit keys.......... not ok! # worst-bit:  83.798% error-ratio: 1.041935e+02
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 43
+# seed    43.0 |...............1................................................|
+# seed    44.0 |................................................................| x 5
+# seed    49.0 |.........................................................1......|
+# seed    50.0 |........................................................2.11....|
+# seed    51.0 |........................................................12.11...|
+# seed    52.0 |.........................................................12.....|
+# seed    53.0 |........................................................4..2....|
+# seed    54.0 |........................................................34.1.111|
+# seed    55.0 |................................................3.1.....243.1232|
+# seed    56.0 |................................................23......8241.232|
+# seed    57.0 |........................................................993..14.|
+# seed    58.0 |....1...................................................10711131|
+# seed    59.0 |1.............................1.................1..1....ö49b2151|
+# seed    60.0 |.11.........11..................................11..1...qA7eh222|
+# seed    61.0 |..13..1.1...15.....1.......1....11.....2.1.1.1.17.0.11...qz22337|
+# seed    62.0 |...13........15.....1.......1...111.......1.1.1.58.9....Y.62.48a|
+# seed    63.0 |....15...11....7.....1...1...1..1.1........1.3.1c80.b.11QÑ.m6198|
+# key      0.0 |................................................................| x 8
+# key      8.0 |.........1......................................................|
+# key      9.0 |................................................................| x 35
+# key     44.0 |..............................................................1.|
+# key     45.0 |................................................................| x 23
+# key     68.0 |......1.........................................................|
+# key     69.0 |................................................................| x 42
+# key    111.0 |........................................1.......................|
+# key    112.0 |................................................................| x 40
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 50
+# seed    50.0 |........................................................#.......|
+# seed    51.0 |.........................................................#.@....|
+# seed    52.0 |.........................................................ð#.....|
+# seed    53.0 |........................................................#..#....|
+# seed    54.0 |........................................................##...@@¤|
+# seed    55.0 |................................................#.Ë.....###.####|
+# seed    56.0 |................................................##......####.###|
+# seed    57.0 |........................................................###..@#.|
+# seed    58.0 |........................................................@##@.###|
+# seed    59.0 |#...............................................%..V....#####.##|
+# seed    60.0 |.............@..................................¶#..@...########|
+# seed    61.0 |..@#........@#.....@.......®.....@.....#...ê.@..#.#.#....#######|
+# seed    62.0 |...##.........#.................................##.#....#.##.###|
+# seed    63.0 |....@#...ö.....#.....@...#...@....®..........#.@###.#.@###.##@##|
+# key      0.0 |................................................................| x 152
+#              +----------------------------------------------------------------+
+# 119 of 13824 bits failed (0.86%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 0.05334710
+#     key/seed errors: 9/216
+#     - seed bit 54 gtest probability not random: 100.0000 (15975903/16024097)
+#     - seed bit 55 gtest probability not random: 100.0000 (15967457/16032543)
+#     - with 7 more seed errors not described above.
+#     hash bit-level errors: 9/64
+#     - hash bit 50 gtest-prob not-random: 100.0000 (53956565/54043435)
+#     - hash bit 51 gtest-prob not-random: 100.0000 (54029555/53970445)
+#     - hash bit 52 gtest-prob not-random: 100.0000 (54040154/53959846)
+#     - with 6 more hash bit errors not described above.
+not ok 36 - Strict Avalanche Criteria - 152 bit keys
+# Testing 152-bit keys.......... not ok! # worst-bit:  83.802% error-ratio: 1.041246e+02
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 12
+# seed    12.0 |.........................................................1......|
+# seed    13.0 |................................................................| x 37
+# seed    50.0 |........................................................2.11....|
+# seed    51.0 |........................................................12.11...|
+# seed    52.0 |.........................................................12.....|
+# seed    53.0 |........................................................4.12....|
+# seed    54.0 |........................................................34.1.111|
+# seed    55.0 |................................................3.1.....233.1232|
+# seed    56.0 |................................................23......8231.232|
+# seed    57.0 |........................................................993..14.|
+# seed    58.0 |....1.............................................1.....10611131|
+# seed    59.0 |1...............................................1..1....ö39b2141|
+# seed    60.0 |.11.........11..............................1...11..1...qA7eh232|
+# seed    61.0 |..14..1.....151....1.......1....11.....2.1.1.1..7.0.211..qz22337|
+# seed    62.0 |...13........14.............1...1...........1.1.68.9..1.Y.62.38a|
+# seed    63.0 |....15...11....7.....1...1...1..1.1........1.3.1c80.b111PÑ.m6198|
+# key      0.0 |................................................................| x 105
+# key    105.0 |.............................................1..................|
+# key    106.0 |................................................................| x 22
+# key    128.0 |................................................1...............|
+# key    129.0 |................................................................| x 23
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 50
+# seed    50.0 |........................................................#.......|
+# seed    51.0 |........................................................@#.@....|
+# seed    52.0 |..........................................................#.....|
+# seed    53.0 |........................................................#.6#....|
+# seed    54.0 |........................................................##....@@|
+# seed    55.0 |................................................#.......###.####|
+# seed    56.0 |................................................##......####.###|
+# seed    57.0 |........................................................###..@#.|
+# seed    58.0 |....@...................................................Ý##Ý.###|
+# seed    59.0 |#...............................................@..Ô....#####@##|
+# seed    60.0 |.............@..............................7....#..@...########|
+# seed    61.0 |..@#........@#.....@.......&.....@.....#.....@..#.#.#®...#######|
+# seed    62.0 |...@#.........#...............................@.##.#....#.##.###|
+# seed    63.0 |....@#...K.....#.....@...@...@..@............#.@###.#.@###.##@##|
+# key      0.0 |................................................................| x 152
+#              +----------------------------------------------------------------+
+# 121 of 13824 bits failed (0.88%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 0.05331180
+#     key/seed errors: 9/216
+#     - seed bit 54 gtest probability not random: 100.0000 (15975751/16024249)
+#     - seed bit 55 gtest probability not random: 100.0000 (15964586/16035414)
+#     - with 7 more seed errors not described above.
+#     hash bit-level errors: 9/64
+#     - hash bit 48 gtest-prob not-random: 100.0000 (54026359/53973641)
+#     - hash bit 50 gtest-prob not-random: 100.0000 (53947520/54052480)
+#     - hash bit 52 gtest-prob not-random: 100.0000 (54034471/53965529)
+#     - with 6 more hash bit errors not described above.
+not ok 37 - Strict Avalanche Criteria - 160 bit keys
+# Testing 200-bit keys.......... not ok! # worst-bit:  83.722% error-ratio: 8.519735e+01
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 18
+# seed    18.0 |...................1............................................|
+# seed    19.0 |................................................................| x 27
+# seed    46.0 |.....................................1..........................|
+# seed    47.0 |........................................................1.......|
+# seed    48.0 |................................................................|
+# seed    49.0 |.........................................................1......|
+# seed    50.0 |........................................................1.1.....|
+# seed    51.0 |........................................................12.1....|
+# seed    52.0 |.........................................................12.....|
+# seed    53.0 |........................................................4.12....|
+# seed    54.0 |........................................................34...111|
+# seed    55.0 |................................................3.1.....233.1232|
+# seed    56.0 |................................................23......8231.232|
+# seed    57.0 |........................................................992..14.|
+# seed    58.0 |....1............................................1......10711131|
+# seed    59.0 |1...............................................11.1....ö39b2141|
+# seed    60.0 |.11.........11.......................1..........11..1...qA7eh232|
+# seed    61.0 |..13........15.....1.......1.....1.....1...1.1.17.0.21...qz22337|
+# seed    62.0 |...14........141....1.......1...11..........1.1.68.9..1.Y.62.38a|
+# seed    63.0 |....15...11....7.....1...1.1.1..1.1........1.3.1b80.b.11PÑ.m5198|
+# key      0.0 |................................................................| x 46
+# key     46.0 |...........................................................1....|
+# key     47.0 |................................................................| x 3
+# key     50.0 |.............................................1..................|
+# key     51.0 |................................................................| x 38
+# key     89.0 |....................................................1...........|
+# key     90.0 |................................................................| x 55
+# key    145.0 |............1...................................................|
+# key    146.0 |................................................................| x 54
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 50
+# seed    50.0 |........................................................#.......|
+# seed    51.0 |........................................................@#.@....|
+# seed    52.0 |.........................................................@#.....|
+# seed    53.0 |........................................................#.t#....|
+# seed    54.0 |........................................................##...®@%|
+# seed    55.0 |................................................#.©.....###.####|
+# seed    56.0 |................................................##......####.###|
+# seed    57.0 |........................................................###..@#.|
+# seed    58.0 |........................................................¶###.###|
+# seed    59.0 |@...............................................s.......#####@##|
+# seed    60.0 |............q@..................................@@..@...########|
+# seed    61.0 |..##........@#.....@.......Å.....@.....#...Ö.Õ..#.#.#....#######|
+# seed    62.0 |...##.........#.................WY..........®.T.##.#....#.##.###|
+# seed    63.0 |....@#.........#.....#...#...@..*..........*.#.@###.#.@###.##@##|
+# key      0.0 |................................................................| x 200
+#              +----------------------------------------------------------------+
+# 126 of 16896 bits failed (0.75%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 0.04362104
+#     key/seed errors: 9/264
+#     - seed bit 54 gtest probability not random: 100.0000 (15974936/16025064)
+#     - seed bit 55 gtest probability not random: 100.0000 (15968366/16031634)
+#     - with 7 more seed errors not described above.
+#     hash bit-level errors: 9/64
+#     - hash bit 50 gtest-prob not-random: 100.0000 (65952993/66047007)
+#     - hash bit 51 gtest-prob not-random: 100.0000 (66029318/65970682)
+#     - hash bit 52 gtest-prob not-random: 100.0000 (66044004/65955996)
+#     - with 6 more hash bit errors not described above.
+not ok 38 - Strict Avalanche Criteria - 200 bit keys
+# Testing 256-bit keys.......... not ok! # worst-bit:  83.813% error-ratio: 7.083427e+01
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 17
+# seed    17.0 |..................................1.............................|
+# seed    18.0 |................................................................| x 30
+# seed    48.0 |........................................................1.......|
+# seed    49.0 |.........................................................1.1....|
+# seed    50.0 |........................................................2.1.....|
+# seed    51.0 |........................................................12.1....|
+# seed    52.0 |.........................................................12.1...|
+# seed    53.0 |........................................................4.12..1.|
+# seed    54.0 |........................................................34.1.111|
+# seed    55.0 |................................................3.1.....233.1132|
+# seed    56.0 |................................................24......8241.232|
+# seed    57.0 |........................................................983..141|
+# seed    58.0 |....1............................................1.1....1071.132|
+# seed    59.0 |1...........1...................................1..1....ö39b2141|
+# seed    60.0 |.11.........111.................................11..1...qA7eh222|
+# seed    61.0 |..14........15.....1.......1....11.....2...1.1..7.0.2....qz22337|
+# seed    62.0 |...13........15....1........1...111.........1.1.68.9....Y.62.48a|
+# seed    63.0 |....15...11...18.....1...1...1..1.1........1.3.1c70.b.11QÑ.m6198|
+# key      0.0 |................................................................| x 13
+# key     13.0 |.........................................................1......|
+# key     14.0 |................................................................| x 47
+# key     61.0 |..1.............................................................|
+# key     62.0 |................................................................| x 11
+# key     73.0 |.1..1...........................................................|
+# key     74.0 |................................................................| x 74
+# key    148.0 |.................................................1..............|
+# key    149.0 |................................................................| x 6
+# key    155.0 |.........................1......................................|
+# key    156.0 |................................................................| x 37
+# key    193.0 |............................................1...................|
+# key    194.0 |................................................................| x 33
+# key    227.0 |..............................1.................................|
+# key    228.0 |................................................................| x 28
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 50
+# seed    50.0 |........................................................#.......|
+# seed    51.0 |........................................................@#.@....|
+# seed    52.0 |.........................................................@#.W...|
+# seed    53.0 |........................................................#..#....|
+# seed    54.0 |........................................................##....@@|
+# seed    55.0 |................................................#.......###.####|
+# seed    56.0 |................................................##......####.###|
+# seed    57.0 |........................................................###..@#.|
+# seed    58.0 |........................................................@##@.###|
+# seed    59.0 |@...............................................@.......#####@##|
+# seed    60.0 |.............@..................................v@..@...########|
+# seed    61.0 |..@#........@#.....Ü.............#.....#...@.@..#.#.#....#######|
+# seed    62.0 |...##........@#.................g.X.........Û...##.#....#.##.###|
+# seed    63.0 |....@#.........#.....@...#...@..&.%..........#.@###.#.@###.##@##|
+# key      0.0 |................................................................| x 256
+#              +----------------------------------------------------------------+
+# 122 of 20480 bits failed (0.60%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 0.03626714
+#     key/seed errors: 9/320
+#     - seed bit 54 gtest probability not random: 100.0000 (15976696/16023304)
+#     - seed bit 55 gtest probability not random: 100.0000 (15967099/16032901)
+#     - with 7 more seed errors not described above.
+#     hash bit-level errors: 7/64
+#     - hash bit 50 gtest-prob not-random: 100.0000 (79959113/80040887)
+#     - hash bit 52 gtest-prob not-random: 100.0000 (80043155/79956845)
+#     - hash bit 56 gtest-prob not-random: 100.0000 (79844902/80155098)
+#     - with 4 more hash bit errors not described above.
+not ok 39 - Strict Avalanche Criteria - 256 bit keys
+# Testing 512-bit keys.......... not ok! # worst-bit:  83.771% error-ratio: 3.965664e+01
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 50
+# seed    50.0 |........................................................2.1.....|
+# seed    51.0 |........................................................12.1....|
+# seed    52.0 |.........................................................12.....|
+# seed    53.0 |........................................................4..2..1.|
+# seed    54.0 |........................................................34...111|
+# seed    55.0 |................................................4.1.....233.1232|
+# seed    56.0 |................................................24......7241.232|
+# seed    57.0 |........................................................993..14.|
+# seed    58.0 |....1..........1........................................1071.131|
+# seed    59.0 |1...............................................1..1....ö39b2151|
+# seed    60.0 |.11.........11..................................11..1...qA7fh232|
+# seed    61.0 |..13........151....1.......1....11.....1...1.1..7.0.21...qz22337|
+# seed    62.0 |...13........15.....1.......1...111.........1.1.68.9....Y.62.38a|
+# seed    63.0 |....15.........7.....1...2...1..1.1........1.3.1b80.b.11PÑ.m6198|
+# key      0.0 |................................................................| x 12
+# key     12.0 |....1...........................................................|
+# key     13.0 |................................................................| x 44
+# key     57.0 |.............................................................1..|
+# key     58.0 |................................................................| x 38
+# key     96.0 |...........................................................1....|
+# key     97.0 |................................................................| x 25
+# key    122.0 |..............1.................................................|
+# key    123.0 |................................................................| x 76
+# key    199.0 |...........................1....................................|
+# key    200.0 |................................................................|
+# key    201.0 |................................................1...............|
+# key    202.0 |................................................................| x 53
+# key    255.0 |..................1.......................................1.....|
+# key    256.0 |................................................................|
+# key    257.0 |..............................................................1.|
+# key    258.0 |................................................................| x 25
+# key    283.0 |........1.......................................................|
+# key    284.0 |................................................................| x 23
+# key    307.0 |..........................1.....................................|
+# key    308.0 |................................................................| x 4
+# key    312.0 |.............1..................................................|
+# key    313.0 |................................................................| x 5
+# key    318.0 |.....................1..........................................|
+# key    319.0 |................................................................| x 26
+# key    345.0 |..............1.................................................|
+# key    346.0 |................................................................| x 36
+# key    382.0 |............................................1...................|
+# key    383.0 |................................................................| x 53
+# key    436.0 |........................................................1.......|
+# key    437.0 |................................................................| x 75
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 50
+# seed    50.0 |........................................................#.......|
+# seed    51.0 |........................................................J#.@....|
+# seed    52.0 |.........................................................®#.....|
+# seed    53.0 |........................................................#..#....|
+# seed    54.0 |........................................................##...q@@|
+# seed    55.0 |................................................#.Ô.....###.####|
+# seed    56.0 |................................................##......###@.###|
+# seed    57.0 |........................................................###..@#.|
+# seed    58.0 |....&...................................................@##@.@#@|
+# seed    59.0 |@...............................................¶..*....#####&##|
+# seed    60.0 |.............@..................................®@..@...########|
+# seed    61.0 |..@#........Z#.....@.......U....A@.....#.....@..#.#.#y...#######|
+# seed    62.0 |...@#.........#...............................@.##.#....#.##.###|
+# seed    63.0 |....@#.........#.....#...#...#..@............#.@###.#.####.##@##|
+# key      0.0 |................................................................| x 512
+#              +----------------------------------------------------------------+
+# 123 of 36864 bits failed (0.33%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 0.02030420
+#     key/seed errors: 9/576
+#     - seed bit 54 gtest probability not random: 100.0000 (15969236/16030764)
+#     - seed bit 55 gtest probability not random: 100.0000 (15969416/16030584)
+#     - with 7 more seed errors not described above.
+#     hash bit-level errors: 5/64
+#     - hash bit 50 gtest-prob not-random: 100.0000 (143953478/144046522)
+#     - hash bit 56 gtest-prob not-random: 100.0000 (143843521/144156479)
+#     - hash bit 58 gtest-prob not-random: 100.0000 (144115555/143884445)
+#     - with 2 more hash bit errors not described above.
+not ok 40 - Strict Avalanche Criteria - 512 bit keys
+not ok 41 - Strict Avalanche Criteria # farmhash64_c
 ### Keyset 'Cyclic' Tests ###
 # Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 41 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
-ok 42 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+ok 42 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+ok 43 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 43 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
-ok 44 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
+ok 44 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
+ok 45 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 45 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
-ok 46 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
+ok 46 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
+ok 47 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 47 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
-ok 48 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
+ok 48 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
+ok 49 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 49 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
-ok 50 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
-ok 51 - Keyset 'Cyclic' # farmhash64_c
+ok 50 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
+ok 51 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
+ok 52 - Keyset 'Cyclic' # farmhash64_c
 ### Keyset 'TwoBytes' Tests ###
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 52 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
-ok 53 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+ok 53 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+ok 54 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 54 - Collision Rate for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
-ok 55 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+ok 55 - Collision Rate for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+ok 56 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 56 - Collision Rate for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
-ok 57 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+ok 57 - Collision Rate for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+ok 58 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 58 - Collision Rate for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
-ok 59 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+ok 59 - Collision Rate for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+ok 60 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 60 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
-ok 61 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
-ok 62 - Keyset 'TwoBytes' # farmhash64_c
+ok 61 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+ok 62 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+ok 63 - Keyset 'TwoBytes' # farmhash64_c
 ### Keyset 'Sparse' Tests ###
 # Keyset 'Sparse' - 32-bit keys with up to 6 bits set - 1149017 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 63 - Collision Rate for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
-ok 64 - Distribution Bias Check for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+ok 64 - Collision Rate for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+ok 65 - Distribution Bias Check for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
 # Keyset 'Sparse' - 40-bit keys with up to 6 bits set - 4598479 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 65 - Collision Rate for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
-ok 66 - Distribution Bias Check for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+ok 66 - Collision Rate for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+ok 67 - Distribution Bias Check for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
 # Keyset 'Sparse' - 48-bit keys with up to 5 bits set - 1925357 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 67 - Collision Rate for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
-ok 68 - Distribution Bias Check for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+ok 68 - Collision Rate for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+ok 69 - Distribution Bias Check for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
 # Keyset 'Sparse' - 56-bit keys with up to 5 bits set - 4216423 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 69 - Collision Rate for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
-ok 70 - Distribution Bias Check for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+ok 70 - Collision Rate for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+ok 71 - Distribution Bias Check for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
 # Keyset 'Sparse' - 64-bit keys with up to 5 bits set - 8303633 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 71 - Collision Rate for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
-ok 72 - Distribution Bias Check for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+ok 72 - Collision Rate for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+ok 73 - Distribution Bias Check for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
 # Keyset 'Sparse' - 96-bit keys with up to 4 bits set - 3469497 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 73 - Collision Rate for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
-ok 74 - Distribution Bias Check for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+ok 74 - Collision Rate for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+ok 75 - Distribution Bias Check for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
 # Keyset 'Sparse' - 256-bit keys with up to 3 bits set - 2796417 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 75 - Collision Rate for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
-ok 76 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+ok 76 - Collision Rate for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+ok 77 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
 # Keyset 'Sparse' - 2048-bit keys with up to 2 bits set - 2098177 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 77 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
-ok 78 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
-ok 79 - Keyset 'Sparse' # farmhash64_c
+ok 78 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 79 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 80 - Keyset 'Sparse' # farmhash64_c
 # Keyset 'CRC-MultiCollision' - 1048575 x 16 block keys - 128-bytes long - 10 seeds
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 80 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 1 # farmhash64_c
+ok 81 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 1 # farmhash64_c
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 81 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 2 # farmhash64_c
+ok 82 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 2 # farmhash64_c
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 82 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 3 # farmhash64_c
+ok 83 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 3 # farmhash64_c
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 83 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 4 # farmhash64_c
+ok 84 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 4 # farmhash64_c
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 84 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 5 # farmhash64_c
+ok 85 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 5 # farmhash64_c
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 85 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 6 # farmhash64_c
+ok 86 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 6 # farmhash64_c
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 86 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 7 # farmhash64_c
+ok 87 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 7 # farmhash64_c
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 87 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 8 # farmhash64_c
+ok 88 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 8 # farmhash64_c
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 88 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 9 # farmhash64_c
+ok 89 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 9 # farmhash64_c
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 89 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 10 # farmhash64_c
+ok 90 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 10 # farmhash64_c
 ### Keyset 'Combination Lowbits' Tests ###
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 90 - Collision Rate for Keyset 'Combination Lowbits'
-ok 91 - Distribution Bias Check for Keyset 'Combination Lowbits'
-ok 92 - Keyset 'Combination Lowbits' # farmhash64_c
+ok 91 - Collision Rate for Keyset 'Combination Lowbits'
+ok 92 - Distribution Bias Check for Keyset 'Combination Lowbits'
+ok 93 - Keyset 'Combination Lowbits' # farmhash64_c
 ### Keyset 'Combination Highbits' Tests ###
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 93 - Collision Rate for Keyset 'Combination Highbits'
-ok 94 - Distribution Bias Check for Keyset 'Combination Highbits'
-ok 95 - Keyset 'Combination Highbits' # farmhash64_c
+ok 94 - Collision Rate for Keyset 'Combination Highbits'
+ok 95 - Distribution Bias Check for Keyset 'Combination Highbits'
+ok 96 - Keyset 'Combination Highbits' # farmhash64_c
 ### Keyset 'Combination Highbits2' Tests ###
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 96 - Collision Rate for Keyset 'Combination Highbits2'
-ok 97 - Distribution Bias Check for Keyset 'Combination Highbits2'
-ok 98 - Keyset 'Combination Highbits2' # farmhash64_c
+ok 97 - Collision Rate for Keyset 'Combination Highbits2'
+ok 98 - Distribution Bias Check for Keyset 'Combination Highbits2'
+ok 99 - Keyset 'Combination Highbits2' # farmhash64_c
 ### Keyset 'Combination 0x80000000' Tests ###
 # Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 99 - Collision Rate for Keyset 'Combination 0x80000000'
-ok 100 - Distribution Bias Check for Keyset 'Combination 0x80000000'
-ok 101 - Keyset 'Combination 0x80000000' # farmhash64_c
+ok 100 - Collision Rate for Keyset 'Combination 0x80000000'
+ok 101 - Distribution Bias Check for Keyset 'Combination 0x80000000'
+ok 102 - Keyset 'Combination 0x80000000' # farmhash64_c
 ### Keyset 'Combination 0x00000001' Tests ###
 # Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 102 - Collision Rate for Keyset 'Combination 0x00000001'
-ok 103 - Distribution Bias Check for Keyset 'Combination 0x00000001'
-ok 104 - Keyset 'Combination 0x00000001' # farmhash64_c
+ok 103 - Collision Rate for Keyset 'Combination 0x00000001'
+ok 104 - Distribution Bias Check for Keyset 'Combination 0x00000001'
+ok 105 - Keyset 'Combination 0x00000001' # farmhash64_c
 ### Keyset 'Combination Hi-Lo' Tests ###
 # Keyset 'Combination' - up to 6 blocks from a set of 15 - 12204240 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 105 - Collision Rate for Keyset 'Combination Hi-Lo'
-ok 106 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
-ok 107 - Keyset 'Combination Hi-Lo' # farmhash64_c
+ok 106 - Collision Rate for Keyset 'Combination Hi-Lo'
+ok 107 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
+ok 108 - Keyset 'Combination Hi-Lo' # farmhash64_c
 ### Keyset 'Text' Tests ###
 # Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 108 - Collision Rate for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
-ok 109 - Distribution Bias Check for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+ok 109 - Collision Rate for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+ok 110 - Distribution Bias Check for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
 # Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 110 - Collision Rate for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
-ok 111 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+ok 111 - Collision Rate for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+ok 112 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
 # Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 112 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
-ok 113 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
-ok 114 - Keyset 'Text' # farmhash64_c
+ok 113 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 114 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 115 - Keyset 'Text' # farmhash64_c
 ### Keyset 'Zeroes' Tests ###
 # Keyset 'Zeroes' - 262144 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 115 - Collision Rate for Keyset 'Zeroes' - 262144 keys
-ok 116 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys
-ok 117 - Keyset 'Zeroes' # farmhash64_c
+ok 116 - Collision Rate for Keyset 'Zeroes' - 262144 keys
+ok 117 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys
+ok 118 - Keyset 'Zeroes' # farmhash64_c
 ### Keyset 'Seed' Tests ###
 # Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 118 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
-ok 119 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+ok 119 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+ok 120 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
 # Keyset 'Seed' - 2000000 seeds, Key ""
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 120 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
-ok 121 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
+ok 121 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
+ok 122 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
 # Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 122 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
-ok 123 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+ok 123 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+ok 124 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
 # Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 124 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
-ok 125 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
-ok 126 - Keyset 'Seed' # farmhash64_c
+ok 125 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 126 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 127 - Keyset 'Seed' # farmhash64_c
 ### Keyset 'Effs' Tests ###
 # Keyset 'Effs' - 262144 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 127 - Collision Rate for Keyset 'Effs' - 262144 keys
-ok 128 - Distribution Bias Check for Keyset 'Effs' - 262144 keys
-ok 129 - Keyset 'Effs' # farmhash64_c
-ok 130 - all tests passed # farmhash64_c
-1..130
-# All Tests Passed. farmhash64_c passed all 130 tests run.
-# Testing took 1917.390046 seconds
-# This is SMHasher version v1.0-demerphq-5-g86440f3 - built on Mar 10 2017.
+ok 128 - Collision Rate for Keyset 'Effs' - 262144 keys
+ok 129 - Distribution Bias Check for Keyset 'Effs' - 262144 keys
+ok 130 - Keyset 'Effs' # farmhash64_c
+not ok 131 - all tests passed # farmhash64_c
+1..131
+# Tests Failed. farmhash64_c failed 26 of 131 tests.
+# Testing took 2062.247651 seconds
+# This is SMHasher version v1.0-demerphq-28-g87b6939-dirty - built on Mar 13 2017.
