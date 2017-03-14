@@ -210,10 +210,10 @@ HashInfo g_hashes[] =
     96, 128, 32, 0x6094D428,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher },
   { "BeagleHash_32_112", "Evolved hash with 128-bit state (2x64) - Yves Orton",
-    112, 128, 32, 0x41A9835C,
+    112, 128, 32, 0x15F076B5,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher },
   { "BeagleHash_32_127", "Evolved hash with 128-bit state (2x64) - Yves Orton",
-    127, 128, 32, 0xE8D97117,
+    127, 128, 32, 0xBE0EDC0A,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher },
 
   // BeagleHash_64_xx
@@ -224,10 +224,10 @@ HashInfo g_hashes[] =
     96, 128, 64, 0xFD557DE9,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_64_128_a_smhasher },
   { "BeagleHash_64_112", "Evolved hash with 128-bit state (2x64) - Yves Orton",
-    112, 128, 64, 0xFC0CC71F,
+    112, 128, 64, 0x49B33FE8,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_64_128_a_smhasher },
   { "BeagleHash_64_127", "Evolved hash with 128-bit state (2x64) - Yves Orton",
-    127, 128, 64, 0x9F568FA2,
+    127, 128, 64, 0x774EC0A3,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_64_128_a_smhasher },
 #if 0
   // very very slow seeding process, huge state, etc. not suitable for day-to-day testing
