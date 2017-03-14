@@ -1,342 +1,944 @@
-ok 1 - SelfTest - Verify 89 Hashes
-ok 2 - Found Hash # t1ha_32le
+ok 1 - Found Hash # t1ha_32le
 ###################################################################
 ### Testing t1ha_32le - no seed_state
 ### - Fast Positive Hash - portable, 32-bit, little-endian -
 ### seedbits: 64 statebits: 64 hashbits: 64
 ###################################################################
+ok 2 - Verification code # t1ha_32le
+# t1ha_32le            - Verification value 0xE42B362F : Passed.
 ### Sanity Tests ###
-ok 3 - Verification code # t1ha_32le
 # Sanity check simple key bit flips and consistency..........
-ok 4 - SanityTest # t1ha_32le
+ok 3 - SanityTest # t1ha_32le
 # Sanity check null suffixes change the hash (simple)..........
-ok 5 - Appended Zeroes Test # t1ha_32le
-ok 6 - Sanity Test # t1ha_32le
+ok 4 - Appended Zeroes Test # t1ha_32le
+ok 5 - Sanity Test # t1ha_32le
 ### Speed Tests ###
 ## Bulk speed test - 262144-byte keys
-# Alignment  7 -  2.816 bytes/cycle - 8057.35 MiB/sec @ 3 ghz
-# Alignment  6 -  2.816 bytes/cycle - 8057.00 MiB/sec @ 3 ghz
-# Alignment  5 -  2.816 bytes/cycle - 8057.10 MiB/sec @ 3 ghz
-# Alignment  4 -  2.816 bytes/cycle - 8057.48 MiB/sec @ 3 ghz
-# Alignment  3 -  2.816 bytes/cycle - 8056.49 MiB/sec @ 3 ghz
-# Alignment  2 -  2.816 bytes/cycle - 8056.70 MiB/sec @ 3 ghz
-# Alignment  1 -  2.816 bytes/cycle - 8056.48 MiB/sec @ 3 ghz
-# Alignment  0 -  2.816 bytes/cycle - 8057.14 MiB/sec @ 3 ghz
-# Average      -  2.816 bytes/cycle - 8056.97 MiB/sec @ 3 ghz
+# Alignment  7 -  2.139 bytes/cycle - 6118.85 MiB/sec @ 3 ghz
+# Alignment  6 -  2.594 bytes/cycle - 7422.31 MiB/sec @ 3 ghz
+# Alignment  5 -  2.745 bytes/cycle - 7853.88 MiB/sec @ 3 ghz
+# Alignment  4 -  2.761 bytes/cycle - 7899.52 MiB/sec @ 3 ghz
+# Alignment  3 -  2.728 bytes/cycle - 7804.33 MiB/sec @ 3 ghz
+# Alignment  2 -  2.738 bytes/cycle - 7834.09 MiB/sec @ 3 ghz
+# Alignment  1 -  2.815 bytes/cycle - 8055.01 MiB/sec @ 3 ghz
+# Alignment  0 -  2.816 bytes/cycle - 8056.15 MiB/sec @ 3 ghz
+# Average      -  2.667 bytes/cycle - 7630.52 MiB/sec @ 3 ghz
 ## KeySpeed tests
 # t1ha_32le                 0 byte keys       10.000 c/h
-# t1ha_32le                 1 byte keys       13.000 c/h       13.000 c/b        0.077 b/c
-# t1ha_32le                 2 byte keys       14.725 c/h        7.362 c/b        0.136 b/c
+# t1ha_32le                 1 byte keys       13.266 c/h       13.266 c/b        0.075 b/c
+# t1ha_32le                 2 byte keys       14.733 c/h        7.367 c/b        0.136 b/c
 # t1ha_32le                 3 byte keys       17.000 c/h        5.667 c/b        0.176 b/c
-# t1ha_32le                 4 byte keys       13.480 c/h        3.370 c/b        0.297 b/c
+# t1ha_32le                 4 byte keys       13.574 c/h        3.393 c/b        0.295 b/c
 # t1ha_32le                 5 byte keys       18.000 c/h        3.600 c/b        0.278 b/c
 # t1ha_32le                 6 byte keys       18.000 c/h        3.000 c/b        0.333 b/c
 # t1ha_32le                 7 byte keys       18.000 c/h        2.571 c/b        0.389 b/c
-# t1ha_32le                 8 byte keys       18.000 c/h        2.250 c/b        0.444 b/c
+# t1ha_32le                 8 byte keys       18.477 c/h        2.310 c/b        0.433 b/c
 # t1ha_32le                 9 byte keys       22.000 c/h        2.444 c/b        0.409 b/c
-# t1ha_32le                10 byte keys       23.235 c/h        2.323 c/b        0.430 b/c
-# t1ha_32le                11 byte keys       22.283 c/h        2.026 c/b        0.494 b/c
-# t1ha_32le                12 byte keys       22.493 c/h        1.874 c/b        0.533 b/c
-# t1ha_32le                13 byte keys       26.993 c/h        2.076 c/b        0.482 b/c
-# t1ha_32le                14 byte keys       27.000 c/h        1.929 c/b        0.519 b/c
-# t1ha_32le                15 byte keys       27.250 c/h        1.817 c/b        0.550 b/c
-# t1ha_32le                16 byte keys       27.000 c/h        1.688 c/b        0.593 b/c
-# t1ha_32le                17 byte keys       26.953 c/h        1.585 c/b        0.631 b/c
-# t1ha_32le                18 byte keys       26.820 c/h        1.490 c/b        0.671 b/c
-# t1ha_32le                19 byte keys       26.258 c/h        1.382 c/b        0.724 b/c
-# t1ha_32le                20 byte keys       26.000 c/h        1.300 c/b        0.769 b/c
-# t1ha_32le                21 byte keys       30.870 c/h        1.470 c/b        0.680 b/c
-# t1ha_32le                22 byte keys       30.983 c/h        1.408 c/b        0.710 b/c
-# t1ha_32le                23 byte keys       30.863 c/h        1.342 c/b        0.745 b/c
-# t1ha_32le                24 byte keys       31.462 c/h        1.311 c/b        0.763 b/c
-# t1ha_32le                25 byte keys       35.910 c/h        1.436 c/b        0.696 b/c
-# t1ha_32le                26 byte keys       35.800 c/h        1.377 c/b        0.726 b/c
-# t1ha_32le                27 byte keys       35.659 c/h        1.321 c/b        0.757 b/c
+# t1ha_32le                10 byte keys       22.884 c/h        2.288 c/b        0.437 b/c
+# t1ha_32le                11 byte keys       22.859 c/h        2.078 c/b        0.481 b/c
+# t1ha_32le                12 byte keys       23.199 c/h        1.933 c/b        0.517 b/c
+# t1ha_32le                13 byte keys       27.343 c/h        2.103 c/b        0.475 b/c
+# t1ha_32le                14 byte keys       27.426 c/h        1.959 c/b        0.510 b/c
+# t1ha_32le                15 byte keys       27.639 c/h        1.843 c/b        0.543 b/c
+# t1ha_32le                16 byte keys       28.000 c/h        1.750 c/b        0.571 b/c
+# t1ha_32le                17 byte keys       27.424 c/h        1.613 c/b        0.620 b/c
+# t1ha_32le                18 byte keys       27.434 c/h        1.524 c/b        0.656 b/c
+# t1ha_32le                19 byte keys       26.000 c/h        1.368 c/b        0.731 b/c
+# t1ha_32le                20 byte keys       26.401 c/h        1.320 c/b        0.758 b/c
+# t1ha_32le                21 byte keys       38.870 c/h        1.851 c/b        0.540 b/c
+# t1ha_32le                22 byte keys       31.232 c/h        1.420 c/b        0.704 b/c
+# t1ha_32le                23 byte keys       31.811 c/h        1.383 c/b        0.723 b/c
+# t1ha_32le                24 byte keys       33.317 c/h        1.388 c/b        0.720 b/c
+# t1ha_32le                25 byte keys       35.951 c/h        1.438 c/b        0.695 b/c
+# t1ha_32le                26 byte keys       35.694 c/h        1.373 c/b        0.728 b/c
+# t1ha_32le                27 byte keys       35.647 c/h        1.320 c/b        0.757 b/c
 # t1ha_32le                28 byte keys       36.000 c/h        1.286 c/b        0.778 b/c
 # t1ha_32le                29 byte keys       40.000 c/h        1.379 c/b        0.725 b/c
-# t1ha_32le                30 byte keys       40.000 c/h        1.333 c/b        0.750 b/c
+# t1ha_32le                30 byte keys       39.990 c/h        1.333 c/b        0.750 b/c
 # t1ha_32le                31 byte keys       39.999 c/h        1.290 c/b        0.775 b/c
-#                          Average < 32       26.001 c/h        1.677 c/b        0.596 b/c
-# t1ha_32le                32 byte keys       28.000 c/h        0.875 c/b        1.143 b/c
+#                          Average < 32       26.505 c/h        1.710 c/b        0.585 b/c
+# t1ha_32le                32 byte keys       41.478 c/h        1.296 c/b        0.772 b/c
 # t1ha_32le                36 byte keys       32.989 c/h        0.916 c/b        1.091 b/c
-# t1ha_32le                40 byte keys       37.837 c/h        0.946 c/b        1.057 b/c
+# t1ha_32le                40 byte keys       37.866 c/h        0.947 c/b        1.056 b/c
 # t1ha_32le                44 byte keys       41.839 c/h        0.951 c/b        1.052 b/c
 # t1ha_32le                48 byte keys       34.000 c/h        0.708 c/b        1.412 b/c
 # t1ha_32le                52 byte keys       38.000 c/h        0.731 c/b        1.368 b/c
-# t1ha_32le                56 byte keys       42.556 c/h        0.760 c/b        1.316 b/c
+# t1ha_32le                56 byte keys       42.000 c/h        0.750 c/b        1.333 b/c
 # t1ha_32le                60 byte keys       47.000 c/h        0.783 c/b        1.277 b/c
-# t1ha_32le                64 byte keys       39.501 c/h        0.617 c/b        1.620 b/c
-# t1ha_32le                68 byte keys       43.999 c/h        0.647 c/b        1.545 b/c
-# t1ha_32le                72 byte keys       48.000 c/h        0.667 c/b        1.500 b/c
-# t1ha_32le                76 byte keys       52.000 c/h        0.684 c/b        1.462 b/c
-# t1ha_32le                80 byte keys       45.000 c/h        0.562 c/b        1.778 b/c
-# t1ha_32le                84 byte keys       49.893 c/h        0.594 c/b        1.684 b/c
+# t1ha_32le                64 byte keys       39.882 c/h        0.623 c/b        1.605 b/c
+# t1ha_32le                68 byte keys       52.856 c/h        0.777 c/b        1.287 b/c
+# t1ha_32le                72 byte keys       49.571 c/h        0.688 c/b        1.452 b/c
+# t1ha_32le                76 byte keys       52.913 c/h        0.696 c/b        1.436 b/c
+# t1ha_32le                80 byte keys       54.380 c/h        0.680 c/b        1.471 b/c
+# t1ha_32le                84 byte keys       51.329 c/h        0.611 c/b        1.637 b/c
 # t1ha_32le                88 byte keys       54.000 c/h        0.614 c/b        1.630 b/c
 # t1ha_32le                92 byte keys       58.997 c/h        0.641 c/b        1.559 b/c
 # t1ha_32le                96 byte keys       51.000 c/h        0.531 c/b        1.882 b/c
-# t1ha_32le               100 byte keys       56.767 c/h        0.568 c/b        1.762 b/c
-# t1ha_32le               104 byte keys       61.570 c/h        0.592 c/b        1.689 b/c
+# t1ha_32le               100 byte keys       57.823 c/h        0.578 c/b        1.729 b/c
+# t1ha_32le               104 byte keys       62.463 c/h        0.601 c/b        1.665 b/c
 # t1ha_32le               108 byte keys       64.000 c/h        0.593 c/b        1.688 b/c
-# t1ha_32le               112 byte keys       57.128 c/h        0.510 c/b        1.960 b/c
-# t1ha_32le               116 byte keys       61.708 c/h        0.532 c/b        1.880 b/c
-# t1ha_32le               120 byte keys       65.859 c/h        0.549 c/b        1.822 b/c
-# t1ha_32le               124 byte keys       69.994 c/h        0.564 c/b        1.772 b/c
-#                         Average < 128       35.958 c/h        0.850 c/b        1.176 b/c
-# t1ha_32le               128 byte keys       62.557 c/h        0.489 c/b        2.046 b/c
-# t1ha_32le               256 byte keys      105.157 c/h        0.411 c/b        2.434 b/c
-# t1ha_32le               512 byte keys      212.099 c/h        0.414 c/b        2.414 b/c
-# t1ha_32le              1024 byte keys      393.543 c/h        0.384 c/b        2.602 b/c
-# t1ha_32le              2048 byte keys      756.568 c/h        0.369 c/b        2.707 b/c
-# t1ha_32le              4096 byte keys     1493.490 c/h        0.365 c/b        2.743 b/c
-# t1ha_32le              8192 byte keys     2999.090 c/h        0.366 c/b        2.731 b/c
-# t1ha_32le             16384 byte keys     5843.872 c/h        0.357 c/b        2.804 b/c
-# t1ha_32le             32768 byte keys    11666.382 c/h        0.356 c/b        2.809 b/c
-# t1ha_32le             65536 byte keys    23294.191 c/h        0.355 c/b        2.813 b/c
-#                       Overall Average      740.009 c/h        0.366 c/b        2.730 b/c
-ok 7 - Speed (always passes) # t1ha_32le
+# t1ha_32le               112 byte keys       57.000 c/h        0.509 c/b        1.965 b/c
+# t1ha_32le               116 byte keys       61.864 c/h        0.533 c/b        1.875 b/c
+# t1ha_32le               120 byte keys       67.331 c/h        0.561 c/b        1.782 b/c
+# t1ha_32le               124 byte keys       69.993 c/h        0.564 c/b        1.772 b/c
+#                         Average < 128       36.942 c/h        0.874 c/b        1.145 b/c
+# t1ha_32le               128 byte keys       62.591 c/h        0.489 c/b        2.045 b/c
+# t1ha_32le               256 byte keys      129.147 c/h        0.504 c/b        1.982 b/c
+# t1ha_32le               512 byte keys      216.455 c/h        0.423 c/b        2.365 b/c
+# t1ha_32le              1024 byte keys      396.858 c/h        0.388 c/b        2.580 b/c
+# t1ha_32le              2048 byte keys      758.041 c/h        0.370 c/b        2.702 b/c
+# t1ha_32le              4096 byte keys     1484.489 c/h        0.362 c/b        2.759 b/c
+# t1ha_32le              8192 byte keys     2938.026 c/h        0.359 c/b        2.788 b/c
+# t1ha_32le             16384 byte keys     5880.520 c/h        0.359 c/b        2.786 b/c
+# t1ha_32le             32768 byte keys    11749.962 c/h        0.359 c/b        2.789 b/c
+# t1ha_32le             65536 byte keys    23295.597 c/h        0.355 c/b        2.813 b/c
+#                       Overall Average      742.128 c/h        0.367 c/b        2.722 b/c
+ok 6 - Speed (always passes) # t1ha_32le
 ### Differential Tests ###
 # Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 64 bit hashes.
 # 1000 reps, 8303632000 total tests, expecting 0.00 random collisions..........
-ok 8 - Differential collisions # t1ha_32le
-ok 9 - Nothing skipped during differential collision check # t1ha_32le
+ok 7 - Differential collisions # t1ha_32le
+ok 8 - Nothing skipped during differential collision check # t1ha_32le
 # 0 total collisions, of which 0 single collisions were ignored
-ok 10 - ProcessDifferentials
+ok 9 - ProcessDifferentials
 # Testing 11017632 up-to-4-bit differentials in 128-bit keys -> 64 bit hashes.
 # 1000 reps, 11017632000 total tests, expecting 0.00 random collisions..........
-ok 11 - Differential collisions # t1ha_32le
-ok 12 - Nothing skipped during differential collision check # t1ha_32le
+ok 10 - Differential collisions # t1ha_32le
+ok 11 - Nothing skipped during differential collision check # t1ha_32le
 # 0 total collisions, of which 0 single collisions were ignored
-ok 13 - ProcessDifferentials
+ok 12 - ProcessDifferentials
 # Testing 2796416 up-to-3-bit differentials in 256-bit keys -> 64 bit hashes.
 # 1000 reps, 2796416000 total tests, expecting 0.00 random collisions..........
-ok 14 - Differential collisions # t1ha_32le
-ok 15 - Nothing skipped during differential collision check # t1ha_32le
+ok 13 - Differential collisions # t1ha_32le
+ok 14 - Nothing skipped during differential collision check # t1ha_32le
 # 0 total collisions, of which 0 single collisions were ignored
-ok 16 - ProcessDifferentials
-ok 17 - Differential # t1ha_32le
+ok 15 - ProcessDifferentials
+ok 16 - Differential # t1ha_32le
 ### Avalanche Tests ### - seed-bits: 64 hash-bits: 64
 # Samples 500000, expected error 0.00051200, confidence level 99.99994267%
-# Testing   0-bit keys.......... ok.     # worst-bit:   0.540% error-ratio: 9.775012e-01
-ok 18 - Strict Avalanche Criteria - 0 bit keys
-# Testing   8-bit keys.......... ok.     # worst-bit:   0.529% error-ratio: 1.008962e+00
-ok 19 - Strict Avalanche Criteria - 8 bit keys
-# Testing  16-bit keys.......... ok.     # worst-bit:   0.565% error-ratio: 1.016421e+00
-ok 20 - Strict Avalanche Criteria - 16 bit keys
-# Testing  24-bit keys.......... ok.     # worst-bit:   0.565% error-ratio: 1.029172e+00
-ok 21 - Strict Avalanche Criteria - 24 bit keys
-# Testing  32-bit keys.......... ok.     # worst-bit:   0.621% error-ratio: 1.038859e+00
-ok 22 - Strict Avalanche Criteria - 32 bit keys
-# Testing  40-bit keys.......... ok.     # worst-bit:   0.512% error-ratio: 9.864036e-01
-ok 23 - Strict Avalanche Criteria - 40 bit keys
-# Testing  48-bit keys.......... ok.     # worst-bit:   0.606% error-ratio: 9.806475e-01
-ok 24 - Strict Avalanche Criteria - 48 bit keys
-# Testing  56-bit keys.......... ok.     # worst-bit:   0.575% error-ratio: 1.000346e+00
-ok 25 - Strict Avalanche Criteria - 56 bit keys
-# Testing  64-bit keys.......... ok.     # worst-bit:   0.677% error-ratio: 1.008333e+00
-ok 26 - Strict Avalanche Criteria - 64 bit keys
-# Testing  72-bit keys.......... ok.     # worst-bit:   0.536% error-ratio: 1.003420e+00
-ok 27 - Strict Avalanche Criteria - 72 bit keys
-# Testing  80-bit keys.......... ok.     # worst-bit:   0.526% error-ratio: 1.016068e+00
-ok 28 - Strict Avalanche Criteria - 80 bit keys
-# Testing  88-bit keys.......... ok.     # worst-bit:   0.548% error-ratio: 9.930828e-01
-ok 29 - Strict Avalanche Criteria - 88 bit keys
-# Testing  96-bit keys.......... ok.     # worst-bit:   0.544% error-ratio: 1.008779e+00
-ok 30 - Strict Avalanche Criteria - 96 bit keys
-# Testing 104-bit keys.......... ok.     # worst-bit:   0.716% error-ratio: 1.002525e+00
-ok 31 - Strict Avalanche Criteria - 104 bit keys
-# Testing 112-bit keys.......... ok.     # worst-bit:   0.740% error-ratio: 9.979186e-01
-ok 32 - Strict Avalanche Criteria - 112 bit keys
-# Testing 120-bit keys.......... ok.     # worst-bit:   0.545% error-ratio: 9.919923e-01
-ok 33 - Strict Avalanche Criteria - 120 bit keys
-# Testing 128-bit keys.......... ok.     # worst-bit:   0.711% error-ratio: 1.016435e+00
-ok 34 - Strict Avalanche Criteria - 128 bit keys
-# Testing 136-bit keys.......... ok.     # worst-bit:   0.562% error-ratio: 9.949741e-01
-ok 35 - Strict Avalanche Criteria - 136 bit keys
-# Testing 144-bit keys.......... ok.     # worst-bit:   0.600% error-ratio: 1.005318e+00
-ok 36 - Strict Avalanche Criteria - 144 bit keys
-# Testing 152-bit keys.......... ok.     # worst-bit:   0.635% error-ratio: 9.901042e-01
-ok 37 - Strict Avalanche Criteria - 152 bit keys
-# Testing 152-bit keys.......... ok.     # worst-bit:   0.590% error-ratio: 9.816998e-01
-ok 38 - Strict Avalanche Criteria - 160 bit keys
-# Testing 256-bit keys.......... ok.     # worst-bit:   0.593% error-ratio: 9.942637e-01
+# Testing   0-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 1.237319e+05
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |5B.ðmz1go5i7j7ê3me6hd7ëÃ0ñUdFÂÜ®3ÿnäReGÃÜ5BYÛ©&2ûXcElJiIjêSeGkåS|
+# seed     1.0 |Ü5.älyt.fo4i7k7ê3me6hd7HÃ0ñUdFÂÜ®3ÿnäRfGÃÜ5BYÛ©&1ûXcElJiIjêSeFkê|
+# seed     2.0 |ÃÜ5piwsw.go4i7j7ê3me6hdgHÃ0ñUdFÃÜ®3ÿnäReGÃÜ5BYÛ©&1ûXcElJiIjêSeFl|
+# seed     3.0 |GÃÜ5csrvv.fo4h7j7ê3me6hNgHÃ0ñUdFÃÜ®3ÿnäRfGÃÜ5BYÛ©&1ûXcElJjIjêSeF|
+# seed     4.0 |fGÃÜ5jntuw.go4i7j7ê3md6tNhHÃ0ñVdFÂÜ®3ÿoäRfGÃÜ5BYÛ©&2ûXcElJjIjêSe|
+# seed     5.0 |ReGÃÝ5fpsvv1fo4i7j6ê3neêtNgHÃ0ñVdFÂÜ®3ÿnäReGÃÝ5BYÛ©&1ûXcElJiIjêS|
+# seed     6.0 |äReGÃÜ5hotuv.fo4i7j6ê3mkêtNgHÃ0ñUdFÃÜ®3ÿnäReGÃÜ5BYÛ©&2ûXcElJjIjê|
+# seed     7.0 |näReGÃÝ5gpsuv.fo4i7j7ê3GkêtNhHÃ0ñUcFÂÜ®3ÿnäReGÃÝ5BYÛ©&1ûXcElJjIj|
+# seed     8.0 |AnäRfGÃÝ5hosuv.fo4i7j6êgGkêtNgHÃ0ñUdFÂÜ®3AnäRfGÃÝ5BYÛ©&1ûXcElJiI|
+# seed     9.0 |3ÿnäRfGÃÝ5gosuv.fo4h7j7PgGkåtNhHÃ0ñUdFÂÜ®3ÿnäRfGÃÝ5AYÛ©&1ûXbElJj|
+# seed    10.0 |®3ÿnäRfGÃÜ5hosuv.fo4i7jwPgGkêtNgHÃañUdFÃÜ®3ÿnäRfGÃÜ5BYÛ©&1ûXcElJ|
+# seed    11.0 |Ü®3ÿoäRfGÃÜ5gosuv.fo4i7wwPgGkåtNhHÃ0ñUdFÂÜ®3ÿoäRfGÃÜ5BYÛ©&2ûXbEl|
+# seed    12.0 |ÂÜ®2ÿoäRfGÃÜ5gosuw1fo4iwwwPgGkåtNgHÃ0ñUdFÂÜ®2ÿoäRfGÃÜ5AYÛ©&2ûXcE|
+# seed    13.0 |FÂÜ®3ÿnäReGÃÝ5.älyt1fo4wwxwPgGkêtNhHÃ0ñVdFÂÜ®3ÿnäReGÃÝ5BYÛ©&1ûXc|
+# seed    14.0 |dFÂÜ®2ÿnäRfGÃÜ6.älyt.fowxwwwPgGkêtNgHÃ0ñUdFÂÜ®2ÿnäRfGÃÜ6BYÛ©&1ûX|
+# seed    15.0 |UdFÂÜ®3ÿnäReGÃÜ5.älyu1fwwwwwwPgGkêtNgHÃ0ñUdFÂÜ®3ÿnäReGÃÜ5BYÛ©&1û|
+# seed    16.0 |ñVdFÂÜ®3ÿoäRfGÃÜ6.älyt1wxwwwxwPgGkêtNgHÃ0ñVdFÂÜ®3ÿoäRfGÃÜ6BYÛ©&2|
+# seed    17.0 |0ñUdFÃÜ®3ÿnäReGÃÜ5.älytxwxwwwxwPgGkåtNhHÃ0ñUdFÃÜ®3ÿnäReGÃÜ5BYÛ©&|
+# seed    18.0 |ÃañUdFÃÜ®3ÿoäRfGÃÜ5.älyuxwxwwwwwPgGkêtNgGÃañUdFÃÜ®3ÿoäRfGÃÜ5BYÛ©|
+# seed    19.0 |HÃ0ñUdFÂÜ®3ÿnäRfGÃÜ5.älãuxwwwwwwwPgGkêtNhHÃ0ñUdFÂÜ®3ÿnäRfGÃÜ5BYÛ|
+# seed    20.0 |gHÃ0ñVdFÂÜ®3ÿoäReGÃÜ5.äoãuxwxwwwwwPgGkåtNgHÃ0ñVdFÂÜ®3ÿoäReGÃÜ5BY|
+# seed    21.0 |NgHÃ0ñVdFÂÜ®3ÿnäRfGÃÝ5.üoãuxwwwxwwwOgGkêtNgHÃ0ñVdFÂÜ®3ÿnäRfGÃÝ5A|
+# seed    22.0 |tNgHÃ0ñUdFÂÜ®3ÿnäRfGÃÜ5.üoäuxwxwwwwwPgGkêtNgHÃ0ñUdFÂÜ®3ÿnäRfGÃÜ5|
+# seed    23.0 |êtNgHÃañUdFÃÜ®3ÿnäRfGÃÜ#.üoãvxwxwxwwxPgGkêtNgHÃañUdFÃÜ®3ÿnäRfGÃÜ|
+# seed    24.0 |kêtNhHÃ0ñUdFÃÜ®3AnäReGÃ##.üoäuxwxwwwxwPgGkêtNhHÃ0ñUdFÃÜ®3AnäReGÃ|
+# seed    25.0 |GkêtNgHÃ0ñUdFÂÜ®3ÿnäReG###.üoäuxwxwwwwwPgGkêtNgHÃ0ñUdFÂÜ®3ÿnäReG|
+# seed    26.0 |gGkêtNgHÃ0ñVdFÂÜ®3ÿnäRf####.üoãuxwxwwwwwPgGkêtNgHÃ0ñVdFÂÜ®3ÿnäRf|
+# seed    27.0 |PfGkêtNgGÃ0ñUdFÂÜ®3AnäR#####.üoäuywxwwxwwPfGkêtNgGÃ0ñUdFÂÜ®3AnäR|
+# seed    28.0 |wPgGkêtNgHÃ0ñUdFÂÜ®3ÿnä######.üoäuxwxwwwwwPgGkêtNgHÃ0ñUdFÂÜ®3ÿnä|
+# seed    29.0 |wxPfGkêtNhHÃ0ñUdFÂÜ®3ÿn#######.üoäuxwxwwwwxPfGkêtNhHÃ0ñUdFÂÜ®3ÿn|
+# seed    30.0 |wwwPgHkêtNgHÃ0ñUdFÃÜ®2ÿ########.üoãuxwwwwwwwPgHkêtNgHÃ0ñUdFÃÜ®2ÿ|
+# seed    31.0 |wwwwPgGkêtNgHÃ0ñUdFÃÜ®3#########.üoãuxwwwwwwwPgGkêtNgHÃ0ñUdFÃÜ®3|
+# seed    32.0 |ww0wwdgGkê3ÿgäR0ñUd5.älãuxwwwwwww.gokutwhww0wwdgGkê3ÿgäR0ñUd5BYÛ|
+# seed    33.0 |hwxaxwdgGkå3ÿgäRañUd5.äoãuxwxwwwww.gokutwhwxaxwdgGkå3ÿgäRañUd5BY|
+# seed    34.0 |whwwawwdgGkê2ÿgäRañUc5.üoãuxwwwxwww.gokutwhwwawwdgGkê2ÿgäRañUc5A|
+# seed    35.0 |twgww0xwdgGkå3ÿgäR0ñVd5.üoäuxwxwwwww.gokutwgww0xwdgGkå3ÿgäR0ñVd5|
+# seed    36.0 |utwhwxawwdgGkê3ÿgäR0ñUd#.üoãvxwxwxwwx.gokutwhwxawwdgGkê3ÿgäR0ñUd|
+# seed    37.0 |kutwhwx0wwdgGkê3AgäR0ñV##.üoäuxwxwwwxw.gokutwhwx0wwdgGkê3AgäR0ñV|
+# seed    38.0 |okutwgww0wwdgGkå3ÿhäR0ñ###.üoäuxwxwwwww.fokutwgww0wwdgGkå3ÿhäR0ñ|
+# seed    39.0 |gokutwgwx0xwdfGkå3ÿgäRa####.üoãuxwxwwwww.gokutwgwx0xwdfGkå3ÿgäRa|
+# seed    40.0 |.fokutwgww0wwdgGkê3AgäR#####.üoäuywxwwxww.fokutwgww0wwdgGkê3AgäR|
+# seed    41.0 |w.gokutwhww0wwdfGkê3ÿgä######.üoäuxwxwwwww.gokutwhww0wwdfGkê3ÿgä|
+# seed    42.0 |wx.fokutwgww0wwdgGkå3ÿh#######.üoäuxwxwwwwx.fokutwgww0wwdgGkå3ÿh|
+# seed    43.0 |www.gokutwgww0wwdgHkê3ÿ########.üoãuxwwwwwww.gokutwgww0wwdgHkê3ÿ|
+# seed    44.0 |wwww.gokutwgww0wwdgGkê3#########.üoãuxwwwwwww.gokutwgww0wwdgGkê3|
+# seed    45.0 |5B.ðm..8b4a7a6m3i765d4mÃ0ñUdFÂÜ®3ÿnäReGÃÜ5BYÛ©.2oãcxlxjxjwwegkkê|
+# seed    46.0 |Ü5.äly..8b4b7a6l3j765d4HÃ0ñUdFÂÜ®3ÿnäRfGÃÜ5BYÛ©.2oãcylwixjxwefkk|
+# seed    47.0 |ÃÜ5piws..8b4a7a7l3i765dgHÃ0ñUdFÃÜ®3ÿnäReGÃÜ5BYÛ©.1oãcxlxjwjwwegk|
+# seed    48.0 |GÃÜ5csrv..9c4a7a7l3i765NgHÃ0ñUdFÃÜ®3ÿnäRfGÃÜ5BYÛ©.1oãcxlxjwjwweg|
+# seed    49.0 |fGÃÜ5jntu..8c4b7a7l3i76tNhHÃ0ñVdFÂÜ®3ÿoäRfGÃÜ5BYÛ©.2oäcylxjwjwwe|
+# seed    50.0 |ReGÃÝ5fpsv.18b4a7a7l3j7êtNgHÃ0ñVdFÂÜ®3ÿnäReGÃÝ5BYÛ©.2oãcxlxiwjww|
+# seed    51.0 |äReGÃÜ5hotu.18b4a7a6l3jkêtNgHÃ0ñUdFÃÜ®3ÿnäReGÃÜ5BYÛ©.2oãcxlxjwjw|
+# seed    52.0 |näReGÃÝ5gpsu..8b4a7a7l3GkêtNhHÃ0ñUcFÂÜ®3ÿnäReGÃÝ5BYÛ©.1oäcxlwjwj|
+# seed    53.0 |AnäRfGÃÝ5hosu..8c4b7a6lgGkêtNgHÃ0ñUdFÂÜ®3AnäRfGÃÝ5BYÛ©.1oäbylwiw|
+# seed    54.0 |3ÿnäRfGÃÝ5gosu..8b4a7a6PgGkåtNhHÃ0ñUdFÂÜ®3ÿnäRfGÃÝ5AYÛ©.1oäcxlxj|
+# seed    55.0 |®3ÿnäRfGÃÜ5hosu..8c4b7awPgGkêtNgHÃañUdFÃÜ®3ÿnäRfGÃÜ5BYÛ©.1oäcxlw|
+# seed    56.0 |Ü®3ÿoäRfGÃÜ5gosu..8c4a7wwPgGkåtNhHÃ0ñUdFÂÜ®3ÿoäRfGÃÜ5BYÛ©.1oäcxl|
+# seed    57.0 |ÂÜ®2ÿoäRfGÃÜ5gosu.18b4awwwPgGkåtNgHÃ0ñUdFÂÜ®2ÿoäRfGÃÜ5AYÛ©.2oãcx|
+# seed    58.0 |FÂÜ®3ÿnäReGÃÝ5.äly.18b4wwxwPgGkêtNhHÃ0ñVdFÂÜ®3ÿnäReGÃÝ5BYÛ©.1oäc|
+# seed    59.0 |dFÂÜ®2ÿnäRfGÃÜ6.äly..8cwxwwwPgGkêtNgHÃ0ñUdFÂÜ®2ÿnäRfGÃÜ6BYÛ©.1oä|
+# seed    60.0 |UdFÂÜ®3ÿnäReGÃÜ5.äly.18wwwwwwPgGkêtNgHÃ0ñUdFÂÜ®3ÿnäReGÃÜ5BYÛ©.1o|
+# seed    61.0 |ñVdFÂÜ®3ÿoäRfGÃÜ6.äly..wxwwwxwPgGkêtNgHÃ0ñVdFÂÜ®3ÿoäRfGÃÜ6BYÛ©.2|
+# seed    62.0 |0ñUdFÃÜ®3ÿnäReGÃÜ5.äly.xwxwwwxwPgGkåtNhHÃ0ñUdFÃÜ®3ÿnäReGÃÜ5BYÛ©.|
+# seed    63.0 |ÃañUdFÃÜ®3ÿoäRfGÃÜ5.älyuxwxwwwwwPgGkêtNgGÃañUdFÃÜ®3ÿoäRfGÃÜ5BYÛ©|
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |##.###.#########################################################|
+# seed     1.0 |##.####.########################################################|
+# seed     2.0 |########.#######################################################|
+# seed     3.0 |#########.######################################################|
+# seed     4.0 |##########.#####################################################|
+# seed     5.0 |###########.####################################################|
+# seed     6.0 |############.###################################################|
+# seed     7.0 |#############.##################################################|
+# seed     8.0 |##############.#################################################|
+# seed     9.0 |###############.################################################|
+# seed    10.0 |################.###############################################|
+# seed    11.0 |#################.##############################################|
+# seed    12.0 |##################.#############################################|
+# seed    13.0 |##############.####.############################################|
+# seed    14.0 |###############.####.###########################################|
+# seed    15.0 |################.####@##########################################|
+# seed    16.0 |#################.####.#########################################|
+# seed    17.0 |##################.#############################################|
+# seed    18.0 |###################.############################################|
+# seed    19.0 |####################.###########################################|
+# seed    20.0 |#####################.##########################################|
+# seed    21.0 |######################.#########################################|
+# seed    22.0 |#######################.########################################|
+# seed    23.0 |########################.#######################################|
+# seed    24.0 |#########################.######################################|
+# seed    25.0 |##########################.#####################################|
+# seed    26.0 |###########################.####################################|
+# seed    27.0 |############################.###################################|
+# seed    28.0 |#############################.##################################|
+# seed    29.0 |##############################.#################################|
+# seed    30.0 |###############################.################################|
+# seed    31.0 |################################.###############################|
+# seed    32.0 |####################.############.##############################|
+# seed    33.0 |#####################.############.#############################|
+# seed    34.0 |######################.############.############################|
+# seed    35.0 |#######################.############.###########################|
+# seed    36.0 |########################.############.##########################|
+# seed    37.0 |#########################.############.#########################|
+# seed    38.0 |##########################.############.########################|
+# seed    39.0 |###########################.############.#######################|
+# seed    40.0 |.###########################.############.######################|
+# seed    41.0 |#.###########################.############.#####################|
+# seed    42.0 |##.###########################.############.####################|
+# seed    43.0 |###.###########################.############.###################|
+# seed    44.0 |####.###########################.############.##################|
+# seed    45.0 |##.##..#######################################.#################|
+# seed    46.0 |##.###..#######################################.################|
+# seed    47.0 |#######..#######################################.###############|
+# seed    48.0 |########..#######################################.##############|
+# seed    49.0 |#########..#######################################.#############|
+# seed    50.0 |##########..#######################################.############|
+# seed    51.0 |###########..#######################################.###########|
+# seed    52.0 |############..#######################################.##########|
+# seed    53.0 |#############..#######################################.@########|
+# seed    54.0 |##############..#######################################.########|
+# seed    55.0 |###############..#######################################.#######|
+# seed    56.0 |################..#######################################.######|
+# seed    57.0 |#################.4#######################################.#####|
+# seed    58.0 |##############.###..#######################################.####|
+# seed    59.0 |###############.###..#######################################.###|
+# seed    60.0 |################.###.@#######################################.##|
+# seed    61.0 |#################.###..#######################################.#|
+# seed    62.0 |##################.###.########################################.|
+# seed    63.0 |###################.############################################|
+#              +----------------------------------------------------------------+
+# 3969 of 4096 bits failed (96.90%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 63.35071970
+#     key/seed errors: 61/64
+#     - seed bit 0 gtest probability not random: 100.0000 (15829648/16170352)
+#     - seed bit 1 gtest probability not random: 100.0000 (16127079/15872921)
+#     - with 59 more seed errors not described above.
+#     hash bit-level errors: 63/64
+#     - hash bit 0 gtest-prob not-random: 100.0000 (16890268/15109732)
+#     - hash bit 1 gtest-prob not-random: 100.0000 (16709278/15290722)
+#     - hash bit 2 gtest-prob not-random: 100.0000 (16220873/15779127)
+#     - with 60 more hash bit errors not described above.
+not ok 17 - Strict Avalanche Criteria - 0 bit keys
+# Testing   8-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 4.624529e+04
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 13
+# seed    13.0 |.............................................1..................|
+# seed    14.0 |................................................................| x 6
+# seed    20.0 |..........................1.....................................|
+# seed    21.0 |................................................................| x 4
+# seed    25.0 |........................1.......................................|
+# seed    26.0 |................................................................| x 6
+# seed    32.0 |ww0wwdgGkê3ÿhäR0ñUd5.älãvxwxwwwww.gokutwgww0wwdgGkê3ÿhäR0ñUd5BYÛ|
+# seed    33.0 |gww0wwdgGkê3ÿhäR0ñUd5.äpãuxwxwwwww.gokutwgww0wwdgGkê3ÿhäR0ñUd5BY|
+# seed    34.0 |wgww0wwdgGkå3ÿhäR0ñUd5.üoãuxwxwwwxw.gokutwgww0wwdgGkå3ÿhäR0ñUd5B|
+# seed    35.0 |twhww0wwdfGkê3ÿgäR0ñVd5.üoäuxwxwwwww.gokutwhww0wwdfGkê3ÿgäR0ñVd5|
+# seed    36.0 |utwgww0wxdgGkå3ÿhäR0ñVd#.üoäuxwxwwwww.gokutwgww0wxdgGkå3ÿhäR0ñVd|
+# seed    37.0 |kutwgwwawwdfGkê3ÿgäR0ñV##.üoãuxwxwwwxw.gokutwgwwawwdfGkê3ÿgäR0ñV|
+# seed    38.0 |okuuwgww0wwdgGkê3ÿhäR0ñ###.üoãuxwxwxwww.gokuuwgww0wwdgGkê3ÿhäR0ñ|
+# seed    39.0 |gokvtwgxw0wwdgGkê3AhäR0####.üoãuxwxwwwxw.gokvtwgxw0wwdgGkê3AhäR0|
+# seed    40.0 |.fokvuvgxw9wwdgGkê4AhãR#####.üoãuxwxwwwww.fokvuvgxw9wwdgGkê4AhãR|
+# seed    41.0 |w1eplwvvfxw9vxchHkê4Aiã######.üoãuxwwwwwww1eplwvvfxw9vxchHkê4Aiã|
+# seed    42.0 |ww1fplvvvfxw9vxchHkê4Ai#######.üoãuxwxwwwww1fplvvvfxw9vxchHkê4Ai|
+# seed    43.0 |xww4aträäs0äu3qã0lJjêaD########.üoãuxwxwwxww4aträäs0äu3qã0lJjêaD|
+# seed    44.0 |xwww4aträäs0äu3qã0lJjêa#########.üoãuxwxwxwww4aträäs0äu3qã0lJjêa|
+# seed    45.0 |5B.ðm..9b4a7a7l3i765d4mÃ0ñUdFÂÜ®3ÿnäRfGÃÜ5BYÛ©.1oäcylxjwjwwegkkê|
+# seed    46.0 |Ü5.äly..8c4b7a6l3i765d4HÃ0ñVdFÂÜ®3ÿnäRfGÃÜ5BYÛ©.2oäcxlxjwjxwegkk|
+# seed    47.0 |ÃÜ5piwt.18c4a7a6l3j765dgHÃ0ñUdFÂÜ®2ÿnäRfGÃÜ5BYÛ©.1oäcylxiwjwwegk|
+# seed    48.0 |GÃÜ5csqv..9b4a8a7l3i765NhHÄ0ñVdFÂÜ®3ÿnäRfGÃÜ5BZÛ©.2oãcxlxjwjwweg|
+# seed    49.0 |eGÃÜ5jntu.18b4a7a7l3i76tNgHÃ0ñUdFÃÜ®3ÿnäReGÃÜ5BYÛ©.2oäcxlxjxjwwe|
+# seed    50.0 |RfGÃÜ5fpsv..9c4a7a7m3j7êtNgHÃ0ñUdFÂÜ®3ÿnäRfGÃÜ5BYÛ©.2oãbxlxixjww|
+# seed    51.0 |äRfGÃÝ5hotu.18c4a7a7l3ikåtNhHÃ0ñUdFÂÜ®3ÿnäRfGÃÝ5AYÛ©.1oãcxlxjwjw|
+# seed    52.0 |näRfGÃÝ5gpsu..8c4a7a7l4HkêtNgHÃ0ñUdFÂÜ®3ÿnäRfGÃÝ5BYÛ©.2oäcxlxjwj|
+# seed    53.0 |ÿnäRfGÃÜ6hotu..8c4b7a7lgGkêtNhHÃ0ñUdFÂÜ®2ÿnäRfGÃÜ6BYÛ©.2oäcylxjx|
+# seed    54.0 |3ÿnäReGÃÜ5gosu.18b4a7a6PgGkêtNgHÃ0ñUdFÂÜ®3ÿnäReGÃÜ5BYÛ©.1oäcxlxj|
+# seed    55.0 |®2ÿnäRfGÃÜ6hosu..8c4a7awPfGkêtNgHÃ0ñUdFÂÜ®2ÿnäRfGÃÜ6BYÛ©.2oäcxlx|
+# seed    56.0 |Ü®3ÿnäReGÃÜ5hotu..8b4a7xwOgHkêtNgHÃ0ñUdFÃÜ®3ÿnäReGÃÜ5BYÛ©.1oãcxl|
+# seed    57.0 |ÂÜ®3ÿnäRfGÃÝ5gosu.18c4bwwwPgGkåtNgHÃ0ñUdFÂÜ®3ÿnäRfGÃÝ5BYÛ©.2oäbx|
+# seed    58.0 |FÂÜ®3ÿnäReGÃÜ5.äly.18c4wwwwPgGkåtNgHÃ0ñVdFÂÜ®3ÿnäReGÃÜ5BYÛ©.2oãc|
+# seed    59.0 |dFÂÜ®2ÿnäRfGÃÜ5.äly.18cwwwwwPgGkåtNgHÃ0ñUdFÂÜ®2ÿnäRfGÃÜ5BYÛ©.2oã|
+# seed    60.0 |VcFÂÜ®3ÿoäRfGÃÜ5.äly.18xwwwwwPgGkåtNhHÃ0ñVcFÂÜ®3ÿoäRfGÃÜ5BYÛ©.1o|
+# seed    61.0 |ñUdFÃÜ®3AnäRfGÃÜ5.äly..wwwwwwwPgGkåtNgHÃ0ñUdFÃÜ®3AnäRfGÃÜ5BYÛ©.1|
+# seed    62.0 |0ñUdFÃÜ®3AnäReGÃÝ5.äly.xwxwwwwwPgGkåtNhHÃ0ñUdFÃÜ®3AnäReGÃÝ5BYÛ©.|
+# seed    63.0 |Ã0ñUdFÂÜ®3ÿnäRfGÃÝ5.älyuxwxwxwwwPgGkåtNhHÃ0ñUdFÂÜ®3ÿnäRfGÃÝ5BYÛ©|
+# key      0.0 |................................................................| x 4
+# key      4.0 |..........................................1.....................|
+# key      5.0 |................................................................| x 2
+# key      7.0 |...................1............................................|
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 32
+# seed    32.0 |####################.############.##############################|
+# seed    33.0 |#####################.############.#############################|
+# seed    34.0 |######################.############.############################|
+# seed    35.0 |#######################.############.###########################|
+# seed    36.0 |########################.############.##########################|
+# seed    37.0 |#########################.############.#########################|
+# seed    38.0 |##########################.############.########################|
+# seed    39.0 |###########################.############.#######################|
+# seed    40.0 |.###########################.############.######################|
+# seed    41.0 |#¶###########################.############¶#####################|
+# seed    42.0 |##.###########################.############.####################|
+# seed    43.0 |###############################.################################|
+# seed    44.0 |################################.###############################|
+# seed    45.0 |##.##..#######################################.#################|
+# seed    46.0 |##.###..#######################################.################|
+# seed    47.0 |#######..#######################################.###############|
+# seed    48.0 |########..#######################################.##############|
+# seed    49.0 |#########..#######################################.#############|
+# seed    50.0 |##########..#######################################.############|
+# seed    51.0 |###########..#######################################.###########|
+# seed    52.0 |############..#######################################.##########|
+# seed    53.0 |#############..#######################################.#########|
+# seed    54.0 |##############..#######################################.########|
+# seed    55.0 |###############..#######################################.#######|
+# seed    56.0 |################..#######################################.######|
+# seed    57.0 |#################..#######################################.#####|
+# seed    58.0 |##############.###..#######################################.####|
+# seed    59.0 |###############.###..#######################################.###|
+# seed    60.0 |################.###..#######################################.##|
+# seed    61.0 |#################.###..#######################################.#|
+# seed    62.0 |##################.###.########################################.|
+# seed    63.0 |###################.############################################|
+# key      0.0 |................................................................| x 8
+#              +----------------------------------------------------------------+
+# 1962 of 4608 bits failed (42.58%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 23.67758804
+#     key/seed errors: 31/72
+#     - seed bit 32 gtest probability not random: 100.0000 (16667214/15332786)
+#     - seed bit 33 gtest probability not random: 100.0000 (16614121/15385879)
+#     - with 29 more seed errors not described above.
+#     hash bit-level errors: 61/64
+#     - hash bit 0 gtest-prob not-random: 100.0000 (18352315/17647685)
+#     - hash bit 1 gtest-prob not-random: 100.0000 (18117039/17882961)
+#     - hash bit 2 gtest-prob not-random: 100.0000 (17850741/18149259)
+#     - with 58 more hash bit errors not described above.
+not ok 18 - Strict Avalanche Criteria - 8 bit keys
+# Testing  16-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 4.160115e+04
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 27
+# seed    27.0 |.......1........................................................|
+# seed    28.0 |................................................................| x 4
+# seed    32.0 |ww0wxdgGkå3ÿhäR0ñUd6.äläuxwxwwwww.fokutwgww0wxdgGkå3ÿhäR0ñUd6BYÛ|
+# seed    33.0 |gww0wxdfGkê3ÿhäR0ñUd5.äoäuxwwwwwww.gokutwgww0wxdfGkê3ÿhäR0ñUd5BY|
+# seed    34.0 |whwx0wwdgGkê3AgäR0ñUd5.üoãuxwxwwwww.gokutwhwx0wwdgGkê3AgäR0ñUd5B|
+# seed    35.0 |twgwxaxwdgGkê3ÿgäR0ñUd5.üoãuxwxwwwww.gokutwgwxaxwdgGkê3ÿgäR0ñUd5|
+# seed    36.0 |utwgwwawwdgGkê3ÿgäR0ñVd#.üoäuxwxwwwww.gokutwgwwawwdgGkê3ÿgäR0ñVd|
+# seed    37.0 |kutwgww0wwdgGkê3ÿhäR0ñU##.üoäuxwxwwwww.gokutwgww0wwdgGkê3ÿhäR0ñU|
+# seed    38.0 |okuuwgww0wwdgGkê3AhäR0ñ###.üoäuxwxwwwww.fokuuwgww0wwdgGkê3AhäR0ñ|
+# seed    39.0 |fpkvuwgxw0wwdgGkê3AhãR0####.üoãuywxwwwwx.fpkvuwgxw0wwdgGkê3AhãR0|
+# seed    40.0 |.fpkvuvgxw0wxcgHkê4AhãR#####.üoäuywxwwwxw.fpkvuvgxw0wxcgHkê4AhãR|
+# seed    41.0 |w1fplwvvfxw9vxchHkê4Aiã######.üoäuywwwwwxw1fplwvvfxw9vxchHkê4Aiã|
+# seed    42.0 |ww1eplwvvfxw9vxchHkê4Ai#######.üoãuxwxwwwww1eplwvvfxw9vxchHkê4Ai|
+# seed    43.0 |www4aträäs0äu2qã0lJiêaD########.üoäuxwxwwwww4aträäs0äu2qã0lJiêaD|
+# seed    44.0 |wwww4aträäs9äu2qã0lJjêa#########.üoäuxwxwwwww4aträäs9äu2qã0lJjêa|
+# seed    45.0 |5A.ðm..9b4a7a7l3j765d4mÃ0ñUdFÂÜ®3ÿnäRfGÃÝ5AYÛ©.2oäcxlxjxjwwegkkå|
+# seed    46.0 |Ý5.äly..8b4a7a7l3j765d4HÃ0ñUdFÂÜ®3ÿnäRfGÃÝ5BYÛ©.1oäcxlxjwjwxegkk|
+# seed    47.0 |ÃÜ5piws..8b4a7a7l3i765dhHÃ0ñUdFÂÜ®3ÿnäRfGÃÜ5BYÛ©.2oäcxlwixjwwegk|
+# seed    48.0 |GÃÜ5csqv.18c4a7a6l3j765NhHÃ0ñUdFÂÜ®3ÿnäRfGÃÜ5BYÛ©.2oäcxlxixjxweg|
+# seed    49.0 |fGÃÝ5jntu..8c4a7a6l3i76tNgGÃ0ñUdFÃÜ®3ÿnäRfGÃÝ5BYÛ©.1oäcxlwjwjwwe|
+# seed    50.0 |ReGÃÜ5fpsv..8c4b7a6l3j7êtNgHÃ0ñUdFÂÜ®3ÿnäReGÃÜ5AYÛ©.2oäcxlxiwjww|
+# seed    51.0 |äReGÃÜ5hotu.18b4a7a6l3ikêtNhHÃ0ñVdFÃÜ®3ÿnäReGÃÜ5BYÛ©.1oãcxlxiwjw|
+# seed    52.0 |näRfGÃÜ5gpsu..9c4a7a7l3GkåtNhHÃ0ñUdFÂÜ®3ÿnäRfGÃÜ5BYÛ©.1oãcxlxjwj|
+# seed    53.0 |ÿnäReGÃÜ5hptu..8b4a7a7lgGkåtNgHÃ0ñUdFÂÜ®3ÿnäReGÃÜ5BYÛ©.1oãcxlxjx|
+# seed    54.0 |3ÿnäReGÃÜ5gpsu..8b4a7a7PfGkêtNhHÃ0ñUdFÂÜ®3ÿnäReGÃÜ5BYÛ©.1oäcxlwj|
+# seed    55.0 |®2ÿnäReGÃÜ5hosu..9c4a7awPgGkêtNhHÄ0ñUdFÂÜ®2ÿnäReGÃÜ5BYÛ©.1oäcxlx|
+# seed    56.0 |Ü®3ÿnäRfGÃÜ5hpsu.18b4a7wwPgGkêtNhHÃ0ñUdFÃÜ®3ÿnäRfGÃÜ5BYÛ©.2oäcxl|
+# seed    57.0 |ÂÜ®3ÿnäRfGÃÜ5gosu..8c5bwwwPgGkêtNhHÃ0ñVdFÂÜ®3ÿnäRfGÃÜ5BYÛ©.1oäcx|
+# seed    58.0 |FÃÜ®3ÿnäRfGÃÜ5.äly..8c4wwwwPgGkêtNgHÃ0ñUdFÃÜ®3ÿnäRfGÃÜ5BYÛ©.1oãc|
+# seed    59.0 |dFÂÜ®3ÿnäRfGÃÜ5.äly..8bwwwwwPgGkêtNhHÃ0ñVdFÂÜ®3ÿnäRfGÃÜ5BYÛ©.2oã|
+# seed    60.0 |UdFÂÜ®3ÿnäRfGÃÜ5.äly..8xwwwxwPfGkåtNhHÃ0ñUdFÂÜ®3ÿnäRfGÃÜ5BYÛ©.1o|
+# seed    61.0 |ñUdFÂÜ®3ÿnäReGÃÜ5.äly.1wxwwwwwPgGkêtNhHÃ0ñUdFÂÜ®3ÿnäReGÃÜ5BYÛ©.1|
+# seed    62.0 |0ñUdFÃÜ®3ÿnäRfGÃÜ5.äly.xwxwwwwwPgGkêtNgHÄ0ñUdFÃÜ®3ÿnäRfGÃÜ5BYÛ©.|
+# seed    63.0 |Ã0ñVdFÂÜ®3ÿnäRfGÃÜ5.älyuxwxwwwwwPgGkêtNgHÃ0ñVdFÂÜ®3ÿnäRfGÃÜ5BYÛ©|
+# key      0.0 |................................................................| x 16
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 32
+# seed    32.0 |####################.############.##############################|
+# seed    33.0 |#####################.############.#############################|
+# seed    34.0 |######################.############.############################|
+# seed    35.0 |#######################.############.###########################|
+# seed    36.0 |########################.############.##########################|
+# seed    37.0 |#########################.############.#########################|
+# seed    38.0 |##########################.############.########################|
+# seed    39.0 |###########################.############.#######################|
+# seed    40.0 |.###########################.############.######################|
+# seed    41.0 |#o###########################.############o#####################|
+# seed    42.0 |##.###########################.############.####################|
+# seed    43.0 |###############################.################################|
+# seed    44.0 |################################.###############################|
+# seed    45.0 |##.##..#######################################.#################|
+# seed    46.0 |##.###..#######################################.################|
+# seed    47.0 |#######..#######################################.###############|
+# seed    48.0 |########..#######################################.##############|
+# seed    49.0 |#########..#######################################.#############|
+# seed    50.0 |##########..#######################################.############|
+# seed    51.0 |###########..#######################################.###########|
+# seed    52.0 |############..#######################################.##########|
+# seed    53.0 |#############..#######################################.#########|
+# seed    54.0 |##############..#######################################.########|
+# seed    55.0 |###############..#######################################.#######|
+# seed    56.0 |################..#######################################.######|
+# seed    57.0 |#################..#######################################.#####|
+# seed    58.0 |##############.###..#######################################.####|
+# seed    59.0 |###############.###..#######################################.###|
+# seed    60.0 |################.###..#######################################.##|
+# seed    61.0 |#################.###..#######################################.#|
+# seed    62.0 |##################.###.########################################.|
+# seed    63.0 |###################.############################################|
+# key      0.0 |................................................................| x 16
+#              +----------------------------------------------------------------+
+# 1962 of 5120 bits failed (38.32%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 21.29978748
+#     key/seed errors: 31/80
+#     - seed bit 32 gtest probability not random: 100.0000 (16673028/15326972)
+#     - seed bit 33 gtest probability not random: 100.0000 (16613533/15386467)
+#     - with 29 more seed errors not described above.
+#     hash bit-level errors: 61/64
+#     - hash bit 0 gtest-prob not-random: 100.0000 (20349497/19650503)
+#     - hash bit 1 gtest-prob not-random: 100.0000 (20118978/19881022)
+#     - hash bit 2 gtest-prob not-random: 100.0000 (19846593/20153407)
+#     - with 58 more hash bit errors not described above.
+not ok 19 - Strict Avalanche Criteria - 16 bit keys
+# Testing  24-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 3.782171e+04
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 8
+# seed     8.0 |..................................................1.............|
+# seed     9.0 |................................................................| x 23
+# seed    32.0 |ww0wwdgGkê3AgäR0ñUd5.älãuxwxwwwww.gokutwgww0wwdgGkê3AgäR0ñUd5BYÛ|
+# seed    33.0 |hwwawwdfGkê2ÿgäRañUd5.äoãuywxwxwww.gokutwhwwawwdfGkê2ÿgäRañUd5AY|
+# seed    34.0 |wgww0wwdgGkê3ÿgäR0ñVd5.üoäuxwwwwwww.gokutwgww0wwdgGkê3ÿgäR0ñVd5B|
+# seed    35.0 |twhwwawwdfGkê3ÿgäRañUd5.üoäuxwxwwwwx.gokutwhwwawwdfGkê3ÿgäRañUd5|
+# seed    36.0 |utwgww0wwdgGkå3ÿhäR0ñVd#.üoäuxwxwwwww.fokutwgww0wwdgGkå3ÿhäR0ñVd|
+# seed    37.0 |kutwhww0wwdgGkê3ÿgäR0ñU##.üoäuywwwwwww.gokutwhww0wwdgGkê3ÿgäR0ñU|
+# seed    38.0 |okutwgww0wwdgGkå3AhäR0ñ###.üoãuxwxwxwww.gokutwgww0wwdgGkå3AhäR0ñ|
+# seed    39.0 |gokutwgwx0wwdgGkê3ÿhäR0####.üoäuxwwwwwww.gokutwgwx0wwdgGkê3ÿhäR0|
+# seed    40.0 |.folvuwgxw0vxdgHkê3AhãR#####.üoãuxwxwwwxw.folvuwgxw0vxdgHkê3AhãR|
+# seed    41.0 |w1fplvuvfxw9vxcgHkê4Aiã######.üoäuxwxwwwww1fplvuvfxw9vxcgHkê4Aiã|
+# seed    42.0 |ww1eplvvvfxw9vxchHjê4Ai#######.üoäuywxwwwww1eplvvvfxw9vxchHjê4Ai|
+# seed    43.0 |www4aträäs0äu2qz0lJjêaD########.üoãuxwxwwwww4aträäs0äu2qz0lJjêaD|
+# seed    44.0 |wwww4aträäs0äu3qz0kJjêa#########.üoäuxwxwwwww4aträäs0äu3qz0kJjêa|
+# seed    45.0 |5B.ðm.19b4a7a7l3i765d4mÃ0ñUdFÂÜ®3ÿnäRfGÃÜ5BYÛ©.1oãcxlwjwjwwegkkê|
+# seed    46.0 |Ü5.äly.18c4a7a6l3i765d4HÃ0ñVdFÂÜ®2ÿnäRfGÃÜ5BYÛ©.2oãcylxjwjxwefkk|
+# seed    47.0 |ÃÜ5piws..8c4b7a6l3j765dhHÃ0ñVcFÂÜ®3ÿnäRfGÃÜ5BYÛ©.1oäcxlxjwjwwegk|
+# seed    48.0 |GÃÜ5csqv.18b4b8a6l3j765NgHÃ0ñUdFÃÜ®2ÿnäRfGÃÜ5BYÛ©.1oãcxlxjwjwwef|
+# seed    49.0 |fGÃÝ5jntu.18c4b7a7l3i76tNgHÃ0ñUdFÂÜ®3ÿnäRfGÃÝ5BYÛ©.1oäcxlxjwjwwe|
+# seed    50.0 |ReGÃÜ6fpsu..8b4a7a6l3j7åtNhHÄ0ñUdFÂÜ®3AnäReGÃÜ6BYÛ©.2oãbxlwiwjxw|
+# seed    51.0 |äRfGÃÜ5hotu.18c4b7a6l3ikêtNgHÃ0ñUdFÂÜ®3ÿnäRfGÃÜ5BYÛ©.1oäcxlxjwjw|
+# seed    52.0 |näRfGÃÜ5gpsu..8c4b7a6l3GkêtNhHÃ0ñUdFÂÜ®3ÿnäRfGÃÜ5BYÛ©.1oãcxlxjxj|
+# seed    53.0 |ÿnäRfGÃÜ5hosu..8c4b8a7lgGkêtNgHÃ0ñUdFÂÜ®3ÿnäRfGÃÜ5BYÛ©.1oäcxlxjw|
+# seed    54.0 |3ÿnäRfGÃÝ5hotu..8b4a7a6PgGkêtNgHÃ0ñUdFÃÜ®3ÿnäRfGÃÝ5BYÛ©.1oãcxlwj|
+# seed    55.0 |®3ÿnäRfGÃÜ5gosu.18b4a7awPgHkêtNgHÃ0ñUdFÂÜ®3ÿnäRfGÃÜ5BYÛ©.2oäcxlw|
+# seed    56.0 |Ü®3ÿnäRfGÃÜ5gosu.18b4a7wwPgHkåtNgHÃ0ñUdFÂÜ®3ÿnäRfGÃÜ5BYÛ©.2oãcxl|
+# seed    57.0 |ÂÜ®3ÿnäReGÃÜ5hosv.18c4bwwwPfGkêtNgHÃañUdFÂÜ®3ÿnäReGÃÜ5BYÛ©.2oãcx|
+# seed    58.0 |FÂÜ®2ÿnäReGÃÜ5.äly..8c4wwwxPgGkêtNgHÃ0ñUdFÂÜ®2ÿnäReGÃÜ5BYÛ©.1oãc|
+# seed    59.0 |dFÂÜ®3ÿnäReGÃÜ5.äly..8cwxwxwPgGkåtNhHÃ0ñUdFÂÜ®3ÿnäReGÃÜ5BYÛ©.1oä|
+# seed    60.0 |UdFÂÜ®3ÿnäReGÃÜ5.äly..8xwwwwxPgGkêtNgHÃ0ñUdFÂÜ®3ÿnäReGÃÜ5BYÛ©.1o|
+# seed    61.0 |ñVdFÃÜ®3ÿnäRfGÃÜ5.äly.1wxwxwxwPgGkåtNgHÃ0ñVdFÃÜ®3ÿnäRfGÃÜ5BYÛ©.1|
+# seed    62.0 |0ñVdFÂÜ®3ÿnäRfGÃÜ5.äly.xwxwxwwwPgGkêtNgHÃ0ñVdFÂÜ®3ÿnäRfGÃÜ5BYÛ©.|
+# seed    63.0 |Ã0ñVdFÃÜ®3ÿnäRfGÃÜ5.älyuxwxwxwwxPfGkåtNgHÃ0ñVdFÃÜ®3ÿnäRfGÃÜ5BYÛ©|
+# key      0.0 |................................................................| x 24
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 32
+# seed    32.0 |####################.############.##############################|
+# seed    33.0 |#####################.############.#############################|
+# seed    34.0 |######################.############.############################|
+# seed    35.0 |#######################.############.###########################|
+# seed    36.0 |########################.############.##########################|
+# seed    37.0 |#########################.############.#########################|
+# seed    38.0 |##########################.############.########################|
+# seed    39.0 |###########################.############.#######################|
+# seed    40.0 |.###########################.############.######################|
+# seed    41.0 |#Õ###########################.############Õ#####################|
+# seed    42.0 |##.###########################.############.####################|
+# seed    43.0 |###############################.################################|
+# seed    44.0 |################################.###############################|
+# seed    45.0 |##.##..#######################################.#################|
+# seed    46.0 |##.###.j#######################################.################|
+# seed    47.0 |#######..#######################################.###############|
+# seed    48.0 |########..#######################################.##############|
+# seed    49.0 |#########..#######################################.#############|
+# seed    50.0 |##########..#######################################.############|
+# seed    51.0 |###########..#######################################.###########|
+# seed    52.0 |############..#######################################.##########|
+# seed    53.0 |#############..#######################################.#########|
+# seed    54.0 |##############..#######################################.########|
+# seed    55.0 |###############..#######################################.#######|
+# seed    56.0 |################..#######################################.######|
+# seed    57.0 |#################..#######################################.#####|
+# seed    58.0 |##############.###..#######################################.####|
+# seed    59.0 |###############.###..#######################################.###|
+# seed    60.0 |################.###..#######################################.##|
+# seed    61.0 |#################.###..#######################################.#|
+# seed    62.0 |##################.###.########################################.|
+# seed    63.0 |###################.############################################|
+# key      0.0 |................................................................| x 24
+#              +----------------------------------------------------------------+
+# 1963 of 5632 bits failed (34.85%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 19.36471458
+#     key/seed errors: 31/88
+#     - seed bit 32 gtest probability not random: 100.0000 (16662492/15337508)
+#     - seed bit 33 gtest probability not random: 100.0000 (16619250/15380750)
+#     - with 29 more seed errors not described above.
+#     hash bit-level errors: 61/64
+#     - hash bit 0 gtest-prob not-random: 100.0000 (22356136/21643864)
+#     - hash bit 1 gtest-prob not-random: 100.0000 (22123034/21876966)
+#     - hash bit 2 gtest-prob not-random: 100.0000 (21849395/22150605)
+#     - with 58 more hash bit errors not described above.
+not ok 20 - Strict Avalanche Criteria - 24 bit keys
+# Testing  32-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 3.460343e+04
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |......................................................1.........|
+# seed     1.0 |................................................................| x 10
+# seed    11.0 |.............................................1..................|
+# seed    12.0 |................................................................| x 20
+# seed    32.0 |ww0wwdgGkê3ÿgäR0ñVd5.älãuywxwxwww.gokutwhww0wwdgGkê3ÿgäR0ñVd5BYÛ|
+# seed    33.0 |gww0wxdgGkê3ÿgäR0ñUd5.äoäuxwxwwwxw.fokutwgww0wxdgGkê3ÿgäR0ñUd5BY|
+# seed    34.0 |wgww0wwdgGkê3ÿgäR0ñUd5.üoãuxwxwwwwx.gokutwgww0wwdgGkê3ÿgäR0ñUd5B|
+# seed    35.0 |twhwx0wwdgGkê3ÿgäR0ñUd5.üoãuxwxwxwww.gokutwhwx0wwdgGkê3ÿgäR0ñUd5|
+# seed    36.0 |utwhww0wxdgGkå3AgäR0ñUd#.üoãuxwxwwwww.gokutwhww0wxdgGkå3AgäR0ñUd|
+# seed    37.0 |kutwgww0wwdfGkå3ÿgäR0ñU##.üoãuxwxwwwxw.gokutwgww0wwdfGkå3ÿgäR0ñU|
+# seed    38.0 |okutwgww0wwdfGkê3ÿhäR0ñ###.üoãuxwxwxwww.gokutwgww0wwdfGkê3ÿhäR0ñ|
+# seed    39.0 |gokutwhwx0wwdgGkå3ÿhäR0####.üoäuxwxwwwww.gokutwhwx0wwdgGkå3ÿhäR0|
+# seed    40.0 |.gokutwhww0wwdgGkê3ÿgäR#####.üoãvxwxwwwww.gokutwhww0wwdgGkê3ÿgäR|
+# seed    41.0 |w.gokutwgww0wwdgGkå3ÿgä######.üoäuywxwwwww.gokutwgww0wwdgGkå3ÿgä|
+# seed    42.0 |xw.gokutwgww0wwdgGkê3ÿh#######.üoãuxwxwxwxw.gokutwgww0wwdgGkê3ÿh|
+# seed    43.0 |wwx.gokutwhww0wwdgGkê3ÿ########.üoãvxwxwwwwx.gokutwhww0wwdgGkê3ÿ|
+# seed    44.0 |xwww.gokutwhwx0wwdgGkê3#########.üoãuxwxwxwww.gokutwhwx0wwdgGkê3|
+# seed    45.0 |5A.ðn..9b4b7a7l3j765d4mÃañUdFÃÜ®3ÿnäReGÃÜ5AYÛ©.1oãcylwjwjxwegkkå|
+# seed    46.0 |Ý5.äly.18c4b7a7l3j765d4HÄ0ñVdFÂÜ®3ÿnäRfGÃÝ5BYÛ©.1oäcxlxiwjwwegkk|
+# seed    47.0 |ÃÜ5piws..8c4b7a6l4j765dhHÄ0ñUdFÂÜ®3ÿnäRfGÃÜ5BYÛ©.1oãcxlwiwjwwegk|
+# seed    48.0 |GÃÜ5csrv.18c4b7a7l3i765NhHÃ0ñVdFÃÜ®3ÿnäReGÃÜ5BYÛ©.1oäbylxjwjwweg|
+# seed    49.0 |fGÃÜ5jntu.18c4b7a6l3i76tNhHÃ0ñUdFÃÜ®3AnäRfGÃÜ5BYÛ©.2oãcxlwjwjwwe|
+# seed    50.0 |ReGÃÜ5fpsu.18b4a7a7l3i7êuNgHÃañUdFÂÜ®3ÿnäReGÃÜ5BYÛ©.1oäcxlxjxjxw|
+# seed    51.0 |äReGÃÜ5hotu..8b4b7a6l3jkêtNgHÃañUdFÃÜ®3ÿnäReGÃÜ5AYÛ©.1oãcylxiwjw|
+# seed    52.0 |näRfGÃÜ5gpsu..8b4a7a6l3GkåtNgHÃ0ñVdFÃÜ®2ÿnäRfGÃÜ5BYÛ©.2oãcxlwjwj|
+# seed    53.0 |ÿnäReGÃÜ5hosu..8c4a7a7lgGkêtNgHÃ0ñVdFÂÜ®3ÿnäReGÃÜ5BYÛ©.1oäcxlxjw|
+# seed    54.0 |3ÿoäRfGÃÜ5gpsu.18b4a7a7PgGkåtNgHÃ0ñUdFÂÜ®3ÿoäRfGÃÜ5BYÛ©.1oãcxlwi|
+# seed    55.0 |®3ÿnäReGÃÜ5hosu.19c4b7awPgGkêtNgHÃ0ñVdFÂÜ®3ÿnäReGÃÜ5BYÛ©.1oãcxlx|
+# seed    56.0 |Ü®3ÿnäRfGÃÜ5hosu.19c4a7wwPgGkåtNhHÃ0ñUdFÃÜ®3ÿnäRfGÃÜ5BYÛ©.1oäcxl|
+# seed    57.0 |ÃÜ®3ÿnäRfGÃÝ5gpsv..8c4awwwPgGkêtNgHÃ0ñUdFÃÜ®3ÿnäRfGÃÝ5BYÛ©.2oäcx|
+# seed    58.0 |FÂÜ®3ÿnäRfGÃÜ5.äly.18c4wxwwPgGkêtNgHÃ0ñUdFÂÜ®3ÿnäRfGÃÜ5BYÛ©.1oãc|
+# seed    59.0 |dFÂÜ®3ÿnäRfGÃÜ5.äly.18bwxwwwPgGkêtNgHÃañUdFÂÜ®3ÿnäRfGÃÜ5BYÛ©.1oã|
+# seed    60.0 |UdFÃÜ®2ÿnäRfGÃÜ5.äly..8xwwwwwPgGkêtNgHÃ0ñUdFÃÜ®2ÿnäRfGÃÜ5AYÛ©.1o|
+# seed    61.0 |ñUdFÂÜ®3ÿnäReGÃÜ5.äly.1wxwwwwwPgHkêtNgHÃ0ñUdFÂÜ®3ÿnäReGÃÜ5BYÛ©.1|
+# seed    62.0 |0ñUdFÃÜ®2ÿnäRfGÃÜ5.äly.xwwwwwwwPgHkêtNgHÃ0ñUdFÃÜ®2ÿnäRfGÃÜ5AYÛ©.|
+# seed    63.0 |Ã0ñUdFÂÜ®3AnäRfGÃÜ5.älyuywxwwxwwPgGkêtNhHÃ0ñUdFÂÜ®3AnäRfGÃÜ5BYÛ©|
+# key      0.0 |................................................................| x 17
+# key     17.0 |...................1........1...................................|
+# key     18.0 |................................................................| x 14
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |................................................................| x 32
+# seed    32.0 |####################.############.##############################|
+# seed    33.0 |#####################.############.#############################|
+# seed    34.0 |######################.############.############################|
+# seed    35.0 |#######################.############.###########################|
+# seed    36.0 |########################.############.##########################|
+# seed    37.0 |#########################.############.#########################|
+# seed    38.0 |##########################.############.########################|
+# seed    39.0 |###########################.############.#######################|
+# seed    40.0 |.###########################.############.######################|
+# seed    41.0 |#.###########################.############.#####################|
+# seed    42.0 |##.###########################.############.####################|
+# seed    43.0 |###.###########################.############.###################|
+# seed    44.0 |####.###########################.############.##################|
+# seed    45.0 |##.##..#######################################.#################|
+# seed    46.0 |##.###.O#######################################.################|
+# seed    47.0 |#######..#######################################.###############|
+# seed    48.0 |########..#######################################.##############|
+# seed    49.0 |#########..#######################################.#############|
+# seed    50.0 |##########..#######################################.############|
+# seed    51.0 |###########..#######################################.###########|
+# seed    52.0 |############..#######################################.##########|
+# seed    53.0 |#############..#######################################.#########|
+# seed    54.0 |##############.Ä#######################################.########|
+# seed    55.0 |###############..#######################################.#######|
+# seed    56.0 |################..#######################################.######|
+# seed    57.0 |#################..#######################################.#####|
+# seed    58.0 |##############.###..#######################################.####|
+# seed    59.0 |###############.###.Ë#######################################.###|
+# seed    60.0 |################.###..#######################################.##|
+# seed    61.0 |#################.###..#######################################.#|
+# seed    62.0 |##################.###.########################################.|
+# seed    63.0 |###################.############################################|
+# key      0.0 |................................................................| x 32
+#              +----------------------------------------------------------------+
+# 1959 of 6144 bits failed (31.88%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 17.71695564
+#     key/seed errors: 30/96
+#     - seed bit 32 gtest probability not random: 100.0000 (16672903/15327097)
+#     - seed bit 33 gtest probability not random: 100.0000 (16614452/15385548)
+#     - with 28 more seed errors not described above.
+#     hash bit-level errors: 62/64
+#     - hash bit 0 gtest-prob not-random: 100.0000 (24348048/23651952)
+#     - hash bit 1 gtest-prob not-random: 100.0000 (24117372/23882628)
+#     - hash bit 2 gtest-prob not-random: 100.0000 (23855527/24144473)
+#     - with 59 more hash bit errors not described above.
+not ok 21 - Strict Avalanche Criteria - 32 bit keys
+# Testing  40-bit keys.......... ok.     # worst-bit:   0.538% error-ratio: 9.748658e-01
+ok 22 - Strict Avalanche Criteria - 40 bit keys
+# Testing  48-bit keys.......... ok.     # worst-bit:   0.555% error-ratio: 9.699401e-01
+ok 23 - Strict Avalanche Criteria - 48 bit keys
+# Testing  56-bit keys.......... ok.     # worst-bit:   0.574% error-ratio: 9.994051e-01
+ok 24 - Strict Avalanche Criteria - 56 bit keys
+# Testing  64-bit keys.......... ok.     # worst-bit:   0.769% error-ratio: 1.018991e+00
+ok 25 - Strict Avalanche Criteria - 64 bit keys
+# Testing  72-bit keys.......... ok.     # worst-bit:   0.569% error-ratio: 1.002658e+00
+ok 26 - Strict Avalanche Criteria - 72 bit keys
+# Testing  80-bit keys.......... ok.     # worst-bit:   0.526% error-ratio: 9.768823e-01
+ok 27 - Strict Avalanche Criteria - 80 bit keys
+# Testing  88-bit keys.......... ok.     # worst-bit:   0.557% error-ratio: 1.002404e+00
+ok 28 - Strict Avalanche Criteria - 88 bit keys
+# Testing  96-bit keys.......... ok.     # worst-bit:   0.565% error-ratio: 1.003618e+00
+ok 29 - Strict Avalanche Criteria - 96 bit keys
+# Testing 104-bit keys.......... ok.     # worst-bit:   0.533% error-ratio: 1.025905e+00
+ok 30 - Strict Avalanche Criteria - 104 bit keys
+# Testing 112-bit keys.......... ok.     # worst-bit:   0.586% error-ratio: 9.822178e-01
+ok 31 - Strict Avalanche Criteria - 112 bit keys
+# Testing 120-bit keys.......... ok.     # worst-bit:   0.640% error-ratio: 1.024754e+00
+ok 32 - Strict Avalanche Criteria - 120 bit keys
+# Testing 128-bit keys.......... ok.     # worst-bit:   0.506% error-ratio: 9.977500e-01
+ok 33 - Strict Avalanche Criteria - 128 bit keys
+# Testing 136-bit keys.......... ok.     # worst-bit:   0.552% error-ratio: 9.984073e-01
+ok 34 - Strict Avalanche Criteria - 136 bit keys
+# Testing 144-bit keys.......... ok.     # worst-bit:   0.544% error-ratio: 1.000635e+00
+ok 35 - Strict Avalanche Criteria - 144 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.553% error-ratio: 1.028318e+00
+ok 36 - Strict Avalanche Criteria - 152 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.600% error-ratio: 9.956424e-01
+ok 37 - Strict Avalanche Criteria - 160 bit keys
+# Testing 200-bit keys.......... ok.     # worst-bit:   0.580% error-ratio: 9.843189e-01
+ok 38 - Strict Avalanche Criteria - 200 bit keys
+# Testing 256-bit keys.......... ok.     # worst-bit:   0.650% error-ratio: 1.010670e+00
 ok 39 - Strict Avalanche Criteria - 256 bit keys
-ok 40 - Strict Avalanche Criteria # t1ha_32le
+# Testing 512-bit keys.......... ok.     # worst-bit:   0.613% error-ratio: 9.945427e-01
+ok 40 - Strict Avalanche Criteria - 512 bit keys
+not ok 41 - Strict Avalanche Criteria # t1ha_32le
 ### Keyset 'Cyclic' Tests ###
 # Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 41 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
-ok 42 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+ok 42 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+ok 43 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 43 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
-ok 44 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
+ok 44 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
+ok 45 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 45 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
-ok 46 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
+ok 46 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
+ok 47 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 47 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
-ok 48 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
+ok 48 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
+ok 49 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 49 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
-ok 50 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
-ok 51 - Keyset 'Cyclic' # t1ha_32le
+ok 50 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
+ok 51 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
+ok 52 - Keyset 'Cyclic' # t1ha_32le
 ### Keyset 'TwoBytes' Tests ###
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 52 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
-ok 53 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+ok 53 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+ok 54 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 54 - Collision Rate for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
-ok 55 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+ok 55 - Collision Rate for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+ok 56 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 56 - Collision Rate for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
-ok 57 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+ok 57 - Collision Rate for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+ok 58 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 58 - Collision Rate for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
-ok 59 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+ok 59 - Collision Rate for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+ok 60 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 60 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
-ok 61 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
-ok 62 - Keyset 'TwoBytes' # t1ha_32le
+ok 61 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+ok 62 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+ok 63 - Keyset 'TwoBytes' # t1ha_32le
 ### Keyset 'Sparse' Tests ###
 # Keyset 'Sparse' - 32-bit keys with up to 6 bits set - 1149017 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 63 - Collision Rate for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
-ok 64 - Distribution Bias Check for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+ok 64 - Collision Rate for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+ok 65 - Distribution Bias Check for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
 # Keyset 'Sparse' - 40-bit keys with up to 6 bits set - 4598479 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 65 - Collision Rate for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
-ok 66 - Distribution Bias Check for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+ok 66 - Collision Rate for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+ok 67 - Distribution Bias Check for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
 # Keyset 'Sparse' - 48-bit keys with up to 5 bits set - 1925357 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 67 - Collision Rate for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
-ok 68 - Distribution Bias Check for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+ok 68 - Collision Rate for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+ok 69 - Distribution Bias Check for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
 # Keyset 'Sparse' - 56-bit keys with up to 5 bits set - 4216423 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 69 - Collision Rate for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
-ok 70 - Distribution Bias Check for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+ok 70 - Collision Rate for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+ok 71 - Distribution Bias Check for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
 # Keyset 'Sparse' - 64-bit keys with up to 5 bits set - 8303633 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 71 - Collision Rate for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
-ok 72 - Distribution Bias Check for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+ok 72 - Collision Rate for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+ok 73 - Distribution Bias Check for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
 # Keyset 'Sparse' - 96-bit keys with up to 4 bits set - 3469497 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 73 - Collision Rate for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
-ok 74 - Distribution Bias Check for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+ok 74 - Collision Rate for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+ok 75 - Distribution Bias Check for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
 # Keyset 'Sparse' - 256-bit keys with up to 3 bits set - 2796417 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 75 - Collision Rate for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
-ok 76 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+ok 76 - Collision Rate for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+ok 77 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
 # Keyset 'Sparse' - 2048-bit keys with up to 2 bits set - 2098177 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 77 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
-ok 78 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
-ok 79 - Keyset 'Sparse' # t1ha_32le
-# Keyset 'CRC-MultiCollision' - 100000 x 16 block keys - 128-bytes long - 10 seeds
+ok 78 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 79 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 80 - Keyset 'Sparse' # t1ha_32le
+# Keyset 'CRC-MultiCollision' - 1048575 x 16 block keys - 128-bytes long - 10 seeds
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 80 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 1 # t1ha_32le
+ok 81 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 1 # t1ha_32le
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 81 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 2 # t1ha_32le
+ok 82 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 2 # t1ha_32le
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 82 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 3 # t1ha_32le
+ok 83 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 3 # t1ha_32le
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 83 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 4 # t1ha_32le
+ok 84 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 4 # t1ha_32le
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 84 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 5 # t1ha_32le
+ok 85 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 5 # t1ha_32le
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 85 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 6 # t1ha_32le
+ok 86 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 6 # t1ha_32le
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 86 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 7 # t1ha_32le
+ok 87 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 7 # t1ha_32le
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 87 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 8 # t1ha_32le
+ok 88 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 8 # t1ha_32le
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 88 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 9 # t1ha_32le
+ok 89 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 9 # t1ha_32le
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 89 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 10 # t1ha_32le
+ok 90 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 10 # t1ha_32le
 ### Keyset 'Combination Lowbits' Tests ###
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 90 - Collision Rate for Keyset 'Combination Lowbits'
-ok 91 - Distribution Bias Check for Keyset 'Combination Lowbits'
-ok 92 - Keyset 'Combination Lowbits' # t1ha_32le
+ok 91 - Collision Rate for Keyset 'Combination Lowbits'
+ok 92 - Distribution Bias Check for Keyset 'Combination Lowbits'
+ok 93 - Keyset 'Combination Lowbits' # t1ha_32le
 ### Keyset 'Combination Highbits' Tests ###
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 93 - Collision Rate for Keyset 'Combination Highbits'
-ok 94 - Distribution Bias Check for Keyset 'Combination Highbits'
-ok 95 - Keyset 'Combination Highbits' # t1ha_32le
+ok 94 - Collision Rate for Keyset 'Combination Highbits'
+ok 95 - Distribution Bias Check for Keyset 'Combination Highbits'
+ok 96 - Keyset 'Combination Highbits' # t1ha_32le
 ### Keyset 'Combination Highbits2' Tests ###
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 96 - Collision Rate for Keyset 'Combination Highbits2'
-ok 97 - Distribution Bias Check for Keyset 'Combination Highbits2'
-ok 98 - Keyset 'Combination Highbits2' # t1ha_32le
+ok 97 - Collision Rate for Keyset 'Combination Highbits2'
+ok 98 - Distribution Bias Check for Keyset 'Combination Highbits2'
+ok 99 - Keyset 'Combination Highbits2' # t1ha_32le
 ### Keyset 'Combination 0x80000000' Tests ###
 # Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 99 - Collision Rate for Keyset 'Combination 0x80000000'
-ok 100 - Distribution Bias Check for Keyset 'Combination 0x80000000'
-ok 101 - Keyset 'Combination 0x80000000' # t1ha_32le
+ok 100 - Collision Rate for Keyset 'Combination 0x80000000'
+ok 101 - Distribution Bias Check for Keyset 'Combination 0x80000000'
+ok 102 - Keyset 'Combination 0x80000000' # t1ha_32le
 ### Keyset 'Combination 0x00000001' Tests ###
 # Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 102 - Collision Rate for Keyset 'Combination 0x00000001'
-ok 103 - Distribution Bias Check for Keyset 'Combination 0x00000001'
-ok 104 - Keyset 'Combination 0x00000001' # t1ha_32le
+ok 103 - Collision Rate for Keyset 'Combination 0x00000001'
+ok 104 - Distribution Bias Check for Keyset 'Combination 0x00000001'
+ok 105 - Keyset 'Combination 0x00000001' # t1ha_32le
 ### Keyset 'Combination Hi-Lo' Tests ###
 # Keyset 'Combination' - up to 6 blocks from a set of 15 - 12204240 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 105 - Collision Rate for Keyset 'Combination Hi-Lo'
-ok 106 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
-ok 107 - Keyset 'Combination Hi-Lo' # t1ha_32le
+ok 106 - Collision Rate for Keyset 'Combination Hi-Lo'
+ok 107 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
+ok 108 - Keyset 'Combination Hi-Lo' # t1ha_32le
 ### Keyset 'Text' Tests ###
 # Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 108 - Collision Rate for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
-ok 109 - Distribution Bias Check for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+ok 109 - Collision Rate for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+ok 110 - Distribution Bias Check for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
 # Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 110 - Collision Rate for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
-ok 111 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+ok 111 - Collision Rate for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+ok 112 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
 # Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 112 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
-ok 113 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
-ok 114 - Keyset 'Text' # t1ha_32le
+ok 113 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 114 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 115 - Keyset 'Text' # t1ha_32le
 ### Keyset 'Zeroes' Tests ###
 # Keyset 'Zeroes' - 262144 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 115 - Collision Rate for Keyset 'Zeroes' - 262144 keys
-ok 116 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys
-ok 117 - Keyset 'Zeroes' # t1ha_32le
+ok 116 - Collision Rate for Keyset 'Zeroes' - 262144 keys
+ok 117 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys
+ok 118 - Keyset 'Zeroes' # t1ha_32le
 ### Keyset 'Seed' Tests ###
 # Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 118 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
-ok 119 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+ok 119 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+ok 120 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
 # Keyset 'Seed' - 2000000 seeds, Key ""
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 120 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
-ok 121 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
+ok 121 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
+ok 122 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
 # Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 122 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
-ok 123 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+ok 123 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+ok 124 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
 # Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 124 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
-ok 125 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
-ok 126 - Keyset 'Seed' # t1ha_32le
+ok 125 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 126 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 127 - Keyset 'Seed' # t1ha_32le
 ### Keyset 'Effs' Tests ###
 # Keyset 'Effs' - 262144 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 127 - Collision Rate for Keyset 'Effs' - 262144 keys
-ok 128 - Distribution Bias Check for Keyset 'Effs' - 262144 keys
-ok 129 - Keyset 'Effs' # t1ha_32le
-ok 130 - all tests passed # t1ha_32le
-1..130
-# All Tests Passed. t1ha_32le passed all 130 tests run.
-# Testing took 1586.612477 seconds
-# This is SMHasher version v1.0-demerphq-5-g86440f3 - built on Mar 10 2017.
+ok 128 - Collision Rate for Keyset 'Effs' - 262144 keys
+ok 129 - Distribution Bias Check for Keyset 'Effs' - 262144 keys
+ok 130 - Keyset 'Effs' # t1ha_32le
+not ok 131 - all tests passed # t1ha_32le
+1..131
+# Tests Failed. t1ha_32le failed 7 of 131 tests.
+# Testing took 1830.168252 seconds
+# This is SMHasher version v1.0-demerphq-28-g87b6939-dirty - built on Mar 13 2017.
