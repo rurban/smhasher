@@ -512,6 +512,22 @@ void SelfTest ()
   done_testing();
 }
 
+bool compare_hashinfo( HashInfo a, HashInfo b ) {
+  int cmp;
+#if 0
+  cmp = a.seedbits - b.seedbits;
+  if (cmp) return cmp < 0;
+  cmp = a.statebits - b.statebits;
+  if (cmp) return cmp < 0;
+  cmp = a.hashbits - b.hashbits;
+  if (cmp) return cmp < 0;
+#endif
+  cmp = _stricmp(a.name,b.name);
+  if (cmp) return cmp < 0;
+  cmp = strcmp(a.name,b.name);
+  return cmp < 0;
+}
+
 
 int main ( int argc, char ** argv )
 {
@@ -522,6 +538,9 @@ int main ( int argc, char ** argv )
 #endif
   const char * hashToTest = defaulthash;
   bool opt_validate = false;
+
+  //std::vector<HashInfo>v_hashes(g_hashes,g_hashes+sizeof(g_hashes)/sizeof(HashInfo));
+  std::sort(g_hashes,g_hashes+sizeof(g_hashes)/sizeof(HashInfo),compare_hashinfo);
 
   g_verbose = 0;
   g_confidence = sigmasToProb(5.0);
