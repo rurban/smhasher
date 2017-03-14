@@ -8,6 +8,7 @@
 #include "DifferentialTest.h"
 #include "StreamTest.h"
 #include "RunTests.h"
+#include "WordsTest.h"
 
 extern HashInfo * g_hashUnderTest;
 extern bool g_runCtrStream;
@@ -25,12 +26,13 @@ extern bool g_testBIC;        /* only ReallyAll */
 extern bool g_testCyclic;
 extern bool g_testTwoBytes;
 extern bool g_testSparse;
-extern bool g_testPermutation;
+extern bool g_testCombination;
 extern bool g_testWindow;     /* only ReallyAll */
 extern bool g_testText;
 extern bool g_testZeroes;
 extern bool g_testEffs;
 extern bool g_testSeed;
+extern bool g_testWords;
 extern HashInfo g_hashes[];
 extern int g_hashes_sizeof;
 extern uint64_t g_rngSeed;
@@ -335,14 +337,15 @@ bool testHash ( HashInfo * info, int self_test, double confidence )
   if(g_testCrcCollision || g_testAll)
   {
     Rand r(1810489);
+    printf("### Keyset 'CRC-MultiCollision' Tests ###\n");
 
     pass &= CrcCollisionKeyTest<hashtype>(hash, r);
 
   }
   //-----------------------------------------------------------------------------
-  // Keyset 'Permutation' - all possible combinations of a set of blocks
+  // Keyset 'Combination' - all possible combinations of a set of blocks
 
-  if(g_testPermutation || g_testAll)
+  if(g_testCombination || g_testAll)
   {
     {
       // This one breaks lookup3, surprisingly
@@ -405,7 +408,7 @@ bool testHash ( HashInfo * info, int self_test, double confidence )
     }
 
     {
-      char name[]= "Keyset 'Combination 0x80000000'";
+      char name[]= "Keyset 'Combination HiBit-Null'";
       printf("### %s Tests ###\n", name);
 
       bool drawDiagram = false;
@@ -424,7 +427,7 @@ bool testHash ( HashInfo * info, int self_test, double confidence )
     }
 
     {
-      char name[]= "Keyset 'Combination 0x00000001'";
+      char name[]= "Keyset 'Combination LowBit-Null'";
       printf("### %s Tests ###\n", name);
 
       bool drawDiagram = false;
@@ -562,6 +565,12 @@ bool testHash ( HashInfo * info, int self_test, double confidence )
     pass &= ok(result, "Keyset 'Effs'", info->name);
   }
 
+  if (g_testWords || g_testAll)
+  {
+    printf("### Keyset 'Words' Tests ###\n");
+
+    pass &= WordsTest<hashtype>( hash, confidence );
+  }
   return pass;
 }
 

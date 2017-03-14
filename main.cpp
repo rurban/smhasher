@@ -38,12 +38,13 @@ bool g_testBIC         = false; /* only ReallyAll */
 bool g_testCyclic      = false;
 bool g_testTwoBytes    = false;
 bool g_testSparse      = false;
-bool g_testPermutation = false;
+bool g_testCombination = false;
 bool g_testWindow      = false; /* only ReallyAll */
 bool g_testText        = false;
 bool g_testZeroes      = false;
 bool g_testEffs        = false;
 bool g_testSeed        = false;
+bool g_testWords       = false;
 bool g_testCrcCollision= false;
 
 bool g_runCtrStream    = false; /* this is special */
@@ -69,13 +70,14 @@ TestOpts g_testopts[] =
   { g_testCyclic,	"Cyclic" },
   { g_testTwoBytes,	"TwoBytes" },
   { g_testSparse,	"Sparse" },
-  { g_testPermutation,	"Permutation" },
+  { g_testCombination,	"Combination" },
   { g_testWindow,	"Window" },
   { g_testText,		"Text" },
   { g_testZeroes,	"Zeroes" },
   { g_testEffs,	        "Effs" },
   { g_testSeed,		"Seed" },
   { g_testCrcCollision, "CRC" },
+  { g_testWords,        "Words" },
 };
 
 //-----------------------------------------------------------------------------
