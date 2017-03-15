@@ -11,7 +11,7 @@
 #include "phat_hash.h"
 #include "zaphod32_hash.h"
 #include "zaphod64_hash.h"
-#include "stadtx_hash.h"
+#include "stadtx_hash_test.h"
 #include "sbox_hash.h"
 #include "md5.h"
 #include "siphash.h"
