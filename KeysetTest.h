@@ -451,7 +451,7 @@ bool CityCollisionKeyTest ( hashfunc<hashtype> hash, Rand &r )
   const int key_bytes= sizeof(uint64_t) * num_key_blocks;
   char name[1024];
   const int count = 10;
-  snprintf(name,1024,"Keyset 'CRC-MultiCollision' - %d x %d block keys - %d-bytes long",
+  snprintf(name,1024,"Keyset 'City64-MultiCollision' - %d x %d block keys - %d-bytes long",
       count, num_key_blocks, key_bytes);
   printf("# %s - %d seeds\n", name, seeds);
   int name_len= strlen(name);
@@ -466,7 +466,7 @@ bool CityCollisionKeyTest ( hashfunc<hashtype> hash, Rand &r )
     for(int j = 0; j < count; ++j) {
       hash(blocks+(j*2),16,&hashes[j]);
     }
-    snprintf(name,1024,"Keyset 'City-MultiCollision' - seed %d # %s", i+1,hash.name());
+    snprintf(name,1024,"Keyset 'City64-MultiCollision' - seed %d # %s", i+1,hash.name());
     result &= TestHashList<hashtype>(hashes,true,false,false,name);
   }
 

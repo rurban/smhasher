@@ -395,7 +395,7 @@ bool testHash ( HashInfo * info, int self_test, double confidence )
   if(g_testCityCollision || g_testAll || g_testMultiCollision)
   {
     Rand r(2313142);
-    printf("### Keyset 'City-MultiCollision' Tests ###\n");
+    printf("### Keyset 'City64-MultiCollision' Tests ###\n");
 
     pass &= CityCollisionKeyTest<hashtype>(hash, r);
   }
