@@ -375,8 +375,10 @@ bool SparseKeyTest ( hashfunc<hashtype> hash, const int setbits, bool inclusive,
 // unique, but when fed to a naive CRC based hash function will all produce
 // the same hash value.
 template < typename hashtype >
-bool CrcCollisionKeyTest ( hashfunc<hashtype> hash, Rand &r )
+bool CollisionKeyTest ( hashfunc<hashtype> hash, Rand &r, const int num_src_blocks, const int block_width, const uint64_t *blocks, const char *subname )
 {
+  const int shift_bits= (int)sqrt(num_src_blocks);
+  const uint32_t mask= num_src_blocks - 1;
   const int seeds= 10;
   const int num_key_blocks= 16;
   // count needs to be high enough that we expect a reasonable number
@@ -384,27 +386,15 @@ bool CrcCollisionKeyTest ( hashfunc<hashtype> hash, Rand &r )
   // breaks the percentage tests. IOW, its better to expect 100 collisions than
   // to expect 1.
   int count = 1024 * 1024 - 1;
-  int key_bytes= num_key_blocks * sizeof(uint64_t);
-  uint64_t key[num_key_blocks];
+  int key_bytes= (num_key_blocks * block_width) * sizeof(uint64_t);
+  uint64_t key[num_key_blocks * block_width];
   char name[1024];
-  snprintf(name,1024,"Keyset 'CRC-MultiCollision' - %d x %d block keys - %d-bytes long",
-      count, num_key_blocks, key_bytes);
+  snprintf(name,1024,"Keyset '%s-MultiCollision' - %d x %d block keys - %d-bytes long",
+      subname, count, num_key_blocks, key_bytes);
   printf("# %s - %d seeds\n", name, seeds);
   int name_len= strlen(name);
 
   std::vector<hashtype> hashes;
-  // The following blocks all have a crc of 57c58437
-  const int num_src_blocks= 4;
-  const int shift_bits= 2;
-  const int mask= num_src_blocks - 1;
-  const uint64_t blocks[num_src_blocks]= {
-    0x4bb53c935d7bc565UL,
-    0x53fa1f51857fa7f4UL,
-    0x6caeaca38c4a8764UL,
-    0xf9e0603f18749bf3UL,
-  };
-  // Alternatively we could use:
-  // 5a476a7f 020d080728338f41 9a36026fdc10f1e0 c5e5a331ecf163dc c9f6d7755f81beca
 
   hashes.resize(count);
 
@@ -415,12 +405,14 @@ bool CrcCollisionKeyTest ( hashfunc<hashtype> hash, Rand &r )
   for (int i= 0; i < seeds; i++) {
     hash.seed_state_rand(r);
     for(int j=0; j < count; j++) {
-      uint64_t *cursor= &key[0];
+      uint64_t *cursor= key;
       uint32_t template_bits = block_template;
       for (int c = 0; c < (sizeof(uint32_t)*8)/shift_bits; c++) {
-        *cursor = blocks[template_bits & mask];
+        int b = (template_bits & mask) * block_width;
+        for (int x= 0; x < block_width; x++)
+          cursor[x] = blocks[b+x];
         //printf("%016lx\n",*cursor);
-        cursor++;
+        cursor += block_width;
         template_bits >>= shift_bits;
       }
       // marsaglia 32-bit permutation - we could use simple increment
@@ -433,9 +425,51 @@ bool CrcCollisionKeyTest ( hashfunc<hashtype> hash, Rand &r )
       hash(&key[0],key_bytes,&hashes[j]);
       //printf("hash=%016lx",*((uint64_t*)&hashes[j]));
     }
-    snprintf(name,1024,"Keyset 'CRC-MultiCollision' - seed %d # %s", i+1,hash.name());
+    snprintf(name,1024,"Keyset '%s-MultiCollision' - seed %d # %s", subname, i+1,hash.name());
     result &= TestHashList<hashtype>(hashes,true,false,false,name);
   }
+  return result;
+}
+
+template < typename hashtype >
+bool CityCollisionKeyTest ( hashfunc<hashtype> hash, Rand &r )
+{
+  const int seeds= 10;
+  uint64_t blocks[20]= {
+    0x8e69324ad2a005ffUL, 0x2148534148202020UL,
+    0x7ae31886221136baUL, 0x2148534148202021UL,
+    0xa9a6b9c6888e94ffUL, 0x2148534148202022UL,
+    0x85fdcf8310e3e955UL, 0x2148534148202023UL,
+    0xb31994ea5c35c000UL, 0x2148534148202024UL,
+    0x3d7fadbb3c05bf28UL, 0x2148534148202025UL,
+    0xe105497eb233edb9UL, 0x2148534148202026UL,
+    0x669d0bfcea999813UL, 0x2148534148202027UL,
+    0x1f2ba4ec627b9656UL, 0x2148534148202028UL,
+    0xcaf3187b666bfebfUL, 0x2148534148202029UL,
+  };
+  const int num_key_blocks = 2;
+  const int key_bytes= sizeof(uint64_t) * num_key_blocks;
+  char name[1024];
+  const int count = 10;
+  snprintf(name,1024,"Keyset 'CRC-MultiCollision' - %d x %d block keys - %d-bytes long",
+      count, num_key_blocks, key_bytes);
+  printf("# %s - %d seeds\n", name, seeds);
+  int name_len= strlen(name);
+
+  std::vector<hashtype> hashes;
+  hashes.resize(count);
+
+  bool result= true;
+  for(int i = 0; i < seeds; ++i) {
+    hash.seed_state_rand(r);
+    uint64_t base_target= r.rand_u64();
+    for(int j = 0; j < count; ++j) {
+      hash(blocks+(j*2),16,&hashes[j]);
+    }
+    snprintf(name,1024,"Keyset 'City-MultiCollision' - seed %d # %s", i+1,hash.name());
+    result &= TestHashList<hashtype>(hashes,true,false,false,name);
+  }
+
   return result;
 }
 

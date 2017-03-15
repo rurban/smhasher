@@ -18,6 +18,10 @@ extern bool g_testSanity;
 extern bool g_testSpeed;
 extern bool g_testBulkSpeed;
 extern bool g_testCrcCollision;
+extern bool g_testCityCollision;
+extern bool g_testMurmur2Collision;
+extern bool g_testMurmur3Collision;
+extern bool g_testMultiCollision;
 extern bool g_testKeySpeed;
 extern bool g_testDiff;
 extern bool g_testDiffDist;   /* only ReallyAll */
@@ -334,13 +338,66 @@ bool testHash ( HashInfo * info, int self_test, double confidence )
     pass &= ok(result, "Keyset 'Sparse'", info->name);
   }
 
-  if(g_testCrcCollision || g_testAll)
+  if(g_testCrcCollision || g_testAll || g_testMultiCollision)
   {
     Rand r(1810489);
-    printf("### Keyset 'CRC-MultiCollision' Tests ###\n");
+    printf("### Keyset 'Crc-MultiCollision' Tests ###\n");
+    // The following blocks all have a crc of 57c58437
+    // Alternatively we could use:
+    // 5a476a7f 020d080728338f41 9a36026fdc10f1e0 c5e5a331ecf163dc c9f6d7755f81beca
+    const uint64_t blocks[4]= {
+      0x4bb53c935d7bc565UL,
+      0x53fa1f51857fa7f4UL,
+      0x6caeaca38c4a8764UL,
+      0xf9e0603f18749bf3UL,
+    };
 
-    pass &= CrcCollisionKeyTest<hashtype>(hash, r);
+    pass &= CollisionKeyTest<hashtype>(hash, r, 4, 1, blocks,"Crc");
 
+  }
+  if(g_testMurmur2Collision || g_testAll || g_testMultiCollision)
+  {
+    Rand r(1810489);
+    printf("### Keyset 'Murmur2-MultiCollision' Tests ###\n");
+    // The following blocks all Murmurhash to the same thing.
+    const uint64_t blocks[4]= {
+        0x1eb684c21eb684c2UL, 0xd129a642d129a642UL,
+        0x3d6d09843d6d0984UL, 0xefe02b04efe02b04UL
+    };
+
+    pass &= CollisionKeyTest<hashtype>(hash, r, 4, 1, blocks,"Murmur2");
+  }
+  if(g_testMurmur3Collision || g_testAll || g_testMultiCollision)
+  {
+    Rand r(1810489);
+    {
+      printf("### Keyset 'Murmur3A-MultiCollision' Tests ###\n");
+      // The following blocks all Murmurhash to the same thing.
+      const uint64_t blocks[4]= {
+        0xa5fbc821a5fbc821UL,0x2ad8cbf32ad8cbf3UL,
+        0xe1acc821127e6979UL,0x6689cbf3975b6d4bUL,
+      };
+
+      pass &= CollisionKeyTest<hashtype>(hash, r, 4, 1, blocks,"Murmur3A");
+    }
+    {
+      printf("### Keyset 'Murmur3F-MultiCollision' Tests ###\n");
+      // The following blocks all Murmurhash to the same thing.
+      const uint64_t blocks[4*4]= {
+        0xa4313cc80d34a51aUL,0x8779ba9b3355a3fcUL,0x3f9bca292d3a8a48UL,0x0ef3753666ab47f8UL,
+        0x31824da1ca7221f9UL,0xa97e19921a00ebf4UL,0xc7504008ea780727UL,0x30f7d42d4d568ff0UL,
+        0x72234b662f32457aUL,0x14eca32a06ee843eUL,0xbccd7cac2d3a8a48UL,0x0ef3753666ab47f8UL,
+        0xf9d7c145ec6fc259UL,0x36f10220ed99cc36UL,0x4a1e8d85ea780727UL,0x30f7d42d4d568ff0UL
+      };
+      pass &= CollisionKeyTest<hashtype>(hash, r, 4, 4, blocks,"Murmur3F");
+    }
+  }
+  if(g_testCityCollision || g_testAll || g_testMultiCollision)
+  {
+    Rand r(2313142);
+    printf("### Keyset 'City-MultiCollision' Tests ###\n");
+
+    pass &= CityCollisionKeyTest<hashtype>(hash, r);
   }
   //-----------------------------------------------------------------------------
   // Keyset 'Combination' - all possible combinations of a set of blocks

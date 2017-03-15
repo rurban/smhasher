@@ -46,6 +46,10 @@ bool g_testEffs        = false;
 bool g_testSeed        = false;
 bool g_testWords       = false;
 bool g_testCrcCollision= false;
+bool g_testCityCollision= false;
+bool g_testMurmur2Collision= false;
+bool g_testMurmur3Collision= false;
+bool g_testMultiCollision= false; /* enables all collision tests */
 
 bool g_runCtrStream    = false; /* this is special */
 uint64_t g_rngSeed = 1234567809;
@@ -76,7 +80,11 @@ TestOpts g_testopts[] =
   { g_testZeroes,	"Zeroes" },
   { g_testEffs,	        "Effs" },
   { g_testSeed,		"Seed" },
-  { g_testCrcCollision, "CRC" },
+  { g_testMultiCollision,"Multi"},
+  { g_testCrcCollision, "CrcMulti" },
+  { g_testCityCollision,"CityMulti"},
+  { g_testMurmur2Collision,"Murmur2Multi"},
+  { g_testMurmur3Collision,"Murmur3Multi"},
   { g_testWords,        "Words" },
 };
 
