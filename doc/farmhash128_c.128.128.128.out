@@ -4,9 +4,9 @@ ok 1 - Found Hash # farmhash128_c
 ### - farmhash128_with_seed (C99) -
 ### seedbits: 128 statebits: 128 hashbits: 128
 ###################################################################
-### Sanity Tests ###
 ok 2 - Verification code # farmhash128_c
 # farmhash128_c        - Verification value 0x2F80D32B : Passed.
+### Sanity Tests ###
 # Sanity check simple key bit flips and consistency..........
 ok 3 - SanityTest # farmhash128_c
 # Sanity check null suffixes change the hash (simple)..........
@@ -14,85 +14,85 @@ ok 4 - Appended Zeroes Test # farmhash128_c
 ok 5 - Sanity Test # farmhash128_c
 ### Speed Tests ###
 ## Bulk speed test - 262144-byte keys
-# Alignment  7 -  5.104 bytes/cycle - 14602.15 MiB/sec @ 3 ghz
-# Alignment  6 -  5.077 bytes/cycle - 14524.01 MiB/sec @ 3 ghz
-# Alignment  5 -  5.059 bytes/cycle - 14475.28 MiB/sec @ 3 ghz
-# Alignment  4 -  5.057 bytes/cycle - 14469.51 MiB/sec @ 3 ghz
-# Alignment  3 -  5.082 bytes/cycle - 14539.50 MiB/sec @ 3 ghz
-# Alignment  2 -  5.099 bytes/cycle - 14588.66 MiB/sec @ 3 ghz
-# Alignment  1 -  5.082 bytes/cycle - 14540.10 MiB/sec @ 3 ghz
-# Alignment  0 -  5.176 bytes/cycle - 14809.48 MiB/sec @ 3 ghz
-# Average      -  5.092 bytes/cycle - 14568.59 MiB/sec @ 3 ghz
+# Alignment  7 -  5.062 bytes/cycle - 14483.31 MiB/sec @ 3 ghz
+# Alignment  6 -  5.044 bytes/cycle - 14430.76 MiB/sec @ 3 ghz
+# Alignment  5 -  5.043 bytes/cycle - 14429.30 MiB/sec @ 3 ghz
+# Alignment  4 -  5.068 bytes/cycle - 14499.74 MiB/sec @ 3 ghz
+# Alignment  3 -  5.025 bytes/cycle - 14377.82 MiB/sec @ 3 ghz
+# Alignment  2 -  5.037 bytes/cycle - 14411.30 MiB/sec @ 3 ghz
+# Alignment  1 -  5.040 bytes/cycle - 14418.74 MiB/sec @ 3 ghz
+# Alignment  0 -  5.136 bytes/cycle - 14694.96 MiB/sec @ 3 ghz
+# Average      -  5.057 bytes/cycle - 14468.24 MiB/sec @ 3 ghz
 ## KeySpeed tests
-# farmhash128_c             0 byte keys       50.433 c/h
-# farmhash128_c             1 byte keys       63.999 c/h       63.999 c/b        0.016 b/c
-# farmhash128_c             2 byte keys       63.999 c/h       31.999 c/b        0.031 b/c
-# farmhash128_c             3 byte keys       63.999 c/h       21.333 c/b        0.047 b/c
-# farmhash128_c             4 byte keys       66.980 c/h       16.745 c/b        0.060 b/c
-# farmhash128_c             5 byte keys       68.272 c/h       13.654 c/b        0.073 b/c
-# farmhash128_c             6 byte keys       66.983 c/h       11.164 c/b        0.090 b/c
-# farmhash128_c             7 byte keys       67.735 c/h        9.676 c/b        0.103 b/c
-# farmhash128_c             8 byte keys       68.996 c/h        8.625 c/b        0.116 b/c
-# farmhash128_c             9 byte keys       74.916 c/h        8.324 c/b        0.120 b/c
-# farmhash128_c            10 byte keys       75.805 c/h        7.581 c/b        0.132 b/c
-# farmhash128_c            11 byte keys       74.920 c/h        6.811 c/b        0.147 b/c
-# farmhash128_c            12 byte keys       74.925 c/h        6.244 c/b        0.160 b/c
-# farmhash128_c            13 byte keys       74.923 c/h        5.763 c/b        0.174 b/c
-# farmhash128_c            14 byte keys       74.928 c/h        5.352 c/b        0.187 b/c
-# farmhash128_c            15 byte keys       74.921 c/h        4.995 c/b        0.200 b/c
-# farmhash128_c            16 byte keys       68.997 c/h        4.312 c/b        0.232 b/c
-# farmhash128_c            17 byte keys       89.000 c/h        5.235 c/b        0.191 b/c
-# farmhash128_c            18 byte keys       89.293 c/h        4.961 c/b        0.202 b/c
-# farmhash128_c            19 byte keys       89.000 c/h        4.684 c/b        0.213 b/c
-# farmhash128_c            20 byte keys       90.070 c/h        4.504 c/b        0.222 b/c
-# farmhash128_c            21 byte keys       89.000 c/h        4.238 c/b        0.236 b/c
-# farmhash128_c            22 byte keys       89.000 c/h        4.045 c/b        0.247 b/c
-# farmhash128_c            23 byte keys       90.066 c/h        3.916 c/b        0.255 b/c
-# farmhash128_c            24 byte keys       84.714 c/h        3.530 c/b        0.283 b/c
-# farmhash128_c            25 byte keys       83.649 c/h        3.346 c/b        0.299 b/c
-# farmhash128_c            26 byte keys       83.659 c/h        3.218 c/b        0.311 b/c
-# farmhash128_c            27 byte keys       83.660 c/h        3.099 c/b        0.323 b/c
-# farmhash128_c            28 byte keys       83.661 c/h        2.988 c/b        0.335 b/c
-# farmhash128_c            29 byte keys       84.371 c/h        2.909 c/b        0.344 b/c
-# farmhash128_c            30 byte keys       83.664 c/h        2.789 c/b        0.359 b/c
-# farmhash128_c            31 byte keys       83.669 c/h        2.699 c/b        0.371 b/c
-#                          Average < 32       77.256 c/h        4.984 c/b        0.201 b/c
-# farmhash128_c            32 byte keys       83.671 c/h        2.615 c/b        0.382 b/c
-# farmhash128_c            36 byte keys       88.738 c/h        2.465 c/b        0.406 b/c
-# farmhash128_c            40 byte keys       88.746 c/h        2.219 c/b        0.451 b/c
-# farmhash128_c            44 byte keys       88.742 c/h        2.017 c/b        0.496 b/c
-# farmhash128_c            48 byte keys       89.892 c/h        1.873 c/b        0.534 b/c
-# farmhash128_c            52 byte keys       92.870 c/h        1.786 c/b        0.560 b/c
-# farmhash128_c            56 byte keys       92.537 c/h        1.652 c/b        0.605 b/c
-# farmhash128_c            60 byte keys       92.543 c/h        1.542 c/b        0.648 b/c
-# farmhash128_c            64 byte keys       92.553 c/h        1.446 c/b        0.691 b/c
-# farmhash128_c            68 byte keys      102.399 c/h        1.506 c/b        0.664 b/c
-# farmhash128_c            72 byte keys       96.879 c/h        1.346 c/b        0.743 b/c
-# farmhash128_c            76 byte keys       96.001 c/h        1.263 c/b        0.792 b/c
-# farmhash128_c            80 byte keys       96.026 c/h        1.200 c/b        0.833 b/c
-# farmhash128_c            84 byte keys      101.630 c/h        1.210 c/b        0.827 b/c
-# farmhash128_c            88 byte keys      100.042 c/h        1.137 c/b        0.880 b/c
-# farmhash128_c            92 byte keys      100.059 c/h        1.088 c/b        0.919 b/c
-# farmhash128_c            96 byte keys      100.074 c/h        1.042 c/b        0.959 b/c
-# farmhash128_c           100 byte keys      103.905 c/h        1.039 c/b        0.962 b/c
-# farmhash128_c           104 byte keys      103.920 c/h        0.999 c/b        1.001 b/c
-# farmhash128_c           108 byte keys      103.933 c/h        0.962 c/b        1.039 b/c
-# farmhash128_c           112 byte keys      105.536 c/h        0.942 c/b        1.061 b/c
-# farmhash128_c           116 byte keys      108.155 c/h        0.932 c/b        1.073 b/c
-# farmhash128_c           120 byte keys      107.687 c/h        0.897 c/b        1.114 b/c
-# farmhash128_c           124 byte keys      107.698 c/h        0.869 c/b        1.151 b/c
-#                         Average < 128       86.008 c/h        2.034 c/b        0.492 b/c
-# farmhash128_c           128 byte keys       92.939 c/h        0.726 c/b        1.377 b/c
-# farmhash128_c           256 byte keys      127.310 c/h        0.497 c/b        2.011 b/c
-# farmhash128_c           512 byte keys      176.039 c/h        0.344 c/b        2.908 b/c
-# farmhash128_c          1024 byte keys      273.102 c/h        0.267 c/b        3.750 b/c
-# farmhash128_c          2048 byte keys      467.548 c/h        0.228 c/b        4.380 b/c
-# farmhash128_c          4096 byte keys      856.024 c/h        0.209 c/b        4.785 b/c
-# farmhash128_c          8192 byte keys     1736.502 c/h        0.212 c/b        4.718 b/c
-# farmhash128_c         16384 byte keys     3223.935 c/h        0.197 c/b        5.082 b/c
-# farmhash128_c         32768 byte keys     6328.456 c/h        0.193 c/b        5.178 b/c
-# farmhash128_c         65536 byte keys    12510.151 c/h        0.191 c/b        5.239 b/c
-#                       Overall Average      463.764 c/h        0.230 c/b        4.355 b/c
+# farmhash128_c             0 byte keys       50.484 c/h
+# farmhash128_c             1 byte keys       65.050 c/h       65.050 c/b        0.015 b/c
+# farmhash128_c             2 byte keys       64.444 c/h       32.222 c/b        0.031 b/c
+# farmhash128_c             3 byte keys       64.354 c/h       21.451 c/b        0.047 b/c
+# farmhash128_c             4 byte keys       67.621 c/h       16.905 c/b        0.059 b/c
+# farmhash128_c             5 byte keys       67.000 c/h       13.400 c/b        0.075 b/c
+# farmhash128_c             6 byte keys       67.735 c/h       11.289 c/b        0.089 b/c
+# farmhash128_c             7 byte keys       66.998 c/h        9.571 c/b        0.104 b/c
+# farmhash128_c             8 byte keys       70.467 c/h        8.808 c/b        0.114 b/c
+# farmhash128_c             9 byte keys       74.997 c/h        8.333 c/b        0.120 b/c
+# farmhash128_c            10 byte keys       74.999 c/h        7.500 c/b        0.133 b/c
+# farmhash128_c            11 byte keys       74.996 c/h        6.818 c/b        0.147 b/c
+# farmhash128_c            12 byte keys       75.668 c/h        6.306 c/b        0.159 b/c
+# farmhash128_c            13 byte keys       74.999 c/h        5.769 c/b        0.173 b/c
+# farmhash128_c            14 byte keys       74.995 c/h        5.357 c/b        0.187 b/c
+# farmhash128_c            15 byte keys       74.997 c/h        5.000 c/b        0.200 b/c
+# farmhash128_c            16 byte keys       69.914 c/h        4.370 c/b        0.229 b/c
+# farmhash128_c            17 byte keys       89.483 c/h        5.264 c/b        0.190 b/c
+# farmhash128_c            18 byte keys       89.466 c/h        4.970 c/b        0.201 b/c
+# farmhash128_c            19 byte keys       89.465 c/h        4.709 c/b        0.212 b/c
+# farmhash128_c            20 byte keys       90.550 c/h        4.527 c/b        0.221 b/c
+# farmhash128_c            21 byte keys       89.477 c/h        4.261 c/b        0.235 b/c
+# farmhash128_c            22 byte keys       90.393 c/h        4.109 c/b        0.243 b/c
+# farmhash128_c            23 byte keys       89.478 c/h        3.890 c/b        0.257 b/c
+# farmhash128_c            24 byte keys       83.996 c/h        3.500 c/b        0.286 b/c
+# farmhash128_c            25 byte keys       83.988 c/h        3.360 c/b        0.298 b/c
+# farmhash128_c            26 byte keys       83.999 c/h        3.231 c/b        0.310 b/c
+# farmhash128_c            27 byte keys       83.991 c/h        3.111 c/b        0.321 b/c
+# farmhash128_c            28 byte keys       85.347 c/h        3.048 c/b        0.328 b/c
+# farmhash128_c            29 byte keys       84.000 c/h        2.897 c/b        0.345 b/c
+# farmhash128_c            30 byte keys       84.134 c/h        2.804 c/b        0.357 b/c
+# farmhash128_c            31 byte keys       83.993 c/h        2.709 c/b        0.369 b/c
+#                          Average < 32       77.546 c/h        5.003 c/b        0.200 b/c
+# farmhash128_c            32 byte keys       84.093 c/h        2.628 c/b        0.381 b/c
+# farmhash128_c            36 byte keys       88.980 c/h        2.472 c/b        0.405 b/c
+# farmhash128_c            40 byte keys       88.991 c/h        2.225 c/b        0.449 b/c
+# farmhash128_c            44 byte keys       88.953 c/h        2.022 c/b        0.495 b/c
+# farmhash128_c            48 byte keys       88.989 c/h        1.854 c/b        0.539 b/c
+# farmhash128_c            52 byte keys       93.252 c/h        1.793 c/b        0.558 b/c
+# farmhash128_c            56 byte keys       93.258 c/h        1.665 c/b        0.600 b/c
+# farmhash128_c            60 byte keys       93.283 c/h        1.555 c/b        0.643 b/c
+# farmhash128_c            64 byte keys       94.387 c/h        1.475 c/b        0.678 b/c
+# farmhash128_c            68 byte keys      104.609 c/h        1.538 c/b        0.650 b/c
+# farmhash128_c            72 byte keys       97.906 c/h        1.360 c/b        0.735 b/c
+# farmhash128_c            76 byte keys       98.278 c/h        1.293 c/b        0.773 b/c
+# farmhash128_c            80 byte keys       98.186 c/h        1.227 c/b        0.815 b/c
+# farmhash128_c            84 byte keys      101.290 c/h        1.206 c/b        0.829 b/c
+# farmhash128_c            88 byte keys      102.734 c/h        1.167 c/b        0.857 b/c
+# farmhash128_c            92 byte keys      102.120 c/h        1.110 c/b        0.901 b/c
+# farmhash128_c            96 byte keys      102.472 c/h        1.067 c/b        0.937 b/c
+# farmhash128_c           100 byte keys      105.130 c/h        1.051 c/b        0.951 b/c
+# farmhash128_c           104 byte keys      104.886 c/h        1.009 c/b        0.992 b/c
+# farmhash128_c           108 byte keys      105.175 c/h        0.974 c/b        1.027 b/c
+# farmhash128_c           112 byte keys      106.401 c/h        0.950 c/b        1.053 b/c
+# farmhash128_c           116 byte keys      134.453 c/h        1.159 c/b        0.863 b/c
+# farmhash128_c           120 byte keys      111.622 c/h        0.930 c/b        1.075 b/c
+# farmhash128_c           124 byte keys      109.640 c/h        0.884 c/b        1.131 b/c
+#                         Average < 128       87.153 c/h        2.061 c/b        0.485 b/c
+# farmhash128_c           128 byte keys       93.668 c/h        0.732 c/b        1.367 b/c
+# farmhash128_c           256 byte keys      128.420 c/h        0.502 c/b        1.993 b/c
+# farmhash128_c           512 byte keys      175.613 c/h        0.343 c/b        2.915 b/c
+# farmhash128_c          1024 byte keys      273.471 c/h        0.267 c/b        3.744 b/c
+# farmhash128_c          2048 byte keys      469.807 c/h        0.229 c/b        4.359 b/c
+# farmhash128_c          4096 byte keys      865.253 c/h        0.211 c/b        4.734 b/c
+# farmhash128_c          8192 byte keys     1628.893 c/h        0.199 c/b        5.029 b/c
+# farmhash128_c         16384 byte keys     3207.227 c/h        0.196 c/b        5.108 b/c
+# farmhash128_c         32768 byte keys     6349.237 c/h        0.194 c/b        5.161 b/c
+# farmhash128_c         65536 byte keys    12451.161 c/h        0.190 c/b        5.263 b/c
+#                       Overall Average      462.474 c/h        0.229 c/b        4.368 b/c
 ok 6 - Speed (always passes) # farmhash128_c
 ### Differential Tests ###
 # Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 128 bit hashes.
@@ -116,227 +116,237 @@ ok 15 - ProcessDifferentials
 ok 16 - Differential # farmhash128_c
 ### Avalanche Tests ### - seed-bits: 128 hash-bits: 128
 # Samples 250000, expected error 0.00102400, confidence level 99.99994267%
-# Testing   0-bit keys.......... ok.     # worst-bit:   0.810% error-ratio: 9.950893e-01
+# Testing   0-bit keys.......... ok.     # worst-bit:   0.848% error-ratio: 9.742127e-01
 ok 17 - Strict Avalanche Criteria - 0 bit keys
-# Testing   8-bit keys.......... ok.     # worst-bit:   0.861% error-ratio: 1.006755e+00
+# Testing   8-bit keys.......... ok.     # worst-bit:   0.839% error-ratio: 9.977115e-01
 ok 18 - Strict Avalanche Criteria - 8 bit keys
-# Testing  16-bit keys.......... ok.     # worst-bit:   0.837% error-ratio: 1.008267e+00
+# Testing  16-bit keys.......... ok.     # worst-bit:   0.831% error-ratio: 1.006925e+00
 ok 19 - Strict Avalanche Criteria - 16 bit keys
-# Testing  24-bit keys.......... ok.     # worst-bit:   0.904% error-ratio: 9.970674e-01
+# Testing  24-bit keys.......... ok.     # worst-bit:   0.929% error-ratio: 1.005074e+00
 ok 20 - Strict Avalanche Criteria - 24 bit keys
-# Testing  32-bit keys.......... ok.     # worst-bit:   0.865% error-ratio: 9.924613e-01
+# Testing  32-bit keys.......... ok.     # worst-bit:   0.792% error-ratio: 9.945488e-01
 ok 21 - Strict Avalanche Criteria - 32 bit keys
-# Testing  40-bit keys.......... ok.     # worst-bit:   0.842% error-ratio: 9.985154e-01
+# Testing  40-bit keys.......... ok.     # worst-bit:   0.808% error-ratio: 9.921949e-01
 ok 22 - Strict Avalanche Criteria - 40 bit keys
-# Testing  48-bit keys.......... ok.     # worst-bit:   0.857% error-ratio: 1.002853e+00
+# Testing  48-bit keys.......... ok.     # worst-bit:   0.808% error-ratio: 1.010288e+00
 ok 23 - Strict Avalanche Criteria - 48 bit keys
-# Testing  56-bit keys.......... ok.     # worst-bit:   0.928% error-ratio: 1.004775e+00
+# Testing  56-bit keys.......... ok.     # worst-bit:   0.763% error-ratio: 1.005920e+00
 ok 24 - Strict Avalanche Criteria - 56 bit keys
-# Testing  64-bit keys.......... ok.     # worst-bit:   0.898% error-ratio: 1.000788e+00
+# Testing  64-bit keys.......... ok.     # worst-bit:   0.804% error-ratio: 1.002501e+00
 ok 25 - Strict Avalanche Criteria - 64 bit keys
-# Testing  72-bit keys.......... ok.     # worst-bit:   0.775% error-ratio: 1.002630e+00
+# Testing  72-bit keys.......... ok.     # worst-bit:   0.869% error-ratio: 9.983856e-01
 ok 26 - Strict Avalanche Criteria - 72 bit keys
-# Testing  80-bit keys.......... ok.     # worst-bit:   0.835% error-ratio: 1.009511e+00
+# Testing  80-bit keys.......... ok.     # worst-bit:   0.831% error-ratio: 1.000780e+00
 ok 27 - Strict Avalanche Criteria - 80 bit keys
-# Testing  88-bit keys.......... ok.     # worst-bit:   0.842% error-ratio: 9.917830e-01
+# Testing  88-bit keys.......... ok.     # worst-bit:   0.847% error-ratio: 1.004553e+00
 ok 28 - Strict Avalanche Criteria - 88 bit keys
-# Testing  96-bit keys.......... ok.     # worst-bit:   0.821% error-ratio: 9.966132e-01
+# Testing  96-bit keys.......... ok.     # worst-bit:   0.854% error-ratio: 1.004621e+00
 ok 29 - Strict Avalanche Criteria - 96 bit keys
-# Testing 104-bit keys.......... ok.     # worst-bit:   0.763% error-ratio: 9.972929e-01
+# Testing 104-bit keys.......... ok.     # worst-bit:   0.917% error-ratio: 1.004680e+00
 ok 30 - Strict Avalanche Criteria - 104 bit keys
-# Testing 112-bit keys.......... ok.     # worst-bit:   0.799% error-ratio: 9.934918e-01
+# Testing 112-bit keys.......... ok.     # worst-bit:   0.862% error-ratio: 9.995100e-01
 ok 31 - Strict Avalanche Criteria - 112 bit keys
-# Testing 120-bit keys.......... ok.     # worst-bit:   0.842% error-ratio: 1.007437e+00
+# Testing 120-bit keys.......... ok.     # worst-bit:   0.832% error-ratio: 9.851151e-01
 ok 32 - Strict Avalanche Criteria - 120 bit keys
-# Testing 128-bit keys.......... ok.     # worst-bit:   0.858% error-ratio: 1.004640e+00
+# Testing 128-bit keys.......... ok.     # worst-bit:   0.849% error-ratio: 1.006160e+00
 ok 33 - Strict Avalanche Criteria - 128 bit keys
-# Testing 136-bit keys.......... ok.     # worst-bit:   0.836% error-ratio: 1.010516e+00
+# Testing 136-bit keys.......... ok.     # worst-bit:   0.839% error-ratio: 9.838259e-01
 ok 34 - Strict Avalanche Criteria - 136 bit keys
-# Testing 144-bit keys.......... ok.     # worst-bit:   0.807% error-ratio: 9.906574e-01
+# Testing 144-bit keys.......... ok.     # worst-bit:   0.808% error-ratio: 9.950435e-01
 ok 35 - Strict Avalanche Criteria - 144 bit keys
-# Testing 152-bit keys.......... ok.     # worst-bit:   0.822% error-ratio: 1.005151e+00
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.837% error-ratio: 9.946387e-01
 ok 36 - Strict Avalanche Criteria - 152 bit keys
-# Testing 152-bit keys.......... ok.     # worst-bit:   0.843% error-ratio: 1.016544e+00
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.800% error-ratio: 1.000831e+00
 ok 37 - Strict Avalanche Criteria - 160 bit keys
-# Testing 256-bit keys.......... ok.     # worst-bit:   0.858% error-ratio: 1.009683e+00
-ok 38 - Strict Avalanche Criteria - 256 bit keys
-ok 39 - Strict Avalanche Criteria # farmhash128_c
+# Testing 200-bit keys.......... ok.     # worst-bit:   0.842% error-ratio: 1.005710e+00
+ok 38 - Strict Avalanche Criteria - 200 bit keys
+# Testing 256-bit keys.......... ok.     # worst-bit:   0.989% error-ratio: 1.002958e+00
+ok 39 - Strict Avalanche Criteria - 256 bit keys
+# Testing 512-bit keys.......... ok.     # worst-bit:   0.858% error-ratio: 1.001497e+00
+ok 40 - Strict Avalanche Criteria - 512 bit keys
+ok 41 - Strict Avalanche Criteria # farmhash128_c
 ### Keyset 'Cyclic' Tests ###
 # Keyset 'Cyclic' - 8 cycles of 16 bytes - 10000000 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 40 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 16 bytes - 10000000 keys
-ok 41 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 16 bytes - 10000000 keys
+ok 42 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 16 bytes - 10000000 keys
+ok 43 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 16 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 17 bytes - 10000000 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 42 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 17 bytes - 10000000 keys
-ok 43 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 17 bytes - 10000000 keys
+ok 44 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 17 bytes - 10000000 keys
+ok 45 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 17 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 18 bytes - 10000000 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 44 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 18 bytes - 10000000 keys
-ok 45 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 18 bytes - 10000000 keys
+ok 46 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 18 bytes - 10000000 keys
+ok 47 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 18 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 19 bytes - 10000000 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 46 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 19 bytes - 10000000 keys
-ok 47 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 19 bytes - 10000000 keys
+ok 48 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 19 bytes - 10000000 keys
+ok 49 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 19 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 20 bytes - 10000000 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 48 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 20 bytes - 10000000 keys
-ok 49 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 20 bytes - 10000000 keys
-ok 50 - Keyset 'Cyclic' # farmhash128_c
+ok 50 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 20 bytes - 10000000 keys
+ok 51 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 20 bytes - 10000000 keys
+ok 52 - Keyset 'Cyclic' # farmhash128_c
 ### Keyset 'TwoBytes' Tests ###
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 51 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
-ok 52 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+ok 53 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+ok 54 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 53 - Collision Rate for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
-ok 54 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+ok 55 - Collision Rate for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+ok 56 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 55 - Collision Rate for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
-ok 56 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+ok 57 - Collision Rate for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+ok 58 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 57 - Collision Rate for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
-ok 58 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+ok 59 - Collision Rate for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+ok 60 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 59 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
-ok 60 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
-ok 61 - Keyset 'TwoBytes' # farmhash128_c
+ok 61 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+ok 62 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+ok 63 - Keyset 'TwoBytes' # farmhash128_c
 ### Keyset 'Sparse' Tests ###
 # Keyset 'Sparse' - 32-bit keys with up to 6 bits set - 1149017 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 62 - Collision Rate for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
-ok 63 - Distribution Bias Check for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+ok 64 - Collision Rate for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+ok 65 - Distribution Bias Check for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
 # Keyset 'Sparse' - 40-bit keys with up to 6 bits set - 4598479 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 64 - Collision Rate for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
-ok 65 - Distribution Bias Check for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+ok 66 - Collision Rate for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+ok 67 - Distribution Bias Check for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
 # Keyset 'Sparse' - 48-bit keys with up to 5 bits set - 1925357 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 66 - Collision Rate for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
-ok 67 - Distribution Bias Check for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+ok 68 - Collision Rate for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+ok 69 - Distribution Bias Check for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
 # Keyset 'Sparse' - 56-bit keys with up to 5 bits set - 4216423 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 68 - Collision Rate for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
-ok 69 - Distribution Bias Check for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+ok 70 - Collision Rate for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+ok 71 - Distribution Bias Check for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
 # Keyset 'Sparse' - 64-bit keys with up to 5 bits set - 8303633 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 70 - Collision Rate for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
-ok 71 - Distribution Bias Check for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+ok 72 - Collision Rate for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+ok 73 - Distribution Bias Check for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
 # Keyset 'Sparse' - 96-bit keys with up to 4 bits set - 3469497 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 72 - Collision Rate for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
-ok 73 - Distribution Bias Check for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+ok 74 - Collision Rate for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+ok 75 - Distribution Bias Check for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
 # Keyset 'Sparse' - 256-bit keys with up to 3 bits set - 2796417 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 74 - Collision Rate for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
-ok 75 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+ok 76 - Collision Rate for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+ok 77 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
 # Keyset 'Sparse' - 2048-bit keys with up to 2 bits set - 2098177 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 76 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
-ok 77 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
-ok 78 - Keyset 'Sparse' # farmhash128_c
+ok 78 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 79 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 80 - Keyset 'Sparse' # farmhash128_c
+### Keyset 'CRC-MultiCollision' Tests ###
 # Keyset 'CRC-MultiCollision' - 1048575 x 16 block keys - 128-bytes long - 10 seeds
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 79 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 1 # farmhash128_c
+ok 81 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 1 # farmhash128_c
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 80 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 2 # farmhash128_c
+ok 82 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 2 # farmhash128_c
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 81 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 3 # farmhash128_c
+ok 83 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 3 # farmhash128_c
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 82 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 4 # farmhash128_c
+ok 84 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 4 # farmhash128_c
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 83 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 5 # farmhash128_c
+ok 85 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 5 # farmhash128_c
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 84 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 6 # farmhash128_c
+ok 86 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 6 # farmhash128_c
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 85 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 7 # farmhash128_c
+ok 87 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 7 # farmhash128_c
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 86 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 8 # farmhash128_c
+ok 88 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 8 # farmhash128_c
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 87 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 9 # farmhash128_c
+ok 89 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 9 # farmhash128_c
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 88 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 10 # farmhash128_c
+ok 90 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 10 # farmhash128_c
 ### Keyset 'Combination Lowbits' Tests ###
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 89 - Collision Rate for Keyset 'Combination Lowbits'
-ok 90 - Distribution Bias Check for Keyset 'Combination Lowbits'
-ok 91 - Keyset 'Combination Lowbits' # farmhash128_c
+ok 91 - Collision Rate for Keyset 'Combination Lowbits'
+ok 92 - Distribution Bias Check for Keyset 'Combination Lowbits'
+ok 93 - Keyset 'Combination Lowbits' # farmhash128_c
 ### Keyset 'Combination Highbits' Tests ###
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 92 - Collision Rate for Keyset 'Combination Highbits'
-ok 93 - Distribution Bias Check for Keyset 'Combination Highbits'
-ok 94 - Keyset 'Combination Highbits' # farmhash128_c
+ok 94 - Collision Rate for Keyset 'Combination Highbits'
+ok 95 - Distribution Bias Check for Keyset 'Combination Highbits'
+ok 96 - Keyset 'Combination Highbits' # farmhash128_c
 ### Keyset 'Combination Highbits2' Tests ###
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 95 - Collision Rate for Keyset 'Combination Highbits2'
-ok 96 - Distribution Bias Check for Keyset 'Combination Highbits2'
-ok 97 - Keyset 'Combination Highbits2' # farmhash128_c
-### Keyset 'Combination 0x80000000' Tests ###
+ok 97 - Collision Rate for Keyset 'Combination Highbits2'
+ok 98 - Distribution Bias Check for Keyset 'Combination Highbits2'
+ok 99 - Keyset 'Combination Highbits2' # farmhash128_c
+### Keyset 'Combination HiBit-Null' Tests ###
 # Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 98 - Collision Rate for Keyset 'Combination 0x80000000'
-ok 99 - Distribution Bias Check for Keyset 'Combination 0x80000000'
-ok 100 - Keyset 'Combination 0x80000000' # farmhash128_c
-### Keyset 'Combination 0x00000001' Tests ###
+ok 100 - Collision Rate for Keyset 'Combination HiBit-Null'
+ok 101 - Distribution Bias Check for Keyset 'Combination HiBit-Null'
+ok 102 - Keyset 'Combination HiBit-Null' # farmhash128_c
+### Keyset 'Combination LowBit-Null' Tests ###
 # Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 101 - Collision Rate for Keyset 'Combination 0x00000001'
-ok 102 - Distribution Bias Check for Keyset 'Combination 0x00000001'
-ok 103 - Keyset 'Combination 0x00000001' # farmhash128_c
+ok 103 - Collision Rate for Keyset 'Combination LowBit-Null'
+ok 104 - Distribution Bias Check for Keyset 'Combination LowBit-Null'
+ok 105 - Keyset 'Combination LowBit-Null' # farmhash128_c
 ### Keyset 'Combination Hi-Lo' Tests ###
 # Keyset 'Combination' - up to 6 blocks from a set of 15 - 12204240 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 104 - Collision Rate for Keyset 'Combination Hi-Lo'
-ok 105 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
-ok 106 - Keyset 'Combination Hi-Lo' # farmhash128_c
+ok 106 - Collision Rate for Keyset 'Combination Hi-Lo'
+ok 107 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
+ok 108 - Keyset 'Combination Hi-Lo' # farmhash128_c
 ### Keyset 'Text' Tests ###
 # Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 107 - Collision Rate for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
-ok 108 - Distribution Bias Check for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+ok 109 - Collision Rate for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+ok 110 - Distribution Bias Check for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
 # Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 109 - Collision Rate for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
-ok 110 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+ok 111 - Collision Rate for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+ok 112 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
 # Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 111 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
-ok 112 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
-ok 113 - Keyset 'Text' # farmhash128_c
+ok 113 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 114 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 115 - Keyset 'Text' # farmhash128_c
 ### Keyset 'Zeroes' Tests ###
 # Keyset 'Zeroes' - 262144 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 114 - Collision Rate for Keyset 'Zeroes' - 262144 keys
-ok 115 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys
-ok 116 - Keyset 'Zeroes' # farmhash128_c
+ok 116 - Collision Rate for Keyset 'Zeroes' - 262144 keys
+ok 117 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys
+ok 118 - Keyset 'Zeroes' # farmhash128_c
 ### Keyset 'Seed' Tests ###
 # Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 117 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
-ok 118 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+ok 119 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+ok 120 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
 # Keyset 'Seed' - 2000000 seeds, Key ""
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 119 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
-ok 120 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
+ok 121 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
+ok 122 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
 # Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 121 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
-ok 122 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+ok 123 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+ok 124 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
 # Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 123 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
-ok 124 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
-ok 125 - Keyset 'Seed' # farmhash128_c
+ok 125 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 126 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 127 - Keyset 'Seed' # farmhash128_c
 ### Keyset 'Effs' Tests ###
 # Keyset 'Effs' - 262144 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 126 - Collision Rate for Keyset 'Effs' - 262144 keys
-ok 127 - Distribution Bias Check for Keyset 'Effs' - 262144 keys
-ok 128 - Keyset 'Effs' # farmhash128_c
-ok 129 - all tests passed # farmhash128_c
-1..129
-# All Tests Passed. farmhash128_c passed all 129 tests run.
-# Testing took 3323.891162 seconds
-# This is SMHasher version v1.0-demerphq-5-g86440f3 - built on Mar 10 2017.
+ok 128 - Collision Rate for Keyset 'Effs' - 262144 keys
+ok 129 - Distribution Bias Check for Keyset 'Effs' - 262144 keys
+ok 130 - Keyset 'Effs' # farmhash128_c
+### Keyset 'Words' Tests ###
+# Read 99171 lines from /usr/share/dict/words
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 131 - Collision Rate for Keyset 'Words'
+ok 132 - Distribution Bias Check for Keyset 'Words'
+ok 133 - all tests passed # farmhash128_c
+1..133
+# All Tests Passed. farmhash128_c passed all 133 tests run.
+# Testing took 3375.401035 seconds
+# This is SMHasher version v1.1-demerphq-5-ged9ad7f - built on Mar 14 2017.
