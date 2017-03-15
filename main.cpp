@@ -7,12 +7,7 @@
 #include "Hashes.h"
 #include "SimpleStats.h"
 #include "PMurHash.h"
-#include "beagle_hash.h"
-#include "phat_hash.h"
-#include "zaphod32_hash.h"
-#include "zaphod64_hash.h"
-#include "stadtx_hash_test.h"
-#include "sbox_hash.h"
+#include "BeagleHashes_test.h"
 #include "md5.h"
 #include "siphash.h"
 #include <stdio.h>
@@ -254,9 +249,9 @@ HashInfo g_hashes[] =
   { "Zaphod32", "Evolved hash with  96-bit state (3x32) - Yves Orton",
     95, 96, 32, 0x802E4AF6,
     zaphod32_seed_state_smhasher_test, zaphod32_hash_with_state_smhasher_test },
-  { "Phat4", "Evolved hash with 128-bit state (4x32) - Yves Orton",
+  { "Phat", "Evolved hash with 128-bit state (4x32) - Yves Orton",
     96, 96, 32, 0xD3C0D0D5,
-    NULL, phat4_hash_with_state_smhasher_test },
+    NULL, phat_hash_with_state_smhasher_test },
   { "Lua53oaat", "Hash function from Lua53, pure one-at-a-time",
     32, 32, 32, 0x072086C1,
     NULL, lua_v53_string_hash_oaat },

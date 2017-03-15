@@ -173,12 +173,7 @@ add_library(
   SuperFastHash.cpp
   Types.cpp
   PMurHash.c
-  beagle_hash.c
-  phat_hash.c
-  zaphod32_hash.c
-  zaphod64_hash.c
-  stadtx_hash_test.c
-  sbox_hash.c
+  BeagleHashes_test.c
   ${64ONLY_SRC}
   ${METROCRC64_SRC}
   ${METROCRC128_SRC}
