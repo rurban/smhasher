@@ -206,16 +206,16 @@ HashInfo g_hashes[] =
 
   // BeagleHash_32_xx
   { "BeagleHash_32_64", "Evolved hash with 128-bit state (2x64) - Yves Orton",
-    64, 128, 32, 0x19497BA9,
+    64, 128, 32, 0xB8AC089B,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher },
   { "BeagleHash_32_96", "Evolved hash with 128-bit state (2x64) - Yves Orton",
-    96, 128, 32, 0xCDD71C17,
+    96, 128, 32, 0xE5FD0F3E,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher },
   { "BeagleHash_32_112", "Evolved hash with 128-bit state (2x64) - Yves Orton",
-    112, 128, 32, 0x4B0545EC,
+    112, 128, 32, 0x3B370767,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher },
   { "BeagleHash_32_127", "Evolved hash with 128-bit state (2x64) - Yves Orton",
-    127, 128, 32, 0x6CB5465F,
+    127, 128, 32, 0xA226EF3D,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_32_128_a_smhasher },
 
   // BeagleHash_64_xx
