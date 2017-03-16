@@ -1,177 +1,198 @@
-<table>
-<tr><th class='hashname'>Name</th><th class='seedbits'>SeedBits</td><th class='statebits'>StateBits</td><td class='hashbits'>HashBits</td><th class='status'>Test-Status</th>
-<th class='Startup'>Startup Test</td>
-<th class='Sanity'>Sanity Test</td>
-<th class='Speed'>Speed Test</td>
-<th class='Differential'>Differential Test</td>
-<th class='Cyclic'>Cyclic Test</td>
-<th class='TwoBytes'>TwoBytes Test</td>
-<th class='Sparse'>Sparse Test</td>
-<th class='CRC-MultiCollision'>CRC-MultiCollision Test</td>
-<th class='CrcCollision'>CrcCollision Test</td>
-<th class='Crc-MultiCollision'>Crc-MultiCollision Test</td>
-<th class='Lowbits'>Lowbits Test</td>
-<th class='Highbits'>Highbits Test</td>
-<th class='Highbits2'>Highbits2 Test</td>
-<th class='HighBit'>HighBit Test</td>
-<th class='Murmur2-MultiCollision'>Murmur2-MultiCollision Test</td>
-<th class='LowBit'>LowBit Test</td>
-<th class='City-MultiCollision'>City-MultiCollision Test</td>
-<th class='Hi-Lo'>Hi-Lo Test</td>
-<th class='Text'>Text Test</td>
-<th class='Murmur3A-MultiCollision'>Murmur3A-MultiCollision Test</td>
-<th class='HiBit-Null'>HiBit-Null Test</td>
-<th class='LowBit-Null'>LowBit-Null Test</td>
-<th class='Zeroes'>Zeroes Test</td>
-<th class='Seed'>Seed Test</td>
-<th class='Murmur3F-MultiCollision'>Murmur3F-MultiCollision Test</td>
-<th class='Effs'>Effs Test</td>
-<th class='City64-MultiCollision'>City64-MultiCollision Test</td>
-<th class='OverAll'>OverAll Test</td>
-<th class='Words'>Words Test</td>
-</tr>
-<tr><th class='hashname'>BadHash</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
+<head><style>
+* {
+  box-sizing: border-box;
+}
+body {
+  background: steelblue;
+  font-family: "Open Sans", arial;
+}
+table {
+  width: 100%;
+  max-width: 600px;
+  height: 320px;
+  border-collapse: collapse;
+  border: 1px solid #38678f;
+  margin: 50px auto;
+  background: white;
+}
+th {
+  background: steelblue;
+  height: 54px;
+  font-weight: lighter;
+  text-shadow: 0 1px 0 #38678f;
+  color: white;
+  border: 1px solid #38678f;
+  box-shadow: inset 0px 1px 2px #568ebd;
+  transition: all 0.2s;
+}
+tr {
+  border-bottom: 1px solid #cccccc;
+}
+tr:last-child {
+  border-bottom: 0px;
+}
+td {
+  border-right: 1px solid #cccccc;
+  padding: 10px;
+  transition: all 0.2s;
+}
+td:last-child {
+  border-right: 0px;
+}
+td.selected {
+  background: #d7e4ef;
+  z-index: ;
+}
+td input {
+  font-size: 14px;
+  background: none;
+  outline: none;
+  border: 0;
+  display: table-cell;
+  height: 100%;
+  width: 100%;
+}
+td input:focus {
+  box-shadow: 0 1px 0 steelblue;
+  color: steelblue;
+}
+::-moz-selection {
+  background: steelblue;
+  color: white;
+}
+::selection {
+  background: steelblue;
+  color: white;
+}
+.main {
+  max-width: 600px;
+  padding: 10px;
+  margin: auto;
+}
+.content {
+  color: white;
+  text-align: center;
+}
+.content p,
+.content pre,
+.content h2 {
+  text-align: left;
+}
+.content pre {
+  padding: 1.2em 0 0.5em;
+  background: white;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  color: #38678f;
+}
+h1 {
+  text-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+tr.passed td.status,
+tr.passed:hover {
+  background: #b3ffb3;
+}
+tr.failed td.status,
+tr.failed:hover {
+  background: #ffb3b3;
+}
+</style>
+<script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
+<script src='http://tablesorter.com/__jquery.tablesorter.min.js'></script>
+</head><body>
+<table id='testresults'>
+<thead><th class='hashname'><span>Name</span></th><th class='seedbits'><span>SeedBits</span></th><th class='statebits'><span>StateBits</span></th><th class='hashbits'><span>HashBits</span></th><th class='status'><span>Test-Status</span></th>
+<th class='Sanity'><span>Sanity Test</span></th>
+<th class='Differential'><span>Differential Test</span></th>
+<th class='Cyclic'><span>Cyclic Test</span></th>
+<th class='TwoBytes'><span>TwoBytes Test</span></th>
+<th class='Sparse'><span>Sparse Test</span></th>
+<th class='Crc-MultiCollision'><span>Crc-MultiCollision Test</span></th>
+<th class='Lowbits'><span>Lowbits Test</span></th>
+<th class='Highbits'><span>Highbits Test</span></th>
+<th class='Highbits2'><span>Highbits2 Test</span></th>
+<th class='HighBit'><span>HighBit Test</span></th>
+<th class='Murmur2-MultiCollision'><span>Murmur2-MultiCollision Test</span></th>
+<th class='LowBit'><span>LowBit Test</span></th>
+<th class='Hi-Lo'><span>Hi-Lo Test</span></th>
+<th class='Text'><span>Text Test</span></th>
+<th class='Murmur3A-MultiCollision'><span>Murmur3A-MultiCollision Test</span></th>
+<th class='HiBit-Null'><span>HiBit-Null Test</span></th>
+<th class='LowBit-Null'><span>LowBit-Null Test</span></th>
+<th class='Zeroes'><span>Zeroes Test</span></th>
+<th class='Seed'><span>Seed Test</span></th>
+<th class='Murmur3F-MultiCollision'><span>Murmur3F-MultiCollision Test</span></th>
+<th class='Effs'><span>Effs Test</span></th>
+<th class='City64-MultiCollision'><span>City64-MultiCollision Test</span></th>
+<th class='OverAll'><span>OverAll Test</span></th>
+<th class='Words'><span>Words Test</span></th>
+</thead><tbody>
+<tr class='failed'><td class='hashname'>BadHash</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
 <td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 9,12,15-41</td>
-<td class='Cyclic'>not ok: 42-44,48,52</td>
-<td class='TwoBytes'>not ok: 53-63</td>
-<td class='Sparse'>not ok: 65-67,69,71,73,75,77,79-80</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
+<td class='Differential'>9, 12, 15-41</td>
+<td class='Cyclic'>42-44, 48, 52</td>
+<td class='TwoBytes'>53-63</td>
+<td class='Sparse'>65-67, 69, 71, 73, 75, 77, 79-80</td>
 <td class='Crc-MultiCollision'>ok</td>
-<td class='Lowbits'>not ok: 132-133</td>
-<td class='Highbits'>not ok: 135-136</td>
-<td class='Highbits2'>not ok: 138-139</td>
+<td class='Lowbits'>132-133</td>
+<td class='Highbits'>135-136</td>
+<td class='Highbits2'>138-139</td>
 <td class='HighBit'>?</td>
 <td class='Murmur2-MultiCollision'>ok</td>
 <td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>not ok: 147-148</td>
-<td class='Text'>not ok: 149-155</td>
+<td class='Hi-Lo'>147-148</td>
+<td class='Text'>149-155</td>
 <td class='Murmur3A-MultiCollision'>ok</td>
-<td class='HiBit-Null'>not ok: 141-142</td>
-<td class='LowBit-Null'>not ok: 144-145</td>
+<td class='HiBit-Null'>141-142</td>
+<td class='LowBit-Null'>144-145</td>
 <td class='Zeroes'>ok</td>
 <td class='Seed'>ok</td>
 <td class='Murmur3F-MultiCollision'>ok</td>
 <td class='Effs'>ok</td>
 <td class='City64-MultiCollision'>ok</td>
 <td class='OverAll'>ok</td>
-<td class='Words'>not ok: 171-172</td>
+<td class='Words'>171-172</td>
 </tr>
-<tr><th class='hashname'>BeagleHash_32_112</th><td class='seedbits'>112</td><td class='statebits'>128</td><td class='hashbits'>32</td><th class='status'>PASSED</th>
-<td class='Startup'>ok</td>
+<tr class='passed'><td class='hashname'>BeagleHash_32_112</td><td class='seedbits'>112</td><td class='statebits'>128</td><td class='hashbits'>32</td><td class='status'>PASSED</td>
 <td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
 <td class='Differential'>ok</td>
 <td class='Cyclic'>ok</td>
 <td class='TwoBytes'>ok</td>
 <td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>ok</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>ok</td>
-<td class='LowBit-Null'>ok</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>ok</td>
-</tr>
-<tr><th class='hashname'>BeagleHash_32_127</th><td class='seedbits'>127</td><td class='statebits'>128</td><td class='hashbits'>32</td><th class='status'>PASSED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>ok</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>ok</td>
-<td class='LowBit-Null'>ok</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>ok</td>
-</tr>
-<tr><th class='hashname'>BeagleHash_32_64</th><td class='seedbits'>64</td><td class='statebits'>128</td><td class='hashbits'>32</td><th class='status'>PASSED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>ok</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
 <td class='Crc-MultiCollision'>ok</td>
 <td class='Lowbits'>ok</td>
 <td class='Highbits'>ok</td>
 <td class='Highbits2'>ok</td>
 <td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
 <td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
 <td class='Hi-Lo'>ok</td>
 <td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
 <td class='HiBit-Null'>ok</td>
 <td class='LowBit-Null'>ok</td>
 <td class='Zeroes'>ok</td>
 <td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
 <td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>ok</td>
+<td class='City64-MultiCollision'>?</td>
 <td class='OverAll'>ok</td>
 <td class='Words'>ok</td>
 </tr>
-<tr><th class='hashname'>BeagleHash_32_96</th><td class='seedbits'>96</td><td class='statebits'>128</td><td class='hashbits'>32</td><th class='status'>PASSED</th>
-<td class='Startup'>ok</td>
+<tr class='passed'><td class='hashname'>BeagleHash_32_127</td><td class='seedbits'>127</td><td class='statebits'>128</td><td class='hashbits'>32</td><td class='status'>PASSED</td>
 <td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
 <td class='Differential'>ok</td>
 <td class='Cyclic'>ok</td>
 <td class='TwoBytes'>ok</td>
 <td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
+<td class='Crc-MultiCollision'>ok</td>
 <td class='Lowbits'>ok</td>
 <td class='Highbits'>ok</td>
 <td class='Highbits2'>ok</td>
 <td class='HighBit'>?</td>
 <td class='Murmur2-MultiCollision'>?</td>
 <td class='LowBit'>?</td>
-<td class='City-MultiCollision'>ok</td>
 <td class='Hi-Lo'>ok</td>
 <td class='Text'>ok</td>
 <td class='Murmur3A-MultiCollision'>?</td>
@@ -185,202 +206,12 @@
 <td class='OverAll'>ok</td>
 <td class='Words'>ok</td>
 </tr>
-<tr><th class='hashname'>BeagleHash_64_112</th><td class='seedbits'>112</td><td class='statebits'>128</td><td class='hashbits'>64</td><th class='status'>PASSED</th>
-<td class='Startup'>ok</td>
+<tr class='passed'><td class='hashname'>BeagleHash_32_64</td><td class='seedbits'>64</td><td class='statebits'>128</td><td class='hashbits'>32</td><td class='status'>PASSED</td>
 <td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
 <td class='Differential'>ok</td>
 <td class='Cyclic'>ok</td>
 <td class='TwoBytes'>ok</td>
 <td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>BeagleHash_64_127</th><td class='seedbits'>127</td><td class='statebits'>128</td><td class='hashbits'>64</td><th class='status'>PASSED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>ok</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>BeagleHash_64_64</th><td class='seedbits'>64</td><td class='statebits'>128</td><td class='hashbits'>64</td><th class='status'>PASSED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>ok</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>BeagleHash_64_96</th><td class='seedbits'>96</td><td class='statebits'>128</td><td class='hashbits'>64</td><th class='status'>PASSED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>ok</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>City128</th><td class='seedbits'>128</td><td class='statebits'>128</td><td class='hashbits'>128</td><th class='status'>PASSED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>ok</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>City32</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 38-41</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>ok</td>
-<td class='LowBit-Null'>ok</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>ok</td>
-</tr>
-<tr><th class='hashname'>City64</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>not ok: 59,61,63</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
 <td class='Crc-MultiCollision'>ok</td>
 <td class='Lowbits'>ok</td>
 <td class='Highbits'>ok</td>
@@ -388,7 +219,6 @@
 <td class='HighBit'>?</td>
 <td class='Murmur2-MultiCollision'>ok</td>
 <td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
 <td class='Hi-Lo'>ok</td>
 <td class='Text'>ok</td>
 <td class='Murmur3A-MultiCollision'>ok</td>
@@ -398,28 +228,23 @@
 <td class='Seed'>ok</td>
 <td class='Murmur3F-MultiCollision'>ok</td>
 <td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>not ok: 121-130</td>
+<td class='City64-MultiCollision'>ok</td>
 <td class='OverAll'>ok</td>
 <td class='Words'>ok</td>
 </tr>
-<tr><th class='hashname'>CityCrc128</th><td class='seedbits'>128</td><td class='statebits'>128</td><td class='hashbits'>128</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
+<tr class='passed'><td class='hashname'>BeagleHash_32_96</td><td class='seedbits'>96</td><td class='statebits'>128</td><td class='hashbits'>32</td><td class='status'>PASSED</td>
 <td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 25-41</td>
+<td class='Differential'>ok</td>
 <td class='Cyclic'>ok</td>
 <td class='TwoBytes'>ok</td>
 <td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
+<td class='Crc-MultiCollision'>ok</td>
 <td class='Lowbits'>ok</td>
 <td class='Highbits'>ok</td>
 <td class='Highbits2'>ok</td>
 <td class='HighBit'>?</td>
 <td class='Murmur2-MultiCollision'>?</td>
 <td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
 <td class='Hi-Lo'>ok</td>
 <td class='Text'>ok</td>
 <td class='Murmur3A-MultiCollision'>?</td>
@@ -433,272 +258,19 @@
 <td class='OverAll'>ok</td>
 <td class='Words'>ok</td>
 </tr>
-<tr><th class='hashname'>Crap8</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
+<tr class='passed'><td class='hashname'>BeagleHash_64_112</td><td class='seedbits'>112</td><td class='statebits'>128</td><td class='hashbits'>64</td><td class='status'>PASSED</td>
 <td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
-<td class='Cyclic'>not ok: 42-44,46,48,50,52</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>not ok: 74,76-80</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>ok</td>
-<td class='Lowbits'>not ok: 131-133</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>not ok: 91-100</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>not ok: 146-148</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>ok</td>
-<td class='HiBit-Null'>ok</td>
-<td class='LowBit-Null'>not ok: 143-145</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>ok</td>
-<td class='Effs'>not ok: 168,170</td>
-<td class='City64-MultiCollision'>ok</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>ok</td>
-</tr>
-<tr><th class='hashname'>DoNothing128</th><td class='seedbits'>128</td><td class='statebits'>128</td><td class='hashbits'>128</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>not ok: 3-5</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 7-38</td>
-<td class='Cyclic'>not ok: 39-49</td>
-<td class='TwoBytes'>not ok: 50-60</td>
-<td class='Sparse'>not ok: 61-77</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>not ok: 78-87</td>
-<td class='Lowbits'>not ok: 128-130</td>
-<td class='Highbits'>not ok: 131-133</td>
-<td class='Highbits2'>not ok: 134-136</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>not ok: 88-97</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>not ok: 143-145</td>
-<td class='Text'>not ok: 146-152</td>
-<td class='Murmur3A-MultiCollision'>not ok: 98-107</td>
-<td class='HiBit-Null'>not ok: 137-139</td>
-<td class='LowBit-Null'>not ok: 140-142</td>
-<td class='Zeroes'>not ok: 153-155</td>
-<td class='Seed'>not ok: 156-164</td>
-<td class='Murmur3F-MultiCollision'>not ok: 108-117</td>
-<td class='Effs'>not ok: 165-167</td>
-<td class='City64-MultiCollision'>not ok: 118-127</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>not ok: 168-169</td>
-</tr>
-<tr><th class='hashname'>DoNothing32</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>not ok: 3-5</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 7-38</td>
-<td class='Cyclic'>not ok: 39-49</td>
-<td class='TwoBytes'>not ok: 50-60</td>
-<td class='Sparse'>not ok: 61-77</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>not ok: 78-87</td>
-<td class='Lowbits'>not ok: 128-130</td>
-<td class='Highbits'>not ok: 131-133</td>
-<td class='Highbits2'>not ok: 134-136</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>not ok: 88-97</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>not ok: 143-145</td>
-<td class='Text'>not ok: 146-152</td>
-<td class='Murmur3A-MultiCollision'>not ok: 98-107</td>
-<td class='HiBit-Null'>not ok: 137-139</td>
-<td class='LowBit-Null'>not ok: 140-142</td>
-<td class='Zeroes'>not ok: 153-155</td>
-<td class='Seed'>not ok: 156-164</td>
-<td class='Murmur3F-MultiCollision'>not ok: 108-117</td>
-<td class='Effs'>not ok: 165-167</td>
-<td class='City64-MultiCollision'>not ok: 118-127</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>not ok: 168-169</td>
-</tr>
-<tr><th class='hashname'>DoNothing64</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>not ok: 4-6</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 8-37</td>
-<td class='Cyclic'>not ok: 38-48</td>
-<td class='TwoBytes'>not ok: 49-59</td>
-<td class='Sparse'>not ok: 60-76</td>
-<td class='CRC-MultiCollision'>not ok: 77-86</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>not ok: 87-89</td>
-<td class='Highbits'>not ok: 90-92</td>
-<td class='Highbits2'>not ok: 93-95</td>
-<td class='HighBit'>not ok: 96-98</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>not ok: 99-101</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>not ok: 102-104</td>
-<td class='Text'>not ok: 105-111</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>not ok: 112-114</td>
-<td class='Seed'>not ok: 115-123</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>not ok: 124-126</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>DoNothingOAAT</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>64</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>not ok: 4-6</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 8-37</td>
-<td class='Cyclic'>not ok: 38-48</td>
-<td class='TwoBytes'>not ok: 49-59</td>
-<td class='Sparse'>not ok: 60-76</td>
-<td class='CRC-MultiCollision'>not ok: 77-86</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>not ok: 87-89</td>
-<td class='Highbits'>not ok: 90-92</td>
-<td class='Highbits2'>not ok: 93-95</td>
-<td class='HighBit'>not ok: 96-98</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>not ok: 99-101</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>not ok: 102-104</td>
-<td class='Text'>not ok: 105-111</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>not ok: 112-114</td>
-<td class='Seed'>not ok: 115-123</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>not ok: 124-126</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>FNV1a</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
-<td class='Cyclic'>not ok: 42-52</td>
-<td class='TwoBytes'>not ok: 54-56,63</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>not ok: 81,83,85-86,88</td>
-<td class='Lowbits'>not ok: 132-133</td>
-<td class='Highbits'>not ok: 134-136</td>
-<td class='Highbits2'>not ok: 137-139</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>not ok: 91-100</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>not ok: 147-148</td>
-<td class='Text'>not ok: 150-155</td>
-<td class='Murmur3A-MultiCollision'>not ok: 101,103,107,109-110</td>
-<td class='HiBit-Null'>not ok: 140-142</td>
-<td class='LowBit-Null'>not ok: 143-145</td>
-<td class='Zeroes'>not ok: 157-158</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>not ok: 112-117,119-120</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>ok</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>ok</td>
-</tr>
-<tr><th class='hashname'>FNV1a_YT</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 9-39</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>not ok: 51,53-61</td>
-<td class='Sparse'>not ok: 74-78</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>ok</td>
-<td class='Lowbits'>not ok: 129-131</td>
-<td class='Highbits'>not ok: 132-134</td>
-<td class='Highbits2'>not ok: 135-137</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>ok</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>not ok: 144-146</td>
-<td class='Text'>not ok: 147-148,150-153</td>
-<td class='Murmur3A-MultiCollision'>ok</td>
-<td class='HiBit-Null'>not ok: 138-140</td>
-<td class='LowBit-Null'>ok</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>ok</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>ok</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>ok</td>
-</tr>
-<tr><th class='hashname'>FNV64</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
-<td class='Cyclic'>not ok: 43-45,47,49,51-52</td>
-<td class='TwoBytes'>not ok: 54-56,58,60,62-63</td>
-<td class='Sparse'>not ok: 65-67,69,71,73,75,77,79-80</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>not ok: 92-93</td>
-<td class='Highbits'>not ok: 95-96</td>
-<td class='Highbits2'>not ok: 98-99</td>
-<td class='HighBit'>not ok: 101-102</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>not ok: 104-105</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>not ok: 107-108</td>
-<td class='Text'>not ok: 110-112,114-115</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>not ok: 117-118</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>FarmHash128</th><td class='seedbits'>128</td><td class='statebits'>128</td><td class='hashbits'>128</td><th class='status'>PASSED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
 <td class='Differential'>ok</td>
 <td class='Cyclic'>ok</td>
 <td class='TwoBytes'>ok</td>
 <td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
+<td class='Crc-MultiCollision'>ok</td>
 <td class='Lowbits'>ok</td>
 <td class='Highbits'>ok</td>
 <td class='Highbits2'>ok</td>
 <td class='HighBit'>ok</td>
 <td class='Murmur2-MultiCollision'>?</td>
 <td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
 <td class='Hi-Lo'>ok</td>
 <td class='Text'>ok</td>
 <td class='Murmur3A-MultiCollision'>?</td>
@@ -712,24 +284,19 @@
 <td class='OverAll'>ok</td>
 <td class='Words'>?</td>
 </tr>
-<tr><th class='hashname'>FarmHash64</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
+<tr class='passed'><td class='hashname'>BeagleHash_64_127</td><td class='seedbits'>127</td><td class='statebits'>128</td><td class='hashbits'>64</td><td class='status'>PASSED</td>
 <td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
+<td class='Differential'>ok</td>
 <td class='Cyclic'>ok</td>
 <td class='TwoBytes'>ok</td>
 <td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
+<td class='Crc-MultiCollision'>ok</td>
 <td class='Lowbits'>ok</td>
 <td class='Highbits'>ok</td>
 <td class='Highbits2'>ok</td>
 <td class='HighBit'>ok</td>
 <td class='Murmur2-MultiCollision'>?</td>
 <td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
 <td class='Hi-Lo'>ok</td>
 <td class='Text'>ok</td>
 <td class='Murmur3A-MultiCollision'>?</td>
@@ -743,24 +310,97 @@
 <td class='OverAll'>ok</td>
 <td class='Words'>?</td>
 </tr>
-<tr><th class='hashname'>GoodOAAT</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
+<tr class='passed'><td class='hashname'>BeagleHash_64_64</td><td class='seedbits'>64</td><td class='statebits'>128</td><td class='hashbits'>64</td><td class='status'>PASSED</td>
 <td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-18,41</td>
+<td class='Differential'>ok</td>
 <td class='Cyclic'>ok</td>
 <td class='TwoBytes'>ok</td>
 <td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='passed'><td class='hashname'>BeagleHash_64_96</td><td class='seedbits'>96</td><td class='statebits'>128</td><td class='hashbits'>64</td><td class='status'>PASSED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>ok</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='passed'><td class='hashname'>City128</td><td class='seedbits'>128</td><td class='statebits'>128</td><td class='hashbits'>128</td><td class='status'>PASSED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>ok</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>City32</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>38-41</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
 <td class='Lowbits'>ok</td>
 <td class='Highbits'>ok</td>
 <td class='Highbits2'>ok</td>
 <td class='HighBit'>?</td>
 <td class='Murmur2-MultiCollision'>?</td>
 <td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
 <td class='Hi-Lo'>ok</td>
 <td class='Text'>ok</td>
 <td class='Murmur3A-MultiCollision'>?</td>
@@ -774,16 +414,12 @@
 <td class='OverAll'>ok</td>
 <td class='Words'>ok</td>
 </tr>
-<tr><th class='hashname'>HalfSipHash</th><td class='seedbits'>64</td><td class='statebits'>128</td><td class='hashbits'>32</td><th class='status'>PASSED</th>
-<td class='Startup'>ok</td>
+<tr class='failed'><td class='hashname'>City64</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><td class='status'>FAILED</td>
 <td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>ok</td>
+<td class='Differential'>17-41</td>
 <td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
+<td class='TwoBytes'>59, 61, 63</td>
 <td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
 <td class='Crc-MultiCollision'>ok</td>
 <td class='Lowbits'>ok</td>
 <td class='Highbits'>ok</td>
@@ -791,7 +427,6 @@
 <td class='HighBit'>?</td>
 <td class='Murmur2-MultiCollision'>ok</td>
 <td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
 <td class='Hi-Lo'>ok</td>
 <td class='Text'>ok</td>
 <td class='Murmur3A-MultiCollision'>ok</td>
@@ -801,20 +436,328 @@
 <td class='Seed'>ok</td>
 <td class='Murmur3F-MultiCollision'>ok</td>
 <td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>121-130</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>ok</td>
+</tr>
+<tr class='failed'><td class='hashname'>CityCrc128</td><td class='seedbits'>128</td><td class='statebits'>128</td><td class='hashbits'>128</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>25-41</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>ok</td>
+<td class='LowBit-Null'>ok</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>ok</td>
+</tr>
+<tr class='failed'><td class='hashname'>Crap8</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-41</td>
+<td class='Cyclic'>42-44, 46, 48, 50, 52</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>74, 76-80</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>131-133</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>91-100</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>146-148</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>ok</td>
+<td class='HiBit-Null'>ok</td>
+<td class='LowBit-Null'>143-145</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>ok</td>
+<td class='Effs'>168, 170</td>
 <td class='City64-MultiCollision'>ok</td>
 <td class='OverAll'>ok</td>
 <td class='Words'>ok</td>
 </tr>
-<tr><th class='hashname'>JenkinsOAAT</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
+<tr class='failed'><td class='hashname'>DoNothing128</td><td class='seedbits'>128</td><td class='statebits'>128</td><td class='hashbits'>128</td><td class='status'>FAILED</td>
+<td class='Sanity'>3-5</td>
+<td class='Differential'>7-38</td>
+<td class='Cyclic'>39-49</td>
+<td class='TwoBytes'>50-60</td>
+<td class='Sparse'>61-77</td>
+<td class='Crc-MultiCollision'>78-87</td>
+<td class='Lowbits'>128-130</td>
+<td class='Highbits'>131-133</td>
+<td class='Highbits2'>134-136</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>88-97</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>143-145</td>
+<td class='Text'>146-152</td>
+<td class='Murmur3A-MultiCollision'>98-107</td>
+<td class='HiBit-Null'>137-139</td>
+<td class='LowBit-Null'>140-142</td>
+<td class='Zeroes'>153-155</td>
+<td class='Seed'>156-164</td>
+<td class='Murmur3F-MultiCollision'>108-117</td>
+<td class='Effs'>165-167</td>
+<td class='City64-MultiCollision'>118-127</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>168-169</td>
+</tr>
+<tr class='failed'><td class='hashname'>DoNothing32</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
+<td class='Sanity'>3-5</td>
+<td class='Differential'>7-38</td>
+<td class='Cyclic'>39-49</td>
+<td class='TwoBytes'>50-60</td>
+<td class='Sparse'>61-77</td>
+<td class='Crc-MultiCollision'>78-87</td>
+<td class='Lowbits'>128-130</td>
+<td class='Highbits'>131-133</td>
+<td class='Highbits2'>134-136</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>88-97</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>143-145</td>
+<td class='Text'>146-152</td>
+<td class='Murmur3A-MultiCollision'>98-107</td>
+<td class='HiBit-Null'>137-139</td>
+<td class='LowBit-Null'>140-142</td>
+<td class='Zeroes'>153-155</td>
+<td class='Seed'>156-164</td>
+<td class='Murmur3F-MultiCollision'>108-117</td>
+<td class='Effs'>165-167</td>
+<td class='City64-MultiCollision'>118-127</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>168-169</td>
+</tr>
+<tr class='failed'><td class='hashname'>DoNothing64</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><td class='status'>FAILED</td>
+<td class='Sanity'>4-6</td>
+<td class='Differential'>8-37</td>
+<td class='Cyclic'>38-48</td>
+<td class='TwoBytes'>49-59</td>
+<td class='Sparse'>60-76</td>
+<td class='Crc-MultiCollision'>77-86</td>
+<td class='Lowbits'>87-89</td>
+<td class='Highbits'>90-92</td>
+<td class='Highbits2'>93-95</td>
+<td class='HighBit'>96-98</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>99-101</td>
+<td class='Hi-Lo'>102-104</td>
+<td class='Text'>105-111</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>112-114</td>
+<td class='Seed'>115-123</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>124-126</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>DoNothingOAAT</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>64</td><td class='status'>FAILED</td>
+<td class='Sanity'>4-6</td>
+<td class='Differential'>8-37</td>
+<td class='Cyclic'>38-48</td>
+<td class='TwoBytes'>49-59</td>
+<td class='Sparse'>60-76</td>
+<td class='Crc-MultiCollision'>77-86</td>
+<td class='Lowbits'>87-89</td>
+<td class='Highbits'>90-92</td>
+<td class='Highbits2'>93-95</td>
+<td class='HighBit'>96-98</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>99-101</td>
+<td class='Hi-Lo'>102-104</td>
+<td class='Text'>105-111</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>112-114</td>
+<td class='Seed'>115-123</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>124-126</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>FNV1a</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
 <td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>not ok: 53-63</td>
+<td class='Differential'>17-41</td>
+<td class='Cyclic'>42-52</td>
+<td class='TwoBytes'>54-56, 63</td>
 <td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
+<td class='Crc-MultiCollision'>81, 83, 85-86, 88</td>
+<td class='Lowbits'>132-133</td>
+<td class='Highbits'>134-136</td>
+<td class='Highbits2'>137-139</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>91-100</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>147-148</td>
+<td class='Text'>150-155</td>
+<td class='Murmur3A-MultiCollision'>101, 103, 107, 109-110</td>
+<td class='HiBit-Null'>140-142</td>
+<td class='LowBit-Null'>143-145</td>
+<td class='Zeroes'>157-158</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>112-117, 119-120</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>ok</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>ok</td>
+</tr>
+<tr class='failed'><td class='hashname'>FNV1a_YT</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>9-39</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>51, 53-61</td>
+<td class='Sparse'>74-78</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>129-131</td>
+<td class='Highbits'>132-134</td>
+<td class='Highbits2'>135-137</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>ok</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>144-146</td>
+<td class='Text'>147-148, 150-153</td>
+<td class='Murmur3A-MultiCollision'>ok</td>
+<td class='HiBit-Null'>138-140</td>
+<td class='LowBit-Null'>ok</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>ok</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>ok</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>ok</td>
+</tr>
+<tr class='failed'><td class='hashname'>FNV64</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-41</td>
+<td class='Cyclic'>43-45, 47, 49, 51-52</td>
+<td class='TwoBytes'>54-56, 58, 60, 62-63</td>
+<td class='Sparse'>65-67, 69, 71, 73, 75, 77, 79-80</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>92-93</td>
+<td class='Highbits'>95-96</td>
+<td class='Highbits2'>98-99</td>
+<td class='HighBit'>101-102</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>104-105</td>
+<td class='Hi-Lo'>107-108</td>
+<td class='Text'>110-112, 114-115</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>117-118</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='passed'><td class='hashname'>FarmHash128</td><td class='seedbits'>128</td><td class='statebits'>128</td><td class='hashbits'>128</td><td class='status'>PASSED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>ok</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>FarmHash64</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-41</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>GoodOAAT</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-18, 41</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>ok</td>
+<td class='LowBit-Null'>ok</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>ok</td>
+</tr>
+<tr class='passed'><td class='hashname'>HalfSipHash</td><td class='seedbits'>64</td><td class='statebits'>128</td><td class='hashbits'>32</td><td class='status'>PASSED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>ok</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
 <td class='Crc-MultiCollision'>ok</td>
 <td class='Lowbits'>ok</td>
 <td class='Highbits'>ok</td>
@@ -822,9 +765,8 @@
 <td class='HighBit'>?</td>
 <td class='Murmur2-MultiCollision'>ok</td>
 <td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
 <td class='Hi-Lo'>ok</td>
-<td class='Text'>not ok: 149,151,153,155</td>
+<td class='Text'>ok</td>
 <td class='Murmur3A-MultiCollision'>ok</td>
 <td class='HiBit-Null'>ok</td>
 <td class='LowBit-Null'>ok</td>
@@ -836,295 +778,12 @@
 <td class='OverAll'>ok</td>
 <td class='Words'>ok</td>
 </tr>
-<tr><th class='hashname'>JenkinsOAATH</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
+<tr class='failed'><td class='hashname'>JenkinsOAAT</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
 <td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
+<td class='Differential'>17-41</td>
 <td class='Cyclic'>ok</td>
-<td class='TwoBytes'>not ok: 53,63</td>
+<td class='TwoBytes'>53-63</td>
 <td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>not ok: 109,111,113,115</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>ok</td>
-<td class='LowBit-Null'>ok</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>ok</td>
-</tr>
-<tr><th class='hashname'>Lua53</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>not ok: 3,5</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 9,12-40</td>
-<td class='Cyclic'>not ok: 41-42,45-46,51</td>
-<td class='TwoBytes'>not ok: 52-62</td>
-<td class='Sparse'>not ok: 64,75-79</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>ok</td>
-<td class='Lowbits'>not ok: 130-132</td>
-<td class='Highbits'>not ok: 134-135</td>
-<td class='Highbits2'>not ok: 137-138</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>ok</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>not ok: 145-147</td>
-<td class='Text'>not ok: 148-154</td>
-<td class='Murmur3A-MultiCollision'>not ok: 100-109</td>
-<td class='HiBit-Null'>not ok: 139-141</td>
-<td class='LowBit-Null'>not ok: 142-144</td>
-<td class='Zeroes'>not ok: 155,157</td>
-<td class='Seed'>not ok: 158,162,164,166</td>
-<td class='Murmur3F-MultiCollision'>not ok: 110-119</td>
-<td class='Effs'>not ok: 167,169</td>
-<td class='City64-MultiCollision'>ok</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>not ok: 170-171</td>
-</tr>
-<tr><th class='hashname'>Lua53oaat</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>not ok: 3,5</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 9,12,15-41</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>not ok: 53-63</td>
-<td class='Sparse'>not ok: 65,76-78,80</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>not ok: 81-90</td>
-<td class='Lowbits'>not ok: 132-133</td>
-<td class='Highbits'>not ok: 134,136</td>
-<td class='Highbits2'>not ok: 137,139</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>not ok: 91-100</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>not ok: 146-148</td>
-<td class='Text'>not ok: 149-155</td>
-<td class='Murmur3A-MultiCollision'>not ok: 101-110</td>
-<td class='HiBit-Null'>not ok: 140-142</td>
-<td class='LowBit-Null'>not ok: 143-145</td>
-<td class='Zeroes'>not ok: 156-158</td>
-<td class='Seed'>not ok: 159,163,165,167</td>
-<td class='Murmur3F-MultiCollision'>not ok: 111-120</td>
-<td class='Effs'>not ok: 168-170</td>
-<td class='City64-MultiCollision'>ok</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>not ok: 171-172</td>
-</tr>
-<tr><th class='hashname'>MUM</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><th class='status'>PASSED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>ok</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>ok</td>
-<td class='LowBit-Null'>ok</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>ok</td>
-</tr>
-<tr><th class='hashname'>MicroOAAT</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-19,39</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>not ok: 52-56,58,61</td>
-<td class='Sparse'>not ok: 63,65-67,69,71,73,78</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>not ok: 93-94</td>
-<td class='Highbits2'>not ok: 96-97</td>
-<td class='HighBit'>not ok: 99-100</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>not ok: 105-106</td>
-<td class='Text'>not ok: 108,110-113</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>Murmur2</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
-<td class='Cyclic'>not ok: 42-44,46,48,50,52</td>
-<td class='TwoBytes'>not ok: 53-55,57,63</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>ok</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>not ok: 134,136</td>
-<td class='Highbits2'>not ok: 137,139</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>not ok: 91-100</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>not ok: 103-104,106,108-110</td>
-<td class='HiBit-Null'>not ok: 140-142</td>
-<td class='LowBit-Null'>not ok: 143,145</td>
-<td class='Zeroes'>not ok: 156,158</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>ok</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>ok</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>ok</td>
-</tr>
-<tr><th class='hashname'>Murmur2A</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
-<td class='Cyclic'>not ok: 42-44,46,48,50,52</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>ok</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>not ok: 134,136</td>
-<td class='Highbits2'>not ok: 137,139</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>not ok: 91-100</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>not ok: 102-106,108-109</td>
-<td class='HiBit-Null'>not ok: 140-142</td>
-<td class='LowBit-Null'>not ok: 143,145</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>ok</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>ok</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>ok</td>
-</tr>
-<tr><th class='hashname'>Murmur2B</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>Murmur2C</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>not ok: 55-63</td>
-<td class='Sparse'>not ok: 78,80</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>not ok: 111,114-115</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>Murmur3A</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>ok</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
 <td class='Crc-MultiCollision'>ok</td>
 <td class='Lowbits'>ok</td>
 <td class='Highbits'>ok</td>
@@ -1132,38 +791,110 @@
 <td class='HighBit'>?</td>
 <td class='Murmur2-MultiCollision'>ok</td>
 <td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
 <td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>not ok: 101-110</td>
+<td class='Text'>149, 151, 153, 155</td>
+<td class='Murmur3A-MultiCollision'>ok</td>
 <td class='HiBit-Null'>ok</td>
 <td class='LowBit-Null'>ok</td>
 <td class='Zeroes'>ok</td>
 <td class='Seed'>ok</td>
 <td class='Murmur3F-MultiCollision'>ok</td>
-<td class='Effs'>not ok: 168,170</td>
+<td class='Effs'>ok</td>
 <td class='City64-MultiCollision'>ok</td>
 <td class='OverAll'>ok</td>
 <td class='Words'>ok</td>
 </tr>
-<tr><th class='hashname'>Murmur3C</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>128</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
+<tr class='failed'><td class='hashname'>JenkinsOAATH</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
 <td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-25,41</td>
+<td class='Differential'>17-41</td>
 <td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
+<td class='TwoBytes'>53, 63</td>
 <td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
+<td class='Crc-MultiCollision'>ok</td>
 <td class='Lowbits'>ok</td>
 <td class='Highbits'>ok</td>
 <td class='Highbits2'>ok</td>
 <td class='HighBit'>?</td>
 <td class='Murmur2-MultiCollision'>?</td>
 <td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>109, 111, 113, 115</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>ok</td>
+<td class='LowBit-Null'>ok</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>ok</td>
+</tr>
+<tr class='failed'><td class='hashname'>Lua53</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
+<td class='Sanity'>3, 5</td>
+<td class='Differential'>9, 12-40</td>
+<td class='Cyclic'>41-42, 45-46, 51</td>
+<td class='TwoBytes'>52-62</td>
+<td class='Sparse'>64, 75-79</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>130-132</td>
+<td class='Highbits'>134-135</td>
+<td class='Highbits2'>137-138</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>ok</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>145-147</td>
+<td class='Text'>148-154</td>
+<td class='Murmur3A-MultiCollision'>100-109</td>
+<td class='HiBit-Null'>139-141</td>
+<td class='LowBit-Null'>142-144</td>
+<td class='Zeroes'>155, 157</td>
+<td class='Seed'>158, 162, 164, 166</td>
+<td class='Murmur3F-MultiCollision'>110-119</td>
+<td class='Effs'>167, 169</td>
+<td class='City64-MultiCollision'>ok</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>170-171</td>
+</tr>
+<tr class='failed'><td class='hashname'>Lua53oaat</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
+<td class='Sanity'>3, 5</td>
+<td class='Differential'>9, 12, 15-41</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>53-63</td>
+<td class='Sparse'>65, 76-78, 80</td>
+<td class='Crc-MultiCollision'>81-90</td>
+<td class='Lowbits'>132-133</td>
+<td class='Highbits'>134, 136</td>
+<td class='Highbits2'>137, 139</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>91-100</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>146-148</td>
+<td class='Text'>149-155</td>
+<td class='Murmur3A-MultiCollision'>101-110</td>
+<td class='HiBit-Null'>140-142</td>
+<td class='LowBit-Null'>143-145</td>
+<td class='Zeroes'>156-158</td>
+<td class='Seed'>159, 163, 165, 167</td>
+<td class='Murmur3F-MultiCollision'>111-120</td>
+<td class='Effs'>168-170</td>
+<td class='City64-MultiCollision'>ok</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>171-172</td>
+</tr>
+<tr class='passed'><td class='hashname'>MUM</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><td class='status'>PASSED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>ok</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>?</td>
 <td class='Hi-Lo'>ok</td>
 <td class='Text'>ok</td>
 <td class='Murmur3A-MultiCollision'>?</td>
@@ -1177,24 +908,97 @@
 <td class='OverAll'>ok</td>
 <td class='Words'>ok</td>
 </tr>
-<tr><th class='hashname'>Murmur3F</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>128</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
+<tr class='failed'><td class='hashname'>MicroOAAT</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
 <td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 18,31,39</td>
+<td class='Differential'>17-19, 39</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>52-56, 58, 61</td>
+<td class='Sparse'>63, 65-67, 69, 71, 73, 78</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>93-94</td>
+<td class='Highbits2'>96-97</td>
+<td class='HighBit'>99-100</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>105-106</td>
+<td class='Text'>108, 110-113</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>Murmur2</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-41</td>
+<td class='Cyclic'>42-44, 46, 48, 50, 52</td>
+<td class='TwoBytes'>53-55, 57, 63</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>134, 136</td>
+<td class='Highbits2'>137, 139</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>91-100</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>103-104, 106, 108-110</td>
+<td class='HiBit-Null'>140-142</td>
+<td class='LowBit-Null'>143, 145</td>
+<td class='Zeroes'>156, 158</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>ok</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>ok</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>ok</td>
+</tr>
+<tr class='failed'><td class='hashname'>Murmur2A</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-41</td>
+<td class='Cyclic'>42-44, 46, 48, 50, 52</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>134, 136</td>
+<td class='Highbits2'>137, 139</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>91-100</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>102-106, 108-109</td>
+<td class='HiBit-Null'>140-142</td>
+<td class='LowBit-Null'>143, 145</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>ok</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>ok</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>ok</td>
+</tr>
+<tr class='failed'><td class='hashname'>Murmur2B</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-41</td>
 <td class='Cyclic'>ok</td>
 <td class='TwoBytes'>ok</td>
 <td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
+<td class='Crc-MultiCollision'>ok</td>
 <td class='Lowbits'>ok</td>
 <td class='Highbits'>ok</td>
 <td class='Highbits2'>ok</td>
 <td class='HighBit'>ok</td>
 <td class='Murmur2-MultiCollision'>?</td>
 <td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
 <td class='Hi-Lo'>ok</td>
 <td class='Text'>ok</td>
 <td class='Murmur3A-MultiCollision'>?</td>
@@ -1208,16 +1012,38 @@
 <td class='OverAll'>ok</td>
 <td class='Words'>?</td>
 </tr>
-<tr><th class='hashname'>MurmurOAAT</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
+<tr class='failed'><td class='hashname'>Murmur2C</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><td class='status'>FAILED</td>
 <td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
+<td class='Differential'>17-41</td>
 <td class='Cyclic'>ok</td>
-<td class='TwoBytes'>not ok: 53-63</td>
+<td class='TwoBytes'>55-63</td>
+<td class='Sparse'>78, 80</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>111, 114-115</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>Murmur3A</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>ok</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
 <td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
 <td class='Crc-MultiCollision'>ok</td>
 <td class='Lowbits'>ok</td>
 <td class='Highbits'>ok</td>
@@ -1225,30 +1051,77 @@
 <td class='HighBit'>?</td>
 <td class='Murmur2-MultiCollision'>ok</td>
 <td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
 <td class='Hi-Lo'>ok</td>
 <td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>ok</td>
+<td class='Murmur3A-MultiCollision'>101-110</td>
 <td class='HiBit-Null'>ok</td>
 <td class='LowBit-Null'>ok</td>
 <td class='Zeroes'>ok</td>
 <td class='Seed'>ok</td>
 <td class='Murmur3F-MultiCollision'>ok</td>
-<td class='Effs'>ok</td>
+<td class='Effs'>168, 170</td>
 <td class='City64-MultiCollision'>ok</td>
 <td class='OverAll'>ok</td>
 <td class='Words'>ok</td>
 </tr>
-<tr><th class='hashname'>PMurHash32</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
+<tr class='failed'><td class='hashname'>Murmur3C</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>128</td><td class='status'>FAILED</td>
 <td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>ok</td>
+<td class='Differential'>17-25, 41</td>
 <td class='Cyclic'>ok</td>
 <td class='TwoBytes'>ok</td>
 <td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>ok</td>
+<td class='LowBit-Null'>ok</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>ok</td>
+</tr>
+<tr class='failed'><td class='hashname'>Murmur3F</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>128</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>18, 31, 39</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>MurmurOAAT</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-41</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>53-63</td>
+<td class='Sparse'>ok</td>
 <td class='Crc-MultiCollision'>ok</td>
 <td class='Lowbits'>ok</td>
 <td class='Highbits'>ok</td>
@@ -1256,216 +1129,25 @@
 <td class='HighBit'>?</td>
 <td class='Murmur2-MultiCollision'>ok</td>
 <td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
 <td class='Hi-Lo'>ok</td>
 <td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>not ok: 101-110</td>
+<td class='Murmur3A-MultiCollision'>ok</td>
 <td class='HiBit-Null'>ok</td>
 <td class='LowBit-Null'>ok</td>
 <td class='Zeroes'>ok</td>
 <td class='Seed'>ok</td>
 <td class='Murmur3F-MultiCollision'>ok</td>
-<td class='Effs'>not ok: 168,170</td>
+<td class='Effs'>ok</td>
 <td class='City64-MultiCollision'>ok</td>
 <td class='OverAll'>ok</td>
 <td class='Words'>ok</td>
 </tr>
-<tr><th class='hashname'>Phat</th><td class='seedbits'>96</td><td class='statebits'>96</td><td class='hashbits'>32</td><th class='status'>PASSED</th>
-<td class='Startup'>ok</td>
+<tr class='failed'><td class='hashname'>PMurHash32</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
 <td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
 <td class='Differential'>ok</td>
 <td class='Cyclic'>ok</td>
 <td class='TwoBytes'>ok</td>
 <td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>ok</td>
-<td class='LowBit-Null'>ok</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>ok</td>
-</tr>
-<tr><th class='hashname'>SipHash</th><td class='seedbits'>128</td><td class='statebits'>256</td><td class='hashbits'>64</td><th class='status'>PASSED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>ok</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>SipHash13</th><td class='seedbits'>128</td><td class='statebits'>256</td><td class='hashbits'>64</td><th class='status'>PASSED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>ok</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>Spooky128</th><td class='seedbits'>128</td><td class='statebits'>128</td><td class='hashbits'>128</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 18,39</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>Spooky32</th><td class='seedbits'>32</td><td class='statebits'>128</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 18,41</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>ok</td>
-<td class='LowBit-Null'>ok</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>ok</td>
-</tr>
-<tr><th class='hashname'>Spooky64</th><td class='seedbits'>64</td><td class='statebits'>128</td><td class='hashbits'>64</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 20,41</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>StadtX</th><td class='seedbits'>128</td><td class='statebits'>256</td><td class='hashbits'>64</td><th class='status'>PASSED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>ok</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
 <td class='Crc-MultiCollision'>ok</td>
 <td class='Lowbits'>ok</td>
 <td class='Highbits'>ok</td>
@@ -1473,627 +1155,58 @@
 <td class='HighBit'>?</td>
 <td class='Murmur2-MultiCollision'>ok</td>
 <td class='LowBit'>?</td>
-<td class='City-MultiCollision'>ok</td>
 <td class='Hi-Lo'>ok</td>
 <td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>ok</td>
+<td class='Murmur3A-MultiCollision'>101-110</td>
 <td class='HiBit-Null'>ok</td>
 <td class='LowBit-Null'>ok</td>
 <td class='Zeroes'>ok</td>
 <td class='Seed'>ok</td>
 <td class='Murmur3F-MultiCollision'>ok</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>ok</td>
-</tr>
-<tr><th class='hashname'>Zaphod32</th><td class='seedbits'>95</td><td class='statebits'>96</td><td class='hashbits'>32</td><th class='status'>PASSED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>ok</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>ok</td>
-<td class='LowBit-Null'>ok</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>ok</td>
-</tr>
-<tr><th class='hashname'>Zaphod64</th><td class='seedbits'>191</td><td class='statebits'>192</td><td class='hashbits'>64</td><th class='status'>PASSED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>ok</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>ok</td>
-<td class='LowBit-Null'>ok</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>ok</td>
-</tr>
-<tr><th class='hashname'>bernstein</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 9,12,15-41</td>
-<td class='Cyclic'>not ok: 42-52</td>
-<td class='TwoBytes'>not ok: 53-63</td>
-<td class='Sparse'>not ok: 65-67,69,71,73,75,77,79-80</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>not ok: 83-84,88-90</td>
-<td class='Lowbits'>not ok: 131-133</td>
-<td class='Highbits'>not ok: 134-136</td>
-<td class='Highbits2'>not ok: 137-139</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>not ok: 91-100</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>not ok: 146-148</td>
-<td class='Text'>not ok: 149-155</td>
-<td class='Murmur3A-MultiCollision'>not ok: 104,106,108-109</td>
-<td class='HiBit-Null'>not ok: 140-142</td>
-<td class='LowBit-Null'>not ok: 143-145</td>
-<td class='Zeroes'>not ok: 157-158</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>not ok: 111-120</td>
-<td class='Effs'>ok</td>
+<td class='Effs'>168, 170</td>
 <td class='City64-MultiCollision'>ok</td>
 <td class='OverAll'>ok</td>
-<td class='Words'>not ok: 171-172</td>
+<td class='Words'>ok</td>
 </tr>
-<tr><th class='hashname'>cmetrohash64_1</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
+<tr class='passed'><td class='hashname'>Phat</td><td class='seedbits'>96</td><td class='statebits'>96</td><td class='hashbits'>32</td><td class='status'>PASSED</td>
 <td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
+<td class='Differential'>ok</td>
 <td class='Cyclic'>ok</td>
 <td class='TwoBytes'>ok</td>
 <td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>not ok: 119,121,123,125,127</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>cmetrohash64_1o</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>not ok: 119,121,123,125,127</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>cmetrohash64_2</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>not ok: 119,121,123,125,127</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>crc32</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>not ok: 54-56,63</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
 <td class='Crc-MultiCollision'>ok</td>
 <td class='Lowbits'>ok</td>
-<td class='Highbits'>not ok: 135-136</td>
-<td class='Highbits2'>not ok: 138-139</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
 <td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
 <td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>not ok: 147-148</td>
-<td class='Text'>not ok: 150-152,154-155</td>
-<td class='Murmur3A-MultiCollision'>ok</td>
-<td class='HiBit-Null'>not ok: 141-142</td>
-<td class='LowBit-Null'>not ok: 144-145</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>ok</td>
+<td class='LowBit-Null'>ok</td>
 <td class='Zeroes'>ok</td>
 <td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>ok</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>ok</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>ok</td>
-</tr>
-<tr><th class='hashname'>crc32_hw</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
-<td class='Cyclic'>not ok: 48,50,52</td>
-<td class='TwoBytes'>not ok: 54-56,63</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>not ok: 81-90</td>
-<td class='Lowbits'>not ok: 132-133</td>
-<td class='Highbits'>not ok: 135-136</td>
-<td class='Highbits2'>not ok: 138-139</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>not ok: 94-95,97-100</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>not ok: 147-148</td>
-<td class='Text'>not ok: 150-152,154-155</td>
-<td class='Murmur3A-MultiCollision'>ok</td>
-<td class='HiBit-Null'>not ok: 141-142</td>
-<td class='LowBit-Null'>not ok: 144-145</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>not ok: 161-162,167</td>
-<td class='Murmur3F-MultiCollision'>ok</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>ok</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>ok</td>
-</tr>
-<tr><th class='hashname'>crc32_hw1</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
-<td class='Cyclic'>not ok: 48,50,52</td>
-<td class='TwoBytes'>not ok: 54-56,63</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>not ok: 81-90</td>
-<td class='Lowbits'>not ok: 132-133</td>
-<td class='Highbits'>not ok: 135-136</td>
-<td class='Highbits2'>not ok: 138-139</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>not ok: 94-95,97-100</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>not ok: 147-148</td>
-<td class='Text'>not ok: 150-152,154-155</td>
-<td class='Murmur3A-MultiCollision'>ok</td>
-<td class='HiBit-Null'>not ok: 141-142</td>
-<td class='LowBit-Null'>not ok: 144-145</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>not ok: 161-162,167</td>
-<td class='Murmur3F-MultiCollision'>ok</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>ok</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>ok</td>
-</tr>
-<tr><th class='hashname'>crc64_hw</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
-<td class='Cyclic'>not ok: 42-52</td>
-<td class='TwoBytes'>not ok: 53-63</td>
-<td class='Sparse'>not ok: 64-80</td>
-<td class='CRC-MultiCollision'>not ok: 81-90</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>not ok: 92-93</td>
-<td class='Highbits'>not ok: 95-96</td>
-<td class='Highbits2'>not ok: 98-99</td>
-<td class='HighBit'>not ok: 101-102</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>not ok: 104-105</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>not ok: 106-108</td>
-<td class='Text'>not ok: 110-112,114-115</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>not ok: 117-118</td>
-<td class='Seed'>not ok: 119-127</td>
 <td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>not ok: 129-130</td>
+<td class='Effs'>ok</td>
 <td class='City64-MultiCollision'>?</td>
 <td class='OverAll'>ok</td>
-<td class='Words'>?</td>
+<td class='Words'>ok</td>
 </tr>
-<tr><th class='hashname'>donothing32</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>not ok: 4-6</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 8-37</td>
-<td class='Cyclic'>not ok: 38-48</td>
-<td class='TwoBytes'>not ok: 49-59</td>
-<td class='Sparse'>not ok: 60-76</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>not ok: 77</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>not ok: 78-80</td>
-<td class='Highbits'>not ok: 81-83</td>
-<td class='Highbits2'>not ok: 84-86</td>
-<td class='HighBit'>not ok: 87-89</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>not ok: 90-92</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>not ok: 93-95</td>
-<td class='Text'>not ok: 96-102</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>not ok: 103-105</td>
-<td class='Seed'>not ok: 106-114</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>not ok: 115-117</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>falkhash</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><th class='status'>PASSED</th>
-<td class='Startup'>ok</td>
+<tr class='passed'><td class='hashname'>SipHash</td><td class='seedbits'>128</td><td class='statebits'>256</td><td class='hashbits'>64</td><td class='status'>PASSED</td>
 <td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
 <td class='Differential'>ok</td>
 <td class='Cyclic'>ok</td>
 <td class='TwoBytes'>ok</td>
 <td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>ok</td>
-<td class='LowBit-Null'>ok</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>ok</td>
-</tr>
-<tr><th class='hashname'>farmhash128_c</th><td class='seedbits'>128</td><td class='statebits'>128</td><td class='hashbits'>128</td><th class='status'>PASSED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>ok</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>ok</td>
-<td class='LowBit-Null'>ok</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>ok</td>
-</tr>
-<tr><th class='hashname'>farmhash64_c</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>fasthash32</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17,41</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>ok</td>
-<td class='LowBit-Null'>ok</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>fasthash64</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>hasshe2</th><td class='seedbits'>128</td><td class='statebits'>128</td><td class='hashbits'>256</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-39</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>not ok: 57,59,61</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>lookup3</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
 <td class='Crc-MultiCollision'>ok</td>
-<td class='Lowbits'>not ok: 131,133</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>ok</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>ok</td>
-<td class='HiBit-Null'>ok</td>
-<td class='LowBit-Null'>ok</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>ok</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>ok</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>ok</td>
-</tr>
-<tr><th class='hashname'>md5_128a</th><td class='seedbits'>64</td><td class='statebits'>256</td><td class='hashbits'>128</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-39</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
 <td class='Lowbits'>ok</td>
 <td class='Highbits'>ok</td>
 <td class='Highbits2'>ok</td>
 <td class='HighBit'>ok</td>
 <td class='Murmur2-MultiCollision'>?</td>
 <td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>not ok: 117,119,121,123,125</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>md5_32a</th><td class='seedbits'>64</td><td class='statebits'>256</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-18,20-34,36,39</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
 <td class='Hi-Lo'>ok</td>
 <td class='Text'>ok</td>
 <td class='Murmur3A-MultiCollision'>?</td>
@@ -2107,295 +1220,116 @@
 <td class='OverAll'>ok</td>
 <td class='Words'>?</td>
 </tr>
-<tr><th class='hashname'>metrohash128_1</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>128</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
+<tr class='passed'><td class='hashname'>SipHash13</td><td class='seedbits'>128</td><td class='statebits'>256</td><td class='hashbits'>64</td><td class='status'>PASSED</td>
 <td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17,39</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>metrohash128_2</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>128</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17,39</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>metrohash128crc_1</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>128</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-24,39</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>not ok: 79-88</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>metrohash128crc_2</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>128</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-24,38,41</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>not ok: 81-90</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>ok</td>
-<td class='LowBit-Null'>ok</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>ok</td>
-</tr>
-<tr><th class='hashname'>metrohash64_1</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17,19,21,41</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>metrohash64_2</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-19,21,41</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>metrohash64crc_1</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17,19,21,41</td>
-<td class='Cyclic'>not ok: 42,52</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>not ok: 81-90</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>metrohash64crc_2</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17,19,21,41</td>
-<td class='Cyclic'>not ok: 42,52</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>not ok: 81-90</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>sdbm</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
-<td class='Cyclic'>not ok: 42-52</td>
-<td class='TwoBytes'>not ok: 54-56,58,60,62-63</td>
-<td class='Sparse'>not ok: 65-67,69,71,73,75,77,79-80</td>
-<td class='CRC-MultiCollision'>not ok: 81-90</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>not ok: 91-93</td>
-<td class='Highbits'>not ok: 94-96</td>
-<td class='Highbits2'>not ok: 97-99</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>not ok: 106-108</td>
-<td class='Text'>not ok: 109-115</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>not ok: 100-102</td>
-<td class='LowBit-Null'>not ok: 103-105</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>not ok: 129-130</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>sha1_32a</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>PASSED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
 <td class='Differential'>ok</td>
 <td class='Cyclic'>ok</td>
 <td class='TwoBytes'>ok</td>
 <td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>Spooky128</td><td class='seedbits'>128</td><td class='statebits'>128</td><td class='hashbits'>128</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>18, 39</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>Spooky32</td><td class='seedbits'>32</td><td class='statebits'>128</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>18, 41</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>ok</td>
+<td class='LowBit-Null'>ok</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>ok</td>
+</tr>
+<tr class='failed'><td class='hashname'>Spooky64</td><td class='seedbits'>64</td><td class='statebits'>128</td><td class='hashbits'>64</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>20, 41</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='passed'><td class='hashname'>StadtX</td><td class='seedbits'>128</td><td class='statebits'>256</td><td class='hashbits'>64</td><td class='status'>PASSED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>ok</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
 <td class='Crc-MultiCollision'>ok</td>
 <td class='Lowbits'>ok</td>
 <td class='Highbits'>ok</td>
@@ -2403,7 +1337,474 @@
 <td class='HighBit'>?</td>
 <td class='Murmur2-MultiCollision'>ok</td>
 <td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>ok</td>
+<td class='HiBit-Null'>ok</td>
+<td class='LowBit-Null'>ok</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>ok</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>ok</td>
+</tr>
+<tr class='passed'><td class='hashname'>Zaphod32</td><td class='seedbits'>95</td><td class='statebits'>96</td><td class='hashbits'>32</td><td class='status'>PASSED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>ok</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>ok</td>
+<td class='LowBit-Null'>ok</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>ok</td>
+</tr>
+<tr class='passed'><td class='hashname'>Zaphod64</td><td class='seedbits'>191</td><td class='statebits'>192</td><td class='hashbits'>64</td><td class='status'>PASSED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>ok</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>ok</td>
+<td class='LowBit-Null'>ok</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>ok</td>
+</tr>
+<tr class='failed'><td class='hashname'>bernstein</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>9, 12, 15-41</td>
+<td class='Cyclic'>42-52</td>
+<td class='TwoBytes'>53-63</td>
+<td class='Sparse'>65-67, 69, 71, 73, 75, 77, 79-80</td>
+<td class='Crc-MultiCollision'>83-84, 88-90</td>
+<td class='Lowbits'>131-133</td>
+<td class='Highbits'>134-136</td>
+<td class='Highbits2'>137-139</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>91-100</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>146-148</td>
+<td class='Text'>149-155</td>
+<td class='Murmur3A-MultiCollision'>104, 106, 108-109</td>
+<td class='HiBit-Null'>140-142</td>
+<td class='LowBit-Null'>143-145</td>
+<td class='Zeroes'>157-158</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>111-120</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>ok</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>171-172</td>
+</tr>
+<tr class='failed'><td class='hashname'>cmetrohash64_1</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-41</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>119, 121, 123, 125, 127</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>cmetrohash64_1o</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-41</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>119, 121, 123, 125, 127</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>cmetrohash64_2</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-41</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>119, 121, 123, 125, 127</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>crc32</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-41</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>54-56, 63</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>135-136</td>
+<td class='Highbits2'>138-139</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>ok</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>147-148</td>
+<td class='Text'>150-152, 154-155</td>
+<td class='Murmur3A-MultiCollision'>ok</td>
+<td class='HiBit-Null'>141-142</td>
+<td class='LowBit-Null'>144-145</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>ok</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>ok</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>ok</td>
+</tr>
+<tr class='failed'><td class='hashname'>crc32_hw</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-41</td>
+<td class='Cyclic'>48, 50, 52</td>
+<td class='TwoBytes'>54-56, 63</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>81-90</td>
+<td class='Lowbits'>132-133</td>
+<td class='Highbits'>135-136</td>
+<td class='Highbits2'>138-139</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>94-95, 97-100</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>147-148</td>
+<td class='Text'>150-152, 154-155</td>
+<td class='Murmur3A-MultiCollision'>ok</td>
+<td class='HiBit-Null'>141-142</td>
+<td class='LowBit-Null'>144-145</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>161-162, 167</td>
+<td class='Murmur3F-MultiCollision'>ok</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>ok</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>ok</td>
+</tr>
+<tr class='failed'><td class='hashname'>crc32_hw1</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-41</td>
+<td class='Cyclic'>48, 50, 52</td>
+<td class='TwoBytes'>54-56, 63</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>81-90</td>
+<td class='Lowbits'>132-133</td>
+<td class='Highbits'>135-136</td>
+<td class='Highbits2'>138-139</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>94-95, 97-100</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>147-148</td>
+<td class='Text'>150-152, 154-155</td>
+<td class='Murmur3A-MultiCollision'>ok</td>
+<td class='HiBit-Null'>141-142</td>
+<td class='LowBit-Null'>144-145</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>161-162, 167</td>
+<td class='Murmur3F-MultiCollision'>ok</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>ok</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>ok</td>
+</tr>
+<tr class='failed'><td class='hashname'>crc64_hw</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-41</td>
+<td class='Cyclic'>42-52</td>
+<td class='TwoBytes'>53-63</td>
+<td class='Sparse'>64-80</td>
+<td class='Crc-MultiCollision'>81-90</td>
+<td class='Lowbits'>92-93</td>
+<td class='Highbits'>95-96</td>
+<td class='Highbits2'>98-99</td>
+<td class='HighBit'>101-102</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>104-105</td>
+<td class='Hi-Lo'>106-108</td>
+<td class='Text'>110-112, 114-115</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>117-118</td>
+<td class='Seed'>119-127</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>129-130</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>donothing32</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
+<td class='Sanity'>4-6</td>
+<td class='Differential'>8-37</td>
+<td class='Cyclic'>38-48</td>
+<td class='TwoBytes'>49-59</td>
+<td class='Sparse'>60-76</td>
+<td class='Crc-MultiCollision'>77</td>
+<td class='Lowbits'>78-80</td>
+<td class='Highbits'>81-83</td>
+<td class='Highbits2'>84-86</td>
+<td class='HighBit'>87-89</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>90-92</td>
+<td class='Hi-Lo'>93-95</td>
+<td class='Text'>96-102</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>103-105</td>
+<td class='Seed'>106-114</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>115-117</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='passed'><td class='hashname'>falkhash</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><td class='status'>PASSED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>ok</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>ok</td>
+<td class='LowBit-Null'>ok</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>ok</td>
+</tr>
+<tr class='passed'><td class='hashname'>farmhash128_c</td><td class='seedbits'>128</td><td class='statebits'>128</td><td class='hashbits'>128</td><td class='status'>PASSED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>ok</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>ok</td>
+<td class='LowBit-Null'>ok</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>ok</td>
+</tr>
+<tr class='failed'><td class='hashname'>farmhash64_c</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-41</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>fasthash32</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17, 41</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>ok</td>
+<td class='LowBit-Null'>ok</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>fasthash64</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-41</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>hasshe2</td><td class='seedbits'>128</td><td class='statebits'>128</td><td class='hashbits'>256</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-39</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>57, 59, 61</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>lookup3</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-41</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>131, 133</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>ok</td>
+<td class='LowBit'>?</td>
 <td class='Hi-Lo'>ok</td>
 <td class='Text'>ok</td>
 <td class='Murmur3A-MultiCollision'>ok</td>
@@ -2417,16 +1818,298 @@
 <td class='OverAll'>ok</td>
 <td class='Words'>ok</td>
 </tr>
-<tr><th class='hashname'>sha1_32b</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>PASSED</th>
-<td class='Startup'>ok</td>
+<tr class='failed'><td class='hashname'>md5_128a</td><td class='seedbits'>64</td><td class='statebits'>256</td><td class='hashbits'>128</td><td class='status'>FAILED</td>
 <td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
+<td class='Differential'>17-39</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>117, 119, 121, 123, 125</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>md5_32a</td><td class='seedbits'>64</td><td class='statebits'>256</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-18, 20-34, 36, 39</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>metrohash128_1</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>128</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17, 39</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>metrohash128_2</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>128</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17, 39</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>metrohash128crc_1</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>128</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-24, 39</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>79-88</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>metrohash128crc_2</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>128</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-24, 38, 41</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>81-90</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>ok</td>
+<td class='LowBit-Null'>ok</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>ok</td>
+</tr>
+<tr class='failed'><td class='hashname'>metrohash64_1</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17, 19, 21, 41</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>metrohash64_2</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-19, 21, 41</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>metrohash64crc_1</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17, 19, 21, 41</td>
+<td class='Cyclic'>42, 52</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>81-90</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>metrohash64crc_2</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17, 19, 21, 41</td>
+<td class='Cyclic'>42, 52</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>81-90</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>sdbm</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-41</td>
+<td class='Cyclic'>42-52</td>
+<td class='TwoBytes'>54-56, 58, 60, 62-63</td>
+<td class='Sparse'>65-67, 69, 71, 73, 75, 77, 79-80</td>
+<td class='Crc-MultiCollision'>81-90</td>
+<td class='Lowbits'>91-93</td>
+<td class='Highbits'>94-96</td>
+<td class='Highbits2'>97-99</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>106-108</td>
+<td class='Text'>109-115</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>100-102</td>
+<td class='LowBit-Null'>103-105</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>129-130</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='passed'><td class='hashname'>sha1_32a</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>PASSED</td>
+<td class='Sanity'>ok</td>
 <td class='Differential'>ok</td>
 <td class='Cyclic'>ok</td>
 <td class='TwoBytes'>ok</td>
 <td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
 <td class='Crc-MultiCollision'>ok</td>
 <td class='Lowbits'>ok</td>
 <td class='Highbits'>ok</td>
@@ -2434,7 +2117,6 @@
 <td class='HighBit'>?</td>
 <td class='Murmur2-MultiCollision'>ok</td>
 <td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
 <td class='Hi-Lo'>ok</td>
 <td class='Text'>ok</td>
 <td class='Murmur3A-MultiCollision'>ok</td>
@@ -2448,295 +2130,12 @@
 <td class='OverAll'>ok</td>
 <td class='Words'>ok</td>
 </tr>
-<tr><th class='hashname'>sha1_64a</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>64</td><th class='status'>PASSED</th>
-<td class='Startup'>ok</td>
+<tr class='passed'><td class='hashname'>sha1_32b</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>PASSED</td>
 <td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
 <td class='Differential'>ok</td>
 <td class='Cyclic'>ok</td>
 <td class='TwoBytes'>ok</td>
 <td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>ok</td>
-<td class='LowBit-Null'>ok</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>ok</td>
-</tr>
-<tr><th class='hashname'>superfast</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 9-11,14-40</td>
-<td class='Cyclic'>not ok: 42,44,46,48,50-51</td>
-<td class='TwoBytes'>not ok: 52-62</td>
-<td class='Sparse'>not ok: 64,66,68,70,72,74,76-79</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>ok</td>
-<td class='Lowbits'>not ok: 130-132</td>
-<td class='Highbits'>not ok: 133-135</td>
-<td class='Highbits2'>not ok: 136-138</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>ok</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>not ok: 145-147</td>
-<td class='Text'>not ok: 149-151,153-154</td>
-<td class='Murmur3A-MultiCollision'>ok</td>
-<td class='HiBit-Null'>not ok: 139-141</td>
-<td class='LowBit-Null'>not ok: 142-144</td>
-<td class='Zeroes'>not ok: 155-157</td>
-<td class='Seed'>not ok: 159-161,163,165-166</td>
-<td class='Murmur3F-MultiCollision'>ok</td>
-<td class='Effs'>not ok: 167-169</td>
-<td class='City64-MultiCollision'>ok</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>not ok: 170-171</td>
-</tr>
-<tr><th class='hashname'>t1ha</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>t1ha_32be</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-21,41</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>t1ha_32le</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-21,41</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>t1ha_64be</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>ok</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>ok</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>?</td>
-<td class='LowBit-Null'>?</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>?</td>
-</tr>
-<tr><th class='hashname'>t1ha_aes</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-39,41</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>ok</td>
-<td class='LowBit-Null'>ok</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>ok</td>
-</tr>
-<tr><th class='hashname'>t1ha_crc</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 17-41</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>not ok: 81-90</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
-<td class='Lowbits'>ok</td>
-<td class='Highbits'>ok</td>
-<td class='Highbits2'>ok</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>?</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>ok</td>
-<td class='Text'>ok</td>
-<td class='Murmur3A-MultiCollision'>?</td>
-<td class='HiBit-Null'>ok</td>
-<td class='LowBit-Null'>ok</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>?</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>?</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>ok</td>
-</tr>
-<tr><th class='hashname'>x17</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 9,12,15-41</td>
-<td class='Cyclic'>not ok: 42-52</td>
-<td class='TwoBytes'>not ok: 53-63</td>
-<td class='Sparse'>not ok: 65-67,69,71,73,75,77,79-80</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>not ok: 83,89</td>
-<td class='Lowbits'>not ok: 131,133</td>
-<td class='Highbits'>not ok: 134-136</td>
-<td class='Highbits2'>not ok: 137-139</td>
-<td class='HighBit'>?</td>
-<td class='Murmur2-MultiCollision'>not ok: 91-100</td>
-<td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
-<td class='Hi-Lo'>not ok: 147-148</td>
-<td class='Text'>not ok: 149-155</td>
-<td class='Murmur3A-MultiCollision'>ok</td>
-<td class='HiBit-Null'>not ok: 140-142</td>
-<td class='LowBit-Null'>not ok: 143-145</td>
-<td class='Zeroes'>ok</td>
-<td class='Seed'>ok</td>
-<td class='Murmur3F-MultiCollision'>not ok: 111-120</td>
-<td class='Effs'>ok</td>
-<td class='City64-MultiCollision'>ok</td>
-<td class='OverAll'>ok</td>
-<td class='Words'>not ok: 171-172</td>
-</tr>
-<tr><th class='hashname'>xxHash32</th><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><th class='status'>FAILED</th>
-<td class='Startup'>ok</td>
-<td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
-<td class='Differential'>not ok: 12,16</td>
-<td class='Cyclic'>ok</td>
-<td class='TwoBytes'>ok</td>
-<td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>?</td>
-<td class='CrcCollision'>?</td>
 <td class='Crc-MultiCollision'>ok</td>
 <td class='Lowbits'>ok</td>
 <td class='Highbits'>ok</td>
@@ -2744,7 +2143,6 @@
 <td class='HighBit'>?</td>
 <td class='Murmur2-MultiCollision'>ok</td>
 <td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
 <td class='Hi-Lo'>ok</td>
 <td class='Text'>ok</td>
 <td class='Murmur3A-MultiCollision'>ok</td>
@@ -2758,24 +2156,19 @@
 <td class='OverAll'>ok</td>
 <td class='Words'>ok</td>
 </tr>
-<tr><th class='hashname'>xxHash64</th><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><th class='status'>PASSED</th>
-<td class='Startup'>ok</td>
+<tr class='passed'><td class='hashname'>sha1_64a</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>64</td><td class='status'>PASSED</td>
 <td class='Sanity'>ok</td>
-<td class='Speed'>ok</td>
 <td class='Differential'>ok</td>
 <td class='Cyclic'>ok</td>
 <td class='TwoBytes'>ok</td>
 <td class='Sparse'>ok</td>
-<td class='CRC-MultiCollision'>ok</td>
-<td class='CrcCollision'>?</td>
-<td class='Crc-MultiCollision'>?</td>
+<td class='Crc-MultiCollision'>ok</td>
 <td class='Lowbits'>ok</td>
 <td class='Highbits'>ok</td>
 <td class='Highbits2'>ok</td>
 <td class='HighBit'>?</td>
 <td class='Murmur2-MultiCollision'>?</td>
 <td class='LowBit'>?</td>
-<td class='City-MultiCollision'>?</td>
 <td class='Hi-Lo'>ok</td>
 <td class='Text'>ok</td>
 <td class='Murmur3A-MultiCollision'>?</td>
@@ -2789,4 +2182,269 @@
 <td class='OverAll'>ok</td>
 <td class='Words'>ok</td>
 </tr>
-</table>
+<tr class='failed'><td class='hashname'>superfast</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>9-11, 14-40</td>
+<td class='Cyclic'>42, 44, 46, 48, 50-51</td>
+<td class='TwoBytes'>52-62</td>
+<td class='Sparse'>64, 66, 68, 70, 72, 74, 76-79</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>130-132</td>
+<td class='Highbits'>133-135</td>
+<td class='Highbits2'>136-138</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>ok</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>145-147</td>
+<td class='Text'>149-151, 153-154</td>
+<td class='Murmur3A-MultiCollision'>ok</td>
+<td class='HiBit-Null'>139-141</td>
+<td class='LowBit-Null'>142-144</td>
+<td class='Zeroes'>155-157</td>
+<td class='Seed'>159-161, 163, 165-166</td>
+<td class='Murmur3F-MultiCollision'>ok</td>
+<td class='Effs'>167-169</td>
+<td class='City64-MultiCollision'>ok</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>170-171</td>
+</tr>
+<tr class='failed'><td class='hashname'>t1ha</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-41</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>t1ha_32be</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-21, 41</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>t1ha_32le</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-21, 41</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>t1ha_64be</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-41</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>ok</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>ok</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>?</td>
+<td class='LowBit-Null'>?</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>?</td>
+</tr>
+<tr class='failed'><td class='hashname'>t1ha_aes</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-39, 41</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>ok</td>
+<td class='LowBit-Null'>ok</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>ok</td>
+</tr>
+<tr class='failed'><td class='hashname'>t1ha_crc</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>17-41</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>81-90</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>ok</td>
+<td class='LowBit-Null'>ok</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>ok</td>
+</tr>
+<tr class='failed'><td class='hashname'>x17</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>9, 12, 15-41</td>
+<td class='Cyclic'>42-52</td>
+<td class='TwoBytes'>53-63</td>
+<td class='Sparse'>65-67, 69, 71, 73, 75, 77, 79-80</td>
+<td class='Crc-MultiCollision'>83, 89</td>
+<td class='Lowbits'>131, 133</td>
+<td class='Highbits'>134-136</td>
+<td class='Highbits2'>137-139</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>91-100</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>147-148</td>
+<td class='Text'>149-155</td>
+<td class='Murmur3A-MultiCollision'>ok</td>
+<td class='HiBit-Null'>140-142</td>
+<td class='LowBit-Null'>143-145</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>111-120</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>ok</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>171-172</td>
+</tr>
+<tr class='failed'><td class='hashname'>xxHash32</td><td class='seedbits'>32</td><td class='statebits'>32</td><td class='hashbits'>32</td><td class='status'>FAILED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>12, 16</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>ok</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>ok</td>
+<td class='HiBit-Null'>ok</td>
+<td class='LowBit-Null'>ok</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>ok</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>ok</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>ok</td>
+</tr>
+<tr class='passed'><td class='hashname'>xxHash64</td><td class='seedbits'>64</td><td class='statebits'>64</td><td class='hashbits'>64</td><td class='status'>PASSED</td>
+<td class='Sanity'>ok</td>
+<td class='Differential'>ok</td>
+<td class='Cyclic'>ok</td>
+<td class='TwoBytes'>ok</td>
+<td class='Sparse'>ok</td>
+<td class='Crc-MultiCollision'>ok</td>
+<td class='Lowbits'>ok</td>
+<td class='Highbits'>ok</td>
+<td class='Highbits2'>ok</td>
+<td class='HighBit'>?</td>
+<td class='Murmur2-MultiCollision'>?</td>
+<td class='LowBit'>?</td>
+<td class='Hi-Lo'>ok</td>
+<td class='Text'>ok</td>
+<td class='Murmur3A-MultiCollision'>?</td>
+<td class='HiBit-Null'>ok</td>
+<td class='LowBit-Null'>ok</td>
+<td class='Zeroes'>ok</td>
+<td class='Seed'>ok</td>
+<td class='Murmur3F-MultiCollision'>?</td>
+<td class='Effs'>ok</td>
+<td class='City64-MultiCollision'>?</td>
+<td class='OverAll'>ok</td>
+<td class='Words'>ok</td>
+</tr>
+</tbody></table><script>
+$(function(){
+      $('#testresults').tablesorter(); 
+});
+</script>
+</body>

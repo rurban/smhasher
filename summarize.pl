@@ -31,12 +31,13 @@ foreach my $file (@files) {
             $test_set =~s/0x00000001/LowBit/;
             $test_set =~s/Combination (\S+)/$1/;
         }
+        $test_set=~s/CRC-?(?:Multi)?Collision/Crc-MultiCollision/i;
         next if /^\s*#/;
         if (/^(not )?ok (\d+)/) {
             $ok[$2]= !$1;
             push @{$test_sets_failed{$test_set}}, $2 if $1 and $test_set ne "OverAll";
-            $all_test_sets{$test_set}= $2 if !defined $all_test_sets{$test_set} 
-                                      or $all_test_sets{$test_set} > $2;
+            $all_test_sets{$test_set}= $2 if $1 and (!defined $all_test_sets{$test_set} 
+                                      or $all_test_sets{$test_set} > $2);
             $test_sets{$test_set}//=$2;
             $passed += !$1;
             $failed += !!$1;
@@ -48,7 +49,7 @@ foreach my $file (@files) {
     }
     next unless $last and defined $ok[$last];
     for my $set (keys %test_sets_failed) {
-        $test_sets_failed{$set}= join(",", @{$test_sets_failed{$set}});
+        $test_sets_failed{$set}= join(", ", @{$test_sets_failed{$set}});
     }
     #my $failed_list= join ", ", grep { !$ok[$_] } 1 .. $last;
     my $failed_list= join ", ", sort map { "$_: " . $test_sets_failed{$_} } 
@@ -59,7 +60,7 @@ foreach my $file (@files) {
     }
     my $count_sets_failed= keys %test_sets_failed;
     my $test_group_plural= $count_sets_failed > 1 ? "s" : "";
-    $test_sets_failed{$_} = $test_sets_failed{$_} ? "not ok: $test_sets_failed{$_}" : "ok"
+    $test_sets_failed{$_} ||= "ok"
         for keys %test_sets;
 
     $data{$name}= {
@@ -84,22 +85,134 @@ foreach my $name (sort keys %data) {
 
 open my $fh, ">", "doc/summary.html";
 select $fh;
-print "<table>\n";
-printf "<tr><th class='hashname'>%s</th><th class='seedbits'>%s</td><th class='statebits'>%s</td><td class='hashbits'>%s</td><th class='status'>%s</th>\n",
+print "<head><style>\n",<<'EOF_STYLE';
+* {
+  box-sizing: border-box;
+}
+body {
+  background: steelblue;
+  font-family: "Open Sans", arial;
+}
+table {
+  width: 100%;
+  max-width: 600px;
+  height: 320px;
+  border-collapse: collapse;
+  border: 1px solid #38678f;
+  margin: 50px auto;
+  background: white;
+}
+th {
+  background: steelblue;
+  height: 54px;
+  font-weight: lighter;
+  text-shadow: 0 1px 0 #38678f;
+  color: white;
+  border: 1px solid #38678f;
+  box-shadow: inset 0px 1px 2px #568ebd;
+  transition: all 0.2s;
+}
+tr {
+  border-bottom: 1px solid #cccccc;
+}
+tr:last-child {
+  border-bottom: 0px;
+}
+td {
+  border-right: 1px solid #cccccc;
+  padding: 10px;
+  transition: all 0.2s;
+}
+td:last-child {
+  border-right: 0px;
+}
+td.selected {
+  background: #d7e4ef;
+  z-index: ;
+}
+td input {
+  font-size: 14px;
+  background: none;
+  outline: none;
+  border: 0;
+  display: table-cell;
+  height: 100%;
+  width: 100%;
+}
+td input:focus {
+  box-shadow: 0 1px 0 steelblue;
+  color: steelblue;
+}
+::-moz-selection {
+  background: steelblue;
+  color: white;
+}
+::selection {
+  background: steelblue;
+  color: white;
+}
+.main {
+  max-width: 600px;
+  padding: 10px;
+  margin: auto;
+}
+.content {
+  color: white;
+  text-align: center;
+}
+.content p,
+.content pre,
+.content h2 {
+  text-align: left;
+}
+.content pre {
+  padding: 1.2em 0 0.5em;
+  background: white;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  color: #38678f;
+}
+h1 {
+  text-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+tr.passed td.status,
+tr.passed:hover {
+  background: #b3ffb3;
+}
+tr.failed td.status,
+tr.failed:hover {
+  background: #ffb3b3;
+}
+</style>
+<script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
+<script src='http://tablesorter.com/__jquery.tablesorter.min.js'></script>
+</head><body>
+EOF_STYLE
+print "<table id='testresults'>\n";
+printf "<thead><th class='hashname'><span>%s</span></th><th class='seedbits'><span>%s</span></th><th class='statebits'><span>%s</span></th><th class='hashbits'><span>%s</span></th><th class='status'><span>%s</span></th>\n",
         qw(Name SeedBits StateBits HashBits Test-Status);
 foreach my $set (sort{ $all_test_sets{$a} <=> $all_test_sets{$b} || $a cmp $b} keys %all_test_sets) {
-    printf "<th class='%s'>%s Test</td>\n", $set, $set; 
+    printf "<th class='%s'><span>%s Test</span></th>\n", $set, $set; 
 }
-print"</tr>\n";
+print "</thead><tbody>\n";
 foreach my $name (sort keys %data) {
     my $info= $data{$name};
-    printf "<tr><th class='hashname'>%s</th><td class='seedbits'>%d</td><td class='statebits'>%d</td><td class='hashbits'>%d</td><th class='status'>%s</th>\n",
-        $name, @$info{qw(seedbits statebits hashbits status)};
+    printf "<tr class='%s'><td class='hashname'>%s</td><td class='seedbits'>%d</td><td class='statebits'>%d</td><td class='hashbits'>%d</td><td class='status'>%s</td>\n",
+        lc($info->{status}), $name, @$info{qw(seedbits statebits hashbits status)};
     foreach my $set (sort{ $all_test_sets{$a}<=>$all_test_sets{$b} || $a cmp $b} keys %all_test_sets) {
         printf "<td class='%s'>%s</td>\n", $set, $info->{status_hash}{$set} // "?"; 
     }
     print"</tr>\n";
 }
-print "</table>\n";
+print "</tbody></table>";
+print <<'EOF_HTML'
+<script>
+$(function(){
+      $('#testresults').tablesorter(); 
+});
+</script>
+</body>
+EOF_HTML
 
 
