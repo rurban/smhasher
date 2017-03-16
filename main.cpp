@@ -247,7 +247,7 @@ HashInfo g_hashes[] =
     191, 192, 64, 0xDD90BE2E,
     zaphod64_seed_state_smhasher_test, zaphod64_hash_with_state_smhasher_test },
   { "Zaphod32", "Evolved hash with  96-bit state (3x32) - Yves Orton",
-    95, 96, 32, 0x802E4AF6,
+    95, 96, 32, 0xBBDE452D,
     zaphod32_seed_state_smhasher_test, zaphod32_hash_with_state_smhasher_test },
   { "Phat", "Evolved hash with 128-bit state (4x32) - Yves Orton",
     96, 96, 32, 0xD3C0D0D5,
