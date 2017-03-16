@@ -109,7 +109,7 @@ sub graph {
         my $text;
         while (<$fh>) {
             s!<title>Gnuplot</title>!<title>$file_titles{"$dir/$file"}</title>!;
-            s!<text>($title - .*?)</text>!<text>$left_links$1$right_links</text>!;
+            s!<text>(\Q$title\E - .*?)</text>!<text>$left_links$1$right_links</text>!;
             #s!<desc>Produced by.*</desc>!<desc></desc>!
             s/gnuplot_plot_(\d+)/$names[$1-1]/g;
             $text .= $_;
