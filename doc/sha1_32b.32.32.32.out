@@ -1,342 +1,440 @@
-ok 1 - SelfTest - Verify 89 Hashes
-ok 2 - Found Hash # sha1_32b
+ok 1 - Found Hash # sha1_32b
 ###################################################################
 ### Testing sha1_32b - no seed_state
 ### - SHA1, 32 bit seed, first 32 bits xored with last 32 bits -
 ### seedbits: 32 statebits: 32 hashbits: 32
 ###################################################################
+ok 2 - Verification code # sha1_32b
+# sha1_32b             - Verification value 0xA2D9EDEF : Passed.
 ### Sanity Tests ###
-ok 3 - Verification code # sha1_32b
 # Sanity check simple key bit flips and consistency..........
-ok 4 - SanityTest # sha1_32b
+ok 3 - SanityTest # sha1_32b
 # Sanity check null suffixes change the hash (simple)..........
-ok 5 - Appended Zeroes Test # sha1_32b
-ok 6 - Sanity Test # sha1_32b
+ok 4 - Appended Zeroes Test # sha1_32b
+ok 5 - Sanity Test # sha1_32b
 ### Speed Tests ###
 ## Bulk speed test - 262144-byte keys
-# Alignment  7 -  0.242 bytes/cycle -  690.98 MiB/sec @ 3 ghz
-# Alignment  6 -  0.241 bytes/cycle -  690.79 MiB/sec @ 3 ghz
-# Alignment  5 -  0.241 bytes/cycle -  690.73 MiB/sec @ 3 ghz
-# Alignment  4 -  0.241 bytes/cycle -  690.83 MiB/sec @ 3 ghz
-# Alignment  3 -  0.241 bytes/cycle -  690.67 MiB/sec @ 3 ghz
-# Alignment  2 -  0.241 bytes/cycle -  690.88 MiB/sec @ 3 ghz
-# Alignment  1 -  0.241 bytes/cycle -  690.78 MiB/sec @ 3 ghz
-# Alignment  0 -  0.238 bytes/cycle -  680.20 MiB/sec @ 3 ghz
-# Average      -  0.241 bytes/cycle -  689.48 MiB/sec @ 3 ghz
+# Alignment  7 -  0.238 bytes/cycle -  680.13 MiB/sec @ 3 ghz
+# Alignment  6 -  0.237 bytes/cycle -  679.14 MiB/sec @ 3 ghz
+# Alignment  5 -  0.238 bytes/cycle -  681.35 MiB/sec @ 3 ghz
+# Alignment  4 -  0.238 bytes/cycle -  681.48 MiB/sec @ 3 ghz
+# Alignment  3 -  0.237 bytes/cycle -  678.98 MiB/sec @ 3 ghz
+# Alignment  2 -  0.238 bytes/cycle -  679.61 MiB/sec @ 3 ghz
+# Alignment  1 -  0.239 bytes/cycle -  683.40 MiB/sec @ 3 ghz
+# Alignment  0 -  0.235 bytes/cycle -  671.39 MiB/sec @ 3 ghz
+# Average      -  0.237 bytes/cycle -  679.44 MiB/sec @ 3 ghz
 ## KeySpeed tests
-# sha1_32b                  0 byte keys     1227.387 c/h
-# sha1_32b                  1 byte keys     1213.771 c/h     1213.771 c/b        0.001 b/c
-# sha1_32b                  2 byte keys     1200.279 c/h      600.139 c/b        0.002 b/c
-# sha1_32b                  3 byte keys     1186.106 c/h      395.369 c/b        0.003 b/c
-# sha1_32b                  4 byte keys     1171.304 c/h      292.826 c/b        0.003 b/c
-# sha1_32b                  5 byte keys     1157.215 c/h      231.443 c/b        0.004 b/c
-# sha1_32b                  6 byte keys     1143.013 c/h      190.502 c/b        0.005 b/c
-# sha1_32b                  7 byte keys     1128.857 c/h      161.265 c/b        0.006 b/c
-# sha1_32b                  8 byte keys     1114.178 c/h      139.272 c/b        0.007 b/c
-# sha1_32b                  9 byte keys     1099.992 c/h      122.221 c/b        0.008 b/c
-# sha1_32b                 10 byte keys     1085.750 c/h      108.575 c/b        0.009 b/c
-# sha1_32b                 11 byte keys     1071.566 c/h       97.415 c/b        0.010 b/c
-# sha1_32b                 12 byte keys     1057.425 c/h       88.119 c/b        0.011 b/c
-# sha1_32b                 13 byte keys     1043.231 c/h       80.249 c/b        0.012 b/c
-# sha1_32b                 14 byte keys     1029.073 c/h       73.505 c/b        0.014 b/c
-# sha1_32b                 15 byte keys     1014.886 c/h       67.659 c/b        0.015 b/c
-# sha1_32b                 16 byte keys     1000.703 c/h       62.544 c/b        0.016 b/c
-# sha1_32b                 17 byte keys      983.427 c/h       57.849 c/b        0.017 b/c
-# sha1_32b                 18 byte keys      969.251 c/h       53.847 c/b        0.019 b/c
-# sha1_32b                 19 byte keys      955.048 c/h       50.266 c/b        0.020 b/c
-# sha1_32b                 20 byte keys      940.861 c/h       47.043 c/b        0.021 b/c
-# sha1_32b                 21 byte keys      926.693 c/h       44.128 c/b        0.023 b/c
-# sha1_32b                 22 byte keys      912.537 c/h       41.479 c/b        0.024 b/c
-# sha1_32b                 23 byte keys      898.354 c/h       39.059 c/b        0.026 b/c
-# sha1_32b                 24 byte keys      884.211 c/h       36.842 c/b        0.027 b/c
-# sha1_32b                 25 byte keys      869.842 c/h       34.794 c/b        0.029 b/c
-# sha1_32b                 26 byte keys      855.779 c/h       32.915 c/b        0.030 b/c
-# sha1_32b                 27 byte keys      841.632 c/h       31.172 c/b        0.032 b/c
-# sha1_32b                 28 byte keys      827.429 c/h       29.551 c/b        0.034 b/c
-# sha1_32b                 29 byte keys      813.296 c/h       28.045 c/b        0.036 b/c
-# sha1_32b                 30 byte keys      799.060 c/h       26.635 c/b        0.038 b/c
-# sha1_32b                 31 byte keys      784.849 c/h       25.318 c/b        0.039 b/c
-#                          Average < 32     1006.469 c/h       64.933 c/b        0.015 b/c
-# sha1_32b                 32 byte keys      770.746 c/h       24.086 c/b        0.042 b/c
-# sha1_32b                 36 byte keys      722.130 c/h       20.059 c/b        0.050 b/c
-# sha1_32b                 40 byte keys      665.303 c/h       16.633 c/b        0.060 b/c
-# sha1_32b                 44 byte keys      585.146 c/h       13.299 c/b        0.075 b/c
-# sha1_32b                 48 byte keys      528.430 c/h       11.009 c/b        0.091 b/c
-# sha1_32b                 52 byte keys      471.706 c/h        9.071 c/b        0.110 b/c
-# sha1_32b                 56 byte keys     1628.287 c/h       29.077 c/b        0.034 b/c
-# sha1_32b                 60 byte keys     1571.610 c/h       26.193 c/b        0.038 b/c
-# sha1_32b                 64 byte keys     1514.506 c/h       23.664 c/b        0.042 b/c
-# sha1_32b                 68 byte keys     1457.573 c/h       21.435 c/b        0.047 b/c
-# sha1_32b                 72 byte keys     1401.742 c/h       19.469 c/b        0.051 b/c
-# sha1_32b                 76 byte keys     1345.041 c/h       17.698 c/b        0.057 b/c
-# sha1_32b                 80 byte keys     1288.210 c/h       16.103 c/b        0.062 b/c
-# sha1_32b                 84 byte keys     1229.843 c/h       14.641 c/b        0.068 b/c
-# sha1_32b                 88 byte keys     1173.193 c/h       13.332 c/b        0.075 b/c
-# sha1_32b                 92 byte keys     1118.433 c/h       12.157 c/b        0.082 b/c
-# sha1_32b                 96 byte keys     1059.778 c/h       11.039 c/b        0.091 b/c
-# sha1_32b                100 byte keys     1008.936 c/h       10.089 c/b        0.099 b/c
-# sha1_32b                104 byte keys      952.307 c/h        9.157 c/b        0.109 b/c
-# sha1_32b                108 byte keys      870.285 c/h        8.058 c/b        0.124 b/c
-# sha1_32b                112 byte keys      813.647 c/h        7.265 c/b        0.138 b/c
-# sha1_32b                116 byte keys      756.706 c/h        6.523 c/b        0.153 b/c
-# sha1_32b                120 byte keys     1913.058 c/h       15.942 c/b        0.063 b/c
-# sha1_32b                124 byte keys     1856.558 c/h       14.972 c/b        0.067 b/c
-#                         Average < 128     1051.967 c/h       24.878 c/b        0.040 b/c
-# sha1_32b                128 byte keys     1788.404 c/h       13.972 c/b        0.072 b/c
-# sha1_32b                256 byte keys     2363.797 c/h        9.234 c/b        0.108 b/c
-# sha1_32b                512 byte keys     3455.584 c/h        6.749 c/b        0.148 b/c
-# sha1_32b               1024 byte keys     5628.054 c/h        5.496 c/b        0.182 b/c
-# sha1_32b               2048 byte keys     9925.283 c/h        4.846 c/b        0.206 b/c
-# sha1_32b               4096 byte keys    18478.398 c/h        4.511 c/b        0.222 b/c
-# sha1_32b               8192 byte keys    35415.411 c/h        4.323 c/b        0.231 b/c
-# sha1_32b              16384 byte keys    69282.551 c/h        4.229 c/b        0.236 b/c
-# sha1_32b              32768 byte keys   137769.849 c/h        4.204 c/b        0.238 b/c
-# sha1_32b              65536 byte keys   276509.138 c/h        4.219 c/b        0.237 b/c
-#                       Overall Average     9386.767 c/h        4.647 c/b        0.215 b/c
-ok 7 - Speed (always passes) # sha1_32b
+# sha1_32b                  0 byte keys     1248.658 c/h
+# sha1_32b                  1 byte keys     1231.213 c/h     1231.213 c/b        0.001 b/c
+# sha1_32b                  2 byte keys     1221.787 c/h      610.893 c/b        0.002 b/c
+# sha1_32b                  3 byte keys     1210.908 c/h      403.636 c/b        0.002 b/c
+# sha1_32b                  4 byte keys     1192.282 c/h      298.071 c/b        0.003 b/c
+# sha1_32b                  5 byte keys     1180.143 c/h      236.029 c/b        0.004 b/c
+# sha1_32b                  6 byte keys     1162.990 c/h      193.832 c/b        0.005 b/c
+# sha1_32b                  7 byte keys     1150.751 c/h      164.393 c/b        0.006 b/c
+# sha1_32b                  8 byte keys     1134.259 c/h      141.782 c/b        0.007 b/c
+# sha1_32b                  9 byte keys     1120.447 c/h      124.494 c/b        0.008 b/c
+# sha1_32b                 10 byte keys     1104.884 c/h      110.488 c/b        0.009 b/c
+# sha1_32b                 11 byte keys     1086.054 c/h       98.732 c/b        0.010 b/c
+# sha1_32b                 12 byte keys     1056.552 c/h       88.046 c/b        0.011 b/c
+# sha1_32b                 13 byte keys     2497.657 c/h      192.127 c/b        0.005 b/c
+# sha1_32b                 14 byte keys     1416.411 c/h      101.172 c/b        0.010 b/c
+# sha1_32b                 15 byte keys     1032.290 c/h       68.819 c/b        0.015 b/c
+# sha1_32b                 16 byte keys     1014.666 c/h       63.417 c/b        0.016 b/c
+# sha1_32b                 17 byte keys      984.899 c/h       57.935 c/b        0.017 b/c
+# sha1_32b                 18 byte keys      970.917 c/h       53.940 c/b        0.019 b/c
+# sha1_32b                 19 byte keys      956.873 c/h       50.362 c/b        0.020 b/c
+# sha1_32b                 20 byte keys      942.517 c/h       47.126 c/b        0.021 b/c
+# sha1_32b                 21 byte keys      928.234 c/h       44.202 c/b        0.023 b/c
+# sha1_32b                 22 byte keys      914.249 c/h       41.557 c/b        0.024 b/c
+# sha1_32b                 23 byte keys      899.914 c/h       39.127 c/b        0.026 b/c
+# sha1_32b                 24 byte keys      885.761 c/h       36.907 c/b        0.027 b/c
+# sha1_32b                 25 byte keys      871.698 c/h       34.868 c/b        0.029 b/c
+# sha1_32b                 26 byte keys      857.548 c/h       32.983 c/b        0.030 b/c
+# sha1_32b                 27 byte keys      843.387 c/h       31.237 c/b        0.032 b/c
+# sha1_32b                 28 byte keys      829.044 c/h       29.609 c/b        0.034 b/c
+# sha1_32b                 29 byte keys      814.924 c/h       28.101 c/b        0.036 b/c
+# sha1_32b                 30 byte keys      800.803 c/h       26.693 c/b        0.037 b/c
+# sha1_32b                 31 byte keys      786.634 c/h       25.375 c/b        0.039 b/c
+#                          Average < 32     1073.417 c/h       69.253 c/b        0.014 b/c
+# sha1_32b                 32 byte keys      772.589 c/h       24.143 c/b        0.041 b/c
+# sha1_32b                 36 byte keys      717.100 c/h       19.919 c/b        0.050 b/c
+# sha1_32b                 40 byte keys      660.307 c/h       16.508 c/b        0.061 b/c
+# sha1_32b                 44 byte keys      579.803 c/h       13.177 c/b        0.076 b/c
+# sha1_32b                 48 byte keys      522.968 c/h       10.895 c/b        0.092 b/c
+# sha1_32b                 52 byte keys      466.274 c/h        8.967 c/b        0.112 b/c
+# sha1_32b                 56 byte keys     1619.992 c/h       28.928 c/b        0.035 b/c
+# sha1_32b                 60 byte keys     1563.415 c/h       26.057 c/b        0.038 b/c
+# sha1_32b                 64 byte keys     1508.678 c/h       23.573 c/b        0.042 b/c
+# sha1_32b                 68 byte keys     1452.376 c/h       21.358 c/b        0.047 b/c
+# sha1_32b                 72 byte keys     1396.326 c/h       19.393 c/b        0.052 b/c
+# sha1_32b                 76 byte keys     1339.543 c/h       17.626 c/b        0.057 b/c
+# sha1_32b                 80 byte keys     1282.847 c/h       16.036 c/b        0.062 b/c
+# sha1_32b                 84 byte keys     1226.479 c/h       14.601 c/b        0.068 b/c
+# sha1_32b                 88 byte keys     1169.717 c/h       13.292 c/b        0.075 b/c
+# sha1_32b                 92 byte keys     1113.027 c/h       12.098 c/b        0.083 b/c
+# sha1_32b                 96 byte keys     1056.214 c/h       11.002 c/b        0.091 b/c
+# sha1_32b                100 byte keys     1001.155 c/h       10.012 c/b        0.100 b/c
+# sha1_32b                104 byte keys      944.361 c/h        9.080 c/b        0.110 b/c
+# sha1_32b                108 byte keys      863.955 c/h        8.000 c/b        0.125 b/c
+# sha1_32b                112 byte keys      807.108 c/h        7.206 c/b        0.139 b/c
+# sha1_32b                116 byte keys      750.449 c/h        6.469 c/b        0.155 b/c
+# sha1_32b                120 byte keys     1903.418 c/h       15.862 c/b        0.063 b/c
+# sha1_32b                124 byte keys     1846.651 c/h       14.892 c/b        0.067 b/c
+#                         Average < 128     1087.752 c/h       25.724 c/b        0.039 b/c
+# sha1_32b                128 byte keys     1782.338 c/h       13.925 c/b        0.072 b/c
+# sha1_32b                256 byte keys     2358.113 c/h        9.211 c/b        0.109 b/c
+# sha1_32b                512 byte keys     3446.479 c/h        6.731 c/b        0.149 b/c
+# sha1_32b               1024 byte keys     5616.103 c/h        5.484 c/b        0.182 b/c
+# sha1_32b               2048 byte keys     9903.512 c/h        4.836 c/b        0.207 b/c
+# sha1_32b               4096 byte keys    18457.879 c/h        4.506 c/b        0.222 b/c
+# sha1_32b               8192 byte keys    35469.316 c/h        4.330 c/b        0.231 b/c
+# sha1_32b              16384 byte keys    69294.735 c/h        4.229 c/b        0.236 b/c
+# sha1_32b              32768 byte keys   137040.445 c/h        4.182 c/b        0.239 b/c
+# sha1_32b              65536 byte keys   275461.123 c/h        4.203 c/b        0.238 b/c
+#                       Overall Average     9390.063 c/h        4.649 c/b        0.215 b/c
+ok 6 - Speed (always passes) # sha1_32b
 ### Differential Tests ###
 # Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 32 bit hashes.
 # 1000 reps, 8303632000 total tests, expecting 1.93 random collisions..........
-ok 8 - Differential collisions # sha1_32b
-ok 9 - Nothing skipped during differential collision check # sha1_32b
+ok 7 - Differential collisions # sha1_32b
+ok 8 - Nothing skipped during differential collision check # sha1_32b
 # 2 total collisions, of which 2 single collisions were ignored
-ok 10 - ProcessDifferentials
+ok 9 - ProcessDifferentials
 # Testing 11017632 up-to-4-bit differentials in 128-bit keys -> 32 bit hashes.
 # 1000 reps, 11017632000 total tests, expecting 2.57 random collisions..........
-ok 11 - Differential collisions # sha1_32b
-ok 12 - Nothing skipped during differential collision check # sha1_32b
+ok 10 - Differential collisions # sha1_32b
+ok 11 - Nothing skipped during differential collision check # sha1_32b
 # 1 total collisions, of which 1 single collisions were ignored
-ok 13 - ProcessDifferentials
+ok 12 - ProcessDifferentials
 # Testing 2796416 up-to-3-bit differentials in 256-bit keys -> 32 bit hashes.
 # 1000 reps, 2796416000 total tests, expecting 0.65 random collisions..........
-ok 14 - Differential collisions # sha1_32b
-ok 15 - Nothing skipped during differential collision check # sha1_32b
+ok 13 - Differential collisions # sha1_32b
+ok 14 - Nothing skipped during differential collision check # sha1_32b
 # 1 total collisions, of which 1 single collisions were ignored
-ok 16 - ProcessDifferentials
-ok 17 - Differential # sha1_32b
+ok 15 - ProcessDifferentials
+ok 16 - Differential # sha1_32b
 ### Avalanche Tests ### - seed-bits: 32 hash-bits: 32
 # Samples 1000000, expected error 0.00025600, confidence level 99.99994267%
-# Testing   0-bit keys.......... ok.     # worst-bit:   0.390% error-ratio: 1.040558e+00
-ok 18 - Strict Avalanche Criteria - 0 bit keys
-# Testing   8-bit keys.......... ok.     # worst-bit:   0.455% error-ratio: 1.067136e+00
-ok 19 - Strict Avalanche Criteria - 8 bit keys
-# Testing  16-bit keys.......... ok.     # worst-bit:   0.404% error-ratio: 1.019060e+00
-ok 20 - Strict Avalanche Criteria - 16 bit keys
-# Testing  24-bit keys.......... ok.     # worst-bit:   0.327% error-ratio: 9.791519e-01
-ok 21 - Strict Avalanche Criteria - 24 bit keys
-# Testing  32-bit keys.......... ok.     # worst-bit:   0.365% error-ratio: 1.054269e+00
-ok 22 - Strict Avalanche Criteria - 32 bit keys
-# Testing  40-bit keys.......... ok.     # worst-bit:   0.381% error-ratio: 9.985947e-01
-ok 23 - Strict Avalanche Criteria - 40 bit keys
-# Testing  48-bit keys.......... ok.     # worst-bit:   0.381% error-ratio: 1.021876e+00
-ok 24 - Strict Avalanche Criteria - 48 bit keys
-# Testing  56-bit keys.......... ok.     # worst-bit:   0.365% error-ratio: 9.686521e-01
-ok 25 - Strict Avalanche Criteria - 56 bit keys
-# Testing  64-bit keys.......... ok.     # worst-bit:   0.327% error-ratio: 9.913226e-01
-ok 26 - Strict Avalanche Criteria - 64 bit keys
-# Testing  72-bit keys.......... ok.     # worst-bit:   0.394% error-ratio: 1.039468e+00
-ok 27 - Strict Avalanche Criteria - 72 bit keys
-# Testing  80-bit keys.......... ok.     # worst-bit:   0.364% error-ratio: 1.008703e+00
-ok 28 - Strict Avalanche Criteria - 80 bit keys
-# Testing  88-bit keys.......... ok.     # worst-bit:   0.409% error-ratio: 9.667907e-01
-ok 29 - Strict Avalanche Criteria - 88 bit keys
-# Testing  96-bit keys.......... ok.     # worst-bit:   0.370% error-ratio: 9.982576e-01
-ok 30 - Strict Avalanche Criteria - 96 bit keys
-# Testing 104-bit keys.......... ok.     # worst-bit:   0.376% error-ratio: 1.025060e+00
-ok 31 - Strict Avalanche Criteria - 104 bit keys
-# Testing 112-bit keys.......... ok.     # worst-bit:   0.414% error-ratio: 9.980052e-01
-ok 32 - Strict Avalanche Criteria - 112 bit keys
-# Testing 120-bit keys.......... ok.     # worst-bit:   0.411% error-ratio: 1.013315e+00
-ok 33 - Strict Avalanche Criteria - 120 bit keys
-# Testing 128-bit keys.......... ok.     # worst-bit:   0.389% error-ratio: 1.002059e+00
-ok 34 - Strict Avalanche Criteria - 128 bit keys
-# Testing 136-bit keys.......... ok.     # worst-bit:   0.352% error-ratio: 9.936385e-01
-ok 35 - Strict Avalanche Criteria - 136 bit keys
-# Testing 144-bit keys.......... ok.     # worst-bit:   0.409% error-ratio: 9.783596e-01
-ok 36 - Strict Avalanche Criteria - 144 bit keys
-# Testing 152-bit keys.......... ok.     # worst-bit:   0.415% error-ratio: 1.007252e+00
-ok 37 - Strict Avalanche Criteria - 152 bit keys
-# Testing 152-bit keys.......... ok.     # worst-bit:   0.435% error-ratio: 9.945032e-01
-ok 38 - Strict Avalanche Criteria - 160 bit keys
-# Testing 256-bit keys.......... ok.     # worst-bit:   0.437% error-ratio: 9.969154e-01
+# Testing   0-bit keys.......... ok.     # worst-bit:   0.343% error-ratio: 9.606663e-01
+ok 17 - Strict Avalanche Criteria - 0 bit keys
+# Testing   8-bit keys.......... ok.     # worst-bit:   0.346% error-ratio: 1.030726e+00
+ok 18 - Strict Avalanche Criteria - 8 bit keys
+# Testing  16-bit keys.......... ok.     # worst-bit:   0.346% error-ratio: 9.755149e-01
+ok 19 - Strict Avalanche Criteria - 16 bit keys
+# Testing  24-bit keys.......... ok.     # worst-bit:   0.382% error-ratio: 9.472824e-01
+ok 20 - Strict Avalanche Criteria - 24 bit keys
+# Testing  32-bit keys.......... ok.     # worst-bit:   0.337% error-ratio: 1.053516e+00
+ok 21 - Strict Avalanche Criteria - 32 bit keys
+# Testing  40-bit keys.......... ok.     # worst-bit:   0.334% error-ratio: 9.913651e-01
+ok 22 - Strict Avalanche Criteria - 40 bit keys
+# Testing  48-bit keys.......... ok.     # worst-bit:   0.362% error-ratio: 9.840828e-01
+ok 23 - Strict Avalanche Criteria - 48 bit keys
+# Testing  56-bit keys.......... ok.     # worst-bit:   0.340% error-ratio: 9.753625e-01
+ok 24 - Strict Avalanche Criteria - 56 bit keys
+# Testing  64-bit keys.......... ok.     # worst-bit:   0.423% error-ratio: 1.037725e+00
+ok 25 - Strict Avalanche Criteria - 64 bit keys
+# Testing  72-bit keys.......... ok.     # worst-bit:   0.353% error-ratio: 1.005007e+00
+ok 26 - Strict Avalanche Criteria - 72 bit keys
+# Testing  80-bit keys.......... ok.     # worst-bit:   0.417% error-ratio: 1.055044e+00
+ok 27 - Strict Avalanche Criteria - 80 bit keys
+# Testing  88-bit keys.......... ok.     # worst-bit:   0.381% error-ratio: 9.833538e-01
+ok 28 - Strict Avalanche Criteria - 88 bit keys
+# Testing  96-bit keys.......... ok.     # worst-bit:   0.416% error-ratio: 9.904059e-01
+ok 29 - Strict Avalanche Criteria - 96 bit keys
+# Testing 104-bit keys.......... ok.     # worst-bit:   0.392% error-ratio: 9.930832e-01
+ok 30 - Strict Avalanche Criteria - 104 bit keys
+# Testing 112-bit keys.......... ok.     # worst-bit:   0.364% error-ratio: 1.017748e+00
+ok 31 - Strict Avalanche Criteria - 112 bit keys
+# Testing 120-bit keys.......... ok.     # worst-bit:   0.380% error-ratio: 9.987492e-01
+ok 32 - Strict Avalanche Criteria - 120 bit keys
+# Testing 128-bit keys.......... ok.     # worst-bit:   0.427% error-ratio: 1.011800e+00
+ok 33 - Strict Avalanche Criteria - 128 bit keys
+# Testing 136-bit keys.......... ok.     # worst-bit:   0.362% error-ratio: 9.919325e-01
+ok 34 - Strict Avalanche Criteria - 136 bit keys
+# Testing 144-bit keys.......... ok.     # worst-bit:   0.382% error-ratio: 1.001290e+00
+ok 35 - Strict Avalanche Criteria - 144 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.385% error-ratio: 9.856730e-01
+ok 36 - Strict Avalanche Criteria - 152 bit keys
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.401% error-ratio: 9.830741e-01
+ok 37 - Strict Avalanche Criteria - 160 bit keys
+# Testing 200-bit keys.......... ok.     # worst-bit:   0.415% error-ratio: 9.880287e-01
+ok 38 - Strict Avalanche Criteria - 200 bit keys
+# Testing 256-bit keys.......... ok.     # worst-bit:   0.378% error-ratio: 9.663244e-01
 ok 39 - Strict Avalanche Criteria - 256 bit keys
-ok 40 - Strict Avalanche Criteria # sha1_32b
+# Testing 512-bit keys.......... ok.     # worst-bit:   0.382% error-ratio: 9.849822e-01
+ok 40 - Strict Avalanche Criteria - 512 bit keys
+ok 41 - Strict Avalanche Criteria # sha1_32b
 ### Keyset 'Cyclic' Tests ###
 # Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
 # Testing collisions   - Expected 11641.53, actual    11629 ( 1.00x) - passed
-ok 41 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
-ok 42 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
+ok 42 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
+ok 43 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
 # Testing collisions   - Expected 11641.53, actual    11661 ( 1.00x) - passed
-ok 43 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
-ok 44 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
+ok 44 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
+ok 45 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
 # Testing collisions   - Expected 11641.53, actual    11781 ( 1.01x) - passed
-ok 45 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
-ok 46 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
+ok 46 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
+ok 47 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
 # Testing collisions   - Expected 11641.53, actual    11814 ( 1.01x) - passed
-ok 47 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
-ok 48 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
+ok 48 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
+ok 49 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
 # Testing collisions   - Expected 11641.53, actual    11551 ( 0.99x) - passed
-ok 49 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
-ok 50 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
-ok 51 - Keyset 'Cyclic' # sha1_32b
+ok 50 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+ok 51 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+ok 52 - Keyset 'Cyclic' # sha1_32b
 ### Keyset 'TwoBytes' Tests ###
 # Testing collisions   - Expected    49.57, actual       49 ( 0.99x) - passed
-ok 52 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
-ok 53 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+ok 53 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+ok 54 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
 # Testing collisions   - Expected  3484.56, actual     3526 ( 1.01x) - passed
-ok 54 - Collision Rate for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
-ok 55 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+ok 55 - Collision Rate for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+ok 56 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
 # Testing collisions   - Expected 40347.77, actual    40340 ( 1.00x) - passed
-ok 56 - Collision Rate for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
-ok 57 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+ok 57 - Collision Rate for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+ok 58 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
 # Testing collisions   - Expected 227963.15, actual   227487 ( 1.00x) - passed
-ok 58 - Collision Rate for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
-ok 59 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+ok 59 - Collision Rate for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+ok 60 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
 # Testing collisions   - Expected 871784.70, actual   865307 ( 0.99x) - passed
-ok 60 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
-ok 61 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
-ok 62 - Keyset 'TwoBytes' # sha1_32b
+ok 61 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+ok 62 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+ok 63 - Keyset 'TwoBytes' # sha1_32b
 ### Keyset 'Sparse' Tests ###
 # Keyset 'Sparse' - 32-bit keys with up to 6 bits set - 1149017 keys
 # Testing collisions   - Expected   153.70, actual      140 ( 0.91x) - passed
-ok 63 - Collision Rate for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
-ok 64 - Distribution Bias Check for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+ok 64 - Collision Rate for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+ok 65 - Distribution Bias Check for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
 # Keyset 'Sparse' - 40-bit keys with up to 6 bits set - 4598479 keys
 # Testing collisions   - Expected  2461.72, actual     2405 ( 0.98x) - passed
-ok 65 - Collision Rate for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
-ok 66 - Distribution Bias Check for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+ok 66 - Collision Rate for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+ok 67 - Distribution Bias Check for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
 # Keyset 'Sparse' - 48-bit keys with up to 5 bits set - 1925357 keys
 # Testing collisions   - Expected   431.55, actual      415 ( 0.96x) - passed
-ok 67 - Collision Rate for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
-ok 68 - Distribution Bias Check for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+ok 68 - Collision Rate for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+ok 69 - Distribution Bias Check for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
 # Keyset 'Sparse' - 56-bit keys with up to 5 bits set - 4216423 keys
 # Testing collisions   - Expected  2069.66, actual     2060 ( 1.00x) - passed
-ok 69 - Collision Rate for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
-ok 70 - Distribution Bias Check for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+ok 70 - Collision Rate for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+ok 71 - Distribution Bias Check for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
 # Keyset 'Sparse' - 64-bit keys with up to 5 bits set - 8303633 keys
 # Testing collisions   - Expected  8026.87, actual     7966 ( 0.99x) - passed
-ok 71 - Collision Rate for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
-ok 72 - Distribution Bias Check for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+ok 72 - Collision Rate for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+ok 73 - Distribution Bias Check for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
 # Keyset 'Sparse' - 96-bit keys with up to 4 bits set - 3469497 keys
 # Testing collisions   - Expected  1401.34, actual     1461 ( 1.04x) - passed
-ok 73 - Collision Rate for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
-ok 74 - Distribution Bias Check for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+ok 74 - Collision Rate for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+ok 75 - Distribution Bias Check for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
 # Keyset 'Sparse' - 256-bit keys with up to 3 bits set - 2796417 keys
 # Testing collisions   - Expected   910.36, actual      961 ( 1.06x) - passed
-ok 75 - Collision Rate for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
-ok 76 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+ok 76 - Collision Rate for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+ok 77 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
 # Keyset 'Sparse' - 2048-bit keys with up to 2 bits set - 2098177 keys
 # Testing collisions   - Expected   512.50, actual      525 ( 1.02x) - passed
-ok 77 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
-ok 78 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
-ok 79 - Keyset 'Sparse' # sha1_32b
-# Keyset 'CRC-MultiCollision' - 100000 x 16 block keys - 128-bytes long - 10 seeds
-# Testing collisions   - Expected     1.16, actual        1 ( 0.86x) - passed
-ok 80 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 1 # sha1_32b
-# Testing collisions   - Expected     1.16, actual        1 ( 0.86x) - passed
-ok 81 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 2 # sha1_32b
-# Testing collisions   - Expected     1.16, actual        0 ( 0.00x) - passed
-ok 82 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 3 # sha1_32b
-# Testing collisions   - Expected     1.16, actual        3 ( 2.58x) - failed
-not ok 83 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 4 # sha1_32b
-# Testing collisions   - Expected     1.16, actual        0 ( 0.00x) - passed
-ok 84 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 5 # sha1_32b
-# Testing collisions   - Expected     1.16, actual        0 ( 0.00x) - passed
-ok 85 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 6 # sha1_32b
-# Testing collisions   - Expected     1.16, actual        1 ( 0.86x) - passed
-ok 86 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 7 # sha1_32b
-# Testing collisions   - Expected     1.16, actual        3 ( 2.58x) - failed
-not ok 87 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 8 # sha1_32b
-# Testing collisions   - Expected     1.16, actual        0 ( 0.00x) - passed
-ok 88 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 9 # sha1_32b
-# Testing collisions   - Expected     1.16, actual        2 ( 1.72x) - passed
-ok 89 - Collision Rate for Keyset 'CRC-MultiCollision' - seed 10 # sha1_32b
+ok 78 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 79 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 80 - Keyset 'Sparse' # sha1_32b
+### Keyset 'Crc-MultiCollision' Tests ###
+# Keyset 'Crc-MultiCollision' - 1048575 x 16 block keys - 128-bytes long - 10 seeds
+# Testing collisions   - Expected   128.00, actual      141 ( 1.10x) - passed
+ok 81 - Collision Rate for Keyset 'Crc-MultiCollision' - seed 1 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      135 ( 1.05x) - passed
+ok 82 - Collision Rate for Keyset 'Crc-MultiCollision' - seed 2 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      129 ( 1.01x) - passed
+ok 83 - Collision Rate for Keyset 'Crc-MultiCollision' - seed 3 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      134 ( 1.05x) - passed
+ok 84 - Collision Rate for Keyset 'Crc-MultiCollision' - seed 4 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      130 ( 1.02x) - passed
+ok 85 - Collision Rate for Keyset 'Crc-MultiCollision' - seed 5 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      133 ( 1.04x) - passed
+ok 86 - Collision Rate for Keyset 'Crc-MultiCollision' - seed 6 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      115 ( 0.90x) - passed
+ok 87 - Collision Rate for Keyset 'Crc-MultiCollision' - seed 7 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      126 ( 0.98x) - passed
+ok 88 - Collision Rate for Keyset 'Crc-MultiCollision' - seed 8 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      121 ( 0.95x) - passed
+ok 89 - Collision Rate for Keyset 'Crc-MultiCollision' - seed 9 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      123 ( 0.96x) - passed
+ok 90 - Collision Rate for Keyset 'Crc-MultiCollision' - seed 10 # sha1_32b
+### Keyset 'Murmur2-MultiCollision' Tests ###
+# Keyset 'Murmur2-MultiCollision' - 1048575 x 16 block keys - 128-bytes long - 10 seeds
+# Testing collisions   - Expected   128.00, actual      113 ( 0.88x) - passed
+ok 91 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 1 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      126 ( 0.98x) - passed
+ok 92 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 2 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      132 ( 1.03x) - passed
+ok 93 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 3 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      140 ( 1.09x) - passed
+ok 94 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 4 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      130 ( 1.02x) - passed
+ok 95 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 5 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      128 ( 1.00x) - passed
+ok 96 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 6 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      140 ( 1.09x) - passed
+ok 97 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 7 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      117 ( 0.91x) - passed
+ok 98 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 8 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      125 ( 0.98x) - passed
+ok 99 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 9 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      108 ( 0.84x) - passed
+ok 100 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 10 # sha1_32b
+### Keyset 'Murmur3A-MultiCollision' Tests ###
+# Keyset 'Murmur3A-MultiCollision' - 1048575 x 16 block keys - 128-bytes long - 10 seeds
+# Testing collisions   - Expected   128.00, actual      122 ( 0.95x) - passed
+ok 101 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 1 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      122 ( 0.95x) - passed
+ok 102 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 2 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      135 ( 1.05x) - passed
+ok 103 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 3 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      113 ( 0.88x) - passed
+ok 104 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 4 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      101 ( 0.79x) - passed
+ok 105 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 5 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      119 ( 0.93x) - passed
+ok 106 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 6 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      117 ( 0.91x) - passed
+ok 107 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 7 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      116 ( 0.91x) - passed
+ok 108 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 8 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      135 ( 1.05x) - passed
+ok 109 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 9 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      123 ( 0.96x) - passed
+ok 110 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 10 # sha1_32b
+### Keyset 'Murmur3F-MultiCollision' Tests ###
+# Keyset 'Murmur3F-MultiCollision' - 1048575 x 16 block keys - 512-bytes long - 10 seeds
+# Testing collisions   - Expected   128.00, actual      152 ( 1.19x) - passed
+ok 111 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 1 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      132 ( 1.03x) - passed
+ok 112 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 2 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      114 ( 0.89x) - passed
+ok 113 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 3 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      130 ( 1.02x) - passed
+ok 114 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 4 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      110 ( 0.86x) - passed
+ok 115 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 5 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      127 ( 0.99x) - passed
+ok 116 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 6 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      120 ( 0.94x) - passed
+ok 117 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 7 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      112 ( 0.88x) - passed
+ok 118 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 8 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      135 ( 1.05x) - passed
+ok 119 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 9 # sha1_32b
+# Testing collisions   - Expected   128.00, actual      135 ( 1.05x) - passed
+ok 120 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 10 # sha1_32b
+### Keyset 'City64-MultiCollision' Tests ###
+# Keyset 'City64-MultiCollision' - 10 x 2 block keys - 16-bytes long - 10 seeds
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 121 - Collision Rate for Keyset 'City64-MultiCollision' - seed 1 # sha1_32b
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 122 - Collision Rate for Keyset 'City64-MultiCollision' - seed 2 # sha1_32b
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 123 - Collision Rate for Keyset 'City64-MultiCollision' - seed 3 # sha1_32b
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 124 - Collision Rate for Keyset 'City64-MultiCollision' - seed 4 # sha1_32b
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 125 - Collision Rate for Keyset 'City64-MultiCollision' - seed 5 # sha1_32b
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 126 - Collision Rate for Keyset 'City64-MultiCollision' - seed 6 # sha1_32b
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 127 - Collision Rate for Keyset 'City64-MultiCollision' - seed 7 # sha1_32b
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 128 - Collision Rate for Keyset 'City64-MultiCollision' - seed 8 # sha1_32b
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 129 - Collision Rate for Keyset 'City64-MultiCollision' - seed 9 # sha1_32b
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 130 - Collision Rate for Keyset 'City64-MultiCollision' - seed 10 # sha1_32b
 ### Keyset 'Combination Lowbits' Tests ###
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
 # Testing collisions   - Expected 42799.01, actual    42997 ( 1.00x) - passed
-ok 90 - Collision Rate for Keyset 'Combination Lowbits'
-ok 91 - Distribution Bias Check for Keyset 'Combination Lowbits'
-ok 92 - Keyset 'Combination Lowbits' # sha1_32b
+ok 131 - Collision Rate for Keyset 'Combination Lowbits'
+ok 132 - Distribution Bias Check for Keyset 'Combination Lowbits'
+ok 133 - Keyset 'Combination Lowbits' # sha1_32b
 ### Keyset 'Combination Highbits' Tests ###
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
 # Testing collisions   - Expected 42799.01, actual    42539 ( 0.99x) - passed
-ok 93 - Collision Rate for Keyset 'Combination Highbits'
-ok 94 - Distribution Bias Check for Keyset 'Combination Highbits'
-ok 95 - Keyset 'Combination Highbits' # sha1_32b
+ok 134 - Collision Rate for Keyset 'Combination Highbits'
+ok 135 - Distribution Bias Check for Keyset 'Combination Highbits'
+ok 136 - Keyset 'Combination Highbits' # sha1_32b
 ### Keyset 'Combination Highbits2' Tests ###
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
 # Testing collisions   - Expected 42799.01, actual    42657 ( 1.00x) - passed
-ok 96 - Collision Rate for Keyset 'Combination Highbits2'
-ok 97 - Distribution Bias Check for Keyset 'Combination Highbits2'
-ok 98 - Keyset 'Combination Highbits2' # sha1_32b
-### Keyset 'Combination 0x80000000' Tests ###
+ok 137 - Collision Rate for Keyset 'Combination Highbits2'
+ok 138 - Distribution Bias Check for Keyset 'Combination Highbits2'
+ok 139 - Keyset 'Combination Highbits2' # sha1_32b
+### Keyset 'Combination HiBit-Null' Tests ###
 # Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
 # Testing collisions   - Expected   512.00, actual      516 ( 1.01x) - passed
-ok 99 - Collision Rate for Keyset 'Combination 0x80000000'
-ok 100 - Distribution Bias Check for Keyset 'Combination 0x80000000'
-ok 101 - Keyset 'Combination 0x80000000' # sha1_32b
-### Keyset 'Combination 0x00000001' Tests ###
+ok 140 - Collision Rate for Keyset 'Combination HiBit-Null'
+ok 141 - Distribution Bias Check for Keyset 'Combination HiBit-Null'
+ok 142 - Keyset 'Combination HiBit-Null' # sha1_32b
+### Keyset 'Combination LowBit-Null' Tests ###
 # Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
 # Testing collisions   - Expected   512.00, actual      494 ( 0.96x) - passed
-ok 102 - Collision Rate for Keyset 'Combination 0x00000001'
-ok 103 - Distribution Bias Check for Keyset 'Combination 0x00000001'
-ok 104 - Keyset 'Combination 0x00000001' # sha1_32b
+ok 143 - Collision Rate for Keyset 'Combination LowBit-Null'
+ok 144 - Distribution Bias Check for Keyset 'Combination LowBit-Null'
+ok 145 - Keyset 'Combination LowBit-Null' # sha1_32b
 ### Keyset 'Combination Hi-Lo' Tests ###
 # Keyset 'Combination' - up to 6 blocks from a set of 15 - 12204240 keys
 # Testing collisions   - Expected 17339.30, actual    16977 ( 0.98x) - passed
-ok 105 - Collision Rate for Keyset 'Combination Hi-Lo'
-ok 106 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
-ok 107 - Keyset 'Combination Hi-Lo' # sha1_32b
+ok 146 - Collision Rate for Keyset 'Combination Hi-Lo'
+ok 147 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
+ok 148 - Keyset 'Combination Hi-Lo' # sha1_32b
 ### Keyset 'Text' Tests ###
 # Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
 # Testing collisions   - Expected 25418.13, actual    25417 ( 1.00x) - passed
-ok 108 - Collision Rate for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
-ok 109 - Distribution Bias Check for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+ok 149 - Collision Rate for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+ok 150 - Distribution Bias Check for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
 # Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
 # Testing collisions   - Expected 25418.13, actual    25604 ( 1.01x) - passed
-ok 110 - Collision Rate for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
-ok 111 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+ok 151 - Collision Rate for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+ok 152 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
 # Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
 # Testing collisions   - Expected 25418.13, actual    25539 ( 1.00x) - passed
-ok 112 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
-ok 113 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
-ok 114 - Keyset 'Text' # sha1_32b
+ok 153 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 154 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 155 - Keyset 'Text' # sha1_32b
 ### Keyset 'Zeroes' Tests ###
 # Keyset 'Zeroes' - 262144 keys
 # Testing collisions   - Expected     8.00, actual        5 ( 0.63x) - passed
-ok 115 - Collision Rate for Keyset 'Zeroes' - 262144 keys
-ok 116 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys
-ok 117 - Keyset 'Zeroes' # sha1_32b
+ok 156 - Collision Rate for Keyset 'Zeroes' - 262144 keys
+ok 157 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys
+ok 158 - Keyset 'Zeroes' # sha1_32b
 ### Keyset 'Seed' Tests ###
 # Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
 # Testing collisions   - Expected   465.46, actual      479 ( 1.03x) - passed
-ok 118 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
-ok 119 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+ok 159 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+ok 160 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
 # Keyset 'Seed' - 2000000 seeds, Key ""
 # Testing collisions   - Expected   465.44, actual      484 ( 1.04x) - passed
-ok 120 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
-ok 121 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
+ok 161 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
+ok 162 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
 # Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
 # Testing collisions   - Expected   465.46, actual      481 ( 1.03x) - passed
-ok 122 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
-ok 123 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+ok 163 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+ok 164 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
 # Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
 # Testing collisions   - Expected   465.45, actual      455 ( 0.98x) - passed
-ok 124 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
-ok 125 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
-ok 126 - Keyset 'Seed' # sha1_32b
+ok 165 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 166 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 167 - Keyset 'Seed' # sha1_32b
 ### Keyset 'Effs' Tests ###
 # Keyset 'Effs' - 262144 keys
 # Testing collisions   - Expected     8.00, actual        6 ( 0.75x) - passed
-ok 127 - Collision Rate for Keyset 'Effs' - 262144 keys
-ok 128 - Distribution Bias Check for Keyset 'Effs' - 262144 keys
-ok 129 - Keyset 'Effs' # sha1_32b
-not ok 130 - all tests passed # sha1_32b
-1..130
-# Tests Failed. sha1_32b failed 3 of 130 tests.
-# Testing took 11892.243184 seconds
-# This is SMHasher version v1.0-demerphq-5-g86440f3 - built on Mar 10 2017.
+ok 168 - Collision Rate for Keyset 'Effs' - 262144 keys
+ok 169 - Distribution Bias Check for Keyset 'Effs' - 262144 keys
+ok 170 - Keyset 'Effs' # sha1_32b
+### Keyset 'Words' Tests ###
+# Hashed 99171 keys from 297513 words from file '/usr/share/dict/words'
+# Testing collisions   - Expected    10.30, actual       12 ( 1.16x) - passed
+ok 171 - Collision Rate for Keyset 'Words'
+ok 172 - Distribution Bias Check for Keyset 'Words'
+ok 173 - all tests passed # sha1_32b
+1..173
+# All Tests Passed. sha1_32b passed all 173 tests run.
+# Testing took 12403.494645 seconds
+# This is SMHasher version v1.1-demerphq-20-g7c461c7 - built on Mar 15 2017.
