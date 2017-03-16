@@ -29,6 +29,7 @@ sub graph {
     }
     $title ||= "Mixed";
     (my $ftitle= $title)=~s/[\W_]+/_/g;
+    s/_+\z//,s/^_+// for $ftitle;
     foreach my $name (@names) {
         push @plot, "'-' with lines title columnhead(2)";
         push @ret, "bytes $name";

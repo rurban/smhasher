@@ -1,5 +1,5 @@
 #!/bin/bash
-perl summarize.pl > doc/summarry.txt
+perl summarize.pl > doc/summary.txt
 ls doc/*.out | xargs perl r2p.pl --name "All Hashes"
 ls doc/Jenkins*.out | xargs perl r2p.pl
 ls doc/*OAAT*.out | xargs perl r2p.pl
