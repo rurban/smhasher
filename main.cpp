@@ -106,7 +106,7 @@ HashInfo g_hashes[] =
   { "BadHash", "very simple XOR shift",
     32, 32, 32, 0x3C2BE229,
     NULL, BadHash_with_state },
-  { "crc32", "CRC-32",
+  { "crc32", "CRC-32 (OAAT table implementation)",
     32, 32, 32, 0x240C9875,
     NULL, crc32_with_state_test },
 #if defined(__SSE4_2__) && defined(__x86_64__)

@@ -345,14 +345,21 @@ bool testHash ( HashInfo * info, int self_test, double confidence )
     // The following blocks all have a crc of 57c58437
     // Alternatively we could use:
     // 5a476a7f 020d080728338f41 9a36026fdc10f1e0 c5e5a331ecf163dc c9f6d7755f81beca
-    const uint64_t blocks[4]= {
+    const uint64_t blocks_a[4]= {
       0x4bb53c935d7bc565UL,
       0x53fa1f51857fa7f4UL,
       0x6caeaca38c4a8764UL,
       0xf9e0603f18749bf3UL,
     };
+    const uint64_t blocks_b[4]= {
+      0x02e22a2c510d00b8UL,
+      0x83937a1e42b3a0dfUL,
+      0xaa586bb5ac2b84ceUL,
+      0xddef2b7f0ccdfbb9UL,
+    };
 
-    pass &= CollisionKeyTest<hashtype>(hash, r, 4, 1, blocks,"Crc");
+    pass &= CollisionKeyTest<hashtype>(hash, r, 4, 1, blocks_a, "Crc(a)");
+    pass &= CollisionKeyTest<hashtype>(hash, r, 4, 1, blocks_b, "Crc(b)");
 
   }
   if(g_testMurmur2Collision || g_testAll || g_testMultiCollision)
