@@ -10,7 +10,6 @@ if (NOT (CMAKE_C_COMPILER_ID STREQUAL CMAKE_CXX_COMPILER_ID))
                     "from CMAKE_CXX_COMPILER_ID (${CMAKE_CXX_COMPILER_ID}). "
                     "The final binary may be unusable.")
 endif()
-
 IF (CMAKE_MAJOR_VERSION GREATER 2)
   cmake_policy(SET CMP0056 OLD)
   cmake_policy(SET CMP0065 NEW) # ENABLE_EXPORTS
@@ -71,18 +70,18 @@ if (CMAKE_COMPILER_IS_GNUCC
   set(CMAKE_CXX_FLAGS_RELEASE "-O3")
   set(CMAKE_C_FLAGS_DEBUG "-g")
   set(CMAKE_CXX_FLAGS_DEBUG "-g")
-  #IF (SSE2_TRUE)
-  #  set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -msse2")
-  #  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse2")
-  #ENDIF (SSE2_TRUE)
-  #IF (SSE42_TRUE)
-  #  set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -msse4")
-  #  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse4")
-  #ENDIF (SSE42_TRUE)
-  #IF (AES_TRUE)
-  #  set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -maes")
-  #  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -maes")
-  #ENDIF (AES_TRUE)
+  IF (SSE2_TRUE)
+    set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -msse2")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse2")
+  ENDIF (SSE2_TRUE)
+  IF (SSE42_TRUE)
+    set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -msse4")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse4")
+  ENDIF (SSE42_TRUE)
+  IF (AES_TRUE)
+    set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -maes")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -maes")
+  ENDIF (AES_TRUE)
   set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -march=native")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
@@ -143,45 +142,51 @@ IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
     opt_cmetrohash64_1.c fasthash.cpp)
 ENDIF()
 
-add_library(
-  SMHasherSupport
+IF(EXISTS "./BeagleHashes_test.c")
+    set(BEAGLE_SRC BeagleHashes_test.c)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_BEAGLE_HASHES")
+ENDIF()
+
+add_library(SMHasherSupport
   AvalancheTest.cpp
   Bitslice.cpp
   Bitvec.cpp
-  CityTest.cpp
-  City.cpp
-  crc.cpp
   DifferentialTest.cpp
-  Hashes.cpp
-  ${SSE2_SRC}
-  ${SSE4_SRC}
-  ${SSE4_SRC1}
   KeysetTest.cpp
-  lookup3.cpp
-  md5.cpp
+  Platform.cpp
+  Random.cpp
+  RunTests.cpp
+  SpeedTest.cpp
+  Stats.cpp
+  TAP.cpp
+  Types.cpp
+  Hashes.cpp
+  
+  City.cpp
+  CityTest.cpp
   MurmurHash1.cpp
   MurmurHash2.cpp
   MurmurHash3.cpp
-  Platform.cpp
-  Random.cpp
-  sha1.cpp
-  ${SIPHASH_SRC}
-  SpeedTest.cpp
+  PMurHash.c
   Spooky.cpp
   SpookyTest.cpp
-  Stats.cpp
   SuperFastHash.cpp
-  Types.cpp
-  PMurHash.c
-  BeagleHashes_test.c
-  ${64ONLY_SRC}
-  ${METROCRC64_SRC}
-  ${METROCRC128_SRC}
-  ${SSE4_OBJ}
-  t1ha.c
+  crc.cpp
+  lookup3.cpp
+  md5.cpp
   mum.cc
-  RunTests.cpp
-  TAP.cpp
+  sha1.cpp
+  t1ha.c
+  
+  ${64ONLY_SRC}
+  ${BEAGLE_SRC}
+  ${METROCRC128_SRC}
+  ${METROCRC64_SRC}
+  ${SIPHASH_SRC}
+  ${SSE2_SRC}
+  ${SSE4_OBJ}
+  ${SSE4_SRC1}
+  ${SSE4_SRC}
 )
 
 add_executable(

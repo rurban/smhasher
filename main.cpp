@@ -7,7 +7,9 @@
 #include "Hashes.h"
 #include "SimpleStats.h"
 #include "PMurHash.h"
+#ifdef HAVE_BEAGLE_HASHES
 #include "BeagleHashes_test.h"
+#endif
 #include "md5.h"
 #include "siphash.h"
 #include <stdio.h>
@@ -207,6 +209,7 @@ HashInfo g_hashes[] =
     32, 32, 32, 0x6D6CCA26,
     NULL, PMurHash32_with_state_test },
 
+#ifdef HAVE_BEAGLE_HASHES
   // BeagleHash_32_xx
   { "BeagleHash_32_64", "Evolved hash with 128-bit state (2x64) - Yves Orton",
     64, 128, 32, 0xB8AC089B,
@@ -252,6 +255,7 @@ HashInfo g_hashes[] =
   { "Phat", "Evolved hash with 128-bit state (4x32) - Yves Orton",
     96, 96, 32, 0xD3C0D0D5,
     NULL, phat_hash_with_state_smhasher_test },
+#endif
   { "Lua53oaat", "Hash function from Lua53, pure one-at-a-time",
     32, 32, 32, 0x072086C1,
     NULL, lua_v53_string_hash_oaat },
