@@ -3,11 +3,11 @@ use warnings;
 use warnings FATAL => "all";
 use List::Util qw(shuffle);
 
-my @files= shuffle glob "doc/*.out";
+my @files= shuffle glob "doc/*.txt";
 my %data;
 my %all_test_sets;
 foreach my $file (@files) {
-    $file=~m!^doc/(\w+)\.(\d+)\.(\d+)\.(\d+)\.out\z!
+    $file=~m!^doc/(\w+)\.(\d+)\.(\d+)\.(\d+)\.txt\z!
         or next;
     my ($name, $seedbits, $statebits, $hashbits)= ($1, $2, $3, $4);
     open my $fh, "<", $file

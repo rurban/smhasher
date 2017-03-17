@@ -12,10 +12,10 @@ while (1) {
         @$info{'name','seedbits','statebits','hashbits'}= @info;
         $byname{$info->{name}}= $info;
         $info->{file_base}= sprintf "doc/%s.%d.%d.%d", @info;
-        $info->{file_name}= $info->{file_base} . ".out";
+        $info->{file_name}= $info->{file_base} . ".txt";
         $info->{file_tmp}= $info->{file_base} . ".tmp";
         $info->{priority}= $info->{name}=~/DoNothing/ ? 0 : $info->{seedbits} * $info->{hashbits};
-        my $old_name= sprintf "doc/%s.%d.out", $info->{name}, $info->{hashbits};
+        my $old_name= sprintf "doc/%s.%d.txt", $info->{name}, $info->{hashbits};
         if (-e $old_name ) {
             rename $old_name, $info->{file_name};
         }
