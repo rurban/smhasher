@@ -31,7 +31,7 @@ foreach my $file (@files) {
             $test_set =~s/0x00000001/LowBit/;
             $test_set =~s/Combination (\S+)/$1/;
         }
-        $test_set=~s/CRC-?(?:Multi)?Collision/Crc-MultiCollision/i;
+        $test_set=~s/CRC[^-]*-?(?:Multi)?Collision/Crc-MultiCollision/i;
         next if /^\s*#/;
         if (/^(not )?ok (\d+)/) {
             $ok[$2]= !$1;
