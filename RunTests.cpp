@@ -254,6 +254,10 @@ bool testHash ( HashInfo * info, int self_test, double confidence )
     result &= ok(AvalancheTest< Blob<512>, hashtype > (
           hash, reps, r, confidence, max_pct_error, max_error_ratio),
         "Strict Avalanche Criteria - 512 bit keys");
+    if (!size || size == 520)
+    result &= ok(AvalancheTest< Blob<520>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio),
+        "Strict Avalanche Criteria - 520 bit keys");
 
     pass &= ok(result, "Strict Avalanche Criteria", info->name);
   }
