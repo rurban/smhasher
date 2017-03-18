@@ -14,7 +14,7 @@ while (1) {
         $info->{file_base}= sprintf "doc/%s.%d.%d.%d", @info;
         $info->{file_name}= $info->{file_base} . ".txt";
         $info->{file_tmp}= $info->{file_base} . ".tmp";
-        $info->{priority}= $info->{name}=~/DoNothing/ ? 0 : $info->{seedbits} * $info->{hashbits};
+        $info->{priority}= $info->{seedbits} * $info->{hashbits};
         my $old_name= sprintf "doc/%s.%d.txt", $info->{name}, $info->{hashbits};
         if (-e $old_name ) {
             rename $old_name, $info->{file_name};
