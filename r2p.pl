@@ -45,25 +45,41 @@ sub graph {
     #my $out = \*STDOUT;
     my $ext;
     my $file;
+    say $out qq(set key below);
+    say $out qq(set xtics 1);
+    say $out qq(set ytics);
+    say $out qq(set grid);
+    say $out qq(set yrange [0:*]);
+    say $out qq(set xlabel "Key Length");
+    say $out qq(set ylabel "cycles/hash");
     if ($save) {
         $ext = "svg"; 
         #say $out qq(set term $ext font "/usr/share/fonts/truetype/liberation/LiberationMono-Regular.ttf,11");
         say $out qq(set term $ext size 1100,500 linewidth 2 mouse standalone font "mono,11");
+    }
+    
+    if ($save) {
+        $file= "$dir/$ftitle.tiny.$ext";
+        say $out qq(set output "$file");
+        say qq(writing '$file');
+    }
+    my $long_title= "$title - Hash Speed for Tiny Keys";
+    $file_titles{$file}=$long_title;
+    say $out qq(set title "$long_title");
+    say $out qq(plot [0:12] ) ,join(",",@plot);
+    say $out join "\n", @ret;
+
+    if ($save) {
         $file= "$dir/$ftitle.short.$ext";
         say $out qq(set output "$file");
         say qq(writing '$file');
     }
-    say $out qq(set key below);
-    say $out qq(set xtics 4);
-    say $out qq(set ytics);
-    say $out qq(set yrange [0:*]);
-    say $out qq(set xlabel "Key Length");
-    say $out qq(set ylabel "cycles/hash");
-    my $long_title= "$title - Hash Speed for Short Keys";
+    $long_title= "$title - Hash Speed for Short Keys";
     $file_titles{$file}=$long_title;
     say $out qq(set title "$long_title");
     say $out qq(plot [0:32] ) ,join(",",@plot);
     say $out join "\n", @ret;
+
     if ($save) {
         $file = "$dir/$ftitle.medium.$ext";
         say $out qq(set output "$file"); 
@@ -71,9 +87,11 @@ sub graph {
     }
     $long_title= "$title - Hash Speed for Medium Keys";
     $file_titles{$file}=$long_title;
+    say $out qq(set xtics 4);
     say $out qq(set title "$long_title");
     say $out qq(plot [32:128]) ,join(",",@plot);
     say $out join "\n", @ret;
+    
     if ($save) {
         $file= "$dir/$ftitle.long.$ext";
         say $out qq(set output "$file"); 
@@ -97,7 +115,7 @@ sub graph {
     close $out;
     return unless $ext eq "svg";
 
-    my @files= map { "$ftitle.$_.$ext" } qw(short medium long);
+    my @files= map { "$ftitle.$_.$ext" } qw(tiny short medium long);
 
     foreach my $idx (0..$#files) {
         my $file= $files[$idx];

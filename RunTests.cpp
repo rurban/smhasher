@@ -148,7 +148,7 @@ bool testHash ( HashInfo * info, int self_test, double confidence )
         info->seedbits, info->hashbits);
 
     bool result = true;
-    const int reps = 32000000 / info->hashbits;
+    const int reps = (g_testAvalanche ? 10000000 : 32000000) / info->hashbits;
     double max_pct_error = 1.0 / 100.00;
     double max_error_ratio = 1.5;
     int size = 0;
@@ -159,107 +159,80 @@ bool testHash ( HashInfo * info, int self_test, double confidence )
      * I think maybe there are ways to get rid of this. We have type explosion
      * going on here big time. */
     if (!size || size == 0)
-    result &= ok(AvalancheTest< Blob< 0>, hashtype > (
-          hash, reps, r, confidence, max_pct_error, max_error_ratio),
-        "Strict Avalanche Criteria - 0 bit keys");
+    result &= AvalancheTest< Blob< 0>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 8)
-    result &= ok(AvalancheTest< Blob< 8>, hashtype > (
-          hash, reps, r, confidence, max_pct_error, max_error_ratio),
-        "Strict Avalanche Criteria - 8 bit keys");
+    result &= AvalancheTest< Blob< 8>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 16)
-    result &= ok(AvalancheTest< Blob< 16>, hashtype > (
-          hash, reps, r, confidence, max_pct_error, max_error_ratio),
-        "Strict Avalanche Criteria - 16 bit keys");
+    result &= AvalancheTest< Blob< 16>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 24)
-    result &= ok(AvalancheTest< Blob< 24>, hashtype > (
-          hash, reps, r, confidence, max_pct_error, max_error_ratio),
-        "Strict Avalanche Criteria - 24 bit keys");
+    result &= AvalancheTest< Blob< 24>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 32)
-    result &= ok(AvalancheTest< Blob< 32>, hashtype > (
-          hash, reps, r, confidence, max_pct_error, max_error_ratio),
-        "Strict Avalanche Criteria - 32 bit keys");
+    result &= AvalancheTest< Blob< 32>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 40)
-    result &= ok(AvalancheTest< Blob< 40>, hashtype > (
-          hash, reps, r, confidence, max_pct_error, max_error_ratio),
-        "Strict Avalanche Criteria - 40 bit keys");
+    result &= AvalancheTest< Blob< 40>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 48)
-    result &= ok(AvalancheTest< Blob< 48>, hashtype > (
-          hash, reps, r, confidence, max_pct_error, max_error_ratio),
-        "Strict Avalanche Criteria - 48 bit keys");
+    result &= AvalancheTest< Blob< 48>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 56)
-    result &= ok(AvalancheTest< Blob< 56>, hashtype > (
-          hash, reps, r, confidence, max_pct_error, max_error_ratio),
-        "Strict Avalanche Criteria - 56 bit keys");
+    result &= AvalancheTest< Blob< 56>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 64)
-    result &= ok(AvalancheTest< Blob< 64>, hashtype > (
-          hash, reps, r, confidence, max_pct_error, max_error_ratio),
-        "Strict Avalanche Criteria - 64 bit keys");
+    result &= AvalancheTest< Blob< 64>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 72)
-    result &= ok(AvalancheTest< Blob< 72>, hashtype > (
-          hash, reps, r, confidence, max_pct_error, max_error_ratio),
-        "Strict Avalanche Criteria - 72 bit keys");
+    result &= AvalancheTest< Blob< 72>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 80)
-    result &= ok(AvalancheTest< Blob< 80>, hashtype > (
-          hash, reps, r, confidence, max_pct_error, max_error_ratio),
-        "Strict Avalanche Criteria - 80 bit keys");
+    result &= AvalancheTest< Blob< 80>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 88)
-    result &= ok(AvalancheTest< Blob< 88>, hashtype > (
-          hash, reps, r, confidence, max_pct_error, max_error_ratio),
-        "Strict Avalanche Criteria - 88 bit keys");
+    result &= AvalancheTest< Blob< 88>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 96)
-    result &= ok(AvalancheTest< Blob< 96>, hashtype > (
-          hash, reps, r, confidence, max_pct_error, max_error_ratio),
-        "Strict Avalanche Criteria - 96 bit keys");
+    result &= AvalancheTest< Blob< 96>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 104)
-    result &= ok(AvalancheTest< Blob<104>, hashtype > (
-          hash, reps, r, confidence, max_pct_error, max_error_ratio),
-        "Strict Avalanche Criteria - 104 bit keys");
+    result &= AvalancheTest< Blob<104>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 112)
-    result &= ok(AvalancheTest< Blob<112>, hashtype > (
-          hash, reps, r, confidence, max_pct_error, max_error_ratio),
-        "Strict Avalanche Criteria - 112 bit keys");
+    result &= AvalancheTest< Blob<112>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 120)
-    result &= ok(AvalancheTest< Blob<120>, hashtype > (
-          hash, reps, r, confidence, max_pct_error, max_error_ratio),
-        "Strict Avalanche Criteria - 120 bit keys");
+    result &= AvalancheTest< Blob<120>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 128)
-    result &= ok(AvalancheTest< Blob<128>, hashtype > (
-          hash, reps, r, confidence, max_pct_error, max_error_ratio),
-        "Strict Avalanche Criteria - 128 bit keys");
+    result &= AvalancheTest< Blob<128>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 136)
-    result &= ok(AvalancheTest< Blob<136>, hashtype > (
-          hash, reps, r, confidence, max_pct_error, max_error_ratio),
-        "Strict Avalanche Criteria - 136 bit keys");
+    result &= AvalancheTest< Blob<136>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 144)
-    result &= ok(AvalancheTest< Blob<144>, hashtype > (
-          hash, reps, r, confidence, max_pct_error, max_error_ratio),
-        "Strict Avalanche Criteria - 144 bit keys");
+    result &= AvalancheTest< Blob<144>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 152)
-    result &= ok(AvalancheTest< Blob<152>, hashtype > (
-          hash, reps, r, confidence, max_pct_error, max_error_ratio),
-        "Strict Avalanche Criteria - 152 bit keys");
+    result &= AvalancheTest< Blob<152>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 160)
-    result &= ok(AvalancheTest< Blob<152>, hashtype > (
-          hash, reps, r, confidence, max_pct_error, max_error_ratio),
-        "Strict Avalanche Criteria - 160 bit keys");
+    result &= AvalancheTest< Blob<152>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 200)
-    result &= ok(AvalancheTest< Blob<200>, hashtype > (
-          hash, reps, r, confidence, max_pct_error, max_error_ratio),
-        "Strict Avalanche Criteria - 200 bit keys");
+    result &= AvalancheTest< Blob<200>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 256)
-    result &= ok(AvalancheTest< Blob<256>, hashtype > (
-          hash, reps, r, confidence, max_pct_error, max_error_ratio),
-        "Strict Avalanche Criteria - 256 bit keys");
+    result &= AvalancheTest< Blob<256>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 512)
-    result &= ok(AvalancheTest< Blob<512>, hashtype > (
-          hash, reps, r, confidence, max_pct_error, max_error_ratio),
-        "Strict Avalanche Criteria - 512 bit keys");
+    result &= AvalancheTest< Blob<512>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio);
     if (!size || size == 520)
-    result &= ok(AvalancheTest< Blob<520>, hashtype > (
-          hash, reps, r, confidence, max_pct_error, max_error_ratio),
-        "Strict Avalanche Criteria - 520 bit keys");
-
-    pass &= ok(result, "Strict Avalanche Criteria", info->name);
+    result &= AvalancheTest< Blob<520>, hashtype > (
+          hash, reps, r, confidence, max_pct_error, max_error_ratio);
   }
 
   //-----------------------------------------------------------------------------

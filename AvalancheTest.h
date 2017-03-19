@@ -131,6 +131,10 @@ bool AvalancheTest (
   int num_rows = keybits + seedbits;
   int num_bits = ( keybits + seedbits ) * hashbits;
   int num_bins = num_bits * 4;
+  char name[1024];
+  snprintf(name,1024,"Strict Avalanche Criteria - %d bit/%d byte keys # %s",
+      keybits, int(sizeof(keytype)), hash.name());
+
   std::vector<int> bins(num_bins, 0);
   std::vector<double> gtests(num_bits, 0);
   std::vector<double> pcts(num_bits, 0);
@@ -185,7 +189,7 @@ bool AvalancheTest (
   printf("# worst-bit: %7.3f%% error-ratio: %e\n",
       stats.worst_pct * 100.0, stats.err_scaled_ratio);
   if (result)
-    return result;
+    return ok(result,name);
 
 
   PrintAvalancheDiagram(&stats, 0, 1, confidence);
@@ -260,7 +264,7 @@ bool AvalancheTest (
       printf("#     - with %d more hash bit errors not described above.\n", skipped);
   }
 
-  return false;
+  return ok(result,name);
 }
 
 //----------------------------------------------------------------------------

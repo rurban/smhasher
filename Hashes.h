@@ -19,6 +19,8 @@
 // These are _not_ hash functions (even though people tend to use crc32 as one...)
 
 void BadHash_with_state    ( const void * key, int len, const void *state, void * out );
+void BadHashSiren_with_state    ( const void * key, int len, const void *state, void * out );
+void BadHashSiren_seed_state( int seedbits, const void *seed, void *state);
 
 void DoNothingHash_with_state( const void * key, int len, const void *state, void * out );
 void DoNothingHash_seed_state( int seedbits, const void *seed, void *state);

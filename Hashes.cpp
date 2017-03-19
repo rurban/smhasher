@@ -25,6 +25,21 @@ BadHash_with_state(const void *key, int len, const void *state, void *out)
   *(uint32_t *) out = h;
 }
 
+uint32_t last0= 0xc6efa8b9;
+uint32_t last= last0;
+void
+BadHashSiren_with_state(const void *key, int len, const void *state, void *out)
+{
+    *(uint32_t *) out = last;
+    last = ((last << 1) | (last >> 31));
+}
+
+void
+BadHashSiren_seed_state(int, const void *, void *)
+{
+    last= last0;
+}
+
 void
 DoNothingHash_with_state(const void *, int, const void *, void *)
 {

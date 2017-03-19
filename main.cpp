@@ -105,9 +105,12 @@ HashInfo g_hashes[] =
     32, 32, 64, 0x00000000,
     NULL, NoopOAATReadHash_with_state },
   // -- Crap hashes
-  { "BadHash", "very simple XOR shift",
+  { "BadHash", "very simple XOR shift (intentionally bad)",
     32, 32, 32, 0x3C2BE229,
     NULL, BadHash_with_state },
+  { "BadHashSiren", "Alternating hash (intentionally bad)",
+    32, 32, 32, 0xC6EFA8B9,
+    BadHashSiren_seed_state, BadHashSiren_with_state },
   { "crc32", "CRC-32 (OAAT table implementation)",
     32, 32, 32, 0x240C9875,
     NULL, crc32_with_state_test },
@@ -125,6 +128,7 @@ HashInfo g_hashes[] =
 #endif
 
   // -- Message Digests/NIST Hash Functions.
+#if 0
   { "md5_128a", "MD5, with a 64 bit seed of the start state",
     64, bitsizeof(unsigned long) * 4, 128, 0x92912D2E,
     md5_seed_state, md5_with_state },
@@ -140,6 +144,7 @@ HashInfo g_hashes[] =
   { "sha1_32b", "SHA1, 32 bit seed, first 32 bits xored with last 32 bits",
     32, 32, 32, 0xA2D9EDEF,
     NULL, sha1_32b_with_state },
+#endif
 
   // -- Others
   { "FNV1a", "Fowler-Noll-Vo hash, 32-bit",
@@ -250,7 +255,7 @@ HashInfo g_hashes[] =
     192, 192, 64, 0xF12E119C,
     zaphod64_seed_state_smhasher_test, zaphod64_hash_with_state_smhasher_test },
   { "Zaphod32", "Evolved hash with  96-bit state (3x32) - Yves Orton",
-    96, 96, 32, 0x0D2E9622,
+    96, 96, 32, 0x47255D06,
     zaphod32_seed_state_smhasher_test, zaphod32_hash_with_state_smhasher_test },
   { "Phat", "Evolved hash with 128-bit state (4x32) - Yves Orton",
     96, 96, 32, 0xD3C0D0D5,

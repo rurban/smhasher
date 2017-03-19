@@ -167,7 +167,7 @@ bool RunKeySpeedTests(hashfunc<hashtype> hash, Rand & r)
   printf("## KeySpeed tests\n");
   for(int key_len = 0; key_len < 32; key_len++)
   {
-    sum += TinySpeedTest(hash, key_len, 99999, r, true);
+    sum += TinySpeedTest(hash, key_len, 199999, r, true);
     sum_key_len += double(key_len);
     count++;
   }
@@ -176,7 +176,7 @@ bool RunKeySpeedTests(hashfunc<hashtype> hash, Rand & r)
       sum / double(count), sum / sum_key_len, sum_key_len / sum );
   for(int key_len = 32; key_len < 128; key_len+=4)
   {
-    sum += TinySpeedTest(hash, key_len, 59999, r, true);
+    sum += TinySpeedTest(hash, key_len, 99999, r, true);
     sum_key_len += double(key_len);
     count++;
   }
@@ -185,7 +185,7 @@ bool RunKeySpeedTests(hashfunc<hashtype> hash, Rand & r)
       sum / double(count), sum / sum_key_len, sum_key_len / sum );
   for(int key_len = 128; key_len <= 1 << 16; key_len *= 2)
   {
-    sum += TinySpeedTest(hash, key_len, 29999, r, true);
+    sum += TinySpeedTest(hash, key_len, 59999, r, true);
     sum_key_len += double(key_len);
     count++;
   }

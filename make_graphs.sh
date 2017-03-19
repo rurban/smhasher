@@ -12,5 +12,8 @@ ls doc/City*.64.txt doc/*metro*.64.txt doc/StadtX.*.64.txt doc/Zaphod64.*.64.txt
 ls $(grep PASSED doc/summary.txt | cut -d' ' -f1 | grep -v sha1 | perl -lne'print "doc/$_.*.txt"')  | xargs perl r2p.pl --name 'Passed All Tests'
 ls doc/sdbm.*.txt doc/*Sip*.txt doc/StadtX.*.txt doc/Zaphod*.txt  | xargs perl r2p.pl --name 'SDBM Selected Comparison'
 ls doc/Jenkins*.txt doc/Sip*.txt doc/StadtX*.txt | xargs perl r2p.pl --name 'Perl Hash Comparison'
+ls doc/Sip*.txt doc/Jenkins*.txt doc/Lua*.txt | xargs perl r2p.pl --name 'Lua53'
+ls doc/Sip*.txt doc/StadtX*.txt doc/Zaphod64.*.txt | xargs perl r2p.pl --name 'Perl 64 bit Candidates'
+ls doc/Zaphod32.*.txt doc/Phat*.txt | xargs perl r2p.pl --name 'Perl 32 bit Candidates'
 
 
