@@ -146,6 +146,10 @@ IF(EXISTS "./BeagleHashes_test.c")
     set(BEAGLE_SRC BeagleHashes_test.c)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_BEAGLE_HASHES")
 ENDIF()
+IF(EXISTS "./tsip.c")
+    set(TSIP_SRC tsip.c)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_TSIP")
+ENDIF()
 
 add_library(SMHasherSupport
   AvalancheTest.cpp
@@ -187,6 +191,7 @@ add_library(SMHasherSupport
   ${SSE4_OBJ}
   ${SSE4_SRC1}
   ${SSE4_SRC}
+  ${TSIP_SRC}
 )
 
 add_executable(

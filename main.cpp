@@ -10,6 +10,9 @@
 #ifdef HAVE_BEAGLE_HASHES
 #include "BeagleHashes_test.h"
 #endif
+#ifdef HAVE_BEAGLE_HASHES
+#include "tsip.h"
+#endif
 #include "md5.h"
 #include "siphash.h"
 #include <stdio.h>
@@ -242,12 +245,10 @@ HashInfo g_hashes[] =
   { "BeagleHash_64_127", "Evolved hash with 128-bit state (2x64) - Yves Orton",
     127, 128, 64, 0x8B14262C,
     beagle_seed_state_128_a_smhasher, beagle_hash_with_state_64_128_a_smhasher },
-#if 0
   // very very slow seeding process, huge state, etc. not suitable for day-to-day testing
-  { "SBOX", "Yves Orton's 64 bit substitution box hash for up to 32 char strings",
-    128, (32 * 256 + 3) * 64, 64, 0xEF32DD9E,
-    sbox_seed_state_smhasher_test, sbox_hash_with_state_smhasher_test },
-#endif
+  { "SBOX32", SBOX32_SMHASHER_DESCR,
+    SBOX32_SMHASHER_SEEDBITS, SBOX32_STATE_BITS, 32, 0xE88DC72D,
+    sbox32_seed_state_smhasher, sbox32_hash_with_state_smhasher },
   { "StadtX", "Evolved hash with 4x64 state - inspired by Metrohash - Yves Orton",
     128, 256, 64, 0x754798B4,
     stadtx_seed_state_smhasher_test, stadtx_hash_with_state_smhasher_test },
@@ -255,7 +256,7 @@ HashInfo g_hashes[] =
     192, 192, 64, 0xF12E119C,
     zaphod64_seed_state_smhasher_test, zaphod64_hash_with_state_smhasher_test },
   { "Zaphod32", "Evolved hash with  96-bit state (3x32) - Yves Orton",
-    96, 96, 32, 0x47255D06,
+    96, 96, 32, 0x1D03F412,
     zaphod32_seed_state_smhasher_test, zaphod32_hash_with_state_smhasher_test },
   { "Phat", "Evolved hash with 128-bit state (4x32) - Yves Orton",
     96, 96, 32, 0xD3C0D0D5,
@@ -291,22 +292,22 @@ HashInfo g_hashes[] =
   { "MicroOAAT", "Small non-mul one-at-a-time by funny-falcon",
     32, 32, 32, 0x9735B83E,
     NULL, MicroOAAT },
-  { "HalfSipHash", "HalfSipHash 2-4, 32bit",
-    64, 128, 32, 0xC8C3FAB5,
-    halfsiphash_seed_state_test, halfsiphash_with_state_test },
-
-  // and now the quality hash funcs, which mostly work
-  // GoodOOAT passes whole SMHasher (by funny-falcon)
   { "GoodOAAT", "Small non-multiplicative one-at-a-time",
     32, 32, 32, 0xF447CE02,
     NULL, GoodOAAT },
-  { "SipHash", "SipHash 2-4",
-    128, 256, 64, 0x5F4173E0,
-    siphash_seed_state_test, siphash_with_state_test },
+  { "HalfSipHash", "HalfSipHash 2-4, 32bit",
+    64, 128, 32, 0xC8C3FAB5,
+    halfsiphash_seed_state_test, halfsiphash_with_state_test },
   // as in rust and swift
   { "SipHash13", "SipHash 1-3",
     128, 256, 64, 0xD03C3A2C,
     siphash_seed_state_test, siphash13_with_state_test },
+  { "SipHash", "SipHash 2-4",
+    128, 256, 64, 0x5F4173E0,
+    siphash_seed_state_test, siphash_with_state_test },
+  { "TSip", "Damian Gryski's Tiny SipHash variant",
+    128, 128, 64, 0x881B5461,
+    tsip_seed_state_smhasher_test, tsip_hash_with_state_smhasher_test },
 #if defined(__x86_64__)
   { "fasthash32", "fast-hash 32bit",
     32, 32, 32, 0x4651528E,

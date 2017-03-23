@@ -47,10 +47,9 @@ if ($orig_inner ne $inner)  {
         or die "Failed to open main.cpp for write: $!";
     print $fh $contents;
     close $fh;
-    exit 1;
-} else {
-    exit 0;
 }
+exit 0;
+
 __END__
 
 sub _format {

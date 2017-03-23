@@ -4,7 +4,7 @@ ls doc/*.txt | xargs perl r2p.pl --name "All Hashes"
 ls doc/Jenkins*.txt | xargs perl r2p.pl
 ls doc/*OAAT*.txt | xargs perl r2p.pl
 ls doc/*Mur*.txt | grep -v OAAT | xargs perl r2p.pl --name "Murmur Hashes"
-ls doc/cmetro*.txt doc/metro*.txt | xargs perl r2p.pl --name "MetroHash Family"
+ls doc/StadtX*.txt doc/cmetro*.txt doc/metro*.txt | xargs perl r2p.pl --name "MetroHash Family"
 ls doc/City*.txt | xargs perl r2p.pl
 ls doc/Farm*.txt doc/farm*.txt | xargs perl r2p.pl
 ls doc/t1ha*.txt | xargs perl r2p.pl

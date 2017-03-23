@@ -26,7 +26,7 @@ foreach my $file (@files) {
         if (/- all tests passed #/) {
             $test_set = "OverAll";
         } 
-        elsif (/^### (.*?) ###$/ || /Keyset '([^']+)'/) {
+        elsif (/^### (.*?) ###/ || /Keyset '([^']+)'/) {
             $test_set = $1;
             $test_set =~s/\s+Tests?\z//;
             $test_set =~s/Keyset '([^']+)'/$1/g;
@@ -41,7 +41,7 @@ foreach my $file (@files) {
         next if /^\s*#/;
         if (/^(not )?ok (\d+)/) {
             $ok[$2]= !$1;
-            push @{$test_sets_failed{$test_set}}, $2 if $1 and $test_set ne "OverAll";
+            push @{$test_sets_failed{$test_set}}, $2 if $1;
             $all_test_sets{$test_set}= $2 if $1 and (!defined $all_test_sets{$test_set} 
                                       or $all_test_sets{$test_set} > $2);
             $test_sets{$test_set}//=$2;
@@ -198,21 +198,23 @@ tr.failed:hover {
 </head><body>
 EOF_STYLE
 print "<table id='testresults'>\n";
-printf "<thead><th class='hashname'><span>%s</span></th><th class='seedbits'><span>%s</span></th><th class='statebits'><span>%s</span></th><th class='hashbits'><span>%s</span></th><th class='status'><span>%s</span></th><th><span class='num_tests'>%s</span></th>\n",
-        qw(Name SeedBits StateBits HashBits Test-Status Num-Tests);
+#printf "<thead><th colspan='%d'>Hash Details</th><th colspan='%d'>Test Group</th><th colspan='%d'>Misc</th></thead>\n", 5, 0+keys %all_test_sets, 2;
+printf "<thead><th class='hashname'><span>%s</span></th><th class='seedbits'><span>%s</span></th><th class='statebits'><span>%s</span></th><th class='hashbits'><span>%s</span></th><th class='status'><span>%s</span></th>\n",
+        qw(Name SeedBits StateBits HashBits Test-Status);
 foreach my $set (sort{ $all_test_sets{$a} <=> $all_test_sets{$b} || $a cmp $b} keys %all_test_sets) {
-    printf "<th class='%s'><span>%s Test</span></th>\n", $set, $set; 
+    printf "<th class='%s'><span>%s</span></th>\n", $set, $set; 
 }
 
-print "<th class='smhasher_version'><span>SMHasher-Version</span></th></thead><tbody>\n";
+print "<th><span class='num_tests'>Num-Tests</span></th><th class='smhasher_version'><span>SMHasher-Version</span></th></thead><tbody>\n";
 foreach my $name (sort keys %data) {
     my $info= $data{$name};
-    printf "<tr class='%s'><td class='hashname'>%s</td><td class='seedbits'>%d</td><td class='statebits'>%d</td><td class='hashbits'>%d</td><td class='status'>%s</td><td class='num_tests'>%s</td>\n",
-        lc($info->{status}), $name, @$info{qw(seedbits statebits hashbits status num_tests)};
+    printf "<tr class='%s'><td class='hashname'>%s</td><td class='seedbits'>%d</td><td class='statebits'>%d</td><td class='hashbits'>%d</td><td class='status'>%s</td>\n",
+        lc($info->{status}), $name, @$info{qw(seedbits statebits hashbits status )};
     foreach my $set (sort{ $all_test_sets{$a}<=>$all_test_sets{$b} || $a cmp $b} keys %all_test_sets) {
         printf "<td class='test_%s'>%s</td>\n", $set, $info->{status_hash}{$set} // "?"; 
     }
-    print "<td class='smhasher_version'><span>$info->{smhasher_version}</span></td>\n";
+    printf "<td class='num_tests'>%s</td><td class='smhasher_version'>%s</td>\n",
+        @$info{qw(num_tests smhasher_version)};
     print"</tr>\n";
 }
 print "</tbody></table>";

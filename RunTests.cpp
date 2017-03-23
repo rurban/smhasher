@@ -148,7 +148,7 @@ bool testHash ( HashInfo * info, int self_test, double confidence )
         info->seedbits, info->hashbits);
 
     bool result = true;
-    const int reps = (g_testAvalanche ? 10000000 : 32000000) / info->hashbits;
+    const int reps = 32000000 / info->hashbits;
     double max_pct_error = 1.0 / 100.00;
     double max_error_ratio = 1.5;
     int size = 0;

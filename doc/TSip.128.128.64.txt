@@ -1,171 +1,171 @@
-ok 1 - Found Hash # SipHash13
+ok 1 - Found Hash # TSip
 ###################################################################
-### Testing SipHash13 - with seed_state
-### - SipHash 1-3 -
-### seedbits: 128 statebits: 256 hashbits: 64
+### Testing TSip - with seed_state
+### - Damian Gryski's Tiny SipHash variant -
+### seedbits: 128 statebits: 128 hashbits: 64
 ###################################################################
-ok 2 - Verification code # SipHash13
-# SipHash13            - Verification value 0xD03C3A2C : Passed.
+ok 2 - Verification code # TSip
+# TSip                 - Verification value 0x881B5461 : Passed.
 ### Sanity Tests ###
 # Sanity check simple key bit flips and consistency..........
-ok 3 - SanityTest # SipHash13
+ok 3 - SanityTest # TSip
 # Sanity check null suffixes change the hash (simple)..........
-ok 4 - Appended Zeroes Test # SipHash13
-ok 5 - Sanity Test # SipHash13
+ok 4 - Appended Zeroes Test # TSip
+ok 5 - Sanity Test # TSip
 ### Speed Tests ###
 ## Bulk speed test - 262144-byte keys
-# Alignment  7 -  1.403 bytes/cycle - 4015.19 MiB/sec @ 3 ghz
-# Alignment  6 -  1.404 bytes/cycle - 4015.53 MiB/sec @ 3 ghz
-# Alignment  5 -  1.403 bytes/cycle - 4015.23 MiB/sec @ 3 ghz
-# Alignment  4 -  1.403 bytes/cycle - 4015.28 MiB/sec @ 3 ghz
-# Alignment  3 -  1.403 bytes/cycle - 4015.10 MiB/sec @ 3 ghz
-# Alignment  2 -  1.403 bytes/cycle - 4015.16 MiB/sec @ 3 ghz
-# Alignment  1 -  1.403 bytes/cycle - 4015.41 MiB/sec @ 3 ghz
-# Alignment  0 -  1.405 bytes/cycle - 4018.62 MiB/sec @ 3 ghz
-# Average      -  1.404 bytes/cycle - 4015.69 MiB/sec @ 3 ghz
+# Alignment  7 -  1.594 bytes/cycle - 4561.66 MiB/sec @ 3 ghz
+# Alignment  6 -  1.574 bytes/cycle - 4502.37 MiB/sec @ 3 ghz
+# Alignment  5 -  1.594 bytes/cycle - 4561.61 MiB/sec @ 3 ghz
+# Alignment  4 -  1.594 bytes/cycle - 4561.68 MiB/sec @ 3 ghz
+# Alignment  3 -  1.594 bytes/cycle - 4561.62 MiB/sec @ 3 ghz
+# Alignment  2 -  1.575 bytes/cycle - 4506.25 MiB/sec @ 3 ghz
+# Alignment  1 -  1.578 bytes/cycle - 4514.62 MiB/sec @ 3 ghz
+# Alignment  0 -  1.594 bytes/cycle - 4561.82 MiB/sec @ 3 ghz
+# Average      -  1.587 bytes/cycle - 4541.45 MiB/sec @ 3 ghz
 ## KeySpeed tests
-# SipHash13                 0 byte keys       21.000 c/h
-# SipHash13                 1 byte keys       26.957 c/h       26.957 c/b        0.037 b/c
-# SipHash13                 2 byte keys       30.000 c/h       15.000 c/b        0.067 b/c
-# SipHash13                 3 byte keys       31.000 c/h       10.333 c/b        0.097 b/c
-# SipHash13                 4 byte keys       32.000 c/h        8.000 c/b        0.125 b/c
-# SipHash13                 5 byte keys       33.000 c/h        6.600 c/b        0.152 b/c
-# SipHash13                 6 byte keys       34.000 c/h        5.667 c/b        0.176 b/c
-# SipHash13                 7 byte keys       34.983 c/h        4.998 c/b        0.200 b/c
-# SipHash13                 8 byte keys       30.998 c/h        3.875 c/b        0.258 b/c
-# SipHash13                 9 byte keys       31.660 c/h        3.518 c/b        0.284 b/c
-# SipHash13                10 byte keys       32.000 c/h        3.200 c/b        0.312 b/c
-# SipHash13                11 byte keys       32.999 c/h        3.000 c/b        0.333 b/c
-# SipHash13                12 byte keys       33.677 c/h        2.806 c/b        0.356 b/c
-# SipHash13                13 byte keys       34.954 c/h        2.689 c/b        0.372 b/c
-# SipHash13                14 byte keys       35.000 c/h        2.500 c/b        0.400 b/c
-# SipHash13                15 byte keys       35.999 c/h        2.400 c/b        0.417 b/c
-# SipHash13                16 byte keys       36.000 c/h        2.250 c/b        0.444 b/c
-# SipHash13                17 byte keys       36.000 c/h        2.118 c/b        0.472 b/c
-# SipHash13                18 byte keys       36.998 c/h        2.055 c/b        0.487 b/c
-# SipHash13                19 byte keys       37.000 c/h        1.947 c/b        0.514 b/c
-# SipHash13                20 byte keys       38.000 c/h        1.900 c/b        0.526 b/c
-# SipHash13                21 byte keys       38.951 c/h        1.855 c/b        0.539 b/c
-# SipHash13                22 byte keys       39.990 c/h        1.818 c/b        0.550 b/c
-# SipHash13                23 byte keys       40.800 c/h        1.774 c/b        0.564 b/c
-# SipHash13                24 byte keys       41.998 c/h        1.750 c/b        0.571 b/c
-# SipHash13                25 byte keys       42.441 c/h        1.698 c/b        0.589 b/c
-# SipHash13                26 byte keys       42.446 c/h        1.633 c/b        0.613 b/c
-# SipHash13                27 byte keys       43.158 c/h        1.598 c/b        0.626 b/c
-# SipHash13                28 byte keys       43.986 c/h        1.571 c/b        0.637 b/c
-# SipHash13                29 byte keys       44.996 c/h        1.552 c/b        0.645 b/c
-# SipHash13                30 byte keys       45.849 c/h        1.528 c/b        0.654 b/c
-# SipHash13                31 byte keys       46.997 c/h        1.516 c/b        0.660 b/c
-#                          Average < 32       36.432 c/h        2.350 c/b        0.425 b/c
-# SipHash13                32 byte keys       47.821 c/h        1.494 c/b        0.669 b/c
-# SipHash13                36 byte keys       50.996 c/h        1.417 c/b        0.706 b/c
-# SipHash13                40 byte keys       53.930 c/h        1.348 c/b        0.742 b/c
-# SipHash13                44 byte keys       55.998 c/h        1.273 c/b        0.786 b/c
-# SipHash13                48 byte keys       59.000 c/h        1.229 c/b        0.814 b/c
-# SipHash13                52 byte keys       61.964 c/h        1.192 c/b        0.839 b/c
-# SipHash13                56 byte keys       65.105 c/h        1.163 c/b        0.860 b/c
-# SipHash13                60 byte keys       67.000 c/h        1.117 c/b        0.896 b/c
-# SipHash13                64 byte keys       70.736 c/h        1.105 c/b        0.905 b/c
-# SipHash13                68 byte keys       73.895 c/h        1.087 c/b        0.920 b/c
-# SipHash13                72 byte keys       76.923 c/h        1.068 c/b        0.936 b/c
-# SipHash13                76 byte keys       78.913 c/h        1.038 c/b        0.963 b/c
-# SipHash13                80 byte keys       82.103 c/h        1.026 c/b        0.974 b/c
-# SipHash13                84 byte keys       84.881 c/h        1.010 c/b        0.990 b/c
-# SipHash13                88 byte keys       88.159 c/h        1.002 c/b        0.998 b/c
-# SipHash13                92 byte keys       89.991 c/h        0.978 c/b        1.022 b/c
-# SipHash13                96 byte keys       93.534 c/h        0.974 c/b        1.026 b/c
-# SipHash13               100 byte keys       96.831 c/h        0.968 c/b        1.033 b/c
-# SipHash13               104 byte keys       99.831 c/h        0.960 c/b        1.042 b/c
-# SipHash13               108 byte keys      101.760 c/h        0.942 c/b        1.061 b/c
-# SipHash13               112 byte keys      108.778 c/h        0.971 c/b        1.030 b/c
-# SipHash13               116 byte keys      107.869 c/h        0.930 c/b        1.075 b/c
-# SipHash13               120 byte keys      110.973 c/h        0.925 c/b        1.081 b/c
-# SipHash13               124 byte keys      112.925 c/h        0.911 c/b        1.098 b/c
-#                         Average < 128       55.460 c/h        1.312 c/b        0.762 b/c
-# SipHash13               128 byte keys      115.980 c/h        0.906 c/b        1.104 b/c
-# SipHash13               256 byte keys      220.523 c/h        0.861 c/b        1.161 b/c
-# SipHash13               512 byte keys      402.802 c/h        0.787 c/b        1.271 b/c
-# SipHash13              1024 byte keys      767.035 c/h        0.749 c/b        1.335 b/c
-# SipHash13              2048 byte keys     1496.434 c/h        0.731 c/b        1.369 b/c
-# SipHash13              4096 byte keys     2953.824 c/h        0.721 c/b        1.387 b/c
-# SipHash13              8192 byte keys     5867.518 c/h        0.716 c/b        1.396 b/c
-# SipHash13             16384 byte keys    11696.811 c/h        0.714 c/b        1.401 b/c
-# SipHash13             32768 byte keys    23368.307 c/h        0.713 c/b        1.402 b/c
-# SipHash13             65536 byte keys    46679.465 c/h        0.712 c/b        1.404 b/c
-#                       Overall Average     1464.764 c/h        0.725 c/b        1.379 b/c
-ok 6 - Speed (always passes) # SipHash13
+# TSip                      0 byte keys       17.412 c/h
+# TSip                      1 byte keys       28.662 c/h       28.662 c/b        0.035 b/c
+# TSip                      2 byte keys       32.205 c/h       16.103 c/b        0.062 b/c
+# TSip                      3 byte keys       32.696 c/h       10.899 c/b        0.092 b/c
+# TSip                      4 byte keys       33.441 c/h        8.360 c/b        0.120 b/c
+# TSip                      5 byte keys       34.270 c/h        6.854 c/b        0.146 b/c
+# TSip                      6 byte keys       35.669 c/h        5.945 c/b        0.168 b/c
+# TSip                      7 byte keys       37.012 c/h        5.287 c/b        0.189 b/c
+# TSip                      8 byte keys       32.219 c/h        4.027 c/b        0.248 b/c
+# TSip                      9 byte keys       31.988 c/h        3.554 c/b        0.281 b/c
+# TSip                     10 byte keys       33.528 c/h        3.353 c/b        0.298 b/c
+# TSip                     11 byte keys       33.022 c/h        3.002 c/b        0.333 b/c
+# TSip                     12 byte keys       33.701 c/h        2.808 c/b        0.356 b/c
+# TSip                     13 byte keys       32.989 c/h        2.538 c/b        0.394 b/c
+# TSip                     14 byte keys       33.555 c/h        2.397 c/b        0.417 b/c
+# TSip                     15 byte keys       34.258 c/h        2.284 c/b        0.438 b/c
+# TSip                     16 byte keys       37.000 c/h        2.312 c/b        0.432 b/c
+# TSip                     17 byte keys       37.935 c/h        2.231 c/b        0.448 b/c
+# TSip                     18 byte keys       37.727 c/h        2.096 c/b        0.477 b/c
+# TSip                     19 byte keys       37.810 c/h        1.990 c/b        0.503 b/c
+# TSip                     20 byte keys       37.316 c/h        1.866 c/b        0.536 b/c
+# TSip                     21 byte keys       37.000 c/h        1.762 c/b        0.568 b/c
+# TSip                     22 byte keys       37.696 c/h        1.713 c/b        0.584 b/c
+# TSip                     23 byte keys       37.752 c/h        1.641 c/b        0.609 b/c
+# TSip                     24 byte keys       41.942 c/h        1.748 c/b        0.572 b/c
+# TSip                     25 byte keys       42.323 c/h        1.693 c/b        0.591 b/c
+# TSip                     26 byte keys       42.569 c/h        1.637 c/b        0.611 b/c
+# TSip                     27 byte keys       42.565 c/h        1.576 c/b        0.634 b/c
+# TSip                     28 byte keys       42.000 c/h        1.500 c/b        0.667 b/c
+# TSip                     29 byte keys       42.685 c/h        1.472 c/b        0.679 b/c
+# TSip                     30 byte keys       42.000 c/h        1.400 c/b        0.714 b/c
+# TSip                     31 byte keys       42.798 c/h        1.381 c/b        0.724 b/c
+#                          Average < 32       36.117 c/h        2.330 c/b        0.429 b/c
+# TSip                     32 byte keys       47.000 c/h        1.469 c/b        0.681 b/c
+# TSip                     36 byte keys       46.891 c/h        1.303 c/b        0.768 b/c
+# TSip                     40 byte keys       52.195 c/h        1.305 c/b        0.766 b/c
+# TSip                     44 byte keys       53.073 c/h        1.206 c/b        0.829 b/c
+# TSip                     48 byte keys       56.954 c/h        1.187 c/b        0.843 b/c
+# TSip                     52 byte keys       57.875 c/h        1.113 c/b        0.898 b/c
+# TSip                     56 byte keys       63.431 c/h        1.133 c/b        0.883 b/c
+# TSip                     60 byte keys       63.325 c/h        1.055 c/b        0.947 b/c
+# TSip                     64 byte keys       67.953 c/h        1.062 c/b        0.942 b/c
+# TSip                     68 byte keys       68.093 c/h        1.001 c/b        0.999 b/c
+# TSip                     72 byte keys       72.379 c/h        1.005 c/b        0.995 b/c
+# TSip                     76 byte keys       73.380 c/h        0.966 c/b        1.036 b/c
+# TSip                     80 byte keys       77.775 c/h        0.972 c/b        1.029 b/c
+# TSip                     84 byte keys       76.951 c/h        0.916 c/b        1.092 b/c
+# TSip                     88 byte keys       83.303 c/h        0.947 c/b        1.056 b/c
+# TSip                     92 byte keys       84.628 c/h        0.920 c/b        1.087 b/c
+# TSip                     96 byte keys       88.624 c/h        0.923 c/b        1.083 b/c
+# TSip                    100 byte keys       86.756 c/h        0.868 c/b        1.153 b/c
+# TSip                    104 byte keys       91.964 c/h        0.884 c/b        1.131 b/c
+# TSip                    108 byte keys       94.109 c/h        0.871 c/b        1.148 b/c
+# TSip                    112 byte keys       99.128 c/h        0.885 c/b        1.130 b/c
+# TSip                    116 byte keys       97.290 c/h        0.839 c/b        1.192 b/c
+# TSip                    120 byte keys      103.737 c/h        0.864 c/b        1.157 b/c
+# TSip                    124 byte keys      103.422 c/h        0.834 c/b        1.199 b/c
+#                         Average < 128       52.964 c/h        1.253 c/b        0.798 b/c
+# TSip                    128 byte keys      108.552 c/h        0.848 c/b        1.179 b/c
+# TSip                    256 byte keys      187.586 c/h        0.733 c/b        1.365 b/c
+# TSip                    512 byte keys      355.134 c/h        0.694 c/b        1.442 b/c
+# TSip                   1024 byte keys      682.530 c/h        0.667 c/b        1.500 b/c
+# TSip                   2048 byte keys     1342.871 c/h        0.656 c/b        1.525 b/c
+# TSip                   4096 byte keys     2595.337 c/h        0.634 c/b        1.578 b/c
+# TSip                   8192 byte keys     5163.334 c/h        0.630 c/b        1.587 b/c
+# TSip                  16384 byte keys    10461.552 c/h        0.639 c/b        1.566 b/c
+# TSip                  32768 byte keys    20789.861 c/h        0.634 c/b        1.576 b/c
+# TSip                  65536 byte keys    41127.441 c/h        0.628 c/b        1.593 b/c
+#                       Overall Average     1299.700 c/h        0.643 c/b        1.554 b/c
+ok 6 - Speed (always passes) # TSip
 ### Differential Tests ###
 # Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 64 bit hashes.
 # 1000 reps, 8303632000 total tests, expecting 0.00 random collisions..........
-ok 7 - Differential collisions # SipHash13
-ok 8 - Nothing skipped during differential collision check # SipHash13
+ok 7 - Differential collisions # TSip
+ok 8 - Nothing skipped during differential collision check # TSip
 # 0 total collisions, of which 0 single collisions were ignored
 ok 9 - ProcessDifferentials
 # Testing 11017632 up-to-4-bit differentials in 128-bit keys -> 64 bit hashes.
 # 1000 reps, 11017632000 total tests, expecting 0.00 random collisions..........
-ok 10 - Differential collisions # SipHash13
-ok 11 - Nothing skipped during differential collision check # SipHash13
+ok 10 - Differential collisions # TSip
+ok 11 - Nothing skipped during differential collision check # TSip
 # 0 total collisions, of which 0 single collisions were ignored
 ok 12 - ProcessDifferentials
 # Testing 2796416 up-to-3-bit differentials in 256-bit keys -> 64 bit hashes.
 # 1000 reps, 2796416000 total tests, expecting 0.00 random collisions..........
-ok 13 - Differential collisions # SipHash13
-ok 14 - Nothing skipped during differential collision check # SipHash13
+ok 13 - Differential collisions # TSip
+ok 14 - Nothing skipped during differential collision check # TSip
 # 0 total collisions, of which 0 single collisions were ignored
 ok 15 - ProcessDifferentials
-ok 16 - Differential # SipHash13
+ok 16 - Differential # TSip
 ### Avalanche Tests ### - seed-bits: 128 hash-bits: 64
 # Samples 500000, expected error 0.00051200, confidence level 99.99994267%
-# Testing   0-bit keys.......... ok.     # worst-bit:   0.516% error-ratio: 1.011118e+00
-ok 17 - Strict Avalanche Criteria - 0 bit/0 byte keys # SipHash13
-# Testing   8-bit keys.......... ok.     # worst-bit:   0.597% error-ratio: 1.019080e+00
-ok 18 - Strict Avalanche Criteria - 8 bit/1 byte keys # SipHash13
-# Testing  16-bit keys.......... ok.     # worst-bit:   0.503% error-ratio: 9.848644e-01
-ok 19 - Strict Avalanche Criteria - 16 bit/2 byte keys # SipHash13
-# Testing  24-bit keys.......... ok.     # worst-bit:   0.543% error-ratio: 9.985856e-01
-ok 20 - Strict Avalanche Criteria - 24 bit/3 byte keys # SipHash13
-# Testing  32-bit keys.......... ok.     # worst-bit:   0.540% error-ratio: 1.005335e+00
-ok 21 - Strict Avalanche Criteria - 32 bit/4 byte keys # SipHash13
-# Testing  40-bit keys.......... ok.     # worst-bit:   0.537% error-ratio: 9.905599e-01
-ok 22 - Strict Avalanche Criteria - 40 bit/5 byte keys # SipHash13
-# Testing  48-bit keys.......... ok.     # worst-bit:   0.565% error-ratio: 1.003308e+00
-ok 23 - Strict Avalanche Criteria - 48 bit/6 byte keys # SipHash13
-# Testing  56-bit keys.......... ok.     # worst-bit:   0.590% error-ratio: 9.844440e-01
-ok 24 - Strict Avalanche Criteria - 56 bit/7 byte keys # SipHash13
-# Testing  64-bit keys.......... ok.     # worst-bit:   0.572% error-ratio: 9.977676e-01
-ok 25 - Strict Avalanche Criteria - 64 bit/8 byte keys # SipHash13
-# Testing  72-bit keys.......... ok.     # worst-bit:   0.560% error-ratio: 1.019529e+00
-ok 26 - Strict Avalanche Criteria - 72 bit/9 byte keys # SipHash13
-# Testing  80-bit keys.......... ok.     # worst-bit:   0.553% error-ratio: 1.001519e+00
-ok 27 - Strict Avalanche Criteria - 80 bit/10 byte keys # SipHash13
-# Testing  88-bit keys.......... ok.     # worst-bit:   0.636% error-ratio: 1.024651e+00
-ok 28 - Strict Avalanche Criteria - 88 bit/11 byte keys # SipHash13
-# Testing  96-bit keys.......... ok.     # worst-bit:   0.527% error-ratio: 9.837517e-01
-ok 29 - Strict Avalanche Criteria - 96 bit/12 byte keys # SipHash13
-# Testing 104-bit keys.......... ok.     # worst-bit:   0.577% error-ratio: 9.880325e-01
-ok 30 - Strict Avalanche Criteria - 104 bit/13 byte keys # SipHash13
-# Testing 112-bit keys.......... ok.     # worst-bit:   0.539% error-ratio: 9.933916e-01
-ok 31 - Strict Avalanche Criteria - 112 bit/14 byte keys # SipHash13
-# Testing 120-bit keys.......... ok.     # worst-bit:   0.570% error-ratio: 9.850777e-01
-ok 32 - Strict Avalanche Criteria - 120 bit/15 byte keys # SipHash13
-# Testing 128-bit keys.......... ok.     # worst-bit:   0.527% error-ratio: 1.005333e+00
-ok 33 - Strict Avalanche Criteria - 128 bit/16 byte keys # SipHash13
-# Testing 136-bit keys.......... ok.     # worst-bit:   0.582% error-ratio: 1.015150e+00
-ok 34 - Strict Avalanche Criteria - 136 bit/17 byte keys # SipHash13
-# Testing 144-bit keys.......... ok.     # worst-bit:   0.643% error-ratio: 1.002573e+00
-ok 35 - Strict Avalanche Criteria - 144 bit/18 byte keys # SipHash13
-# Testing 152-bit keys.......... ok.     # worst-bit:   0.607% error-ratio: 9.909321e-01
-ok 36 - Strict Avalanche Criteria - 152 bit/19 byte keys # SipHash13
-# Testing 152-bit keys.......... ok.     # worst-bit:   0.595% error-ratio: 1.007700e+00
-ok 37 - Strict Avalanche Criteria - 152 bit/19 byte keys # SipHash13
-# Testing 200-bit keys.......... ok.     # worst-bit:   0.598% error-ratio: 1.005005e+00
-ok 38 - Strict Avalanche Criteria - 200 bit/25 byte keys # SipHash13
-# Testing 256-bit keys.......... ok.     # worst-bit:   0.658% error-ratio: 1.009420e+00
-ok 39 - Strict Avalanche Criteria - 256 bit/32 byte keys # SipHash13
-# Testing 512-bit keys.......... ok.     # worst-bit:   0.606% error-ratio: 1.002383e+00
-ok 40 - Strict Avalanche Criteria - 512 bit/64 byte keys # SipHash13
-# Testing 520-bit keys.......... ok.     # worst-bit:   0.622% error-ratio: 1.000884e+00
-ok 41 - Strict Avalanche Criteria - 520 bit/65 byte keys # SipHash13
+# Testing   0-bit keys.......... ok.     # worst-bit:   0.508% error-ratio: 9.709121e-01
+ok 17 - Strict Avalanche Criteria - 0 bit/0 byte keys # TSip
+# Testing   8-bit keys.......... ok.     # worst-bit:   0.681% error-ratio: 9.952848e-01
+ok 18 - Strict Avalanche Criteria - 8 bit/1 byte keys # TSip
+# Testing  16-bit keys.......... ok.     # worst-bit:   0.578% error-ratio: 9.730948e-01
+ok 19 - Strict Avalanche Criteria - 16 bit/2 byte keys # TSip
+# Testing  24-bit keys.......... ok.     # worst-bit:   0.600% error-ratio: 9.892549e-01
+ok 20 - Strict Avalanche Criteria - 24 bit/3 byte keys # TSip
+# Testing  32-bit keys.......... ok.     # worst-bit:   0.540% error-ratio: 9.975917e-01
+ok 21 - Strict Avalanche Criteria - 32 bit/4 byte keys # TSip
+# Testing  40-bit keys.......... ok.     # worst-bit:   0.603% error-ratio: 1.000354e+00
+ok 22 - Strict Avalanche Criteria - 40 bit/5 byte keys # TSip
+# Testing  48-bit keys.......... ok.     # worst-bit:   0.588% error-ratio: 1.001976e+00
+ok 23 - Strict Avalanche Criteria - 48 bit/6 byte keys # TSip
+# Testing  56-bit keys.......... ok.     # worst-bit:   0.565% error-ratio: 9.987961e-01
+ok 24 - Strict Avalanche Criteria - 56 bit/7 byte keys # TSip
+# Testing  64-bit keys.......... ok.     # worst-bit:   0.606% error-ratio: 1.007749e+00
+ok 25 - Strict Avalanche Criteria - 64 bit/8 byte keys # TSip
+# Testing  72-bit keys.......... ok.     # worst-bit:   0.552% error-ratio: 9.960502e-01
+ok 26 - Strict Avalanche Criteria - 72 bit/9 byte keys # TSip
+# Testing  80-bit keys.......... ok.     # worst-bit:   0.567% error-ratio: 1.006669e+00
+ok 27 - Strict Avalanche Criteria - 80 bit/10 byte keys # TSip
+# Testing  88-bit keys.......... ok.     # worst-bit:   0.624% error-ratio: 1.003254e+00
+ok 28 - Strict Avalanche Criteria - 88 bit/11 byte keys # TSip
+# Testing  96-bit keys.......... ok.     # worst-bit:   0.606% error-ratio: 1.014009e+00
+ok 29 - Strict Avalanche Criteria - 96 bit/12 byte keys # TSip
+# Testing 104-bit keys.......... ok.     # worst-bit:   0.623% error-ratio: 9.929619e-01
+ok 30 - Strict Avalanche Criteria - 104 bit/13 byte keys # TSip
+# Testing 112-bit keys.......... ok.     # worst-bit:   0.515% error-ratio: 9.980364e-01
+ok 31 - Strict Avalanche Criteria - 112 bit/14 byte keys # TSip
+# Testing 120-bit keys.......... ok.     # worst-bit:   0.569% error-ratio: 9.930752e-01
+ok 32 - Strict Avalanche Criteria - 120 bit/15 byte keys # TSip
+# Testing 128-bit keys.......... ok.     # worst-bit:   0.561% error-ratio: 1.006649e+00
+ok 33 - Strict Avalanche Criteria - 128 bit/16 byte keys # TSip
+# Testing 136-bit keys.......... ok.     # worst-bit:   0.562% error-ratio: 1.006114e+00
+ok 34 - Strict Avalanche Criteria - 136 bit/17 byte keys # TSip
+# Testing 144-bit keys.......... ok.     # worst-bit:   0.549% error-ratio: 9.956266e-01
+ok 35 - Strict Avalanche Criteria - 144 bit/18 byte keys # TSip
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.585% error-ratio: 1.007244e+00
+ok 36 - Strict Avalanche Criteria - 152 bit/19 byte keys # TSip
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.604% error-ratio: 9.972343e-01
+ok 37 - Strict Avalanche Criteria - 152 bit/19 byte keys # TSip
+# Testing 200-bit keys.......... ok.     # worst-bit:   0.525% error-ratio: 1.003102e+00
+ok 38 - Strict Avalanche Criteria - 200 bit/25 byte keys # TSip
+# Testing 256-bit keys.......... ok.     # worst-bit:   0.566% error-ratio: 9.941994e-01
+ok 39 - Strict Avalanche Criteria - 256 bit/32 byte keys # TSip
+# Testing 512-bit keys.......... ok.     # worst-bit:   0.727% error-ratio: 1.013415e+00
+ok 40 - Strict Avalanche Criteria - 512 bit/64 byte keys # TSip
+# Testing 520-bit keys.......... ok.     # worst-bit:   0.573% error-ratio: 1.009750e+00
+ok 41 - Strict Avalanche Criteria - 520 bit/65 byte keys # TSip
 ### Keyset 'Cyclic' Tests ###
 # Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
@@ -187,7 +187,7 @@ ok 49 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 11 bytes - 100
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
 ok 50 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
 ok 51 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
-ok 52 - Keyset 'Cyclic' # SipHash13
+ok 52 - Keyset 'Cyclic' # TSip
 ### Keyset 'TwoBytes' Tests ###
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
 ok 53 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
@@ -204,7 +204,7 @@ ok 60 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 4425
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
 ok 61 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
 ok 62 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
-ok 63 - Keyset 'TwoBytes' # SipHash13
+ok 63 - Keyset 'TwoBytes' # TSip
 ### Keyset 'Sparse' Tests ###
 # Keyset 'Sparse' - 32-bit keys with up to 6 bits set - 1149017 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
@@ -238,174 +238,174 @@ ok 77 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
 ok 78 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
 ok 79 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
-ok 80 - Keyset 'Sparse' # SipHash13
+ok 80 - Keyset 'Sparse' # TSip
 ### Keyset 'Crc-MultiCollision' Tests ###
 # Keyset 'Crc(a)-MultiCollision' - 1048575 x 16 block keys - 128-bytes long - 10 seeds
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 81 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 1 # SipHash13
+ok 81 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 1 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 82 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 2 # SipHash13
+ok 82 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 2 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 83 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 3 # SipHash13
+ok 83 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 3 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 84 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 4 # SipHash13
+ok 84 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 4 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 85 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 5 # SipHash13
+ok 85 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 5 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 86 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 6 # SipHash13
+ok 86 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 6 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 87 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 7 # SipHash13
+ok 87 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 7 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 88 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 8 # SipHash13
+ok 88 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 8 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 89 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 9 # SipHash13
+ok 89 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 9 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 90 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 10 # SipHash13
+ok 90 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 10 # TSip
 # Keyset 'Crc(b)-MultiCollision' - 1048575 x 16 block keys - 128-bytes long - 10 seeds
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 91 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 1 # SipHash13
+ok 91 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 1 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 92 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 2 # SipHash13
+ok 92 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 2 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 93 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 3 # SipHash13
+ok 93 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 3 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 94 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 4 # SipHash13
+ok 94 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 4 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 95 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 5 # SipHash13
+ok 95 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 5 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 96 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 6 # SipHash13
+ok 96 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 6 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 97 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 7 # SipHash13
+ok 97 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 7 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 98 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 8 # SipHash13
+ok 98 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 8 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 99 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 9 # SipHash13
+ok 99 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 9 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 100 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 10 # SipHash13
+ok 100 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 10 # TSip
 ### Keyset 'Murmur2-MultiCollision' Tests ###
 # Keyset 'Murmur2-MultiCollision' - 1048575 x 16 block keys - 128-bytes long - 10 seeds
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 101 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 1 # SipHash13
+ok 101 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 1 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 102 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 2 # SipHash13
+ok 102 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 2 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 103 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 3 # SipHash13
+ok 103 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 3 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 104 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 4 # SipHash13
+ok 104 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 4 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 105 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 5 # SipHash13
+ok 105 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 5 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 106 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 6 # SipHash13
+ok 106 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 6 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 107 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 7 # SipHash13
+ok 107 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 7 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 108 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 8 # SipHash13
+ok 108 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 8 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 109 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 9 # SipHash13
+ok 109 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 9 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 110 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 10 # SipHash13
+ok 110 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 10 # TSip
 ### Keyset 'Murmur3A-MultiCollision' Tests ###
 # Keyset 'Murmur3A-MultiCollision' - 1048575 x 16 block keys - 128-bytes long - 10 seeds
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 111 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 1 # SipHash13
+ok 111 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 1 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 112 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 2 # SipHash13
+ok 112 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 2 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 113 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 3 # SipHash13
+ok 113 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 3 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 114 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 4 # SipHash13
+ok 114 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 4 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 115 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 5 # SipHash13
+ok 115 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 5 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 116 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 6 # SipHash13
+ok 116 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 6 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 117 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 7 # SipHash13
+ok 117 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 7 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 118 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 8 # SipHash13
+ok 118 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 8 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 119 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 9 # SipHash13
+ok 119 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 9 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 120 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 10 # SipHash13
+ok 120 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 10 # TSip
 ### Keyset 'Murmur3F-MultiCollision' Tests ###
 # Keyset 'Murmur3F-MultiCollision' - 1048575 x 16 block keys - 512-bytes long - 10 seeds
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 121 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 1 # SipHash13
+ok 121 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 1 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 122 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 2 # SipHash13
+ok 122 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 2 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 123 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 3 # SipHash13
+ok 123 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 3 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 124 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 4 # SipHash13
+ok 124 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 4 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 125 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 5 # SipHash13
+ok 125 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 5 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 126 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 6 # SipHash13
+ok 126 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 6 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 127 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 7 # SipHash13
+ok 127 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 7 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 128 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 8 # SipHash13
+ok 128 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 8 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 129 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 9 # SipHash13
+ok 129 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 9 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 130 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 10 # SipHash13
+ok 130 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 10 # TSip
 ### Keyset 'City64-MultiCollision' Tests ###
 # Keyset 'City64-MultiCollision' - 10 x 2 block keys - 16-bytes long - 10 seeds
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 131 - Collision Rate for Keyset 'City64-MultiCollision' - seed 1 # SipHash13
+ok 131 - Collision Rate for Keyset 'City64-MultiCollision' - seed 1 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 132 - Collision Rate for Keyset 'City64-MultiCollision' - seed 2 # SipHash13
+ok 132 - Collision Rate for Keyset 'City64-MultiCollision' - seed 2 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 133 - Collision Rate for Keyset 'City64-MultiCollision' - seed 3 # SipHash13
+ok 133 - Collision Rate for Keyset 'City64-MultiCollision' - seed 3 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 134 - Collision Rate for Keyset 'City64-MultiCollision' - seed 4 # SipHash13
+ok 134 - Collision Rate for Keyset 'City64-MultiCollision' - seed 4 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 135 - Collision Rate for Keyset 'City64-MultiCollision' - seed 5 # SipHash13
+ok 135 - Collision Rate for Keyset 'City64-MultiCollision' - seed 5 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 136 - Collision Rate for Keyset 'City64-MultiCollision' - seed 6 # SipHash13
+ok 136 - Collision Rate for Keyset 'City64-MultiCollision' - seed 6 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 137 - Collision Rate for Keyset 'City64-MultiCollision' - seed 7 # SipHash13
+ok 137 - Collision Rate for Keyset 'City64-MultiCollision' - seed 7 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 138 - Collision Rate for Keyset 'City64-MultiCollision' - seed 8 # SipHash13
+ok 138 - Collision Rate for Keyset 'City64-MultiCollision' - seed 8 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 139 - Collision Rate for Keyset 'City64-MultiCollision' - seed 9 # SipHash13
+ok 139 - Collision Rate for Keyset 'City64-MultiCollision' - seed 9 # TSip
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 140 - Collision Rate for Keyset 'City64-MultiCollision' - seed 10 # SipHash13
+ok 140 - Collision Rate for Keyset 'City64-MultiCollision' - seed 10 # TSip
 ### Keyset 'Combination Lowbits' Tests ###
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
 ok 141 - Collision Rate for Keyset 'Combination Lowbits'
 ok 142 - Distribution Bias Check for Keyset 'Combination Lowbits'
-ok 143 - Keyset 'Combination Lowbits' # SipHash13
+ok 143 - Keyset 'Combination Lowbits' # TSip
 ### Keyset 'Combination Highbits' Tests ###
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
 ok 144 - Collision Rate for Keyset 'Combination Highbits'
 ok 145 - Distribution Bias Check for Keyset 'Combination Highbits'
-ok 146 - Keyset 'Combination Highbits' # SipHash13
+ok 146 - Keyset 'Combination Highbits' # TSip
 ### Keyset 'Combination Highbits2' Tests ###
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
 ok 147 - Collision Rate for Keyset 'Combination Highbits2'
 ok 148 - Distribution Bias Check for Keyset 'Combination Highbits2'
-ok 149 - Keyset 'Combination Highbits2' # SipHash13
+ok 149 - Keyset 'Combination Highbits2' # TSip
 ### Keyset 'Combination HiBit-Null' Tests ###
 # Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
 ok 150 - Collision Rate for Keyset 'Combination HiBit-Null'
 ok 151 - Distribution Bias Check for Keyset 'Combination HiBit-Null'
-ok 152 - Keyset 'Combination HiBit-Null' # SipHash13
+ok 152 - Keyset 'Combination HiBit-Null' # TSip
 ### Keyset 'Combination LowBit-Null' Tests ###
 # Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
 ok 153 - Collision Rate for Keyset 'Combination LowBit-Null'
 ok 154 - Distribution Bias Check for Keyset 'Combination LowBit-Null'
-ok 155 - Keyset 'Combination LowBit-Null' # SipHash13
+ok 155 - Keyset 'Combination LowBit-Null' # TSip
 ### Keyset 'Combination Hi-Lo' Tests ###
 # Keyset 'Combination' - up to 6 blocks from a set of 15 - 12204240 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
 ok 156 - Collision Rate for Keyset 'Combination Hi-Lo'
 ok 157 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
-ok 158 - Keyset 'Combination Hi-Lo' # SipHash13
+ok 158 - Keyset 'Combination Hi-Lo' # TSip
 ### Keyset 'Text' Tests ###
 # Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
@@ -419,13 +419,13 @@ ok 162 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]"
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
 ok 163 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
 ok 164 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
-ok 165 - Keyset 'Text' # SipHash13
+ok 165 - Keyset 'Text' # TSip
 ### Keyset 'Zeroes' Tests ###
 # Keyset 'Zeroes' - 262144 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
 ok 166 - Collision Rate for Keyset 'Zeroes' - 262144 keys
 ok 167 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys
-ok 168 - Keyset 'Zeroes' # SipHash13
+ok 168 - Keyset 'Zeroes' # TSip
 ### Keyset 'Seed' Tests ###
 # Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
@@ -443,20 +443,20 @@ ok 174 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "0010110
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
 ok 175 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
 ok 176 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
-ok 177 - Keyset 'Seed' # SipHash13
+ok 177 - Keyset 'Seed' # TSip
 ### Keyset 'Effs' Tests ###
 # Keyset 'Effs' - 262144 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
 ok 178 - Collision Rate for Keyset 'Effs' - 262144 keys
 ok 179 - Distribution Bias Check for Keyset 'Effs' - 262144 keys
-ok 180 - Keyset 'Effs' # SipHash13
+ok 180 - Keyset 'Effs' # TSip
 ### Keyset 'Words' Tests ###
 # Hashed 99171 keys from 297513 words from file '/usr/share/dict/words'
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
 ok 181 - Collision Rate for Keyset 'Words'
 ok 182 - Distribution Bias Check for Keyset 'Words'
-ok 183 - all tests passed # SipHash13
+ok 183 - all tests passed # TSip
 1..183
-# All Tests Passed. SipHash13 passed all 183 tests run.
-# Testing took 2273.007675 seconds
-# This is SMHasher version v1.2-demerphq-0-gd7c9ff3 - built on Mar 18 2017.
+# All Tests Passed. TSip passed all 183 tests run.
+# Testing took 2461.973184 seconds
+# This is SMHasher version v1.2-demerphq-0-gd7c9ff3 - built on Mar 22 2017.
