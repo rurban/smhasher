@@ -7,6 +7,7 @@ ls doc/*Mur*.txt | grep -v OAAT | xargs perl r2p.pl --name "Murmur Hashes"
 ls doc/StadtX*.txt doc/cmetro*.txt doc/metro*.txt | xargs perl r2p.pl --name "MetroHash Family"
 ls doc/City*.txt | xargs perl r2p.pl
 ls doc/Farm*.txt doc/farm*.txt | xargs perl r2p.pl
+ls doc/Sip*.txt doc/TSip*.txt | xargs perl r2p.pl --name "SipHash Family"
 ls doc/t1ha*.txt | xargs perl r2p.pl
 ls doc/City*.64.txt doc/*metro*.64.txt doc/StadtX.*.64.txt doc/Zaphod64.*.64.txt doc/Sip*.64.txt doc/Farm*.64.txt doc/t1ha*.64.txt doc/xxHash64.*.64.txt | xargs perl r2p.pl --name "Selected 64 Bit"
 ls $(grep PASSED doc/summary.txt | cut -d' ' -f1 | grep -v sha1 | perl -lne'print "doc/$_.*.txt"')  | xargs perl r2p.pl --name 'Passed All Tests'
