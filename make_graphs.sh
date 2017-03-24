@@ -16,5 +16,5 @@ ls doc/Jenkins*.txt doc/Sip*.txt doc/StadtX*.txt | xargs perl r2p.pl --name 'Per
 ls doc/Sip*.txt doc/Jenkins*.txt doc/Lua*.txt | xargs perl r2p.pl --name 'Lua53'
 ls doc/Sip*.txt doc/StadtX*.txt doc/Zaphod64.*.txt | xargs perl r2p.pl --name 'Perl 64 bit Candidates'
 ls doc/Zaphod32.*.txt doc/Phat*.txt | xargs perl r2p.pl --name 'Perl 32 bit Candidates'
-
+ls doc/FNV*.txt doc/bernstein*.txt doc/StadtX.*.txt doc/Zaphod*.txt doc/Sip*.txt | xargs perl r2p.pl --name 'FNV Comparison'
 
