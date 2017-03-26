@@ -10,7 +10,7 @@
 #ifdef HAVE_BEAGLE_HASHES
 #include "BeagleHashes_test.h"
 #endif
-#ifdef HAVE_BEAGLE_HASHES
+#ifdef HAVE_TSIP
 #include "tsip.h"
 #endif
 #include "md5.h"
