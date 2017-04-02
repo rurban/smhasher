@@ -73,12 +73,12 @@ SMhasher
 | [cmetrohash64_1](doc/cmetrohash64_1)      |  8135.24	|    55.96 |                            |
 | [cmetrohash64_2](doc/cmetrohash64_2)      |  9046.35	|    50.95 |                            |
 | [falkhash](doc/falkhash)              |     19888.45	|   173.92 |                            |
-| [t1ha](doc/t1ha)                      |      7754.48	|    40.06 |                            |
-| [t1ha_64be](doc/t1ha_64be)            |      6516.99	|    37.77 |                            |
-| [t1ha_32le](doc/t1ha_32le)            |      4981.09	|    47.55 |                            |
-| [t1ha_32be](doc/t1ha_32be)            |      4327.73	|    43.31 |                            |
-| [t1ha_crc](doc/t1ha_crc)              |     11591.98	|    39.15 |                            |
-| [t1ha_aes](doc/t1ha_aes)              |     19175.29	|    34.87 |  machine-specific          |
+| [t1ha](doc/t1ha)                      |     15480.28	|    26.41 |                            |
+| [t1ha_64be](doc/t1ha_64be)            |      5203.00	|    53.69 |                            |
+| [t1ha_32le](doc/t1ha_32le)            |      8930.90	|    29.79 |                            |
+| [t1ha_32be](doc/t1ha_32be)            |      6931.84	|    34.17 |                            |
+| [t1ha_crc](doc/t1ha_crc)              |     16757.73	|    28.69 |                            |
+| [t1ha_aes](doc/t1ha_aes)              |     37299.66	|    25.68 |  machine-specific          |
 | [MUM](doc/MUM)                        |      7763.68	|    41.28 |  machine-specific          |
 
 Summary
