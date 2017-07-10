@@ -12,9 +12,15 @@ if (NOT (CMAKE_C_COMPILER_ID STREQUAL CMAKE_CXX_COMPILER_ID))
 endif()
 
 IF (CMAKE_MAJOR_VERSION GREATER 2)
-  cmake_policy(SET CMP0056 OLD)
-  cmake_policy(SET CMP0065 NEW) # ENABLE_EXPORTS
-  cmake_policy(SET CMP0066 OLD)
+  IF (CMAKE_MAJOR_VERSION GREATER 3 OR CMAKE_MINOR_VERSION GREATER 1)
+    cmake_policy(SET CMP0056 OLD) # since 3.2. Honor link flags in try_compile() source-file signature.
+  ENDIF()
+  IF (CMAKE_MAJOR_VERSION GREATER 3 OR CMAKE_MINOR_VERSION GREATER 3)
+    cmake_policy(SET CMP0065 NEW) # since 3.4. ENABLE_EXPORTS.
+  ENDIF()
+  IF (CMAKE_MAJOR_VERSION GREATER 3 OR CMAKE_MINOR_VERSION GREATER 6)
+    cmake_policy(SET CMP0066 OLD) # since 3.7. Honor per-config flags in try_compile() source-file signature.
+  ENDIF()
 
   include (TestBigEndian)
   TEST_BIG_ENDIAN(IS_BIG_ENDIAN)
