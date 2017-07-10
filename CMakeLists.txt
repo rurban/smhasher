@@ -37,6 +37,7 @@ if(NOT CMAKE_BUILD_TYPE)
   FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
+# TODO: rather parse `$CC -march=native -dM -E - <<< ''` [gh #10]
 IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
    EXEC_PROGRAM(cat ARGS "/proc/cpuinfo" OUTPUT_VARIABLE CPUINFO)
    STRING(REGEX REPLACE "^.*(sse2).*$" "\\1" SSE_THERE ${CPUINFO})
