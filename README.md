@@ -46,8 +46,8 @@ SMhasher
 | [Murmur3F](doc/Murmur3F)              |      4376.29	|    55.03 |                            |
 | [fasthash32](doc/fasthash32)          |      4881.26	|    55.11 |                            |
 | [fasthash64](doc/fasthash64)          |      5404.17	|    46.73 |                            |
-| [City32](doc/City32)                  |      3523.77	|    53.76 | 2 minor collisions         |
-| [City64](doc/City64)                  |      8728.22	|    54.72 |                            |
+| [City32](doc/City32)                  |      3523.77	|    53.76 |                            |
+| [City64](doc/City64)                  |      8728.22	|    54.72 | 2 minor collisions         |
 | [City128](doc/City128)                |      9769.19	|    63.38 |                            |
 | [CityCrc128](doc/CityCrc128)          |     13730.97	|    85.88 |                            |
 | [FarmHash64](doc/FarmHash64)         	|      8711.25	|    58.16 | machine-specific           |
@@ -58,15 +58,15 @@ SMhasher
 | [farmhash128_c](doc/farmhash128_c)    |      9770.40	|    79.59 |                            |
 | [Spooky32](doc/Spooky32)              |      9944.88	|    60.12 |                            |
 | [Spooky64](doc/Spooky64)              |      9943.72	|    60.16 |                            |
-| [Spooky128](doc/Spooky128)            |      9936.26	|    60.10 | collisions with 4bit diff  |
-| [xxHash32](doc/xxHash32)              |      4914.62	|    64.17 |                            |
+| [Spooky128](doc/Spooky128)            |      9936.26	|    60.10 |                            |
+| [xxHash32](doc/xxHash32)              |      4914.62	|    64.17 | collisions with 4bit diff  |
 | [xxHash64](doc/xxHash64)              |      8474.87	|    61.57 |                            |
 | [metrohash64_1](doc/metrohash64_1)    |      8177.73	|    56.05 |                            |
 | [metrohash64_2](doc/metrohash64_2)    |      9064.45	|    50.83 |                            |
 | [metrohash128_1](doc/metrohash128_1)  |      7931.50	|    65.88 |                            |
-| [metrohash128_2](doc/metrohash128_2)  |      8779.11	|    59.36 | cyclic collisions 8 byte   |
+| [metrohash128_2](doc/metrohash128_2)  |      8779.11	|    59.36 |                            |
 | [metrohash64crc_1](doc/metrohash64crc_1)  | 15827.71	|    55.72 | cyclic collisions 8 byte   |
-| [metrohash64crc_2](doc/metrohash64crc_2)  | 16072.41	|    56.79 |                            |
+| [metrohash64crc_2](doc/metrohash64crc_2)  | 16072.41	|    56.79 | cyclic collisions 8 byte   |
 | [metrohash128crc_1](doc/metrohash128crc_1)| 15468.70	|    66.62 |                            |
 | [metrohash128crc_2](doc/metrohash128crc_2)| 14100.80	|    71.89 |                            |
 | [cmetrohash64_1_o](doc/cmetrohash64_1_o)  |  9054.06	|    50.66 |                            |
