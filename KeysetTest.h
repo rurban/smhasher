@@ -668,8 +668,6 @@ template < typename hashtype >
 bool RepeatedCharKeyTest ( hashfunc<hashtype> hash, const char *name, unsigned char c, int keycount, double confidence, bool drawDiagram, Rand &r )
 {
   char fullname[1024];
-  snprintf(fullname,1024,"Keyset '%s' - %d keys",name,keycount);
-  printf("# %s\n", fullname);
 
   unsigned char * block = new unsigned char[keycount];
   memset(block,c,keycount);
@@ -679,22 +677,26 @@ bool RepeatedCharKeyTest ( hashfunc<hashtype> hash, const char *name, unsigned c
   std::vector<hashtype> hashes;
 
   hashes.resize(keycount);
-
-  if (hash.seedbits() == 64) {
-    uint64_t s= 0xffffffff9d66d03f;
-    hash.seed_state(&s);
-  } else {
-    hash.seed_state_rand(r);
-  }
-
-  for(int i = 0; i < keycount; i++)
-  {
-    hash(block,i,&hashes[i]);
-  }
-
   bool result = true;
 
-  result &= TestHashList(hashes,true,confidence,drawDiagram,fullname);
+  for(int rep=0; rep < 2; rep++)
+  {
+    snprintf(fullname,1024,"Keyset '%s' - %d keys, %s seed",name,keycount,rep ? "nonzero" : "zero");
+    printf("# %s\n", fullname);
+
+    if (rep) {
+      hash.seed_state_rand(r);
+    } else {
+      hash.seed_state_zero();
+    }
+
+    for(int i = 0; i < keycount; i++)
+    {
+      hash(block,i,&hashes[i]);
+    }
+
+    result &= TestHashList(hashes,true,confidence,drawDiagram,fullname);
+  }
 
   delete [] block;
 
