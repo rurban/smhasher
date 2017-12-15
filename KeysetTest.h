@@ -206,24 +206,30 @@ bool AppendedZeroesTest ( hashfunc<hashtype> hash )
 
     memset(key,0,sizeof(key));
 
-    hash.seed_state_rand(r);
+    if (rep)
+      hash.seed_state_rand(r);
+    else
+      hash.seed_state_zero();
 
-    uint32_t h1[16];
-    uint32_t h2[16];
+    uint8_t h1[hashbytes];
+    uint8_t h2[hashbytes];
 
     memset(h1,0,hashbytes);
     memset(h2,0,hashbytes);
 
-    for(int i = 0; i < 32; i++)
+    for(int incr = 1; incr <= 16; incr *= 2)
     {
-      hash(key,32+i,h1);
-
-      if(i && memcmp(h1,h2,hashbytes) == 0)
+      for(int i = 0; i < 32; i+=incr)
       {
-        failed++;
-      }
+        hash(key,32+i,h1);
 
-      memcpy(h2,h1,hashbytes);
+        if(i && memcmp(h1,h2,hashbytes) == 0)
+        {
+          failed++;
+        }
+
+        memcpy(h2,h1,hashbytes);
+      }
     }
     r.rand_p(key,32);
   }
