@@ -118,16 +118,16 @@ bool SanityTest ( hashfunc<hashtype> hash )
   uint32_t count = 0;
   //----------
 
-  printf("# Sanity check simple key bit flips and consistency");
+  printf("# Sanity check simple key bit flips and consistency - hashbytes=%d",hashbytes);
 
-  for(int irep = 0; irep < reps; irep++)
+  for(int irep = 0; result && irep < reps; irep++)
   {
     if(irep % (reps/10) == 0) printf(".");
     hash.seed_state_rand(r);
 
-    for(int len = 4; len <= keymax; len++)
+    for(int len = 4; result && len <= keymax; len++)
     {
-      for(int offset = pad; offset < pad*2; offset++)
+      for(int offset = pad; result && offset < pad*2; offset++)
       {
         uint8_t * key1 = &buffer1[pad];
         uint8_t * key2 = &buffer2[pad+offset];
@@ -169,7 +169,7 @@ bool SanityTest ( hashfunc<hashtype> hash )
   }
   printf("\n"); // nl ok
   if (!ok(result,"SanityTest", hash.name()))
-    printf("# from %d hashes there were %d inconsistent of %d collisions.\n",
+    printf("# from %d hashes there were %d inconsistent and %d collisions.\n",
         count, count_inconsistent, count_same);
 
   delete [] buffer1;
