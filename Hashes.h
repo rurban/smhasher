@@ -214,3 +214,21 @@ inline void t1ha_aes_with_state_test(const void * key, int len, const void *stat
   *(uint64_t*)out = t1ha_ia32aes(key, len, *((uint64_t*)state));
 }
 #endif
+
+
+#ifdef HAVE_FUNNY_HASH
+#include "funny_hash.h"
+inline void
+funny_hash64_2_seed_state_test(int seed_bits, const void * seed, void *state)
+{
+    memcpy(state,seed,seed_bits/8);
+}
+
+inline void
+funny_hash64_2_with_state_test(const void *key, int len, const void * state, void *out)
+{
+    uint64_t *s64 = (uint64_t *)state;
+  *(uint64_t *) out = fh64_string_hash2(key, len, s64[0], s64[1]);
+}
+#endif
+

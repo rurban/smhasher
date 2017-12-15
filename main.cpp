@@ -186,6 +186,13 @@ HashInfo g_hashes[] =
     128, 128, 128, 0x5DF3C836,
     SpookyHash_seed_state_test, SpookyHash128_with_state_test },
 
+#ifdef HAVE_FUNNY_HASH
+  { "FunnyHash64-2", "Funny Falcon",
+    128, 128, 64, 0xC955988D,
+    funny_hash64_2_seed_state_test, funny_hash64_2_with_state_test },
+#endif
+
+
   // MurmurHash2
   { "Murmur2", "MurmurHash2 for x86, 32-bit",
     32, 32, 32, 0xBD317868,
@@ -249,6 +256,7 @@ HashInfo g_hashes[] =
   { "SBOX32", SBOX32_SMHASHER_DESCR,
     SBOX32_SMHASHER_SEEDBITS, SBOX32_STATE_BITS, 32, 0xE88DC72D,
     sbox32_seed_state_smhasher, sbox32_hash_with_state_smhasher },
+
   { "StadtX", "Evolved hash with 4x64 state - inspired by Metrohash - Yves Orton",
     128, 256, 64, 0x754798B4,
     stadtx_seed_state_smhasher_test, stadtx_hash_with_state_smhasher_test },

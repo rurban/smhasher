@@ -13,7 +13,7 @@ endif()
 IF (CMAKE_MAJOR_VERSION GREATER 2)
   cmake_policy(SET CMP0056 OLD)
   cmake_policy(SET CMP0065 NEW) # ENABLE_EXPORTS
-  cmake_policy(SET CMP0066 OLD)
+  #cmake_policy(SET CMP0066 OLD)
 
   include (TestBigEndian)
   TEST_BIG_ENDIAN(IS_BIG_ENDIAN)
@@ -150,7 +150,9 @@ IF(EXISTS "./tsip.c")
     set(TSIP_SRC tsip.c)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_TSIP")
 ENDIF()
-
+IF(EXISTS "./funny_hash.h")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_FUNNY_HASH")
+ENDIF()
 add_library(SMHasherSupport
   AvalancheTest.cpp
   Bitslice.cpp
