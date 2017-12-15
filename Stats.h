@@ -118,8 +118,8 @@ bool TestDistribution ( std::vector<hashtype> & hashes, double confidence, bool 
   bool result = !worst;
 
   if (worst)
-    printf("# worst bias is the %3d-bit window at bit %3d - %5.3f%% (%d)\n",
-      worstWidth, worstStart, worst * 100, scores);
+    printf("# worst bias is the %3d-bit window at bit %3d - score %5.3f (from %d scores)\n",
+      worstWidth, worstStart, worst, scores);
   return okf(result, "Distribution Bias Check for %s", name);
 }
 

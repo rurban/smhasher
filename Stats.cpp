@@ -108,9 +108,9 @@ double calcScore ( const int * vals, const int icount, const int isum, double co
     if (g_verbose) {
       printf(
           "Failed gtest with %.6f prob\n"
-          "  old_score = %.6f%% score = %.6f%% (%.6f%%)\n"
+          "  old_score = %.6f%% score = %.6f (%.6f)\n"
           "  bins=%.0f sum=%.0f mean=%.0f stddev=%.6f\n",
-          gtest * 100, old_score * 100, score * 100, quality_score * 100,
+          gtest * 100, old_score * 100, score, quality_score,
           count, sum, expected, stddev);
       printf("  Bucket Count Frequencies:\n");
       for ( int i = min ; i <= max ; i++ )
@@ -122,9 +122,9 @@ double calcScore ( const int * vals, const int icount, const int isum, double co
     if (g_verbose > 1) {
       printf(
           "Passed gtest with %.6f prob\n"
-          "  old_score = %.6f%% score = %.6f%% (%.6f%%)\n"
+          "  old_score = %.6f%% score = %.6f (%.6f)\n"
           "  bins=%.0f sum=%.0f mean=%.0f stddev=%.6f\n",
-          gtest * 100, old_score * 100, score * 100, quality_score * 100,
+          gtest * 100, old_score * 100, score, quality_score,
           count, sum, expected, stddev);
     }
     return 0;
