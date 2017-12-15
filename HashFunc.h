@@ -74,9 +74,15 @@ public:
     } else {
       memcpy( state, seed, m_seed.size() );
     }
-    if (state == (void *)&m_state[0]) {
+    if (state == (void *)&m_state[0] && seed != (void *)&m_seed[0]) {
       memcpy( &m_seed[0], seed, m_seed.size() );
     }
+  }
+
+  inline void seed_state_zero ()
+  {
+    std::fill(m_seed.begin(), m_seed.end(), 0);
+    _seed_state(m_seedbits, &m_seed[0], &m_state[0]);
   }
 
   inline void seed_state ( const void *seed )
