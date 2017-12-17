@@ -1,0 +1,477 @@
+ok 1 - Found Hash # SBOX32
+###################################################################
+### Testing SBOX32 - with seed_state
+### - Yves Orton's 32 bit substitution box hash for up to 128 char strings, 128 bit seed -
+### seedbits: 128 statebits: 1048608 hashbits: 32
+###################################################################
+ok 2 - Verification code # SBOX32
+# SBOX32               - Verification value 0xE88DC72D : Passed.
+### Sanity Tests ###
+# Sanity check simple key bit flips and consistency - hashbytes=4..........
+ok 3 - SanityTest # SBOX32
+# Sanity check null suffixes change the hash (simple)..........
+ok 4 - Appended Zeroes Test # SBOX32
+ok 5 - Sanity Test # SBOX32
+### Speed Tests ###
+## Bulk speed test - 262144-byte keys
+# Alignment  7 -  1.416 bytes/cycle - 4052.43 MiB/sec @ 3 ghz
+# Alignment  6 -  1.422 bytes/cycle - 4068.76 MiB/sec @ 3 ghz
+# Alignment  5 -  1.414 bytes/cycle - 4045.04 MiB/sec @ 3 ghz
+# Alignment  4 -  1.416 bytes/cycle - 4050.41 MiB/sec @ 3 ghz
+# Alignment  3 -  1.413 bytes/cycle - 4042.32 MiB/sec @ 3 ghz
+# Alignment  2 -  1.413 bytes/cycle - 4042.76 MiB/sec @ 3 ghz
+# Alignment  1 -  1.403 bytes/cycle - 4012.94 MiB/sec @ 3 ghz
+# Alignment  0 -  1.407 bytes/cycle - 4024.70 MiB/sec @ 3 ghz
+# Average      -  1.413 bytes/cycle - 4042.42 MiB/sec @ 3 ghz
+## KeySpeed tests
+# SBOX32                    0 byte keys        6.000 c/h
+# SBOX32                    1 byte keys        7.915 c/h        7.915 c/b        0.126 b/c
+# SBOX32                    2 byte keys       10.884 c/h        5.442 c/b        0.184 b/c
+# SBOX32                    3 byte keys       11.938 c/h        3.979 c/b        0.251 b/c
+# SBOX32                    4 byte keys       12.945 c/h        3.236 c/b        0.309 b/c
+# SBOX32                    5 byte keys       12.942 c/h        2.588 c/b        0.386 b/c
+# SBOX32                    6 byte keys       12.996 c/h        2.166 c/b        0.462 b/c
+# SBOX32                    7 byte keys       12.994 c/h        1.856 c/b        0.539 b/c
+# SBOX32                    8 byte keys       13.000 c/h        1.625 c/b        0.615 b/c
+# SBOX32                    9 byte keys       13.999 c/h        1.555 c/b        0.643 b/c
+# SBOX32                   10 byte keys       14.116 c/h        1.412 c/b        0.708 b/c
+# SBOX32                   11 byte keys       15.000 c/h        1.364 c/b        0.733 b/c
+# SBOX32                   12 byte keys       15.157 c/h        1.263 c/b        0.792 b/c
+# SBOX32                   13 byte keys       15.840 c/h        1.218 c/b        0.821 b/c
+# SBOX32                   14 byte keys       15.237 c/h        1.088 c/b        0.919 b/c
+# SBOX32                   15 byte keys       16.000 c/h        1.067 c/b        0.938 b/c
+# SBOX32                   16 byte keys       16.979 c/h        1.061 c/b        0.942 b/c
+# SBOX32                   17 byte keys       17.164 c/h        1.010 c/b        0.990 b/c
+# SBOX32                   18 byte keys       18.000 c/h        1.000 c/b        1.000 b/c
+# SBOX32                   19 byte keys       19.000 c/h        1.000 c/b        1.000 b/c
+# SBOX32                   20 byte keys       19.993 c/h        1.000 c/b        1.000 b/c
+# SBOX32                   21 byte keys       20.906 c/h        0.996 c/b        1.004 b/c
+# SBOX32                   22 byte keys       21.327 c/h        0.969 c/b        1.032 b/c
+# SBOX32                   23 byte keys       22.000 c/h        0.957 c/b        1.045 b/c
+# SBOX32                   24 byte keys       23.000 c/h        0.958 c/b        1.043 b/c
+# SBOX32                   25 byte keys       24.000 c/h        0.960 c/b        1.042 b/c
+# SBOX32                   26 byte keys       24.999 c/h        0.961 c/b        1.040 b/c
+# SBOX32                   27 byte keys       25.932 c/h        0.960 c/b        1.041 b/c
+# SBOX32                   28 byte keys       26.418 c/h        0.943 c/b        1.060 b/c
+# SBOX32                   29 byte keys       27.139 c/h        0.936 c/b        1.069 b/c
+# SBOX32                   30 byte keys       28.000 c/h        0.933 c/b        1.071 b/c
+# SBOX32                   31 byte keys       29.000 c/h        0.935 c/b        1.069 b/c
+#                          Average < 32       17.838 c/h        1.151 c/b        0.869 b/c
+# SBOX32                   32 byte keys       30.000 c/h        0.938 c/b        1.067 b/c
+# SBOX32                   36 byte keys       33.820 c/h        0.939 c/b        1.064 b/c
+# SBOX32                   40 byte keys       37.154 c/h        0.929 c/b        1.077 b/c
+# SBOX32                   44 byte keys       40.872 c/h        0.929 c/b        1.077 b/c
+# SBOX32                   48 byte keys       43.999 c/h        0.917 c/b        1.091 b/c
+# SBOX32                   52 byte keys       47.430 c/h        0.912 c/b        1.096 b/c
+# SBOX32                   56 byte keys       50.976 c/h        0.910 c/b        1.099 b/c
+# SBOX32                   60 byte keys       54.235 c/h        0.904 c/b        1.106 b/c
+# SBOX32                   64 byte keys       57.935 c/h        0.905 c/b        1.105 b/c
+# SBOX32                   68 byte keys       61.200 c/h        0.900 c/b        1.111 b/c
+# SBOX32                   72 byte keys       64.878 c/h        0.901 c/b        1.110 b/c
+# SBOX32                   76 byte keys       68.159 c/h        0.897 c/b        1.115 b/c
+# SBOX32                   80 byte keys       71.770 c/h        0.897 c/b        1.115 b/c
+# SBOX32                   84 byte keys       75.127 c/h        0.894 c/b        1.118 b/c
+# SBOX32                   88 byte keys       78.720 c/h        0.895 c/b        1.118 b/c
+# SBOX32                   92 byte keys       82.132 c/h        0.893 c/b        1.120 b/c
+# SBOX32                   96 byte keys       85.876 c/h        0.895 c/b        1.118 b/c
+# SBOX32                  100 byte keys       89.390 c/h        0.894 c/b        1.119 b/c
+# SBOX32                  104 byte keys       92.872 c/h        0.893 c/b        1.120 b/c
+# SBOX32                  108 byte keys       96.512 c/h        0.894 c/b        1.119 b/c
+# SBOX32                  112 byte keys      100.142 c/h        0.894 c/b        1.118 b/c
+# SBOX32                  116 byte keys      103.664 c/h        0.894 c/b        1.119 b/c
+# SBOX32                  120 byte keys      107.302 c/h        0.894 c/b        1.118 b/c
+# SBOX32                  124 byte keys      110.813 c/h        0.894 c/b        1.119 b/c
+#                         Average < 128       40.282 c/h        0.953 c/b        1.050 b/c
+# SBOX32                  128 byte keys      112.988 c/h        0.883 c/b        1.133 b/c
+# SBOX32                  256 byte keys      236.983 c/h        0.926 c/b        1.080 b/c
+# SBOX32                  512 byte keys      411.046 c/h        0.803 c/b        1.246 b/c
+# SBOX32                 1024 byte keys      803.881 c/h        0.785 c/b        1.274 b/c
+# SBOX32                 2048 byte keys     1544.649 c/h        0.754 c/b        1.326 b/c
+# SBOX32                 4096 byte keys     2966.926 c/h        0.724 c/b        1.381 b/c
+# SBOX32                 8192 byte keys     5871.340 c/h        0.717 c/b        1.395 b/c
+# SBOX32                16384 byte keys    11632.521 c/h        0.710 c/b        1.408 b/c
+# SBOX32                32768 byte keys    23619.296 c/h        0.721 c/b        1.387 b/c
+# SBOX32                65536 byte keys    46758.875 c/h        0.713 c/b        1.402 b/c
+#                       Overall Average     1457.793 c/h        0.722 c/b        1.386 b/c
+ok 6 - Speed (always passes) # SBOX32
+### Differential Tests ###
+# Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 32 bit hashes.
+# 1000 reps, 8303632000 total tests, expecting 1.93 random collisions..........
+ok 7 - Differential collisions # SBOX32
+ok 8 - Nothing skipped during differential collision check # SBOX32
+# 2 total collisions, of which 2 single collisions were ignored
+ok 9 - ProcessDifferentials
+# Testing 11017632 up-to-4-bit differentials in 128-bit keys -> 32 bit hashes.
+# 1000 reps, 11017632000 total tests, expecting 2.57 random collisions..........
+ok 10 - Differential collisions # SBOX32
+ok 11 - Nothing skipped during differential collision check # SBOX32
+# 2 total collisions, of which 2 single collisions were ignored
+ok 12 - ProcessDifferentials
+# Testing 2796416 up-to-3-bit differentials in 256-bit keys -> 32 bit hashes.
+# 1000 reps, 2796416000 total tests, expecting 0.65 random collisions..........
+ok 13 - Differential collisions # SBOX32
+ok 14 - Nothing skipped during differential collision check # SBOX32
+# 0 total collisions, of which 0 single collisions were ignored
+ok 15 - ProcessDifferentials
+ok 16 - Differential # SBOX32
+### Avalanche Tests ### - seed-bits: 128 hash-bits: 32
+# Samples 1000000, expected error 0.00025600, confidence level 99.99994267%
+# Testing   0-bit keys.......... ok.     # worst-bit:   0.421% error-ratio: 1.048864e+00
+ok 17 - Strict Avalanche Criteria - 0 bit/0 byte keys # SBOX32
+# Testing   8-bit keys.......... ok.     # worst-bit:   0.322% error-ratio: 9.912089e-01
+ok 18 - Strict Avalanche Criteria - 8 bit/1 byte keys # SBOX32
+# Testing  16-bit keys.......... ok.     # worst-bit:   0.377% error-ratio: 9.975605e-01
+ok 19 - Strict Avalanche Criteria - 16 bit/2 byte keys # SBOX32
+# Testing  24-bit keys.......... ok.     # worst-bit:   0.340% error-ratio: 9.718010e-01
+ok 20 - Strict Avalanche Criteria - 24 bit/3 byte keys # SBOX32
+# Testing  32-bit keys.......... ok.     # worst-bit:   0.366% error-ratio: 1.040938e+00
+ok 21 - Strict Avalanche Criteria - 32 bit/4 byte keys # SBOX32
+# Testing  40-bit keys.......... ok.     # worst-bit:   0.360% error-ratio: 9.983301e-01
+ok 22 - Strict Avalanche Criteria - 40 bit/5 byte keys # SBOX32
+# Testing  48-bit keys.......... ok.     # worst-bit:   0.356% error-ratio: 1.013678e+00
+ok 23 - Strict Avalanche Criteria - 48 bit/6 byte keys # SBOX32
+# Testing  56-bit keys.......... ok.     # worst-bit:   0.407% error-ratio: 9.767381e-01
+ok 24 - Strict Avalanche Criteria - 56 bit/7 byte keys # SBOX32
+# Testing  64-bit keys.......... ok.     # worst-bit:   0.395% error-ratio: 1.010734e+00
+ok 25 - Strict Avalanche Criteria - 64 bit/8 byte keys # SBOX32
+# Testing  72-bit keys.......... ok.     # worst-bit:   0.415% error-ratio: 9.957402e-01
+ok 26 - Strict Avalanche Criteria - 72 bit/9 byte keys # SBOX32
+# Testing  80-bit keys.......... ok.     # worst-bit:   0.385% error-ratio: 1.010584e+00
+ok 27 - Strict Avalanche Criteria - 80 bit/10 byte keys # SBOX32
+# Testing  88-bit keys.......... ok.     # worst-bit:   0.380% error-ratio: 1.020049e+00
+ok 28 - Strict Avalanche Criteria - 88 bit/11 byte keys # SBOX32
+# Testing  96-bit keys.......... ok.     # worst-bit:   0.391% error-ratio: 1.008621e+00
+ok 29 - Strict Avalanche Criteria - 96 bit/12 byte keys # SBOX32
+# Testing 104-bit keys.......... ok.     # worst-bit:   0.420% error-ratio: 1.007086e+00
+ok 30 - Strict Avalanche Criteria - 104 bit/13 byte keys # SBOX32
+# Testing 112-bit keys.......... ok.     # worst-bit:   0.372% error-ratio: 9.974551e-01
+ok 31 - Strict Avalanche Criteria - 112 bit/14 byte keys # SBOX32
+# Testing 120-bit keys.......... ok.     # worst-bit:   0.412% error-ratio: 1.000153e+00
+ok 32 - Strict Avalanche Criteria - 120 bit/15 byte keys # SBOX32
+# Testing 128-bit keys.......... ok.     # worst-bit:   0.389% error-ratio: 9.836254e-01
+ok 33 - Strict Avalanche Criteria - 128 bit/16 byte keys # SBOX32
+# Testing 136-bit keys.......... ok.     # worst-bit:   0.375% error-ratio: 1.006342e+00
+ok 34 - Strict Avalanche Criteria - 136 bit/17 byte keys # SBOX32
+# Testing 144-bit keys.......... ok.     # worst-bit:   0.495% error-ratio: 9.768463e-01
+ok 35 - Strict Avalanche Criteria - 144 bit/18 byte keys # SBOX32
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.426% error-ratio: 9.863587e-01
+ok 36 - Strict Avalanche Criteria - 152 bit/19 byte keys # SBOX32
+# Testing 152-bit keys.......... ok.     # worst-bit:   0.401% error-ratio: 1.010785e+00
+ok 37 - Strict Avalanche Criteria - 152 bit/19 byte keys # SBOX32
+# Testing 200-bit keys.......... ok.     # worst-bit:   0.379% error-ratio: 9.795110e-01
+ok 38 - Strict Avalanche Criteria - 200 bit/25 byte keys # SBOX32
+# Testing 256-bit keys.......... ok.     # worst-bit:   0.411% error-ratio: 9.952202e-01
+ok 39 - Strict Avalanche Criteria - 256 bit/32 byte keys # SBOX32
+# Testing 512-bit keys.......... ok.     # worst-bit:   0.426% error-ratio: 1.005051e+00
+ok 40 - Strict Avalanche Criteria - 512 bit/64 byte keys # SBOX32
+# Testing 520-bit keys.......... ok.     # worst-bit:   0.433% error-ratio: 9.988166e-01
+ok 41 - Strict Avalanche Criteria - 520 bit/65 byte keys # SBOX32
+### Keyset 'Cyclic' Tests ###
+# Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    11617 ( 1.00x) - passed
+ok 42 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
+ok 43 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    11539 ( 0.99x) - passed
+ok 44 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
+ok 45 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    11758 ( 1.01x) - passed
+ok 46 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
+ok 47 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    11580 ( 0.99x) - passed
+ok 48 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
+ok 49 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
+# Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+# Testing collisions   - Expected 11641.53, actual    11699 ( 1.00x) - passed
+ok 50 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+ok 51 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+ok 52 - Keyset 'Cyclic' # SBOX32
+### Keyset 'TwoBytes' Tests ###
+# Testing collisions   - Expected    49.57, actual   652544 - ALL keys were in collision - failed
+not ok 53 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+# worst bias is the  16-bit window at bit   0 - score 54573.249 (from 288 scores)
+not ok 54 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+# Testing collisions   - Expected  3484.56, actual  5471024 - ALL keys were in collision - failed
+not ok 55 - Collision Rate for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+# worst bias is the  20-bit window at bit   0 - score 758013.422 (from 416 scores)
+not ok 56 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+# Testing collisions   - Expected 40347.77, actual 18616784 (461.41x) - failed
+not ok 57 - Collision Rate for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+# worst bias is the  20-bit window at bit   0 - score 942413.566 (from 416 scores)
+not ok 58 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+# Testing collisions   - Expected 227963.15, actual 44251424 (194.12x) - failed
+not ok 59 - Collision Rate for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+# worst bias is the  20-bit window at bit   0 - score 1001129.720 (from 416 scores)
+not ok 60 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+# Testing collisions   - Expected 871784.70, actual 86536544 (99.26x) - failed
+not ok 61 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+# worst bias is the  20-bit window at bit   0 - score 1023764.784 (from 416 scores)
+not ok 62 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+not ok 63 - Keyset 'TwoBytes' # SBOX32
+### Keyset 'Sparse' Tests ###
+# Keyset 'Sparse' - 32-bit keys with up to 6 bits set - 1149017 keys
+# Testing collisions   - Expected   153.70, actual      153 ( 1.00x) - passed
+ok 64 - Collision Rate for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+ok 65 - Distribution Bias Check for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+# Keyset 'Sparse' - 40-bit keys with up to 6 bits set - 4598479 keys
+# Testing collisions   - Expected  2461.72, actual     2451 ( 1.00x) - passed
+ok 66 - Collision Rate for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+ok 67 - Distribution Bias Check for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+# Keyset 'Sparse' - 48-bit keys with up to 5 bits set - 1925357 keys
+# Testing collisions   - Expected   431.55, actual      414 ( 0.96x) - passed
+ok 68 - Collision Rate for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+ok 69 - Distribution Bias Check for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 56-bit keys with up to 5 bits set - 4216423 keys
+# Testing collisions   - Expected  2069.66, actual     2172 ( 1.05x) - passed
+ok 70 - Collision Rate for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+ok 71 - Distribution Bias Check for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 64-bit keys with up to 5 bits set - 8303633 keys
+# Testing collisions   - Expected  8026.87, actual     8081 ( 1.01x) - passed
+ok 72 - Collision Rate for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+ok 73 - Distribution Bias Check for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+# Keyset 'Sparse' - 96-bit keys with up to 4 bits set - 3469497 keys
+# Testing collisions   - Expected  1401.34, actual     1336 ( 0.95x) - passed
+ok 74 - Collision Rate for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+ok 75 - Distribution Bias Check for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+# Keyset 'Sparse' - 256-bit keys with up to 3 bits set - 2796417 keys
+# Testing collisions   - Expected   910.36, actual      905 ( 0.99x) - passed
+ok 76 - Collision Rate for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+ok 77 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+# Keyset 'Sparse' - 2048-bit keys with up to 2 bits set - 2098177 keys
+# Testing collisions   - Expected   512.50, actual      527 ( 1.03x) - passed
+ok 78 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 79 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+ok 80 - Keyset 'Sparse' # SBOX32
+### Keyset 'Crc-MultiCollision' Tests ###
+# Keyset 'Crc(a)-MultiCollision' - 1048575 x 16 block keys - 128-bytes long - 10 seeds
+# Testing collisions   - Expected   128.00, actual      125 ( 0.98x) - passed
+ok 81 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 1 # SBOX32
+# Testing collisions   - Expected   128.00, actual      132 ( 1.03x) - passed
+ok 82 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 2 # SBOX32
+# Testing collisions   - Expected   128.00, actual      123 ( 0.96x) - passed
+ok 83 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 3 # SBOX32
+# Testing collisions   - Expected   128.00, actual      117 ( 0.91x) - passed
+ok 84 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 4 # SBOX32
+# Testing collisions   - Expected   128.00, actual      133 ( 1.04x) - passed
+ok 85 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 5 # SBOX32
+# Testing collisions   - Expected   128.00, actual      129 ( 1.01x) - passed
+ok 86 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 6 # SBOX32
+# Testing collisions   - Expected   128.00, actual      120 ( 0.94x) - passed
+ok 87 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 7 # SBOX32
+# Testing collisions   - Expected   128.00, actual      118 ( 0.92x) - passed
+ok 88 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 8 # SBOX32
+# Testing collisions   - Expected   128.00, actual      121 ( 0.95x) - passed
+ok 89 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 9 # SBOX32
+# Testing collisions   - Expected   128.00, actual      132 ( 1.03x) - passed
+ok 90 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 10 # SBOX32
+# Keyset 'Crc(b)-MultiCollision' - 1048575 x 16 block keys - 128-bytes long - 10 seeds
+# Testing collisions   - Expected   128.00, actual      112 ( 0.88x) - passed
+ok 91 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 1 # SBOX32
+# Testing collisions   - Expected   128.00, actual      127 ( 0.99x) - passed
+ok 92 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 2 # SBOX32
+# Testing collisions   - Expected   128.00, actual      145 ( 1.13x) - passed
+ok 93 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 3 # SBOX32
+# Testing collisions   - Expected   128.00, actual      128 ( 1.00x) - passed
+ok 94 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 4 # SBOX32
+# Testing collisions   - Expected   128.00, actual      125 ( 0.98x) - passed
+ok 95 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 5 # SBOX32
+# Testing collisions   - Expected   128.00, actual      130 ( 1.02x) - passed
+ok 96 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 6 # SBOX32
+# Testing collisions   - Expected   128.00, actual      113 ( 0.88x) - passed
+ok 97 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 7 # SBOX32
+# Testing collisions   - Expected   128.00, actual      139 ( 1.09x) - passed
+ok 98 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 8 # SBOX32
+# Testing collisions   - Expected   128.00, actual      127 ( 0.99x) - passed
+ok 99 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 9 # SBOX32
+# Testing collisions   - Expected   128.00, actual      115 ( 0.90x) - passed
+ok 100 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 10 # SBOX32
+### Keyset 'Murmur2-MultiCollision' Tests ###
+# Keyset 'Murmur2-MultiCollision' - 1048575 x 16 block keys - 128-bytes long - 10 seeds
+# Testing collisions   - Expected   128.00, actual      122 ( 0.95x) - passed
+ok 101 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 1 # SBOX32
+# Testing collisions   - Expected   128.00, actual      117 ( 0.91x) - passed
+ok 102 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 2 # SBOX32
+# Testing collisions   - Expected   128.00, actual      119 ( 0.93x) - passed
+ok 103 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 3 # SBOX32
+# Testing collisions   - Expected   128.00, actual      130 ( 1.02x) - passed
+ok 104 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 4 # SBOX32
+# Testing collisions   - Expected   128.00, actual      135 ( 1.05x) - passed
+ok 105 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 5 # SBOX32
+# Testing collisions   - Expected   128.00, actual      109 ( 0.85x) - passed
+ok 106 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 6 # SBOX32
+# Testing collisions   - Expected   128.00, actual      111 ( 0.87x) - passed
+ok 107 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 7 # SBOX32
+# Testing collisions   - Expected   128.00, actual      142 ( 1.11x) - passed
+ok 108 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 8 # SBOX32
+# Testing collisions   - Expected   128.00, actual      146 ( 1.14x) - passed
+ok 109 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 9 # SBOX32
+# Testing collisions   - Expected   128.00, actual      138 ( 1.08x) - passed
+ok 110 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 10 # SBOX32
+### Keyset 'Murmur3A-MultiCollision' Tests ###
+# Keyset 'Murmur3A-MultiCollision' - 1048575 x 16 block keys - 128-bytes long - 10 seeds
+# Testing collisions   - Expected   128.00, actual      121 ( 0.95x) - passed
+ok 111 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 1 # SBOX32
+# Testing collisions   - Expected   128.00, actual      140 ( 1.09x) - passed
+ok 112 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 2 # SBOX32
+# Testing collisions   - Expected   128.00, actual      125 ( 0.98x) - passed
+ok 113 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 3 # SBOX32
+# Testing collisions   - Expected   128.00, actual       98 ( 0.77x) - passed
+ok 114 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 4 # SBOX32
+# Testing collisions   - Expected   128.00, actual      121 ( 0.95x) - passed
+ok 115 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 5 # SBOX32
+# Testing collisions   - Expected   128.00, actual      131 ( 1.02x) - passed
+ok 116 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 6 # SBOX32
+# Testing collisions   - Expected   128.00, actual      129 ( 1.01x) - passed
+ok 117 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 7 # SBOX32
+# Testing collisions   - Expected   128.00, actual      126 ( 0.98x) - passed
+ok 118 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 8 # SBOX32
+# Testing collisions   - Expected   128.00, actual      132 ( 1.03x) - passed
+ok 119 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 9 # SBOX32
+# Testing collisions   - Expected   128.00, actual      150 ( 1.17x) - passed
+ok 120 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 10 # SBOX32
+### Keyset 'Murmur3F-MultiCollision' Tests ###
+# Keyset 'Murmur3F-MultiCollision' - 1048575 x 16 block keys - 512-bytes long - 10 seeds
+# Testing collisions   - Expected   128.00, actual      123 ( 0.96x) - passed
+ok 121 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 1 # SBOX32
+# Testing collisions   - Expected   128.00, actual      138 ( 1.08x) - passed
+ok 122 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 2 # SBOX32
+# Testing collisions   - Expected   128.00, actual      112 ( 0.88x) - passed
+ok 123 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 3 # SBOX32
+# Testing collisions   - Expected   128.00, actual      123 ( 0.96x) - passed
+ok 124 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 4 # SBOX32
+# Testing collisions   - Expected   128.00, actual      122 ( 0.95x) - passed
+ok 125 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 5 # SBOX32
+# Testing collisions   - Expected   128.00, actual      134 ( 1.05x) - passed
+ok 126 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 6 # SBOX32
+# Testing collisions   - Expected   128.00, actual      135 ( 1.05x) - passed
+ok 127 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 7 # SBOX32
+# Testing collisions   - Expected   128.00, actual      131 ( 1.02x) - passed
+ok 128 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 8 # SBOX32
+# Testing collisions   - Expected   128.00, actual      118 ( 0.92x) - passed
+ok 129 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 9 # SBOX32
+# Testing collisions   - Expected   128.00, actual      118 ( 0.92x) - passed
+ok 130 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 10 # SBOX32
+### Keyset 'City64-MultiCollision' Tests ###
+# Keyset 'City64-MultiCollision' - 10 x 2 block keys - 16-bytes long - 10 seeds
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 131 - Collision Rate for Keyset 'City64-MultiCollision' - seed 1 # SBOX32
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 132 - Collision Rate for Keyset 'City64-MultiCollision' - seed 2 # SBOX32
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 133 - Collision Rate for Keyset 'City64-MultiCollision' - seed 3 # SBOX32
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 134 - Collision Rate for Keyset 'City64-MultiCollision' - seed 4 # SBOX32
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 135 - Collision Rate for Keyset 'City64-MultiCollision' - seed 5 # SBOX32
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 136 - Collision Rate for Keyset 'City64-MultiCollision' - seed 6 # SBOX32
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 137 - Collision Rate for Keyset 'City64-MultiCollision' - seed 7 # SBOX32
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 138 - Collision Rate for Keyset 'City64-MultiCollision' - seed 8 # SBOX32
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 139 - Collision Rate for Keyset 'City64-MultiCollision' - seed 9 # SBOX32
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 140 - Collision Rate for Keyset 'City64-MultiCollision' - seed 10 # SBOX32
+### Keyset 'Combination Lowbits' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected 42799.01, actual    39316 ( 0.92x) - passed
+ok 141 - Collision Rate for Keyset 'Combination Lowbits'
+ok 142 - Distribution Bias Check for Keyset 'Combination Lowbits'
+ok 143 - Keyset 'Combination Lowbits' # SBOX32
+### Keyset 'Combination Highbits' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected 42799.01, actual    44593 ( 1.04x) - passed
+ok 144 - Collision Rate for Keyset 'Combination Highbits'
+ok 145 - Distribution Bias Check for Keyset 'Combination Highbits'
+ok 146 - Keyset 'Combination Highbits' # SBOX32
+### Keyset 'Combination Highbits2' Tests ###
+# Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
+# Testing collisions   - Expected 42799.01, actual    35048 ( 0.82x) - passed
+ok 147 - Collision Rate for Keyset 'Combination Highbits2'
+ok 148 - Distribution Bias Check for Keyset 'Combination Highbits2'
+ok 149 - Keyset 'Combination Highbits2' # SBOX32
+### Keyset 'Combination HiBit-Null' Tests ###
+# Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
+# Testing collisions   - Expected   512.00, actual        0 ( 0.00x) - passed
+ok 150 - Collision Rate for Keyset 'Combination HiBit-Null'
+# worst bias is the  15-bit window at bit   1 - score 0.846 (from 352 scores)
+not ok 151 - Distribution Bias Check for Keyset 'Combination HiBit-Null'
+not ok 152 - Keyset 'Combination HiBit-Null' # SBOX32
+### Keyset 'Combination LowBit-Null' Tests ###
+# Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
+# Testing collisions   - Expected   512.00, actual        0 ( 0.00x) - passed
+ok 153 - Collision Rate for Keyset 'Combination LowBit-Null'
+# worst bias is the  16-bit window at bit   4 - score 0.555 (from 352 scores)
+not ok 154 - Distribution Bias Check for Keyset 'Combination LowBit-Null'
+not ok 155 - Keyset 'Combination LowBit-Null' # SBOX32
+### Keyset 'Combination Hi-Lo' Tests ###
+# Keyset 'Combination' - up to 6 blocks from a set of 15 - 12204240 keys
+# Testing collisions   - Expected 17339.30, actual    19494 ( 1.12x) - passed
+ok 156 - Collision Rate for Keyset 'Combination Hi-Lo'
+ok 157 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
+ok 158 - Keyset 'Combination Hi-Lo' # SBOX32
+### Keyset 'Text' Tests ###
+# Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# Testing collisions   - Expected 25418.13, actual    25445 ( 1.00x) - passed
+ok 159 - Collision Rate for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+ok 160 - Distribution Bias Check for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# Testing collisions   - Expected 25418.13, actual    24970 ( 0.98x) - passed
+ok 161 - Collision Rate for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+ok 162 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+# Testing collisions   - Expected 25418.13, actual    24950 ( 0.98x) - passed
+ok 163 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 164 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+ok 165 - Keyset 'Text' # SBOX32
+### Keyset 'Zeroes' Tests ###
+# Keyset 'Zeroes' - 262144 keys, zero seed
+# Testing collisions   - Expected     8.00, actual       13 ( 1.63x) - passed
+ok 166 - Collision Rate for Keyset 'Zeroes' - 262144 keys, zero seed
+ok 167 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys, zero seed
+# Keyset 'Zeroes' - 262144 keys, nonzero seed
+# Testing collisions   - Expected     8.00, actual        4 ( 0.50x) - passed
+ok 168 - Collision Rate for Keyset 'Zeroes' - 262144 keys, nonzero seed
+ok 169 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys, nonzero seed
+ok 170 - Keyset 'Zeroes' # SBOX32
+### Keyset 'Seed' Tests ###
+# Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# Testing collisions   - Expected   465.66, actual      463 ( 0.99x) - passed
+ok 171 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+ok 172 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# Keyset 'Seed' - 2000000 seeds, Key ""
+# Testing collisions   - Expected   465.66, actual      457 ( 0.98x) - passed
+ok 173 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
+ok 174 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
+# Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# Testing collisions   - Expected   465.66, actual      444 ( 0.95x) - passed
+ok 175 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+ok 176 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+# Testing collisions   - Expected   465.66, actual      505 ( 1.08x) - passed
+ok 177 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 178 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 179 - Keyset 'Seed' # SBOX32
+### Keyset 'Effs' Tests ###
+# Keyset 'Effs' - 262144 keys, zero seed
+# Testing collisions   - Expected     8.00, actual        6 ( 0.75x) - passed
+ok 180 - Collision Rate for Keyset 'Effs' - 262144 keys, zero seed
+ok 181 - Distribution Bias Check for Keyset 'Effs' - 262144 keys, zero seed
+# Keyset 'Effs' - 262144 keys, nonzero seed
+# Testing collisions   - Expected     8.00, actual        9 ( 1.13x) - passed
+ok 182 - Collision Rate for Keyset 'Effs' - 262144 keys, nonzero seed
+ok 183 - Distribution Bias Check for Keyset 'Effs' - 262144 keys, nonzero seed
+ok 184 - Keyset 'Effs' # SBOX32
+### Keyset 'Words' Tests ###
+# Hashed 99171 keys from 297513 words from file '/usr/share/dict/words'
+# Testing collisions   - Expected    10.30, actual       10 ( 0.97x) - passed
+ok 185 - Collision Rate for Keyset 'Words'
+ok 186 - Distribution Bias Check for Keyset 'Words'
+not ok 187 - all tests passed # SBOX32
+1..187
+# Tests Failed. SBOX32 failed 16 of 187 tests.
+# Testing took 103066.767433 seconds
+# This is SMHasher version v1.3-demerphq-7-geee7fbf - built on Dec 15 2017.
