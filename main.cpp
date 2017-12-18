@@ -188,7 +188,7 @@ HashInfo g_hashes[] =
 
 #ifdef HAVE_FUNNY_HASH
   { "FunnyHash64-2", "Funny Falcon",
-    128, 128, 64, 0xC955988D,
+    128, 128, 64, 0x10FEBF8E,
     funny_hash64_2_seed_state_test, funny_hash64_2_with_state_test },
 #endif
 
