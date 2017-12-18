@@ -7,24 +7,24 @@ ok 1 - Found Hash # DoNothing32
 ok 2 - Verification code # DoNothing32
 # DoNothing32          - Verification value 0x00000000 : Passed.
 ### Sanity Tests ###
-# Sanity check simple key bit flips and consistency..........
+# Sanity check simple key bit flips and consistency - hashbytes=4.
 not ok 3 - SanityTest # DoNothing32
-# from 42099200 hashes there were 42099200 inconsistent of 0 collisions.
+# from 32 hashes there were 32 inconsistent and 0 collisions.
 # Sanity check null suffixes change the hash (simple)..........
 not ok 4 - Appended Zeroes Test # DoNothing32
-# There were 31000 collisions
+# There were 57000 collisions
 not ok 5 - Sanity Test # DoNothing32
 ### Speed Tests ###
 ## Bulk speed test - 262144-byte keys
-# Alignment  7 - 6391.137 bytes/cycle - 18285188.22 MiB/sec @ 3 ghz
-# Alignment  6 - 8003.767 bytes/cycle - 22898959.83 MiB/sec @ 3 ghz
-# Alignment  5 - 6377.757 bytes/cycle - 18246910.30 MiB/sec @ 3 ghz
-# Alignment  4 - 8002.514 bytes/cycle - 22895377.58 MiB/sec @ 3 ghz
-# Alignment  3 - 6396.110 bytes/cycle - 18299416.89 MiB/sec @ 3 ghz
-# Alignment  2 - 7969.237 bytes/cycle - 22800169.26 MiB/sec @ 3 ghz
-# Alignment  1 - 6368.608 bytes/cycle - 18220732.84 MiB/sec @ 3 ghz
-# Alignment  0 - 8014.376 bytes/cycle - 22929312.83 MiB/sec @ 3 ghz
-# Average      - 7190.438 bytes/cycle - 20572008.47 MiB/sec @ 3 ghz
+# Alignment  7 - 8331.535 bytes/cycle - 23836712.30 MiB/sec @ 3 ghz
+# Alignment  6 - 10284.694 bytes/cycle - 29424746.21 MiB/sec @ 3 ghz
+# Alignment  5 - 8143.420 bytes/cycle - 23298512.48 MiB/sec @ 3 ghz
+# Alignment  4 - 10311.220 bytes/cycle - 29500636.13 MiB/sec @ 3 ghz
+# Alignment  3 - 8222.863 bytes/cycle - 23525798.53 MiB/sec @ 3 ghz
+# Alignment  2 - 10327.473 bytes/cycle - 29547137.22 MiB/sec @ 3 ghz
+# Alignment  1 - 8098.575 bytes/cycle - 23170209.60 MiB/sec @ 3 ghz
+# Alignment  0 - 10240.862 bytes/cycle - 29299342.42 MiB/sec @ 3 ghz
+# Average      - 9245.080 bytes/cycle - 26450386.86 MiB/sec @ 3 ghz
 ## KeySpeed tests
 # DoNothing32               0 byte keys        4.000 c/h
 # DoNothing32               1 byte keys        4.000 c/h        4.000 c/b        0.250 b/c
@@ -85,16 +85,16 @@ not ok 5 - Sanity Test # DoNothing32
 # DoNothing32             124 byte keys        4.000 c/h        0.032 c/b       31.000 b/c
 #                         Average < 128        4.000 c/h        0.095 c/b       10.571 b/c
 # DoNothing32             128 byte keys        4.000 c/h        0.031 c/b       32.000 b/c
-# DoNothing32             256 byte keys       36.034 c/h        0.141 c/b        7.104 b/c
-# DoNothing32             512 byte keys       36.087 c/h        0.070 c/b       14.188 b/c
-# DoNothing32            1024 byte keys       35.618 c/h        0.035 c/b       28.750 b/c
-# DoNothing32            2048 byte keys       35.052 c/h        0.017 c/b       58.427 b/c
-# DoNothing32            4096 byte keys       33.690 c/h        0.008 c/b      121.578 b/c
-# DoNothing32            8192 byte keys       31.828 c/h        0.004 c/b      257.382 b/c
-# DoNothing32           16384 byte keys       30.043 c/h        0.002 c/b      545.350 b/c
-# DoNothing32           32768 byte keys       28.461 c/h        0.001 c/b     1151.337 b/c
-# DoNothing32           65536 byte keys       28.454 c/h        0.000 c/b     2303.210 b/c
-#                       Overall Average        7.928 c/h        0.004 c/b      254.768 b/c
+# DoNothing32             256 byte keys       43.494 c/h        0.170 c/b        5.886 b/c
+# DoNothing32             512 byte keys       43.387 c/h        0.085 c/b       11.801 b/c
+# DoNothing32            1024 byte keys       43.117 c/h        0.042 c/b       23.749 b/c
+# DoNothing32            2048 byte keys       29.232 c/h        0.014 c/b       70.059 b/c
+# DoNothing32            4096 byte keys       29.144 c/h        0.007 c/b      140.546 b/c
+# DoNothing32            8192 byte keys       28.757 c/h        0.004 c/b      284.867 b/c
+# DoNothing32           16384 byte keys       29.085 c/h        0.002 c/b      563.319 b/c
+# DoNothing32           32768 byte keys       31.855 c/h        0.001 c/b     1028.661 b/c
+# DoNothing32           65536 byte keys       31.167 c/h        0.000 c/b     2102.715 b/c
+#                       Overall Average        8.140 c/h        0.004 c/b      248.143 b/c
 ok 6 - Speed (always passes) # DoNothing32
 ### Differential Tests ###
 # Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 32 bit hashes.
@@ -143,15 +143,15 @@ not ok 13 - Differential # DoNothing32
 #     g-test: 100.000000%
 #     sum-error-square: 256.00000000
 #     key/seed errors: 32/32
-#     - seed bit 0 gtest probability not random: 100.0000 (20000000/12000000)
-#     - seed bit 1 gtest probability not random: 100.0000 (20000000/12000000)
+#     - seed bit 0 gtest probability not random: 100.0000 (7000000/25000000)
+#     - seed bit 1 gtest probability not random: 100.0000 (7000000/25000000)
 #     - with 30 more seed errors not described above.
 #     hash bit-level errors: 32/32
-#     - hash bit 0 gtest-prob not-random: 100.0000 (32000000/0)
+#     - hash bit 0 gtest-prob not-random: 100.0000 (0/32000000)
 #     - hash bit 1 gtest-prob not-random: 100.0000 (0/32000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (0/32000000)
 #     - with 29 more hash bit errors not described above.
-not ok 14 - Strict Avalanche Criteria - 0 bit keys
+not ok 14 - Strict Avalanche Criteria - 0 bit/0 byte keys # DoNothing32
 # Testing   8-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 1.000000e+06
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -185,17 +185,17 @@ not ok 14 - Strict Avalanche Criteria - 0 bit keys
 #     g-test: 100.000000%
 #     sum-error-square: 256.00000000
 #     key/seed errors: 40/40
-#     - seed bit 0 gtest probability not random: 100.0000 (20000000/12000000)
-#     - seed bit 1 gtest probability not random: 100.0000 (20000000/12000000)
-#     - key bit 0 gtest probability not random: 100.0000 (20000000/12000000)
-#     - key bit 1 gtest probability not random: 100.0000 (20000000/12000000)
+#     - seed bit 0 gtest probability not random: 100.0000 (7000000/25000000)
+#     - seed bit 1 gtest probability not random: 100.0000 (7000000/25000000)
+#     - key bit 0 gtest probability not random: 100.0000 (7000000/25000000)
+#     - key bit 1 gtest probability not random: 100.0000 (7000000/25000000)
 #     - with 30 more seed errors and 6 more key errors not described above.
 #     hash bit-level errors: 32/32
-#     - hash bit 0 gtest-prob not-random: 100.0000 (40000000/0)
+#     - hash bit 0 gtest-prob not-random: 100.0000 (0/40000000)
 #     - hash bit 1 gtest-prob not-random: 100.0000 (0/40000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (0/40000000)
 #     - with 29 more hash bit errors not described above.
-not ok 15 - Strict Avalanche Criteria - 8 bit keys
+not ok 15 - Strict Avalanche Criteria - 8 bit/1 byte keys # DoNothing32
 # Testing  16-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 1.000000e+06
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -229,17 +229,17 @@ not ok 15 - Strict Avalanche Criteria - 8 bit keys
 #     g-test: 100.000000%
 #     sum-error-square: 256.00000000
 #     key/seed errors: 48/48
-#     - seed bit 0 gtest probability not random: 100.0000 (17000000/15000000)
-#     - seed bit 1 gtest probability not random: 100.0000 (17000000/15000000)
-#     - key bit 0 gtest probability not random: 100.0000 (17000000/15000000)
-#     - key bit 1 gtest probability not random: 100.0000 (17000000/15000000)
+#     - seed bit 0 gtest probability not random: 100.0000 (11000000/21000000)
+#     - seed bit 1 gtest probability not random: 100.0000 (11000000/21000000)
+#     - key bit 0 gtest probability not random: 100.0000 (11000000/21000000)
+#     - key bit 1 gtest probability not random: 100.0000 (11000000/21000000)
 #     - with 30 more seed errors and 14 more key errors not described above.
 #     hash bit-level errors: 32/32
-#     - hash bit 0 gtest-prob not-random: 100.0000 (48000000/0)
-#     - hash bit 1 gtest-prob not-random: 100.0000 (48000000/0)
-#     - hash bit 2 gtest-prob not-random: 100.0000 (48000000/0)
+#     - hash bit 0 gtest-prob not-random: 100.0000 (0/48000000)
+#     - hash bit 1 gtest-prob not-random: 100.0000 (0/48000000)
+#     - hash bit 2 gtest-prob not-random: 100.0000 (0/48000000)
 #     - with 29 more hash bit errors not described above.
-not ok 16 - Strict Avalanche Criteria - 16 bit keys
+not ok 16 - Strict Avalanche Criteria - 16 bit/2 byte keys # DoNothing32
 # Testing  24-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 1.000000e+06
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -273,17 +273,17 @@ not ok 16 - Strict Avalanche Criteria - 16 bit keys
 #     g-test: 100.000000%
 #     sum-error-square: 256.00000000
 #     key/seed errors: 56/56
-#     - seed bit 0 gtest probability not random: 100.0000 (20000000/12000000)
-#     - seed bit 1 gtest probability not random: 100.0000 (20000000/12000000)
-#     - key bit 0 gtest probability not random: 100.0000 (20000000/12000000)
-#     - key bit 1 gtest probability not random: 100.0000 (20000000/12000000)
+#     - seed bit 0 gtest probability not random: 100.0000 (7000000/25000000)
+#     - seed bit 1 gtest probability not random: 100.0000 (7000000/25000000)
+#     - key bit 0 gtest probability not random: 100.0000 (7000000/25000000)
+#     - key bit 1 gtest probability not random: 100.0000 (7000000/25000000)
 #     - with 30 more seed errors and 22 more key errors not described above.
 #     hash bit-level errors: 32/32
-#     - hash bit 0 gtest-prob not-random: 100.0000 (56000000/0)
+#     - hash bit 0 gtest-prob not-random: 100.0000 (0/56000000)
 #     - hash bit 1 gtest-prob not-random: 100.0000 (0/56000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (0/56000000)
 #     - with 29 more hash bit errors not described above.
-not ok 17 - Strict Avalanche Criteria - 24 bit keys
+not ok 17 - Strict Avalanche Criteria - 24 bit/3 byte keys # DoNothing32
 # Testing  32-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 1.000000e+06
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -317,17 +317,17 @@ not ok 17 - Strict Avalanche Criteria - 24 bit keys
 #     g-test: 100.000000%
 #     sum-error-square: 256.00000000
 #     key/seed errors: 64/64
-#     - seed bit 0 gtest probability not random: 100.0000 (17000000/15000000)
-#     - seed bit 1 gtest probability not random: 100.0000 (17000000/15000000)
-#     - key bit 0 gtest probability not random: 100.0000 (17000000/15000000)
-#     - key bit 1 gtest probability not random: 100.0000 (17000000/15000000)
+#     - seed bit 0 gtest probability not random: 100.0000 (13000000/19000000)
+#     - seed bit 1 gtest probability not random: 100.0000 (13000000/19000000)
+#     - key bit 0 gtest probability not random: 100.0000 (13000000/19000000)
+#     - key bit 1 gtest probability not random: 100.0000 (13000000/19000000)
 #     - with 30 more seed errors and 30 more key errors not described above.
 #     hash bit-level errors: 32/32
-#     - hash bit 0 gtest-prob not-random: 100.0000 (64000000/0)
-#     - hash bit 1 gtest-prob not-random: 100.0000 (64000000/0)
-#     - hash bit 2 gtest-prob not-random: 100.0000 (64000000/0)
+#     - hash bit 0 gtest-prob not-random: 100.0000 (0/64000000)
+#     - hash bit 1 gtest-prob not-random: 100.0000 (0/64000000)
+#     - hash bit 2 gtest-prob not-random: 100.0000 (0/64000000)
 #     - with 29 more hash bit errors not described above.
-not ok 18 - Strict Avalanche Criteria - 32 bit keys
+not ok 18 - Strict Avalanche Criteria - 32 bit/4 byte keys # DoNothing32
 # Testing  40-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 1.000000e+06
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -361,17 +361,17 @@ not ok 18 - Strict Avalanche Criteria - 32 bit keys
 #     g-test: 100.000000%
 #     sum-error-square: 256.00000000
 #     key/seed errors: 72/72
-#     - seed bit 0 gtest probability not random: 100.0000 (20000000/12000000)
-#     - seed bit 1 gtest probability not random: 100.0000 (20000000/12000000)
-#     - key bit 0 gtest probability not random: 100.0000 (20000000/12000000)
-#     - key bit 1 gtest probability not random: 100.0000 (20000000/12000000)
+#     - seed bit 0 gtest probability not random: 100.0000 (8000000/24000000)
+#     - seed bit 1 gtest probability not random: 100.0000 (8000000/24000000)
+#     - key bit 0 gtest probability not random: 100.0000 (8000000/24000000)
+#     - key bit 1 gtest probability not random: 100.0000 (8000000/24000000)
 #     - with 30 more seed errors and 38 more key errors not described above.
 #     hash bit-level errors: 32/32
-#     - hash bit 0 gtest-prob not-random: 100.0000 (72000000/0)
+#     - hash bit 0 gtest-prob not-random: 100.0000 (0/72000000)
 #     - hash bit 1 gtest-prob not-random: 100.0000 (0/72000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (0/72000000)
 #     - with 29 more hash bit errors not described above.
-not ok 19 - Strict Avalanche Criteria - 40 bit keys
+not ok 19 - Strict Avalanche Criteria - 40 bit/5 byte keys # DoNothing32
 # Testing  48-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 1.000000e+06
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -405,17 +405,17 @@ not ok 19 - Strict Avalanche Criteria - 40 bit keys
 #     g-test: 100.000000%
 #     sum-error-square: 256.00000000
 #     key/seed errors: 80/80
-#     - seed bit 0 gtest probability not random: 100.0000 (20000000/12000000)
-#     - seed bit 1 gtest probability not random: 100.0000 (20000000/12000000)
-#     - key bit 0 gtest probability not random: 100.0000 (20000000/12000000)
-#     - key bit 1 gtest probability not random: 100.0000 (20000000/12000000)
+#     - seed bit 0 gtest probability not random: 100.0000 (6000000/26000000)
+#     - seed bit 1 gtest probability not random: 100.0000 (6000000/26000000)
+#     - key bit 0 gtest probability not random: 100.0000 (6000000/26000000)
+#     - key bit 1 gtest probability not random: 100.0000 (6000000/26000000)
 #     - with 30 more seed errors and 46 more key errors not described above.
 #     hash bit-level errors: 32/32
-#     - hash bit 0 gtest-prob not-random: 100.0000 (80000000/0)
+#     - hash bit 0 gtest-prob not-random: 100.0000 (0/80000000)
 #     - hash bit 1 gtest-prob not-random: 100.0000 (0/80000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (0/80000000)
 #     - with 29 more hash bit errors not described above.
-not ok 20 - Strict Avalanche Criteria - 48 bit keys
+not ok 20 - Strict Avalanche Criteria - 48 bit/6 byte keys # DoNothing32
 # Testing  56-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 1.000000e+06
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -449,17 +449,17 @@ not ok 20 - Strict Avalanche Criteria - 48 bit keys
 #     g-test: 100.000000%
 #     sum-error-square: 256.00000000
 #     key/seed errors: 88/88
-#     - seed bit 0 gtest probability not random: 100.0000 (20000000/12000000)
-#     - seed bit 1 gtest probability not random: 100.0000 (20000000/12000000)
-#     - key bit 0 gtest probability not random: 100.0000 (20000000/12000000)
-#     - key bit 1 gtest probability not random: 100.0000 (20000000/12000000)
+#     - seed bit 0 gtest probability not random: 100.0000 (7000000/25000000)
+#     - seed bit 1 gtest probability not random: 100.0000 (7000000/25000000)
+#     - key bit 0 gtest probability not random: 100.0000 (7000000/25000000)
+#     - key bit 1 gtest probability not random: 100.0000 (7000000/25000000)
 #     - with 30 more seed errors and 54 more key errors not described above.
 #     hash bit-level errors: 32/32
-#     - hash bit 0 gtest-prob not-random: 100.0000 (88000000/0)
+#     - hash bit 0 gtest-prob not-random: 100.0000 (0/88000000)
 #     - hash bit 1 gtest-prob not-random: 100.0000 (0/88000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (0/88000000)
 #     - with 29 more hash bit errors not described above.
-not ok 21 - Strict Avalanche Criteria - 56 bit keys
+not ok 21 - Strict Avalanche Criteria - 56 bit/7 byte keys # DoNothing32
 # Testing  64-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 1.000000e+06
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -493,17 +493,17 @@ not ok 21 - Strict Avalanche Criteria - 56 bit keys
 #     g-test: 100.000000%
 #     sum-error-square: 256.00000000
 #     key/seed errors: 96/96
-#     - seed bit 0 gtest probability not random: 100.0000 (20000000/12000000)
-#     - seed bit 1 gtest probability not random: 100.0000 (20000000/12000000)
-#     - key bit 0 gtest probability not random: 100.0000 (20000000/12000000)
-#     - key bit 1 gtest probability not random: 100.0000 (20000000/12000000)
+#     - seed bit 0 gtest probability not random: 100.0000 (7000000/25000000)
+#     - seed bit 1 gtest probability not random: 100.0000 (7000000/25000000)
+#     - key bit 0 gtest probability not random: 100.0000 (7000000/25000000)
+#     - key bit 1 gtest probability not random: 100.0000 (7000000/25000000)
 #     - with 30 more seed errors and 62 more key errors not described above.
 #     hash bit-level errors: 32/32
-#     - hash bit 0 gtest-prob not-random: 100.0000 (96000000/0)
+#     - hash bit 0 gtest-prob not-random: 100.0000 (0/96000000)
 #     - hash bit 1 gtest-prob not-random: 100.0000 (0/96000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (0/96000000)
 #     - with 29 more hash bit errors not described above.
-not ok 22 - Strict Avalanche Criteria - 64 bit keys
+not ok 22 - Strict Avalanche Criteria - 64 bit/8 byte keys # DoNothing32
 # Testing  72-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 1.000000e+06
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -537,17 +537,17 @@ not ok 22 - Strict Avalanche Criteria - 64 bit keys
 #     g-test: 100.000000%
 #     sum-error-square: 256.00000000
 #     key/seed errors: 104/104
-#     - seed bit 0 gtest probability not random: 100.0000 (20000000/12000000)
-#     - seed bit 1 gtest probability not random: 100.0000 (20000000/12000000)
-#     - key bit 0 gtest probability not random: 100.0000 (20000000/12000000)
-#     - key bit 1 gtest probability not random: 100.0000 (20000000/12000000)
+#     - seed bit 0 gtest probability not random: 100.0000 (6000000/26000000)
+#     - seed bit 1 gtest probability not random: 100.0000 (6000000/26000000)
+#     - key bit 0 gtest probability not random: 100.0000 (6000000/26000000)
+#     - key bit 1 gtest probability not random: 100.0000 (6000000/26000000)
 #     - with 30 more seed errors and 70 more key errors not described above.
 #     hash bit-level errors: 32/32
-#     - hash bit 0 gtest-prob not-random: 100.0000 (104000000/0)
-#     - hash bit 1 gtest-prob not-random: 100.0000 (104000000/0)
-#     - hash bit 2 gtest-prob not-random: 100.0000 (104000000/0)
+#     - hash bit 0 gtest-prob not-random: 100.0000 (0/104000000)
+#     - hash bit 1 gtest-prob not-random: 100.0000 (0/104000000)
+#     - hash bit 2 gtest-prob not-random: 100.0000 (0/104000000)
 #     - with 29 more hash bit errors not described above.
-not ok 23 - Strict Avalanche Criteria - 72 bit keys
+not ok 23 - Strict Avalanche Criteria - 72 bit/9 byte keys # DoNothing32
 # Testing  80-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 1.000000e+06
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -581,17 +581,17 @@ not ok 23 - Strict Avalanche Criteria - 72 bit keys
 #     g-test: 100.000000%
 #     sum-error-square: 256.00000000
 #     key/seed errors: 112/112
-#     - seed bit 0 gtest probability not random: 100.0000 (17000000/15000000)
-#     - seed bit 1 gtest probability not random: 100.0000 (17000000/15000000)
-#     - key bit 0 gtest probability not random: 100.0000 (17000000/15000000)
-#     - key bit 1 gtest probability not random: 100.0000 (17000000/15000000)
+#     - seed bit 0 gtest probability not random: 100.0000 (5000000/27000000)
+#     - seed bit 1 gtest probability not random: 100.0000 (5000000/27000000)
+#     - key bit 0 gtest probability not random: 100.0000 (5000000/27000000)
+#     - key bit 1 gtest probability not random: 100.0000 (5000000/27000000)
 #     - with 30 more seed errors and 78 more key errors not described above.
 #     hash bit-level errors: 32/32
-#     - hash bit 0 gtest-prob not-random: 100.0000 (112000000/0)
-#     - hash bit 1 gtest-prob not-random: 100.0000 (112000000/0)
-#     - hash bit 2 gtest-prob not-random: 100.0000 (112000000/0)
+#     - hash bit 0 gtest-prob not-random: 100.0000 (0/112000000)
+#     - hash bit 1 gtest-prob not-random: 100.0000 (0/112000000)
+#     - hash bit 2 gtest-prob not-random: 100.0000 (0/112000000)
 #     - with 29 more hash bit errors not described above.
-not ok 24 - Strict Avalanche Criteria - 80 bit keys
+not ok 24 - Strict Avalanche Criteria - 80 bit/10 byte keys # DoNothing32
 # Testing  88-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 1.000000e+06
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -625,17 +625,17 @@ not ok 24 - Strict Avalanche Criteria - 80 bit keys
 #     g-test: 100.000000%
 #     sum-error-square: 256.00000000
 #     key/seed errors: 120/120
-#     - seed bit 0 gtest probability not random: 100.0000 (19000000/13000000)
-#     - seed bit 1 gtest probability not random: 100.0000 (19000000/13000000)
-#     - key bit 0 gtest probability not random: 100.0000 (19000000/13000000)
-#     - key bit 1 gtest probability not random: 100.0000 (19000000/13000000)
+#     - seed bit 0 gtest probability not random: 100.0000 (6000000/26000000)
+#     - seed bit 1 gtest probability not random: 100.0000 (6000000/26000000)
+#     - key bit 0 gtest probability not random: 100.0000 (6000000/26000000)
+#     - key bit 1 gtest probability not random: 100.0000 (6000000/26000000)
 #     - with 30 more seed errors and 86 more key errors not described above.
 #     hash bit-level errors: 32/32
-#     - hash bit 0 gtest-prob not-random: 100.0000 (120000000/0)
-#     - hash bit 1 gtest-prob not-random: 100.0000 (120000000/0)
-#     - hash bit 2 gtest-prob not-random: 100.0000 (120000000/0)
+#     - hash bit 0 gtest-prob not-random: 100.0000 (0/120000000)
+#     - hash bit 1 gtest-prob not-random: 100.0000 (0/120000000)
+#     - hash bit 2 gtest-prob not-random: 100.0000 (0/120000000)
 #     - with 29 more hash bit errors not described above.
-not ok 25 - Strict Avalanche Criteria - 88 bit keys
+not ok 25 - Strict Avalanche Criteria - 88 bit/11 byte keys # DoNothing32
 # Testing  96-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 1.000000e+06
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -669,17 +669,17 @@ not ok 25 - Strict Avalanche Criteria - 88 bit keys
 #     g-test: 100.000000%
 #     sum-error-square: 256.00000000
 #     key/seed errors: 128/128
-#     - seed bit 0 gtest probability not random: 100.0000 (19000000/13000000)
-#     - seed bit 1 gtest probability not random: 100.0000 (19000000/13000000)
-#     - key bit 0 gtest probability not random: 100.0000 (19000000/13000000)
-#     - key bit 1 gtest probability not random: 100.0000 (19000000/13000000)
+#     - seed bit 0 gtest probability not random: 100.0000 (6000000/26000000)
+#     - seed bit 1 gtest probability not random: 100.0000 (6000000/26000000)
+#     - key bit 0 gtest probability not random: 100.0000 (6000000/26000000)
+#     - key bit 1 gtest probability not random: 100.0000 (6000000/26000000)
 #     - with 30 more seed errors and 94 more key errors not described above.
 #     hash bit-level errors: 32/32
-#     - hash bit 0 gtest-prob not-random: 100.0000 (128000000/0)
-#     - hash bit 1 gtest-prob not-random: 100.0000 (128000000/0)
-#     - hash bit 2 gtest-prob not-random: 100.0000 (128000000/0)
+#     - hash bit 0 gtest-prob not-random: 100.0000 (0/128000000)
+#     - hash bit 1 gtest-prob not-random: 100.0000 (0/128000000)
+#     - hash bit 2 gtest-prob not-random: 100.0000 (0/128000000)
 #     - with 29 more hash bit errors not described above.
-not ok 26 - Strict Avalanche Criteria - 96 bit keys
+not ok 26 - Strict Avalanche Criteria - 96 bit/12 byte keys # DoNothing32
 # Testing 104-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 1.000000e+06
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -713,17 +713,17 @@ not ok 26 - Strict Avalanche Criteria - 96 bit keys
 #     g-test: 100.000000%
 #     sum-error-square: 256.00000000
 #     key/seed errors: 136/136
-#     - seed bit 0 gtest probability not random: 100.0000 (21000000/11000000)
-#     - seed bit 1 gtest probability not random: 100.0000 (21000000/11000000)
-#     - key bit 0 gtest probability not random: 100.0000 (21000000/11000000)
-#     - key bit 1 gtest probability not random: 100.0000 (21000000/11000000)
+#     - seed bit 0 gtest probability not random: 100.0000 (7000000/25000000)
+#     - seed bit 1 gtest probability not random: 100.0000 (7000000/25000000)
+#     - key bit 0 gtest probability not random: 100.0000 (7000000/25000000)
+#     - key bit 1 gtest probability not random: 100.0000 (7000000/25000000)
 #     - with 30 more seed errors and 102 more key errors not described above.
 #     hash bit-level errors: 32/32
-#     - hash bit 0 gtest-prob not-random: 100.0000 (136000000/0)
-#     - hash bit 1 gtest-prob not-random: 100.0000 (136000000/0)
-#     - hash bit 2 gtest-prob not-random: 100.0000 (136000000/0)
+#     - hash bit 0 gtest-prob not-random: 100.0000 (0/136000000)
+#     - hash bit 1 gtest-prob not-random: 100.0000 (0/136000000)
+#     - hash bit 2 gtest-prob not-random: 100.0000 (0/136000000)
 #     - with 29 more hash bit errors not described above.
-not ok 27 - Strict Avalanche Criteria - 104 bit keys
+not ok 27 - Strict Avalanche Criteria - 104 bit/13 byte keys # DoNothing32
 # Testing 112-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 1.000000e+06
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -757,17 +757,17 @@ not ok 27 - Strict Avalanche Criteria - 104 bit keys
 #     g-test: 100.000000%
 #     sum-error-square: 256.00000000
 #     key/seed errors: 144/144
-#     - seed bit 0 gtest probability not random: 100.0000 (19000000/13000000)
-#     - seed bit 1 gtest probability not random: 100.0000 (19000000/13000000)
-#     - key bit 0 gtest probability not random: 100.0000 (19000000/13000000)
-#     - key bit 1 gtest probability not random: 100.0000 (19000000/13000000)
+#     - seed bit 0 gtest probability not random: 100.0000 (5000000/27000000)
+#     - seed bit 1 gtest probability not random: 100.0000 (5000000/27000000)
+#     - key bit 0 gtest probability not random: 100.0000 (5000000/27000000)
+#     - key bit 1 gtest probability not random: 100.0000 (5000000/27000000)
 #     - with 30 more seed errors and 110 more key errors not described above.
 #     hash bit-level errors: 32/32
-#     - hash bit 0 gtest-prob not-random: 100.0000 (144000000/0)
-#     - hash bit 1 gtest-prob not-random: 100.0000 (144000000/0)
-#     - hash bit 2 gtest-prob not-random: 100.0000 (144000000/0)
+#     - hash bit 0 gtest-prob not-random: 100.0000 (0/144000000)
+#     - hash bit 1 gtest-prob not-random: 100.0000 (0/144000000)
+#     - hash bit 2 gtest-prob not-random: 100.0000 (0/144000000)
 #     - with 29 more hash bit errors not described above.
-not ok 28 - Strict Avalanche Criteria - 112 bit keys
+not ok 28 - Strict Avalanche Criteria - 112 bit/14 byte keys # DoNothing32
 # Testing 120-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 1.000000e+06
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -801,17 +801,17 @@ not ok 28 - Strict Avalanche Criteria - 112 bit keys
 #     g-test: 100.000000%
 #     sum-error-square: 256.00000000
 #     key/seed errors: 152/152
-#     - seed bit 0 gtest probability not random: 100.0000 (20000000/12000000)
-#     - seed bit 1 gtest probability not random: 100.0000 (20000000/12000000)
-#     - key bit 0 gtest probability not random: 100.0000 (20000000/12000000)
-#     - key bit 1 gtest probability not random: 100.0000 (20000000/12000000)
+#     - seed bit 0 gtest probability not random: 100.0000 (6000000/26000000)
+#     - seed bit 1 gtest probability not random: 100.0000 (6000000/26000000)
+#     - key bit 0 gtest probability not random: 100.0000 (6000000/26000000)
+#     - key bit 1 gtest probability not random: 100.0000 (6000000/26000000)
 #     - with 30 more seed errors and 118 more key errors not described above.
 #     hash bit-level errors: 32/32
-#     - hash bit 0 gtest-prob not-random: 100.0000 (152000000/0)
-#     - hash bit 1 gtest-prob not-random: 100.0000 (152000000/0)
-#     - hash bit 2 gtest-prob not-random: 100.0000 (152000000/0)
+#     - hash bit 0 gtest-prob not-random: 100.0000 (0/152000000)
+#     - hash bit 1 gtest-prob not-random: 100.0000 (0/152000000)
+#     - hash bit 2 gtest-prob not-random: 100.0000 (0/152000000)
 #     - with 29 more hash bit errors not described above.
-not ok 29 - Strict Avalanche Criteria - 120 bit keys
+not ok 29 - Strict Avalanche Criteria - 120 bit/15 byte keys # DoNothing32
 # Testing 128-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 1.000000e+06
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -845,17 +845,17 @@ not ok 29 - Strict Avalanche Criteria - 120 bit keys
 #     g-test: 100.000000%
 #     sum-error-square: 256.00000000
 #     key/seed errors: 160/160
-#     - seed bit 0 gtest probability not random: 100.0000 (1000000/31000000)
-#     - seed bit 1 gtest probability not random: 100.0000 (1000000/31000000)
-#     - key bit 0 gtest probability not random: 100.0000 (1000000/31000000)
-#     - key bit 1 gtest probability not random: 100.0000 (1000000/31000000)
+#     - seed bit 0 gtest probability not random: 100.0000 (8000000/24000000)
+#     - seed bit 1 gtest probability not random: 100.0000 (8000000/24000000)
+#     - key bit 0 gtest probability not random: 100.0000 (8000000/24000000)
+#     - key bit 1 gtest probability not random: 100.0000 (8000000/24000000)
 #     - with 30 more seed errors and 126 more key errors not described above.
 #     hash bit-level errors: 32/32
 #     - hash bit 0 gtest-prob not-random: 100.0000 (0/160000000)
 #     - hash bit 1 gtest-prob not-random: 100.0000 (0/160000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (160000000/0)
 #     - with 29 more hash bit errors not described above.
-not ok 30 - Strict Avalanche Criteria - 128 bit keys
+not ok 30 - Strict Avalanche Criteria - 128 bit/16 byte keys # DoNothing32
 # Testing 136-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 1.000000e+06
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -889,17 +889,17 @@ not ok 30 - Strict Avalanche Criteria - 128 bit keys
 #     g-test: 100.000000%
 #     sum-error-square: 256.00000000
 #     key/seed errors: 168/168
-#     - seed bit 0 gtest probability not random: 100.0000 (1000000/31000000)
-#     - seed bit 1 gtest probability not random: 100.0000 (1000000/31000000)
-#     - key bit 0 gtest probability not random: 100.0000 (1000000/31000000)
-#     - key bit 1 gtest probability not random: 100.0000 (1000000/31000000)
+#     - seed bit 0 gtest probability not random: 100.0000 (8000000/24000000)
+#     - seed bit 1 gtest probability not random: 100.0000 (8000000/24000000)
+#     - key bit 0 gtest probability not random: 100.0000 (8000000/24000000)
+#     - key bit 1 gtest probability not random: 100.0000 (8000000/24000000)
 #     - with 30 more seed errors and 134 more key errors not described above.
 #     hash bit-level errors: 32/32
 #     - hash bit 0 gtest-prob not-random: 100.0000 (0/168000000)
 #     - hash bit 1 gtest-prob not-random: 100.0000 (0/168000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (168000000/0)
 #     - with 29 more hash bit errors not described above.
-not ok 31 - Strict Avalanche Criteria - 136 bit keys
+not ok 31 - Strict Avalanche Criteria - 136 bit/17 byte keys # DoNothing32
 # Testing 144-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 1.000000e+06
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -933,17 +933,17 @@ not ok 31 - Strict Avalanche Criteria - 136 bit keys
 #     g-test: 100.000000%
 #     sum-error-square: 256.00000000
 #     key/seed errors: 176/176
-#     - seed bit 0 gtest probability not random: 100.0000 (1000000/31000000)
-#     - seed bit 1 gtest probability not random: 100.0000 (1000000/31000000)
-#     - key bit 0 gtest probability not random: 100.0000 (1000000/31000000)
-#     - key bit 1 gtest probability not random: 100.0000 (1000000/31000000)
+#     - seed bit 0 gtest probability not random: 100.0000 (8000000/24000000)
+#     - seed bit 1 gtest probability not random: 100.0000 (8000000/24000000)
+#     - key bit 0 gtest probability not random: 100.0000 (8000000/24000000)
+#     - key bit 1 gtest probability not random: 100.0000 (8000000/24000000)
 #     - with 30 more seed errors and 142 more key errors not described above.
 #     hash bit-level errors: 32/32
 #     - hash bit 0 gtest-prob not-random: 100.0000 (0/176000000)
 #     - hash bit 1 gtest-prob not-random: 100.0000 (0/176000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (176000000/0)
 #     - with 29 more hash bit errors not described above.
-not ok 32 - Strict Avalanche Criteria - 144 bit keys
+not ok 32 - Strict Avalanche Criteria - 144 bit/18 byte keys # DoNothing32
 # Testing 152-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 1.000000e+06
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -977,17 +977,17 @@ not ok 32 - Strict Avalanche Criteria - 144 bit keys
 #     g-test: 100.000000%
 #     sum-error-square: 256.00000000
 #     key/seed errors: 184/184
-#     - seed bit 0 gtest probability not random: 100.0000 (1000000/31000000)
-#     - seed bit 1 gtest probability not random: 100.0000 (1000000/31000000)
-#     - key bit 0 gtest probability not random: 100.0000 (1000000/31000000)
-#     - key bit 1 gtest probability not random: 100.0000 (1000000/31000000)
+#     - seed bit 0 gtest probability not random: 100.0000 (8000000/24000000)
+#     - seed bit 1 gtest probability not random: 100.0000 (8000000/24000000)
+#     - key bit 0 gtest probability not random: 100.0000 (8000000/24000000)
+#     - key bit 1 gtest probability not random: 100.0000 (8000000/24000000)
 #     - with 30 more seed errors and 150 more key errors not described above.
 #     hash bit-level errors: 32/32
 #     - hash bit 0 gtest-prob not-random: 100.0000 (0/184000000)
 #     - hash bit 1 gtest-prob not-random: 100.0000 (0/184000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (184000000/0)
 #     - with 29 more hash bit errors not described above.
-not ok 33 - Strict Avalanche Criteria - 152 bit keys
+not ok 33 - Strict Avalanche Criteria - 152 bit/19 byte keys # DoNothing32
 # Testing 152-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 1.000000e+06
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -1021,17 +1021,17 @@ not ok 33 - Strict Avalanche Criteria - 152 bit keys
 #     g-test: 100.000000%
 #     sum-error-square: 256.00000000
 #     key/seed errors: 184/184
-#     - seed bit 0 gtest probability not random: 100.0000 (1000000/31000000)
-#     - seed bit 1 gtest probability not random: 100.0000 (1000000/31000000)
-#     - key bit 0 gtest probability not random: 100.0000 (1000000/31000000)
-#     - key bit 1 gtest probability not random: 100.0000 (1000000/31000000)
+#     - seed bit 0 gtest probability not random: 100.0000 (8000000/24000000)
+#     - seed bit 1 gtest probability not random: 100.0000 (8000000/24000000)
+#     - key bit 0 gtest probability not random: 100.0000 (8000000/24000000)
+#     - key bit 1 gtest probability not random: 100.0000 (8000000/24000000)
 #     - with 30 more seed errors and 150 more key errors not described above.
 #     hash bit-level errors: 32/32
 #     - hash bit 0 gtest-prob not-random: 100.0000 (0/184000000)
 #     - hash bit 1 gtest-prob not-random: 100.0000 (0/184000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (184000000/0)
 #     - with 29 more hash bit errors not described above.
-not ok 34 - Strict Avalanche Criteria - 160 bit keys
+not ok 34 - Strict Avalanche Criteria - 152 bit/19 byte keys # DoNothing32
 # Testing 200-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 1.000000e+06
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -1065,17 +1065,17 @@ not ok 34 - Strict Avalanche Criteria - 160 bit keys
 #     g-test: 100.000000%
 #     sum-error-square: 256.00000000
 #     key/seed errors: 232/232
-#     - seed bit 0 gtest probability not random: 100.0000 (8000000/24000000)
-#     - seed bit 1 gtest probability not random: 100.0000 (8000000/24000000)
-#     - key bit 0 gtest probability not random: 100.0000 (8000000/24000000)
-#     - key bit 1 gtest probability not random: 100.0000 (8000000/24000000)
+#     - seed bit 0 gtest probability not random: 100.0000 (11000000/21000000)
+#     - seed bit 1 gtest probability not random: 100.0000 (11000000/21000000)
+#     - key bit 0 gtest probability not random: 100.0000 (11000000/21000000)
+#     - key bit 1 gtest probability not random: 100.0000 (11000000/21000000)
 #     - with 30 more seed errors and 198 more key errors not described above.
 #     hash bit-level errors: 32/32
 #     - hash bit 0 gtest-prob not-random: 100.0000 (0/232000000)
-#     - hash bit 1 gtest-prob not-random: 100.0000 (0/232000000)
+#     - hash bit 1 gtest-prob not-random: 100.0000 (232000000/0)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (0/232000000)
 #     - with 29 more hash bit errors not described above.
-not ok 35 - Strict Avalanche Criteria - 200 bit keys
+not ok 35 - Strict Avalanche Criteria - 200 bit/25 byte keys # DoNothing32
 # Testing 256-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 1.000000e+06
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -1109,17 +1109,17 @@ not ok 35 - Strict Avalanche Criteria - 200 bit keys
 #     g-test: 100.000000%
 #     sum-error-square: 256.00000000
 #     key/seed errors: 288/288
-#     - seed bit 0 gtest probability not random: 100.0000 (8000000/24000000)
-#     - seed bit 1 gtest probability not random: 100.0000 (8000000/24000000)
-#     - key bit 0 gtest probability not random: 100.0000 (8000000/24000000)
-#     - key bit 1 gtest probability not random: 100.0000 (8000000/24000000)
+#     - seed bit 0 gtest probability not random: 100.0000 (3000000/29000000)
+#     - seed bit 1 gtest probability not random: 100.0000 (3000000/29000000)
+#     - key bit 0 gtest probability not random: 100.0000 (3000000/29000000)
+#     - key bit 1 gtest probability not random: 100.0000 (3000000/29000000)
 #     - with 30 more seed errors and 254 more key errors not described above.
 #     hash bit-level errors: 32/32
-#     - hash bit 0 gtest-prob not-random: 100.0000 (0/288000000)
-#     - hash bit 1 gtest-prob not-random: 100.0000 (0/288000000)
+#     - hash bit 0 gtest-prob not-random: 100.0000 (288000000/0)
+#     - hash bit 1 gtest-prob not-random: 100.0000 (288000000/0)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (0/288000000)
 #     - with 29 more hash bit errors not described above.
-not ok 36 - Strict Avalanche Criteria - 256 bit keys
+not ok 36 - Strict Avalanche Criteria - 256 bit/32 byte keys # DoNothing32
 # Testing 512-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 1.000000e+06
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -1163,7 +1163,7 @@ not ok 36 - Strict Avalanche Criteria - 256 bit keys
 #     - hash bit 1 gtest-prob not-random: 100.0000 (0/544000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (0/544000000)
 #     - with 29 more hash bit errors not described above.
-not ok 37 - Strict Avalanche Criteria - 512 bit keys
+not ok 37 - Strict Avalanche Criteria - 512 bit/64 byte keys # DoNothing32
 # Testing 520-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 1.000000e+06
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -1207,333 +1207,342 @@ not ok 37 - Strict Avalanche Criteria - 512 bit keys
 #     - hash bit 1 gtest-prob not-random: 100.0000 (0/552000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (0/552000000)
 #     - with 29 more hash bit errors not described above.
-not ok 38 - Strict Avalanche Criteria - 520 bit keys
-not ok 39 - Strict Avalanche Criteria # DoNothing32
+not ok 38 - Strict Avalanche Criteria - 520 bit/65 byte keys # DoNothing32
 ### Keyset 'Cyclic' Tests ###
 # Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
 # Testing collisions   - Expected 11641.53, actual  9999999 (858.99x) - failed
-not ok 40 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
-# worst bias is the  20-bit window at bit   0 - 86679491.323% (416)
-not ok 41 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
+not ok 39 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
+# worst bias is the  20-bit window at bit   0 - score 866794.913 (from 416 scores)
+not ok 40 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
 # Testing collisions   - Expected 11641.53, actual  9999999 (858.99x) - failed
-not ok 42 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
-# worst bias is the  20-bit window at bit   0 - 86679491.323% (416)
-not ok 43 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
+not ok 41 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
+# worst bias is the  20-bit window at bit   0 - score 866794.913 (from 416 scores)
+not ok 42 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
 # Testing collisions   - Expected 11641.53, actual  9999999 (858.99x) - failed
-not ok 44 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
-# worst bias is the  20-bit window at bit   0 - 86679491.323% (416)
-not ok 45 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
+not ok 43 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
+# worst bias is the  20-bit window at bit   0 - score 866794.913 (from 416 scores)
+not ok 44 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
 # Testing collisions   - Expected 11641.53, actual  9999999 (858.99x) - failed
-not ok 46 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
-# worst bias is the  20-bit window at bit   0 - 86679491.323% (416)
-not ok 47 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
+not ok 45 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
+# worst bias is the  20-bit window at bit   0 - score 866794.913 (from 416 scores)
+not ok 46 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
 # Testing collisions   - Expected 11641.53, actual  9999999 (858.99x) - failed
-not ok 48 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
-# worst bias is the  20-bit window at bit   0 - 86679491.323% (416)
-not ok 49 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
-not ok 50 - Keyset 'Cyclic' # DoNothing32
+not ok 47 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+# worst bias is the  20-bit window at bit   0 - score 866794.913 (from 416 scores)
+not ok 48 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
+not ok 49 - Keyset 'Cyclic' # DoNothing32
 ### Keyset 'TwoBytes' Tests ###
 # Testing collisions   - Expected    49.57, actual   652544 - ALL keys were in collision - failed
-not ok 51 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
-# worst bias is the  16-bit window at bit   0 - 5457324.894% (288)
-not ok 52 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+not ok 50 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+# worst bias is the  16-bit window at bit   0 - score 54573.249 (from 288 scores)
+not ok 51 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
 # Testing collisions   - Expected  3484.56, actual  5471024 - ALL keys were in collision - failed
-not ok 53 - Collision Rate for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
-# worst bias is the  20-bit window at bit   0 - 75801342.236% (416)
-not ok 54 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+not ok 52 - Collision Rate for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+# worst bias is the  20-bit window at bit   0 - score 758013.422 (from 416 scores)
+not ok 53 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
 # Testing collisions   - Expected 40347.77, actual 18616784 (461.41x) - failed
-not ok 55 - Collision Rate for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
-# worst bias is the  20-bit window at bit   0 - 94241356.557% (416)
-not ok 56 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+not ok 54 - Collision Rate for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+# worst bias is the  20-bit window at bit   0 - score 942413.566 (from 416 scores)
+not ok 55 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
 # Testing collisions   - Expected 227963.15, actual 44251424 (194.12x) - failed
-not ok 57 - Collision Rate for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
-# worst bias is the  20-bit window at bit   0 - 100112972.016% (416)
-not ok 58 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+not ok 56 - Collision Rate for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+# worst bias is the  20-bit window at bit   0 - score 1001129.720 (from 416 scores)
+not ok 57 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
 # Testing collisions   - Expected 871784.70, actual 86536544 (99.26x) - failed
-not ok 59 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
-# worst bias is the  20-bit window at bit   0 - 102376478.382% (416)
-not ok 60 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
-not ok 61 - Keyset 'TwoBytes' # DoNothing32
+not ok 58 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+# worst bias is the  20-bit window at bit   0 - score 1023764.784 (from 416 scores)
+not ok 59 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+not ok 60 - Keyset 'TwoBytes' # DoNothing32
 ### Keyset 'Sparse' Tests ###
 # Keyset 'Sparse' - 32-bit keys with up to 6 bits set - 1149017 keys
-# Testing collisions   - Expected   153.70, actual  1149014 - Excessive keys in collision - failed
-not ok 62 - Collision Rate for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
-# worst bias is the  17-bit window at bit   0 - 8286216.730% (320)
-not ok 63 - Distribution Bias Check for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+# Testing collisions   - Expected   153.70, actual  1149015 - Excessive keys in collision - failed
+not ok 61 - Collision Rate for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
+# worst bias is the  17-bit window at bit   0 - score 106722.423 (from 320 scores)
+not ok 62 - Distribution Bias Check for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
 # Keyset 'Sparse' - 40-bit keys with up to 6 bits set - 4598479 keys
-# Testing collisions   - Expected  2461.72, actual  4598477 - Excessive keys in collision - failed
-not ok 64 - Collision Rate for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
-# worst bias is the  19-bit window at bit   0 - 32082163.918% (384)
-not ok 65 - Distribution Bias Check for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+# Testing collisions   - Expected  2461.72, actual  4598478 - ALL keys were in collision - failed
+not ok 63 - Collision Rate for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
+# worst bias is the  19-bit window at bit   0 - score 426934.510 (from 384 scores)
+not ok 64 - Distribution Bias Check for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
 # Keyset 'Sparse' - 48-bit keys with up to 5 bits set - 1925357 keys
-# Testing collisions   - Expected   431.55, actual  1925355 - Excessive keys in collision - failed
-not ok 66 - Collision Rate for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
-# worst bias is the  18-bit window at bit   0 - 16860105.100% (352)
-not ok 67 - Distribution Bias Check for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+# Testing collisions   - Expected   431.55, actual  1925356 - ALL keys were in collision - failed
+not ok 65 - Collision Rate for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
+# worst bias is the  18-bit window at bit   0 - score 206037.529 (from 352 scores)
+not ok 66 - Distribution Bias Check for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
 # Keyset 'Sparse' - 56-bit keys with up to 5 bits set - 4216423 keys
-# Testing collisions   - Expected  2069.66, actual  4216421 - Excessive keys in collision - failed
-not ok 68 - Collision Rate for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
-# worst bias is the  19-bit window at bit   0 - 35309269.387% (384)
-not ok 69 - Distribution Bias Check for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+# Testing collisions   - Expected  2069.66, actual  4216422 - ALL keys were in collision - failed
+not ok 67 - Collision Rate for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
+# worst bias is the  19-bit window at bit   0 - score 419870.101 (from 384 scores)
+not ok 68 - Distribution Bias Check for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
 # Keyset 'Sparse' - 64-bit keys with up to 5 bits set - 8303633 keys
-# Testing collisions   - Expected  8026.87, actual  8303631 - Excessive keys in collision - failed
-not ok 70 - Collision Rate for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
-# worst bias is the  20-bit window at bit   0 - 71883613.395% (416)
-not ok 71 - Distribution Bias Check for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+# Testing collisions   - Expected  8026.87, actual  8303632 - ALL keys were in collision - failed
+not ok 69 - Collision Rate for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
+# worst bias is the  20-bit window at bit   0 - score 837146.596 (from 416 scores)
+not ok 70 - Distribution Bias Check for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
 # Keyset 'Sparse' - 96-bit keys with up to 4 bits set - 3469497 keys
-# Testing collisions   - Expected  1401.34, actual  3469495 - Excessive keys in collision - failed
-not ok 72 - Collision Rate for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
-# worst bias is the  19-bit window at bit   0 - 36982290.665% (384)
-not ok 73 - Distribution Bias Check for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+# Testing collisions   - Expected  1401.34, actual  3469496 - ALL keys were in collision - failed
+not ok 71 - Collision Rate for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
+# worst bias is the  19-bit window at bit   0 - score 402607.937 (from 384 scores)
+not ok 72 - Distribution Bias Check for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
 # Keyset 'Sparse' - 256-bit keys with up to 3 bits set - 2796417 keys
 # Testing collisions   - Expected   910.36, actual  2796416 - ALL keys were in collision - failed
-not ok 74 - Collision Rate for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
-# worst bias is the  19-bit window at bit   0 - 38130756.979% (384)
-not ok 75 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+not ok 73 - Collision Rate for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
+# worst bias is the  19-bit window at bit   0 - score 381307.570 (from 384 scores)
+not ok 74 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
 # Keyset 'Sparse' - 2048-bit keys with up to 2 bits set - 2098177 keys
 # Testing collisions   - Expected   512.50, actual  2098176 - ALL keys were in collision - failed
-not ok 76 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
-# worst bias is the  18-bit window at bit   0 - 20973487.193% (352)
-not ok 77 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
-not ok 78 - Keyset 'Sparse' # DoNothing32
+not ok 75 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+# worst bias is the  18-bit window at bit   0 - score 209734.872 (from 352 scores)
+not ok 76 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
+not ok 77 - Keyset 'Sparse' # DoNothing32
 ### Keyset 'Crc-MultiCollision' Tests ###
 # Keyset 'Crc(a)-MultiCollision' - 1048575 x 16 block keys - 128-bytes long - 10 seeds
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 79 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 1 # DoNothing32
+not ok 78 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 1 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 80 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 2 # DoNothing32
+not ok 79 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 2 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 81 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 3 # DoNothing32
+not ok 80 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 3 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 82 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 4 # DoNothing32
+not ok 81 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 4 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 83 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 5 # DoNothing32
+not ok 82 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 5 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 84 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 6 # DoNothing32
+not ok 83 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 6 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 85 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 7 # DoNothing32
+not ok 84 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 7 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 86 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 8 # DoNothing32
+not ok 85 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 8 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 87 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 9 # DoNothing32
+not ok 86 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 9 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 88 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 10 # DoNothing32
+not ok 87 - Collision Rate for Keyset 'Crc(a)-MultiCollision' - seed 10 # DoNothing32
 # Keyset 'Crc(b)-MultiCollision' - 1048575 x 16 block keys - 128-bytes long - 10 seeds
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 89 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 1 # DoNothing32
+not ok 88 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 1 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 90 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 2 # DoNothing32
+not ok 89 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 2 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 91 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 3 # DoNothing32
+not ok 90 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 3 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 92 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 4 # DoNothing32
+not ok 91 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 4 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 93 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 5 # DoNothing32
+not ok 92 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 5 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 94 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 6 # DoNothing32
+not ok 93 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 6 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 95 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 7 # DoNothing32
+not ok 94 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 7 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 96 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 8 # DoNothing32
+not ok 95 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 8 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 97 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 9 # DoNothing32
+not ok 96 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 9 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 98 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 10 # DoNothing32
+not ok 97 - Collision Rate for Keyset 'Crc(b)-MultiCollision' - seed 10 # DoNothing32
 ### Keyset 'Murmur2-MultiCollision' Tests ###
 # Keyset 'Murmur2-MultiCollision' - 1048575 x 16 block keys - 128-bytes long - 10 seeds
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 99 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 1 # DoNothing32
+not ok 98 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 1 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 100 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 2 # DoNothing32
+not ok 99 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 2 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 101 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 3 # DoNothing32
+not ok 100 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 3 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 102 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 4 # DoNothing32
+not ok 101 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 4 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 103 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 5 # DoNothing32
+not ok 102 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 5 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 104 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 6 # DoNothing32
+not ok 103 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 6 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 105 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 7 # DoNothing32
+not ok 104 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 7 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 106 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 8 # DoNothing32
+not ok 105 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 8 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 107 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 9 # DoNothing32
+not ok 106 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 9 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 108 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 10 # DoNothing32
+not ok 107 - Collision Rate for Keyset 'Murmur2-MultiCollision' - seed 10 # DoNothing32
 ### Keyset 'Murmur3A-MultiCollision' Tests ###
 # Keyset 'Murmur3A-MultiCollision' - 1048575 x 16 block keys - 128-bytes long - 10 seeds
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 109 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 1 # DoNothing32
+not ok 108 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 1 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 110 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 2 # DoNothing32
+not ok 109 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 2 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 111 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 3 # DoNothing32
+not ok 110 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 3 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 112 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 4 # DoNothing32
+not ok 111 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 4 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 113 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 5 # DoNothing32
+not ok 112 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 5 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 114 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 6 # DoNothing32
+not ok 113 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 6 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 115 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 7 # DoNothing32
+not ok 114 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 7 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 116 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 8 # DoNothing32
+not ok 115 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 8 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 117 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 9 # DoNothing32
+not ok 116 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 9 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 118 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 10 # DoNothing32
+not ok 117 - Collision Rate for Keyset 'Murmur3A-MultiCollision' - seed 10 # DoNothing32
 ### Keyset 'Murmur3F-MultiCollision' Tests ###
 # Keyset 'Murmur3F-MultiCollision' - 1048575 x 16 block keys - 512-bytes long - 10 seeds
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 119 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 1 # DoNothing32
+not ok 118 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 1 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 120 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 2 # DoNothing32
+not ok 119 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 2 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 121 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 3 # DoNothing32
+not ok 120 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 3 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 122 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 4 # DoNothing32
+not ok 121 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 4 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 123 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 5 # DoNothing32
+not ok 122 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 5 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 124 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 6 # DoNothing32
+not ok 123 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 6 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 125 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 7 # DoNothing32
+not ok 124 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 7 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 126 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 8 # DoNothing32
+not ok 125 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 8 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 127 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 9 # DoNothing32
+not ok 126 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 9 # DoNothing32
 # Testing collisions   - Expected   128.00, actual  1048574 - ALL keys were in collision - failed
-not ok 128 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 10 # DoNothing32
+not ok 127 - Collision Rate for Keyset 'Murmur3F-MultiCollision' - seed 10 # DoNothing32
 ### Keyset 'City64-MultiCollision' Tests ###
 # Keyset 'City64-MultiCollision' - 10 x 2 block keys - 16-bytes long - 10 seeds
 # Testing collisions   - Expected     0.00, actual        9 - ALL keys were in collision - failed
-not ok 129 - Collision Rate for Keyset 'City64-MultiCollision' - seed 1 # DoNothing32
+not ok 128 - Collision Rate for Keyset 'City64-MultiCollision' - seed 1 # DoNothing32
 # Testing collisions   - Expected     0.00, actual        9 - ALL keys were in collision - failed
-not ok 130 - Collision Rate for Keyset 'City64-MultiCollision' - seed 2 # DoNothing32
+not ok 129 - Collision Rate for Keyset 'City64-MultiCollision' - seed 2 # DoNothing32
 # Testing collisions   - Expected     0.00, actual        9 - ALL keys were in collision - failed
-not ok 131 - Collision Rate for Keyset 'City64-MultiCollision' - seed 3 # DoNothing32
+not ok 130 - Collision Rate for Keyset 'City64-MultiCollision' - seed 3 # DoNothing32
 # Testing collisions   - Expected     0.00, actual        9 - ALL keys were in collision - failed
-not ok 132 - Collision Rate for Keyset 'City64-MultiCollision' - seed 4 # DoNothing32
+not ok 131 - Collision Rate for Keyset 'City64-MultiCollision' - seed 4 # DoNothing32
 # Testing collisions   - Expected     0.00, actual        9 - ALL keys were in collision - failed
-not ok 133 - Collision Rate for Keyset 'City64-MultiCollision' - seed 5 # DoNothing32
+not ok 132 - Collision Rate for Keyset 'City64-MultiCollision' - seed 5 # DoNothing32
 # Testing collisions   - Expected     0.00, actual        9 - ALL keys were in collision - failed
-not ok 134 - Collision Rate for Keyset 'City64-MultiCollision' - seed 6 # DoNothing32
+not ok 133 - Collision Rate for Keyset 'City64-MultiCollision' - seed 6 # DoNothing32
 # Testing collisions   - Expected     0.00, actual        9 - ALL keys were in collision - failed
-not ok 135 - Collision Rate for Keyset 'City64-MultiCollision' - seed 7 # DoNothing32
+not ok 134 - Collision Rate for Keyset 'City64-MultiCollision' - seed 7 # DoNothing32
 # Testing collisions   - Expected     0.00, actual        9 - ALL keys were in collision - failed
-not ok 136 - Collision Rate for Keyset 'City64-MultiCollision' - seed 8 # DoNothing32
+not ok 135 - Collision Rate for Keyset 'City64-MultiCollision' - seed 8 # DoNothing32
 # Testing collisions   - Expected     0.00, actual        9 - ALL keys were in collision - failed
-not ok 137 - Collision Rate for Keyset 'City64-MultiCollision' - seed 9 # DoNothing32
+not ok 136 - Collision Rate for Keyset 'City64-MultiCollision' - seed 9 # DoNothing32
 # Testing collisions   - Expected     0.00, actual        9 - ALL keys were in collision - failed
-not ok 138 - Collision Rate for Keyset 'City64-MultiCollision' - seed 10 # DoNothing32
+not ok 137 - Collision Rate for Keyset 'City64-MultiCollision' - seed 10 # DoNothing32
 ### Keyset 'Combination Lowbits' Tests ###
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
-# Testing collisions   - Expected 42799.01, actual 19173953 (448.00x) - failed
-not ok 139 - Collision Rate for Keyset 'Combination Lowbits'
-# worst bias is the  20-bit window at bit   7 - 73838804.442% (416)
-not ok 140 - Distribution Bias Check for Keyset 'Combination Lowbits'
-not ok 141 - Keyset 'Combination Lowbits' # DoNothing32
+# Testing collisions   - Expected 42799.01, actual 19173958 (448.00x) - failed
+not ok 138 - Collision Rate for Keyset 'Combination Lowbits'
+# worst bias is the  20-bit window at bit   0 - score 945193.567 (from 416 scores)
+not ok 139 - Distribution Bias Check for Keyset 'Combination Lowbits'
+not ok 140 - Keyset 'Combination Lowbits' # DoNothing32
 ### Keyset 'Combination Highbits' Tests ###
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
-# Testing collisions   - Expected 42799.01, actual 19173952 (448.00x) - failed
-not ok 142 - Collision Rate for Keyset 'Combination Highbits'
-# worst bias is the  20-bit window at bit   8 - 91611305.708% (416)
-not ok 143 - Distribution Bias Check for Keyset 'Combination Highbits'
-not ok 144 - Keyset 'Combination Highbits' # DoNothing32
+# Testing collisions   - Expected 42799.01, actual 19173958 (448.00x) - failed
+not ok 141 - Collision Rate for Keyset 'Combination Highbits'
+# worst bias is the  20-bit window at bit   0 - score 945193.567 (from 416 scores)
+not ok 142 - Distribution Bias Check for Keyset 'Combination Highbits'
+not ok 143 - Keyset 'Combination Highbits' # DoNothing32
 ### Keyset 'Combination Highbits2' Tests ###
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
-# Testing collisions   - Expected 42799.01, actual 19173952 (448.00x) - failed
-not ok 145 - Collision Rate for Keyset 'Combination Highbits2'
-# worst bias is the  20-bit window at bit   8 - 91611305.708% (416)
-not ok 146 - Distribution Bias Check for Keyset 'Combination Highbits2'
-not ok 147 - Keyset 'Combination Highbits2' # DoNothing32
+# Testing collisions   - Expected 42799.01, actual 19173958 (448.00x) - failed
+not ok 144 - Collision Rate for Keyset 'Combination Highbits2'
+# worst bias is the  20-bit window at bit   0 - score 945193.567 (from 416 scores)
+not ok 145 - Distribution Bias Check for Keyset 'Combination Highbits2'
+not ok 146 - Keyset 'Combination Highbits2' # DoNothing32
 ### Keyset 'Combination HiBit-Null' Tests ###
 # Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
-# Testing collisions   - Expected   512.00, actual  2097141 - Excessive keys in collision - failed
-not ok 148 - Collision Rate for Keyset 'Combination HiBit-Null'
-# worst bias is the  18-bit window at bit  14 - 17318751.590% (352)
-not ok 149 - Distribution Bias Check for Keyset 'Combination HiBit-Null'
-not ok 150 - Keyset 'Combination HiBit-Null' # DoNothing32
+# Testing collisions   - Expected   512.00, actual  2097148 - Excessive keys in collision - failed
+not ok 147 - Collision Rate for Keyset 'Combination HiBit-Null'
+# worst bias is the  18-bit window at bit   0 - score 209713.940 (from 352 scores)
+not ok 148 - Distribution Bias Check for Keyset 'Combination HiBit-Null'
+not ok 149 - Keyset 'Combination HiBit-Null' # DoNothing32
 ### Keyset 'Combination LowBit-Null' Tests ###
 # Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
-# Testing collisions   - Expected   512.00, actual  2097142 - Excessive keys in collision - failed
-not ok 151 - Collision Rate for Keyset 'Combination LowBit-Null'
-# worst bias is the  18-bit window at bit  14 - 17321205.761% (352)
-not ok 152 - Distribution Bias Check for Keyset 'Combination LowBit-Null'
-not ok 153 - Keyset 'Combination LowBit-Null' # DoNothing32
+# Testing collisions   - Expected   512.00, actual  2097148 - Excessive keys in collision - failed
+not ok 150 - Collision Rate for Keyset 'Combination LowBit-Null'
+# worst bias is the  18-bit window at bit   0 - score 209713.940 (from 352 scores)
+not ok 151 - Distribution Bias Check for Keyset 'Combination LowBit-Null'
+not ok 152 - Keyset 'Combination LowBit-Null' # DoNothing32
 ### Keyset 'Combination Hi-Lo' Tests ###
 # Keyset 'Combination' - up to 6 blocks from a set of 15 - 12204240 keys
 # Testing collisions   - Expected 17339.30, actual 12204238 (703.85x) - failed
-not ok 154 - Collision Rate for Keyset 'Combination Hi-Lo'
-# worst bias is the  20-bit window at bit   7 - 89481225.354% (416)
-not ok 155 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
-not ok 156 - Keyset 'Combination Hi-Lo' # DoNothing32
+not ok 153 - Collision Rate for Keyset 'Combination Hi-Lo'
+# worst bias is the  20-bit window at bit   0 - score 894810.054 (from 416 scores)
+not ok 154 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
+not ok 155 - Keyset 'Combination Hi-Lo' # DoNothing32
 ### Keyset 'Text' Tests ###
 # Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
 # Testing collisions   - Expected 25418.13, actual 14776335 (581.33x) - failed
-not ok 157 - Collision Rate for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
-# worst bias is the  20-bit window at bit   0 - 91825095.030% (416)
-not ok 158 - Distribution Bias Check for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+not ok 156 - Collision Rate for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+# worst bias is the  20-bit window at bit   0 - score 918250.950 (from 416 scores)
+not ok 157 - Distribution Bias Check for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
 # Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
 # Testing collisions   - Expected 25418.13, actual 14776335 (581.33x) - failed
-not ok 159 - Collision Rate for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
-# worst bias is the  20-bit window at bit   0 - 91825095.030% (416)
-not ok 160 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+not ok 158 - Collision Rate for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+# worst bias is the  20-bit window at bit   0 - score 918250.950 (from 416 scores)
+not ok 159 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
 # Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
 # Testing collisions   - Expected 25418.13, actual 14776335 (581.33x) - failed
-not ok 161 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
-# worst bias is the  20-bit window at bit   0 - 91825095.030% (416)
-not ok 162 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
-not ok 163 - Keyset 'Text' # DoNothing32
+not ok 160 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+# worst bias is the  20-bit window at bit   0 - score 918250.950 (from 416 scores)
+not ok 161 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+not ok 162 - Keyset 'Text' # DoNothing32
 ### Keyset 'Zeroes' Tests ###
-# Keyset 'Zeroes' - 262144 keys
+# Keyset 'Zeroes' - 262144 keys, zero seed
 # Testing collisions   - Expected     8.00, actual   262143 - ALL keys were in collision - failed
-not ok 164 - Collision Rate for Keyset 'Zeroes' - 262144 keys
-# worst bias is the  15-bit window at bit   0 - 2621358.000% (256)
-not ok 165 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys
-not ok 166 - Keyset 'Zeroes' # DoNothing32
+not ok 163 - Collision Rate for Keyset 'Zeroes' - 262144 keys, zero seed
+# worst bias is the  15-bit window at bit   0 - score 26213.580 (from 256 scores)
+not ok 164 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys, zero seed
+# Keyset 'Zeroes' - 262144 keys, nonzero seed
+# Testing collisions   - Expected     8.00, actual   262143 - ALL keys were in collision - failed
+not ok 165 - Collision Rate for Keyset 'Zeroes' - 262144 keys, nonzero seed
+# worst bias is the  15-bit window at bit   0 - score 26213.580 (from 256 scores)
+not ok 166 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys, nonzero seed
+not ok 167 - Keyset 'Zeroes' # DoNothing32
 ### Keyset 'Seed' Tests ###
 # Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
 # Testing collisions   - Expected   465.46, actual  1999561 - ALL keys were in collision - failed
-not ok 167 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
-# worst bias is the  18-bit window at bit   0 - 20768711.568% (352)
-not ok 168 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+not ok 168 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# worst bias is the  18-bit window at bit   0 - score 207687.116 (from 352 scores)
+not ok 169 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
 # Keyset 'Seed' - 2000000 seeds, Key ""
 # Testing collisions   - Expected   465.44, actual  1999533 - ALL keys were in collision - failed
-not ok 169 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
-# worst bias is the  18-bit window at bit   0 - 20768651.153% (352)
-not ok 170 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
+not ok 170 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
+# worst bias is the  18-bit window at bit   0 - score 207686.512 (from 352 scores)
+not ok 171 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
 # Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
 # Testing collisions   - Expected   465.46, actual  1999565 - ALL keys were in collision - failed
-not ok 171 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
-# worst bias is the  18-bit window at bit   0 - 20768720.199% (352)
-not ok 172 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+not ok 172 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# worst bias is the  18-bit window at bit   0 - score 207687.202 (from 352 scores)
+not ok 173 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
 # Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
 # Testing collisions   - Expected   465.45, actual  1999554 - ALL keys were in collision - failed
-not ok 173 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
-# worst bias is the  18-bit window at bit   0 - 20768696.464% (352)
-not ok 174 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
-not ok 175 - Keyset 'Seed' # DoNothing32
+not ok 174 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+# worst bias is the  18-bit window at bit   0 - score 207686.965 (from 352 scores)
+not ok 175 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+not ok 176 - Keyset 'Seed' # DoNothing32
 ### Keyset 'Effs' Tests ###
-# Keyset 'Effs' - 262144 keys
+# Keyset 'Effs' - 262144 keys, zero seed
 # Testing collisions   - Expected     8.00, actual   262143 - ALL keys were in collision - failed
-not ok 176 - Collision Rate for Keyset 'Effs' - 262144 keys
-# worst bias is the  15-bit window at bit   0 - 2621358.000% (256)
-not ok 177 - Distribution Bias Check for Keyset 'Effs' - 262144 keys
-not ok 178 - Keyset 'Effs' # DoNothing32
+not ok 177 - Collision Rate for Keyset 'Effs' - 262144 keys, zero seed
+# worst bias is the  15-bit window at bit   0 - score 26213.580 (from 256 scores)
+not ok 178 - Distribution Bias Check for Keyset 'Effs' - 262144 keys, zero seed
+# Keyset 'Effs' - 262144 keys, nonzero seed
+# Testing collisions   - Expected     8.00, actual   262143 - ALL keys were in collision - failed
+not ok 179 - Collision Rate for Keyset 'Effs' - 262144 keys, nonzero seed
+# worst bias is the  15-bit window at bit   0 - score 26213.580 (from 256 scores)
+not ok 180 - Distribution Bias Check for Keyset 'Effs' - 262144 keys, nonzero seed
+not ok 181 - Keyset 'Effs' # DoNothing32
 ### Keyset 'Words' Tests ###
 # Hashed 99171 keys from 297513 words from file '/usr/share/dict/words'
 # Testing collisions   - Expected    10.30, actual   297512 - ALL keys were in collision - failed
-not ok 179 - Collision Rate for Keyset 'Words'
-# worst bias is the  15-bit window at bit   0 - 2685202.977% (256)
-not ok 180 - Distribution Bias Check for Keyset 'Words'
-not ok 181 - all tests passed # DoNothing32
-1..181
-# Tests Failed. DoNothing32 failed 178 of 181 tests.
-# Testing took 1165.455223 seconds
-# This is SMHasher version v1.2-demerphq-0-gd7c9ff3 - built on Mar 18 2017.
+not ok 182 - Collision Rate for Keyset 'Words'
+# worst bias is the  15-bit window at bit   0 - score 26852.030 (from 256 scores)
+not ok 183 - Distribution Bias Check for Keyset 'Words'
+not ok 184 - all tests passed # DoNothing32
+1..184
+# Tests Failed. DoNothing32 failed 181 of 184 tests.
+# Testing took 1072.019272 seconds
+# This is SMHasher version v1.3-demerphq-7-geee7fbf - built on Dec 15 2017.

@@ -7,92 +7,93 @@ ok 1 - Found Hash # crc64_hw
 ok 2 - Verification code # crc64_hw
 # crc64_hw             - Verification value 0x6B9CBBED : Passed.
 ### Sanity Tests ###
-# Sanity check simple key bit flips and consistency..........
+# Sanity check simple key bit flips and consistency - hashbytes=8..........
 ok 3 - SanityTest # crc64_hw
 # Sanity check null suffixes change the hash (simple)..........
-ok 4 - Appended Zeroes Test # crc64_hw
-ok 5 - Sanity Test # crc64_hw
+not ok 4 - Appended Zeroes Test # crc64_hw
+# There were 57 collisions
+not ok 5 - Sanity Test # crc64_hw
 ### Speed Tests ###
 ## Bulk speed test - 262144-byte keys
-# Alignment  7 -  3.196 bytes/cycle - 9145.26 MiB/sec @ 3 ghz
-# Alignment  6 -  3.196 bytes/cycle - 9144.92 MiB/sec @ 3 ghz
-# Alignment  5 -  3.196 bytes/cycle - 9144.53 MiB/sec @ 3 ghz
-# Alignment  4 -  3.196 bytes/cycle - 9144.16 MiB/sec @ 3 ghz
-# Alignment  3 -  3.196 bytes/cycle - 9143.79 MiB/sec @ 3 ghz
-# Alignment  2 -  3.196 bytes/cycle - 9143.44 MiB/sec @ 3 ghz
-# Alignment  1 -  3.196 bytes/cycle - 9143.03 MiB/sec @ 3 ghz
-# Alignment  0 -  3.196 bytes/cycle - 9145.22 MiB/sec @ 3 ghz
-# Average      -  3.196 bytes/cycle - 9144.29 MiB/sec @ 3 ghz
+# Alignment  7 -  3.195 bytes/cycle - 9140.91 MiB/sec @ 3 ghz
+# Alignment  6 -  3.195 bytes/cycle - 9141.22 MiB/sec @ 3 ghz
+# Alignment  5 -  3.195 bytes/cycle - 9141.73 MiB/sec @ 3 ghz
+# Alignment  4 -  3.195 bytes/cycle - 9141.38 MiB/sec @ 3 ghz
+# Alignment  3 -  3.195 bytes/cycle - 9140.59 MiB/sec @ 3 ghz
+# Alignment  2 -  3.195 bytes/cycle - 9140.02 MiB/sec @ 3 ghz
+# Alignment  1 -  3.195 bytes/cycle - 9140.60 MiB/sec @ 3 ghz
+# Alignment  0 -  3.195 bytes/cycle - 9142.17 MiB/sec @ 3 ghz
+# Average      -  3.195 bytes/cycle - 9141.08 MiB/sec @ 3 ghz
 ## KeySpeed tests
-# crc64_hw                  0 byte keys        4.000 c/h
-# crc64_hw                  1 byte keys       16.370 c/h       16.370 c/b        0.061 b/c
-# crc64_hw                  2 byte keys       15.151 c/h        7.576 c/b        0.132 b/c
-# crc64_hw                  3 byte keys       14.900 c/h        4.967 c/b        0.201 b/c
-# crc64_hw                  4 byte keys       15.000 c/h        3.750 c/b        0.267 b/c
-# crc64_hw                  5 byte keys       13.598 c/h        2.720 c/b        0.368 b/c
-# crc64_hw                  6 byte keys       13.156 c/h        2.193 c/b        0.456 b/c
-# crc64_hw                  7 byte keys       12.000 c/h        1.714 c/b        0.583 b/c
-# crc64_hw                  8 byte keys       16.224 c/h        2.028 c/b        0.493 b/c
-# crc64_hw                  9 byte keys       14.998 c/h        1.666 c/b        0.600 b/c
-# crc64_hw                 10 byte keys       13.000 c/h        1.300 c/b        0.769 b/c
-# crc64_hw                 11 byte keys       13.000 c/h        1.182 c/b        0.846 b/c
-# crc64_hw                 12 byte keys       13.920 c/h        1.160 c/b        0.862 b/c
-# crc64_hw                 13 byte keys       12.992 c/h        0.999 c/b        1.001 b/c
-# crc64_hw                 14 byte keys       12.997 c/h        0.928 c/b        1.077 b/c
-# crc64_hw                 15 byte keys       15.000 c/h        1.000 c/b        1.000 b/c
-# crc64_hw                 16 byte keys       21.670 c/h        1.354 c/b        0.738 b/c
-# crc64_hw                 17 byte keys       19.662 c/h        1.157 c/b        0.865 b/c
-# crc64_hw                 18 byte keys       18.312 c/h        1.017 c/b        0.983 b/c
-# crc64_hw                 19 byte keys       18.124 c/h        0.954 c/b        1.048 b/c
-# crc64_hw                 20 byte keys       15.931 c/h        0.797 c/b        1.255 b/c
-# crc64_hw                 21 byte keys       15.745 c/h        0.750 c/b        1.334 b/c
-# crc64_hw                 22 byte keys       15.854 c/h        0.721 c/b        1.388 b/c
-# crc64_hw                 23 byte keys       17.000 c/h        0.739 c/b        1.353 b/c
-# crc64_hw                 24 byte keys       22.120 c/h        0.922 c/b        1.085 b/c
-# crc64_hw                 25 byte keys       21.151 c/h        0.846 c/b        1.182 b/c
-# crc64_hw                 26 byte keys       20.732 c/h        0.797 c/b        1.254 b/c
-# crc64_hw                 27 byte keys       19.987 c/h        0.740 c/b        1.351 b/c
-# crc64_hw                 28 byte keys       19.520 c/h        0.697 c/b        1.434 b/c
-# crc64_hw                 29 byte keys       16.000 c/h        0.552 c/b        1.812 b/c
-# crc64_hw                 30 byte keys       16.000 c/h        0.533 c/b        1.875 b/c
-# crc64_hw                 31 byte keys       20.000 c/h        0.645 c/b        1.550 b/c
-#                          Average < 32       16.066 c/h        1.037 c/b        0.965 b/c
-# crc64_hw                 32 byte keys       23.878 c/h        0.746 c/b        1.340 b/c
-# crc64_hw                 36 byte keys       20.000 c/h        0.556 c/b        1.800 b/c
-# crc64_hw                 40 byte keys       25.000 c/h        0.625 c/b        1.600 b/c
-# crc64_hw                 44 byte keys       21.000 c/h        0.477 c/b        2.095 b/c
-# crc64_hw                 48 byte keys       26.000 c/h        0.542 c/b        1.846 b/c
-# crc64_hw                 52 byte keys       23.543 c/h        0.453 c/b        2.209 b/c
-# crc64_hw                 56 byte keys       28.000 c/h        0.500 c/b        2.000 b/c
-# crc64_hw                 60 byte keys       25.691 c/h        0.428 c/b        2.335 b/c
-# crc64_hw                 64 byte keys       30.000 c/h        0.469 c/b        2.133 b/c
-# crc64_hw                 68 byte keys       26.000 c/h        0.382 c/b        2.615 b/c
-# crc64_hw                 72 byte keys       32.114 c/h        0.446 c/b        2.242 b/c
-# crc64_hw                 76 byte keys       28.566 c/h        0.376 c/b        2.660 b/c
-# crc64_hw                 80 byte keys       33.000 c/h        0.412 c/b        2.424 b/c
-# crc64_hw                 84 byte keys       31.000 c/h        0.369 c/b        2.710 b/c
-# crc64_hw                 88 byte keys       35.000 c/h        0.398 c/b        2.514 b/c
-# crc64_hw                 92 byte keys       33.000 c/h        0.359 c/b        2.788 b/c
-# crc64_hw                 96 byte keys       36.000 c/h        0.375 c/b        2.667 b/c
-# crc64_hw                100 byte keys       36.000 c/h        0.360 c/b        2.778 b/c
-# crc64_hw                104 byte keys       38.000 c/h        0.365 c/b        2.737 b/c
-# crc64_hw                108 byte keys       38.000 c/h        0.352 c/b        2.842 b/c
-# crc64_hw                112 byte keys       40.503 c/h        0.362 c/b        2.765 b/c
-# crc64_hw                116 byte keys       41.000 c/h        0.353 c/b        2.829 b/c
-# crc64_hw                120 byte keys       41.763 c/h        0.348 c/b        2.873 b/c
-# crc64_hw                124 byte keys       43.000 c/h        0.347 c/b        2.884 b/c
-#                         Average < 128       22.682 c/h        0.536 c/b        1.864 b/c
-# crc64_hw                128 byte keys       43.000 c/h        0.336 c/b        2.977 b/c
-# crc64_hw                256 byte keys      104.659 c/h        0.409 c/b        2.446 b/c
-# crc64_hw                512 byte keys      184.703 c/h        0.361 c/b        2.772 b/c
-# crc64_hw               1024 byte keys      344.560 c/h        0.336 c/b        2.972 b/c
-# crc64_hw               2048 byte keys      664.929 c/h        0.325 c/b        3.080 b/c
-# crc64_hw               4096 byte keys     1305.612 c/h        0.319 c/b        3.137 b/c
-# crc64_hw               8192 byte keys     2586.476 c/h        0.316 c/b        3.167 b/c
-# crc64_hw              16384 byte keys     5148.462 c/h        0.314 c/b        3.182 b/c
-# crc64_hw              32768 byte keys    10271.281 c/h        0.313 c/b        3.190 b/c
-# crc64_hw              65536 byte keys    20523.565 c/h        0.313 c/b        3.193 b/c
-#                       Overall Average      643.143 c/h        0.318 c/b        3.141 b/c
+# crc64_hw                  0 byte keys        5.000 c/h
+# crc64_hw                  1 byte keys       11.000 c/h       11.000 c/b        0.091 b/c
+# crc64_hw                  2 byte keys       13.323 c/h        6.661 c/b        0.150 b/c
+# crc64_hw                  3 byte keys       15.635 c/h        5.212 c/b        0.192 b/c
+# crc64_hw                  4 byte keys       14.000 c/h        3.500 c/b        0.286 b/c
+# crc64_hw                  5 byte keys       14.668 c/h        2.934 c/b        0.341 b/c
+# crc64_hw                  6 byte keys       16.850 c/h        2.808 c/b        0.356 b/c
+# crc64_hw                  7 byte keys       18.924 c/h        2.703 c/b        0.370 b/c
+# crc64_hw                  8 byte keys       13.597 c/h        1.700 c/b        0.588 b/c
+# crc64_hw                  9 byte keys       14.496 c/h        1.611 c/b        0.621 b/c
+# crc64_hw                 10 byte keys       16.816 c/h        1.682 c/b        0.595 b/c
+# crc64_hw                 11 byte keys       17.000 c/h        1.545 c/b        0.647 b/c
+# crc64_hw                 12 byte keys       16.676 c/h        1.390 c/b        0.720 b/c
+# crc64_hw                 13 byte keys       17.903 c/h        1.377 c/b        0.726 b/c
+# crc64_hw                 14 byte keys       20.948 c/h        1.496 c/b        0.668 b/c
+# crc64_hw                 15 byte keys       21.537 c/h        1.436 c/b        0.696 b/c
+# crc64_hw                 16 byte keys       15.130 c/h        0.946 c/b        1.057 b/c
+# crc64_hw                 17 byte keys       15.000 c/h        0.882 c/b        1.133 b/c
+# crc64_hw                 18 byte keys       17.731 c/h        0.985 c/b        1.015 b/c
+# crc64_hw                 19 byte keys       19.221 c/h        1.012 c/b        0.988 b/c
+# crc64_hw                 20 byte keys       18.791 c/h        0.940 c/b        1.064 b/c
+# crc64_hw                 21 byte keys       18.759 c/h        0.893 c/b        1.119 b/c
+# crc64_hw                 22 byte keys       21.914 c/h        0.996 c/b        1.004 b/c
+# crc64_hw                 23 byte keys       22.000 c/h        0.957 c/b        1.045 b/c
+# crc64_hw                 24 byte keys       16.998 c/h        0.708 c/b        1.412 b/c
+# crc64_hw                 25 byte keys       18.650 c/h        0.746 c/b        1.341 b/c
+# crc64_hw                 26 byte keys       20.210 c/h        0.777 c/b        1.286 b/c
+# crc64_hw                 27 byte keys       21.718 c/h        0.804 c/b        1.243 b/c
+# crc64_hw                 28 byte keys       20.944 c/h        0.748 c/b        1.337 b/c
+# crc64_hw                 29 byte keys       21.258 c/h        0.733 c/b        1.364 b/c
+# crc64_hw                 30 byte keys       24.147 c/h        0.805 c/b        1.242 b/c
+# crc64_hw                 31 byte keys       25.326 c/h        0.817 c/b        1.224 b/c
+#                          Average < 32       17.693 c/h        1.141 c/b        0.876 b/c
+# crc64_hw                 32 byte keys       19.697 c/h        0.616 c/b        1.625 b/c
+# crc64_hw                 36 byte keys       22.607 c/h        0.628 c/b        1.592 b/c
+# crc64_hw                 40 byte keys       21.165 c/h        0.529 c/b        1.890 b/c
+# crc64_hw                 44 byte keys       23.420 c/h        0.532 c/b        1.879 b/c
+# crc64_hw                 48 byte keys       22.987 c/h        0.479 c/b        2.088 b/c
+# crc64_hw                 52 byte keys       25.589 c/h        0.492 c/b        2.032 b/c
+# crc64_hw                 56 byte keys       23.315 c/h        0.416 c/b        2.402 b/c
+# crc64_hw                 60 byte keys       25.838 c/h        0.431 c/b        2.322 b/c
+# crc64_hw                 64 byte keys       22.000 c/h        0.344 c/b        2.909 b/c
+# crc64_hw                 68 byte keys       25.000 c/h        0.368 c/b        2.720 b/c
+# crc64_hw                 72 byte keys       25.000 c/h        0.347 c/b        2.880 b/c
+# crc64_hw                 76 byte keys       27.000 c/h        0.355 c/b        2.815 b/c
+# crc64_hw                 80 byte keys       27.000 c/h        0.338 c/b        2.963 b/c
+# crc64_hw                 84 byte keys       30.000 c/h        0.357 c/b        2.800 b/c
+# crc64_hw                 88 byte keys       30.000 c/h        0.341 c/b        2.933 b/c
+# crc64_hw                 92 byte keys       32.000 c/h        0.348 c/b        2.875 b/c
+# crc64_hw                 96 byte keys       32.000 c/h        0.333 c/b        3.000 b/c
+# crc64_hw                100 byte keys       35.000 c/h        0.350 c/b        2.857 b/c
+# crc64_hw                104 byte keys       35.000 c/h        0.337 c/b        2.971 b/c
+# crc64_hw                108 byte keys       37.000 c/h        0.343 c/b        2.919 b/c
+# crc64_hw                112 byte keys       37.000 c/h        0.330 c/b        3.027 b/c
+# crc64_hw                116 byte keys       40.000 c/h        0.345 c/b        2.900 b/c
+# crc64_hw                120 byte keys       40.000 c/h        0.333 c/b        3.000 b/c
+# crc64_hw                124 byte keys       42.884 c/h        0.346 c/b        2.892 b/c
+#                         Average < 128       22.637 c/h        0.535 c/b        1.868 b/c
+# crc64_hw                128 byte keys       42.542 c/h        0.332 c/b        3.009 b/c
+# crc64_hw                256 byte keys       43.070 c/h        0.168 c/b        5.944 b/c
+# crc64_hw                512 byte keys       50.714 c/h        0.099 c/b       10.096 b/c
+# crc64_hw               1024 byte keys      209.546 c/h        0.205 c/b        4.887 b/c
+# crc64_hw               2048 byte keys      530.995 c/h        0.259 c/b        3.857 b/c
+# crc64_hw               4096 byte keys     1171.274 c/h        0.286 c/b        3.497 b/c
+# crc64_hw               8192 byte keys     2588.878 c/h        0.316 c/b        3.164 b/c
+# crc64_hw              16384 byte keys     5150.607 c/h        0.314 c/b        3.181 b/c
+# crc64_hw              32768 byte keys    10273.671 c/h        0.314 c/b        3.190 b/c
+# crc64_hw              65536 byte keys    20533.715 c/h        0.313 c/b        3.192 b/c
+#                       Overall Average      634.283 c/h        0.314 c/b        3.185 b/c
 ok 6 - Speed (always passes) # crc64_hw
 ### Differential Tests ###
 # Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 64 bit hashes.
@@ -155,7 +156,7 @@ ok 16 - Differential # crc64_hw
 #     - hash bit 1 gtest-prob not-random: 100.0000 (0/32000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (0/32000000)
 #     - with 61 more hash bit errors not described above.
-not ok 17 - Strict Avalanche Criteria - 0 bit keys
+not ok 17 - Strict Avalanche Criteria - 0 bit/0 byte keys # crc64_hw
 # Testing   8-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 5.000000e+05
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -199,7 +200,7 @@ not ok 17 - Strict Avalanche Criteria - 0 bit keys
 #     - hash bit 1 gtest-prob not-random: 100.0000 (6500000/29500000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (6500000/29500000)
 #     - with 61 more hash bit errors not described above.
-not ok 18 - Strict Avalanche Criteria - 8 bit keys
+not ok 18 - Strict Avalanche Criteria - 8 bit/1 byte keys # crc64_hw
 # Testing  16-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 5.000000e+05
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -243,7 +244,7 @@ not ok 18 - Strict Avalanche Criteria - 8 bit keys
 #     - hash bit 1 gtest-prob not-random: 100.0000 (9500000/30500000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (10500000/29500000)
 #     - with 61 more hash bit errors not described above.
-not ok 19 - Strict Avalanche Criteria - 16 bit keys
+not ok 19 - Strict Avalanche Criteria - 16 bit/2 byte keys # crc64_hw
 # Testing  24-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 5.000000e+05
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -287,7 +288,7 @@ not ok 19 - Strict Avalanche Criteria - 16 bit keys
 #     - hash bit 1 gtest-prob not-random: 100.0000 (13500000/30500000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (14500000/29500000)
 #     - with 61 more hash bit errors not described above.
-not ok 20 - Strict Avalanche Criteria - 24 bit keys
+not ok 20 - Strict Avalanche Criteria - 24 bit/3 byte keys # crc64_hw
 # Testing  32-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 5.000000e+05
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -331,7 +332,7 @@ not ok 20 - Strict Avalanche Criteria - 24 bit keys
 #     - hash bit 1 gtest-prob not-random: 100.0000 (18000000/30000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (18000000/30000000)
 #     - with 61 more hash bit errors not described above.
-not ok 21 - Strict Avalanche Criteria - 32 bit keys
+not ok 21 - Strict Avalanche Criteria - 32 bit/4 byte keys # crc64_hw
 # Testing  40-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 5.000000e+05
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -375,7 +376,7 @@ not ok 21 - Strict Avalanche Criteria - 32 bit keys
 #     - hash bit 1 gtest-prob not-random: 100.0000 (18000000/34000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (19000000/33000000)
 #     - with 61 more hash bit errors not described above.
-not ok 22 - Strict Avalanche Criteria - 40 bit keys
+not ok 22 - Strict Avalanche Criteria - 40 bit/5 byte keys # crc64_hw
 # Testing  48-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 5.000000e+05
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -419,7 +420,7 @@ not ok 22 - Strict Avalanche Criteria - 40 bit keys
 #     - hash bit 1 gtest-prob not-random: 100.0000 (22500000/33500000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (22000000/34000000)
 #     - with 61 more hash bit errors not described above.
-not ok 23 - Strict Avalanche Criteria - 48 bit keys
+not ok 23 - Strict Avalanche Criteria - 48 bit/6 byte keys # crc64_hw
 # Testing  56-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 5.000000e+05
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -463,7 +464,7 @@ not ok 23 - Strict Avalanche Criteria - 48 bit keys
 #     - hash bit 1 gtest-prob not-random: 100.0000 (23500000/36500000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (23000000/37000000)
 #     - with 61 more hash bit errors not described above.
-not ok 24 - Strict Avalanche Criteria - 56 bit keys
+not ok 24 - Strict Avalanche Criteria - 56 bit/7 byte keys # crc64_hw
 # Testing  64-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 5.000000e+05
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -507,7 +508,7 @@ not ok 24 - Strict Avalanche Criteria - 56 bit keys
 #     - hash bit 1 gtest-prob not-random: 100.0000 (25000000/39000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (26000000/38000000)
 #     - with 61 more hash bit errors not described above.
-not ok 25 - Strict Avalanche Criteria - 64 bit keys
+not ok 25 - Strict Avalanche Criteria - 64 bit/8 byte keys # crc64_hw
 # Testing  72-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 5.000000e+05
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -551,7 +552,7 @@ not ok 25 - Strict Avalanche Criteria - 64 bit keys
 #     - hash bit 1 gtest-prob not-random: 100.0000 (28500000/39500000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (28000000/40000000)
 #     - with 61 more hash bit errors not described above.
-not ok 26 - Strict Avalanche Criteria - 72 bit keys
+not ok 26 - Strict Avalanche Criteria - 72 bit/9 byte keys # crc64_hw
 # Testing  80-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 5.000000e+05
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -595,7 +596,7 @@ not ok 26 - Strict Avalanche Criteria - 72 bit keys
 #     - hash bit 1 gtest-prob not-random: 100.0000 (29500000/42500000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (30500000/41500000)
 #     - with 61 more hash bit errors not described above.
-not ok 27 - Strict Avalanche Criteria - 80 bit keys
+not ok 27 - Strict Avalanche Criteria - 80 bit/10 byte keys # crc64_hw
 # Testing  88-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 5.000000e+05
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -639,7 +640,7 @@ not ok 27 - Strict Avalanche Criteria - 80 bit keys
 #     - hash bit 1 gtest-prob not-random: 100.0000 (32000000/44000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (32000000/44000000)
 #     - with 61 more hash bit errors not described above.
-not ok 28 - Strict Avalanche Criteria - 88 bit keys
+not ok 28 - Strict Avalanche Criteria - 88 bit/11 byte keys # crc64_hw
 # Testing  96-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 5.000000e+05
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -683,7 +684,7 @@ not ok 28 - Strict Avalanche Criteria - 88 bit keys
 #     - hash bit 1 gtest-prob not-random: 100.0000 (32000000/48000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (31500000/48500000)
 #     - with 61 more hash bit errors not described above.
-not ok 29 - Strict Avalanche Criteria - 96 bit keys
+not ok 29 - Strict Avalanche Criteria - 96 bit/12 byte keys # crc64_hw
 # Testing 104-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 5.000000e+05
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -727,7 +728,7 @@ not ok 29 - Strict Avalanche Criteria - 96 bit keys
 #     - hash bit 1 gtest-prob not-random: 100.0000 (32500000/51500000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (33500000/50500000)
 #     - with 61 more hash bit errors not described above.
-not ok 30 - Strict Avalanche Criteria - 104 bit keys
+not ok 30 - Strict Avalanche Criteria - 104 bit/13 byte keys # crc64_hw
 # Testing 112-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 5.000000e+05
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -771,7 +772,7 @@ not ok 30 - Strict Avalanche Criteria - 104 bit keys
 #     - hash bit 1 gtest-prob not-random: 100.0000 (34500000/53500000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (35000000/53000000)
 #     - with 61 more hash bit errors not described above.
-not ok 31 - Strict Avalanche Criteria - 112 bit keys
+not ok 31 - Strict Avalanche Criteria - 112 bit/14 byte keys # crc64_hw
 # Testing 120-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 5.000000e+05
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -815,7 +816,7 @@ not ok 31 - Strict Avalanche Criteria - 112 bit keys
 #     - hash bit 1 gtest-prob not-random: 100.0000 (36500000/55500000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (36500000/55500000)
 #     - with 61 more hash bit errors not described above.
-not ok 32 - Strict Avalanche Criteria - 120 bit keys
+not ok 32 - Strict Avalanche Criteria - 120 bit/15 byte keys # crc64_hw
 # Testing 128-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 5.000000e+05
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -859,7 +860,7 @@ not ok 32 - Strict Avalanche Criteria - 120 bit keys
 #     - hash bit 1 gtest-prob not-random: 100.0000 (40500000/55500000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (41500000/54500000)
 #     - with 61 more hash bit errors not described above.
-not ok 33 - Strict Avalanche Criteria - 128 bit keys
+not ok 33 - Strict Avalanche Criteria - 128 bit/16 byte keys # crc64_hw
 # Testing 136-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 5.000000e+05
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -903,7 +904,7 @@ not ok 33 - Strict Avalanche Criteria - 128 bit keys
 #     - hash bit 1 gtest-prob not-random: 100.0000 (45000000/55000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (45500000/54500000)
 #     - with 61 more hash bit errors not described above.
-not ok 34 - Strict Avalanche Criteria - 136 bit keys
+not ok 34 - Strict Avalanche Criteria - 136 bit/17 byte keys # crc64_hw
 # Testing 144-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 5.000000e+05
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -947,7 +948,7 @@ not ok 34 - Strict Avalanche Criteria - 136 bit keys
 #     - hash bit 1 gtest-prob not-random: 100.0000 (47000000/57000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (46500000/57500000)
 #     - with 61 more hash bit errors not described above.
-not ok 35 - Strict Avalanche Criteria - 144 bit keys
+not ok 35 - Strict Avalanche Criteria - 144 bit/18 byte keys # crc64_hw
 # Testing 152-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 5.000000e+05
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -991,7 +992,7 @@ not ok 35 - Strict Avalanche Criteria - 144 bit keys
 #     - hash bit 1 gtest-prob not-random: 100.0000 (51000000/57000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (52000000/56000000)
 #     - with 61 more hash bit errors not described above.
-not ok 36 - Strict Avalanche Criteria - 152 bit keys
+not ok 36 - Strict Avalanche Criteria - 152 bit/19 byte keys # crc64_hw
 # Testing 152-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 5.000000e+05
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -1035,7 +1036,7 @@ not ok 36 - Strict Avalanche Criteria - 152 bit keys
 #     - hash bit 1 gtest-prob not-random: 100.0000 (51000000/57000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (52000000/56000000)
 #     - with 61 more hash bit errors not described above.
-not ok 37 - Strict Avalanche Criteria - 160 bit keys
+not ok 37 - Strict Avalanche Criteria - 152 bit/19 byte keys # crc64_hw
 # Testing 200-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 5.000000e+05
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -1079,7 +1080,7 @@ not ok 37 - Strict Avalanche Criteria - 160 bit keys
 #     - hash bit 1 gtest-prob not-random: 100.0000 (61000000/71000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (61500000/70500000)
 #     - with 60 more hash bit errors not described above.
-not ok 38 - Strict Avalanche Criteria - 200 bit keys
+not ok 38 - Strict Avalanche Criteria - 200 bit/25 byte keys # crc64_hw
 # Testing 256-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 5.000000e+05
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -1123,7 +1124,7 @@ not ok 38 - Strict Avalanche Criteria - 200 bit keys
 #     - hash bit 1 gtest-prob not-random: 100.0000 (78000000/82000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (77500000/82500000)
 #     - with 61 more hash bit errors not described above.
-not ok 39 - Strict Avalanche Criteria - 256 bit keys
+not ok 39 - Strict Avalanche Criteria - 256 bit/32 byte keys # crc64_hw
 # Testing 512-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 5.000000e+05
 #              +---------------------------------------------------+
 #              |012345678901234567890123456789012345678901234567890|
@@ -1167,97 +1168,140 @@ not ok 39 - Strict Avalanche Criteria - 256 bit keys
 #     - hash bit 1 gtest-prob not-random: 100.0000 (137000000/151000000)
 #     - hash bit 2 gtest-prob not-random: 100.0000 (137000000/151000000)
 #     - with 61 more hash bit errors not described above.
-not ok 40 - Strict Avalanche Criteria - 512 bit keys
-not ok 41 - Strict Avalanche Criteria # crc64_hw
+not ok 40 - Strict Avalanche Criteria - 512 bit/64 byte keys # crc64_hw
+# Testing 520-bit keys.......... not ok! # worst-bit: 100.000% error-ratio: 5.000000e+05
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |pct diff from 50%: abs((0.5-(changed/reps))*2) *100|
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |################################################################| x 64
+# key      0.0 |################################################################| x 520
+#              +----------------------------------------------------------------+
+#              +---------------------------------------------------+
+#              |012345678901234567890123456789012345678901234567890|
+#              +---------------------------------------------------+
+# Scale:       |.1234567890abcdefghijklmnopqrstuvwxyzãäåêëîïðñôõöûü|
+#              |üÿABCDEFGHIJKLMNOPQRSTUVWXYZÂÃÄÅÊËÑÔÕÖÛÜÝø¤*©®¶&%@#|
+#              +---------------------------------------------------+
+#              |scaled p-value above confidence level (zero is ok) |
+#              +----------------------------------------------------------------+
+#              |0         1         2         3         4         5         6   |
+#              |0123456789012345678901234567890123456789012345678901234567890123|
+#              +----------------------------------------------------------------+
+# seed     0.0 |################################################################| x 64
+# key      0.0 |################################################################| x 520
+#              +----------------------------------------------------------------+
+# 37376 of 37376 bits failed (100.00%) failed at 99.999943 confidence
+#     g-test: 100.000000%
+#     sum-error-square: 256.00000000
+#     key/seed errors: 584/584
+#     - seed bit 0 gtest probability not random: 100.0000 (8500000/23500000)
+#     - seed bit 1 gtest probability not random: 100.0000 (7500000/24500000)
+#     - key bit 0 gtest probability not random: 100.0000 (8500000/23500000)
+#     - key bit 1 gtest probability not random: 100.0000 (7500000/24500000)
+#     - with 62 more seed errors and 518 more key errors not described above.
+#     hash bit-level errors: 63/64
+#     - hash bit 0 gtest-prob not-random: 100.0000 (138500000/153500000)
+#     - hash bit 1 gtest-prob not-random: 100.0000 (138500000/153500000)
+#     - hash bit 2 gtest-prob not-random: 100.0000 (138000000/154000000)
+#     - with 60 more hash bit errors not described above.
+not ok 41 - Strict Avalanche Criteria - 520 bit/65 byte keys # crc64_hw
 ### Keyset 'Cyclic' Tests ###
 # Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
 # Testing collisions   - Expected     0.00, actual    23353 - Excessive keys in collision - failed
 not ok 42 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
-# worst bias is the  20-bit window at bit  32 - 86679491.323% (832)
+# worst bias is the  20-bit window at bit  32 - score 866794.913 (from 832 scores)
 not ok 43 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
 # Testing collisions   - Expected     0.00, actual    23163 - Excessive keys in collision - failed
 not ok 44 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
-# worst bias is the  20-bit window at bit  32 - 86679491.323% (832)
+# worst bias is the  20-bit window at bit  32 - score 866794.913 (from 832 scores)
 not ok 45 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 9 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
 # Testing collisions   - Expected     0.00, actual    23226 - Excessive keys in collision - failed
 not ok 46 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
-# worst bias is the  20-bit window at bit  32 - 86679491.323% (832)
+# worst bias is the  20-bit window at bit  32 - score 866794.913 (from 832 scores)
 not ok 47 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 10 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
 # Testing collisions   - Expected     0.00, actual    22856 - Excessive keys in collision - failed
 not ok 48 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
-# worst bias is the  20-bit window at bit  32 - 86679491.323% (832)
+# worst bias is the  20-bit window at bit  32 - score 866794.913 (from 832 scores)
 not ok 49 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 11 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
 # Testing collisions   - Expected     0.00, actual    23331 - Excessive keys in collision - failed
 not ok 50 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
-# worst bias is the  20-bit window at bit  32 - 86679491.323% (832)
+# worst bias is the  20-bit window at bit  32 - score 866794.913 (from 832 scores)
 not ok 51 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 12 bytes - 10000000 keys
 not ok 52 - Keyset 'Cyclic' # crc64_hw
 ### Keyset 'TwoBytes' Tests ###
 # Testing collisions   - Expected     0.00, actual   261375 - Excessive keys in collision - failed
 not ok 53 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
-# worst bias is the  16-bit window at bit  32 - 5457324.894% (576)
+# worst bias is the  16-bit window at bit  32 - score 54573.249 (from 576 scores)
 not ok 54 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
 # Testing collisions   - Expected     0.00, actual  3648417 - Excessive keys in collision - failed
 not ok 55 - Collision Rate for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
-# worst bias is the  20-bit window at bit  32 - 75801342.236% (832)
+# worst bias is the  20-bit window at bit  32 - score 758013.422 (from 832 scores)
 not ok 56 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
 # Testing collisions   - Expected     0.00, actual 14323401 - Excessive keys in collision - failed
 not ok 57 - Collision Rate for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
-# worst bias is the  20-bit window at bit  32 - 94241356.557% (832)
+# worst bias is the  20-bit window at bit  32 - score 942413.566 (from 832 scores)
 not ok 58 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
 # Testing collisions   - Expected     0.00, actual 36449548 - Excessive keys in collision - failed
 not ok 59 - Collision Rate for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
-# worst bias is the  20-bit window at bit  32 - 100112972.016% (832)
+# worst bias is the  20-bit window at bit  32 - score 1001129.720 (from 832 scores)
 not ok 60 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
 # Testing collisions   - Expected     0.00, actual 74190498 - Excessive keys in collision - failed
 not ok 61 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
-# worst bias is the  20-bit window at bit  32 - 102376478.382% (832)
+# worst bias is the  20-bit window at bit  32 - score 1023764.784 (from 832 scores)
 not ok 62 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
 not ok 63 - Keyset 'TwoBytes' # crc64_hw
 ### Keyset 'Sparse' Tests ###
 # Keyset 'Sparse' - 32-bit keys with up to 6 bits set - 1149017 keys
 # Testing collisions   - Expected     0.00, actual      151 - Excessive keys in collision - failed
 not ok 64 - Collision Rate for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
-# worst bias is the  17-bit window at bit  32 - 10672260.845% (640)
+# worst bias is the  17-bit window at bit  32 - score 106722.608 (from 640 scores)
 not ok 65 - Distribution Bias Check for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
 # Keyset 'Sparse' - 40-bit keys with up to 6 bits set - 4598479 keys
 # Testing collisions   - Expected     0.00, actual     2449 - Excessive keys in collision - failed
 not ok 66 - Collision Rate for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
-# worst bias is the  19-bit window at bit  32 - 42693451.049% (768)
+# worst bias is the  19-bit window at bit  32 - score 426934.510 (from 768 scores)
 not ok 67 - Distribution Bias Check for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
 # Keyset 'Sparse' - 48-bit keys with up to 5 bits set - 1925357 keys
 # Testing collisions   - Expected     0.00, actual      469 - Excessive keys in collision - failed
 not ok 68 - Collision Rate for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
-# worst bias is the  18-bit window at bit  32 - 20603752.950% (704)
+# worst bias is the  18-bit window at bit  32 - score 206037.529 (from 704 scores)
 not ok 69 - Distribution Bias Check for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
 # Keyset 'Sparse' - 56-bit keys with up to 5 bits set - 4216423 keys
 # Testing collisions   - Expected     0.00, actual     2125 - Excessive keys in collision - failed
 not ok 70 - Collision Rate for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
-# worst bias is the  19-bit window at bit  32 - 41987010.083% (768)
+# worst bias is the  19-bit window at bit  32 - score 419870.101 (from 768 scores)
 not ok 71 - Distribution Bias Check for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
 # Keyset 'Sparse' - 64-bit keys with up to 5 bits set - 8303633 keys
 # Testing collisions   - Expected     0.00, actual     7677 - Excessive keys in collision - failed
 not ok 72 - Collision Rate for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
-# worst bias is the  20-bit window at bit  32 - 83714659.630% (832)
+# worst bias is the  20-bit window at bit  32 - score 837146.596 (from 832 scores)
 not ok 73 - Distribution Bias Check for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
 # Keyset 'Sparse' - 96-bit keys with up to 4 bits set - 3469497 keys
 # Testing collisions   - Expected     0.00, actual     1299 - Excessive keys in collision - failed
 not ok 74 - Collision Rate for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
-# worst bias is the  19-bit window at bit  32 - 40260793.749% (768)
+# worst bias is the  19-bit window at bit  32 - score 402607.937 (from 768 scores)
 not ok 75 - Distribution Bias Check for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
 # Keyset 'Sparse' - 256-bit keys with up to 3 bits set - 2796417 keys
 # Testing collisions   - Expected     0.00, actual      897 - Excessive keys in collision - failed
 not ok 76 - Collision Rate for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
-# worst bias is the  19-bit window at bit  32 - 38130756.979% (768)
+# worst bias is the  19-bit window at bit  32 - score 381307.570 (from 768 scores)
 not ok 77 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
 # Keyset 'Sparse' - 2048-bit keys with up to 2 bits set - 2098177 keys
 # Testing collisions   - Expected     0.00, actual      476 - Excessive keys in collision - failed
 not ok 78 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
-# worst bias is the  18-bit window at bit  32 - 20973487.193% (704)
+# worst bias is the  18-bit window at bit  32 - score 209734.872 (from 704 scores)
 not ok 79 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
 not ok 80 - Keyset 'Sparse' # crc64_hw
 ### Keyset 'Crc-MultiCollision' Tests ###
@@ -1395,105 +1439,115 @@ ok 140 - Collision Rate for Keyset 'City64-MultiCollision' - seed 10 # crc64_hw
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
 ok 141 - Collision Rate for Keyset 'Combination Lowbits'
-# worst bias is the  20-bit window at bit  32 - 94519435.578% (832)
+# worst bias is the  20-bit window at bit  32 - score 945194.356 (from 832 scores)
 not ok 142 - Distribution Bias Check for Keyset 'Combination Lowbits'
 not ok 143 - Keyset 'Combination Lowbits' # crc64_hw
 ### Keyset 'Combination Highbits' Tests ###
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
 ok 144 - Collision Rate for Keyset 'Combination Highbits'
-# worst bias is the  20-bit window at bit  32 - 94519435.578% (832)
+# worst bias is the  20-bit window at bit  32 - score 945194.356 (from 832 scores)
 not ok 145 - Distribution Bias Check for Keyset 'Combination Highbits'
 not ok 146 - Keyset 'Combination Highbits' # crc64_hw
 ### Keyset 'Combination Highbits2' Tests ###
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
 ok 147 - Collision Rate for Keyset 'Combination Highbits2'
-# worst bias is the  20-bit window at bit  32 - 94519435.578% (832)
+# worst bias is the  20-bit window at bit  32 - score 945194.356 (from 832 scores)
 not ok 148 - Distribution Bias Check for Keyset 'Combination Highbits2'
 not ok 149 - Keyset 'Combination Highbits2' # crc64_hw
 ### Keyset 'Combination HiBit-Null' Tests ###
 # Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
 ok 150 - Collision Rate for Keyset 'Combination HiBit-Null'
-# worst bias is the  18-bit window at bit  32 - 20971434.000% (704)
+# worst bias is the  18-bit window at bit  32 - score 209714.340 (from 704 scores)
 not ok 151 - Distribution Bias Check for Keyset 'Combination HiBit-Null'
 not ok 152 - Keyset 'Combination HiBit-Null' # crc64_hw
 ### Keyset 'Combination LowBit-Null' Tests ###
 # Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
 ok 153 - Collision Rate for Keyset 'Combination LowBit-Null'
-# worst bias is the  18-bit window at bit  32 - 20971434.000% (704)
+# worst bias is the  18-bit window at bit  32 - score 209714.340 (from 704 scores)
 not ok 154 - Distribution Bias Check for Keyset 'Combination LowBit-Null'
 not ok 155 - Keyset 'Combination LowBit-Null' # crc64_hw
 ### Keyset 'Combination Hi-Lo' Tests ###
 # Keyset 'Combination' - up to 6 blocks from a set of 15 - 12204240 keys
 # Testing collisions   - Expected     0.00, actual    19533 - Excessive keys in collision - failed
 not ok 156 - Collision Rate for Keyset 'Combination Hi-Lo'
-# worst bias is the  20-bit window at bit  32 - 89481225.354% (832)
+# worst bias is the  20-bit window at bit  32 - score 894812.254 (from 832 scores)
 not ok 157 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
 not ok 158 - Keyset 'Combination Hi-Lo' # crc64_hw
 ### Keyset 'Text' Tests ###
 # Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
 ok 159 - Collision Rate for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
-# worst bias is the  20-bit window at bit  32 - 91825095.030% (832)
+# worst bias is the  20-bit window at bit  32 - score 918250.950 (from 832 scores)
 not ok 160 - Distribution Bias Check for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
 # Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
 ok 161 - Collision Rate for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
-# worst bias is the  20-bit window at bit  32 - 91825095.030% (832)
+# worst bias is the  20-bit window at bit  32 - score 918250.950 (from 832 scores)
 not ok 162 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
 # Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
 ok 163 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
-# worst bias is the  20-bit window at bit  32 - 91825095.030% (832)
+# worst bias is the  20-bit window at bit  32 - score 918250.950 (from 832 scores)
 not ok 164 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
 not ok 165 - Keyset 'Text' # crc64_hw
 ### Keyset 'Zeroes' Tests ###
-# Keyset 'Zeroes' - 262144 keys
+# Keyset 'Zeroes' - 262144 keys, zero seed
+# Testing collisions   - Expected     0.00, actual   262143 - ALL keys were in collision - failed
+not ok 166 - Collision Rate for Keyset 'Zeroes' - 262144 keys, zero seed
+# worst bias is the  15-bit window at bit   0 - score 26213.580 (from 512 scores)
+not ok 167 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys, zero seed
+# Keyset 'Zeroes' - 262144 keys, nonzero seed
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 166 - Collision Rate for Keyset 'Zeroes' - 262144 keys
-# worst bias is the  15-bit window at bit  32 - 2621358.000% (512)
-not ok 167 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys
-not ok 168 - Keyset 'Zeroes' # crc64_hw
+ok 168 - Collision Rate for Keyset 'Zeroes' - 262144 keys, nonzero seed
+# worst bias is the  15-bit window at bit  32 - score 26213.580 (from 512 scores)
+not ok 169 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys, nonzero seed
+not ok 170 - Keyset 'Zeroes' # crc64_hw
 ### Keyset 'Seed' Tests ###
 # Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
 # Testing collisions   - Expected     0.00, actual      438 - Excessive keys in collision - failed
-not ok 169 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
-# worst bias is the  18-bit window at bit  32 - 20769656.456% (704)
-not ok 170 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+not ok 171 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+# worst bias is the  18-bit window at bit  32 - score 207696.565 (from 704 scores)
+not ok 172 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
 # Keyset 'Seed' - 2000000 seeds, Key ""
 # Testing collisions   - Expected     0.00, actual  1999999 - ALL keys were in collision - failed
-not ok 171 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
-# worst bias is the  18-bit window at bit   0 - 20769656.456% (704)
-not ok 172 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
+not ok 173 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
+# worst bias is the  18-bit window at bit   0 - score 207696.565 (from 704 scores)
+not ok 174 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
 # Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
 # Testing collisions   - Expected     0.00, actual      434 - Excessive keys in collision - failed
-not ok 173 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
-# worst bias is the  18-bit window at bit  32 - 20769656.456% (704)
-not ok 174 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+not ok 175 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+# worst bias is the  18-bit window at bit  32 - score 207696.565 (from 704 scores)
+not ok 176 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
 # Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
 # Testing collisions   - Expected     0.00, actual      445 - Excessive keys in collision - failed
-not ok 175 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
-# worst bias is the  18-bit window at bit  32 - 20769656.456% (704)
-not ok 176 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
-not ok 177 - Keyset 'Seed' # crc64_hw
+not ok 177 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+# worst bias is the  18-bit window at bit  32 - score 207696.565 (from 704 scores)
+not ok 178 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+not ok 179 - Keyset 'Seed' # crc64_hw
 ### Keyset 'Effs' Tests ###
-# Keyset 'Effs' - 262144 keys
+# Keyset 'Effs' - 262144 keys, zero seed
 # Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
-ok 178 - Collision Rate for Keyset 'Effs' - 262144 keys
-# worst bias is the  15-bit window at bit  32 - 2621358.000% (512)
-not ok 179 - Distribution Bias Check for Keyset 'Effs' - 262144 keys
-not ok 180 - Keyset 'Effs' # crc64_hw
+ok 180 - Collision Rate for Keyset 'Effs' - 262144 keys, zero seed
+# worst bias is the  15-bit window at bit  32 - score 26213.580 (from 512 scores)
+not ok 181 - Distribution Bias Check for Keyset 'Effs' - 262144 keys, zero seed
+# Keyset 'Effs' - 262144 keys, nonzero seed
+# Testing collisions   - Expected     0.00, actual        0 ( 0.00x) - passed
+ok 182 - Collision Rate for Keyset 'Effs' - 262144 keys, nonzero seed
+# worst bias is the  15-bit window at bit  32 - score 26213.580 (from 512 scores)
+not ok 183 - Distribution Bias Check for Keyset 'Effs' - 262144 keys, nonzero seed
+not ok 184 - Keyset 'Effs' # crc64_hw
 ### Keyset 'Words' Tests ###
 # Hashed 99171 keys from 297513 words from file '/usr/share/dict/words'
 # Testing collisions   - Expected     0.00, actual        2 - Excessive keys in collision - failed
-not ok 181 - Collision Rate for Keyset 'Words'
-# worst bias is the  15-bit window at bit  32 - 2685202.977% (512)
-not ok 182 - Distribution Bias Check for Keyset 'Words'
-not ok 183 - all tests passed # crc64_hw
-1..183
-# Tests Failed. crc64_hw failed 147 of 183 tests.
-# Testing took 1559.595684 seconds
-# This is SMHasher version v1.1-demerphq-20-g7c461c7 - built on Mar 15 2017.
+not ok 185 - Collision Rate for Keyset 'Words'
+# worst bias is the  15-bit window at bit  32 - score 26852.030 (from 512 scores)
+not ok 186 - Distribution Bias Check for Keyset 'Words'
+not ok 187 - all tests passed # crc64_hw
+1..187
+# Tests Failed. crc64_hw failed 152 of 187 tests.
+# Testing took 1530.900227 seconds
+# This is SMHasher version v1.3-demerphq-7-geee7fbf - built on Dec 15 2017.
