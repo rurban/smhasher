@@ -7,93 +7,93 @@ ok 1 - Found Hash # Lua53
 ok 2 - Verification code # Lua53
 # Lua53                - Verification value 0x8BF8D02F : Passed.
 ### Sanity Tests ###
-# Sanity check simple key bit flips and consistency..........
+# Sanity check simple key bit flips and consistency - hashbytes=4.
 not ok 3 - SanityTest # Lua53
-# from 42099200 hashes there were 0 inconsistent of 33533456 collisions.
+# from 62976 hashes there were 0 inconsistent and 128 collisions.
 # Sanity check null suffixes change the hash (simple)..........
 ok 4 - Appended Zeroes Test # Lua53
 not ok 5 - Sanity Test # Lua53
 ### Speed Tests ###
 ## Bulk speed test - 262144-byte keys
-# Alignment  7 - 1567.488 bytes/cycle - 4484620.36 MiB/sec @ 3 ghz
-# Alignment  6 - 1545.343 bytes/cycle - 4421262.41 MiB/sec @ 3 ghz
-# Alignment  5 - 1570.234 bytes/cycle - 4492476.22 MiB/sec @ 3 ghz
-# Alignment  4 - 1546.666 bytes/cycle - 4425046.04 MiB/sec @ 3 ghz
-# Alignment  3 - 1524.938 bytes/cycle - 4362883.44 MiB/sec @ 3 ghz
-# Alignment  2 - 1527.242 bytes/cycle - 4369473.15 MiB/sec @ 3 ghz
-# Alignment  1 - 1521.438 bytes/cycle - 4352868.14 MiB/sec @ 3 ghz
-# Alignment  0 - 1539.662 bytes/cycle - 4405007.44 MiB/sec @ 3 ghz
-# Average      - 1542.876 bytes/cycle - 4414204.65 MiB/sec @ 3 ghz
+# Alignment  7 - 1454.051 bytes/cycle - 4160074.52 MiB/sec @ 3 ghz
+# Alignment  6 - 1437.362 bytes/cycle - 4112326.51 MiB/sec @ 3 ghz
+# Alignment  5 - 1493.663 bytes/cycle - 4273403.92 MiB/sec @ 3 ghz
+# Alignment  4 - 1515.719 bytes/cycle - 4336505.62 MiB/sec @ 3 ghz
+# Alignment  3 - 1495.942 bytes/cycle - 4279923.06 MiB/sec @ 3 ghz
+# Alignment  2 - 1510.724 bytes/cycle - 4322217.32 MiB/sec @ 3 ghz
+# Alignment  1 - 1496.267 bytes/cycle - 4280853.24 MiB/sec @ 3 ghz
+# Alignment  0 - 1491.365 bytes/cycle - 4266829.60 MiB/sec @ 3 ghz
+# Average      - 1486.887 bytes/cycle - 4254016.72 MiB/sec @ 3 ghz
 ## KeySpeed tests
 # Lua53                     0 byte keys        5.000 c/h
-# Lua53                     1 byte keys        6.000 c/h        6.000 c/b        0.167 b/c
-# Lua53                     2 byte keys        9.999 c/h        5.000 c/b        0.200 b/c
-# Lua53                     3 byte keys       14.000 c/h        4.667 c/b        0.214 b/c
-# Lua53                     4 byte keys       17.977 c/h        4.494 c/b        0.223 b/c
-# Lua53                     5 byte keys       18.000 c/h        3.600 c/b        0.278 b/c
-# Lua53                     6 byte keys       19.000 c/h        3.167 c/b        0.316 b/c
-# Lua53                     7 byte keys       21.000 c/h        3.000 c/b        0.333 b/c
-# Lua53                     8 byte keys       24.000 c/h        3.000 c/b        0.333 b/c
-# Lua53                     9 byte keys       26.000 c/h        2.889 c/b        0.346 b/c
-# Lua53                    10 byte keys       29.000 c/h        2.900 c/b        0.345 b/c
-# Lua53                    11 byte keys       32.000 c/h        2.909 c/b        0.344 b/c
-# Lua53                    12 byte keys       35.000 c/h        2.917 c/b        0.343 b/c
-# Lua53                    13 byte keys       38.000 c/h        2.923 c/b        0.342 b/c
-# Lua53                    14 byte keys       41.430 c/h        2.959 c/b        0.338 b/c
-# Lua53                    15 byte keys       45.000 c/h        3.000 c/b        0.333 b/c
-# Lua53                    16 byte keys       48.988 c/h        3.062 c/b        0.327 b/c
-# Lua53                    17 byte keys       52.000 c/h        3.059 c/b        0.327 b/c
-# Lua53                    18 byte keys       55.932 c/h        3.107 c/b        0.322 b/c
-# Lua53                    19 byte keys       61.154 c/h        3.219 c/b        0.311 b/c
-# Lua53                    20 byte keys       62.855 c/h        3.143 c/b        0.318 b/c
-# Lua53                    21 byte keys       66.000 c/h        3.143 c/b        0.318 b/c
-# Lua53                    22 byte keys       69.944 c/h        3.179 c/b        0.315 b/c
-# Lua53                    23 byte keys       73.398 c/h        3.191 c/b        0.313 b/c
-# Lua53                    24 byte keys       77.000 c/h        3.208 c/b        0.312 b/c
-# Lua53                    25 byte keys       88.456 c/h        3.538 c/b        0.283 b/c
-# Lua53                    26 byte keys       94.918 c/h        3.651 c/b        0.274 b/c
-# Lua53                    27 byte keys      101.356 c/h        3.754 c/b        0.266 b/c
-# Lua53                    28 byte keys      105.629 c/h        3.772 c/b        0.265 b/c
-# Lua53                    29 byte keys      109.853 c/h        3.788 c/b        0.264 b/c
-# Lua53                    30 byte keys      113.871 c/h        3.796 c/b        0.263 b/c
-# Lua53                    31 byte keys      117.964 c/h        3.805 c/b        0.263 b/c
-#                          Average < 32       52.523 c/h        3.389 c/b        0.295 b/c
-# Lua53                    32 byte keys       48.985 c/h        1.531 c/b        0.653 b/c
-# Lua53                    36 byte keys       55.786 c/h        1.550 c/b        0.645 b/c
-# Lua53                    40 byte keys       62.979 c/h        1.574 c/b        0.635 b/c
-# Lua53                    44 byte keys       69.993 c/h        1.591 c/b        0.629 b/c
-# Lua53                    48 byte keys       82.528 c/h        1.719 c/b        0.582 b/c
-# Lua53                    52 byte keys       95.195 c/h        1.831 c/b        0.546 b/c
-# Lua53                    56 byte keys      105.725 c/h        1.888 c/b        0.530 b/c
-# Lua53                    60 byte keys      113.954 c/h        1.899 c/b        0.527 b/c
-# Lua53                    64 byte keys       66.000 c/h        1.031 c/b        0.970 b/c
-# Lua53                    68 byte keys       69.991 c/h        1.029 c/b        0.972 b/c
-# Lua53                    72 byte keys       84.833 c/h        1.178 c/b        0.849 b/c
-# Lua53                    76 byte keys       89.571 c/h        1.179 c/b        0.848 b/c
-# Lua53                    80 byte keys       95.774 c/h        1.197 c/b        0.835 b/c
-# Lua53                    84 byte keys      105.805 c/h        1.260 c/b        0.794 b/c
-# Lua53                    88 byte keys      109.927 c/h        1.249 c/b        0.801 b/c
-# Lua53                    92 byte keys      113.985 c/h        1.239 c/b        0.807 b/c
-# Lua53                    96 byte keys       77.000 c/h        0.802 c/b        1.247 b/c
-# Lua53                   100 byte keys       80.992 c/h        0.810 c/b        1.235 b/c
-# Lua53                   104 byte keys       95.978 c/h        0.923 c/b        1.084 b/c
-# Lua53                   108 byte keys      101.778 c/h        0.942 c/b        1.061 b/c
-# Lua53                   112 byte keys       92.433 c/h        0.825 c/b        1.212 b/c
-# Lua53                   116 byte keys       96.000 c/h        0.828 c/b        1.208 b/c
-# Lua53                   120 byte keys       99.997 c/h        0.833 c/b        1.200 b/c
-# Lua53                   124 byte keys      103.992 c/h        0.839 c/b        1.192 b/c
-#                         Average < 128       67.856 c/h        1.605 c/b        0.623 b/c
-# Lua53                   128 byte keys       80.998 c/h        0.633 c/b        1.580 b/c
-# Lua53                   256 byte keys      135.999 c/h        0.531 c/b        1.882 b/c
-# Lua53                   512 byte keys      142.892 c/h        0.279 c/b        3.583 b/c
-# Lua53                  1024 byte keys      147.740 c/h        0.144 c/b        6.931 b/c
-# Lua53                  2048 byte keys      149.085 c/h        0.073 c/b       13.737 b/c
-# Lua53                  4096 byte keys      148.854 c/h        0.036 c/b       27.517 b/c
-# Lua53                  8192 byte keys      149.154 c/h        0.018 c/b       54.923 b/c
-# Lua53                 16384 byte keys      150.219 c/h        0.009 c/b      109.068 b/c
-# Lua53                 32768 byte keys      151.134 c/h        0.005 c/b      216.815 b/c
-# Lua53                 65536 byte keys      151.230 c/h        0.002 c/b      433.352 b/c
-#                       Overall Average       78.897 c/h        0.039 c/b       25.601 b/c
+# Lua53                     1 byte keys        5.998 c/h        5.998 c/b        0.167 b/c
+# Lua53                     2 byte keys        9.000 c/h        4.500 c/b        0.222 b/c
+# Lua53                     3 byte keys       13.842 c/h        4.614 c/b        0.217 b/c
+# Lua53                     4 byte keys       17.500 c/h        4.375 c/b        0.229 b/c
+# Lua53                     5 byte keys       17.978 c/h        3.596 c/b        0.278 b/c
+# Lua53                     6 byte keys       18.000 c/h        3.000 c/b        0.333 b/c
+# Lua53                     7 byte keys       20.000 c/h        2.857 c/b        0.350 b/c
+# Lua53                     8 byte keys       22.117 c/h        2.765 c/b        0.362 b/c
+# Lua53                     9 byte keys       24.218 c/h        2.691 c/b        0.372 b/c
+# Lua53                    10 byte keys       27.000 c/h        2.700 c/b        0.370 b/c
+# Lua53                    11 byte keys       30.000 c/h        2.727 c/b        0.367 b/c
+# Lua53                    12 byte keys       33.000 c/h        2.750 c/b        0.364 b/c
+# Lua53                    13 byte keys       36.000 c/h        2.769 c/b        0.361 b/c
+# Lua53                    14 byte keys       39.000 c/h        2.786 c/b        0.359 b/c
+# Lua53                    15 byte keys       42.967 c/h        2.864 c/b        0.349 b/c
+# Lua53                    16 byte keys       46.000 c/h        2.875 c/b        0.348 b/c
+# Lua53                    17 byte keys       49.868 c/h        2.933 c/b        0.341 b/c
+# Lua53                    18 byte keys       53.000 c/h        2.944 c/b        0.340 b/c
+# Lua53                    19 byte keys       56.605 c/h        2.979 c/b        0.336 b/c
+# Lua53                    20 byte keys       59.983 c/h        2.999 c/b        0.333 b/c
+# Lua53                    21 byte keys       63.854 c/h        3.041 c/b        0.329 b/c
+# Lua53                    22 byte keys       66.910 c/h        3.041 c/b        0.329 b/c
+# Lua53                    23 byte keys       70.469 c/h        3.064 c/b        0.326 b/c
+# Lua53                    24 byte keys       74.000 c/h        3.083 c/b        0.324 b/c
+# Lua53                    25 byte keys       77.989 c/h        3.120 c/b        0.321 b/c
+# Lua53                    26 byte keys       81.923 c/h        3.151 c/b        0.317 b/c
+# Lua53                    27 byte keys       85.865 c/h        3.180 c/b        0.314 b/c
+# Lua53                    28 byte keys       90.441 c/h        3.230 c/b        0.310 b/c
+# Lua53                    29 byte keys       93.579 c/h        3.227 c/b        0.310 b/c
+# Lua53                    30 byte keys       97.559 c/h        3.252 c/b        0.308 b/c
+# Lua53                    31 byte keys      101.537 c/h        3.275 c/b        0.305 b/c
+#                          Average < 32       47.850 c/h        3.087 c/b        0.324 b/c
+# Lua53                    32 byte keys       46.000 c/h        1.438 c/b        0.696 b/c
+# Lua53                    36 byte keys       53.423 c/h        1.484 c/b        0.674 b/c
+# Lua53                    40 byte keys       60.388 c/h        1.510 c/b        0.662 b/c
+# Lua53                    44 byte keys       66.946 c/h        1.522 c/b        0.657 b/c
+# Lua53                    48 byte keys       74.000 c/h        1.542 c/b        0.649 b/c
+# Lua53                    52 byte keys       81.943 c/h        1.576 c/b        0.635 b/c
+# Lua53                    56 byte keys       90.388 c/h        1.614 c/b        0.620 b/c
+# Lua53                    60 byte keys       99.084 c/h        1.651 c/b        0.606 b/c
+# Lua53                    64 byte keys       63.000 c/h        0.984 c/b        1.016 b/c
+# Lua53                    68 byte keys       66.966 c/h        0.985 c/b        1.015 b/c
+# Lua53                    72 byte keys       74.000 c/h        1.028 c/b        0.973 b/c
+# Lua53                    76 byte keys       78.827 c/h        1.037 c/b        0.964 b/c
+# Lua53                    80 byte keys       82.569 c/h        1.032 c/b        0.969 b/c
+# Lua53                    84 byte keys       89.801 c/h        1.069 c/b        0.935 b/c
+# Lua53                    88 byte keys       93.642 c/h        1.064 c/b        0.940 b/c
+# Lua53                    92 byte keys       98.312 c/h        1.069 c/b        0.936 b/c
+# Lua53                    96 byte keys       74.000 c/h        0.771 c/b        1.297 b/c
+# Lua53                   100 byte keys       78.119 c/h        0.781 c/b        1.280 b/c
+# Lua53                   104 byte keys       81.980 c/h        0.788 c/b        1.269 b/c
+# Lua53                   108 byte keys       85.963 c/h        0.796 c/b        1.256 b/c
+# Lua53                   112 byte keys       89.884 c/h        0.803 c/b        1.246 b/c
+# Lua53                   116 byte keys       94.644 c/h        0.816 c/b        1.226 b/c
+# Lua53                   120 byte keys       97.874 c/h        0.816 c/b        1.226 b/c
+# Lua53                   124 byte keys      101.909 c/h        0.822 c/b        1.217 b/c
+#                         Average < 128       61.694 c/h        1.459 c/b        0.685 b/c
+# Lua53                   128 byte keys       78.240 c/h        0.611 c/b        1.636 b/c
+# Lua53                   256 byte keys       92.698 c/h        0.362 c/b        2.762 b/c
+# Lua53                   512 byte keys      102.469 c/h        0.200 c/b        4.997 b/c
+# Lua53                  1024 byte keys      104.602 c/h        0.102 c/b        9.789 b/c
+# Lua53                  2048 byte keys      106.570 c/h        0.052 c/b       19.217 b/c
+# Lua53                  4096 byte keys      106.083 c/h        0.026 c/b       38.611 b/c
+# Lua53                  8192 byte keys      105.869 c/h        0.013 c/b       77.379 b/c
+# Lua53                 16384 byte keys      131.754 c/h        0.008 c/b      124.353 b/c
+# Lua53                 32768 byte keys      149.568 c/h        0.005 c/b      219.085 b/c
+# Lua53                 65536 byte keys      151.982 c/h        0.002 c/b      431.210 b/c
+#                       Overall Average       69.465 c/h        0.034 c/b       29.078 b/c
 ok 6 - Speed (always passes) # Lua53
 ### Differential Tests ###
 # Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 32 bit hashes.
@@ -4359,7 +4359,7 @@ not ok 40 - Strict Avalanche Criteria - 520 bit/65 byte keys # Lua53
 # Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
 # Testing collisions   - Expected 11641.53, actual  9934470 (853.36x) - failed
 not ok 41 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
-# worst bias is the  20-bit window at bit  11 - 1328.166% (416)
+# worst bias is the  20-bit window at bit  11 - score 13.282 (from 416 scores)
 not ok 42 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
 # Testing collisions   - Expected 11641.53, actual    11838 ( 1.02x) - passed
@@ -4368,7 +4368,7 @@ ok 44 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 5 bytes - 1000
 # Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
 # Testing collisions   - Expected 11641.53, actual  2474071 (212.52x) - failed
 not ok 45 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
-# worst bias is the  20-bit window at bit  12 - 5.478% (416)
+# worst bias is the  20-bit window at bit  12 - score 0.055 (from 416 scores)
 not ok 46 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
 # Testing collisions   - Expected 11641.53, actual    11558 ( 0.99x) - passed
@@ -4382,30 +4382,30 @@ not ok 51 - Keyset 'Cyclic' # Lua53
 ### Keyset 'TwoBytes' Tests ###
 # Testing collisions   - Expected    49.57, actual   359077 - Excessive keys in collision - failed
 not ok 52 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
-# worst bias is the  15-bit window at bit  17 - 308010.634% (288)
+# worst bias is the  15-bit window at bit  17 - score 3080.106 (from 288 scores)
 not ok 53 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
 # Testing collisions   - Expected  3484.56, actual  1792910 (514.53x) - failed
 not ok 54 - Collision Rate for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
-# worst bias is the  20-bit window at bit  12 - 34553.944% (416)
+# worst bias is the  20-bit window at bit  12 - score 345.539 (from 416 scores)
 not ok 55 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
 # Testing collisions   - Expected 40347.77, actual  4457966 (110.49x) - failed
 not ok 56 - Collision Rate for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
-# worst bias is the  20-bit window at bit  12 - 5911.024% (416)
+# worst bias is the  20-bit window at bit  12 - score 59.110 (from 416 scores)
 not ok 57 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
 # Testing collisions   - Expected 227963.15, actual  8747494 (38.37x) - failed
 not ok 58 - Collision Rate for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
-# worst bias is the  20-bit window at bit  12 - 1622.699% (416)
+# worst bias is the  20-bit window at bit  12 - score 16.227 (from 416 scores)
 not ok 59 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
 # Testing collisions   - Expected 871784.70, actual 15572601 (17.86x) - failed
 not ok 60 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
-# worst bias is the  20-bit window at bit  12 - 566.096% (416)
+# worst bias is the  20-bit window at bit  12 - score 5.661 (from 416 scores)
 not ok 61 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
 not ok 62 - Keyset 'TwoBytes' # Lua53
 ### Keyset 'Sparse' Tests ###
 # Keyset 'Sparse' - 32-bit keys with up to 6 bits set - 1149017 keys
 # Testing collisions   - Expected   153.70, actual      167 ( 1.09x) - passed
 ok 63 - Collision Rate for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
-# worst bias is the  17-bit window at bit  15 - 2.980% (320)
+# worst bias is the  17-bit window at bit  15 - score 0.030 (from 320 scores)
 not ok 64 - Distribution Bias Check for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
 # Keyset 'Sparse' - 40-bit keys with up to 6 bits set - 4598479 keys
 # Testing collisions   - Expected  2461.72, actual     2681 ( 1.09x) - passed
@@ -4430,12 +4430,12 @@ ok 74 - Distribution Bias Check for Keyset 'Sparse' - 96-bit keys with up to 4 b
 # Keyset 'Sparse' - 256-bit keys with up to 3 bits set - 2796417 keys
 # Testing collisions   - Expected   910.36, actual  1303425 - Excessive keys in collision - failed
 not ok 75 - Collision Rate for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
-# worst bias is the  19-bit window at bit  13 - 408.805% (384)
+# worst bias is the  19-bit window at bit  13 - score 4.088 (from 384 scores)
 not ok 76 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
 # Keyset 'Sparse' - 2048-bit keys with up to 2 bits set - 2098177 keys
 # Testing collisions   - Expected   512.50, actual  1856029 - Excessive keys in collision - failed
 not ok 77 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
-# worst bias is the  18-bit window at bit  31 - 10815.336% (352)
+# worst bias is the  18-bit window at bit  31 - score 108.153 (from 352 scores)
 not ok 78 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
 not ok 79 - Keyset 'Sparse' # Lua53
 ### Keyset 'Crc-MultiCollision' Tests ###
@@ -4573,99 +4573,107 @@ ok 139 - Collision Rate for Keyset 'City64-MultiCollision' - seed 10 # Lua53
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
 # Testing collisions   - Expected 42799.01, actual 16780137 (392.07x) - failed
 not ok 140 - Collision Rate for Keyset 'Combination Lowbits'
-# worst bias is the  20-bit window at bit   2 - 72366475.834% (416)
+# worst bias is the  20-bit window at bit   2 - score 723664.758 (from 416 scores)
 not ok 141 - Distribution Bias Check for Keyset 'Combination Lowbits'
 not ok 142 - Keyset 'Combination Lowbits' # Lua53
 ### Keyset 'Combination Highbits' Tests ###
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
 # Testing collisions   - Expected 42799.01, actual    84083 ( 1.96x) - passed
 ok 143 - Collision Rate for Keyset 'Combination Highbits'
-# worst bias is the  20-bit window at bit  15 - 23.681% (416)
+# worst bias is the  20-bit window at bit  15 - score 0.237 (from 416 scores)
 not ok 144 - Distribution Bias Check for Keyset 'Combination Highbits'
 not ok 145 - Keyset 'Combination Highbits' # Lua53
 ### Keyset 'Combination Highbits2' Tests ###
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
 # Testing collisions   - Expected 42799.01, actual    83034 ( 1.94x) - passed
 ok 146 - Collision Rate for Keyset 'Combination Highbits2'
-# worst bias is the  20-bit window at bit  14 - 23.722% (416)
+# worst bias is the  20-bit window at bit  14 - score 0.237 (from 416 scores)
 not ok 147 - Distribution Bias Check for Keyset 'Combination Highbits2'
 not ok 148 - Keyset 'Combination Highbits2' # Lua53
 ### Keyset 'Combination HiBit-Null' Tests ###
 # Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
 # Testing collisions   - Expected   512.00, actual  2031168 - Excessive keys in collision - failed
 not ok 149 - Collision Rate for Keyset 'Combination HiBit-Null'
-# worst bias is the  18-bit window at bit  19 - 107394.004% (352)
+# worst bias is the  18-bit window at bit  19 - score 1073.940 (from 352 scores)
 not ok 150 - Distribution Bias Check for Keyset 'Combination HiBit-Null'
 not ok 151 - Keyset 'Combination HiBit-Null' # Lua53
 ### Keyset 'Combination LowBit-Null' Tests ###
 # Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
 # Testing collisions   - Expected   512.00, actual  2096536 - Excessive keys in collision - failed
 not ok 152 - Collision Rate for Keyset 'Combination LowBit-Null'
-# worst bias is the  18-bit window at bit  14 - 121456.820% (352)
+# worst bias is the  18-bit window at bit  14 - score 1214.568 (from 352 scores)
 not ok 153 - Distribution Bias Check for Keyset 'Combination LowBit-Null'
 not ok 154 - Keyset 'Combination LowBit-Null' # Lua53
 ### Keyset 'Combination Hi-Lo' Tests ###
 # Keyset 'Combination' - up to 6 blocks from a set of 15 - 12204240 keys
 # Testing collisions   - Expected 17339.30, actual    40498 ( 2.34x) - failed
 not ok 155 - Collision Rate for Keyset 'Combination Hi-Lo'
-# worst bias is the  20-bit window at bit  12 - 27.776% (416)
+# worst bias is the  20-bit window at bit  12 - score 0.278 (from 416 scores)
 not ok 156 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
 not ok 157 - Keyset 'Combination Hi-Lo' # Lua53
 ### Keyset 'Text' Tests ###
 # Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
 # Testing collisions   - Expected 25418.13, actual 13026973 (512.51x) - failed
 not ok 158 - Collision Rate for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
-# worst bias is the  20-bit window at bit  20 - 75.443% (416)
+# worst bias is the  20-bit window at bit  20 - score 0.754 (from 416 scores)
 not ok 159 - Distribution Bias Check for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
 # Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
 # Testing collisions   - Expected 25418.13, actual 13051835 (513.49x) - failed
 not ok 160 - Collision Rate for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
-# worst bias is the  20-bit window at bit  19 - 70.392% (416)
+# worst bias is the  20-bit window at bit  19 - score 0.704 (from 416 scores)
 not ok 161 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
 # Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
 # Testing collisions   - Expected 25418.13, actual 12978429 (510.60x) - failed
 not ok 162 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
-# worst bias is the  20-bit window at bit  12 - 178555.376% (416)
+# worst bias is the  20-bit window at bit  12 - score 1785.554 (from 416 scores)
 not ok 163 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
 not ok 164 - Keyset 'Text' # Lua53
 ### Keyset 'Zeroes' Tests ###
-# Keyset 'Zeroes' - 262144 keys
+# Keyset 'Zeroes' - 262144 keys, zero seed
+# Testing collisions   - Expected     8.00, actual     1506 (188.25x) - failed
+not ok 165 - Collision Rate for Keyset 'Zeroes' - 262144 keys, zero seed
+ok 166 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys, zero seed
+# Keyset 'Zeroes' - 262144 keys, nonzero seed
 # Testing collisions   - Expected     8.00, actual     1498 (187.25x) - failed
-not ok 165 - Collision Rate for Keyset 'Zeroes' - 262144 keys
-ok 166 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys
-not ok 167 - Keyset 'Zeroes' # Lua53
+not ok 167 - Collision Rate for Keyset 'Zeroes' - 262144 keys, nonzero seed
+ok 168 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys, nonzero seed
+not ok 169 - Keyset 'Zeroes' # Lua53
 ### Keyset 'Seed' Tests ###
 # Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
 # Testing collisions   - Expected   465.46, actual     7162 (15.39x) - failed
-not ok 168 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
-ok 169 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+not ok 170 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+ok 171 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
 # Keyset 'Seed' - 2000000 seeds, Key ""
 # Testing collisions   - Expected   465.44, actual        0 ( 0.00x) - passed
-ok 170 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
-ok 171 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
+ok 172 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
+ok 173 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
 # Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
 # Testing collisions   - Expected   465.46, actual     5584 (12.00x) - failed
-not ok 172 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
-ok 173 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+not ok 174 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+ok 175 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
 # Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
 # Testing collisions   - Expected   465.45, actual    10321 (22.17x) - failed
-not ok 174 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
-ok 175 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
-not ok 176 - Keyset 'Seed' # Lua53
+not ok 176 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 177 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+not ok 178 - Keyset 'Seed' # Lua53
 ### Keyset 'Effs' Tests ###
-# Keyset 'Effs' - 262144 keys
+# Keyset 'Effs' - 262144 keys, zero seed
+# Testing collisions   - Expected     8.00, actual      723 (90.38x) - failed
+not ok 179 - Collision Rate for Keyset 'Effs' - 262144 keys, zero seed
+ok 180 - Distribution Bias Check for Keyset 'Effs' - 262144 keys, zero seed
+# Keyset 'Effs' - 262144 keys, nonzero seed
 # Testing collisions   - Expected     8.00, actual      744 (93.00x) - failed
-not ok 177 - Collision Rate for Keyset 'Effs' - 262144 keys
-ok 178 - Distribution Bias Check for Keyset 'Effs' - 262144 keys
-not ok 179 - Keyset 'Effs' # Lua53
+not ok 181 - Collision Rate for Keyset 'Effs' - 262144 keys, nonzero seed
+ok 182 - Distribution Bias Check for Keyset 'Effs' - 262144 keys, nonzero seed
+not ok 183 - Keyset 'Effs' # Lua53
 ### Keyset 'Words' Tests ###
 # Hashed 99171 keys from 297513 words from file '/usr/share/dict/words'
 # Testing collisions   - Expected    10.30, actual      121 (11.74x) - failed
-not ok 180 - Collision Rate for Keyset 'Words'
-# worst bias is the  15-bit window at bit  17 - 480.548% (256)
-not ok 181 - Distribution Bias Check for Keyset 'Words'
-not ok 182 - all tests passed # Lua53
-1..182
-# Tests Failed. Lua53 failed 108 of 182 tests.
-# Testing took 1596.929122 seconds
-# This is SMHasher version v1.2-demerphq-0-gd7c9ff3 - built on Mar 18 2017.
+not ok 184 - Collision Rate for Keyset 'Words'
+# worst bias is the  15-bit window at bit  17 - score 4.805 (from 256 scores)
+not ok 185 - Distribution Bias Check for Keyset 'Words'
+not ok 186 - all tests passed # Lua53
+1..186
+# Tests Failed. Lua53 failed 110 of 186 tests.
+# Testing took 1499.189078 seconds
+# This is SMHasher version v1.3-demerphq-10-g9a0e16f-dirty - built on Dec 18 2017.
