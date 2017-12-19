@@ -7,92 +7,93 @@ ok 1 - Found Hash # bernstein
 ok 2 - Verification code # bernstein
 # bernstein            - Verification value 0xE956A8EA : Passed.
 ### Sanity Tests ###
-# Sanity check simple key bit flips and consistency..........
+# Sanity check simple key bit flips and consistency - hashbytes=4..........
 ok 3 - SanityTest # bernstein
 # Sanity check null suffixes change the hash (simple)..........
-ok 4 - Appended Zeroes Test # bernstein
-ok 5 - Sanity Test # bernstein
+not ok 4 - Appended Zeroes Test # bernstein
+# There were 57 collisions
+not ok 5 - Sanity Test # bernstein
 ### Speed Tests ###
 ## Bulk speed test - 262144-byte keys
-# Alignment  7 -  0.300 bytes/cycle -  857.66 MiB/sec @ 3 ghz
-# Alignment  6 -  0.300 bytes/cycle -  857.66 MiB/sec @ 3 ghz
-# Alignment  5 -  0.300 bytes/cycle -  857.66 MiB/sec @ 3 ghz
-# Alignment  4 -  0.300 bytes/cycle -  857.66 MiB/sec @ 3 ghz
-# Alignment  3 -  0.300 bytes/cycle -  857.66 MiB/sec @ 3 ghz
-# Alignment  2 -  0.300 bytes/cycle -  857.66 MiB/sec @ 3 ghz
-# Alignment  1 -  0.300 bytes/cycle -  857.66 MiB/sec @ 3 ghz
-# Alignment  0 -  0.300 bytes/cycle -  857.66 MiB/sec @ 3 ghz
-# Average      -  0.300 bytes/cycle -  857.66 MiB/sec @ 3 ghz
+# Alignment  7 -  0.400 bytes/cycle - 1143.48 MiB/sec @ 3 ghz
+# Alignment  6 -  0.400 bytes/cycle - 1143.48 MiB/sec @ 3 ghz
+# Alignment  5 -  0.400 bytes/cycle - 1143.48 MiB/sec @ 3 ghz
+# Alignment  4 -  0.400 bytes/cycle - 1143.48 MiB/sec @ 3 ghz
+# Alignment  3 -  0.400 bytes/cycle - 1143.48 MiB/sec @ 3 ghz
+# Alignment  2 -  0.400 bytes/cycle - 1143.48 MiB/sec @ 3 ghz
+# Alignment  1 -  0.400 bytes/cycle - 1143.48 MiB/sec @ 3 ghz
+# Alignment  0 -  0.400 bytes/cycle - 1143.48 MiB/sec @ 3 ghz
+# Average      -  0.400 bytes/cycle - 1143.48 MiB/sec @ 3 ghz
 ## KeySpeed tests
 # bernstein                 0 byte keys        5.000 c/h
-# bernstein                 1 byte keys        5.000 c/h        5.000 c/b        0.200 b/c
-# bernstein                 2 byte keys        6.000 c/h        3.000 c/b        0.333 b/c
-# bernstein                 3 byte keys       10.000 c/h        3.333 c/b        0.300 b/c
-# bernstein                 4 byte keys       13.000 c/h        3.250 c/b        0.308 b/c
-# bernstein                 5 byte keys       16.000 c/h        3.200 c/b        0.312 b/c
-# bernstein                 6 byte keys       20.000 c/h        3.333 c/b        0.300 b/c
-# bernstein                 7 byte keys       23.000 c/h        3.286 c/b        0.304 b/c
-# bernstein                 8 byte keys       26.000 c/h        3.250 c/b        0.308 b/c
-# bernstein                 9 byte keys       30.000 c/h        3.333 c/b        0.300 b/c
-# bernstein                10 byte keys       33.000 c/h        3.300 c/b        0.303 b/c
-# bernstein                11 byte keys       36.000 c/h        3.273 c/b        0.306 b/c
-# bernstein                12 byte keys       40.000 c/h        3.333 c/b        0.300 b/c
-# bernstein                13 byte keys       43.000 c/h        3.308 c/b        0.302 b/c
-# bernstein                14 byte keys       46.000 c/h        3.286 c/b        0.304 b/c
-# bernstein                15 byte keys       50.000 c/h        3.333 c/b        0.300 b/c
-# bernstein                16 byte keys       53.000 c/h        3.312 c/b        0.302 b/c
-# bernstein                17 byte keys       56.000 c/h        3.294 c/b        0.304 b/c
-# bernstein                18 byte keys       60.000 c/h        3.333 c/b        0.300 b/c
-# bernstein                19 byte keys       63.000 c/h        3.316 c/b        0.302 b/c
-# bernstein                20 byte keys       66.000 c/h        3.300 c/b        0.303 b/c
-# bernstein                21 byte keys       70.000 c/h        3.333 c/b        0.300 b/c
-# bernstein                22 byte keys       73.000 c/h        3.318 c/b        0.301 b/c
-# bernstein                23 byte keys       76.000 c/h        3.304 c/b        0.303 b/c
-# bernstein                24 byte keys       80.000 c/h        3.333 c/b        0.300 b/c
-# bernstein                25 byte keys       83.000 c/h        3.320 c/b        0.301 b/c
-# bernstein                26 byte keys       86.187 c/h        3.315 c/b        0.302 b/c
-# bernstein                27 byte keys       90.000 c/h        3.333 c/b        0.300 b/c
-# bernstein                28 byte keys       93.000 c/h        3.321 c/b        0.301 b/c
-# bernstein                29 byte keys       96.242 c/h        3.319 c/b        0.301 b/c
-# bernstein                30 byte keys      100.000 c/h        3.333 c/b        0.300 b/c
-# bernstein                31 byte keys      103.000 c/h        3.323 c/b        0.301 b/c
-#                          Average < 32       51.576 c/h        3.327 c/b        0.301 b/c
-# bernstein                32 byte keys      106.000 c/h        3.312 c/b        0.302 b/c
-# bernstein                36 byte keys      119.999 c/h        3.333 c/b        0.300 b/c
-# bernstein                40 byte keys      133.000 c/h        3.325 c/b        0.301 b/c
-# bernstein                44 byte keys      150.145 c/h        3.412 c/b        0.293 b/c
-# bernstein                48 byte keys      165.366 c/h        3.445 c/b        0.290 b/c
-# bernstein                52 byte keys      179.231 c/h        3.447 c/b        0.290 b/c
-# bernstein                56 byte keys      193.232 c/h        3.451 c/b        0.290 b/c
-# bernstein                60 byte keys      207.201 c/h        3.453 c/b        0.290 b/c
-# bernstein                64 byte keys      213.000 c/h        3.328 c/b        0.300 b/c
-# bernstein                68 byte keys      226.712 c/h        3.334 c/b        0.300 b/c
-# bernstein                72 byte keys      248.282 c/h        3.448 c/b        0.290 b/c
-# bernstein                76 byte keys      253.000 c/h        3.329 c/b        0.300 b/c
-# bernstein                80 byte keys      266.675 c/h        3.333 c/b        0.300 b/c
-# bernstein                84 byte keys      291.383 c/h        3.469 c/b        0.288 b/c
-# bernstein                88 byte keys      304.531 c/h        3.461 c/b        0.289 b/c
-# bernstein                92 byte keys      318.511 c/h        3.462 c/b        0.289 b/c
-# bernstein                96 byte keys      332.251 c/h        3.461 c/b        0.289 b/c
-# bernstein               100 byte keys      336.982 c/h        3.370 c/b        0.297 b/c
-# bernstein               104 byte keys      346.698 c/h        3.334 c/b        0.300 b/c
-# bernstein               108 byte keys      359.996 c/h        3.333 c/b        0.300 b/c
-# bernstein               112 byte keys      376.309 c/h        3.360 c/b        0.298 b/c
-# bernstein               116 byte keys      400.312 c/h        3.451 c/b        0.290 b/c
-# bernstein               120 byte keys      413.967 c/h        3.450 c/b        0.290 b/c
-# bernstein               124 byte keys      427.795 c/h        3.450 c/b        0.290 b/c
-#                         Average < 128      143.232 c/h        3.387 c/b        0.295 b/c
-# bernstein               128 byte keys      441.586 c/h        3.450 c/b        0.290 b/c
-# bernstein               256 byte keys      905.937 c/h        3.539 c/b        0.283 b/c
-# bernstein               512 byte keys     1789.348 c/h        3.495 c/b        0.286 b/c
-# bernstein              1024 byte keys     3556.516 c/h        3.473 c/b        0.288 b/c
-# bernstein              2048 byte keys     7090.202 c/h        3.462 c/b        0.289 b/c
-# bernstein              4096 byte keys    14157.685 c/h        3.456 c/b        0.289 b/c
-# bernstein              8192 byte keys    28292.454 c/h        3.454 c/b        0.290 b/c
-# bernstein             16384 byte keys    56561.717 c/h        3.452 c/b        0.290 b/c
-# bernstein             32768 byte keys   113099.950 c/h        3.452 c/b        0.290 b/c
-# bernstein             65536 byte keys   224186.593 c/h        3.421 c/b        0.292 b/c
-#                       Overall Average     6940.954 c/h        3.436 c/b        0.291 b/c
+# bernstein                 1 byte keys        6.000 c/h        6.000 c/b        0.167 b/c
+# bernstein                 2 byte keys        7.000 c/h        3.500 c/b        0.286 b/c
+# bernstein                 3 byte keys        9.000 c/h        3.000 c/b        0.333 b/c
+# bernstein                 4 byte keys       10.993 c/h        2.748 c/b        0.364 b/c
+# bernstein                 5 byte keys       13.000 c/h        2.600 c/b        0.385 b/c
+# bernstein                 6 byte keys       15.527 c/h        2.588 c/b        0.386 b/c
+# bernstein                 7 byte keys       18.000 c/h        2.571 c/b        0.389 b/c
+# bernstein                 8 byte keys       22.000 c/h        2.750 c/b        0.364 b/c
+# bernstein                 9 byte keys       23.000 c/h        2.556 c/b        0.391 b/c
+# bernstein                10 byte keys       26.000 c/h        2.600 c/b        0.385 b/c
+# bernstein                11 byte keys       28.000 c/h        2.545 c/b        0.393 b/c
+# bernstein                12 byte keys       31.000 c/h        2.583 c/b        0.387 b/c
+# bernstein                13 byte keys       33.000 c/h        2.538 c/b        0.394 b/c
+# bernstein                14 byte keys       36.000 c/h        2.571 c/b        0.389 b/c
+# bernstein                15 byte keys       38.000 c/h        2.533 c/b        0.395 b/c
+# bernstein                16 byte keys       42.000 c/h        2.625 c/b        0.381 b/c
+# bernstein                17 byte keys       43.000 c/h        2.529 c/b        0.395 b/c
+# bernstein                18 byte keys       46.249 c/h        2.569 c/b        0.389 b/c
+# bernstein                19 byte keys       48.000 c/h        2.526 c/b        0.396 b/c
+# bernstein                20 byte keys       51.000 c/h        2.550 c/b        0.392 b/c
+# bernstein                21 byte keys       53.000 c/h        2.524 c/b        0.396 b/c
+# bernstein                22 byte keys       56.000 c/h        2.545 c/b        0.393 b/c
+# bernstein                23 byte keys       58.000 c/h        2.522 c/b        0.397 b/c
+# bernstein                24 byte keys       63.000 c/h        2.625 c/b        0.381 b/c
+# bernstein                25 byte keys       63.000 c/h        2.520 c/b        0.397 b/c
+# bernstein                26 byte keys       66.000 c/h        2.538 c/b        0.394 b/c
+# bernstein                27 byte keys       68.000 c/h        2.519 c/b        0.397 b/c
+# bernstein                28 byte keys       71.365 c/h        2.549 c/b        0.392 b/c
+# bernstein                29 byte keys       73.414 c/h        2.532 c/b        0.395 b/c
+# bernstein                30 byte keys       76.000 c/h        2.533 c/b        0.395 b/c
+# bernstein                31 byte keys       78.000 c/h        2.516 c/b        0.397 b/c
+#                          Average < 32       39.923 c/h        2.576 c/b        0.388 b/c
+# bernstein                32 byte keys       83.979 c/h        2.624 c/b        0.381 b/c
+# bernstein                36 byte keys       91.000 c/h        2.528 c/b        0.396 b/c
+# bernstein                40 byte keys      104.626 c/h        2.616 c/b        0.382 b/c
+# bernstein                44 byte keys      111.000 c/h        2.523 c/b        0.396 b/c
+# bernstein                48 byte keys      125.000 c/h        2.604 c/b        0.384 b/c
+# bernstein                52 byte keys      131.000 c/h        2.519 c/b        0.397 b/c
+# bernstein                56 byte keys      146.000 c/h        2.607 c/b        0.384 b/c
+# bernstein                60 byte keys      151.000 c/h        2.517 c/b        0.397 b/c
+# bernstein                64 byte keys      166.215 c/h        2.597 c/b        0.385 b/c
+# bernstein                68 byte keys      171.000 c/h        2.515 c/b        0.398 b/c
+# bernstein                72 byte keys      186.998 c/h        2.597 c/b        0.385 b/c
+# bernstein                76 byte keys      191.000 c/h        2.513 c/b        0.398 b/c
+# bernstein                80 byte keys      207.615 c/h        2.595 c/b        0.385 b/c
+# bernstein                84 byte keys      211.000 c/h        2.512 c/b        0.398 b/c
+# bernstein                88 byte keys      228.513 c/h        2.597 c/b        0.385 b/c
+# bernstein                92 byte keys      231.000 c/h        2.511 c/b        0.398 b/c
+# bernstein                96 byte keys      248.946 c/h        2.593 c/b        0.386 b/c
+# bernstein               100 byte keys      251.000 c/h        2.510 c/b        0.398 b/c
+# bernstein               104 byte keys      269.728 c/h        2.594 c/b        0.386 b/c
+# bernstein               108 byte keys      271.000 c/h        2.509 c/b        0.399 b/c
+# bernstein               112 byte keys      290.299 c/h        2.592 c/b        0.386 b/c
+# bernstein               116 byte keys      291.170 c/h        2.510 c/b        0.398 b/c
+# bernstein               120 byte keys      311.227 c/h        2.594 c/b        0.386 b/c
+# bernstein               124 byte keys      311.273 c/h        2.510 c/b        0.398 b/c
+#                         Average < 128      108.199 c/h        2.559 c/b        0.391 b/c
+# bernstein               128 byte keys      331.540 c/h        2.590 c/b        0.386 b/c
+# bernstein               256 byte keys      617.179 c/h        2.411 c/b        0.415 b/c
+# bernstein               512 byte keys     1257.627 c/h        2.456 c/b        0.407 b/c
+# bernstein              1024 byte keys     2586.303 c/h        2.526 c/b        0.396 b/c
+# bernstein              2048 byte keys     5148.529 c/h        2.514 c/b        0.398 b/c
+# bernstein              4096 byte keys    10272.387 c/h        2.508 c/b        0.399 b/c
+# bernstein              8192 byte keys    20519.836 c/h        2.505 c/b        0.399 b/c
+# bernstein             16384 byte keys    41014.678 c/h        2.503 c/b        0.399 b/c
+# bernstein             32768 byte keys    82006.936 c/h        2.503 c/b        0.400 b/c
+# bernstein             65536 byte keys   163997.105 c/h        2.502 c/b        0.400 b/c
+#                       Overall Average     5057.746 c/h        2.504 c/b        0.399 b/c
 ok 6 - Speed (always passes) # bernstein
 ### Differential Tests ###
 # Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 32 bit hashes.
@@ -8954,91 +8955,91 @@ not ok 41 - Strict Avalanche Criteria - 520 bit/65 byte keys # bernstein
 # Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
 # Testing collisions   - Expected 11641.53, actual  3876930 (333.03x) - failed
 not ok 42 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
-# worst bias is the   8-bit window at bit  30 - 699.964% (416)
+# worst bias is the   8-bit window at bit  30 - score 7.000 (from 416 scores)
 not ok 43 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 4 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
 # Testing collisions   - Expected 11641.53, actual   162695 (13.98x) - failed
 not ok 44 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
-# worst bias is the   8-bit window at bit  31 - 699.965% (416)
+# worst bias is the   8-bit window at bit  31 - score 7.000 (from 416 scores)
 not ok 45 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 5 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
 # Testing collisions   - Expected 11641.53, actual    92400 ( 7.94x) - failed
 not ok 46 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
-# worst bias is the   8-bit window at bit  28 - 699.965% (416)
+# worst bias is the   8-bit window at bit  28 - score 7.000 (from 416 scores)
 not ok 47 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 6 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
 # Testing collisions   - Expected 11641.53, actual    92059 ( 7.91x) - failed
 not ok 48 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
-# worst bias is the   8-bit window at bit  30 - 699.964% (416)
+# worst bias is the   8-bit window at bit  30 - score 7.000 (from 416 scores)
 not ok 49 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 7 bytes - 10000000 keys
 # Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
 # Testing collisions   - Expected 11641.53, actual    92726 ( 7.97x) - failed
 not ok 50 - Collision Rate for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
-# worst bias is the   8-bit window at bit   0 - 699.964% (416)
+# worst bias is the   8-bit window at bit   0 - score 7.000 (from 416 scores)
 not ok 51 - Distribution Bias Check for Keyset 'Cyclic' - 8 cycles of 8 bytes - 10000000 keys
 not ok 52 - Keyset 'Cyclic' # bernstein
 ### Keyset 'TwoBytes' Tests ###
 # Testing collisions   - Expected    49.57, actual   442547 - Excessive keys in collision - failed
 not ok 53 - Collision Rate for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
-# worst bias is the  16-bit window at bit  16 - 1000168.697% (288)
+# worst bias is the  16-bit window at bit  16 - score 10001.687 (from 288 scores)
 not ok 54 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
 # Testing collisions   - Expected  3484.56, actual  4120372 - Excessive keys in collision - failed
 not ok 55 - Collision Rate for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
-# worst bias is the  19-bit window at bit  13 - 337313.237% (416)
+# worst bias is the  19-bit window at bit  13 - score 3373.132 (from 416 scores)
 not ok 56 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
 # Testing collisions   - Expected 40347.77, actual 15141934 (375.29x) - failed
 not ok 57 - Collision Rate for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
-# worst bias is the  19-bit window at bit  13 - 83438.638% (416)
+# worst bias is the  19-bit window at bit  13 - score 834.386 (from 416 scores)
 not ok 58 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
 # Testing collisions   - Expected 227963.15, actual 37670307 (165.25x) - failed
 not ok 59 - Collision Rate for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
-# worst bias is the  19-bit window at bit  13 - 28920.646% (416)
+# worst bias is the  19-bit window at bit  13 - score 289.206 (from 416 scores)
 not ok 60 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
 # Testing collisions   - Expected 871784.70, actual 75868652 (87.03x) - failed
 not ok 61 - Collision Rate for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
-# worst bias is the  20-bit window at bit  12 - 12640.401% (416)
+# worst bias is the  20-bit window at bit  12 - score 126.404 (from 416 scores)
 not ok 62 - Distribution Bias Check for Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
 not ok 63 - Keyset 'TwoBytes' # bernstein
 ### Keyset 'Sparse' Tests ###
 # Keyset 'Sparse' - 32-bit keys with up to 6 bits set - 1149017 keys
 # Testing collisions   - Expected   153.70, actual      168 ( 1.09x) - passed
 ok 64 - Collision Rate for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
-# worst bias is the  17-bit window at bit  15 - 68.160% (320)
+# worst bias is the  17-bit window at bit  15 - score 0.682 (from 320 scores)
 not ok 65 - Distribution Bias Check for Keyset 'Sparse' - 32-bit keys with up to 6 bits set
 # Keyset 'Sparse' - 40-bit keys with up to 6 bits set - 4598479 keys
 # Testing collisions   - Expected  2461.72, actual     2426 ( 0.99x) - passed
 ok 66 - Collision Rate for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
-# worst bias is the  19-bit window at bit  13 - 72.901% (384)
+# worst bias is the  19-bit window at bit  13 - score 0.729 (from 384 scores)
 not ok 67 - Distribution Bias Check for Keyset 'Sparse' - 40-bit keys with up to 6 bits set
 # Keyset 'Sparse' - 48-bit keys with up to 5 bits set - 1925357 keys
 # Testing collisions   - Expected   431.55, actual      427 ( 0.99x) - passed
 ok 68 - Collision Rate for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
-# worst bias is the  18-bit window at bit  14 - 106.070% (352)
+# worst bias is the  18-bit window at bit  14 - score 1.061 (from 352 scores)
 not ok 69 - Distribution Bias Check for Keyset 'Sparse' - 48-bit keys with up to 5 bits set
 # Keyset 'Sparse' - 56-bit keys with up to 5 bits set - 4216423 keys
 # Testing collisions   - Expected  2069.66, actual     2113 ( 1.02x) - passed
 ok 70 - Collision Rate for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
-# worst bias is the  19-bit window at bit  13 - 92.408% (384)
+# worst bias is the  19-bit window at bit  13 - score 0.924 (from 384 scores)
 not ok 71 - Distribution Bias Check for Keyset 'Sparse' - 56-bit keys with up to 5 bits set
 # Keyset 'Sparse' - 64-bit keys with up to 5 bits set - 8303633 keys
 # Testing collisions   - Expected  8026.87, actual     7904 ( 0.98x) - passed
 ok 72 - Collision Rate for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
-# worst bias is the  20-bit window at bit  12 - 79.089% (416)
+# worst bias is the  20-bit window at bit  12 - score 0.791 (from 416 scores)
 not ok 73 - Distribution Bias Check for Keyset 'Sparse' - 64-bit keys with up to 5 bits set
 # Keyset 'Sparse' - 96-bit keys with up to 4 bits set - 3469497 keys
 # Testing collisions   - Expected  1401.34, actual     1436 ( 1.02x) - passed
 ok 74 - Collision Rate for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
-# worst bias is the  19-bit window at bit  13 - 90.067% (384)
+# worst bias is the  19-bit window at bit  13 - score 0.901 (from 384 scores)
 not ok 75 - Distribution Bias Check for Keyset 'Sparse' - 96-bit keys with up to 4 bits set
 # Keyset 'Sparse' - 256-bit keys with up to 3 bits set - 2796417 keys
 # Testing collisions   - Expected   910.36, actual      868 ( 0.95x) - passed
 ok 76 - Collision Rate for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
-# worst bias is the  19-bit window at bit  13 - 41.825% (384)
+# worst bias is the  19-bit window at bit  13 - score 0.418 (from 384 scores)
 not ok 77 - Distribution Bias Check for Keyset 'Sparse' - 256-bit keys with up to 3 bits set
 # Keyset 'Sparse' - 2048-bit keys with up to 2 bits set - 2098177 keys
 # Testing collisions   - Expected   512.50, actual      503 ( 0.98x) - passed
 ok 78 - Collision Rate for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
-# worst bias is the  12-bit window at bit   0 - 7.746% (352)
+# worst bias is the  12-bit window at bit   0 - score 0.077 (from 352 scores)
 not ok 79 - Distribution Bias Check for Keyset 'Sparse' - 2048-bit keys with up to 2 bits set
 not ok 80 - Keyset 'Sparse' # bernstein
 ### Keyset 'Crc-MultiCollision' Tests ###
@@ -9176,100 +9177,109 @@ ok 140 - Collision Rate for Keyset 'City64-MultiCollision' - seed 10 # bernstein
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
 # Testing collisions   - Expected 42799.01, actual  1767985 (41.31x) - failed
 not ok 141 - Collision Rate for Keyset 'Combination Lowbits'
-# worst bias is the  20-bit window at bit   0 - 1210.746% (416)
+# worst bias is the  20-bit window at bit   0 - score 12.107 (from 416 scores)
 not ok 142 - Distribution Bias Check for Keyset 'Combination Lowbits'
 not ok 143 - Keyset 'Combination Lowbits' # bernstein
 ### Keyset 'Combination Highbits' Tests ###
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
 # Testing collisions   - Expected 42799.01, actual 13618525 (318.20x) - failed
 not ok 144 - Collision Rate for Keyset 'Combination Highbits'
-# worst bias is the  19-bit window at bit   0 - 30562.056% (416)
+# worst bias is the  19-bit window at bit   0 - score 305.621 (from 416 scores)
 not ok 145 - Distribution Bias Check for Keyset 'Combination Highbits'
 not ok 146 - Keyset 'Combination Highbits' # bernstein
 ### Keyset 'Combination Highbits2' Tests ###
 # Keyset 'Combination' - up to 8 blocks from a set of 8 - 19173960 keys
 # Testing collisions   - Expected 42799.01, actual 13594023 (317.62x) - failed
 not ok 147 - Collision Rate for Keyset 'Combination Highbits2'
-# worst bias is the  18-bit window at bit   0 - 15617.878% (416)
+# worst bias is the  18-bit window at bit   0 - score 156.179 (from 416 scores)
 not ok 148 - Distribution Bias Check for Keyset 'Combination Highbits2'
 not ok 149 - Keyset 'Combination Highbits2' # bernstein
 ### Keyset 'Combination HiBit-Null' Tests ###
 # Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
 # Testing collisions   - Expected   512.00, actual   946979 - Excessive keys in collision - failed
 not ok 150 - Collision Rate for Keyset 'Combination HiBit-Null'
-# worst bias is the  14-bit window at bit   0 - 67942.190% (352)
+# worst bias is the  14-bit window at bit   0 - score 679.422 (from 352 scores)
 not ok 151 - Distribution Bias Check for Keyset 'Combination HiBit-Null'
 not ok 152 - Keyset 'Combination HiBit-Null' # bernstein
 ### Keyset 'Combination LowBit-Null' Tests ###
 # Keyset 'Combination' - up to 20 blocks from a set of 2 - 2097150 keys
 # Testing collisions   - Expected   512.00, actual    27521 (53.75x) - failed
 not ok 153 - Collision Rate for Keyset 'Combination LowBit-Null'
-# worst bias is the  15-bit window at bit   0 - 2149.968% (352)
+# worst bias is the  15-bit window at bit   0 - score 21.500 (from 352 scores)
 not ok 154 - Distribution Bias Check for Keyset 'Combination LowBit-Null'
 not ok 155 - Keyset 'Combination LowBit-Null' # bernstein
 ### Keyset 'Combination Hi-Lo' Tests ###
 # Keyset 'Combination' - up to 6 blocks from a set of 15 - 12204240 keys
 # Testing collisions   - Expected 17339.30, actual   109183 ( 6.30x) - failed
 not ok 156 - Collision Rate for Keyset 'Combination Hi-Lo'
-# worst bias is the  19-bit window at bit   0 - 108.607% (416)
+# worst bias is the  19-bit window at bit   0 - score 1.086 (from 416 scores)
 not ok 157 - Distribution Bias Check for Keyset 'Combination Hi-Lo'
 not ok 158 - Keyset 'Combination Hi-Lo' # bernstein
 ### Keyset 'Text' Tests ###
 # Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
 # Testing collisions   - Expected 25418.13, actual 13348160 (525.14x) - failed
 not ok 159 - Collision Rate for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
-# worst bias is the  20-bit window at bit   8 - 99.272% (416)
+# worst bias is the  20-bit window at bit   8 - score 0.993 (from 416 scores)
 not ok 160 - Distribution Bias Check for Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
 # Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
 # Testing collisions   - Expected 25418.13, actual 13348160 (525.14x) - failed
 not ok 161 - Collision Rate for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
-# worst bias is the  19-bit window at bit  13 - 200711.626% (416)
+# worst bias is the  19-bit window at bit  13 - score 2007.116 (from 416 scores)
 not ok 162 - Distribution Bias Check for Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
 # Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
 # Testing collisions   - Expected 25418.13, actual 13348160 (525.14x) - failed
 not ok 163 - Collision Rate for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
-# worst bias is the  20-bit window at bit  12 - 106.125% (416)
+# worst bias is the  20-bit window at bit  12 - score 1.061 (from 416 scores)
 not ok 164 - Distribution Bias Check for Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
 not ok 165 - Keyset 'Text' # bernstein
 ### Keyset 'Zeroes' Tests ###
-# Keyset 'Zeroes' - 262144 keys
+# Keyset 'Zeroes' - 262144 keys, zero seed
+# Testing collisions   - Expected     8.00, actual   262143 - ALL keys were in collision - failed
+not ok 166 - Collision Rate for Keyset 'Zeroes' - 262144 keys, zero seed
+# worst bias is the  15-bit window at bit   0 - score 26213.580 (from 256 scores)
+not ok 167 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys, zero seed
+# Keyset 'Zeroes' - 262144 keys, nonzero seed
 # Testing collisions   - Expected     8.00, actual        0 ( 0.00x) - passed
-ok 166 - Collision Rate for Keyset 'Zeroes' - 262144 keys
-# worst bias is the   8-bit window at bit  30 - 6287.686% (256)
-not ok 167 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys
-not ok 168 - Keyset 'Zeroes' # bernstein
+ok 168 - Collision Rate for Keyset 'Zeroes' - 262144 keys, nonzero seed
+# worst bias is the   8-bit window at bit  30 - score 62.877 (from 256 scores)
+not ok 169 - Distribution Bias Check for Keyset 'Zeroes' - 262144 keys, nonzero seed
+not ok 170 - Keyset 'Zeroes' # bernstein
 ### Keyset 'Seed' Tests ###
 # Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
 # Testing collisions   - Expected   465.46, actual        0 ( 0.00x) - passed
-ok 169 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
-ok 170 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+ok 171 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
+ok 172 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "The quick brown fox "...
 # Keyset 'Seed' - 2000000 seeds, Key ""
 # Testing collisions   - Expected   465.44, actual        0 ( 0.00x) - passed
-ok 171 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
-ok 172 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
+ok 173 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key ""
+ok 174 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key ""
 # Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
 # Testing collisions   - Expected   465.46, actual        0 ( 0.00x) - passed
-ok 173 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
-ok 174 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+ok 175 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
+ok 176 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "00101100110101101"
 # Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
 # Testing collisions   - Expected   465.45, actual        0 ( 0.00x) - passed
-ok 175 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
-ok 176 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
-ok 177 - Keyset 'Seed' # bernstein
+ok 177 - Collision Rate for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 178 - Distribution Bias Check for Keyset 'Seed' - 2000000 seeds, Key "abcbcddbdebdcaaabaaa"...
+ok 179 - Keyset 'Seed' # bernstein
 ### Keyset 'Effs' Tests ###
-# Keyset 'Effs' - 262144 keys
+# Keyset 'Effs' - 262144 keys, zero seed
 # Testing collisions   - Expected     8.00, actual        0 ( 0.00x) - passed
-ok 178 - Collision Rate for Keyset 'Effs' - 262144 keys
-ok 179 - Distribution Bias Check for Keyset 'Effs' - 262144 keys
-ok 180 - Keyset 'Effs' # bernstein
+ok 180 - Collision Rate for Keyset 'Effs' - 262144 keys, zero seed
+ok 181 - Distribution Bias Check for Keyset 'Effs' - 262144 keys, zero seed
+# Keyset 'Effs' - 262144 keys, nonzero seed
+# Testing collisions   - Expected     8.00, actual        0 ( 0.00x) - passed
+ok 182 - Collision Rate for Keyset 'Effs' - 262144 keys, nonzero seed
+ok 183 - Distribution Bias Check for Keyset 'Effs' - 262144 keys, nonzero seed
+ok 184 - Keyset 'Effs' # bernstein
 ### Keyset 'Words' Tests ###
 # Hashed 99171 keys from 297513 words from file '/usr/share/dict/words'
 # Testing collisions   - Expected    10.30, actual      131 (12.71x) - failed
-not ok 181 - Collision Rate for Keyset 'Words'
-# worst bias is the  15-bit window at bit  17 - 139.221% (256)
-not ok 182 - Distribution Bias Check for Keyset 'Words'
-not ok 183 - all tests passed # bernstein
-1..183
-# Tests Failed. bernstein failed 118 of 183 tests.
-# Testing took 1695.315810 seconds
-# This is SMHasher version v1.2-demerphq-0-gd7c9ff3 - built on Mar 18 2017.
+not ok 185 - Collision Rate for Keyset 'Words'
+# worst bias is the  15-bit window at bit  17 - score 1.392 (from 256 scores)
+not ok 186 - Distribution Bias Check for Keyset 'Words'
+not ok 187 - all tests passed # bernstein
+1..187
+# Tests Failed. bernstein failed 122 of 187 tests.
+# Testing took 1501.000599 seconds
+# This is SMHasher version v1.3-demerphq-14-g32879ab - built on Dec 18 2017.

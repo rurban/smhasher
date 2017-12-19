@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"  standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg  onload="if (typeof(gnuplot_svg)!='undefined') gnuplot_svg.Init(evt)"
+<svg  onload="if (typeof(gnuplot_svg)!='undefined') gnuplot_svg.Init(evt)" 
  width="1100" height="500"
  viewBox="0 0 1100 500"
  xmlns="http://www.w3.org/2000/svg"
@@ -15,7 +15,7 @@
 /*
  * $Id: gnuplot_svg.js,v 1.17 2014/05/26 21:59:41 sfeam Exp $
  */
-// Javascript routines for interaction with SVG documents produced by
+// Javascript routines for interaction with SVG documents produced by 
 // gnuplot's SVG terminal driver.
 
 var gnuplot_svg = { };
@@ -65,25 +65,25 @@ gnuplot_svg.getText = function() {
 }
 
 gnuplot_svg.updateCoordBox = function(t, evt) {
-    /*
-     * Apply screen CTM transformation to the evt screenX and screenY to get
+    /* 
+     * Apply screen CTM transformation to the evt screenX and screenY to get 
      * coordinates in SVG coordinate space.  Use scaling parameters stored in
      * the plot document by gnuplot to convert further into plot coordinates.
      * Then position the floating text box using the SVG coordinates.
      */
     var m = document.documentElement.getScreenCTM();
-    var p = document.documentElement.createSVGPoint();
-    p.x = evt.clientX; p.y = evt.clientY;
-    p = p.matrixTransform(m.inverse());
+    var p = document.documentElement.createSVGPoint(); 
+    p.x = evt.clientX; p.y = evt.clientY; 
+    p = p.matrixTransform(m.inverse()); 
     var label_x, label_y;
 
     // Allow for scrollbar position (Firefox, others?)
     if (typeof evt.pageX != 'undefined') {
-        p.x = evt.pageX; p.y = evt.pageY;
+        p.x = evt.pageX; p.y = evt.pageY; 
     }
     t.setAttribute("x", p.x);
     t.setAttribute("y", p.y);
-
+   
     var plotcoord = gnuplot_svg.mouse2plot(p.x,p.y);
 
     if (gnuplot_svg.plot_timeaxis_x == "DMS" || gnuplot_svg.plot_timeaxis_y == "DMS") {
@@ -115,7 +115,7 @@ gnuplot_svg.updateCoordBox = function(t, evt) {
 	var hour = gnuplot_svg.axisdate.getUTCHours();
 	var minute = gnuplot_svg.axisdate.getUTCMinutes();
 	var second = gnuplot_svg.axisdate.getUTCSeconds();
-	label_x = ("0" + hour).slice (-2) + ":"
+	label_x = ("0" + hour).slice (-2) + ":" 
 		+ ("0" + minute).slice (-2) + ":"
 		+ ("0" + second).slice (-2);
 	label_y = plotcoord.y.toFixed(2);
@@ -183,7 +183,7 @@ gnuplot_svg.showHypertext = function(evt, mouseovertext)
     var anchor_y = evt.clientY;
     // Allow for scrollbar position (Firefox, others?)
     if (typeof evt.pageX != 'undefined') {
-        anchor_x = evt.pageX; anchor_y = evt.pageY;
+        anchor_x = evt.pageX; anchor_y = evt.pageY; 
     }
     var hypertextbox = document.getElementById("hypertextbox")
     hypertextbox.setAttributeNS(null,"x",anchor_x+10);
@@ -299,7 +299,7 @@ gnuplot_svg.convert_to_polar = function (x,y)
     polar = new Object;
     var phi, r;
     phi = Math.atan2(y,x);
-    if (gnuplot_svg.plot_logaxis_r)
+    if (gnuplot_svg.plot_logaxis_r) 
         r = Math.exp( (x/Math.cos(phi) + Math.log(gnuplot_svg.plot_axis_rmin)/Math.LN10) * Math.LN10);
     else
         r = x/Math.cos(phi) + gnuplot_svg.plot_axis_rmin;
@@ -1033,7 +1033,7 @@ onclick="gnuplot_svg.toggleCoordBox(evt)"  onmousemove="gnuplot_svg.moveCoordBox
 </g>
 
 <script type="text/javascript"><![CDATA[
-// plot boundaries and axis scaling information for mousing
+// plot boundaries and axis scaling information for mousing 
 gnuplot_svg.plot_term_xmax = 1100;
 gnuplot_svg.plot_term_ymax = 500;
 gnuplot_svg.plot_xmin = 89.5;
