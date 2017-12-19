@@ -7,7 +7,7 @@ my @files= shuffle glob "doc/*.txt";
 my %data;
 my %all_test_sets;
 foreach my $file (@files) {
-    $file=~m!^doc/(\w+)\.(\d+)\.(\d+)\.(\d+)\.txt\z!
+    $file=~m!^doc/([^.]+)\.(\d+)\.(\d+)\.(\d+)\.txt\z!
         or next;
     my ($name, $seedbits, $statebits, $hashbits)= ($1, $2, $3, $4);
     open my $fh, "<", $file
