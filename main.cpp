@@ -313,9 +313,11 @@ HashInfo g_hashes[] =
   { "SipHash", "SipHash 2-4",
     128, 256, 64, 0x5F4173E0,
     siphash_seed_state_test, siphash_with_state_test },
+#ifdef HAVE_TSIP
   { "TSip", "Damian Gryski's Tiny SipHash variant",
     128, 128, 64, 0x881B5461,
     tsip_seed_state_smhasher_test, tsip_hash_with_state_smhasher_test },
+#endif
 #if defined(__x86_64__)
   { "fasthash32", "fast-hash 32bit",
     32, 32, 32, 0x4651528E,
