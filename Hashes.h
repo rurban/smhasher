@@ -2,9 +2,6 @@
 
 #include "Types.h"
 
-#include "jody_hash32.h"
-#include "jody_hash64.h"
-
 #include "MurmurHash1.h"
 #include "MurmurHash2.h"
 #include "MurmurHash3.h"
@@ -17,6 +14,8 @@
 #endif
 
 #include "fasthash.h"
+#include "jody_hash32.h"
+#include "jody_hash64.h"
 
 //----------
 // These are _not_ hash functions (even though people tend to use crc32 as one...)

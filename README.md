@@ -27,6 +27,8 @@ SMhasher
 | [JenkinsOOAT](doc/JenkinsOOAT)        |       412.39	|   154.66 | 53.5% bias, collisions, distrib  |
 | [JenkinsOOAT_pl](doc/JenkinsOOAT_perl)|       452.50	|   118.25 | 1.5-11.5% bias, 7.2x collisions  |
 | [MicroOAAT](doc/MicroOAAT)            |       689.16	|    83.45 | 100% bias, distrib               |
+| [jodyhash32](doc/jodyhash32)          |      1428.46	|    44.25 | bias, collisions, distr    |
+| [jodyhash64](doc/jodyhash64)          |      2843.93	|    39.53 | bias, collisions, distr    |
 | [lookup3](doc/lookup3)                |      1735.25	|    48.78 | 28% bias, collisions, 30% distr  |
 | [superfast](doc/superfast)            |      2045.98	|    52.16 | 91% bias, 5273.01x collisions, 37% distr |
 | [MurmurOAAT](doc/MurmurOAAT)          |       465.93	|   110.78 | collisions, 99.998% distr          |
@@ -46,6 +48,7 @@ SMhasher
 | [Murmur3F](doc/Murmur3F)              |      4376.29	|    55.03 |                            |
 | [fasthash32](doc/fasthash32)          |      4881.26	|    55.11 |                            |
 | [fasthash64](doc/fasthash64)          |      5404.17	|    46.73 |                            |
+| [MUM](doc/MUM)                        |      7763.68	|    41.28 |  machine-specific          |
 | [City32](doc/City32)                  |      3523.77	|    53.76 |                            |
 | [City64](doc/City64)                  |      8728.22	|    54.72 | 2 minor collisions         |
 | [City128](doc/City128)                |      9769.19	|    63.38 |                            |
@@ -79,7 +82,6 @@ SMhasher
 | [t1ha_32be](doc/t1ha_32be)            |      6931.84	|    34.17 |                            |
 | [t1ha_crc](doc/t1ha_crc)              |     16757.73	|    28.69 |                            |
 | [t1ha_aes](doc/t1ha_aes)              |     37299.66	|    25.68 |  machine-specific          |
-| [MUM](doc/MUM)                        |      7763.68	|    41.28 |  machine-specific          |
 
 Summary
 -------

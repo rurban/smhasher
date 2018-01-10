@@ -442,13 +442,12 @@ zlib_crc32_test(const void *input, int len, uint32_t seed, void *out)
 }
 #endif
 
-#if 0 && defined(__x86_64__) && (defined(__linux__) || defined(__APPLE__))  
-extern "C" {
-  uint64_t fhtw_test(const unsigned char key[16], const unsigned char *m, size_t len);
-  int fhtw_hash(void* key, int key_len);
-}
+#if 0 && defined(__x86_64__) && (defined(__linux__) || defined(__APPLE__))
 /* asm */
-inline void
+extern "C" {
+  int fhtw_hash(const void* key, int key_len);
+}
+void
 fhtw_test(const void *input, int len, uint32_t seed, void *out)
 {
   *(uint32_t *) out = fhtw_hash(input, len);

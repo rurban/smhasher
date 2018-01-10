@@ -64,6 +64,7 @@ struct HashInfo
   const char * desc;
 };
 
+// sorted by quality and speed
 HashInfo g_hashes[] =
 {
   // first the bad hash funcs, failing tests:
@@ -75,7 +76,7 @@ HashInfo g_hashes[] =
   { sumhash,     	  32, 0x0000A9AC, "sumhash", 	 "sum all bytes" },
   { sumhash32,     	  32, 0xF5562C80, "sumhash32",   "sum all 32bit words" },
 
-  // here start the real hashes
+  // here start the real hashes. the problematic ones:
   { crc32,                32, 0x3719DB20, "crc32",       "CRC-32 soft" },
 
   { md5_32,               32, 0xF7192210, "md5_32a",     "MD5, first 32 bits of result" },
@@ -121,6 +122,8 @@ HashInfo g_hashes[] =
   { JenkinsOOAT,          32, 0x83E133DA, "JenkinsOOAT", "Bob Jenkins' OOAT as in perl 5.18" },
   { JenkinsOOAT_perl,     32, 0xEE05869B, "JenkinsOOAT_perl", "Bob Jenkins' OOAT as in old perl5" },
   { MicroOAAT,            32, 0x16F1BA97, "MicroOAAT", "Small non-multiplicative OAAT that passes all collision checks (by funny-falcon)" },
+  { jodyhash32_test,      32, 0xFB47D60D, "jodyhash32",  "jodyhash, 32-bit (v5)" },
+  { jodyhash64_test,      64, 0x623B99CF, "jodyhash64",  "jodyhash, 64-bit (v5)" },
   { lookup3_test,         32, 0x3D83917A, "lookup3",     "Bob Jenkins' lookup3" },
   { SuperFastHash,        32, 0x980ACD1D, "superfast",   "Paul Hsieh's SuperFastHash" },
   { MurmurOAAT_test,      32, 0x5363BD98, "MurmurOAAT",  "Murmur one-at-a-time" },
@@ -133,12 +136,13 @@ HashInfo g_hashes[] =
   { MurmurHash64B_test,   64, 0xDD537C05, "Murmur2C",    "MurmurHash2 for x86, 64-bit" },
   { halfsiphash_test,     32, 0xA7A05F72, "HalfSipHash", "HalfSipHash 2-4, 32bit" },
 
-  // and now the quality hash funcs, which mostly work
+  // and now the quality hash funcs
   // GoodOOAT passes whole SMHasher (by funny-falcon)
   { GoodOAAT,             32, 0x7B14EEE5, "GoodOAAT",    "Small non-multiplicative OAAT" },
   { siphash_test,         64, 0xC58D7F9C, "SipHash",     "SipHash 2-4 - SSSE3 optimized" },
   // as in rust and swift
   { siphash13_test,       64, 0x29C010BF, "SipHash13",   "SipHash 1-3 - SSSE3 optimized" },
+  // TODO: Google HighwayHash
   { PMurHash32_test,      32, 0xB0F57EE3, "PMurHash32",  "Shane Day's portable-ized MurmurHash3 for x86, 32-bit." },
   { MurmurHash3_x86_32,   32, 0xB0F57EE3, "Murmur3A",    "MurmurHash3 for x86, 32-bit" },
   { MurmurHash3_x86_128, 128, 0xB3ECE62A, "Murmur3C",    "MurmurHash3 for x86, 128-bit" },
@@ -149,6 +153,13 @@ HashInfo g_hashes[] =
   { fasthash32_test,      32, 0xE9481AFC, "fasthash32",  "fast-hash 32bit" },
   { fasthash64_test,      64, 0xA16231A7, "fasthash64",  "fast-hash 64bit" },
 #endif
+  { mum_hash_test,              64,
+#if defined(__GNUC__) && UINT_MAX != ULONG_MAX
+                                    0x3EEAE2D4,
+#else
+                                    0xA973C6C0,
+#endif
+                                                "MUM",               "github.com/vnmakarov/mum-hash" },
   { CityHash32_test,      32, 0x5C28AD62, "City32",      "Google CityHash32WithSeed (old)" },
   { CityHash64_test,      64, 0x25A20825, "City64",      "Google CityHash64WithSeed (old)" },
 #if defined(__SSE4_2__) && defined(__x86_64__)
@@ -171,8 +182,6 @@ HashInfo g_hashes[] =
   { xxhash256_test,       64, 0x024B7CF4, "xxhash256",   "xxhash256, 64-bit unportable" },
 #endif
 #endif
-  { jodyhash32_test,      32, 0xFB47D60D, "jodyhash32",  "jodyhash, 32-bit (v5)" },
-  { jodyhash64_test,      64, 0x623B99CF, "jodyhash64",  "jodyhash, 64-bit (v5)" },
 #if defined(__x86_64__)
   { metrohash64_1_test,       64, 0xEE88F7D2, "metrohash64_1",     "MetroHash64_1 for 64-bit" },
   { metrohash64_2_test,       64, 0xE1FC7C6E, "metrohash64_2",     "MetroHash64_2 for 64-bit" },
@@ -203,13 +212,6 @@ HashInfo g_hashes[] =
 #if defined(__AES__) || defined(_M_X64) || defined(_M_IX86)
   { t1ha_aes_test,              64, 0x54BBFF21, "t1ha_aes",          "Fast Positive Hash (machine-specific, requires: AES-NI)" },
 #endif
-  { mum_hash_test,              64,
-#if defined(__GNUC__) && UINT_MAX != ULONG_MAX
-                                    0x3EEAE2D4,
-#else
-                                    0xA973C6C0,
-#endif
-                                                "MUM",               "github.com/vnmakarov/mum-hash" },
 };
 
 HashInfo * findHash ( const char * name )
