@@ -185,6 +185,8 @@ add_library(
   ${SSE4_OBJ}
   t1ha.c
   mum.cc
+  jody_hash32.c
+  jody_hash64.c
 )
 
 add_executable(
