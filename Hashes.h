@@ -2,6 +2,9 @@
 
 #include "Types.h"
 
+#include "jody_hash32.h"
+#include "jody_hash64.h"
+
 #include "MurmurHash1.h"
 #include "MurmurHash2.h"
 #include "MurmurHash3.h"
@@ -125,6 +128,13 @@ inline void MurmurHash64A_test ( const void * key, int len, uint32_t seed, void 
 inline void MurmurHash64B_test ( const void * key, int len, uint32_t seed, void * out )
 {
   *(uint64_t*)out = MurmurHash64B(key,len,seed);
+}
+
+inline void jodyhash32_test( const void * key, int len, uint32_t seed, void * out ) {
+  *(uint32_t*)out = (uint32_t) jody_block_hash32((const jodyhash32_t *)key, (jodyhash32_t) seed, (size_t) len);
+}
+inline void jodyhash64_test( const void * key, int len, uint32_t seed, void * out ) {
+  *(uint32_t*)out = (uint32_t) jody_block_hash((const jodyhash_t *)key, (jodyhash_t) seed, (size_t) len);
 }
 
 #if defined(__x86_64__)
