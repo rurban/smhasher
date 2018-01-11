@@ -409,25 +409,25 @@ HashInfo g_hashes[] =
     NULL, falkhash_with_state_test_cxx },
 #endif
   { "t1ha", "Fast Positive Hash - portable, 64-bit, little-endian",
-    64, 64, 64, 0xA18A4E0E,
+    64, 64, 64, 0xBA00C7E2,
     NULL, t1ha_with_state_test },
   { "t1ha_64be", "Fast Positive Hash - portable, 64-bit, big-endian",
-    64, 64, 64, 0xF8FFDED6,
+    64, 64, 64, 0xAF0631C1,
     NULL, t1ha_64be_with_state_test },
   { "t1ha_32le", "Fast Positive Hash - portable, 32-bit, little-endian",
-    64, 64, 64, 0xE42B362F,
+    64, 64, 64, 0xE541B1E0,
     NULL, t1ha_32le_with_state_test },
   { "t1ha_32be", "Fast Positive Hash - portable, 32-bit, big-endian",
-    64, 64, 64, 0xF0C501EB,
+    64, 64, 64, 0x2F1B1437,
     NULL, t1ha_32be_with_state_test },
 #if (defined(__SSE4_2__) && defined(__x86_64__)) || defined(_M_X64)
   { "t1ha_crc", "Fast Positive Hash - requires SSE4.2 CRC32C",
-    64, 64, 64, 0x20BD585A,
+    64, 64, 64, 0xA87828F1,
     NULL, t1ha_crc_with_state_test },
 #endif
 #if defined(__AES__) || defined(_M_X64) || defined(_M_IX86)
   { "t1ha_aes", "Fast Positive Hash - requires: AES-NI",
-    64, 64, 64, 0x62ACCBC1,
+    64, 64, 64, 0x1C02055E,
     NULL, t1ha_aes_with_state_test },
 #endif
 #if defined(__GNUC__) && UINT_MAX != ULONG_MAX

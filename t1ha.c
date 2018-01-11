@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  Copyright (c) 2016-2017 Positive Technologies, https://www.ptsecurity.com,
  *  Fast Positive Hash.
  *
@@ -349,6 +349,15 @@ static __inline uint64_t mux64(uint64_t v, uint64_t p) {
 #endif
 }
 
+static __inline uint64_t final64(uint64_t a, uint64_t b) {
+#if 1
+  b ^= mux64(a + rot64(b, s2), p0);
+  return mux64(rot64(a, s1) + b, p4);
+#else
+  return mux64(rot64(a + b, s1), p4) + mix(a ^ b, p0);
+#endif
+}
+
 uint64_t t1ha(const void *data, size_t len, uint64_t seed) {
   uint64_t a = seed;
   uint64_t b = len;
@@ -419,7 +428,7 @@ uint64_t t1ha(const void *data, size_t len, uint64_t seed) {
   case 1:
     a += mux64(tail64_le(v, len), p1);
   case 0:
-    return mux64(rot64(a + b, s1), p4) + mix(a ^ b, p0);
+    return final64(a, b);
   }
 }
 
@@ -573,7 +582,7 @@ uint64_t t1ha_64be(const void *data, size_t len, uint64_t seed) {
   case 1:
     a += mux64(tail64_be(v, len), p1);
   case 0:
-    return mux64(rot64(a + b, s1), p4) + mix(a ^ b, p0);
+    return final64(a, b);
   }
 }
 
@@ -644,12 +653,24 @@ static __inline uint32_t tail32_be(const void *v, size_t tail) {
   unreachable();
 }
 
-static __inline uint64_t remix32(uint32_t a, uint32_t b) {
+static __inline uint64_t final32(uint32_t a, uint32_t b) {
+#if 1
+  a ^= rot32(b, 17);
+  b += rot32(a, 11);
+  uint64_t l = a | (uint64_t)b << 32;
+  l *= p0;
+  l ^= l >> 41;
+  l *= p4;
+  l ^= l >> 47;
+  l *= p1;
+  return l;
+#else
   a ^= rot32(b, 13);
   uint64_t l = a | (uint64_t)b << 32;
   l *= p0;
   l ^= l >> 41;
   return l;
+#endif
 }
 
 static __inline void mixup32(uint32_t *a, uint32_t *b, uint32_t v, uint32_t p) {
@@ -732,7 +753,7 @@ uint64_t t1ha_32le(const void *data, size_t len, uint64_t seed) {
   case 1:
     mixup32(&b, &a, tail32_le(v, len), q1);
   case 0:
-    return remix32(a, b);
+    return final32(a, b);
   }
 }
 
@@ -801,7 +822,7 @@ uint64_t t1ha_32be(const void *data, size_t len, uint64_t seed) {
   case 1:
     mixup32(&b, &a, tail32_be(v, len), q1);
   case 0:
-    return remix32(a, b);
+    return final32(a, b);
   }
 }
 
@@ -872,7 +893,7 @@ uint64_t
   case 1:
     a += mux64(tail64_le(v, len), p1);
   case 0:
-    return mux64(rot64(a + b, s1), p4) + mix(a ^ b, p0);
+    return final64(a, b);
   }
 }
 
@@ -1025,7 +1046,7 @@ t1ha_ia32aes_avx(const void *data, size_t len, uint64_t seed) {
   case 1:
     a += mux64(tail64_le(v, len), p1);
   case 0:
-    return mux64(rot64(a + b, s1), p4) + mix(a ^ b, p0);
+    return final64(a, b);
   }
 }
 
@@ -1143,7 +1164,7 @@ uint64_t
   case 1:
     a += mux64(tail64_le(v, len), p1);
   case 0:
-    return mux64(rot64(a + b, s1), p4) + mix(a ^ b, p0);
+    return final64(a, b);
   }
 }
 
