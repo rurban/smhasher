@@ -158,6 +158,11 @@ IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
     opt_cmetrohash64_1.c fasthash.cpp)
 ENDIF()
 
+set(T1HA_SRC t1ha/t1ha0.c t1ha/t1ha1.c t1ha/t1ha2.c t1ha/t1ha0_ia32aes_noavx.c t1ha/t1ha0_ia32aes_avx.c t1ha/t1ha0_ia32aes_avx2.c)
+set_source_files_properties(t1ha/t1ha0_ia32aes_noavx.c PROPERTIES COMPILE_FLAGS "-mno-avx2 -mno-avx -maes")
+set_source_files_properties(t1ha/t1ha0_ia32aes_avx.c PROPERTIES COMPILE_FLAGS "-mno-avx2 -mavx -maes")
+set_source_files_properties(t1ha/t1ha0_ia32aes_avx2.c PROPERTIES COMPILE_FLAGS "-mavx -mavx2 -maes")
+
 add_library(
   SMHasherSupport
   AvalancheTest.cpp
@@ -193,7 +198,7 @@ add_library(
   ${METROCRC128_SRC}
   ${SSE4_OBJ}
   # ${FHTW_OBJ}
-  t1ha.c
+  ${T1HA_SRC}
   mum.cc
   jody_hash32.c
   jody_hash64.c

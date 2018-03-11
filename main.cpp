@@ -201,16 +201,23 @@ HashInfo g_hashes[] =
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { falkhash_test_cxx,          64, 0x2F99B071, "falkhash",          "falkhash.asm with aesenc, 64-bit for x64" },
 #endif
-  { t1ha_64be_test,             64, 0x93F864DE, "t1ha_64be",         "Fast Positive Hash (portable, best for: 64-bit, big-engian)" },
-  { t1ha_32le_test,             64, 0xE489F366, "t1ha_32le",         "Fast Positive Hash (portable, best for: 32-bit, little-endian)" },
-  { t1ha_32be_test,             64, 0x71F649A9, "t1ha_32be",         "Fast Positive Hash (portable, best for: 32-bit, big-endian)" },
-  { t1ha_test,                  64, 0xD6836381, "t1ha",              "Fast Positive Hash (portable, best for: 64-bit, little-endian)" },
-#if (defined(__SSE4_2__) && defined(__x86_64__)) || defined(_M_X64)
-  { t1ha_crc_test,              64, 0xA57ACE7D, "t1ha_crc",          "Fast Positive Hash (machine-specific, requires: SSE4.2 CRC32C)" },
-#endif
-#if defined(__AES__) || defined(_M_X64) || defined(_M_IX86)
-  { t1ha_aes_test,              64, 0x54BBFF21, "t1ha_aes",          "Fast Positive Hash (machine-specific, requires: AES-NI)" },
-#endif
+  { t1ha2_atonce_test,           64, 0x8F16C948, "t1ha2_atonce",     "Fast Positive Hash (portable, aims 64-bit, little-endian)" },
+  { t1ha2_stream_test,           64, 0xDED9B580, "t1ha2_stream",     "Fast Positive Hash (portable, aims 64-bit, little-endian)" },
+  { t1ha2_atonce128_test,       128, 0xB44C43A1, "t1ha2_atonce128",  "Fast Positive Hash (portable, aims 64-bit, little-endian)" },
+  { t1ha2_stream128_test,       128, 0xE929E756, "t1ha2_stream128",  "Fast Positive Hash (portable, aims 64-bit, little-endian)" },
+  { t1ha1_64le_test,             64, 0xD6836381, "t1ha1_64le",       "Fast Positive Hash (portable, aims 64-bit, little-endian)" },
+  { t1ha1_64be_test,             64, 0x93F864DE, "t1ha1_64be",       "Fast Positive Hash (portable, aims 64-bit, big-engian)" },
+  { t1ha0_32le_test,             64, 0x7F7D7B29, "t1ha0_32le",       "Fast Positive Hash (portable, aims 32-bit, little-endian)" },
+  { t1ha0_32be_test,             64, 0xDA6A4061, "t1ha0_32be",       "Fast Positive Hash (portable, aims 32-bit, big-endian)" },
+#if defined(__AES__)
+  { t1ha0_ia32aes_noavx_test,    64, 0xF07C4DA5, "t1ha0_aes_noavx",  "Fast Positive Hash (machine-specific, requires AES-NI)" },
+#if defined(__AVX__)
+  { t1ha0_ia32aes_avx1_test,     64, 0xF07C4DA5, "t1ha0_aes_avx1",    "Fast Positive Hash (machine-specific, requires AES-NI & AVX)" },
+#endif /* __AVX__ */
+#if defined(__AVX__)
+  { t1ha0_ia32aes_avx2_test,     64, 0x8B38C599, "t1ha0_aes_avx2",   "Fast Positive Hash (machine-specific, requires AES-NI & AVX)" },
+#endif /* __AVX__ */
+#endif /* __AES__ */
 };
 
 HashInfo * findHash ( const char * name )

@@ -187,42 +187,75 @@ inline void fasthash64_test ( const void * key, int len, uint32_t seed, void * o
 }
 #endif
 
+void mum_hash_test(const void * key, int len, uint32_t seed, void * out);
+
 //-----------------------------------------------------------------------------
 
 #include "t1ha.h"
 
-inline void t1ha_test(const void * key, int len, uint32_t seed, void * out)
+inline void t1ha2_atonce_test(const void * key, int len, uint32_t seed, void * out)
 {
-  *(uint64_t*)out = t1ha(key, len, seed);
+  *(uint64_t*)out = t1ha2_atonce(key, len, seed);
 }
 
-void mum_hash_test(const void * key, int len, uint32_t seed, void * out);
-
-#if (defined(__SSE4_2__) && defined(__x86_64__)) || defined(_M_X64)
-inline void t1ha_crc_test(const void * key, int len, uint32_t seed, void * out)
+inline void t1ha2_stream_test(const void * key, int len, uint32_t seed, void * out)
 {
-  *(uint64_t*)out = t1ha_ia32crc(key, len, seed);
-}
-#endif
-
-inline void t1ha_64be_test(const void * key, int len, uint32_t seed, void * out)
-{
-  *(uint64_t*)out = t1ha_64be(key, len, seed);
+  t1ha_context_t ctx;
+  t1ha2_init(&ctx, seed, 0);
+  t1ha2_update(&ctx, key, len);
+  *(uint64_t*)out = t1ha2_final(&ctx, NULL);
 }
 
-inline void t1ha_32le_test(const void * key, int len, uint32_t seed, void * out)
+inline void t1ha2_atonce128_test(const void * key, int len, uint32_t seed, void * out)
 {
-  *(uint64_t*)out = t1ha_32le(key, len, seed);
+  *(uint64_t*)out = t1ha2_atonce128((uint64_t*)out + 1, key, len, seed);
 }
 
-inline void t1ha_32be_test(const void * key, int len, uint32_t seed, void * out)
+inline void t1ha2_stream128_test(const void * key, int len, uint32_t seed, void * out)
 {
-  *(uint64_t*)out = t1ha_32be(key, len, seed);
+  t1ha_context_t ctx;
+  t1ha2_init(&ctx, seed, 0);
+  t1ha2_update(&ctx, key, len);
+  *(uint64_t*)out = t1ha2_final(&ctx, (uint64_t*)out + 1);
 }
 
-#if defined(__AES__) || defined(_M_X64) || defined(_M_IX86)
-inline void t1ha_aes_test(const void * key, int len, uint32_t seed, void * out)
+inline void t1ha1_64le_test(const void * key, int len, uint32_t seed, void * out)
 {
-  *(uint64_t*)out = t1ha_ia32aes(key, len, seed);
+  *(uint64_t*)out = t1ha1_le(key, len, seed);
 }
-#endif
+
+inline void t1ha1_64be_test(const void * key, int len, uint32_t seed, void * out)
+{
+  *(uint64_t*)out = t1ha1_be(key, len, seed);
+}
+
+inline void t1ha0_32le_test(const void * key, int len, uint32_t seed, void * out)
+{
+  *(uint64_t*)out = t1ha0_32le(key, len, seed);
+}
+
+inline void t1ha0_32be_test(const void * key, int len, uint32_t seed, void * out)
+{
+  *(uint64_t*)out = t1ha0_32be(key, len, seed);
+}
+
+#ifdef T1HA0_AESNI_AVAILABLE
+inline void t1ha0_ia32aes_noavx_test(const void * key, int len, uint32_t seed, void * out)
+{
+  *(uint64_t*)out = t1ha0_ia32aes_noavx(key, len, seed);
+}
+
+#if defined(__AVX__)
+inline void t1ha0_ia32aes_avx1_test(const void * key, int len, uint32_t seed, void * out)
+{
+  *(uint64_t*)out = t1ha0_ia32aes_avx(key, len, seed);
+}
+#endif /* __AVX__ */
+
+#if defined(__AVX__)
+inline void t1ha0_ia32aes_avx2_test(const void * key, int len, uint32_t seed, void * out)
+{
+  *(uint64_t*)out = t1ha0_ia32aes_avx2(key, len, seed);
+}
+#endif /* __AVX__ */
+#endif /* T1HA0_AESNI_AVAILABLE */
