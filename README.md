@@ -14,11 +14,11 @@ SMhasher
 | [crc32](doc/crc32)                    |      392.09	|   135.20 | insecure, 8589.93x collisions, distrib  |
 | [md5_32a](doc/md5_32a)                |      352.25	|   674.76 | 8589.93x collisions, distrib   |
 | [sha1_32a](doc/sha1_32a)              |      373.41	|  1492.19 | collisions, 36.6% distrib      |
-| [hasshe2](doc/hasshe2)                |     3139.96	|    70.18 | insecure,100% bias, collisions, distrib |
-| [crc32_hw](doc/crc32_hw)              |     6331.24	|    29.89 | insecure,100% bias, collisions, distrib |
-| [crc64_hw1](doc/crc64_hw1)            |    23011.78	|    35.72 | insecure,100% bias, collisions, distrib |
-| [crc32_hw](doc/crc32_hw)              |     8423.86	|    29.36 | insecure,100% bias, collisions, distrib |
-| [FNV1a](doc/FNV1a)                    |      790.45	|    69.32 | zeros,100% bias, collisions, distrib    |
+| [hasshe2](doc/hasshe2)                |     3139.96	|    70.18 | insecure, 100% bias, collisions, distrib |
+| [crc32_hw](doc/crc32_hw)              |     6331.24	|    29.89 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
+| [crc64_hw1](doc/crc64_hw1)            |    23011.78	|    35.72 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
+| [crc32_hw](doc/crc32_hw)              |     8423.86	|    29.36 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
+| [FNV1a](doc/FNV1a)                    |      790.45	|    69.32 | zeros, 100% bias, collisions, distrib    |
 | [FNV1a_YT](doc/FNV1a_YT)              |     8949.71	|    27.97 | 100% bias, collisions, distrib   |
 | [FNV64](doc/FNV64)                    |      791.85	|    69.31 | 100% bias, collisions, distrib   |
 | [bernstein](doc/bernstein)            |      791.84	|    67.09 | 100% bias, collisions, distrib   |
@@ -48,15 +48,15 @@ SMhasher
 | [Murmur3F](doc/Murmur3F)              |      5256.15	|    50.23 |                            |
 | [fasthash32](doc/fasthash32)          |      4661.31	|    50.81 |                            |
 | [fasthash64](doc/fasthash64)          |      4612.00	|    48.14 |                            |
-| [MUM](doc/MUM)                        |      6564.38	|    39.85 |  machine-specific          |
+| [MUM](doc/MUM)                        |      6564.38	|    39.85 | machine-specific (32/64 differs) |
 | [City32](doc/City32)                  |      3818.33	|    53.02 |                            |
 | [City64](doc/City64)                  |      9200.87	|    55.70 | 2 minor collisions         |
 | [City128](doc/City128)                |     10105.87	|    89.41 |                            |
 | [CityCrc128](doc/CityCrc128)          |     12638.87	|    90.65 |                            |
-| [FarmHash64](doc/FarmHash64)         	|      9187.94	|    62.93 | machine-specific           |
-| [FarmHash128](doc/FarmHash128)        |      9877.60	|    82.89 | machine-specific           |
-| [FarmHash32](doc/FarmHash32)         	|     24831.45  |    24.99 | disabled. too machine-specific |
-| [farmhash32_c](doc/farmhash32_c)      |     24647.21  |    25.36 |                            |
+| [FarmHash64](doc/FarmHash64)         	|      9187.94	|    62.93 |                            |
+| [FarmHash128](doc/FarmHash128)        |      9877.60	|    82.89 |                            |
+| [FarmHash32](doc/FarmHash32)         	|     24831.45  |    24.99 | machine-specific (x86_64 SSE4/AVX) |
+| [farmhash32_c](doc/farmhash32_c)      |     24647.21  |    25.36 | machine-specific (x86_64 SSE4/AVX) |
 | [farmhash64_c](doc/farmhash64_c)     	|      9149.44	|    74.39 |                            |
 | [farmhash128_c](doc/farmhash128_c)    |      9959.95	|    99.01 |                            |
 | [xxHash32](doc/xxHash32)              |      5414.57	|    46.85 | collisions with 4bit diff  |
@@ -68,20 +68,20 @@ SMhasher
 | [metrohash64_2](doc/metrohash64_2)    |      9569.20	|    50.86 |                            |
 | [metrohash128_1](doc/metrohash128_1)  |      9908.72	|    81.39 |                            |
 | [metrohash128_2](doc/metrohash128_2)  |      9943.95	|    81.31 |                            |
-| [metrohash64crc_1](doc/metrohash64crc_1)  | 14007.26	|    55.84 | cyclic collisions 8 byte   |
-| [metrohash64crc_2](doc/metrohash64crc_2)  | 13932.90	|    55.90 | cyclic collisions 8 byte   |
-| [metrohash128crc_1](doc/metrohash128crc_1)| 13993.55	|    86.92 |                            |
-| [metrohash128crc_2](doc/metrohash128crc_2)| 13929.50	|    86.90 |                            |
+| [metrohash64crc_1](doc/metrohash64crc_1)  | 14007.26	|    55.84 | cyclic collisions 8 byte, machine-specific (x86_64 SSE4.2) |
+| [metrohash64crc_2](doc/metrohash64crc_2)  | 13932.90	|    55.90 | cyclic collisions 8 byte, machine-specific (x86_64  SSE4.2) |
+| [metrohash128crc_1](doc/metrohash128crc_1)| 13993.55	|    86.92 | machine-specific (x86_64 SSE4.2) |
+| [metrohash128crc_2](doc/metrohash128crc_2)| 13929.50	|    86.90 | machine-specific (x86_64 SSE4.2) |
 | [cmetrohash64_1o](doc/cmetrohash64_1o)    |  8665.09	|    50.82 |                            |
 | [cmetrohash64_1](doc/cmetrohash64_1)      |  9522.76	|    51.04 |                            |
 | [cmetrohash64_2](doc/cmetrohash64_2)      |  9470.74	|    50.80 |                            |
-| [falkhash](doc/falkhash)              |     19984.13	|   173.46 |                            |
+| [falkhash](doc/falkhash)              |     19984.13	|   173.46 | machine-specific (x86_64 AES-NI) |
 | [t1ha_64be](doc/t1ha_64be)            |      7146.84	|    39.78 |                            |
 | [t1ha_32le](doc/t1ha_32le)            |      5577.12	|    42.53 |                            |
 | [t1ha_32be](doc/t1ha_32be)            |      4266.89	|    41.72 |                            |
 | [t1ha](doc/t1ha)                      |      9590.96	|    36.51 |                            |
-| [t1ha_crc](doc/t1ha_crc)              |     13775.04	|    35.87 |                            |
-| [t1ha_aes](doc/t1ha_aes)              |     19927.77	|    36.02 |  machine-specific          |
+| [t1ha_crc](doc/t1ha_crc)              |     13775.04	|    35.87 | machine-specific (x86 SSE4.2) |
+| [t1ha_aes](doc/t1ha_aes)              |     19927.77	|    36.02 | machine-specific (x86 AES-NI) |
 
 Summary
 -------
@@ -100,7 +100,7 @@ So the fastest hash functions on x86_64 without quality problems are:
 - xxHash64
 - fasthash
 - City (_deprecated_)
-- mum (_machine specific, mum: different arch results_)
+- mum (_machine specific, mum: different results on 32/64-bit archs_)
 
 Hash functions for symbol tables or hash tables typically use 32 bit
 hashes, for databases, file systems and file checksums typically 64 or
