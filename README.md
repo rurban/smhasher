@@ -147,7 +147,7 @@ against City, Murmur or Perl JenkinsOAAT or at
 [Hash Function Lounge](http://www.larc.usp.br/~pbarreto/hflounge.html)
 are not included here.
 
-Such an attack avoidance cannot not be the problem of the hash
+Such an attack avoidance cannot be the problem of the hash
 function, but the hash table collision resolution scheme.  You can
 attack every single hash function, even the best and most secure if
 you detect the seed, e.g. from language (mis-)features, side-channel
