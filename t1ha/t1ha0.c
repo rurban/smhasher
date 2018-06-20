@@ -41,9 +41,56 @@
  * for The 1Hippeus project - zerocopy messaging in the spirit of Sparta!
  */
 
+#ifndef T1HA0_DISABLED
 #include "t1ha_bits.h"
 
-static __always_inline uint32_t tail32_le(const void *v, size_t tail) {
+static __maybe_unused __always_inline uint32_t tail32_le_aligned(const void *v,
+                                                                 size_t tail) {
+  const uint8_t *const p = (const uint8_t *)v;
+#if T1HA_USE_FAST_ONESHOT_READ && !defined(__SANITIZE_ADDRESS__)
+  /* We can perform a 'oneshot' read, which is little bit faster. */
+  const unsigned shift = ((4 - tail) & 3) << 3;
+  return fetch32_le_aligned(p) & ((~UINT32_C(0)) >> shift);
+#else
+  uint32_t r = 0;
+  switch (tail & 3) {
+  default:
+    unreachable();
+/* fall through */
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+  /* For most CPUs this code is better when not needed
+   * copying for alignment or byte reordering. */
+  case 0:
+    return fetch32_le_aligned(p);
+  case 3:
+    r = (uint32_t)p[2] << 16;
+  /* fall through */
+  case 2:
+    return r + fetch16_le_aligned(p);
+  case 1:
+    return p[0];
+#else
+  case 0:
+    r += p[3];
+    r <<= 8;
+  /* fall through */
+  case 3:
+    r += p[2];
+    r <<= 8;
+  /* fall through */
+  case 2:
+    r += p[1];
+    r <<= 8;
+  /* fall through */
+  case 1:
+    return r + p[0];
+#endif
+  }
+#endif /* T1HA_USE_FAST_ONESHOT_READ */
+}
+
+static __maybe_unused __always_inline uint32_t
+tail32_le_unaligned(const void *v, size_t tail) {
   const uint8_t *p = (const uint8_t *)v;
 #ifdef can_read_underside
   /* On some systems (e.g. x86) we can perform a 'oneshot' read, which
@@ -53,23 +100,26 @@ static __always_inline uint32_t tail32_le(const void *v, size_t tail) {
   const unsigned shift = offset << 3;
   if (likely(can_read_underside(p, 4))) {
     p -= offset;
-    return fetch32_le(p) >> shift;
+    return fetch32_le_unaligned(p) >> shift;
   }
-  return fetch32_le(p) & ((~UINT32_C(0)) >> shift);
-#endif /* 'oneshot' read */
-
+  return fetch32_le_unaligned(p) & ((~UINT32_C(0)) >> shift);
+#else
   uint32_t r = 0;
   switch (tail & 3) {
-#if UNALIGNED_OK && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+  default:
+    unreachable();
+/* fall through */
+#if T1HA_SYS_UNALIGNED_ACCESS == T1HA_UNALIGNED_ACCESS__EFFICIENT &&           \
+    __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
   /* For most CPUs this code is better when not needed
    * copying for alignment or byte reordering. */
   case 0:
-    return fetch32_le(p);
+    return fetch32_le_unaligned(p);
   case 3:
     r = (uint32_t)p[2] << 16;
   /* fall through */
   case 2:
-    return r + fetch16_le(p);
+    return r + fetch16_le_unaligned(p);
   case 1:
     return p[0];
 #else
@@ -91,10 +141,49 @@ static __always_inline uint32_t tail32_le(const void *v, size_t tail) {
     return r + p[0];
 #endif
   }
-  unreachable();
+#endif /* can_read_underside */
 }
 
-static __always_inline uint32_t tail32_be(const void *v, size_t tail) {
+static __maybe_unused __always_inline uint32_t tail32_be_aligned(const void *v,
+                                                                 size_t tail) {
+  const uint8_t *const p = (const uint8_t *)v;
+#if T1HA_USE_FAST_ONESHOT_READ && !defined(__SANITIZE_ADDRESS__)
+  /* We can perform a 'oneshot' read, which is little bit faster. */
+  const unsigned shift = ((4 - tail) & 3) << 3;
+  return fetch32_be_aligned(p) >> shift;
+#else
+  switch (tail & 3) {
+  default:
+    unreachable();
+/* fall through */
+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+  /* For most CPUs this code is better when not needed
+   * copying for alignment or byte reordering. */
+  case 1:
+    return p[0];
+  case 2:
+    return fetch16_be_aligned(p);
+  case 3:
+    return fetch16_be_aligned(p) << 8 | p[2];
+  case 0:
+    return fetch32_be_aligned(p);
+#else
+  case 1:
+    return p[0];
+  case 2:
+    return p[1] | (uint32_t)p[0] << 8;
+  case 3:
+    return p[2] | (uint32_t)p[1] << 8 | (uint32_t)p[0] << 16;
+  case 0:
+    return p[3] | (uint32_t)p[2] << 8 | (uint32_t)p[1] << 16 |
+           (uint32_t)p[0] << 24;
+#endif
+  }
+#endif /* T1HA_USE_FAST_ONESHOT_READ */
+}
+
+static __maybe_unused __always_inline uint32_t
+tail32_be_unaligned(const void *v, size_t tail) {
   const uint8_t *p = (const uint8_t *)v;
 #ifdef can_read_underside
   /* On some systems we can perform a 'oneshot' read, which is little bit
@@ -104,23 +193,26 @@ static __always_inline uint32_t tail32_be(const void *v, size_t tail) {
   const unsigned shift = offset << 3;
   if (likely(can_read_underside(p, 4))) {
     p -= offset;
-    return fetch32_be(p) & ((~UINT32_C(0)) >> shift);
+    return fetch32_be_unaligned(p) & ((~UINT32_C(0)) >> shift);
   }
-  return fetch32_be(p) >> shift;
-#endif /* 'oneshot' read */
-
+  return fetch32_be_unaligned(p) >> shift;
+#else
   switch (tail & 3) {
-#if UNALIGNED_OK && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+  default:
+    unreachable();
+/* fall through */
+#if T1HA_SYS_UNALIGNED_ACCESS == T1HA_UNALIGNED_ACCESS__EFFICIENT &&           \
+    __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
   /* For most CPUs this code is better when not needed
    * copying for alignment or byte reordering. */
   case 1:
     return p[0];
   case 2:
-    return fetch16_be(p);
+    return fetch16_be_unaligned(p);
   case 3:
-    return fetch16_be(p) << 8 | p[2];
+    return fetch16_be_unaligned(p) << 8 | p[2];
   case 0:
-    return fetch32_be(p);
+    return fetch32_be_unaligned(p);
 #else
   /* For most CPUs this code is better than a
    * copying for alignment and/or byte reordering. */
@@ -135,7 +227,7 @@ static __always_inline uint32_t tail32_be(const void *v, size_t tail) {
            (uint32_t)p[0] << 24;
 #endif
   }
-  unreachable();
+#endif /* can_read_underside */
 }
 
 /***************************************************************************/
@@ -172,155 +264,101 @@ static const uint32_t prime32_4 = UINT32_C(0x86F0FD61);
 static const uint32_t prime32_5 = UINT32_C(0xCA2DA6FB);
 static const uint32_t prime32_6 = UINT32_C(0xC4BB3575);
 
+/* TODO: C++ template in the next version */
+#define T1HA0_BODY(ENDIANNES, ALIGNESS)                                        \
+  const uint32_t *v = (const uint32_t *)data;                                  \
+  if (unlikely(len > 16)) {                                                    \
+    uint32_t c = ~a;                                                           \
+    uint32_t d = rot32(b, 5);                                                  \
+    const uint32_t *detent =                                                   \
+        (const uint32_t *)((const uint8_t *)data + len - 15);                  \
+    do {                                                                       \
+      const uint32_t w0 = fetch32_##ENDIANNES##_##ALIGNESS(v + 0);             \
+      const uint32_t w1 = fetch32_##ENDIANNES##_##ALIGNESS(v + 1);             \
+      const uint32_t w2 = fetch32_##ENDIANNES##_##ALIGNESS(v + 2);             \
+      const uint32_t w3 = fetch32_##ENDIANNES##_##ALIGNESS(v + 3);             \
+      v += 4;                                                                  \
+      prefetch(v);                                                             \
+                                                                               \
+      const uint32_t d13 = w1 + rot32(w3 + d, 17);                             \
+      const uint32_t c02 = w0 ^ rot32(w2 + c, 11);                             \
+      d ^= rot32(a + w0, 3);                                                   \
+      c ^= rot32(b + w1, 7);                                                   \
+      b = prime32_1 * (c02 + w3);                                              \
+      a = prime32_0 * (d13 ^ w2);                                              \
+    } while (likely(v < detent));                                              \
+                                                                               \
+    c += a;                                                                    \
+    d += b;                                                                    \
+    a ^= prime32_6 * (rot32(c, 16) + d);                                       \
+    b ^= prime32_5 * (c + rot32(d, 16));                                       \
+                                                                               \
+    len &= 15;                                                                 \
+  }                                                                            \
+                                                                               \
+  switch (len) {                                                               \
+  default:                                                                     \
+    mixup32(&a, &b, fetch32_##ENDIANNES##_##ALIGNESS(v++), prime32_4);         \
+  /* fall through */                                                           \
+  case 12:                                                                     \
+  case 11:                                                                     \
+  case 10:                                                                     \
+  case 9:                                                                      \
+    mixup32(&b, &a, fetch32_##ENDIANNES##_##ALIGNESS(v++), prime32_3);         \
+  /* fall through */                                                           \
+  case 8:                                                                      \
+  case 7:                                                                      \
+  case 6:                                                                      \
+  case 5:                                                                      \
+    mixup32(&a, &b, fetch32_##ENDIANNES##_##ALIGNESS(v++), prime32_2);         \
+  /* fall through */                                                           \
+  case 4:                                                                      \
+  case 3:                                                                      \
+  case 2:                                                                      \
+  case 1:                                                                      \
+    mixup32(&b, &a, tail32_##ENDIANNES##_##ALIGNESS(v, len), prime32_1);       \
+  /* fall through */                                                           \
+  case 0:                                                                      \
+    return final32(a, b);                                                      \
+  }
+
 uint64_t t1ha0_32le(const void *data, size_t len, uint64_t seed) {
   uint32_t a = rot32((uint32_t)len, 17) + (uint32_t)seed;
   uint32_t b = (uint32_t)len ^ (uint32_t)(seed >> 32);
 
-  const int need_align = (((uintptr_t)data) & 3) != 0 && !UNALIGNED_OK;
-  uint32_t align[4];
-
-  if (unlikely(len > 16)) {
-    uint32_t c = ~a;
-    uint32_t d = rot32(b, 5);
-    const void *detent = (const uint8_t *)data + len - 15;
-    do {
-      const uint32_t *v = (const uint32_t *)data;
-      if (unlikely(need_align))
-        v = (const uint32_t *)memcpy(&align, v, 16);
-
-      uint32_t w0 = fetch32_le(v + 0);
-      uint32_t w1 = fetch32_le(v + 1);
-      uint32_t w2 = fetch32_le(v + 2);
-      uint32_t w3 = fetch32_le(v + 3);
-
-      uint32_t c02 = w0 ^ rot32(w2 + c, 11);
-      uint32_t d13 = w1 + rot32(w3 + d, 17);
-      c ^= rot32(b + w1, 7);
-      d ^= rot32(a + w0, 3);
-      b = prime32_1 * (c02 + w3);
-      a = prime32_0 * (d13 ^ w2);
-
-      data = (const uint32_t *)data + 4;
-    } while (likely(data < detent));
-
-    c += a;
-    d += b;
-    a ^= prime32_6 * (rot32(c, 16) + d);
-    b ^= prime32_5 * (c + rot32(d, 16));
-
-    len &= 15;
+#if T1HA_SYS_UNALIGNED_ACCESS == T1HA_UNALIGNED_ACCESS__EFFICIENT
+  T1HA0_BODY(le, unaligned);
+#else
+  const bool misaligned = (((uintptr_t)data) & (ALIGNMENT_32 - 1)) != 0;
+  if (misaligned) {
+    T1HA0_BODY(le, unaligned);
+  } else {
+    T1HA0_BODY(le, aligned);
   }
-
-  const uint8_t *v = (const uint8_t *)data;
-  if (unlikely(need_align) && len > 4)
-    v = (const uint8_t *)memcpy(&align, v, len);
-
-  switch (len) {
-  default:
-    mixup32(&a, &b, fetch32_le(v), prime32_4);
-    v += 4;
-  /* fall through */
-  case 12:
-  case 11:
-  case 10:
-  case 9:
-    mixup32(&b, &a, fetch32_le(v), prime32_3);
-    v += 4;
-  /* fall through */
-  case 8:
-  case 7:
-  case 6:
-  case 5:
-    mixup32(&a, &b, fetch32_le(v), prime32_2);
-    v += 4;
-  /* fall through */
-  case 4:
-  case 3:
-  case 2:
-  case 1:
-    mixup32(&b, &a, tail32_le(v, len), prime32_1);
-  /* fall through */
-  case 0:
-    return final32(a, b);
-  }
+#endif
 }
 
 uint64_t t1ha0_32be(const void *data, size_t len, uint64_t seed) {
   uint32_t a = rot32((uint32_t)len, 17) + (uint32_t)seed;
   uint32_t b = (uint32_t)len ^ (uint32_t)(seed >> 32);
 
-  const int need_align = (((uintptr_t)data) & 3) != 0 && !UNALIGNED_OK;
-  uint32_t align[4];
-
-  if (unlikely(len > 16)) {
-    uint32_t c = ~a;
-    uint32_t d = rot32(b, 5);
-    const void *detent = (const uint8_t *)data + len - 15;
-    do {
-      const uint32_t *v = (const uint32_t *)data;
-      if (unlikely(need_align))
-        v = (const uint32_t *)memcpy(&align, v, 16);
-
-      uint32_t w0 = fetch32_be(v + 0);
-      uint32_t w1 = fetch32_be(v + 1);
-      uint32_t w2 = fetch32_be(v + 2);
-      uint32_t w3 = fetch32_be(v + 3);
-
-      uint32_t c02 = w0 ^ rot32(w2 + c, 11);
-      uint32_t d13 = w1 + rot32(w3 + d, 17);
-      c ^= rot32(b + w1, 7);
-      d ^= rot32(a + w0, 3);
-      b = prime32_1 * (c02 + w3);
-      a = prime32_0 * (d13 ^ w2);
-
-      data = (const uint32_t *)data + 4;
-    } while (likely(data < detent));
-
-    c += a;
-    d += b;
-    a ^= prime32_6 * (rot32(c, 16) + d);
-    b ^= prime32_5 * (c + rot32(d, 16));
-
-    len &= 15;
+#if T1HA_SYS_UNALIGNED_ACCESS == T1HA_UNALIGNED_ACCESS__EFFICIENT
+  T1HA0_BODY(be, unaligned);
+#else
+  const bool misaligned = (((uintptr_t)data) & (ALIGNMENT_32 - 1)) != 0;
+  if (misaligned) {
+    T1HA0_BODY(be, unaligned);
+  } else {
+    T1HA0_BODY(be, aligned);
   }
-
-  const uint8_t *v = (const uint8_t *)data;
-  if (unlikely(need_align) && len > 4)
-    v = (const uint8_t *)memcpy(&align, v, len);
-
-  switch (len) {
-  default:
-    mixup32(&a, &b, fetch32_be(v), prime32_4);
-    v += 4;
-  /* fall through */
-  case 12:
-  case 11:
-  case 10:
-  case 9:
-    mixup32(&b, &a, fetch32_be(v), prime32_3);
-    v += 4;
-  /* fall through */
-  case 8:
-  case 7:
-  case 6:
-  case 5:
-    mixup32(&a, &b, fetch32_be(v), prime32_2);
-    v += 4;
-  /* fall through */
-  case 4:
-  case 3:
-  case 2:
-  case 1:
-    mixup32(&b, &a, tail32_be(v, len), prime32_1);
-  /* fall through */
-  case 0:
-    return final32(a, b);
-  }
+#endif
 }
 
 /***************************************************************************/
 
-#ifdef __ia32__
+#if T1HA0_RUNTIME_SELECT
+
+#if T1HA0_AESNI_AVAILABLE && defined(__ia32__)
 static uint64_t x86_cpu_features(void) {
   uint32_t features = 0;
   uint32_t extended = 0;
@@ -347,11 +385,7 @@ static uint64_t x86_cpu_features(void) {
 #endif
   return features | (uint64_t)extended << 32;
 }
-#endif /* __ia32__ */
-
-/***************************************************************************/
-
-#ifdef T1HA0_RUNTIME_SELECT
+#endif /* T1HA0_AESNI_AVAILABLE && __ia32__ */
 
 static
 #if __GNUC_PREREQ(4, 0) || __has_attribute(used)
@@ -359,7 +393,7 @@ static
 #endif
     uint64_t (*t1ha0_resolve(void))(const void *, size_t, uint64_t) {
 
-#ifdef __ia32__
+#if T1HA0_AESNI_AVAILABLE && defined(__ia32__)
   uint64_t features = x86_cpu_features();
   if (features & UINT32_C(0x02000000) /* check for AES-NI */) {
     if ((features & UINT32_C(0x1A000000)) ==
@@ -368,32 +402,45 @@ static
       return ((features >> 32) & 32) ? t1ha0_ia32aes_avx2 : t1ha0_ia32aes_avx;
     return t1ha0_ia32aes_noavx;
   }
-#endif /* __ia32__ */
+#endif /* T1HA0_AESNI_AVAILABLE && __ia32__ */
 
 #if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-#if UINTPTR_MAX > 0xffffFFFFul || ULONG_MAX > 0xffffFFFFul
+#if (UINTPTR_MAX > 0xffffFFFFul || ULONG_MAX > 0xffffFFFFul) &&                \
+    (!defined(T1HA1_DISABLED) || !defined(T1HA2_DISABLED))
+#ifndef T1HA1_DISABLED
   return t1ha1_be;
+#else
+  return t1ha2_atonce;
+#endif /* T1HA1_DISABLED */
 #else
   return t1ha0_32be;
 #endif
 #else /* __BYTE_ORDER__ != __ORDER_BIG_ENDIAN__ */
-#if UINTPTR_MAX > 0xffffFFFFul || ULONG_MAX > 0xffffFFFFul
+#if (UINTPTR_MAX > 0xffffFFFFul || ULONG_MAX > 0xffffFFFFul) &&                \
+    (!defined(T1HA1_DISABLED) || !defined(T1HA2_DISABLED))
+#ifndef T1HA1_DISABLED
   return t1ha1_le;
+#else
+  return t1ha2_atonce;
+#endif /* T1HA1_DISABLED */
 #else
   return t1ha0_32le;
 #endif
 #endif /* __BYTE_ORDER__ */
 }
 
-#ifdef __ELF__
-
+#if T1HA_USE_INDIRECT_FUNCTIONS
+/* Use IFUNC (GNU ELF indirect functions) to choice implementation at runtime.
+ * For more info please see
+ * https://en.wikipedia.org/wiki/Executable_and_Linkable_Format
+ * and https://sourceware.org/glibc/wiki/GNU_IFUNC */
 #if __has_attribute(ifunc)
 uint64_t t1ha0(const void *data, size_t len, uint64_t seed)
     __attribute__((ifunc("t1ha0_resolve")));
 #else
 __asm("\t.globl\tt1ha0\n\t.type\tt1ha0, "
       "%gnu_indirect_function\n\t.set\tt1ha0,t1ha0_resolve");
-#endif /* ifunc */
+#endif /* __has_attribute(ifunc) */
 
 #elif __GNUC_PREREQ(4, 0) || __has_attribute(constructor)
 
@@ -403,7 +450,7 @@ static void __attribute__((constructor)) t1ha0_init(void) {
   t1ha0_funcptr = t1ha0_resolve();
 }
 
-#else /* ELF */
+#else /* T1HA_USE_INDIRECT_FUNCTIONS */
 
 static uint64_t t1ha0_proxy(const void *data, size_t len, uint64_t seed) {
   t1ha0_funcptr = t1ha0_resolve();
@@ -412,5 +459,7 @@ static uint64_t t1ha0_proxy(const void *data, size_t len, uint64_t seed) {
 
 uint64_t (*t1ha0_funcptr)(const void *, size_t, uint64_t) = t1ha0_proxy;
 
-#endif /* !ELF */
+#endif /* !T1HA_USE_INDIRECT_FUNCTIONS */
 #endif /* T1HA0_RUNTIME_SELECT */
+
+#endif /* T1HA0_DISABLED */

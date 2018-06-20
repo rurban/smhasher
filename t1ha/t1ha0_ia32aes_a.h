@@ -43,7 +43,7 @@
 
 #include "t1ha_bits.h"
 
-#ifdef T1HA0_AESNI_AVAILABLE
+#if T1HA0_AESNI_AVAILABLE
 
 uint64_t T1HA_IA32AES_NAME(const void *data, size_t len, uint64_t seed) {
   uint64_t a = seed;
@@ -139,7 +139,7 @@ uint64_t T1HA_IA32AES_NAME(const void *data, size_t len, uint64_t seed) {
   const uint64_t *v = (const uint64_t *)data;
   switch (len) {
   default:
-    mixup64(&a, &b, *v++, prime_4);
+    mixup64(&a, &b, fetch64_le_unaligned(v++), prime_4);
   /* fall through */
   case 24:
   case 23:
@@ -149,7 +149,7 @@ uint64_t T1HA_IA32AES_NAME(const void *data, size_t len, uint64_t seed) {
   case 19:
   case 18:
   case 17:
-    mixup64(&b, &a, *v++, prime_3);
+    mixup64(&b, &a, fetch64_le_unaligned(v++), prime_3);
   /* fall through */
   case 16:
   case 15:
@@ -159,7 +159,7 @@ uint64_t T1HA_IA32AES_NAME(const void *data, size_t len, uint64_t seed) {
   case 11:
   case 10:
   case 9:
-    mixup64(&a, &b, *v++, prime_2);
+    mixup64(&a, &b, fetch64_le_unaligned(v++), prime_2);
   /* fall through */
   case 8:
   case 7:
@@ -169,7 +169,7 @@ uint64_t T1HA_IA32AES_NAME(const void *data, size_t len, uint64_t seed) {
   case 3:
   case 2:
   case 1:
-    mixup64(&b, &a, tail64_le(v, len), prime_1);
+    mixup64(&b, &a, tail64_le_unaligned(v, len), prime_1);
   /* fall through */
   case 0:
     return final64(a, b);
