@@ -70,19 +70,56 @@
 #error Unsupported byte order.
 #endif
 
-#if !defined(UNALIGNED_OK)
-#if defined(__ia32__) || defined(__e2k__)
-#define UNALIGNED_OK 1
-#define PAGESIZE 4096
+#define T1HA_UNALIGNED_ACCESS__UNABLE 0
+#define T1HA_UNALIGNED_ACCESS__SLOW 1
+#define T1HA_UNALIGNED_ACCESS__EFFICIENT 2
+
+#ifndef T1HA_SYS_UNALIGNED_ACCESS
+#if defined(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS)
+#define T1HA_SYS_UNALIGNED_ACCESS T1HA_UNALIGNED_ACCESS__EFFICIENT
+#elif defined(__ia32__)
+#define T1HA_SYS_UNALIGNED_ACCESS T1HA_UNALIGNED_ACCESS__EFFICIENT
+#elif defined(__e2k__)
+#define T1HA_SYS_UNALIGNED_ACCESS T1HA_UNALIGNED_ACCESS__SLOW
+#elif defined(__ARM_FEATURE_UNALIGNED)
+#define T1HA_SYS_UNALIGNED_ACCESS T1HA_UNALIGNED_ACCESS__EFFICIENT
 #else
-#define UNALIGNED_OK 0
+#define T1HA_SYS_UNALIGNED_ACCESS T1HA_UNALIGNED_ACCESS__UNABLE
 #endif
+#endif /* T1HA_SYS_UNALIGNED_ACCESS */
+
+#define ALIGNMENT_16 2
+#define ALIGNMENT_32 4
+#if UINTPTR_MAX > 0xffffFFFFul || ULONG_MAX > 0xffffFFFFul
+#define ALIGNMENT_64 8
+#else
+#define ALIGNMENT_64 4
 #endif
+
+#ifndef PAGESIZE
+#define PAGESIZE 4096
+#endif /* PAGESIZE */
 
 /***************************************************************************/
 
 #ifndef __has_builtin
 #define __has_builtin(x) (0)
+#endif
+
+#ifndef __has_warning
+#define __has_warning(x) (0)
+#endif
+
+#ifndef __has_feature
+#define __has_feature(x) (0)
+#endif
+
+#ifndef __has_extension
+#define __has_extension(x) (0)
+#endif
+
+#if __has_feature(address_sanitizer)
+#define __SANITIZE_ADDRESS__ 1
 #endif
 
 #if __GNUC_PREREQ(4, 4) || defined(__clang__)
@@ -91,8 +128,12 @@
 #include <x86intrin.h>
 #endif
 
-#if defined(__ia32__)
+#if defined(__ia32__) && !defined(__cpuid_count)
 #include <cpuid.h>
+#endif
+
+#if defined(__e2k__)
+#include <e2kbuiltin.h>
 #endif
 
 #ifndef likely
@@ -121,6 +162,45 @@
     (__GNUC_PREREQ(3, 2) || __has_attribute(always_inline))
 #define __always_inline __inline __attribute__((always_inline))
 #endif
+
+#if defined(__e2k__)
+
+#if __iset__ >= 3
+#define mul_64x64_high(a, b) __builtin_e2k_umulhd(a, b)
+#endif /* __iset__ >= 3 */
+
+#if __iset__ >= 5
+static __maybe_unused __always_inline unsigned
+e2k_add64carry_first(uint64_t base, uint64_t addend, uint64_t *sum) {
+  *sum = base + addend;
+  return (unsigned)__builtin_e2k_addcd_c(base, addend, 0);
+}
+#define add64carry_first(base, addend, sum)                                    \
+  e2k_add64carry_first(base, addend, sum)
+
+static __maybe_unused __always_inline unsigned
+e2k_add64carry_next(unsigned carry, uint64_t base, uint64_t addend,
+                    uint64_t *sum) {
+  *sum = __builtin_e2k_addcd(base, addend, carry);
+  return (unsigned)__builtin_e2k_addcd_c(base, addend, carry);
+}
+#define add64carry_next(carry, base, addend, sum)                              \
+  e2k_add64carry_next(carry, base, addend, sum)
+
+static __maybe_unused __always_inline void e2k_add64carry_last(unsigned carry,
+                                                               uint64_t base,
+                                                               uint64_t addend,
+                                                               uint64_t *sum) {
+  *sum = __builtin_e2k_addcd(base, addend, carry);
+}
+#define add64carry_last(carry, base, addend, sum)                              \
+  e2k_add64carry_last(carry, base, addend, sum)
+#endif /* __iset__ >= 5 */
+
+#define fetch64_be_aligned(ptr) ((uint64_t)__builtin_e2k_ld_64s_be(ptr))
+#define fetch32_be_aligned(ptr) ((uint32_t)__builtin_e2k_ld_32u_be(ptr))
+
+#endif /* __e2k__ Elbrus */
 
 #elif defined(_MSC_VER)
 
@@ -153,6 +233,12 @@
 #if defined(_M_X64) || defined(_M_IA64)
 #pragma intrinsic(_umul128)
 #define mul_64x64_128(a, b, ph) _umul128(a, b, ph)
+#pragma intrinsic(_addcarry_u64)
+#define add64carry_first(base, addend, sum) _addcarry_u64(0, base, addend, sum)
+#define add64carry_next(carry, base, addend, sum)                              \
+  _addcarry_u64(carry, base, addend, sum)
+#define add64carry_last(carry, base, addend, sum)                              \
+  (void)_addcarry_u64(carry, base, addend, sum)
 #endif
 
 #if defined(_M_ARM64) || defined(_M_X64) || defined(_M_IA64)
@@ -163,6 +249,57 @@
 #if defined(_M_IX86)
 #pragma intrinsic(__emulu)
 #define mul_32x32_64(a, b) __emulu(a, b)
+
+#if _MSC_FULL_VER >= 190024231 /* LY: workaround for optimizer bug */
+#pragma intrinsic(_addcarry_u32)
+#define add32carry_first(base, addend, sum) _addcarry_u32(0, base, addend, sum)
+#define add32carry_next(carry, base, addend, sum)                              \
+  _addcarry_u32(carry, base, addend, sum)
+#define add32carry_last(carry, base, addend, sum)                              \
+  (void)_addcarry_u32(carry, base, addend, sum)
+
+static __forceinline char
+msvc32_add64carry_first(uint64_t base, uint64_t addend, uint64_t *sum) {
+  uint32_t *const sum32 = (uint32_t *)sum;
+  const uint32_t base_32l = (uint32_t)base;
+  const uint32_t base_32h = (uint32_t)(base >> 32);
+  const uint32_t addend_32l = (uint32_t)addend;
+  const uint32_t addend_32h = (uint32_t)(addend >> 32);
+  return add32carry_next(add32carry_first(base_32l, addend_32l, sum32),
+                         base_32h, addend_32h, sum32 + 1);
+}
+#define add64carry_first(base, addend, sum)                                    \
+  msvc32_add64carry_first(base, addend, sum)
+
+static __forceinline char msvc32_add64carry_next(char carry, uint64_t base,
+                                                 uint64_t addend,
+                                                 uint64_t *sum) {
+  uint32_t *const sum32 = (uint32_t *)sum;
+  const uint32_t base_32l = (uint32_t)base;
+  const uint32_t base_32h = (uint32_t)(base >> 32);
+  const uint32_t addend_32l = (uint32_t)addend;
+  const uint32_t addend_32h = (uint32_t)(addend >> 32);
+  return add32carry_next(add32carry_next(carry, base_32l, addend_32l, sum32),
+                         base_32h, addend_32h, sum32 + 1);
+}
+#define add64carry_next(carry, base, addend, sum)                              \
+  msvc32_add64carry_next(carry, base, addend, sum)
+
+static __forceinline void msvc32_add64carry_last(char carry, uint64_t base,
+                                                 uint64_t addend,
+                                                 uint64_t *sum) {
+  uint32_t *const sum32 = (uint32_t *)sum;
+  const uint32_t base_32l = (uint32_t)base;
+  const uint32_t base_32h = (uint32_t)(base >> 32);
+  const uint32_t addend_32l = (uint32_t)addend;
+  const uint32_t addend_32h = (uint32_t)(addend >> 32);
+  add32carry_last(add32carry_next(carry, base_32l, addend_32l, sum32), base_32h,
+                  addend_32h, sum32 + 1);
+}
+#define add64carry_last(carry, base, addend, sum)                              \
+  msvc32_add64carry_last(carry, base, addend, sum)
+#endif /* _MSC_FULL_VER >= 190024231 */
+
 #elif defined(_M_ARM)
 #define mul_32x32_64(a, b) _arm_umull(a, b)
 #endif
@@ -235,60 +372,200 @@ static __always_inline uint16_t bswap16(uint16_t v) { return v << 8 | v >> 8; }
 #endif
 #endif /* bswap16 */
 
+#ifndef read_unaligned
+#if defined(__GNUC__) || __has_attribute(packed)
+typedef struct {
+  uint8_t unaligned_8;
+  uint16_t unaligned_16;
+  uint32_t unaligned_32;
+  uint64_t unaligned_64;
+} __attribute__((packed)) t1ha_unaligned_proxy;
+#define read_unaligned(ptr, bits)                                              \
+  (((const t1ha_unaligned_proxy *)((const uint8_t *)(ptr)-offsetof(            \
+        t1ha_unaligned_proxy, unaligned_##bits)))                              \
+       ->unaligned_##bits)
+#elif defined(_MSC_VER)
+#pragma warning(                                                               \
+    disable : 4235) /* nonstandard extension used: '__unaligned'               \
+                     * keyword not supported on this architecture */
+#define read_unaligned(ptr, bits) (*(const __unaligned uint##bits##_t *)(ptr))
+#else
+#pragma pack(push, 1)
+typedef struct {
+  uint8_t unaligned_8;
+  uint16_t unaligned_16;
+  uint32_t unaligned_32;
+  uint64_t unaligned_64;
+} t1ha_unaligned_proxy;
+#pragma pack(pop)
+#define read_unaligned(ptr, bits)                                              \
+  (((const t1ha_unaligned_proxy *)((const uint8_t *)(ptr)-offsetof(            \
+        t1ha_unaligned_proxy, unaligned_##bits)))                              \
+       ->unaligned_##bits)
+#endif
+#endif /* read_unaligned */
+
+#ifndef read_aligned
+#if __GNUC_PREREQ(4, 8) || __has_builtin(__builtin_assume_aligned)
+#define read_aligned(ptr, bits)                                                \
+  (*(const uint##bits##_t *)__builtin_assume_aligned(ptr, ALIGNMENT_##bits))
+#elif (__GNUC_PREREQ(3, 3) || __has_attribute(aligned)) && !defined(__clang__)
+#define read_aligned(ptr, bits)                                                \
+  (*(const uint##bits##_t __attribute__((aligned(ALIGNMENT_##bits))) *)(ptr))
+#elif __has_attribute(assume_aligned)
+
+static __always_inline const
+    uint16_t *__attribute__((assume_aligned(ALIGNMENT_16)))
+    cast_aligned_16(const void *ptr) {
+  return (const uint16_t *)ptr;
+}
+static __always_inline const
+    uint32_t *__attribute__((assume_aligned(ALIGNMENT_32)))
+    cast_aligned_32(const void *ptr) {
+  return (const uint32_t *)ptr;
+}
+static __always_inline const
+    uint64_t *__attribute__((assume_aligned(ALIGNMENT_64)))
+    cast_aligned_64(const void *ptr) {
+  return (const uint64_t *)ptr;
+}
+
+#define read_aligned(ptr, bits) (*cast_aligned_##bits(ptr))
+
+#elif defined(_MSC_VER)
+#define read_aligned(ptr, bits)                                                \
+  (*(const __declspec(align(ALIGNMENT_##bits)) uint##bits##_t *)(ptr))
+#else
+#define read_aligned(ptr, bits) (*(const uint##bits##_t *)(ptr))
+#endif
+#endif /* read_aligned */
+
+#ifndef prefetch
+#if (__GNUC_PREREQ(4, 0) || __has_builtin(__builtin_prefetch)) &&              \
+    !defined(__ia32__)
+#define prefetch(ptr) __builtin_prefetch(ptr)
+#elif defined(_M_ARM64) || defined(_M_ARM)
+#define prefetch(ptr) __prefetch(ptr)
+#else
+#define prefetch(ptr)                                                          \
+  do {                                                                         \
+    (void)(ptr);                                                               \
+  } while (0)
+#endif
+#endif /* prefetch */
+
+#if __has_warning("-Wconstant-logical-operand")
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wconstant-logical-operand"
+#elif defined(__GNUC__)
+#pragma GCC diagnostic ignored "-Wconstant-logical-operand"
+#else
+#pragma warning disable "constant-logical-operand"
+#endif
+#endif /* -Wconstant-logical-operand */
+
+#if __has_warning("-Wtautological-pointer-compare")
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wtautological-pointer-compare"
+#elif defined(__GNUC__)
+#pragma GCC diagnostic ignored "-Wtautological-pointer-compare"
+#else
+#pragma warning disable "tautological-pointer-compare"
+#endif
+#endif /* -Wtautological-pointer-compare */
+
 /***************************************************************************/
 
-static __always_inline uint64_t fetch64_le(const void *v) {
+/*---------------------------------------------------------- Little Endian */
+
+#ifndef fetch16_le_aligned
+static __always_inline uint16_t fetch16_le_aligned(const void *v) {
+  assert(((uintptr_t)v) % ALIGNMENT_16 == 0);
 #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-  return *(const uint64_t *)v;
+  return read_aligned(v, 16);
 #else
-  return bswap64(*(const uint64_t *)v);
+  return bswap16(read_aligned(v, 16));
 #endif
 }
+#endif /* fetch16_le_aligned */
 
-static __always_inline uint32_t fetch32_le(const void *v) {
-#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-  return *(const uint32_t *)v;
-#else
-  return bswap32(*(const uint32_t *)v);
-#endif
-}
-
-static __always_inline uint16_t fetch16_le(const void *v) {
-#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-  return *(const uint16_t *)v;
-#else
-  return bswap16(*(const uint16_t *)v);
-#endif
-}
-
-#if T1HA_USE_FAST_ONESHOT_READ && UNALIGNED_OK && defined(PAGESIZE) &&         \
-    PAGESIZE > 0
-#define can_read_underside(ptr, size)                                          \
-  ((size) <= sizeof(uintptr_t) && ((PAGESIZE - (size)) & (uintptr_t)(ptr)) != 0)
-#endif /* can_fast_read */
-
-static __always_inline uint64_t tail64_le(const void *v, size_t tail) {
+#ifndef fetch16_le_unaligned
+static __always_inline uint16_t fetch16_le_unaligned(const void *v) {
+#if T1HA_SYS_UNALIGNED_ACCESS == T1HA_UNALIGNED_ACCESS__UNABLE
   const uint8_t *p = (const uint8_t *)v;
-#ifdef can_read_underside
-  /* On some systems (e.g. x86) we can perform a 'oneshot' read, which
-   * is little bit faster. Thanks Marcin Żukowski <marcin.zukowski@gmail.com>
-   * for the reminder. */
-  const unsigned offset = (8 - tail) & 7;
-  const unsigned shift = offset << 3;
-  if (likely(can_read_underside(p, 8))) {
-    p -= offset;
-    return fetch64_le(p) >> shift;
-  }
-  return fetch64_le(p) & ((~UINT64_C(0)) >> shift);
-#endif /* 'oneshot' read */
+  return p[0] | (uint16_t)p[1] << 8;
+#elif __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+  return read_unaligned(v, 16);
+#else
+  return bswap16(read_unaligned(v, 16));
+#endif
+}
+#endif /* fetch16_le_unaligned */
 
+#ifndef fetch32_le_aligned
+static __always_inline uint32_t fetch32_le_aligned(const void *v) {
+  assert(((uintptr_t)v) % ALIGNMENT_32 == 0);
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+  return read_aligned(v, 32);
+#else
+  return bswap32(read_aligned(v, 32));
+#endif
+}
+#endif /* fetch32_le_aligned */
+
+#ifndef fetch32_le_unaligned
+static __always_inline uint32_t fetch32_le_unaligned(const void *v) {
+#if T1HA_SYS_UNALIGNED_ACCESS == T1HA_UNALIGNED_ACCESS__UNABLE
+  return fetch16_le_unaligned(v) |
+         (uint32_t)fetch16_le_unaligned((const uint8_t *)v + 2) << 16;
+#elif __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+  return read_unaligned(v, 32);
+#else
+  return bswap32(read_unaligned(v, 32));
+#endif
+}
+#endif /* fetch32_le_unaligned */
+
+#ifndef fetch64_le_aligned
+static __always_inline uint64_t fetch64_le_aligned(const void *v) {
+  assert(((uintptr_t)v) % ALIGNMENT_64 == 0);
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+  return read_aligned(v, 64);
+#else
+  return bswap64(read_aligned(v, 64));
+#endif
+}
+#endif /* fetch64_le_aligned */
+
+#ifndef fetch64_le_unaligned
+static __always_inline uint64_t fetch64_le_unaligned(const void *v) {
+#if T1HA_SYS_UNALIGNED_ACCESS == T1HA_UNALIGNED_ACCESS__UNABLE
+  return fetch32_le_unaligned(v) |
+         (uint64_t)fetch32_le_unaligned((const uint8_t *)v + 4) << 32;
+#elif __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+  return read_unaligned(v, 64);
+#else
+  return bswap64(read_unaligned(v, 64));
+#endif
+}
+#endif /* fetch64_le_unaligned */
+
+static __always_inline uint64_t tail64_le_aligned(const void *v, size_t tail) {
+  const uint8_t *const p = (const uint8_t *)v;
+#if T1HA_USE_FAST_ONESHOT_READ && !defined(__SANITIZE_ADDRESS__)
+  /* We can perform a 'oneshot' read, which is little bit faster. */
+  const unsigned shift = ((8 - tail) & 7) << 3;
+  return fetch64_le_aligned(p) & ((~UINT64_C(0)) >> shift);
+#else
   uint64_t r = 0;
   switch (tail & 7) {
-#if UNALIGNED_OK && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-  /* For most CPUs this code is better when not needed
-   * copying for alignment or byte reordering. */
+  default:
+    unreachable();
+/* fall through */
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+  /* For most CPUs this code is better when not needed byte reordering. */
   case 0:
-    return fetch64_le(p);
+    return fetch64_le_aligned(p);
   case 7:
     r = (uint64_t)p[6] << 8;
   /* fall through */
@@ -301,12 +578,100 @@ static __always_inline uint64_t tail64_le(const void *v, size_t tail) {
     r <<= 32;
   /* fall through */
   case 4:
-    return r + fetch32_le(p);
+    return r + fetch32_le_aligned(p);
   case 3:
     r = (uint64_t)p[2] << 16;
   /* fall through */
   case 2:
-    return r + fetch16_le(p);
+    return r + fetch16_le_aligned(p);
+  case 1:
+    return p[0];
+#else
+  case 0:
+    r = p[7] << 8;
+  /* fall through */
+  case 7:
+    r += p[6];
+    r <<= 8;
+  /* fall through */
+  case 6:
+    r += p[5];
+    r <<= 8;
+  /* fall through */
+  case 5:
+    r += p[4];
+    r <<= 8;
+  /* fall through */
+  case 4:
+    r += p[3];
+    r <<= 8;
+  /* fall through */
+  case 3:
+    r += p[2];
+    r <<= 8;
+  /* fall through */
+  case 2:
+    r += p[1];
+    r <<= 8;
+  /* fall through */
+  case 1:
+    return r + p[0];
+#endif
+  }
+#endif /* T1HA_USE_FAST_ONESHOT_READ */
+}
+
+#if T1HA_USE_FAST_ONESHOT_READ &&                                              \
+    T1HA_SYS_UNALIGNED_ACCESS != T1HA_UNALIGNED_ACCESS__UNABLE &&              \
+    defined(PAGESIZE) && PAGESIZE > 42 && !defined(__SANITIZE_ADDRESS__)
+#define can_read_underside(ptr, size)                                          \
+  ((size) <= sizeof(uintptr_t) && ((PAGESIZE - (size)) & (uintptr_t)(ptr)) != 0)
+#endif /* T1HA_USE_FAST_ONESHOT_READ */
+
+static __always_inline uint64_t tail64_le_unaligned(const void *v,
+                                                    size_t tail) {
+  const uint8_t *p = (const uint8_t *)v;
+#ifdef can_read_underside
+  /* On some systems (e.g. x86) we can perform a 'oneshot' read, which
+   * is little bit faster. Thanks Marcin Żukowski <marcin.zukowski@gmail.com>
+   * for the reminder. */
+  const unsigned offset = (8 - tail) & 7;
+  const unsigned shift = offset << 3;
+  if (likely(can_read_underside(p, 8))) {
+    p -= offset;
+    return fetch64_le_unaligned(p) >> shift;
+  }
+  return fetch64_le_unaligned(p) & ((~UINT64_C(0)) >> shift);
+#else
+  uint64_t r = 0;
+  switch (tail & 7) {
+  default:
+    unreachable();
+/* fall through */
+#if T1HA_SYS_UNALIGNED_ACCESS == T1HA_UNALIGNED_ACCESS__EFFICIENT &&           \
+    __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+  /* For most CPUs this code is better when not needed
+   * copying for alignment or byte reordering. */
+  case 0:
+    return fetch64_le_unaligned(p);
+  case 7:
+    r = (uint64_t)p[6] << 8;
+  /* fall through */
+  case 6:
+    r += p[5];
+    r <<= 8;
+  /* fall through */
+  case 5:
+    r += p[4];
+    r <<= 32;
+  /* fall through */
+  case 4:
+    return r + fetch32_le_unaligned(p);
+  case 3:
+    r = (uint64_t)p[2] << 16;
+  /* fall through */
+  case 2:
+    return r + fetch16_le_unaligned(p);
   case 1:
     return p[0];
 #else
@@ -343,35 +708,151 @@ static __always_inline uint64_t tail64_le(const void *v, size_t tail) {
     return r + p[0];
 #endif
   }
-  unreachable();
+#endif /* can_read_underside */
 }
 
-static __maybe_unused __always_inline uint64_t fetch64_be(const void *v) {
+/*------------------------------------------------------------- Big Endian */
+
+#ifndef fetch16_be_aligned
+static __maybe_unused __always_inline uint16_t
+fetch16_be_aligned(const void *v) {
+  assert(((uintptr_t)v) % ALIGNMENT_16 == 0);
 #if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-  return *(const uint64_t *)v;
+  return read_aligned(v, 16);
 #else
-  return bswap64(*(const uint64_t *)v);
+  return bswap16(read_aligned(v, 16));
 #endif
 }
+#endif /* fetch16_be_aligned */
 
-static __maybe_unused __always_inline uint32_t fetch32_be(const void *v) {
-#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-  return *(const uint32_t *)v;
+#ifndef fetch16_be_unaligned
+static __maybe_unused __always_inline uint16_t
+fetch16_be_unaligned(const void *v) {
+#if T1HA_SYS_UNALIGNED_ACCESS == T1HA_UNALIGNED_ACCESS__UNABLE
+  const uint8_t *p = (const uint8_t *)v;
+  return (uint16_t)p[0] << 8 | p[1];
+#elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+  return read_unaligned(v, 16);
 #else
-  return bswap32(*(const uint32_t *)v);
+  return bswap16(read_unaligned(v, 16));
 #endif
 }
+#endif /* fetch16_be_unaligned */
 
-static __maybe_unused __always_inline uint16_t fetch16_be(const void *v) {
+#ifndef fetch32_be_aligned
+static __maybe_unused __always_inline uint32_t
+fetch32_be_aligned(const void *v) {
+  assert(((uintptr_t)v) % ALIGNMENT_32 == 0);
 #if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-  return *(const uint16_t *)v;
+  return read_aligned(v, 32);
 #else
-  return bswap16(*(const uint16_t *)v);
+  return bswap32(read_aligned(v, 32));
 #endif
 }
+#endif /* fetch32_be_aligned */
 
-static __maybe_unused __always_inline uint64_t tail64_be(const void *v,
-                                                         size_t tail) {
+#ifndef fetch32_be_unaligned
+static __maybe_unused __always_inline uint32_t
+fetch32_be_unaligned(const void *v) {
+#if T1HA_SYS_UNALIGNED_ACCESS == T1HA_UNALIGNED_ACCESS__UNABLE
+  return (uint32_t)fetch16_be_unaligned(v) << 16 |
+         fetch16_be_unaligned((const uint8_t *)v + 2);
+#elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+  return read_unaligned(v, 32);
+#else
+  return bswap32(read_unaligned(v, 32));
+#endif
+}
+#endif /* fetch32_be_unaligned */
+
+#ifndef fetch64_be_aligned
+static __maybe_unused __always_inline uint64_t
+fetch64_be_aligned(const void *v) {
+  assert(((uintptr_t)v) % ALIGNMENT_64 == 0);
+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+  return read_aligned(v, 64);
+#else
+  return bswap64(read_aligned(v, 64));
+#endif
+}
+#endif /* fetch64_be_aligned */
+
+#ifndef fetch64_be_unaligned
+static __maybe_unused __always_inline uint64_t
+fetch64_be_unaligned(const void *v) {
+#if T1HA_SYS_UNALIGNED_ACCESS == T1HA_UNALIGNED_ACCESS__UNABLE
+  return (uint64_t)fetch32_be_unaligned(v) << 32 |
+         fetch32_be_unaligned((const uint8_t *)v + 4);
+#elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+  return read_unaligned(v, 64);
+#else
+  return bswap64(read_unaligned(v, 64));
+#endif
+}
+#endif /* fetch64_be_unaligned */
+
+static __maybe_unused __always_inline uint64_t tail64_be_aligned(const void *v,
+                                                                 size_t tail) {
+  const uint8_t *const p = (const uint8_t *)v;
+#if T1HA_USE_FAST_ONESHOT_READ && !defined(__SANITIZE_ADDRESS__)
+  /* We can perform a 'oneshot' read, which is little bit faster. */
+  const unsigned shift = ((8 - tail) & 7) << 3;
+  return fetch64_be_aligned(p) >> shift;
+#else
+  switch (tail & 7) {
+  default:
+    unreachable();
+/* fall through */
+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+  /* For most CPUs this code is better when not byte reordering. */
+  case 1:
+    return p[0];
+  case 2:
+    return fetch16_be_aligned(p);
+  case 3:
+    return (uint32_t)fetch16_be_aligned(p) << 8 | p[2];
+  case 4:
+    return fetch32_be_aligned(p);
+  case 5:
+    return (uint64_t)fetch32_be_aligned(p) << 8 | p[4];
+  case 6:
+    return (uint64_t)fetch32_be_aligned(p) << 16 | fetch16_be_aligned(p + 4);
+  case 7:
+    return (uint64_t)fetch32_be_aligned(p) << 24 |
+           (uint32_t)fetch16_be_aligned(p + 4) << 8 | p[6];
+  case 0:
+    return fetch64_be_aligned(p);
+#else
+  case 1:
+    return p[0];
+  case 2:
+    return p[1] | (uint32_t)p[0] << 8;
+  case 3:
+    return p[2] | (uint32_t)p[1] << 8 | (uint32_t)p[0] << 16;
+  case 4:
+    return p[3] | (uint32_t)p[2] << 8 | (uint32_t)p[1] << 16 |
+           (uint32_t)p[0] << 24;
+  case 5:
+    return p[4] | (uint32_t)p[3] << 8 | (uint32_t)p[2] << 16 |
+           (uint32_t)p[1] << 24 | (uint64_t)p[0] << 32;
+  case 6:
+    return p[5] | (uint32_t)p[4] << 8 | (uint32_t)p[3] << 16 |
+           (uint32_t)p[2] << 24 | (uint64_t)p[1] << 32 | (uint64_t)p[0] << 40;
+  case 7:
+    return p[6] | (uint32_t)p[5] << 8 | (uint32_t)p[4] << 16 |
+           (uint32_t)p[3] << 24 | (uint64_t)p[2] << 32 | (uint64_t)p[1] << 40 |
+           (uint64_t)p[0] << 48;
+  case 0:
+    return p[7] | (uint32_t)p[6] << 8 | (uint32_t)p[5] << 16 |
+           (uint32_t)p[4] << 24 | (uint64_t)p[3] << 32 | (uint64_t)p[2] << 40 |
+           (uint64_t)p[1] << 48 | (uint64_t)p[0] << 56;
+#endif
+  }
+#endif /* T1HA_USE_FAST_ONESHOT_READ */
+}
+
+static __maybe_unused __always_inline uint64_t
+tail64_be_unaligned(const void *v, size_t tail) {
   const uint8_t *p = (const uint8_t *)v;
 #ifdef can_read_underside
   /* On some systems we can perform a 'oneshot' read, which is little bit
@@ -381,32 +862,36 @@ static __maybe_unused __always_inline uint64_t tail64_be(const void *v,
   const unsigned shift = offset << 3;
   if (likely(can_read_underside(p, 8))) {
     p -= offset;
-    return fetch64_be(p) & ((~UINT64_C(0)) >> shift);
+    return fetch64_be_unaligned(p) & ((~UINT64_C(0)) >> shift);
   }
-  return fetch64_be(p) >> shift;
-#endif /* 'oneshot' read */
-
+  return fetch64_be_unaligned(p) >> shift;
+#else
   switch (tail & 7) {
-#if UNALIGNED_OK && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+  default:
+    unreachable();
+/* fall through */
+#if T1HA_SYS_UNALIGNED_ACCESS == T1HA_UNALIGNED_ACCESS__EFFICIENT &&           \
+    __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
   /* For most CPUs this code is better when not needed
    * copying for alignment or byte reordering. */
   case 1:
     return p[0];
   case 2:
-    return fetch16_be(p);
+    return fetch16_be_unaligned(p);
   case 3:
-    return (uint32_t)fetch16_be(p) << 8 | p[2];
+    return (uint32_t)fetch16_be_unaligned(p) << 8 | p[2];
   case 4:
     return fetch32_be(p);
   case 5:
-    return (uint64_t)fetch32_be(p) << 8 | p[4];
+    return (uint64_t)fetch32_be_unaligned(p) << 8 | p[4];
   case 6:
-    return (uint64_t)fetch32_be(p) << 16 | fetch16_be(p + 4);
+    return (uint64_t)fetch32_be_unaligned(p) << 16 |
+           fetch16_be_unaligned(p + 4);
   case 7:
-    return (uint64_t)fetch32_be(p) << 24 | (uint32_t)fetch16_be(p + 4) << 8 |
-           p[6];
+    return (uint64_t)fetch32_be_unaligned(p) << 24 |
+           (uint32_t)fetch16_be_unaligned(p + 4) << 8 | p[6];
   case 0:
-    return fetch64_be(p);
+    return fetch64_be_unaligned(p);
 #else
   /* For most CPUs this code is better than a
    * copying for alignment and/or byte reordering. */
@@ -435,7 +920,7 @@ static __maybe_unused __always_inline uint64_t tail64_be(const void *v,
            (uint64_t)p[1] << 48 | (uint64_t)p[0] << 56;
 #endif
   }
-  unreachable();
+#endif /* can_read_underside */
 }
 
 /***************************************************************************/
@@ -452,14 +937,48 @@ static __always_inline uint64_t mul_32x32_64(uint32_t a, uint32_t b) {
 }
 #endif /* mul_32x32_64 */
 
-#ifndef mul_64x64_128
-
-static __maybe_unused __always_inline unsigned add_with_carry(uint64_t *sum,
-                                                              uint64_t addend) {
-  *sum += addend;
+#ifndef add64carry_first
+static __maybe_unused __always_inline unsigned
+add64carry_first(uint64_t base, uint64_t addend, uint64_t *sum) {
+#if __has_builtin(__builtin_addcll)
+  unsigned long long carryout;
+  *sum = __builtin_addcll(base, addend, 0, &carryout);
+  return (unsigned)carryout;
+#else
+  *sum = base + addend;
   return *sum < addend;
+#endif /* __has_builtin(__builtin_addcll) */
 }
+#endif /* add64carry_fist */
 
+#ifndef add64carry_next
+static __maybe_unused __always_inline unsigned
+add64carry_next(unsigned carry, uint64_t base, uint64_t addend, uint64_t *sum) {
+#if __has_builtin(__builtin_addcll)
+  unsigned long long carryout;
+  *sum = __builtin_addcll(base, addend, carry, &carryout);
+  return (unsigned)carryout;
+#else
+  *sum = base + addend + carry;
+  return *sum < addend || (carry && *sum == addend);
+#endif /* __has_builtin(__builtin_addcll) */
+}
+#endif /* add64carry_next */
+
+#ifndef add64carry_last
+static __maybe_unused __always_inline void
+add64carry_last(unsigned carry, uint64_t base, uint64_t addend, uint64_t *sum) {
+#if __has_builtin(__builtin_addcll)
+  unsigned long long carryout;
+  *sum = __builtin_addcll(base, addend, carry, &carryout);
+  (void)carryout;
+#else
+  *sum = base + addend + carry;
+#endif /* __has_builtin(__builtin_addcll) */
+}
+#endif /* add64carry_last */
+
+#ifndef mul_64x64_128
 static __maybe_unused __always_inline uint64_t mul_64x64_128(uint64_t a,
                                                              uint64_t b,
                                                              uint64_t *h) {
@@ -474,19 +993,21 @@ static __maybe_unused __always_inline uint64_t mul_64x64_128(uint64_t a,
   return a * b;
 #else
   /* performs 64x64 to 128 bit multiplication */
-  uint64_t ll = mul_32x32_64((uint32_t)a, (uint32_t)b);
-  uint64_t lh = mul_32x32_64(a >> 32, (uint32_t)b);
-  uint64_t hl = mul_32x32_64((uint32_t)a, b >> 32);
-  *h = mul_32x32_64(a >> 32, b >> 32) + (lh >> 32) + (hl >> 32) +
-       /* Few simplification are possible here for 32-bit architectures,
-        * but thus we would lost compatibility with the original 64-bit
-        * version.  Think is very bad idea, because then 32-bit t1ha will
-        * still (relatively) very slowly and well yet not compatible. */
-       add_with_carry(&ll, lh << 32) + add_with_carry(&ll, hl << 32);
-  return ll;
+  const uint64_t ll = mul_32x32_64((uint32_t)a, (uint32_t)b);
+  const uint64_t lh = mul_32x32_64(a >> 32, (uint32_t)b);
+  const uint64_t hl = mul_32x32_64((uint32_t)a, b >> 32);
+  const uint64_t hh = mul_32x32_64(a >> 32, b >> 32);
+
+  /* Few simplification are possible here for 32-bit architectures,
+   * but thus we would lost compatibility with the original 64-bit
+   * version.  Think is very bad idea, because then 32-bit t1ha will
+   * still (relatively) very slowly and well yet not compatible. */
+  uint64_t l;
+  add64carry_last(add64carry_first(ll, lh << 32, &l), hh, lh >> 32, h);
+  add64carry_last(add64carry_first(l, hl << 32, &l), *h, hl >> 32, h);
+  return l;
 #endif
 }
-
 #endif /* mul_64x64_128() */
 
 #ifndef mul_64x64_high
@@ -631,8 +1152,7 @@ static __always_inline t1ha_uint128_t add128(t1ha_uint128_t x,
     (defined(_INTEGRAL_MAX_BITS) && _INTEGRAL_MAX_BITS >= 128)
   r.v = x.v + y.v;
 #else
-  r.l = x.l + y.l;
-  r.h = (r.l < x.l) + x.h + y.h;
+  add64carry_last(add64carry_first(x.l, y.l, &r.l), x.h, y.h, &r.h);
 #endif
   return r;
 }

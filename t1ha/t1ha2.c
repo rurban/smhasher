@@ -41,6 +41,7 @@
  * for The 1Hippeus project - zerocopy messaging in the spirit of Sparta!
  */
 
+#ifndef T1HA2_DISABLED
 #include "t1ha_bits.h"
 
 static __always_inline void init_ab(t1ha_state256_t *s, uint64_t x,
@@ -55,128 +56,135 @@ static __always_inline void init_cd(t1ha_state256_t *s, uint64_t x,
   s->n.d = ~y + rot64(x, 19);
 }
 
-static __always_inline void update(t1ha_state256_t *__restrict s,
-                                   const uint64_t *__restrict v) {
-  uint64_t w0 = fetch64_le(v + 0);
-  uint64_t w1 = fetch64_le(v + 1);
-  uint64_t w2 = fetch64_le(v + 2);
-  uint64_t w3 = fetch64_le(v + 3);
-
-  uint64_t d02 = w0 + rot64(w2 + s->n.d, 56);
-  uint64_t c13 = w1 + rot64(w3 + s->n.c, 19);
-#ifdef __e2k__
-  /* FIXME: temporary workaround for lcc's ELBRUS scheduling bug (LY) */
-  s->n.c ^= s->n.a + rot64(w0, 57);
-  s->n.d ^= s->n.b + rot64(w1, 38);
-#else
-  s->n.d ^= s->n.b + rot64(w1, 38);
-  s->n.c ^= s->n.a + rot64(w0, 57);
-#endif
-  s->n.b ^= prime_6 * (c13 + w2);
-  s->n.a ^= prime_5 * (d02 + w3);
-}
+/* TODO: C++ template in the next version */
+#define T1HA2_UPDATE(ENDIANNES, ALIGNESS, state, v)                            \
+  do {                                                                         \
+    t1ha_state256_t *const s = state;                                          \
+    const uint64_t w0 = fetch64_##ENDIANNES##_##ALIGNESS(v + 0);               \
+    const uint64_t w1 = fetch64_##ENDIANNES##_##ALIGNESS(v + 1);               \
+    const uint64_t w2 = fetch64_##ENDIANNES##_##ALIGNESS(v + 2);               \
+    const uint64_t w3 = fetch64_##ENDIANNES##_##ALIGNESS(v + 3);               \
+                                                                               \
+    const uint64_t d02 = w0 + rot64(w2 + s->n.d, 56);                          \
+    const uint64_t c13 = w1 + rot64(w3 + s->n.c, 19);                          \
+    s->n.d ^= s->n.b + rot64(w1, 38);                                          \
+    s->n.c ^= s->n.a + rot64(w0, 57);                                          \
+    s->n.b ^= prime_6 * (c13 + w2);                                            \
+    s->n.a ^= prime_5 * (d02 + w3);                                            \
+  } while (0)
 
 static __always_inline void squash(t1ha_state256_t *s) {
   s->n.a ^= prime_6 * (s->n.c + rot64(s->n.d, 23));
   s->n.b ^= prime_5 * (rot64(s->n.c, 19) + s->n.d);
 }
 
-static __always_inline const void *
-loop(bool need_copy4align, uint64_t *__restrict buffer4align,
-     t1ha_state256_t *__restrict s, const void *__restrict data, size_t len) {
-  const void *detent = (const uint8_t *)data + len - 31;
-  do {
-    const uint64_t *v = (const uint64_t *)data;
-    if (unlikely(need_copy4align))
-      v = (const uint64_t *)memcpy(buffer4align, v, 32);
-    update(s, v);
-    data = (const uint64_t *)data + 4;
-  } while (likely(data < detent));
-  return data;
-}
+/* TODO: C++ template in the next version */
+#define T1HA2_LOOP(ENDIANNES, ALIGNESS, state, data, len)                      \
+  do {                                                                         \
+    const void *detent = (const uint8_t *)data + len - 31;                     \
+    do {                                                                       \
+      const uint64_t *v = (const uint64_t *)data;                              \
+      data = (const uint64_t *)data + 4;                                       \
+      prefetch(data);                                                          \
+      T1HA2_UPDATE(le, ALIGNESS, state, v);                                    \
+    } while (likely(data < detent));                                           \
+  } while (0)
 
-static __always_inline void tail_ab(t1ha_state256_t *__restrict s,
-                                    const uint64_t *__restrict v, size_t len) {
-  switch (len) {
-  default:
-    mixup64(&s->n.a, &s->n.b, fetch64_le(v++), prime_4);
-  /* fall through */
-  case 24:
-  case 23:
-  case 22:
-  case 21:
-  case 20:
-  case 19:
-  case 18:
-  case 17:
-    mixup64(&s->n.b, &s->n.a, fetch64_le(v++), prime_3);
-  /* fall through */
-  case 16:
-  case 15:
-  case 14:
-  case 13:
-  case 12:
-  case 11:
-  case 10:
-  case 9:
-    mixup64(&s->n.a, &s->n.b, fetch64_le(v++), prime_2);
-  /* fall through */
-  case 8:
-  case 7:
-  case 6:
-  case 5:
-  case 4:
-  case 3:
-  case 2:
-  case 1:
-    mixup64(&s->n.b, &s->n.a, tail64_le(v, len), prime_1);
-  /* fall through */
-  case 0:
-    return;
-  }
-}
+/* TODO: C++ template in the next version */
+#define T1HA2_TAIL_AB(ENDIANNES, ALIGNESS, state, data, len)                   \
+  do {                                                                         \
+    t1ha_state256_t *const s = state;                                          \
+    const uint64_t *v = (const uint64_t *)data;                                \
+    switch (len) {                                                             \
+    default:                                                                   \
+      mixup64(&s->n.a, &s->n.b, fetch64_##ENDIANNES##_##ALIGNESS(v++),         \
+              prime_4);                                                        \
+    /* fall through */                                                         \
+    case 24:                                                                   \
+    case 23:                                                                   \
+    case 22:                                                                   \
+    case 21:                                                                   \
+    case 20:                                                                   \
+    case 19:                                                                   \
+    case 18:                                                                   \
+    case 17:                                                                   \
+      mixup64(&s->n.b, &s->n.a, fetch64_##ENDIANNES##_##ALIGNESS(v++),         \
+              prime_3);                                                        \
+    /* fall through */                                                         \
+    case 16:                                                                   \
+    case 15:                                                                   \
+    case 14:                                                                   \
+    case 13:                                                                   \
+    case 12:                                                                   \
+    case 11:                                                                   \
+    case 10:                                                                   \
+    case 9:                                                                    \
+      mixup64(&s->n.a, &s->n.b, fetch64_##ENDIANNES##_##ALIGNESS(v++),         \
+              prime_2);                                                        \
+    /* fall through */                                                         \
+    case 8:                                                                    \
+    case 7:                                                                    \
+    case 6:                                                                    \
+    case 5:                                                                    \
+    case 4:                                                                    \
+    case 3:                                                                    \
+    case 2:                                                                    \
+    case 1:                                                                    \
+      mixup64(&s->n.b, &s->n.a, tail64_##ENDIANNES##_##ALIGNESS(v, len),       \
+              prime_1);                                                        \
+    /* fall through */                                                         \
+    case 0:                                                                    \
+      return final64(s->n.a, s->n.b);                                          \
+    }                                                                          \
+  } while (0)
 
-static __always_inline void tail_abcd(t1ha_state256_t *__restrict s,
-                                      const uint64_t *__restrict v,
-                                      size_t len) {
-  switch (len) {
-  default:
-    mixup64(&s->n.a, &s->n.d, fetch64_le(v++), prime_4);
-  /* fall through */
-  case 24:
-  case 23:
-  case 22:
-  case 21:
-  case 20:
-  case 19:
-  case 18:
-  case 17:
-    mixup64(&s->n.b, &s->n.a, fetch64_le(v++), prime_3);
-  /* fall through */
-  case 16:
-  case 15:
-  case 14:
-  case 13:
-  case 12:
-  case 11:
-  case 10:
-  case 9:
-    mixup64(&s->n.c, &s->n.b, fetch64_le(v++), prime_2);
-  /* fall through */
-  case 8:
-  case 7:
-  case 6:
-  case 5:
-  case 4:
-  case 3:
-  case 2:
-  case 1:
-    mixup64(&s->n.d, &s->n.c, tail64_le(v, len), prime_1);
-  /* fall through */
-  case 0:
-    return;
-  }
-}
+/* TODO: C++ template in the next version */
+#define T1HA2_TAIL_ABCD(ENDIANNES, ALIGNESS, state, data, len)                 \
+  do {                                                                         \
+    t1ha_state256_t *const s = state;                                          \
+    const uint64_t *v = (const uint64_t *)data;                                \
+    switch (len) {                                                             \
+    default:                                                                   \
+      mixup64(&s->n.a, &s->n.d, fetch64_##ENDIANNES##_##ALIGNESS(v++),         \
+              prime_4);                                                        \
+    /* fall through */                                                         \
+    case 24:                                                                   \
+    case 23:                                                                   \
+    case 22:                                                                   \
+    case 21:                                                                   \
+    case 20:                                                                   \
+    case 19:                                                                   \
+    case 18:                                                                   \
+    case 17:                                                                   \
+      mixup64(&s->n.b, &s->n.a, fetch64_##ENDIANNES##_##ALIGNESS(v++),         \
+              prime_3);                                                        \
+    /* fall through */                                                         \
+    case 16:                                                                   \
+    case 15:                                                                   \
+    case 14:                                                                   \
+    case 13:                                                                   \
+    case 12:                                                                   \
+    case 11:                                                                   \
+    case 10:                                                                   \
+    case 9:                                                                    \
+      mixup64(&s->n.c, &s->n.b, fetch64_##ENDIANNES##_##ALIGNESS(v++),         \
+              prime_2);                                                        \
+    /* fall through */                                                         \
+    case 8:                                                                    \
+    case 7:                                                                    \
+    case 6:                                                                    \
+    case 5:                                                                    \
+    case 4:                                                                    \
+    case 3:                                                                    \
+    case 2:                                                                    \
+    case 1:                                                                    \
+      mixup64(&s->n.d, &s->n.c, tail64_##ENDIANNES##_##ALIGNESS(v, len),       \
+              prime_1);                                                        \
+    /* fall through */                                                         \
+    case 0:                                                                    \
+      return final128(s->n.a, s->n.b, s->n.c, s->n.d, extra_result);           \
+    }                                                                          \
+  } while (0)
 
 static __always_inline uint64_t final128(uint64_t a, uint64_t b, uint64_t c,
                                          uint64_t d, uint64_t *h) {
@@ -194,22 +202,34 @@ uint64_t t1ha2_atonce(const void *data, size_t length, uint64_t seed) {
   t1ha_state256_t state;
   init_ab(&state, seed, length);
 
-  const int need_copy4align = (((uintptr_t)data) & 7) != 0 && !UNALIGNED_OK;
-  uint64_t buffer4align[4];
-
+#if T1HA_SYS_UNALIGNED_ACCESS == T1HA_UNALIGNED_ACCESS__EFFICIENT
   if (unlikely(length > 32)) {
     init_cd(&state, seed, length);
-    data = loop(need_copy4align, buffer4align, &state, data, length);
+    T1HA2_LOOP(le, unaligned, &state, data, length);
     squash(&state);
     length &= 31;
   }
-
-  const uint64_t *v = (const uint64_t *)data;
-  if (unlikely(need_copy4align) && length > 8)
-    v = (const uint64_t *)memcpy(&buffer4align, v, length);
-
-  tail_ab(&state, v, length);
-  return final64(state.n.a, state.n.b);
+  T1HA2_TAIL_AB(le, unaligned, &state, data, length);
+#else
+  const bool misaligned = (((uintptr_t)data) & (ALIGNMENT_64 - 1)) != 0;
+  if (misaligned) {
+    if (unlikely(length > 32)) {
+      init_cd(&state, seed, length);
+      T1HA2_LOOP(le, unaligned, &state, data, length);
+      squash(&state);
+      length &= 31;
+    }
+    T1HA2_TAIL_AB(le, unaligned, &state, data, length);
+  } else {
+    if (unlikely(length > 32)) {
+      init_cd(&state, seed, length);
+      T1HA2_LOOP(le, aligned, &state, data, length);
+      squash(&state);
+      length &= 31;
+    }
+    T1HA2_TAIL_AB(le, aligned, &state, data, length);
+  }
+#endif
 }
 
 uint64_t t1ha2_atonce128(uint64_t *__restrict extra_result,
@@ -219,20 +239,28 @@ uint64_t t1ha2_atonce128(uint64_t *__restrict extra_result,
   init_ab(&state, seed, length);
   init_cd(&state, seed, length);
 
-  const int need_copy4align = (((uintptr_t)data) & 7) != 0 && !UNALIGNED_OK;
-  uint64_t buffer4align[4];
-
+#if T1HA_SYS_UNALIGNED_ACCESS == T1HA_UNALIGNED_ACCESS__EFFICIENT
   if (unlikely(length > 32)) {
-    data = loop(need_copy4align, buffer4align, &state, data, length);
+    T1HA2_LOOP(le, unaligned, &state, data, length);
     length &= 31;
   }
-
-  const uint64_t *v = (const uint64_t *)data;
-  if (unlikely(need_copy4align) && length > 8)
-    v = (const uint64_t *)memcpy(&buffer4align, v, length);
-
-  tail_abcd(&state, v, length);
-  return final128(state.n.a, state.n.b, state.n.c, state.n.d, extra_result);
+  T1HA2_TAIL_ABCD(le, unaligned, &state, data, length);
+#else
+  const bool misaligned = (((uintptr_t)data) & (ALIGNMENT_64 - 1)) != 0;
+  if (misaligned) {
+    if (unlikely(length > 32)) {
+      T1HA2_LOOP(le, unaligned, &state, data, length);
+      length &= 31;
+    }
+    T1HA2_TAIL_ABCD(le, unaligned, &state, data, length);
+  } else {
+    if (unlikely(length > 32)) {
+      T1HA2_LOOP(le, aligned, &state, data, length);
+      length &= 31;
+    }
+    T1HA2_TAIL_ABCD(le, aligned, &state, data, length);
+  }
+#endif
 }
 
 //------------------------------------------------------------------------------
@@ -260,15 +288,20 @@ void t1ha2_update(t1ha_context_t *__restrict ctx, const void *__restrict data,
     ctx->partial = 0;
     data = (const uint8_t *)data + chunk;
     length -= chunk;
-    update(&ctx->state, ctx->buffer.u64);
+    T1HA2_UPDATE(le, aligned, &ctx->state, ctx->buffer.u64);
   }
 
   if (length >= 32) {
-    const bool need_copy4align = (((uintptr_t)data) & 7) != 0 && !UNALIGNED_OK;
-    if (need_copy4align)
-      data = loop(true, ctx->buffer.u64, &ctx->state, data, length);
-    else
-      data = loop(false, NULL, &ctx->state, data, length);
+#if T1HA_SYS_UNALIGNED_ACCESS == T1HA_UNALIGNED_ACCESS__EFFICIENT
+    T1HA2_LOOP(le, unaligned, &ctx->state, data, length);
+#else
+    const bool misaligned = (((uintptr_t)data) & (ALIGNMENT_64 - 1)) != 0;
+    if (misaligned) {
+      T1HA2_LOOP(le, unaligned, &ctx->state, data, length);
+    } else {
+      T1HA2_LOOP(le, aligned, &ctx->state, data, length);
+    }
+#endif
     length &= 31;
   }
 
@@ -278,19 +311,18 @@ void t1ha2_update(t1ha_context_t *__restrict ctx, const void *__restrict data,
 
 uint64_t t1ha2_final(t1ha_context_t *__restrict ctx,
                      uint64_t *__restrict extra_result) {
-  uint64_t bytes = (ctx->total << 3) ^ (UINT64_C(1) << 63);
+  uint64_t bits = (ctx->total << 3) ^ (UINT64_C(1) << 63);
 #if __BYTE_ORDER__ != __ORDER_LITTLE_ENDIAN__
-  bytes = bswap64(bytes);
+  bits = bswap64(bits);
 #endif
-  t1ha2_update(ctx, &bytes, 8);
+  t1ha2_update(ctx, &bits, 8);
 
   if (likely(!extra_result)) {
     squash(&ctx->state);
-    tail_ab(&ctx->state, ctx->buffer.u64, ctx->partial);
-    return final64(ctx->state.n.a, ctx->state.n.b);
+    T1HA2_TAIL_AB(le, aligned, &ctx->state, ctx->buffer.u64, ctx->partial);
   }
 
-  tail_abcd(&ctx->state, ctx->buffer.u64, ctx->partial);
-  return final128(ctx->state.n.a, ctx->state.n.b, ctx->state.n.c,
-                  ctx->state.n.d, extra_result);
+  T1HA2_TAIL_ABCD(le, aligned, &ctx->state, ctx->buffer.u64, ctx->partial);
 }
+
+#endif /* T1HA2_DISABLED */
