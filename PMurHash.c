@@ -206,7 +206,7 @@ void PMurHash32_Process(uint32_t *ph1, uint32_t *pcarry, const void *key, int le
   /* This CPU does not handle unaligned word access */
 
   /* Consume enough so that the next data byte is word aligned */
-  int i = -(long)ptr & 3;
+  int i = -(intptr_t)ptr & 3;
   if(i && i <= len) {
       DOBYTES(i, h1, c, n, ptr, len);
   }
