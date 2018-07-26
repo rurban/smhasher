@@ -1,0 +1,61 @@
+version: 0.2.{build}
+max_jobs: 4
+#os: Visual Studio 2017
+environment:
+  matrix:
+    - MSVC: 1
+      PLATFORM: amd64
+    - MSVC: 1
+      PLATFORM: x86
+    #- MINGW: 1
+    #  MSYS2_ARCH: x86_64
+    #  MSYSTEM: MINGW64
+    #  ARCH: win64
+    #  PLATFORM: x64
+    #- MINGW: 1
+    #  MSYS2_ARCH: i686
+    #  MSYSTEM: MINGW32
+    #  ARCH: win32
+    #  PLATFORM: x86
+clone_depth: 1
+skip_tags: true
+build:
+  verbosity: detailed
+
+init:
+  - git config --global core.autocrlf input
+  # Disable popups as they hang the build as there is nobody to click on the OK button...
+  # Hanging the build is a lot less user friendly than reporting a build failure.
+  #
+  # Disable of system hard error popup
+  # See: https://msdn.microsoft.com/en-us/library/bb513638%28VS.85%29.aspx
+  - reg add "HKLM\SYSTEM\CurrentControlSet\Control\Windows" /f /v ErrorMode /d 2
+  # Disable the following popup on program failure:
+  #     |       ** <program name> has stopped working **        |
+  #     | Windows can check online for a solution to the problem|
+  #     |  - Check online for a solution and close the program  |
+  #     |  - Close the program                                  |
+  # See: https://msdn.microsoft.com/en-us/library/bb513638%28VS.85%29.aspx
+  - reg add "HKLM\Software\Microsoft\Windows\Windows Error Reporting" /f /v DontShowUI /d 1  
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+  # git bash conflicts with MinGW makefiles, esp. the space in 'Program Files'
+  - if "%MINGW%"=="1" set "PATH=%PATH:C:\Program Files\Git\usr\bin;=%"
+  - set PROCESSOR_ARCHITECTURE=%PLATFORM%
+  - if "%PLATFORM%"=="x64" set PROCESSOR_ARCHITECTURE=AMD64
+
+#- if "%APPVEYOR_BUILD_WORKER_IMAGE%" == "Visual Studio 2017" (call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64)
+#- if "%APPVEYOR_BUILD_WORKER_IMAGE%" == "Visual Studio 2015" (call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64)
+#- if "%APPVEYOR_BUILD_WORKER_IMAGE%" == "Visual Studio 2013" (call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" amd64)
+# call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
+
+build_script:
+  - if "%MINGW%"=="1" call build-msys2.bat
+  - if "%MINGW%"=="1" bash -c "cmake ."
+  - if "%MINGW%"=="1" make VERBOSE=1
+  - if "%MSVC%"=="1" call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %PLATFORM%
+  - if "%MSVC%"=="1" cmake . -DCMAKE_BUILD_TYPE=Release
+  - if "%MSVC%"=="1" cmake --build .
+
+test_script:
+  - SMHasher --test=Speed,Avalanche,Zeroes,Seed falkhash
+
