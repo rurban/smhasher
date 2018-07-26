@@ -155,7 +155,7 @@ IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
   set(64ONLY_SRC
     xxhash.c metrohash64.cpp metrohash128.cpp farmhash.cc
     FarmTest.cc farmhash-c.c farmhash-c-test.cc cmetrohash64.c
-    opt_cmetrohash64_1.c fasthash.cpp)
+    opt_cmetrohash64_1.c fasthash.cpp jody_hash64.c)
 ENDIF()
 
 set(T1HA_SRC t1ha/t1ha0.c t1ha/t1ha1.c t1ha/t1ha2.c t1ha/t1ha0_ia32aes_noavx.c t1ha/t1ha0_ia32aes_avx.c t1ha/t1ha0_ia32aes_avx2.c)
@@ -193,7 +193,6 @@ add_library(
   SuperFastHash.cpp
   Types.cpp
   PMurHash.c
-  ${64ONLY_SRC}
   ${METROCRC64_SRC}
   ${METROCRC128_SRC}
   ${SSE4_OBJ}
@@ -201,7 +200,7 @@ add_library(
   ${T1HA_SRC}
   mum.cc
   jody_hash32.c
-  jody_hash64.c
+  ${64ONLY_SRC}
 )
 
 add_executable(

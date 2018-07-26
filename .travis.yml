@@ -2,12 +2,21 @@
 language:
   - c++
 sudo: false
-env:
-  matrix:
-    - CC=gcc CXX=g++
-    - CC=clang CXX=clang++
+matrix:
+  fast_finish: true
+  include:
+    - compiler: gcc
+      env: XCC=gcc XCXX=g++
+    - compiler: clang
+      env: XCC=clang XCXX=clang++
+    - env: XCC="gcc -m32" XCXX="g++ -m32"
+      addons:
+        apt:
+          packages:
+            - g++-multilib
+            - gcc-multilib
 
 script:
-  - CC=$CC CXX=$CXX cmake .
+  - CC="$XCC" CXX="$XCXX" cmake .
   - make -j4 VERBOSE=1
   - ./SMHasher --test=Speed,Avalanche,Zeroes,Seed falkhash

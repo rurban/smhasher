@@ -7,6 +7,7 @@
 #include "PMurHash.h"
 
 #include <stdio.h>
+#include <stdint.h>
 #include <time.h>
 
 //-----------------------------------------------------------------------------
@@ -123,14 +124,16 @@ HashInfo g_hashes[] =
   { JenkinsOOAT_perl,     32, 0xEE05869B, "JenkinsOOAT_perl", "Bob Jenkins' OOAT as in old perl5" },
   { MicroOAAT,            32, 0x16F1BA97, "MicroOAAT", "Small non-multiplicative OAAT that passes all collision checks (by funny-falcon)" },
   { jodyhash32_test,      32, 0xFB47D60D, "jodyhash32",  "jodyhash, 32-bit (v5)" },
+#if __WORDSIZE >= 64
   { jodyhash64_test,      64, 0x623B99CF, "jodyhash64",  "jodyhash, 64-bit (v5)" },
+#endif
   { lookup3_test,         32, 0x3D83917A, "lookup3",     "Bob Jenkins' lookup3" },
   { SuperFastHash,        32, 0x980ACD1D, "superfast",   "Paul Hsieh's SuperFastHash" },
   { MurmurOAAT_test,      32, 0x5363BD98, "MurmurOAAT",  "Murmur one-at-a-time" },
   { Crap8_test,           32, 0x743E97A1, "Crap8",       "Crap8" },
   { MurmurHash2_test,     32, 0x27864C1E, "Murmur2",     "MurmurHash2 for x86, 32-bit" },
   { MurmurHash2A_test,    32, 0x7FBD4396, "Murmur2A",    "MurmurHash2A for x86, 32-bit" },
-#if defined(__x86_64__)
+#if __WORDSIZE >= 64
   { MurmurHash64A_test,   64, 0x1F0D3804, "Murmur2B",    "MurmurHash2 for x64, 64-bit" },
 #endif
   { MurmurHash64B_test,   64, 0xDD537C05, "Murmur2C",    "MurmurHash2 for x86, 64-bit" },
@@ -145,7 +148,7 @@ HashInfo g_hashes[] =
   { PMurHash32_test,      32, 0xB0F57EE3, "PMurHash32",  "Shane Day's portable-ized MurmurHash3 for x86, 32-bit." },
   { MurmurHash3_x86_32,   32, 0xB0F57EE3, "Murmur3A",    "MurmurHash3 for x86, 32-bit" },
   { MurmurHash3_x86_128, 128, 0xB3ECE62A, "Murmur3C",    "MurmurHash3 for x86, 128-bit" },
-#if defined(__x86_64__)
+#if __WORDSIZE >= 64
   { MurmurHash3_x64_128, 128, 0x6384BA69, "Murmur3F",    "MurmurHash3 for x64, 128-bit" },
 #endif
 #if defined(__x86_64__)
@@ -186,12 +189,12 @@ HashInfo g_hashes[] =
   { metrohash64_2_test,       64, 0xE1FC7C6E, "metrohash64_2",     "MetroHash64_2 for 64-bit" },
   { metrohash128_1_test,     128, 0x20E8A1D7, "metrohash128_1",    "MetroHash128_1 for 64-bit" },
   { metrohash128_2_test,     128, 0x5437C684, "metrohash128_2",    "MetroHash128_2 for 64-bit" },
-#if defined(__SSE4_2__) && defined(__x86_64__)
+# if defined(__SSE4_2__) && defined(__x86_64__)
   { metrohash64crc_1_test,    64, 0x29C68A50, "metrohash64crc_1",  "MetroHash64crc_1 for x64" },
   { metrohash64crc_2_test,    64, 0x2C00BD9F, "metrohash64crc_2",  "MetroHash64crc_2 for x64" },
   { metrohash128crc_1_test,  128, 0x5E75144E, "metrohash128crc_1", "MetroHash128crc_1 for x64" },
   { metrohash128crc_2_test,  128, 0x1ACF3E77, "metrohash128crc_2", "MetroHash128crc_2 for x64" },
-#endif
+# endif
 #endif
 #if defined(__x86_64__)
   { cmetrohash64_1_optshort_test, 64, 0xEE88F7D2, "cmetrohash64_1o", "cmetrohash64_1 (shorter key optimized) , 64-bit for x64" },
@@ -212,9 +215,7 @@ HashInfo g_hashes[] =
 #if defined(__AES__)
   { t1ha0_ia32aes_noavx_test,    64, 0xF07C4DA5, "t1ha0_aes_noavx",  "Fast Positive Hash (machine-specific, requires AES-NI)" },
 #if defined(__AVX__)
-  { t1ha0_ia32aes_avx1_test,     64, 0xF07C4DA5, "t1ha0_aes_avx1",    "Fast Positive Hash (machine-specific, requires AES-NI & AVX)" },
-#endif /* __AVX__ */
-#if defined(__AVX__)
+  { t1ha0_ia32aes_avx1_test,     64, 0xF07C4DA5, "t1ha0_aes_avx1",   "Fast Positive Hash (machine-specific, requires AES-NI & AVX)" },
   { t1ha0_ia32aes_avx2_test,     64, 0x8B38C599, "t1ha0_aes_avx2",   "Fast Positive Hash (machine-specific, requires AES-NI & AVX)" },
 #endif /* __AVX__ */
 #endif /* __AES__ */
@@ -737,9 +738,9 @@ static char* strndup(char const *s, size_t n)
 int main ( int argc, char ** argv )
 {
 #if (defined(__x86_64__) && __SSE4_2__) || defined(_M_X64) || defined(_X86_64_)
-  const char * defaulthash = "metrohash64crc_1"; /* "murmur3a"; */
+  const char * defaulthash = "t1ha1_64le"; /* "murmur3a"; */
 #else
-  const char * defaulthash = "t1ha_32le";
+  const char * defaulthash = "t1ha0_32le";
 #endif
   const char * hashToTest = defaulthash;
 
