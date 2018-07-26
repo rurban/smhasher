@@ -16,15 +16,15 @@ U64TO8_LE(unsigned char *p, const uint64_t v) {
 }
 */
 
-#define sipcompress() \
+#define SIPCOMPRESS \
 	v0 += v1; v2 += v3; \
-	v1 = ROTL64(v1,13);	v3 = ROTL64(v3,16); \
+	v1 = ROTL64(v1,13); v3 = ROTL64(v3,16); \
 	v1 ^= v0; v3 ^= v2; \
 	v0 = ROTL64(v0,32); \
 	v2 += v1; v0 += v3; \
 	v1 = ROTL64(v1,17); v3 = ROTL64(v3,21); \
 	v1 ^= v2; v3 ^= v0; \
-	v2 = ROTL64(v2,32);
+	v2 = ROTL64(v2,32)
 
 /* The 64bit 2-4 variant */
 uint64_t
@@ -46,8 +46,8 @@ siphash(const unsigned char key[16], const unsigned char *m, size_t len) {
 	for (i = 0, blocks = (len & ~7); i < blocks; i += 8) {
 		mi = U8TO64_LE(m + i);
 		v3 ^= mi;
-		sipcompress() /* 2 c rounds */
-		sipcompress()
+		SIPCOMPRESS; /* 2 c rounds */
+		SIPCOMPRESS;
 		v0 ^= mi;
 	}
 
@@ -63,14 +63,14 @@ siphash(const unsigned char key[16], const unsigned char *m, size_t len) {
 		default:;
 	};
 	v3 ^= last7;
-	sipcompress() /* 2 more c rounds */
-	sipcompress()
+	SIPCOMPRESS; /* 2 more c rounds */
+	SIPCOMPRESS;
 	v0 ^= last7;
 	v2 ^= 0xff;
-	sipcompress() /* and 4 final d rounds */
-	sipcompress()
-	sipcompress()
-	sipcompress()
+	SIPCOMPRESS; /* and 4 final d rounds */
+	SIPCOMPRESS;
+	SIPCOMPRESS;
+	SIPCOMPRESS;
 	return v0 ^ v1 ^ v2 ^ v3;
 
 #undef sipcompress
@@ -96,7 +96,7 @@ siphash13(const unsigned char key[16], const unsigned char *m, size_t len) {
 	for (i = 0, blocks = (len & ~7); i < blocks; i += 8) {
 		mi = U8TO64_LE(m + i);
 		v3 ^= mi;
-		sipcompress() /* 1 c round */
+		SIPCOMPRESS; /* 1 c round */
 		v0 ^= mi;
 	}
 
@@ -112,12 +112,12 @@ siphash13(const unsigned char key[16], const unsigned char *m, size_t len) {
 		default:;
 	};
 	v3 ^= last7;
-	sipcompress() /* 1 more c round */
+	SIPCOMPRESS; /* 1 more c round */
 	v0 ^= last7;
 	v2 ^= 0xff;
-	sipcompress() /* and 3 final d rounds */
-	sipcompress()
-	sipcompress()
+	SIPCOMPRESS; /* and 3 final d rounds */
+	SIPCOMPRESS;
+	SIPCOMPRESS;
 	return v0 ^ v1 ^ v2 ^ v3;
 
 #undef sipcompress
