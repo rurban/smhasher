@@ -82,8 +82,8 @@ static const jodyhash_t tail_mask[] = {
  * of any amount of data. If data is not divisible by the size of
  * jodyhash_t, it is MANDATORY that the caller provide a data buffer
  * which is divisible by sizeof(jodyhash_t). */
-extern jodyhash_t jody_block_hash(const jodyhash_t *data,
-		const jodyhash_t start_hash, const size_t count)
+jodyhash_t jody_block_hash(const jodyhash_t *data,
+                           const jodyhash_t start_hash, const size_t count)
 {
 	jodyhash_t hash = start_hash;
 	jodyhash_t element;

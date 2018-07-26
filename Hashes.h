@@ -132,9 +132,11 @@ inline void MurmurHash64B_test ( const void * key, int len, uint32_t seed, void 
 inline void jodyhash32_test( const void * key, int len, uint32_t seed, void * out ) {
   *(uint32_t*)out = (uint32_t) jody_block_hash32((const jodyhash32_t *)key, (jodyhash32_t) seed, (size_t) len);
 }
+#if __WORDSIZE >= 64
 inline void jodyhash64_test( const void * key, int len, uint32_t seed, void * out ) {
   *(uint32_t*)out = (uint32_t) jody_block_hash((const jodyhash_t *)key, (jodyhash_t) seed, (size_t) len);
 }
+#endif
 
 #if defined(__x86_64__)
 inline void xxHash32_test( const void * key, int len, uint32_t seed, void * out ) {

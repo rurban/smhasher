@@ -43,8 +43,8 @@ typedef uint16_t jodyhash_t;
 /* Version increments when algorithm changes incompatibly */
 #define JODY_HASH_VERSION 5
 
-extern jodyhash_t jody_block_hash(const jodyhash_t *data,
-		const jodyhash_t start_hash, const size_t count);
+jodyhash_t jody_block_hash(const jodyhash_t *data,
+                           const jodyhash_t start_hash, const size_t count);
 
 #ifdef __cplusplus
 }
