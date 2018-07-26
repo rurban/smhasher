@@ -4,7 +4,7 @@ os: Visual Studio 2017
 environment:
   matrix:
     - MSVC: 1
-      PLATFORM: amd64
+      PLATFORM: x64
     - MSVC: 1
       PLATFORM: x86
     #- MINGW: 1
@@ -40,8 +40,8 @@ init:
   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
   # git bash conflicts with MinGW makefiles, esp. the space in 'Program Files'
   #- if "%MINGW%"=="1" set "PATH=%PATH:C:\Program Files\Git\usr\bin;=%"
-  #- set PROCESSOR_ARCHITECTURE=%PLATFORM%
-  #- if "%PLATFORM%"=="x64" set PROCESSOR_ARCHITECTURE=AMD64
+  - set PROCESSOR_ARCHITECTURE=%PLATFORM%
+  - if "%PLATFORM%"=="x64" set PROCESSOR_ARCHITECTURE=AMD64
 
 #- if "%APPVEYOR_BUILD_WORKER_IMAGE%" == "Visual Studio 2017" (call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64)
 #- if "%APPVEYOR_BUILD_WORKER_IMAGE%" == "Visual Studio 2015" (call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64)
@@ -54,10 +54,10 @@ build_script:
   #- if "%MINGW%"=="1" make VERBOSE=1
   #- if "%MSVC%"=="1" call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %PLATFORM%
   - if "%APPVEYOR_BUILD_WORKER_IMAGE%" == "Visual Studio 2017" (call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat"  %PLATFORM%)
-
-  - if "%MSVC%"=="1" cmake . -DCMAKE_BUILD_TYPE=Release
-  - if "%MSVC%"=="1" cmake --build .
+  - if "%PLATFORM%"=="x64" cmake . -DCMAKE_BUILD_TYPE=Release -A %PLATFORM%
+  - if "%PLATFORM%"=="x86" cmake . -DCMAKE_BUILD_TYPE=Release
+  - if "%MSVC%"=="1" cmake --build . --config Release
 
 test_script:
-  - SMHasher --test=Speed,Avalanche,Zeroes,Seed falkhash
+  - Release\SMHasher --test=Speed,Avalanche,Zeroes,Seed t1ha0_32le
 
