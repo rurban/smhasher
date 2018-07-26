@@ -106,7 +106,7 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
   set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} /arch:SSE2")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")
 else()
-  message(WARNING "Unknown ${CMAKE_C_COMPILER_ID} compiler")
+  message(WARNING "Unknown ${CMAKE_CXX_COMPILER_ID} compiler")
 # TODO: BSD and ARM8 crc detection
 # TODO: 32bit filter
 endif()
@@ -156,12 +156,20 @@ IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
     xxhash.c metrohash64.cpp metrohash128.cpp farmhash.cc
     FarmTest.cc farmhash-c.c farmhash-c-test.cc cmetrohash64.c
     opt_cmetrohash64_1.c fasthash.cpp jody_hash64.c)
+ELSE()
+    message(WARNING "32bit only: CMAKE_SIZEOF_VOID_P=${CMAKE_SIZEOF_VOID_P}")
 ENDIF()
 
 set(T1HA_SRC t1ha/t1ha0.c t1ha/t1ha1.c t1ha/t1ha2.c t1ha/t1ha0_ia32aes_noavx.c t1ha/t1ha0_ia32aes_avx.c t1ha/t1ha0_ia32aes_avx2.c)
+if ("${CMAKE_C_COMPILER_ID}" STREQUAL "MSVC")
+set_source_files_properties(t1ha/t1ha0_ia32aes_noavx.c PROPERTIES COMPILE_FLAGS "/arch:aes" )
+set_source_files_properties(t1ha/t1ha0_ia32aes_avx.c PROPERTIES COMPILE_FLAGS "/arch:avx /arch:aes")
+set_source_files_properties(t1ha/t1ha0_ia32aes_avx2.c PROPERTIES COMPILE_FLAGS "/arch:avx /arch:avx2 /arch:aes")
+else()
 set_source_files_properties(t1ha/t1ha0_ia32aes_noavx.c PROPERTIES COMPILE_FLAGS "-mno-avx2 -mno-avx -maes")
 set_source_files_properties(t1ha/t1ha0_ia32aes_avx.c PROPERTIES COMPILE_FLAGS "-mno-avx2 -mavx -maes")
 set_source_files_properties(t1ha/t1ha0_ia32aes_avx2.c PROPERTIES COMPILE_FLAGS "-mavx -mavx2 -maes")
+endif()
 
 add_library(
   SMHasherSupport
