@@ -44,7 +44,6 @@ halfsiphash(const unsigned char key[16], const unsigned char *m, size_t len) {
     uint32_t k0 = U8TO32_LE(key);
     uint32_t k1 = U8TO32_LE(key + 8);
     uint32_t mi;
-    int i;
     const uint8_t *end = m + len - (len % sizeof(uint32_t));
     const int left = len & 3;
     uint32_t b = ((uint32_t)len) << 24;

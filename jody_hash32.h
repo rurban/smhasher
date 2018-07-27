@@ -21,21 +21,7 @@ extern "C" {
 /* Required for uint64_t */
 #include <stdint.h>
 
-/* Width of a jody_hash. Changing this will also require
- * changing the width of tail masks to match. */
-#ifndef JODY_HASH_WIDTH
-#define JODY_HASH_WIDTH 32
-#endif
-
-#if JODY_HASH_WIDTH == 64
-typedef uint64_t jodyhash32_t;
-#endif
-#if JODY_HASH_WIDTH == 32
 typedef uint32_t jodyhash32_t;
-#endif
-#if JODY_HASH_WIDTH == 16
-typedef uint16_t jodyhash32_t;
-#endif
 
 /* Version increments when algorithm changes incompatibly */
 #define JODY_HASH_VERSION 5

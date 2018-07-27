@@ -6,12 +6,10 @@
 #include "MurmurHash2.h"
 #include "MurmurHash3.h"
 
-#if defined(__x86_64__)
 #include "xxhash.h"
 #include "metrohash.h"
 #include "cmetrohash.h"
 #include "opt_cmetrohash.h"
-#endif
 
 #include "fasthash.h"
 #include "jody_hash32.h"
@@ -130,15 +128,12 @@ inline void MurmurHash64B_test ( const void * key, int len, uint32_t seed, void 
 }
 
 inline void jodyhash32_test( const void * key, int len, uint32_t seed, void * out ) {
-  *(uint32_t*)out = (uint32_t) jody_block_hash32((const jodyhash32_t *)key, (jodyhash32_t) seed, (size_t) len);
+  *(uint32_t*)out = jody_block_hash32((const jodyhash32_t *)key, (jodyhash32_t) seed, (size_t) len);
 }
-#if !defined(HAVE_BIT32) && __WORDSIZE >= 64
 inline void jodyhash64_test( const void * key, int len, uint32_t seed, void * out ) {
-  *(uint32_t*)out = (uint32_t) jody_block_hash((const jodyhash_t *)key, (jodyhash_t) seed, (size_t) len);
+  *(uint64_t*)out = jody_block_hash((const jodyhash_t *)key, (jodyhash_t) seed, (size_t) len);
 }
-#endif
 
-#if defined(__x86_64__)
 inline void xxHash32_test( const void * key, int len, uint32_t seed, void * out ) {
   *(uint32_t*)out = (uint32_t) XXH32(key, (size_t) len, (unsigned) seed);
 }
@@ -187,7 +182,6 @@ inline void fasthash32_test ( const void * key, int len, uint32_t seed, void * o
 inline void fasthash64_test ( const void * key, int len, uint32_t seed, void * out ) {
   *(uint64_t*)out = fasthash64(key, (size_t) len, (uint64_t)seed);
 }
-#endif
 
 void mum_hash_test(const void * key, int len, uint32_t seed, void * out);
 
@@ -254,10 +248,10 @@ inline void t1ha0_ia32aes_avx1_test(const void * key, int len, uint32_t seed, vo
 }
 #endif /* __AVX__ */
 
-#if defined(__AVX__)
+#if defined(__AVX2__)
 inline void t1ha0_ia32aes_avx2_test(const void * key, int len, uint32_t seed, void * out)
 {
   *(uint64_t*)out = t1ha0_ia32aes_avx2(key, len, seed);
 }
-#endif /* __AVX__ */
+#endif /* __AVX2__ */
 #endif /* T1HA0_AESNI_AVAILABLE */
