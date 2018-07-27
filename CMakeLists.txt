@@ -7,7 +7,7 @@ include(CheckCCompilerFlag)
 # Check if the same compile family is used for both C and CXX
 if (NOT (CMAKE_C_COMPILER_ID STREQUAL CMAKE_CXX_COMPILER_ID))
     message(WARNING "CMAKE_C_COMPILER_ID (${CMAKE_C_COMPILER_ID}) is different "
-                    "from CMAKE_CXX_COMPILER_ID (${CMAKE_CXX_COMPILER_ID})."
+                    "from CMAKE_CXX_COMPILER_ID (${CMAKE_CXX_COMPILER_ID}). "
                     "The final binary may be unusable.")
 endif()
 
@@ -101,7 +101,7 @@ if (CMAKE_COMPILER_IS_GNUCC
   #ENDIF (AES_TRUE)
   set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -march=native")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
-elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+elseif (MSVC)
   # using Visual Studio C++
   set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} /arch:SSE2")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")
@@ -144,9 +144,9 @@ IF(SSE4_2_FOUND)
 IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
   #enable_language(ASM-NASM)
   #set(CMAKE_ASM_FLAGS "-f elf64")
-  set(SSE4_SRC1       crc32_hw1.c)
-  set(METROCRC64_SRC  metrohash64crc.cpp)
-  set(METROCRC128_SRC metrohash128crc.cpp)
+  set(X86_64ONLY_SRC farmhash-c.c farmhash-c-test.cc metrohash64crc.cpp metrohash128crc.cpp crc32_hw1.c)
+ELSE()
+    message(WARNING "32bit only: CMAKE_SIZEOF_VOID_P=${CMAKE_SIZEOF_VOID_P}")
 ENDIF()
   set(SIPHASH_SRC     siphash_ssse3.c)
 ELSEIF(SSE2_FOUND)
@@ -156,20 +156,10 @@ ELSE()
   set(SIPHASH_SRC     siphash.c)
 ENDIF(SSE4_2_FOUND)
 
-IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
-  set(64ONLY_SRC
-    xxhash.c metrohash64.cpp metrohash128.cpp farmhash.cc
-    FarmTest.cc farmhash-c.c farmhash-c-test.cc cmetrohash64.c
-    opt_cmetrohash64_1.c fasthash.cpp jody_hash64.c)
-ELSE()
-    message(WARNING "32bit only: CMAKE_SIZEOF_VOID_P=${CMAKE_SIZEOF_VOID_P}")
-ENDIF()
-
 set(T1HA_SRC t1ha/t1ha0.c t1ha/t1ha1.c t1ha/t1ha2.c t1ha/t1ha0_ia32aes_noavx.c t1ha/t1ha0_ia32aes_avx.c t1ha/t1ha0_ia32aes_avx2.c)
-if ("${CMAKE_C_COMPILER_ID}" STREQUAL "MSVC")
-set_source_files_properties(t1ha/t1ha0_ia32aes_noavx.c PROPERTIES COMPILE_FLAGS "/arch:aes" )
-set_source_files_properties(t1ha/t1ha0_ia32aes_avx.c PROPERTIES COMPILE_FLAGS "/arch:avx /arch:aes")
-set_source_files_properties(t1ha/t1ha0_ia32aes_avx2.c PROPERTIES COMPILE_FLAGS "/arch:avx /arch:avx2 /arch:aes")
+if(MSVC)
+set_source_files_properties(t1ha/t1ha0_ia32aes_avx.c PROPERTIES COMPILE_FLAGS "/arch:avx")
+set_source_files_properties(t1ha/t1ha0_ia32aes_avx2.c PROPERTIES COMPILE_FLAGS "/arch:avx2")
 else()
 set_source_files_properties(t1ha/t1ha0_ia32aes_noavx.c PROPERTIES COMPILE_FLAGS "-mno-avx2 -mno-avx -maes")
 set_source_files_properties(t1ha/t1ha0_ia32aes_avx.c PROPERTIES COMPILE_FLAGS "-mno-avx2 -mavx -maes")
@@ -188,7 +178,6 @@ add_library(
   Hashes.cpp
   ${SSE2_SRC}
   ${SSE4_SRC}
-  ${SSE4_SRC1}
   KeysetTest.cpp
   lookup3.cpp
   md5.cpp
@@ -206,14 +195,19 @@ add_library(
   SuperFastHash.cpp
   Types.cpp
   PMurHash.c
-  ${METROCRC64_SRC}
-  ${METROCRC128_SRC}
+  fasthash.cpp
+  xxhash.c
+  metrohash64.cpp
+  metrohash128.cpp
+  cmetrohash64.c opt_cmetrohash64_1.c
+  farmhash.cc FarmTest.cc
   ${SSE4_OBJ}
   # ${FHTW_OBJ}
   ${T1HA_SRC}
   mum.cc
   jody_hash32.c
-  ${64ONLY_SRC}
+  jody_hash64.c
+  ${X86_64ONLY_SRC}
 )
 
 add_executable(

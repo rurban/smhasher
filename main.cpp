@@ -106,10 +106,10 @@ HashInfo g_hashes[] =
   { crc32c_hw1_test,      32, 0x0C7346F0, "crc32_hw1",   "Faster Adler SSE4.2 crc32 in HW" },
   { crc64c_hw_test,       64, 0xE7C3FD0E, "crc64_hw",    "SSE4.2 crc64 in HW" },
 #endif
-#if 0 && defined(__x86_64__) && (defined(__linux__) || defined(__APPLE__))  
+#if 0 && defined(__x86_64__) && (defined(__linux__) || defined(__APPLE__))
   // elf64 or macho64 only
   { fhtw_test,            64, 0x0,        "fhtw",        "fhtw asm" },
-#endif  
+#endif
   { FNV32a,               32, 0xE3CBBE91, "FNV1a",       "Fowler-Noll-Vo hash, 32-bit" },
   { FNV32a_YoshimitsuTRIAD,32,0xD8AFFD71, "FNV1a_YT",    "FNV1a-YoshimitsuTRIAD 32-bit sanmayce" },
   { FNV64a,               64, 0x103455FC, "FNV64",       "Fowler-Noll-Vo hash, 64-bit" },
@@ -154,10 +154,8 @@ HashInfo g_hashes[] =
 #if __WORDSIZE >= 64
   { MurmurHash3_x64_128, 128, 0x6384BA69, "Murmur3F",    "MurmurHash3 for x64, 128-bit" },
 #endif
-#if defined(__x86_64__)
   { fasthash32_test,      32, 0xE9481AFC, "fasthash32",  "fast-hash 32bit" },
   { fasthash64_test,      64, 0xA16231A7, "fasthash64",  "fast-hash 64bit" },
-#endif
   { mum_hash_test,              64,
 #if defined(__GNUC__) && UINT_MAX != ULONG_MAX
                                     0x3EEAE2D4,
@@ -171,35 +169,31 @@ HashInfo g_hashes[] =
   { CityHash128_test,    128, 0x6531F54E, "City128",     "Google CityHash128WithSeed (old)" },
   { CityHashCrc128_test, 128, 0xD4389C97, "CityCrc128",  "Google CityHashCrc128WithSeed SSE4.2 (old)" },
 #endif
-#if defined(__x86_64__)
   { FarmHash64_test,      64, 0x35F84A93, "FarmHash64",  "Google FarmHash64WithSeed" },
   { FarmHash128_test,    128, 0x9E636AAE, "FarmHash128", "Google FarmHash128WithSeed" },
+#if defined(__x86_64__)
   { farmhash64_c_test,    64, 0x35F84A93, "farmhash64_c",  "farmhash64_with_seed (C99)" },
   { farmhash128_c_test,  128, 0x9E636AAE, "farmhash128_c", "farmhash128_with_seed (C99)" },
 #endif
-#if defined(__x86_64__)
   { xxHash32_test,        32, 0xBA88B743, "xxHash32",    "xxHash, 32-bit for x64" },
   { xxHash64_test,        64, 0x024B7CF4, "xxHash64",    "xxHash, 64-bit" },
-# if 0
+#if 0
   { xxhash256_test,       64, 0x024B7CF4, "xxhash256",   "xxhash256, 64-bit unportable" },
-# endif
 #endif
   { SpookyHash32_test,    32, 0x3F798BBB, "Spooky32",    "Bob Jenkins' SpookyHash, 32-bit result" },
   { SpookyHash64_test,    64, 0xA7F955F1, "Spooky64",    "Bob Jenkins' SpookyHash, 64-bit result" },
   { SpookyHash128_test,  128, 0x8D263080, "Spooky128",   "Bob Jenkins' SpookyHash, 128-bit result" },
-#if defined(__x86_64__)
   { metrohash64_1_test,       64, 0xEE88F7D2, "metrohash64_1",     "MetroHash64_1 for 64-bit" },
   { metrohash64_2_test,       64, 0xE1FC7C6E, "metrohash64_2",     "MetroHash64_2 for 64-bit" },
   { metrohash128_1_test,     128, 0x20E8A1D7, "metrohash128_1",    "MetroHash128_1 for 64-bit" },
   { metrohash128_2_test,     128, 0x5437C684, "metrohash128_2",    "MetroHash128_2 for 64-bit" },
-# if defined(__SSE4_2__) && defined(__x86_64__)
+#if defined(__SSE4_2__) && defined(__x86_64__)
   { metrohash64crc_1_test,    64, 0x29C68A50, "metrohash64crc_1",  "MetroHash64crc_1 for x64" },
   { metrohash64crc_2_test,    64, 0x2C00BD9F, "metrohash64crc_2",  "MetroHash64crc_2 for x64" },
   { metrohash128crc_1_test,  128, 0x5E75144E, "metrohash128crc_1", "MetroHash128crc_1 for x64" },
   { metrohash128crc_2_test,  128, 0x1ACF3E77, "metrohash128crc_2", "MetroHash128crc_2 for x64" },
-# endif
 #endif
-#if defined(__x86_64__)
+#if __WORDSIZE >= 64
   { cmetrohash64_1_optshort_test, 64, 0xEE88F7D2, "cmetrohash64_1o", "cmetrohash64_1 (shorter key optimized) , 64-bit for x64" },
   { cmetrohash64_1_test,        64, 0xEE88F7D2, "cmetrohash64_1",    "cmetrohash64_1, 64-bit for x64" },
   { cmetrohash64_2_test,        64, 0xE1FC7C6E, "cmetrohash64_2",    "cmetrohash64_2, 64-bit for x64" },
@@ -215,13 +209,15 @@ HashInfo g_hashes[] =
   { t1ha1_64be_test,             64, 0x93F864DE, "t1ha1_64be",       "Fast Positive Hash (portable, aims 64-bit, big-engian)" },
   { t1ha0_32le_test,             64, 0x7F7D7B29, "t1ha0_32le",       "Fast Positive Hash (portable, aims 32-bit, little-endian)" },
   { t1ha0_32be_test,             64, 0xDA6A4061, "t1ha0_32be",       "Fast Positive Hash (portable, aims 32-bit, big-endian)" },
-#if defined(__AES__)
+#if T1HA0_AESNI_AVAILABLE
   { t1ha0_ia32aes_noavx_test,    64, 0xF07C4DA5, "t1ha0_aes_noavx",  "Fast Positive Hash (machine-specific, requires AES-NI)" },
 #if defined(__AVX__)
   { t1ha0_ia32aes_avx1_test,     64, 0xF07C4DA5, "t1ha0_aes_avx1",   "Fast Positive Hash (machine-specific, requires AES-NI & AVX)" },
-  { t1ha0_ia32aes_avx2_test,     64, 0x8B38C599, "t1ha0_aes_avx2",   "Fast Positive Hash (machine-specific, requires AES-NI & AVX)" },
 #endif /* __AVX__ */
-#endif /* __AES__ */
+#if defined(__AVX2__)
+  { t1ha0_ia32aes_avx2_test,     64, 0x8B38C599, "t1ha0_aes_avx2",   "Fast Positive Hash (machine-specific, requires AES-NI & AVX)" },
+#endif /* __AVX2__ */
+#endif /* T1HA0_AESNI_AVAILABLE */
 };
 
 HashInfo * findHash ( const char * name )
@@ -741,7 +737,7 @@ static char* strndup(char const *s, size_t n)
 int main ( int argc, char ** argv )
 {
 #if (defined(__x86_64__) && __SSE4_2__) || defined(_M_X64) || defined(_X86_64_)
-  const char * defaulthash = "t1ha1_64le"; /* "murmur3a"; */
+  const char * defaulthash = "t1ha2_atonce"; /* "murmur3a"; */
 #else
   const char * defaulthash = "t1ha0_32le";
 #endif

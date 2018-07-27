@@ -24,7 +24,7 @@ extern "C" {
 /* Width of a jody_hash. Changing this will also require
  * changing the width of tail masks to match. */
 #ifndef __WORDSIZE
-# define __WORDSIZE 64  
+# define __WORDSIZE 64
 #endif
 #ifndef JODY_HASH_WIDTH
 # define JODY_HASH_WIDTH __WORDSIZE
