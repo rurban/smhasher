@@ -167,9 +167,11 @@ HashInfo g_hashes[] =
   { CityHash128_test,    128, 0x6531F54E, "City128",     "Google CityHash128WithSeed (old)" },
   { CityHashCrc128_test, 128, 0xD4389C97, "CityCrc128",  "Google CityHashCrc128WithSeed SSE4.2 (old)" },
 #endif
+#if 0 /* LY: results are extremely depends from available CPU features AES/SSE41/SSE42/x86_64 */
+  { FarmHash32_test,      32, 0xA2E45238, "FarmHash32",  "Google FarmHash32WithSeed" },
   { FarmHash64_test,      64, 0x35F84A93, "FarmHash64",  "Google FarmHash64WithSeed" },
   { FarmHash128_test,    128, 0x9E636AAE, "FarmHash128", "Google FarmHash128WithSeed" },
-#if defined(__x86_64__)
+  { farmhash32_c_test,    32, 0xA2E45238, "farmhash32_c",  "farmhash64_with_seed (C99)" },
   { farmhash64_c_test,    64, 0x35F84A93, "farmhash64_c",  "farmhash64_with_seed (C99)" },
   { farmhash128_c_test,  128, 0x9E636AAE, "farmhash128_c", "farmhash128_with_seed (C99)" },
 #endif
