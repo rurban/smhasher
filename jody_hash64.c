@@ -23,6 +23,10 @@
 #include <stdlib.h>
 #include "jody_hash64.h"
 
+/* Width of a jody_hash. Changing this will also require
+ * changing the width of tail masks to match. */
+#define JODY_HASH_WIDTH 64
+
 /* DO NOT modify the shift unless you know what you're doing.
  * This shift was decided upon after lots of testing and
  * changing it will likely cause lots of hash collisions. */

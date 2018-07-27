@@ -23,22 +23,7 @@ extern "C" {
 
 /* Width of a jody_hash. Changing this will also require
  * changing the width of tail masks to match. */
-#ifndef __WORDSIZE
-# define __WORDSIZE 64
-#endif
-#ifndef JODY_HASH_WIDTH
-# define JODY_HASH_WIDTH __WORDSIZE
-#endif
-
-#if JODY_HASH_WIDTH == 64
 typedef uint64_t jodyhash_t;
-#endif
-#if JODY_HASH_WIDTH == 32
-typedef uint32_t jodyhash_t;
-#endif
-#if JODY_HASH_WIDTH == 16
-typedef uint16_t jodyhash_t;
-#endif
 
 /* Version increments when algorithm changes incompatibly */
 #define JODY_HASH_VERSION 5
