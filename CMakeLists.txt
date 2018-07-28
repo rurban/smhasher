@@ -102,7 +102,7 @@ if (CMAKE_COMPILER_IS_GNUCC
   set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -march=native")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
 elseif (MSVC)
-  # using Visual Studio C++
+  # using Visual Studio C++, already the default with VS17
   set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} /arch:SSE2")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")
 else()
@@ -158,6 +158,7 @@ ENDIF(SSE4_2_FOUND)
 
 set(T1HA_SRC t1ha/t1ha0.c t1ha/t1ha1.c t1ha/t1ha2.c t1ha/t1ha0_ia32aes_noavx.c t1ha/t1ha0_ia32aes_avx.c t1ha/t1ha0_ia32aes_avx2.c)
 if(MSVC)
+set_source_files_properties(t1ha/t1ha0_ia32aes_noavx.c PROPERTIES COMPILE_FLAGS "/arch:ia32")
 set_source_files_properties(t1ha/t1ha0_ia32aes_avx.c PROPERTIES COMPILE_FLAGS "/arch:avx")
 set_source_files_properties(t1ha/t1ha0_ia32aes_avx2.c PROPERTIES COMPILE_FLAGS "/arch:avx2")
 else()
