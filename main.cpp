@@ -81,10 +81,12 @@ HashInfo g_hashes[] =
   { crc32,                32, 0x3719DB20, "crc32",       "CRC-32 soft" },
 
   { md5_32,               32, 0xF7192210, "md5_32a",     "MD5, first 32 bits of result" },
-#ifndef _MSC_VER
-  //MSVC fails verification
-  { sha1_32a,             32, 0x7FE8C80E, "sha1_32a",    "SHA1, first 32 bits of result" },
+#ifdef _MSC_VER /* truncated long to 32 */
+#  define SHA1_SEED           0xDCB02360
+#else
+#  define SHA1_SEED           0x7FE8C80E
 #endif
+  { sha1_32a,             32, SHA1_SEED,  "sha1_32a",    "SHA1, first 32 bits of result" },
 #if 0
   { sha1_64a,             32, 0x00000000, "sha1_64a",    "SHA1 64-bit, first 64 bits of result" },
   { sha2_32a,             32, 0x00000000, "sha2_32a",    "SHA2, first 32 bits of result" },
@@ -166,9 +168,6 @@ HashInfo g_hashes[] =
   { CityHash128_test,    128, 0x6531F54E, "City128",     "Google CityHash128WithSeed (old)" },
   { CityHashCrc128_test, 128, 0xD4389C97, "CityCrc128",  "Google CityHashCrc128WithSeed SSE4.2 (old)" },
 #endif
-  { FarmHash64_test,      64, 0x35F84A93, "FarmHash64",  "Google FarmHash64WithSeed" },
-  { FarmHash128_test,    128, 0x9E636AAE, "FarmHash128", "Google FarmHash128WithSeed" },
-#if defined(__x86_64__)
 # ifdef _MSC_VER /* truncated long to 32 */
 #  define FARM64_SEED         0xEBC4A679
 #  define FARM128_SEED        0x305C0D9A
@@ -176,8 +175,11 @@ HashInfo g_hashes[] =
 #  define FARM64_SEED         0x35F84A93
 #  define FARM128_SEED        0x9E636AAE
 # endif
-  { farmhash64_c_test,    64, FARM64_SEED,  "farmhash64_c",  "farmhash64_with_seed (C99)" },
-  { farmhash128_c_test,  128, FARM128_SEED, "farmhash128_c", "farmhash128_with_seed (C99)" },
+  { FarmHash64_test,      64, FARM64_SEED, "FarmHash64",  "Google FarmHash64WithSeed" },
+  { FarmHash128_test,    128, FARM128_SEED,"FarmHash128", "Google FarmHash128WithSeed" },
+#if defined(__x86_64__)
+  { farmhash64_c_test,    64, FARM64_SEED, "farmhash64_c",  "farmhash64_with_seed (C99)" },
+  { farmhash128_c_test,  128, FARM128_SEED,"farmhash128_c", "farmhash128_with_seed (C99)" },
 #endif
   { xxHash32_test,        32, 0xBA88B743, "xxHash32",    "xxHash, 32-bit for x64" },
   { xxHash64_test,        64, 0x024B7CF4, "xxHash64",    "xxHash, 64-bit" },
