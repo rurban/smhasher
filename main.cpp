@@ -154,13 +154,12 @@ HashInfo g_hashes[] =
 #endif
   { fasthash32_test,      32, 0xE9481AFC, "fasthash32",  "fast-hash 32bit" },
   { fasthash64_test,      64, 0xA16231A7, "fasthash64",  "fast-hash 64bit" },
-  { mum_hash_test,              64,
 #if defined(__GNUC__) && UINT_MAX != ULONG_MAX
-                                    0x3EEAE2D4,
+ #define MUM_SEED             0x3EEAE2D4
 #else
-                                    0xA973C6C0,
+ #define MUM_SEED             0xA973C6C0
 #endif
-                                                "MUM",               "github.com/vnmakarov/mum-hash" },
+  { mum_hash_test,        64, MUM_SEED,   "MUM",         "github.com/vnmakarov/mum-hash" },
   { CityHash32_test,      32, 0x5C28AD62, "City32",      "Google CityHash32WithSeed (old)" },
   { CityHash64_test,      64, 0x25A20825, "City64",      "Google CityHash64WithSeed (old)" },
 #if defined(__SSE4_2__) && defined(__x86_64__)
@@ -170,8 +169,15 @@ HashInfo g_hashes[] =
   { FarmHash64_test,      64, 0x35F84A93, "FarmHash64",  "Google FarmHash64WithSeed" },
   { FarmHash128_test,    128, 0x9E636AAE, "FarmHash128", "Google FarmHash128WithSeed" },
 #if defined(__x86_64__)
-  { farmhash64_c_test,    64, 0x35F84A93, "farmhash64_c",  "farmhash64_with_seed (C99)" },
-  { farmhash128_c_test,  128, 0x9E636AAE, "farmhash128_c", "farmhash128_with_seed (C99)" },
+# ifdef _MSC_VER /* truncated long to 32 */
+#  define FARM64_SEED         0xEBC4A679
+#  define FARM128_SEED        0x305C0D9A
+# else
+#  define FARM64_SEED         0x35F84A93
+#  define FARM128_SEED        0x9E636AAE
+# endif
+  { farmhash64_c_test,    64, FARM64_SEED,  "farmhash64_c",  "farmhash64_with_seed (C99)" },
+  { farmhash128_c_test,  128, FARM128_SEED, "farmhash128_c", "farmhash128_with_seed (C99)" },
 #endif
   { xxHash32_test,        32, 0xBA88B743, "xxHash32",    "xxHash, 32-bit for x64" },
   { xxHash64_test,        64, 0x024B7CF4, "xxHash64",    "xxHash, 64-bit" },
