@@ -177,7 +177,7 @@ HashInfo g_hashes[] =
 # endif
   { FarmHash64_test,      64, FARM64_SEED, "FarmHash64",  "Google FarmHash64WithSeed" },
   { FarmHash128_test,    128, FARM128_SEED,"FarmHash128", "Google FarmHash128WithSeed" },
-#if defined(__x86_64__)
+#if defined(__SSE4_2__) && defined(__x86_64__)
   { farmhash64_c_test,    64, FARM64_SEED, "farmhash64_c",  "farmhash64_with_seed (C99)" },
   { farmhash128_c_test,  128, FARM128_SEED,"farmhash128_c", "farmhash128_with_seed (C99)" },
 #endif

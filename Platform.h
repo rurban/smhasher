@@ -10,6 +10,12 @@ void SetAffinity ( int cpu );
 
 #if defined(_MSC_VER)
 
+#ifndef __x86_64__
+#if defined(__x86_64) || defined(_M_AMD64) || defined(_M_X64)
+  #define  __x86_64__
+ #endif
+#endif
+
 #define FORCE_INLINE	__forceinline
 #define	NEVER_INLINE  __declspec(noinline)
 
