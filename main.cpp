@@ -199,7 +199,7 @@ HashInfo g_hashes[] =
   { metrohash128crc_1_test,  128, 0x5E75144E, "metrohash128crc_1", "MetroHash128crc_1 for x64" },
   { metrohash128crc_2_test,  128, 0x1ACF3E77, "metrohash128crc_2", "MetroHash128crc_2 for x64" },
 #endif
-#if __WORDSIZE >= 64
+#if defined(__SSE4_2__)
   { cmetrohash64_1_optshort_test, 64, 0xEE88F7D2, "cmetrohash64_1o", "cmetrohash64_1 (shorter key optimized) , 64-bit for x64" },
   { cmetrohash64_1_test,        64, 0xEE88F7D2, "cmetrohash64_1",    "cmetrohash64_1, 64-bit for x64" },
   { cmetrohash64_2_test,        64, 0xE1FC7C6E, "cmetrohash64_2",    "cmetrohash64_2, 64-bit for x64" },
