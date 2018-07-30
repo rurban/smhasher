@@ -22,6 +22,7 @@ void SetAffinity ( int cpu );
 #include <stdlib.h>
 #include <math.h>   // Has to be included before intrin.h or VC complains about 'ceil'
 #include <intrin.h> // for __rdtsc
+#pragma intrinsic(_mm_lfence)
 #include <stdint.h>
 
 #define ROTL32(x,y)	_rotl(x,y)
@@ -46,6 +47,9 @@ void SetAffinity ( int cpu );
 
 #include <stdlib.h>
 #include <stdint.h>
+#ifdef __x86_64__
+#include <emmintrin.h> // for _mm_lfence
+#endif
 
 #define	FORCE_INLINE inline __attribute__((always_inline))
 #define	NEVER_INLINE __attribute__((noinline))
@@ -81,6 +85,7 @@ __inline__ unsigned long long int rdtsc()
 {
 #ifdef __x86_64__
     unsigned int a, d;
+    _mm_lfence();
     __asm__ volatile ("rdtsc" : "=a" (a), "=d" (d));
     return (unsigned long)a | ((unsigned long)d << 32);
 #elif defined(__i386__)
