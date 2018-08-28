@@ -116,7 +116,7 @@ Even if those worse hash functions will lead to more collisions, the
 overall speed advantage beats the slightly worse quality.
 See e.g. [A Seven-Dimensional Analysis of Hashing Methods and its Implications on Query Processing](https://infosys.cs.uni-saarland.de/publications/p249-richter.pdf)
 for a concise overview of the best hash table strategies, confirming that the
-simpliest Mult hashing (bernstein, FNV*, x17, sdbm) always beat "better" hash
+simplest Mult hashing (bernstein, FNV*, x17, sdbm) always beat "better" hash
 functions (Tabulation, Murmur, Farm, ...) when used in a hash table.
 
 The fast hash functions tested here are recommendable as fast for file
