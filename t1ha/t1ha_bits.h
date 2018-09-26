@@ -122,6 +122,33 @@
 #define __SANITIZE_ADDRESS__ 1
 #endif
 
+#ifndef __optimize
+#if defined(__clang__) && !__has_attribute(optimize)
+#define __optimize(ops)
+#elif defined(__GNUC__) || __has_attribute(optimize)
+#define __optimize(ops) __attribute__((optimize(ops)))
+#else
+#define __optimize(ops)
+#endif
+#endif /* __optimize */
+
+#ifndef __cold
+#if defined(__OPTIMIZE__)
+#if defined(__e2k__)
+#define __cold __optimize(1) __attribute__((cold))
+#elif defined(__clang__) && !__has_attribute(cold)
+/* just put infrequently used functions in separate section */
+#define __cold __attribute__((section("text.unlikely"))) __optimize("Os")
+#elif defined(__GNUC__) || __has_attribute(cold)
+#define __cold __attribute__((cold)) __optimize("Os")
+#else
+#define __cold __optimize("Os")
+#endif
+#else
+#define __cold
+#endif
+#endif /* __cold */
+
 #if __GNUC_PREREQ(4, 4) || defined(__clang__)
 
 #if defined(__ia32__) || defined(__e2k__)
@@ -475,6 +502,10 @@ static __always_inline const
 #endif /* -Wtautological-pointer-compare */
 
 /***************************************************************************/
+
+#if __GNUC_PREREQ(4, 0)
+#pragma GCC visibility push(hidden)
+#endif /* __GNUC_PREREQ(4,0) */
 
 /*---------------------------------------------------------- Little Endian */
 

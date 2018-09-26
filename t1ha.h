@@ -104,6 +104,13 @@
  *      // To disable runtime choice of fastest implementation.
  *      #define T1HA0_RUNTIME_SELECT 0
  *
+ *    When T1HA0_RUNTIME_SELECT is nonzero the t1ha0_resolve() function could
+ *    be used to get actual t1ha0() implementation address at runtime. This is
+ *    useful for two cases:
+ *      - calling by local pointer-to-function usually is little
+ *        bit faster (less overhead) than via a PLT thru the DSO boundary.
+ *      - GNU Indirect functions (see below) don't supported by environment
+ *        and calling by t1ha0_funcptr is not available and/or expensive.
  *
  * 4) T1HA_USE_INDIRECT_FUNCTIONS = Controls usage of GNU Indirect functions.
  *
@@ -133,13 +140,14 @@
  *    By default, t1ha engade AES-NI for t1ha0() on the x86 platform, but
  *    you could override this default behavior when build t1ha library itself:
  *
- *      // To enable detection and usage of AES-NI instructions for t1ha0().
- *      #define T1HA0_AESNI_AVAILABLE 1
- *
  *      // To disable detection and usage of AES-NI instructions for t1ha0().
  *      // This may be useful when you unable to build t1ha library properly
  *      // or known that AES-NI will be unavailable at the deploy.
  *      #define T1HA0_AESNI_AVAILABLE 0
+ *
+ *      // To force detection and usage of AES-NI instructions for t1ha0(),
+ *      // but I don't known reasons to anybody would need this.
+ *      #define T1HA0_AESNI_AVAILABLE 1
  *
  * 6) T1HA0_DISABLED, T1HA1_DISABLED, T1HA2_DISABLED = Controls availability of
  *    t1ha functions.
@@ -161,7 +169,7 @@
 
 #define T1HA_VERSION_MAJOR 2
 #define T1HA_VERSION_MINOR 0
-#define T1HA_VERSION_RELEASE 2
+#define T1HA_VERSION_RELEASE 4
 
 #ifndef __has_attribute
 #define __has_attribute(x) (0)
@@ -381,6 +389,10 @@
 #endif
 #endif /* T1HA_USE_INDIRECT_FUNCTIONS */
 
+#if __GNUC_PREREQ(4, 0)
+#pragma GCC visibility push(hidden)
+#endif /* __GNUC_PREREQ(4,0) */
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -501,6 +513,15 @@ T1HA_API uint64_t t1ha1_be(const void *data, size_t length, uint64_t seed);
  *      Briefly, such hash-results and their derivatives, should be
  *      used only in runtime, but should not be persist or transferred
  *      over a network.
+ *
+ *
+ *  When T1HA0_RUNTIME_SELECT is nonzero the t1ha0_resolve() function could
+ *  be used to get actual t1ha0() implementation address at runtime. This is
+ *  useful for two cases:
+ *    - calling by local pointer-to-function usually is little
+ *      bit faster (less overhead) than via a PLT thru the DSO boundary.
+ *    - GNU Indirect functions (see below) don't supported by environment
+ *      and calling by t1ha0_funcptr is not available and/or expensive.
  */
 
 #ifndef T1HA0_DISABLED
@@ -556,6 +577,8 @@ uint64_t t1ha0_ia32aes_avx2(const void *data, size_t length, uint64_t seed);
 #endif /* __force_inline */
 
 #if T1HA0_RUNTIME_SELECT
+typedef uint64_t (*t1ha0_function_t)(const void *, size_t, uint64_t);
+T1HA_API t1ha0_function_t t1ha0_resolve(void);
 #if T1HA_USE_INDIRECT_FUNCTIONS
 T1HA_API uint64_t t1ha0(const void *data, size_t length, uint64_t seed);
 #else
@@ -642,3 +665,7 @@ static __force_inline uint64_t t1ha0(const void *data, size_t length,
 #ifdef __cplusplus
 }
 #endif
+
+#if __GNUC_PREREQ(4, 0)
+#pragma GCC visibility pop
+#endif /* __GNUC_PREREQ(4,0) */
