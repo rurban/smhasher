@@ -102,10 +102,10 @@ uint64_t T1HA_IA32AES_NAME(const void *data, size_t len, uint64_t seed) {
 #endif
 #else
 #if defined(__SSE4_1__) || defined(__AVX__)
-    a = (uint32_t)_mm_extract_epi32(x, 0) |
-        (uint64_t)_mm_extract_epi32(x, 1) << 32;
-    b = (uint32_t)_mm_extract_epi32(x, 2) |
-        (uint64_t)_mm_extract_epi32(x, 3) << 32;
+    a = (uint32_t)_mm_extract_epi32(x, 0) | (uint64_t)_mm_extract_epi32(x, 1)
+                                                << 32;
+    b = (uint32_t)_mm_extract_epi32(x, 2) | (uint64_t)_mm_extract_epi32(x, 3)
+                                                << 32;
 #else
     a = (uint32_t)_mm_cvtsi128_si32(x);
     a |= (uint64_t)_mm_cvtsi128_si32(_mm_shuffle_epi32(x, 1)) << 32;
