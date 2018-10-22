@@ -137,6 +137,8 @@ IF(AES_FOUND AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
 ENDIF()
 
 IF(SSE4_2_FOUND)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_SSE42")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_SSE42")
   SET(CMAKE_THREAD_LIBS_INIT "-lpthread")
   set(SSE2_SRC        hasshe2.c)
   set(SSE4_SRC        crc32_hw.c)
@@ -157,10 +159,16 @@ ELSE()
   set(SIPHASH_SRC     siphash.c)
 ENDIF(SSE4_2_FOUND)
 
-set(T1HA_SRC t1ha/t1ha0.c t1ha/t1ha1.c t1ha/t1ha2.c
-             t1ha/t1ha0_ia32aes_noavx.c
-             t1ha/t1ha0_ia32aes_avx.c
-             t1ha/t1ha0_ia32aes_avx2.c)
+IF(AES_FOUND)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_AESNI")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_AESNI")
+  set(T1HA_SRC
+    t1ha/t1ha0.c t1ha/t1ha1.c t1ha/t1ha2.c
+    t1ha/t1ha0_ia32aes_noavx.c t1ha/t1ha0_ia32aes_avx.c
+    t1ha/t1ha0_ia32aes_avx2.c)
+ELSE()
+  set(T1HA_SRC t1ha/t1ha0.c t1ha/t1ha1.c t1ha/t1ha2.c)
+ENDIF()
 if(MSVC)
 set_source_files_properties(t1ha/t1ha0_ia32aes_noavx.c PROPERTIES COMPILE_FLAGS "/arch:ia32")
 set_source_files_properties(t1ha/t1ha0_ia32aes_avx.c PROPERTIES COMPILE_FLAGS "/arch:avx")

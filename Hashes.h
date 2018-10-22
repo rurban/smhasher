@@ -232,6 +232,11 @@ inline void mum_low_test ( const void * key, int len, uint32_t seed, void * out 
 
 //-----------------------------------------------------------------------------
 
+#ifdef HAVE_AESNI
+# define T1HA0_AESNI_AVAILABLE 1
+#else
+# define T1HA0_AESNI_AVAILABLE 0
+#endif
 #include "t1ha.h"
 
 inline void t1ha2_atonce_test(const void * key, int len, uint32_t seed, void * out)
@@ -280,7 +285,7 @@ inline void t1ha0_32be_test(const void * key, int len, uint32_t seed, void * out
   *(uint64_t*)out = t1ha0_32be(key, len, seed);
 }
 
-#ifdef T1HA0_AESNI_AVAILABLE
+#if T1HA0_AESNI_AVAILABLE
 inline void t1ha0_ia32aes_noavx_test(const void * key, int len, uint32_t seed, void * out)
 {
   *(uint64_t*)out = t1ha0_ia32aes_noavx(key, len, seed);
