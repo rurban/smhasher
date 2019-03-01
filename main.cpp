@@ -13,7 +13,7 @@
 //-----------------------------------------------------------------------------
 // Configuration. TODO - move these to command-line flags
 
-bool g_testAll = true;
+bool g_testAll = false;
 
 bool g_testSanity      = false;
 bool g_testSpeed       = false;
@@ -29,6 +29,8 @@ bool g_testWindow      = false;
 bool g_testText        = false;
 bool g_testZeroes      = false;
 bool g_testSeed        = false;
+
+bool g_testdist        = true;
 
 struct TestOpts {
   bool         &var;
@@ -183,6 +185,9 @@ HashInfo g_hashes[] =
 #endif
   { xxHash32_test,        32, 0xBA88B743, "xxHash32",    "xxHash, 32-bit for x64" },
   { xxHash64_test,        64, 0x024B7CF4, "xxHash64",    "xxHash, 64-bit" },
+  { xxh3_test,            64, 0xECA5AAE7, "xxh3",        "xxHash v3, 64-bit" },
+  { xxh3low_test,         32, 0xECA5AAE7, "xxh3low",     "xxHash v3, 64-bit, low 32-bits part" },
+  { xxh3high_test,        32, 0xECA5AAE7, "xxh3high",    "xxHash v3, 64-bit, high 32-bits part" },
 #if 0
   { xxhash256_test,       64, 0x024B7CF4, "xxhash256",   "xxhash256, 64-bit unportable" },
 #endif
@@ -270,7 +275,7 @@ void SelfTest ( void )
 //----------------------------------------------------------------------------
 
 template < typename hashtype >
-void test ( hashfunc<hashtype> hash, HashInfo * info )
+void test ( hashfunc<hashtype> hash, HashInfo* info )
 {
   const int hashbits = sizeof(hashtype) * 8;
 
@@ -327,9 +332,9 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
     bool result = true;
     bool dumpCollisions = false;
 
-    result &= DiffTest< Blob<64>,  hashtype >(hash,5,1000,dumpCollisions);
-    result &= DiffTest< Blob<128>, hashtype >(hash,4,1000,dumpCollisions);
-    result &= DiffTest< Blob<256>, hashtype >(hash,3,1000,dumpCollisions);
+    result &= DiffTest< Blob<64>,  hashtype >(hash,5,100,dumpCollisions);
+    result &= DiffTest< Blob<128>, hashtype >(hash,4,100,dumpCollisions);
+    result &= DiffTest< Blob<256>, hashtype >(hash,3,100,dumpCollisions);
 
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
@@ -382,6 +387,11 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
     result &= AvalancheTest< Blob<144>, hashtype > (hash,300000);
     result &= AvalancheTest< Blob<152>, hashtype > (hash,300000);
 
+    result &= AvalancheTest< Blob<160>, hashtype > (hash,300000);
+    result &= AvalancheTest< Blob<168>, hashtype > (hash,300000);
+    result &= AvalancheTest< Blob<176>, hashtype > (hash,300000);
+    result &= AvalancheTest< Blob<184>, hashtype > (hash,300000);
+
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
     fflush(NULL);
@@ -425,6 +435,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
     result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+2,8,10000000,drawDiagram);
     result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+3,8,10000000,drawDiagram);
     result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+4,8,10000000,drawDiagram);
+    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+8,8,10000000,drawDiagram);
 #endif
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
@@ -444,7 +455,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
     bool result = true;
     bool drawDiagram = false;
 
-    for(int i = 4; i <= 20; i += 4)
+    for(int i = 4; i <= 24; i += 4)
     {
       result &= TwoBytesTest2<hashtype>(hash,i,drawDiagram);
     }
@@ -467,12 +478,34 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
 
     result &= SparseKeyTest<  32,hashtype>(hash,6,true,true,true,drawDiagram);
     result &= SparseKeyTest<  40,hashtype>(hash,6,true,true,true,drawDiagram);
-    result &= SparseKeyTest<  48,hashtype>(hash,5,true,true,true,drawDiagram);
+    result &= SparseKeyTest<  48,hashtype>(hash,6,true,true,true,drawDiagram);
     result &= SparseKeyTest<  56,hashtype>(hash,5,true,true,true,drawDiagram);
     result &= SparseKeyTest<  64,hashtype>(hash,5,true,true,true,drawDiagram);
+    result &= SparseKeyTest<  72,hashtype>(hash,5,true,true,true,drawDiagram);
     result &= SparseKeyTest<  96,hashtype>(hash,4,true,true,true,drawDiagram);
+    result &= SparseKeyTest< 112,hashtype>(hash,4,true,true,true,drawDiagram);
+    result &= SparseKeyTest< 128,hashtype>(hash,4,true,true,true,drawDiagram);
+    result &= SparseKeyTest< 144,hashtype>(hash,4,true,true,true,drawDiagram);
+    result &= SparseKeyTest< 160,hashtype>(hash,4,true,true,true,drawDiagram);
+    result &= SparseKeyTest< 192,hashtype>(hash,4,true,true,true,drawDiagram);
     result &= SparseKeyTest< 256,hashtype>(hash,3,true,true,true,drawDiagram);
+    result &= SparseKeyTest< 288,hashtype>(hash,3,true,true,true,drawDiagram);
+    result &= SparseKeyTest< 320,hashtype>(hash,3,true,true,true,drawDiagram);
+    result &= SparseKeyTest< 384,hashtype>(hash,3,true,true,true,drawDiagram);
+    result &= SparseKeyTest< 448,hashtype>(hash,3,true,true,true,drawDiagram);
+    result &= SparseKeyTest< 512,hashtype>(hash,3,true,true,true,drawDiagram);
+    result &= SparseKeyTest< 640,hashtype>(hash,3,true,true,true,drawDiagram);
+    result &= SparseKeyTest< 768,hashtype>(hash,3,true,true,true,drawDiagram);
+    result &= SparseKeyTest< 896,hashtype>(hash,2,true,true,true,drawDiagram);
+    result &= SparseKeyTest<1024,hashtype>(hash,2,true,true,true,drawDiagram);
+    result &= SparseKeyTest<1280,hashtype>(hash,2,true,true,true,drawDiagram);
+    result &= SparseKeyTest<1536,hashtype>(hash,2,true,true,true,drawDiagram);
     result &= SparseKeyTest<2048,hashtype>(hash,2,true,true,true,drawDiagram);
+    result &= SparseKeyTest<3072,hashtype>(hash,2,true,true,true,drawDiagram);
+    result &= SparseKeyTest<4096,hashtype>(hash,2,true,true,true,drawDiagram);
+    result &= SparseKeyTest<6144,hashtype>(hash,2,true,true,true,drawDiagram);
+    result &= SparseKeyTest<8192,hashtype>(hash,2,true,true,true,drawDiagram);
+    result &= SparseKeyTest<9992,hashtype>(hash,2,true,true,true,drawDiagram);
 
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
@@ -521,7 +554,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
         0x20000000, 0x40000000, 0x60000000, 0x80000000, 0xA0000000, 0xC0000000, 0xE0000000
       };
 
-      result &= CombinationKeyTest<hashtype>(hash,8,blocks,sizeof(blocks) / sizeof(uint32_t),true,true,drawDiagram);
+      result &= CombinationKeyTest(hash,8,blocks,sizeof(blocks) / sizeof(uint32_t),true,true,drawDiagram);
 
       if(!result) printf("*********FAIL*********\n");
       printf("\n");
@@ -542,7 +575,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
         0x80000000,
       };
 
-      result &= CombinationKeyTest<hashtype>(hash,20,blocks,sizeof(blocks) / sizeof(uint32_t),true,true,drawDiagram);
+      result &= CombinationKeyTest(hash, 23, blocks, sizeof(blocks) / sizeof(uint32_t),true,true,drawDiagram);
 
       if(!result) printf("*********FAIL*********\n");
       printf("\n");
@@ -562,7 +595,197 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
         0x00000001,
       };
 
-      result &= CombinationKeyTest<hashtype>(hash,20,blocks,sizeof(blocks) / sizeof(uint32_t),true,true,drawDiagram);
+      result &= CombinationKeyTest(hash, 23, blocks, sizeof(blocks) / sizeof(uint32_t), true, true, drawDiagram);
+
+      if(!result) printf("*********FAIL*********\n");
+      printf("\n");
+      fflush(NULL);
+    }
+
+    {
+      printf("[[[ Keyset 'Combination 0x800000000000000' Tests ]]]\n\n");
+      fflush(NULL);
+
+      bool result = true;
+      bool drawDiagram = false;
+
+      uint64_t blocks[] =
+      {
+        0x0000000000000000ULL,
+
+        0x8000000000000000ULL,
+      };
+
+      result &= CombinationKeyTest(hash, 23, blocks, sizeof(blocks) / sizeof(uint64_t), true, true, drawDiagram);
+
+      if(!result) printf("*********FAIL*********\n");
+      printf("\n");
+      fflush(NULL);
+    }
+
+    {
+      printf("[[[ Keyset 'Combination 0x000000000000001' Tests ]]]\n\n");
+      fflush(NULL);
+
+      bool result = true;
+      bool drawDiagram = false;
+
+      uint64_t blocks[] =
+      {
+        0x0000000000000000ULL,
+
+        0x0000000000000001ULL,
+      };
+
+      result &= CombinationKeyTest(hash, 23, blocks, sizeof(blocks) / sizeof(uint64_t), true, true, drawDiagram);
+
+      if(!result) printf("*********FAIL*********\n");
+      printf("\n");
+      fflush(NULL);
+    }
+
+    {
+      printf("[[[ Keyset 'Combination 16-bytes [0-1]' Tests ]]]\n\n");
+      fflush(NULL);
+
+      bool result = true;
+      bool drawDiagram = false;
+
+      block16 blocks[2];
+      memset(blocks, 0, sizeof(blocks));
+      blocks[0].c[0] = 1;   // presumes little endian
+
+      result &= CombinationKeyTest(hash, 23, blocks, 2, true, true, drawDiagram);
+
+      if(!result) printf("*********FAIL*********\n");
+      printf("\n");
+      fflush(NULL);
+    }
+
+    {
+      printf("[[[ Keyset 'Combination 16-bytes [0-last]' Tests ]]]\n\n");
+      fflush(NULL);
+
+      bool result = true;
+      bool drawDiagram = false;
+
+      size_t const nbElts = 2;
+      block16 blocks[nbElts];
+      memset(blocks, 0, sizeof(blocks));
+      blocks[0].c[sizeof(blocks[0].c)-1] = 0x80;   // presumes little endian
+
+      result &= CombinationKeyTest(hash, 23, blocks, nbElts, true, true, drawDiagram);
+
+      if(!result) printf("*********FAIL*********\n");
+      printf("\n");
+      fflush(NULL);
+    }
+
+    {
+      printf("[[[ Keyset 'Combination 32-bytes [0-1]' Tests ]]]\n\n");
+      fflush(NULL);
+
+      bool result = true;
+      bool drawDiagram = false;
+
+      block32 blocks[2];
+      memset(blocks, 0, sizeof(blocks));
+      blocks[0].c[0] = 1;   // presumes little endian
+
+      result &= CombinationKeyTest(hash, 23, blocks, 2, true, true, drawDiagram);
+
+      if(!result) printf("*********FAIL*********\n");
+      printf("\n");
+      fflush(NULL);
+    }
+
+    {
+      printf("[[[ Keyset 'Combination 32-bytes [0-last]' Tests ]]]\n\n");
+      fflush(NULL);
+
+      bool result = true;
+      bool drawDiagram = false;
+
+      size_t const nbElts = 2;
+      block32 blocks[nbElts];
+      memset(blocks, 0, sizeof(blocks));
+      blocks[0].c[sizeof(blocks[0].c)-1] = 0x80;   // presumes little endian
+
+      result &= CombinationKeyTest(hash, 23, blocks, nbElts, true, true, drawDiagram);
+
+      if(!result) printf("*********FAIL*********\n");
+      printf("\n");
+      fflush(NULL);
+    }
+
+    {
+      printf("[[[ Keyset 'Combination 64-bytes [0-1]' Tests ]]]\n\n");
+      fflush(NULL);
+
+      bool result = true;
+      bool drawDiagram = false;
+
+      block64 blocks[2];
+      memset(blocks, 0, sizeof(blocks));
+      blocks[0].c[0] = 1;   // presumes little endian
+
+      result &= CombinationKeyTest(hash, 23, blocks, 2, true, true, drawDiagram);
+
+      if(!result) printf("*********FAIL*********\n");
+      printf("\n");
+      fflush(NULL);
+    }
+
+    {
+      printf("[[[ Keyset 'Combination 64-bytes [0-last]' Tests ]]]\n\n");
+      fflush(NULL);
+
+      bool result = true;
+      bool drawDiagram = false;
+
+      size_t const nbElts = 2;
+      block64 blocks[nbElts];
+      memset(blocks, 0, sizeof(blocks));
+      blocks[0].c[sizeof(blocks[0].c)-1] = 0x80;   // presumes little endian
+
+      result &= CombinationKeyTest(hash, 23, blocks, nbElts, true, true, drawDiagram);
+
+      if(!result) printf("*********FAIL*********\n");
+      printf("\n");
+      fflush(NULL);
+    }
+
+    {
+      printf("[[[ Keyset 'Combination 128-bytes [0-1]' Tests ]]]\n\n");
+      fflush(NULL);
+
+      bool result = true;
+      bool drawDiagram = false;
+
+      block128 blocks[2];
+      memset(blocks, 0, sizeof(blocks));
+      blocks[0].c[0] = 1;   // presumes little endian
+
+      result &= CombinationKeyTest(hash, 23, blocks, 2, true, true, drawDiagram);
+
+      if(!result) printf("*********FAIL*********\n");
+      printf("\n");
+      fflush(NULL);
+    }
+
+    {
+      printf("[[[ Keyset 'Combination 128-bytes [0-last]' Tests ]]]\n\n");
+      fflush(NULL);
+
+      bool result = true;
+      bool drawDiagram = false;
+
+      size_t const nbElts = 2;
+      block128 blocks[nbElts];
+      memset(blocks, 0, sizeof(blocks));
+      blocks[0].c[sizeof(blocks[0].c)-1] = 0x80;   // presumes little endian
+
+      result &= CombinationKeyTest(hash, 23, blocks, nbElts, true, true, drawDiagram);
 
       if(!result) printf("*********FAIL*********\n");
       printf("\n");
@@ -662,7 +885,7 @@ void test ( hashfunc<hashtype> hash, HashInfo * info )
     bool result = true;
     bool drawDiagram = false;
 
-    result &= SeedTest<hashtype>( hash, 1000000, drawDiagram );
+    result &= SeedTest<hashtype>( hash, 5000000, drawDiagram );
 
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
@@ -680,12 +903,12 @@ HashInfo * g_hashUnderTest = NULL;
 
 void VerifyHash ( const void * key, int len, uint32_t seed, void * out )
 {
-  g_inputVCode = MurmurOAAT(key,len,g_inputVCode);
-  g_inputVCode = MurmurOAAT(&seed,sizeof(uint32_t),g_inputVCode);
+  g_inputVCode = MurmurOAAT(key, len, g_inputVCode);
+  g_inputVCode = MurmurOAAT(&seed, sizeof(uint32_t), g_inputVCode);
 
-  g_hashUnderTest->hash(key,len,seed,out);
+  g_hashUnderTest->hash(key, len, seed, out);
 
-  g_outputVCode = MurmurOAAT(out,g_hashUnderTest->hashbits/8,g_outputVCode);
+  g_outputVCode = MurmurOAAT(out, g_hashUnderTest->hashbits/8, g_outputVCode);
 }
 
 //-----------------------------------------------------------------------------
@@ -730,23 +953,22 @@ void testHash ( const char * name )
 #ifdef _MSC_VER
 static char* strndup(char const *s, size_t n)
 {
-  size_t len = strnlen(s, n);
+  size_t const len = strnlen(s, n);
   char *p = (char*) malloc(len + 1);
-
-  if (p == NULL)
-    return NULL;
-
+  if (p == NULL) return NULL;
+  memcpy(p, s, len);
   p[len] = '\0';
-  return (char*) memcpy(p, s, len);
+  return p;
 }
 #endif
 
-int main ( int argc, char ** argv )
+
+int main ( int argc, const char ** argv )
 {
 #if (defined(__x86_64__) && __SSE4_2__) || defined(_M_X64) || defined(_X86_64_)
-  const char * defaulthash = "t1ha2_atonce"; /* "murmur3a"; */
+  const char * defaulthash = "xxh3"; /* "murmur3a"; */
 #else
-  const char * defaulthash = "t1ha0_32le";
+  const char * defaulthash = "murmur3a";
 #endif
   const char * hashToTest = defaulthash;
 
@@ -803,7 +1025,7 @@ int main ( int argc, char ** argv )
 
   // Code runs on the 3rd CPU by default
   //SetAffinity((1 << 2));
-  SelfTest();
+  //SelfTest();
 
   int timeBegin = clock();
 
@@ -813,8 +1035,8 @@ int main ( int argc, char ** argv )
 
   printf("\n");
   fflush(NULL);
-  printf("Input vcode 0x%08x, Output vcode 0x%08x, Result vcode 0x%08x\n",g_inputVCode,g_outputVCode,g_resultVCode);
-  printf("Verification value is 0x%08x - Testing took %f seconds\n",g_verify,double(timeEnd-timeBegin)/double(CLOCKS_PER_SEC));
+  printf("Input vcode 0x%08x, Output vcode 0x%08x, Result vcode 0x%08x\n", g_inputVCode, g_outputVCode, g_resultVCode);
+  printf("Verification value is 0x%08x - Testing took %f seconds\n", g_verify, double(timeEnd-timeBegin)/double(CLOCKS_PER_SEC));
   printf("-------------------------------------------------------------------------------\n");
   fflush(NULL);
   return 0;

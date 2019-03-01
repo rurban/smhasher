@@ -75,7 +75,7 @@ public:
     return m_hash;
   }
 
-  inline T operator () ( const void * key, const int len, const uint32_t seed ) 
+  inline T operator () ( const void * key, const int len, const uint32_t seed )
   {
     T result;
 
@@ -114,6 +114,8 @@ struct KeyCallback
 
 //----------
 
+static void printKey(const void* key, size_t len);
+
 template<typename hashtype>
 struct HashCallback : public KeyCallback
 {
@@ -127,10 +129,17 @@ struct HashCallback : public KeyCallback
   virtual void operator () ( const void * key, int len )
   {
     size_t newsize = m_hashes.size() + 1;
-    
+
     m_hashes.resize(newsize);
 
-    m_pfHash(key,len,0,&m_hashes.back());
+    hashtype h;
+    m_pfHash(key, len, 0, &h);
+    m_hashes.back() = h;
+#if 0  // debug : display specific keys
+    unsigned uh; memcpy(&uh,&h,sizeof(uh));
+    if (uh == 0x1CE514E4) printKey(key, len);
+    if (uh == 0x1926156A) printKey(key, len);
+#endif
   }
 
   virtual void reserve ( int keycount )
@@ -156,8 +165,8 @@ struct CollisionCallback : public KeyCallback
   typedef HashSet<hashtype> hashset;
   typedef CollisionMap<hashtype,ByteVec> collmap;
 
-  CollisionCallback ( pfHash hash, hashset & collisions, collmap & cmap ) 
-  : m_pfHash(hash), 
+  CollisionCallback ( pfHash hash, hashset & collisions, collmap & cmap )
+  : m_pfHash(hash),
     m_collisions(collisions),
     m_collmap(cmap)
   {
@@ -168,7 +177,7 @@ struct CollisionCallback : public KeyCallback
     hashtype h;
 
     m_pfHash(key,len,0,&h);
-    
+
     if(m_collisions.count(h))
     {
       m_collmap[h].push_back( ByteVec(key,len) );
@@ -264,7 +273,7 @@ public:
 
   //----------
   // boolean operations
-  
+
   bool operator < ( const Blob & k ) const
   {
     for(size_t i = 0; i < sizeof(bytes); i++)
@@ -294,7 +303,7 @@ public:
   //----------
   // bitwise operations
 
-  Blob operator ^ ( const Blob & k ) const 
+  Blob operator ^ ( const Blob & k ) const
   {
     Blob t;
 
@@ -362,7 +371,7 @@ public:
   }
 
   //----------
-  
+
 private:
 
   uint8_t bytes[(_bits+7)/8];

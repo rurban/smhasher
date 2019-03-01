@@ -6,6 +6,7 @@
 #include "MurmurHash2.h"
 #include "MurmurHash3.h"
 
+#define XXH_INLINE_ALL
 #include "xxhash.h"
 #include "metrohash.h"
 #include "cmetrohash.h"
@@ -134,12 +135,32 @@ inline void jodyhash64_test( const void * key, int len, uint32_t seed, void * ou
   *(uint64_t*)out = jody_block_hash((const jodyhash_t *)key, (jodyhash_t) seed, (size_t) len);
 }
 
+
 inline void xxHash32_test( const void * key, int len, uint32_t seed, void * out ) {
   *(uint32_t*)out = (uint32_t) XXH32(key, (size_t) len, (unsigned) seed);
 }
 inline void xxHash64_test( const void * key, int len, uint32_t seed, void * out ) {
   *(uint64_t*)out = (uint64_t) XXH64(key, (size_t) len, (unsigned long long) seed);
 }
+
+#define restrict // oddly enough, seems to choke on this keyword
+#include "xxh3.h"
+
+inline void xxh3_test( const void * key, int len, uint32_t seed, void * out ) {
+  (void)seed;
+  *(uint64_t*)out = (uint64_t) XXH3_64b(key, (size_t) len);
+}
+
+inline void xxh3low_test( const void * key, int len, uint32_t seed, void * out ) {
+  (void)seed;
+  *(uint32_t*)out = (uint32_t) XXH3_64b(key, (size_t) len);
+}
+
+inline void xxh3high_test( const void * key, int len, uint32_t seed, void * out ) {
+  (void)seed;
+  *(uint32_t*)out = (uint32_t) (XXH3_64b(key, (size_t) len) >> 32);
+}
+
 
 inline void metrohash64_1_test ( const void * key, int len, uint32_t seed, void * out ) {
   metrohash64_1((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);

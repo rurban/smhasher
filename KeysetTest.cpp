@@ -71,7 +71,7 @@ bool VerificationTest ( pfHash hash, const int hashbits, uint32_t expected, bool
 bool SanityTest ( pfHash hash, const int hashbits )
 {
   printf("Running sanity check 1    ");
-  
+
   Rand r(883741);
 
   bool result = true;
@@ -81,7 +81,7 @@ bool SanityTest ( pfHash hash, const int hashbits )
   const int keymax = 256;
   const int pad = 16;
   const int buflen = keymax + pad*3;
-  
+
   uint8_t * buffer1 = new uint8_t[buflen];
   uint8_t * buffer2 = new uint8_t[buflen];
 
@@ -89,7 +89,7 @@ bool SanityTest ( pfHash hash, const int hashbits )
   uint8_t * hash2 = new uint8_t[hashbytes];
 
   //----------
-  
+
   for(int irep = 0; irep < reps; irep++)
   {
     if(irep % (reps/10) == 0) printf(".");
@@ -159,7 +159,7 @@ bool SanityTest ( pfHash hash, const int hashbits )
 void AppendedZeroesTest ( pfHash hash, const int hashbits )
 {
   printf("Running AppendedZeroesTest");
-  
+
   Rand r(173994);
 
   const int hashbytes = hashbits/8;
@@ -213,7 +213,7 @@ void TwoBytesKeygen ( int maxlen, KeyCallback & c )
 
   for(int i = 2; i <= maxlen; i++) keycount += i*255;
 
-  printf("Keyset 'TwoBytes' - up-to-%d-byte keys, %d total keys\n",maxlen, keycount);
+  printf("Keyset 'TwoBytes' - up-to-%d-byte keys, %d total keys\n", maxlen, keycount);
 
   c.reserve(keycount);
 

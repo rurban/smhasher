@@ -13,4 +13,5 @@ Linux)   CXX=g++ CC=gcc cmake .. ;;
 *)       CXX=clang++-4.0  CC=clang-4.0 cmake ..   ;;
 esac
 make -j4 $@
+cp SMHasher ..
 cd ..

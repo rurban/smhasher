@@ -39,7 +39,7 @@ inline uint32_t f3mix ( uint32_t k )
 // the first N collisions for further processing
 
 template< typename hashtype >
-int FindCollisions ( std::vector<hashtype> & hashes, 
+int FindCollisions ( std::vector<hashtype> & hashes,
                      HashSet<hashtype> & collisions,
                      int maxCollisions )
 {
@@ -47,15 +47,16 @@ int FindCollisions ( std::vector<hashtype> & hashes,
 
   std::sort(hashes.begin(),hashes.end());
 
-  for(size_t i = 1; i < hashes.size(); i++)
+  for(size_t hnb = 1; hnb < hashes.size(); hnb++)
   {
-    if(hashes[i] == hashes[i-1])
+    if(hashes[hnb] == hashes[hnb-1])
     {
+      //unsigned uh; memcpy(&uh, &hashes[hnb], sizeof(uh)); printf("collision found : 0x%08X \n", uh);
       collcount++;
 
       if((int)collisions.size() < maxCollisions)
       {
-        collisions.insert(hashes[i]);
+        collisions.insert(hashes[hnb]);
       }
     }
   }
@@ -224,11 +225,12 @@ bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & coll
     else
     {
       // For all hashes larger than 32 bits, _any_ collisions are a failure.
-      
+
       if(collcount > 0)
       {
         printf(" !!!!! ");
         result = false;
+        //PrintCollisions(hashes, collisions);
       }
     }
 
@@ -290,7 +292,7 @@ bool TestKeyList ( hashfunc<hashtype> hash, std::vector<keytype> & keys, bool te
 // Bytepair test - generate 16-bit indices from all possible non-overlapping
 // 8-bit sections of the hash value, check distribution on all of them.
 
-// This is a very good test for catching weak intercorrelations between bits - 
+// This is a very good test for catching weak intercorrelations between bits -
 // much harder to pass than the normal distribution test. However, it doesn't
 // really model the normal usage of hash functions in hash table lookup, so
 // I'm not sure it's that useful (and hash functions that fail this test but
@@ -301,7 +303,7 @@ double TestDistributionBytepairs ( std::vector<hashtype> & hashes, bool drawDiag
 {
   const int nbytes = sizeof(hashtype);
   const int hashbits = nbytes * 8;
-  
+
   const int nbins = 65536;
 
   std::vector<int> bins(nbins,0);
@@ -355,7 +357,7 @@ void TestDistributionFast ( std::vector<hashtype> & hashes, double & dworst, dou
 {
   const int hashbits = sizeof(hashtype) * 8;
   const int nbins = 65536;
-  
+
   std::vector<int> bins(nbins,0);
 
   dworst = -1.0e90;
@@ -376,7 +378,7 @@ void TestDistributionFast ( std::vector<hashtype> & hashes, double & dworst, dou
     }
 
     double n = calcScore(&bins.front(),(int)bins.size(),(int)hashes.size());
-    
+
     davg += n;
 
     if(n > dworst) dworst = n;

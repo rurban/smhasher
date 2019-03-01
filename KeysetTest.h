@@ -24,21 +24,51 @@ void AppendedZeroesTest ( pfHash hash, const int hashbits );
 //-----------------------------------------------------------------------------
 // Keyset 'Combination' - all possible combinations of input blocks
 
-template< typename hashtype >
-void CombinationKeygenRecurse ( uint32_t * key, int len, int maxlen, 
-                  uint32_t * blocks, int blockcount, 
-                pfHash hash, std::vector<hashtype> & hashes )
+static void printKey(const void* key, size_t len)
 {
-  if(len == maxlen) return;
+    const unsigned char* const p = (const unsigned char*)key;
+    size_t s;
+    printf("\n0x");
+    for (s=0; s<len; s++) printf("%02X", p[s]);
+    printf("\n  ");
+    for (s=0; s<len; s+=8) printf("%-16zu", s);
+}
+
+template< typename hashtype, class blocktype >
+void CombinationKeygenRecurse ( blocktype * key, int len, int maxlen,
+                  blocktype * blocks, int blockcount,
+                  pfHash hash, std::vector<hashtype> & hashes )
+{
+  if(len == maxlen) return;  // end recursion
 
   for(int i = 0; i < blockcount; i++)
   {
     key[len] = blocks[i];
-  
+
     //if(len == maxlen-1)
     {
       hashtype h;
-      hash(key,(len+1) * sizeof(uint32_t),0,&h);
+      hash(key, (len+1) * sizeof(blocktype), 0, &h);
+#if 0
+
+      unsigned uh; memcpy(&uh, &h, sizeof(uh));;
+      if (uh == 0x7B1F1626) {
+          printf("hash value == 0x%08X for : ", 0x7B1F1626);
+          printKey(key, (len+1) * sizeof(blocktype));
+      }
+
+#elif 0
+      if (std::find(hashes.begin(), hashes.end(), h) != hashes.end()) {
+         printf("collision found (len=%2zu): ", (len+1) * sizeof(blocktype));
+         printKey(key, (len+1) * sizeof(blocktype));
+#  if 1
+         unsigned uh;
+         memcpy(&uh, &h, sizeof(uh));
+         printf(" ===> %08X", uh);
+#  endif
+         printf(" \n");
+       }
+#endif
       hashes.push_back(h);
     }
 
@@ -49,8 +79,13 @@ void CombinationKeygenRecurse ( uint32_t * key, int len, int maxlen,
   }
 }
 
-template< typename hashtype >
-bool CombinationKeyTest ( hashfunc<hashtype> hash, int maxlen, uint32_t * blocks, int blockcount, bool testColl, bool testDist, bool drawDiagram )
+typedef struct { char c[16]; } block16;
+typedef struct { char c[32]; } block32;
+typedef struct { char c[64]; } block64;
+typedef struct { char c[128]; } block128;
+
+template< typename hashtype, typename blocktype >
+bool CombinationKeyTest ( hashfunc<hashtype> hash, int maxlen, blocktype* blocks, int blockcount, bool testColl, bool testDist, bool drawDiagram )
 {
   printf("Keyset 'Combination' - up to %d blocks from a set of %d - ",maxlen,blockcount);
 
@@ -58,9 +93,9 @@ bool CombinationKeyTest ( hashfunc<hashtype> hash, int maxlen, uint32_t * blocks
 
   std::vector<hashtype> hashes;
 
-  uint32_t * key = new uint32_t[maxlen];
+  blocktype * key = new blocktype[maxlen];
 
-  CombinationKeygenRecurse<hashtype>(key,0,maxlen,blocks,blockcount,hash,hashes);
+  CombinationKeygenRecurse(key,0,maxlen,blocks,blockcount,hash,hashes);
 
   delete [] key;
 
@@ -70,12 +105,14 @@ bool CombinationKeyTest ( hashfunc<hashtype> hash, int maxlen, uint32_t * blocks
 
   bool result = true;
 
-  result &= TestHashList<hashtype>(hashes,testColl,testDist,drawDiagram);
-  
+  result &= TestHashList(hashes,testColl,testDist,drawDiagram);
+
   printf("\n");
 
   return result;
 }
+
+
 
 //----------------------------------------------------------------------------
 // Keyset 'Permutation' - given a set of 32-bit blocks, generate keys
@@ -123,7 +160,7 @@ bool PermutationKeyTest ( hashfunc<hashtype> hash, uint32_t * blocks, int blockc
   bool result = true;
 
   result &= TestHashList<hashtype>(hashes,testColl,testDist,drawDiagram);
-  
+
   printf("\n");
 
   return result;
@@ -131,6 +168,20 @@ bool PermutationKeyTest ( hashfunc<hashtype> hash, uint32_t * blocks, int blockc
 
 //-----------------------------------------------------------------------------
 // Keyset 'Sparse' - generate all possible N-bit keys with up to K bits set
+
+static void printSparseKey(const void* buffer, size_t size)
+{
+    const char* const p = (const char*)buffer;
+    size_t s;
+    printf("bits:");
+    for (s=0; s<size; s++) {
+        int b;
+        for (b=0; b<8; b++) {
+            if ((p[s] >> b) & 1)
+                printf(" %2u.%2i,", (unsigned)s, b);
+        }
+    }
+}
 
 template < typename keytype, typename hashtype >
 void SparseKeygenRecurse ( pfHash hash, int start, int bitsleft, bool inclusive, keytype & k, std::vector<hashtype> & hashes )
@@ -142,20 +193,39 @@ void SparseKeygenRecurse ( pfHash hash, int start, int bitsleft, bool inclusive,
 
   for(int i = start; i < nbits; i++)
   {
-    flipbit(&k,nbytes,i);
+    flipbit(&k, nbytes, i);
 
     if(inclusive || (bitsleft == 1))
     {
-      hash(&k,sizeof(keytype),0,&h);
+      hash(&k, sizeof(keytype), 0, &h);
+#if 0
+    if (std::find(hashes.begin(), hashes.end(), h) != hashes.end()) {
+       printf("collision found (len=%2zu): ", sizeof(keytype));
+       printSparseKey(&k, sizeof(keytype));
+    #  if 1
+       unsigned uh;
+       memcpy(&uh, &h, sizeof(uh));
+       printf(" ===> %08X", uh);
+    #  endif
+       printf(" \n");
+     }
+#elif 0
+      unsigned uh; memcpy(&uh, &h, sizeof(uh));
+      if ( uh == 0x52A0D13C
+         ) {
+         printf("\nh:0x%08X ==> ", uh);
+         printSparseKey(&k, sizeof(keytype));
+      }
+#endif
       hashes.push_back(h);
     }
 
     if(bitsleft > 1)
     {
-      SparseKeygenRecurse(hash,i+1,bitsleft-1,inclusive,k,hashes);
+      SparseKeygenRecurse(hash, i+1, bitsleft-1, inclusive, k, hashes);
     }
 
-    flipbit(&k,nbytes,i);
+    flipbit(&k, nbytes, i);
   }
 }
 
@@ -187,7 +257,7 @@ bool SparseKeyTest ( hashfunc<hashtype> hash, const int setbits, bool inclusive,
   printf("%d keys\n",(int)hashes.size());
 
   bool result = true;
-  
+
   result &= TestHashList<hashtype>(hashes,testColl,testDist,drawDiagram);
 
   printf("\n");
@@ -278,7 +348,7 @@ bool CyclicKeyTest ( pfHash hash, int cycleLen, int cycleReps, const int keycoun
   }
 
   //----------
-  
+
   bool result = true;
 
   result &= TestHashList(hashes,true,true,drawDiagram);
@@ -328,7 +398,7 @@ bool TextKeyTest ( hashfunc<hashtype> hash, const char * prefix, const char * co
   const int keycount = (int)pow(double(corecount),double(corelen));
 
   printf("Keyset 'Text' - keys of form \"%s[",prefix);
-  for(int i = 0; i < corelen; i++) printf("X");		
+  for(int i = 0; i < corelen; i++) printf("X");
   printf("]%s\" - %d keys\n",suffix,keycount);
 
   uint8_t * key = new uint8_t[keybytes+1];
@@ -376,7 +446,7 @@ bool TextKeyTest ( hashfunc<hashtype> hash, const char * prefix, const char * co
 template < typename hashtype >
 bool ZeroKeyTest ( pfHash hash, bool drawDiagram )
 {
-  int keycount = 64*1024;
+  int keycount = 200*1024;
 
   printf("Keyset 'Zeroes' - %d keys\n",keycount);
 

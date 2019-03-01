@@ -97,7 +97,7 @@ static uint64_t _mum_unroll_prime = 0x7b51ec3d22f7096fULL;
 static uint64_t _mum_tail_prime = 0xaf47d47c99b1461bULL;
 static uint64_t _mum_finish_prime1 = 0xa9a7ae7ceff79f3fULL;
 static uint64_t _mum_finish_prime2 = 0xaf47d47c99b1461bULL;
-  
+
 static uint64_t _mum_primes [] = {
   0X9ebdcae10d981691, 0X32b9b9b97a27ac7d, 0X29b5584d83d35bbd, 0X4b04e0e61401255f,
   0X25e8f7b1f1c9d027, 0X80d4c8c000f3e881, 0Xbd1255431904b9dd, 0X8a3bd4485eee6d81,
@@ -133,7 +133,7 @@ _mum (uint64_t v, uint64_t p) {
   uint64_t rm_1 = hp * lv;
   uint64_t rl =  lv * lp;
   uint64_t t, carry = 0;
-  
+
   /* We could ignore a carry bit here if we did not care about the
      same hash for 32-bit and 64-bit targets.  */
   t = rl + (rm_0 << 32);
@@ -223,7 +223,7 @@ _mum_hash_aligned (uint64_t start, const void *key, size_t len) {
   uint64_t u64;
   size_t i;
   size_t n;
-  
+
   result = _mum (result, _mum_block_start_prime);
   while  (len > _MUM_UNROLL_FACTOR * sizeof (uint64_t)) {
     /* This loop could be vectorized when we have vector insns for
@@ -320,14 +320,14 @@ _mum_hash_avx2 (const void * key, size_t len, uint64_t seed) {
 
 static inline uint64_t
 #if defined(__x86_64__)
-_MUM_TARGET("inline-all-stringops")
+//_MUM_TARGET("inline-all-stringops")
 #endif
 _mum_hash_default (const void *key, size_t len, uint64_t seed) {
   uint64_t result;
   const unsigned char *str = (const unsigned char *) key;
   size_t block_len;
   uint64_t buf[_MUM_BLOCK_LEN / sizeof (uint64_t)];
-  
+
   result = seed + len;
   if (_MUM_UNALIGNED_ACCESS || ((size_t) str & 0x7) == 0)
     result = _mum_hash_aligned (result, key, len);
@@ -347,7 +347,7 @@ static inline uint64_t
 _mum_next_factor (void) {
   uint64_t start = 0;
   int i;
-  
+
   for (i = 0; i < 8; i++)
     start = (start << 8) | rand() % 256;
   return start;
