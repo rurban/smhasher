@@ -217,9 +217,9 @@ _mum_le32 (uint32_t v) {
 #define _MUM_UNROLL_FACTOR (1 << _MUM_UNROLL_FACTOR_POWER)
 
 static inline uint64_t _MUM_OPTIMIZE("unroll-loops")
-_mum_hash_aligned (uint64_t start, const void *key, size_t len) {
+_mum_hash_aligned (uint64_t start, const void* key, size_t len) {
   uint64_t result = start;
-  const unsigned char *str = (const unsigned char *) key;
+  const unsigned char* str = (const unsigned char*) key;
   uint64_t u64;
   size_t i;
   size_t n;
@@ -228,7 +228,7 @@ _mum_hash_aligned (uint64_t start, const void *key, size_t len) {
   while  (len > _MUM_UNROLL_FACTOR * sizeof (uint64_t)) {
     /* This loop could be vectorized when we have vector insns for
        64x64->128-bit multiplication.  AVX2 currently only have a
-       vector insn for 4 32x32->64-bit multiplication.  */
+       vector insn for 4 32x32->64-bit multiplication. */
     for (i = 0; i < _MUM_UNROLL_FACTOR; i++)
       result ^= _mum (_mum_le (((uint64_t *) str)[i]), _mum_primes[i]);
     len -= _MUM_UNROLL_FACTOR * sizeof (uint64_t);

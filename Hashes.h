@@ -77,6 +77,7 @@ void Crap8_test            ( const void * key, int len, uint32_t seed, void * ou
 
 void CityHash32_test       ( const void * key, int len, uint32_t seed, void * out );
 void CityHash64_test       ( const void * key, int len, uint32_t seed, void * out );
+void CityHash64noSeed_test ( const void * key, int len, uint32_t seed, void * out );
 void CityHash128_test      ( const void * key, int len, uint32_t seed, void * out );
 void FarmHash32_test       ( const void * key, int len, uint32_t seed, void * out );
 void FarmHash64_test       ( const void * key, int len, uint32_t seed, void * out );
@@ -204,7 +205,20 @@ inline void fasthash64_test ( const void * key, int len, uint32_t seed, void * o
   *(uint64_t*)out = fasthash64(key, (size_t) len, (uint64_t)seed);
 }
 
+
 void mum_hash_test(const void * key, int len, uint32_t seed, void * out);
+
+inline void mum_low_test ( const void * key, int len, uint32_t seed, void * out ) {
+  uint64_t result;
+  mum_hash_test(key, len, seed, &result);
+  *(uint32_t*)out = (uint32_t)result;
+}
+inline void mum_high_test ( const void * key, int len, uint32_t seed, void * out ) {
+  uint64_t result;
+  mum_hash_test(key, len, seed, &result);
+  *(uint32_t*)out = (uint32_t)(result>>32);
+}
+
 
 //-----------------------------------------------------------------------------
 

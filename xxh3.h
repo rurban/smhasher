@@ -160,28 +160,7 @@ static U64 XXH3_len_17to32_64b(const void* data, size_t len)
 }
 
 
-static U64 XXH3_len_33to64_64b(const void* data, size_t len)
-{
-    assert(data != NULL);
-    assert(len > 33 && len <= 64);
-
-    {   const BYTE* const p = (const BYTE*)data;
-
-        U64 const mul = PRIME64_2 + len * 2;   /* keep it odd */
-
-        U64 const ll1 = XXH_read64(p);
-        U64 const ll2 = XXH_read64(p + 8);
-        U64 const ll3 = XXH_read64(p + 16);
-        U64 const ll4 = XXH_read64(p + 24);
-        U64 const ll5 = XXH_read64(p + len - 32);
-        U64 const ll6 = XXH_read64(p + len - 24);
-        U64 const ll7 = XXH_read64(p + len - 16);
-        U64 const ll8 = XXH_read64(p + len - 8);
-
-        return XXH3_finalMerge_8u64(ll1, ll2, ll3, ll4, ll5, ll6, ll7, ll8, mul);
-    }
-}
-
+static U64 XXH3_len_33to64_64b(const void* data, size_t len);
 
 static U64 XXH3_len_65to96_64b(const void* data, size_t len)
 {
@@ -237,6 +216,53 @@ ALIGN(64) static const U32 kKey[KEYSET_DEFAULT_SIZE] = {
 };
 
 #define ACC_NB (STRIPE_LEN / sizeof(U64))
+
+static U64 XXH64_avalanche2(U64 h64)
+{
+    //h64 ^= h64 >> 33;
+    //h64 *= PRIME64_2;
+    h64 ^= h64 >> 29;
+    h64 *= PRIME64_3;
+    h64 ^= h64 >> 32;
+    return h64;
+}
+
+static U64 XXH3_len_33to64_64b(const void* data, size_t len)
+{
+    assert(data != NULL);
+    assert(len > 33 && len <= 64);
+
+    {   const BYTE* const p = (const BYTE*)data;
+
+        U64 const ll1 = XXH_read64(p);
+        U64 const ll2 = XXH_read64(p + 8);
+        U64 const ll3 = XXH_read64(p + 16);
+        U64 const ll4 = XXH_read64(p + 24);
+        U64 const ll5 = XXH_read64(p + len - 32);
+        U64 const ll6 = XXH_read64(p + len - 24);
+        U64 const ll7 = XXH_read64(p + len - 16);
+        U64 const ll8 = XXH_read64(p + len - 8);
+
+#if 0
+        const U64* const key = (const U64*)(const void*)kKey;
+        __uint128_t acc = PRIME64_1 * len;
+
+        acc ^= (__uint128_t)ll1 * key[0]; //printf("key0 = %016llx \n", (unsigned long long)(key[0]));
+        acc ^= (__uint128_t)ll2 * key[1]; //printf("key1 = %016llx \n", (unsigned long long)(key[1]));
+        acc ^= (__uint128_t)ll3 * key[2];
+        acc ^= (__uint128_t)ll4 * key[3];
+        acc ^= (__uint128_t)ll5 * key[4];
+        acc ^= (__uint128_t)ll6 * key[5];
+        acc ^= (__uint128_t)ll7 * key[6];
+        acc ^= (__uint128_t)ll8 * key[7];
+
+        return XXH64_avalanche2((U64)(acc + (acc>>64)));
+#else
+        U64 const mul = PRIME64_2 + len * 2;   /* keep it odd */
+        return XXH3_finalMerge_8u64(ll1, ll2, ll3, ll4, ll5, ll6, ll7, ll8, mul);
+#endif
+    }
+}
 
 XXH_FORCE_INLINE void
 XXH3_accumulate_512(void* acc, const void *restrict data, const void *restrict key)

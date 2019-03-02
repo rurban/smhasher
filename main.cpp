@@ -164,8 +164,12 @@ HashInfo g_hashes[] =
  #define MUM_SEED             0xA973C6C0
 #endif
   { mum_hash_test,        64, MUM_SEED,   "MUM",         "github.com/vnmakarov/mum-hash" },
+  { mum_low_test,         32, MUM_SEED,   "MUMlow",      "github.com/vnmakarov/mum-hash" },
+  { mum_high_test,        32, MUM_SEED,   "MUMhigh",     "github.com/vnmakarov/mum-hash" },
+
   { CityHash32_test,      32, 0x5C28AD62, "City32",      "Google CityHash32WithSeed (old)" },
   { CityHash64_test,      64, 0x25A20825, "City64",      "Google CityHash64WithSeed (old)" },
+  { CityHash64noSeed_test,64, 0x63FC6063, "City64noSeed","Google CityHash64 without seed (default version, misses one final avalanche)" },
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { CityHash128_test,    128, 0x6531F54E, "City128",     "Google CityHash128WithSeed (old)" },
   { CityHashCrc128_test, 128, 0xD4389C97, "CityCrc128",  "Google CityHashCrc128WithSeed SSE4.2 (old)" },
@@ -183,6 +187,7 @@ HashInfo g_hashes[] =
   { farmhash64_c_test,    64, FARM64_SEED, "farmhash64_c",  "farmhash64_with_seed (C99)" },
   { farmhash128_c_test,  128, FARM128_SEED,"farmhash128_c", "farmhash128_with_seed (C99)" },
 #endif
+
   { xxHash32_test,        32, 0xBA88B743, "xxHash32",    "xxHash, 32-bit for x64" },
   { xxHash64_test,        64, 0x024B7CF4, "xxHash64",    "xxHash, 64-bit" },
   { xxh3_test,            64, 0xECA5AAE7, "xxh3",        "xxHash v3, 64-bit" },
@@ -191,6 +196,7 @@ HashInfo g_hashes[] =
 #if 0
   { xxhash256_test,       64, 0x024B7CF4, "xxhash256",   "xxhash256, 64-bit unportable" },
 #endif
+
   { SpookyHash32_test,    32, 0x3F798BBB, "Spooky32",    "Bob Jenkins' SpookyHash, 32-bit result" },
   { SpookyHash64_test,    64, 0xA7F955F1, "Spooky64",    "Bob Jenkins' SpookyHash, 64-bit result" },
   { SpookyHash128_test,  128, 0x8D263080, "Spooky128",   "Bob Jenkins' SpookyHash, 128-bit result" },
@@ -322,26 +328,6 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   }
 
   //-----------------------------------------------------------------------------
-  // Differential tests
-
-  if(g_testDiff || g_testAll)
-  {
-    printf("[[[ Differential Tests ]]]\n\n");
-    fflush(NULL);
-
-    bool result = true;
-    bool dumpCollisions = false;
-
-    result &= DiffTest< Blob<64>,  hashtype >(hash,5,100,dumpCollisions);
-    result &= DiffTest< Blob<128>, hashtype >(hash,4,100,dumpCollisions);
-    result &= DiffTest< Blob<256>, hashtype >(hash,3,100,dumpCollisions);
-
-    if(!result) printf("*********FAIL*********\n");
-    printf("\n");
-    fflush(NULL);
-  }
-
-  //-----------------------------------------------------------------------------
   // Differential-distribution tests
 
   if(g_testDiffDist /*|| g_testAll*/)
@@ -371,26 +357,31 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     result &= AvalancheTest< Blob< 40>, hashtype > (hash,300000);
     result &= AvalancheTest< Blob< 48>, hashtype > (hash,300000);
     result &= AvalancheTest< Blob< 56>, hashtype > (hash,300000);
-
     result &= AvalancheTest< Blob< 64>, hashtype > (hash,300000);
     result &= AvalancheTest< Blob< 72>, hashtype > (hash,300000);
     result &= AvalancheTest< Blob< 80>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob< 88>, hashtype > (hash,300000);
 
     result &= AvalancheTest< Blob< 96>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob<104>, hashtype > (hash,300000);
     result &= AvalancheTest< Blob<112>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob<120>, hashtype > (hash,300000);
-
     result &= AvalancheTest< Blob<128>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob<136>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob<144>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob<152>, hashtype > (hash,300000);
 
     result &= AvalancheTest< Blob<160>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob<168>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob<176>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob<184>, hashtype > (hash,300000);
+    result &= AvalancheTest< Blob<192>, hashtype > (hash,300000);
+    result &= AvalancheTest< Blob<224>, hashtype > (hash,300000);
+    result &= AvalancheTest< Blob<256>, hashtype > (hash,300000);
+
+    result &= AvalancheTest< Blob<320>, hashtype > (hash,300000);
+    result &= AvalancheTest< Blob<384>, hashtype > (hash,300000);
+    result &= AvalancheTest< Blob<448>, hashtype > (hash,300000);
+    result &= AvalancheTest< Blob<512>, hashtype > (hash,300000);
+
+    result &= AvalancheTest< Blob<640>, hashtype > (hash,300000);
+    result &= AvalancheTest< Blob<768>, hashtype > (hash,300000);
+    result &= AvalancheTest< Blob<896>, hashtype > (hash,300000);
+    result &= AvalancheTest< Blob<1024>,hashtype > (hash,300000);
+
+    result &= AvalancheTest< Blob<1280>,hashtype > (hash,300000);
+    result &= AvalancheTest< Blob<1536>,hashtype > (hash,300000);
 
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
@@ -891,6 +882,28 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("\n");
     fflush(NULL);
   }
+
+  //-----------------------------------------------------------------------------
+  // Differential tests
+
+  if(g_testDiff || g_testAll)
+  {
+    printf("[[[ Differential Tests ]]]\n\n");
+    fflush(NULL);
+
+    bool result = true;
+    bool dumpCollisions = false;
+
+    result &= DiffTest< Blob<64>,  hashtype >(hash,5,1000,dumpCollisions);
+    result &= DiffTest< Blob<128>, hashtype >(hash,4,1000,dumpCollisions);
+    result &= DiffTest< Blob<256>, hashtype >(hash,3,1000,dumpCollisions);
+
+    if(!result) printf("*********FAIL*********\n");
+    printf("\n");
+    fflush(NULL);
+  }
+
+
 }
 
 //-----------------------------------------------------------------------------
