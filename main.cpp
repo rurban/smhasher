@@ -332,22 +332,6 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   }
 
   //-----------------------------------------------------------------------------
-  // Differential-distribution tests
-
-  if(g_testDiffDist /*|| g_testAll*/)
-  {
-    printf("[[[ Differential Distribution Tests ]]]\n\n");
-    fflush(NULL);
-
-    bool result = true;
-
-    result &= DiffDistTest2<uint64_t,hashtype>(hash);
-
-    printf("\n");
-    fflush(NULL);
-  }
-
-  //-----------------------------------------------------------------------------
   // Avalanche tests
 
   if(g_testAvalanche || g_testAll)
@@ -386,74 +370,6 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
     result &= AvalancheTest< Blob<1280>,hashtype > (hash,300000);
     result &= AvalancheTest< Blob<1536>,hashtype > (hash,300000);
-
-    if(!result) printf("*********FAIL*********\n");
-    printf("\n");
-    fflush(NULL);
-  }
-
-  //-----------------------------------------------------------------------------
-  // Bit Independence Criteria. Interesting, but doesn't tell us much about
-  // collision or distribution.
-
-  if(g_testBIC)
-  {
-    printf("[[[ Bit Independence Criteria ]]]\n\n");
-    fflush(NULL);
-
-    bool result = true;
-
-    //result &= BicTest<uint64_t,hashtype>(hash,2000000);
-    BicTest3<Blob<88>,hashtype>(hash,2000000);
-
-    if(!result) printf("*********FAIL*********\n");
-    printf("\n");
-    fflush(NULL);
-  }
-
-  //-----------------------------------------------------------------------------
-  // Keyset 'Cyclic' - keys of the form "abcdabcdabcd..."
-
-  if(g_testCyclic || g_testAll)
-  {
-    printf("[[[ Keyset 'Cyclic' Tests ]]]\n\n");
-    fflush(NULL);
-
-    bool result = true;
-    bool drawDiagram = false;
-
-#if 0
-    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+0,8,100000,drawDiagram);
-#else
-    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+0,8,10000000,drawDiagram);
-    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+1,8,10000000,drawDiagram);
-    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+2,8,10000000,drawDiagram);
-    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+3,8,10000000,drawDiagram);
-    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+4,8,10000000,drawDiagram);
-    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+8,8,10000000,drawDiagram);
-#endif
-    if(!result) printf("*********FAIL*********\n");
-    printf("\n");
-    fflush(NULL);
-  }
-
-  //-----------------------------------------------------------------------------
-  // Keyset 'TwoBytes' - all keys up to N bytes containing two non-zero bytes
-
-  // This generates some huge keysets, 128-bit tests will take ~1.3 gigs of RAM.
-
-  if(g_testTwoBytes || g_testAll)
-  {
-    printf("[[[ Keyset 'TwoBytes' Tests ]]]\n\n");
-    fflush(NULL);
-
-    bool result = true;
-    bool drawDiagram = false;
-
-    for(int i = 4; i <= 24; i += 4)
-    {
-      result &= TwoBytesTest2<hashtype>(hash,i,drawDiagram);
-    }
 
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
@@ -833,6 +749,55 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   }
 
   //-----------------------------------------------------------------------------
+  // Keyset 'Cyclic' - keys of the form "abcdabcdabcd..."
+
+  if(g_testCyclic || g_testAll)
+  {
+    printf("[[[ Keyset 'Cyclic' Tests ]]]\n\n");
+    fflush(NULL);
+
+    bool result = true;
+    bool drawDiagram = false;
+
+#if 0
+    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+0,8,100000,drawDiagram);
+#else
+    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+0,8,10000000,drawDiagram);
+    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+1,8,10000000,drawDiagram);
+    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+2,8,10000000,drawDiagram);
+    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+3,8,10000000,drawDiagram);
+    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+4,8,10000000,drawDiagram);
+    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+8,8,10000000,drawDiagram);
+#endif
+    if(!result) printf("*********FAIL*********\n");
+    printf("\n");
+    fflush(NULL);
+  }
+
+  //-----------------------------------------------------------------------------
+  // Keyset 'TwoBytes' - all keys up to N bytes containing two non-zero bytes
+
+  // This generates some huge keysets, 128-bit tests will take ~1.3 gigs of RAM.
+
+  if(g_testTwoBytes || g_testAll)
+  {
+    printf("[[[ Keyset 'TwoBytes' Tests ]]]\n\n");
+    fflush(NULL);
+
+    bool result = true;
+    bool drawDiagram = false;
+
+    for(int i = 4; i <= 24; i += 4)
+    {
+      result &= TwoBytesTest2<hashtype>(hash,i,drawDiagram);
+    }
+
+    if(!result) printf("*********FAIL*********\n");
+    printf("\n");
+    fflush(NULL);
+  }
+
+  //-----------------------------------------------------------------------------
   // Keyset 'Text'
 
   if(g_testText || g_testAll)
@@ -901,6 +866,41 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     result &= DiffTest< Blob<64>,  hashtype >(hash,5,1000,dumpCollisions);
     result &= DiffTest< Blob<128>, hashtype >(hash,4,1000,dumpCollisions);
     result &= DiffTest< Blob<256>, hashtype >(hash,3,1000,dumpCollisions);
+
+    if(!result) printf("*********FAIL*********\n");
+    printf("\n");
+    fflush(NULL);
+  }
+
+  //-----------------------------------------------------------------------------
+  // Differential-distribution tests
+
+  if(g_testDiffDist /*|| g_testAll*/)
+  {
+    printf("[[[ Differential Distribution Tests ]]]\n\n");
+    fflush(NULL);
+
+    bool result = true;
+
+    result &= DiffDistTest2<uint64_t,hashtype>(hash);
+
+    printf("\n");
+    fflush(NULL);
+  }
+
+  //-----------------------------------------------------------------------------
+  // Bit Independence Criteria. Interesting, but doesn't tell us much about
+  // collision or distribution.
+
+  if(g_testBIC)
+  {
+    printf("[[[ Bit Independence Criteria ]]]\n\n");
+    fflush(NULL);
+
+    bool result = true;
+
+    //result &= BicTest<uint64_t,hashtype>(hash,2000000);
+    BicTest3<Blob<88>,hashtype>(hash,2000000);
 
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
