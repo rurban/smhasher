@@ -11,6 +11,10 @@ void FarmHash64_test ( const void * key, int len, uint32_t seed, void * out ) {
   using namespace NAMESPACE_FOR_HASH_FUNCTIONS;
   *(uint64_t*)out = Hash64WithSeed((const char *)key,(size_t)len,(uint64_t)seed);
 }
+void FarmHash64noSeed_test ( const void * key, int len, uint32_t seed, void * out ) {
+  using namespace NAMESPACE_FOR_HASH_FUNCTIONS;
+  *(uint64_t*)out = Hash64((const char *)key,(size_t)len); (void)seed;
+}
 void FarmHash128_test ( const void * key, int len, uint32_t seed, void * out ) {
   using namespace NAMESPACE_FOR_HASH_FUNCTIONS;
   uint128_t s((uint64_t)seed, (uint64_t)0UL);

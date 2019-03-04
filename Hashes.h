@@ -76,15 +76,26 @@ void MurmurOAAT_test       ( const void * key, int len, uint32_t seed, void * ou
 void Crap8_test            ( const void * key, int len, uint32_t seed, void * out );
 
 void CityHash32_test       ( const void * key, int len, uint32_t seed, void * out );
-void CityHash64_test       ( const void * key, int len, uint32_t seed, void * out );
 void CityHash64noSeed_test ( const void * key, int len, uint32_t seed, void * out );
+void CityHash64_test       ( const void * key, int len, uint32_t seed, void * out );
+inline void CityHash64_low_test ( const void * key, int len, uint32_t seed, void * out ) {
+  uint64_t result;
+  CityHash64_test(key, len, seed, &result);
+  *(uint32_t*)out = (uint32_t)result;
+}
+inline void CityHash64_high_test ( const void * key, int len, uint32_t seed, void * out ) {
+  uint64_t result;
+  CityHash64_test(key, len, seed, &result);
+  *(uint32_t*)out = (uint32_t)(result>>32);
+}
 void CityHash128_test      ( const void * key, int len, uint32_t seed, void * out );
 void FarmHash32_test       ( const void * key, int len, uint32_t seed, void * out );
 void FarmHash64_test       ( const void * key, int len, uint32_t seed, void * out );
+void FarmHash64noSeed_test ( const void * key, int len, uint32_t seed, void * out );
 void FarmHash128_test      ( const void * key, int len, uint32_t seed, void * out );
-void farmhash32_c_test       ( const void * key, int len, uint32_t seed, void * out );
-void farmhash64_c_test       ( const void * key, int len, uint32_t seed, void * out );
-void farmhash128_c_test      ( const void * key, int len, uint32_t seed, void * out );
+void farmhash32_c_test     ( const void * key, int len, uint32_t seed, void * out );
+void farmhash64_c_test     ( const void * key, int len, uint32_t seed, void * out );
+void farmhash128_c_test    ( const void * key, int len, uint32_t seed, void * out );
 
 void SpookyHash32_test     ( const void * key, int len, uint32_t seed, void * out );
 void SpookyHash64_test     ( const void * key, int len, uint32_t seed, void * out );

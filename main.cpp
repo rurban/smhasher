@@ -75,9 +75,9 @@ HashInfo g_hashes[] =
   { DoNothingHash,        64, 0x00000000, "donothing64", "Do-Nothing function (only valid for measuring call overhead)" },
   { DoNothingHash,       128, 0x00000000, "donothing128", "Do-Nothing function (only valid for measuring call overhead)" },
   { NoopOAATReadHash,     64, 0x00000000, "NOP_OAAT_read64", "Noop function (only valid for measuring call + OAAT reading overhead)" },
-  { BadHash,     	  32, 0xAB432E23, "BadHash", 	 "very simple XOR shift" },
-  { sumhash,     	  32, 0x0000A9AC, "sumhash", 	 "sum all bytes" },
-  { sumhash32,     	  32, 0xF5562C80, "sumhash32",   "sum all 32bit words" },
+  { BadHash,     	        32, 0xAB432E23, "BadHash", 	 "very simple XOR shift" },
+  { sumhash,     	        32, 0x0000A9AC, "sumhash", 	 "sum all bytes" },
+  { sumhash32,     	      32, 0xF5562C80, "sumhash32",   "sum all 32bit words" },
 
   // here start the real hashes. the problematic ones:
   { crc32,                32, 0x3719DB20, "crc32",       "CRC-32 soft" },
@@ -121,7 +121,7 @@ HashInfo g_hashes[] =
   { fletcher2,            64, 0x0, "fletcher2",  "fletcher2 ZFS"} //TODO
   { fletcher4,            64, 0x0, "fletcher4",  "fletcher4 ZFS"} //TODO
   { Jesteress,            32, 0x0, "Jesteress",  "FNV1a-Jesteress 32-bit sanmayce" },
-  { Meiyan,       	  32, 0x0, "Meiyan",     "FNV1a-Meiyan 32-bit sanmayce" },
+  { Meiyan,       	      32, 0x0, "Meiyan",     "FNV1a-Meiyan 32-bit sanmayce" },
 #endif
   { Bernstein,            32, 0xBDB4B640, "bernstein",   "Bernstein, 32-bit" },
   { sdbm,                 32, 0x582AF769, "sdbm",        "sdbm as in perl5" },
@@ -168,20 +168,24 @@ HashInfo g_hashes[] =
   { mum_high_test,        32, MUM_SEED,   "MUMhigh",     "github.com/vnmakarov/mum-hash" },
 
   { CityHash32_test,      32, 0x5C28AD62, "City32",      "Google CityHash32WithSeed (old)" },
-  { CityHash64_test,      64, 0x25A20825, "City64",      "Google CityHash64WithSeed (old)" },
   { CityHash64noSeed_test,64, 0x63FC6063, "City64noSeed","Google CityHash64 without seed (default version, misses one final avalanche)" },
+  { CityHash64_test,      64, 0x25A20825, "City64",      "Google CityHash64WithSeed (old)" },
+  { CityHash64_low_test,  32, 0xCC5BC861, "City64low",   "Google CityHash64WithSeed (low 32-bits)" },
+  { CityHash64_high_test, 32, 0xC94A0E6B, "City64high",  "Google CityHash64WithSeed (high 32-bits)" },
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { CityHash128_test,    128, 0x6531F54E, "City128",     "Google CityHash128WithSeed (old)" },
   { CityHashCrc128_test, 128, 0xD4389C97, "CityCrc128",  "Google CityHashCrc128WithSeed SSE4.2 (old)" },
 #endif
-# ifdef _MSC_VER /* truncated long to 32 */
+
+#ifdef _MSC_VER /* truncated long to 32 */
 #  define FARM64_SEED         0xEBC4A679
 #  define FARM128_SEED        0x305C0D9A
-# else
+#else
 #  define FARM64_SEED         0x35F84A93
 #  define FARM128_SEED        0x9E636AAE
-# endif
+#endif
   { FarmHash64_test,      64, FARM64_SEED, "FarmHash64",  "Google FarmHash64WithSeed" },
+  { FarmHash64noSeed_test,64, 0xA5B9146C, "Farm64noSeed", "Google FarmHash64 without seed (default, misses on final avalanche)" },
   { FarmHash128_test,    128, FARM128_SEED,"FarmHash128", "Google FarmHash128WithSeed" },
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { farmhash64_c_test,    64, FARM64_SEED, "farmhash64_c",  "farmhash64_with_seed (C99)" },
@@ -821,7 +825,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     bool testDistribution = false;
     bool drawDiagram = false;
 
-    result &= WindowedKeyTest< Blob<hashbits*2>, hashtype > ( hash, 20, testCollision, testDistribution, drawDiagram );
+    result &= WindowedKeyTest< Blob<hashbits*2+2>, hashtype > ( hash, 20, testCollision, testDistribution, drawDiagram );
 
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
