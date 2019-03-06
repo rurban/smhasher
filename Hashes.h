@@ -160,7 +160,7 @@ inline void xxHash64_test( const void * key, int len, uint32_t seed, void * out 
 
 inline void xxh3_test( const void * key, int len, uint32_t seed, void * out ) {
   (void)seed;
-  *(uint64_t*)out = (uint64_t) XXH3_64b(key, (size_t) len);
+  *(uint64_t*)out = (uint64_t) XXH3_64b_withSeed(key, (size_t) len, seed);
 }
 
 inline void xxh3low_test( const void * key, int len, uint32_t seed, void * out ) {
