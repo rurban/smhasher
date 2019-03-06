@@ -341,6 +341,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
     bool result = true;
 
+    result &= AvalancheTest< Blob< 24>, hashtype > (hash,300000);
     result &= AvalancheTest< Blob< 32>, hashtype > (hash,300000);
     result &= AvalancheTest< Blob< 40>, hashtype > (hash,300000);
     result &= AvalancheTest< Blob< 48>, hashtype > (hash,300000);
@@ -387,6 +388,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     bool result = true;
     bool drawDiagram = false;
 
+    result &= SparseKeyTest<  24,hashtype>(hash,7,true,true,true,drawDiagram);
     result &= SparseKeyTest<  32,hashtype>(hash,6,true,true,true,drawDiagram);
     result &= SparseKeyTest<  40,hashtype>(hash,6,true,true,true,drawDiagram);
     result &= SparseKeyTest<  48,hashtype>(hash,6,true,true,true,drawDiagram);
@@ -466,6 +468,28 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       };
 
       result &= CombinationKeyTest(hash,8,blocks,sizeof(blocks) / sizeof(uint32_t),true,true,drawDiagram);
+
+      if(!result) printf("*********FAIL*********\n");
+      printf("\n");
+      fflush(NULL);
+    }
+
+    {
+      printf("[[[ Keyset 'Combination Hi-Lo' Tests ]]]\n\n");
+
+      bool result = true;
+      bool drawDiagram = false;
+
+      uint32_t blocks[] =
+      {
+        0x00000000,
+
+        0x00000001, 0x00000002, 0x00000003, 0x00000004, 0x00000005, 0x00000006, 0x00000007,
+
+        0x80000000, 0x40000000, 0xC0000000, 0x20000000, 0xA0000000, 0x60000000, 0xE0000000
+      };
+
+      result &= CombinationKeyTest<hashtype>(hash,6,blocks,sizeof(blocks) / sizeof(uint32_t),true,true,drawDiagram);
 
       if(!result) printf("*********FAIL*********\n");
       printf("\n");
@@ -703,27 +727,6 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       fflush(NULL);
     }
 
-    {
-      printf("[[[ Keyset 'Combination Hi-Lo' Tests ]]]\n\n");
-
-      bool result = true;
-      bool drawDiagram = false;
-
-      uint32_t blocks[] =
-      {
-        0x00000000,
-
-        0x00000001, 0x00000002, 0x00000003, 0x00000004, 0x00000005, 0x00000006, 0x00000007,
-
-        0x80000000, 0x40000000, 0xC0000000, 0x20000000, 0xA0000000, 0x60000000, 0xE0000000
-      };
-
-      result &= CombinationKeyTest<hashtype>(hash,6,blocks,sizeof(blocks) / sizeof(uint32_t),true,true,drawDiagram);
-
-      if(!result) printf("*********FAIL*********\n");
-      printf("\n");
-      fflush(NULL);
-    }
   }
 
   //-----------------------------------------------------------------------------
