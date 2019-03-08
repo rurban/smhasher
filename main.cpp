@@ -197,6 +197,9 @@ HashInfo g_hashes[] =
   { xxh3_test,            64, 0xECA5AAE7, "xxh3",        "xxHash v3, 64-bit" },
   { xxh3low_test,         32, 0xECA5AAE7, "xxh3low",     "xxHash v3, 64-bit, low 32-bits part" },
   { xxh3high_test,        32, 0xECA5AAE7, "xxh3high",    "xxHash v3, 64-bit, high 32-bits part" },
+  { xxh128_test,         128, 0xECA5AAE7, "xxh128",      "xxHash v3, 128-bit" },
+  { xxh128low_test,       64, 0xECA5AAE7, "xxh128low",   "xxHash v3, 128-bit, low 64-bits part" },
+  { xxh128high_test,      64, 0xECA5AAE7, "xxh128high",  "xxHash v3, 128-bit, high 64-bits part" },
 #if 0
   { xxhash256_test,       64, 0x024B7CF4, "xxhash256",   "xxhash256, 64-bit unportable" },
 #endif
@@ -388,8 +391,9 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     bool result = true;
     bool drawDiagram = false;
 
-    result &= SparseKeyTest<  24,hashtype>(hash,7,true,true,true,drawDiagram);
-    result &= SparseKeyTest<  32,hashtype>(hash,6,true,true,true,drawDiagram);
+    result &= SparseKeyTest<  16,hashtype>(hash,9,true,true,true,drawDiagram);
+    result &= SparseKeyTest<  24,hashtype>(hash,8,true,true,true,drawDiagram);
+    result &= SparseKeyTest<  32,hashtype>(hash,7,true,true,true,drawDiagram);
     result &= SparseKeyTest<  40,hashtype>(hash,6,true,true,true,drawDiagram);
     result &= SparseKeyTest<  48,hashtype>(hash,6,true,true,true,drawDiagram);
     result &= SparseKeyTest<  56,hashtype>(hash,5,true,true,true,drawDiagram);

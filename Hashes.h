@@ -173,6 +173,21 @@ inline void xxh3high_test( const void * key, int len, uint32_t seed, void * out 
   *(uint32_t*)out = (uint32_t) (XXH3_64b(key, (size_t) len) >> 32);
 }
 
+inline void xxh128_test( const void * key, int len, uint32_t seed, void * out ) {
+  (void)seed;
+  *(XXH128_hash_t*)out = XXH128(key, (size_t) len, seed);
+}
+
+inline void xxh128low_test( const void * key, int len, uint32_t seed, void * out ) {
+  (void)seed;
+  *(uint64_t*)out = (uint64_t) (XXH128(key, (size_t) len, seed).ll1);
+}
+
+inline void xxh128high_test( const void * key, int len, uint32_t seed, void * out ) {
+  (void)seed;
+  *(uint64_t*)out = (uint64_t) (XXH128(key, (size_t) len, seed).ll2);
+}
+
 
 inline void metrohash64_1_test ( const void * key, int len, uint32_t seed, void * out ) {
   metrohash64_1((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
