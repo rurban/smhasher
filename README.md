@@ -82,6 +82,7 @@ SMhasher
 | [t1ha](doc/t1ha)                      |      9590.96	|    36.51 |                            |
 | [t1ha_crc](doc/t1ha_crc)              |     13775.04	|    35.87 | machine-specific (x86 SSE4.2) |
 | [t1ha_aes](doc/t1ha_aes)              |     19927.77	|    36.02 | machine-specific (x86 AES-NI) |
+| [wyhash](doc/wyhash)                  |     10388.38	|    23.46 |                            |
 
 Summary
 -------
@@ -92,6 +93,7 @@ See also the old [https://code.google.com/p/smhasher/w/list](https://code.google
 
 So the fastest hash functions on x86_64 without quality problems are:
 
+- wyhash
 - t1ha
 - falkhash (_macho64 and elf64 nasm only, with HW AES extension_)
 - Metro (_but not 64crc yet, WIP_)

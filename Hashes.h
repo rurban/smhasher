@@ -255,3 +255,10 @@ inline void t1ha0_ia32aes_avx2_test(const void * key, int len, uint32_t seed, vo
 }
 #endif /* __AVX2__ */
 #endif /* T1HA0_AESNI_AVAILABLE */
+
+//https://github.com/wangyi-fudan/wyhash
+#include "wyhash.h"
+
+inline void wyhash_test (const void * key, int len, uint32_t seed, void * out) {
+  *(uint64_t*)out = wyhash(key, (unsigned long long) len, (unsigned long long)seed);
+}

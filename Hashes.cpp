@@ -509,5 +509,3 @@ falkhash_test_cxx(const void *input, int len, uint32_t seed, void *out)
   *(uint64_t *) out = hash[0];
 }
 #endif
-
-
