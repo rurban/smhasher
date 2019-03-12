@@ -91,7 +91,7 @@ I added some SSE assisted hashes and fast intel/arm CRC32-C and AES HW variants,
 [crcutil](https://code.google.com/p/crcutil/) yet. See [our crcutil results](https://github.com/rurban/smhasher/blob/master/doc/crcutil).
 See also the old [https://code.google.com/p/smhasher/w/list](https://code.google.com/p/smhasher/w/list).
 
-So the fastest hash functions on x86_64 without quality problems are:
+The fastest hash functions on x86_64 without quality problems are:
 
 - wyhash
 - t1ha
@@ -105,8 +105,8 @@ So the fastest hash functions on x86_64 without quality problems are:
 - mum (_machine specific, mum: different results on 32/64-bit archs_)
 
 Hash functions for symbol tables or hash tables typically use 32 bit
-hashes, for databases, file systems and file checksums typically 64 or
-128bit, for crypto now starting with 256 bit.
+hashes. Databases, file systems and file checksums are typically 64 or
+128bit. Crypto is now starting with 256 bit.
 
 Typical median key size in perl5 is 20, the most common 4. Similar for all other dynamic languages.
 See [github.com/rurban/perl-hash-stats](https://github.com/rurban/perl-hash-stats)
@@ -114,14 +114,13 @@ See [github.com/rurban/perl-hash-stats](https://github.com/rurban/perl-hash-stat
 When used in a hash table the instruction cache will usually beat the
 CPU and throughput measured here. In my tests the smallest `FNV1A`
 beats the fastest `crc32_hw1` with [Perl 5 hash tables](https://github.com/rurban/perl-hash-stats). 
-Even if those worse hash functions will lead to more collisions, the
-overall speed advantage beats the slightly worse quality.
+The ovreall speed advantage of the "worse" hash functions offsets the increase in collisions.
 See e.g. [A Seven-Dimensional Analysis of Hashing Methods and its Implications on Query Processing](https://infosys.cs.uni-saarland.de/publications/p249-richter.pdf)
 for a concise overview of the best hash table strategies, confirming that the
 simplest Mult hashing (bernstein, FNV*, x17, sdbm) always beat "better" hash
 functions (Tabulation, Murmur, Farm, ...) when used in a hash table.
 
-The fast hash functions tested here are recommendable as fast for file
+The fast hash functions tested here are recommended for file
 digests and maybe bigger databases, but not for 32bit hash tables.  The
 "Quality problems" lead to less uniform distribution, i.e.  more collisions
 and worse performance, but are rarely related to real security attacks, just
@@ -130,7 +129,7 @@ the 2nd sanity test against `\0` invariance is security relevant.
 Other
 -----
 
-* [http://www.strchr.com/hash_functions](http://www.strchr.com/hash_functions) lists other benchmarks and quality of most simple and fast hash functions.
+* [http://www.strchr.com/hash_functions](http://www.strchr.com/hash_functions) lists other benchmarks and quality of the most simple and fast hash functions.
 * [http://bench.cr.yp.to/primitives-hash.html](http://bench.cr.yp.to/primitives-hash.html) lists the benchmarks of all currently tested secure hashes.
 * The [Hash Function Lounge](http://www.larc.usp.br/~pbarreto/hflounge.html) overviews the known weaknesses and attacks.
 
@@ -150,10 +149,10 @@ against City, Murmur or Perl JenkinsOAAT or at
 are not included here.
 
 Such an attack avoidance cannot be the problem of the hash
-function, but the hash table collision resolution scheme.  You can
-attack every single hash function, even the best and most secure if
-you detect the seed, e.g. from language (mis-)features, side-channel
-attacks, collision timings and independly the sort-order, so you need
+function, but the hash table collision resolution scheme.  The best, 
+most secure hash functions are vulnerable if you detect the seed, 
+e.g. from language (mis-)features, side-channel attacks, collision 
+timings, and independly the sort-order, so you need
 to protect your collision handling scheme from the worst-case O(n),
 i.e. separate chaining with linked lists. Linked lists chaining allows
 high load factors, but is very cache-unfriendly.  The only
@@ -165,10 +164,10 @@ I.e. the usage of SipHash for their hash table in Python 3.4, ruby,
 rust, systemd, OpenDNS, Haskell and OpenBSD is pure security theatre.
 SipHash is not secure enough for security purposes and not fast enough
 for general usage. Brute-force generation of ~32k collisions need 2-4m
-for all these hashes. siphash being the slowest needs max 4m, other
+for all these hashes. Siphash being the slowest needs max 4m, other
 typically max 2m30s, with <10s for practical 16k collision attacks
 with all hash functions.  Using Murmur is usually slower than a simple
-Mult, even in the worst case.  Provable secure is only uniform
+Mult, even in the worst case.  Provable security is only uniform
 hashing, i.e. 2-5 independent Mult or Tabulation, or using a
 guaranteed logarithmic collision scheme (a tree) or a linear collision
 scheme, such as Robin Hood or Cockoo hashing with collision counting.
