@@ -160,17 +160,17 @@ inline void xxHash64_test( const void * key, int len, uint32_t seed, void * out 
 
 inline void xxh3_test( const void * key, int len, uint32_t seed, void * out ) {
   (void)seed;
-  *(uint64_t*)out = (uint64_t) XXH3_64b_withSeed(key, (size_t) len, seed);
+  *(uint64_t*)out = (uint64_t) XXH3_64bits_withSeed(key, (size_t) len, seed);
 }
 
 inline void xxh3low_test( const void * key, int len, uint32_t seed, void * out ) {
   (void)seed;
-  *(uint32_t*)out = (uint32_t) XXH3_64b(key, (size_t) len);
+  *(uint32_t*)out = (uint32_t) XXH3_64bits(key, (size_t) len);
 }
 
 inline void xxh3high_test( const void * key, int len, uint32_t seed, void * out ) {
   (void)seed;
-  *(uint32_t*)out = (uint32_t) (XXH3_64b(key, (size_t) len) >> 32);
+  *(uint32_t*)out = (uint32_t) (XXH3_64bits(key, (size_t) len) >> 32);
 }
 
 inline void xxh128_test( const void * key, int len, uint32_t seed, void * out ) {
@@ -180,12 +180,12 @@ inline void xxh128_test( const void * key, int len, uint32_t seed, void * out ) 
 
 inline void xxh128low_test( const void * key, int len, uint32_t seed, void * out ) {
   (void)seed;
-  *(uint64_t*)out = (uint64_t) (XXH128(key, (size_t) len, seed).ll1);
+  *(uint64_t*)out = (uint64_t) (XXH128(key, (size_t) len, seed).low64);
 }
 
 inline void xxh128high_test( const void * key, int len, uint32_t seed, void * out ) {
   (void)seed;
-  *(uint64_t*)out = (uint64_t) (XXH128(key, (size_t) len, seed).ll2);
+  *(uint64_t*)out = (uint64_t) (XXH128(key, (size_t) len, seed).high64);
 }
 
 
