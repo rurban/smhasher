@@ -135,11 +135,6 @@ struct HashCallback : public KeyCallback
     hashtype h;
     m_pfHash(key, len, 0, &h);
     m_hashes.back() = h;
-#if 0  // debug : display specific keys
-    unsigned uh; memcpy(&uh,&h,sizeof(uh));
-    if (uh == 0x1CE514E4) printKey(key, len);
-    if (uh == 0x1926156A) printKey(key, len);
-#endif
   }
 
   virtual void reserve ( int keycount )

@@ -49,26 +49,6 @@ void CombinationKeygenRecurse ( blocktype * key, int len, int maxlen,
     {
       hashtype h;
       hash(key, (len+1) * sizeof(blocktype), 0, &h);
-#if 0
-
-      unsigned uh; memcpy(&uh, &h, sizeof(uh));;
-      if (uh == 0x7B1F1626) {
-          printf("hash value == 0x%08X for : ", 0x7B1F1626);
-          printKey(key, (len+1) * sizeof(blocktype));
-      }
-
-#elif 0
-      if (std::find(hashes.begin(), hashes.end(), h) != hashes.end()) {
-         printf("collision found (len=%2zu): ", (len+1) * sizeof(blocktype));
-         printKey(key, (len+1) * sizeof(blocktype));
-#  if 1
-         unsigned uh;
-         memcpy(&uh, &h, sizeof(uh));
-         printf(" ===> %08X", uh);
-#  endif
-         printf(" \n");
-       }
-#endif
       hashes.push_back(h);
     }
 
@@ -198,25 +178,6 @@ void SparseKeygenRecurse ( pfHash hash, int start, int bitsleft, bool inclusive,
     if(inclusive || (bitsleft == 1))
     {
       hash(&k, sizeof(keytype), 0, &h);
-#if 0
-    if (std::find(hashes.begin(), hashes.end(), h) != hashes.end()) {
-       printf("collision found (len=%2zu): ", sizeof(keytype));
-       printSparseKey(&k, sizeof(keytype));
-    #  if 1
-       unsigned uh;
-       memcpy(&uh, &h, sizeof(uh));
-       printf(" ===> %08X", uh);
-    #  endif
-       printf(" \n");
-     }
-#elif 0
-      unsigned uh; memcpy(&uh, &h, sizeof(uh));
-      if ( uh == 0x52A0D13C
-         ) {
-         printf("\nh:0x%08X ==> ", uh);
-         printSparseKey(&k, sizeof(keytype));
-      }
-#endif
       hashes.push_back(h);
     }
 
