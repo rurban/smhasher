@@ -13,7 +13,7 @@
 //-----------------------------------------------------------------------------
 // Configuration. TODO - move these to command-line flags
 
-bool g_testAll = false;
+bool g_testAll = true;
 
 bool g_testSanity      = false;
 bool g_testSpeed       = false;
