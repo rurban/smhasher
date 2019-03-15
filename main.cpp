@@ -194,7 +194,7 @@ HashInfo g_hashes[] =
 
   { xxHash32_test,        32, 0xBA88B743, "xxHash32",    "xxHash, 32-bit for x64" },
   { xxHash64_test,        64, 0x024B7CF4, "xxHash64",    "xxHash, 64-bit" },
-  { xxh3_test,            64, 0xECA5AAE7, "xxh3",        "xxHash v3, 64-bit" },
+  { xxh3_test,            64, 0xF6FED399, "xxh3",        "xxHash v3, 64-bit" },
   { xxh3low_test,         32, 0xECA5AAE7, "xxh3low",     "xxHash v3, 64-bit, low 32-bits part" },
   { xxh3high_test,        32, 0xECA5AAE7, "xxh3high",    "xxHash v3, 64-bit, high 32-bits part" },
   { xxh128_test,         128, 0xECA5AAE7, "xxh128",      "xxHash v3, 128-bit" },
