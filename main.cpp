@@ -861,7 +861,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     fflush(NULL);
 
     bool result = true;
-    bool dumpCollisions = false; // --verbose?
+    bool dumpCollisions = g_drawDiagram; // from --verbose
 
     result &= DiffTest< Blob<64>,  hashtype >(hash,5,1000,dumpCollisions);
     result &= DiffTest< Blob<128>, hashtype >(hash,4,1000,dumpCollisions);
