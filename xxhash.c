@@ -32,7 +32,6 @@
 *  - xxHash source repository : https://github.com/Cyan4973/xxHash
 */
 
-
 /* *************************************
 *  Tuning parameters
 ***************************************/
@@ -101,6 +100,7 @@ static void* XXH_memcpy(void* dest, const void* src, size_t size) { return memcp
 
 #include <assert.h>   /* assert */
 
+#define XXH_EXPORT
 #define XXH_STATIC_LINKING_ONLY
 #include "xxhash.h"
 
