@@ -104,26 +104,6 @@ static void* XXH_memcpy(void* dest, const void* src, size_t size) { return memcp
 #define XXH_STATIC_LINKING_ONLY
 #include "xxhash.h"
 
-
-/* *************************************
-*  Compiler Specific Options
-***************************************/
-#ifdef _MSC_VER    /* Visual Studio */
-#  pragma warning(disable : 4127)      /* disable: C4127: conditional expression is constant */
-#  define XXH_FORCE_INLINE static __forceinline
-#else
-#  if defined (__cplusplus) || defined (__STDC_VERSION__) && __STDC_VERSION__ >= 199901L   /* C99 */
-#    ifdef __GNUC__
-#      define XXH_FORCE_INLINE static inline __attribute__((always_inline))
-#    else
-#      define XXH_FORCE_INLINE static inline
-#    endif
-#  else
-#    define XXH_FORCE_INLINE static
-#  endif /* __STDC_VERSION__ */
-#endif
-
-
 /* *************************************
 *  Basic Types
 ***************************************/

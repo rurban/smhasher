@@ -118,6 +118,30 @@ typedef enum { XXH_OK=0, XXH_ERROR } XXH_errorcode;
 #  endif
 #endif /* XXH_INLINE_ALL || XXH_PRIVATE_API */
 
+
+/* *************************************
+*  Compiler Specific Options
+***************************************/
+
+#ifdef _MSC_VER    /* Visual Studio */
+#  pragma warning(disable : 4127)      /* disable: C4127: conditional expression is constant */
+#  define XXH_FORCE_INLINE static __forceinline
+#  define XXH_NEVER_INLINE  __declspec(noinline)
+#else
+#  if defined (__cplusplus) || defined (__STDC_VERSION__) && __STDC_VERSION__ >= 199901L   /* C99 */
+#    define XXH_NEVER_INLINE __attribute__((noinline))
+#    ifdef __GNUC__
+#      define XXH_FORCE_INLINE static inline __attribute__((always_inline))
+#    else
+#      define XXH_FORCE_INLINE static inline
+#    endif
+#  else
+#    define XXH_NEVER_INLINE
+#    define XXH_FORCE_INLINE static
+#  endif /* __STDC_VERSION__ */
+#endif
+
+  
 /*! XXH_NAMESPACE, aka Namespace Emulation :
  *
  * If you want to include _and expose_ xxHash functions from within your own library,
