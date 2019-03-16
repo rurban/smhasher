@@ -996,9 +996,15 @@ int main ( int argc, const char ** argv )
            " or --test=Speed,... hash\n");
   }
   else {
-    hashToTest = argv[1];
+    int i = 1;
+    hashToTest = argv[i];
+    i++;
 
     if (strncmp(hashToTest,"--", 2) == 0) {
+      if (argc > i)
+        hashToTest = argv[i];
+      else
+        hashToTest = defaulthash;
       if (strcmp(hashToTest,"--help") == 0) {
         printf("Usage: SMHasher [--list][--tests] [--verbose][--extra]\n"
                " or --test=Speed,... hash\n");
@@ -1019,9 +1025,15 @@ int main ( int argc, const char ** argv )
       }
       if (strcmp(hashToTest,"--verbose") == 0) {
         g_drawDiagram = true;
+        i++;
       }
       if (strcmp(hashToTest,"--extra") == 0) {
         g_testExtra = true;
+        i++;
+        if (argc > i)
+          hashToTest = argv[i];
+        else
+          hashToTest = defaulthash;
       }
       /* default: --test=All. comma seperated list of options */
       if (strncmp(hashToTest,"--test=", 6) == 0) {
@@ -1029,6 +1041,7 @@ int main ( int argc, const char ** argv )
         char *rest = opt;
         char *p;
         bool found = false;
+        i++;
         g_testAll = false;
         do {
           if ((p = strchr(rest, ','))) {
@@ -1053,8 +1066,8 @@ int main ( int argc, const char ** argv )
           }
         } while (p);
       }
-      if (argc > 2)
-        hashToTest = argv[2];
+      if (argc > i)
+        hashToTest = argv[i];
       else
         hashToTest = defaulthash;
     }
