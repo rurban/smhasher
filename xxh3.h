@@ -99,7 +99,9 @@
 #ifdef _MSC_VER
 #   include <intrin.h>
     /* MSVC doesn't do a good job with the mull detection. */
-#   define XXH_mult32to64 __emulu
+#   define XXH_mult32to64(x, y) __emulu(x, y)
+#   pragma intrinsic(__emulu)
+#   pragma intrinsic(_umul128)
 #else
 #   define XXH_mult32to64(x, y) ((U64)((x) & 0xFFFFFFFF) * (U64)((y) & 0xFFFFFFFF))
 #endif
@@ -110,7 +112,6 @@
  * ========================================== */
 
 #define KEYSET_DEFAULT_SIZE 48   /* minimum 32 */
-
 
 ALIGN(64) static const U32 kKey[KEYSET_DEFAULT_SIZE] = {
     0xb8fe6c39,0x23a44bbe,0x7c01812c,0xf721ad1c,
@@ -144,7 +145,9 @@ XXH3_mul128(U64 ll1, U64 ll2)
 
 #elif defined(_M_X64) || defined(_M_IA64)
 
+#ifndef _MSC_VER
 #   pragma intrinsic(_umul128)
+#endif
     U64 llhigh;
     U64 const lllow = _umul128(ll1, ll2, &llhigh);
     return lllow + llhigh;
@@ -291,7 +294,7 @@ XXH3_len_1to3_64b(const void* data, size_t len, const void* keyPtr, XXH64_hash_t
         BYTE const c3 = ((const BYTE*)data)[len - 1];
         U32  const l1 = (U32)(c1) + ((U32)(c2) << 8);
         U32  const l2 = (U32)(len) + ((U32)(c3) << 2);
-        U64  const ll11 = XXH_mult32to64((l1 + seed + key32[0]), (l2 + key32[1]));
+        U64  const ll11 = XXH_mult32to64(l1 + seed + key32[0], l2 + key32[1]);
         return XXH3_avalanche(ll11);
     }
 }
@@ -687,7 +690,14 @@ XXH3_len_1to3_128b(const void* data, size_t len, const void* keyPtr, XXH64_hash_
         U32  const l2 = (U32)(len) + ((U32)(c3) << 2);
         U64  const ll11 = XXH_mult32to64(l1 + seed + key32[0], l2 + key32[1]);
         U64  const ll12 = XXH_mult32to64(l1 + key32[2], l2 - seed + key32[3]);
+#ifdef _MSC_VER
+        XXH128_hash_t ret;
+        ret.low64  = XXH3_avalanche(ll11);
+        ret.high64 = XXH3_avalanche(ll12);
+        return ret;
+#else
         return (XXH128_hash_t) { XXH3_avalanche(ll11), XXH3_avalanche(ll12) };
+#endif
     }
 }
 
@@ -704,7 +714,14 @@ XXH3_len_4to8_128b(const void* data, size_t len, const void* keyPtr, XXH64_hash_
         U32 const l2 = XXH_readLE32((const BYTE*)data + len - 4);
         acc1 += XXH_mult32to64(l1 + key32[0], l2 + key32[1]);
         acc2 += XXH_mult32to64(l1 - key32[2], l2 + key32[3]);
+#ifdef _MSC_VER
+        XXH128_hash_t ret;
+        ret.low64  = XXH3_avalanche(acc1);
+        ret.high64 = XXH3_avalanche(acc2);
+        return ret;
+#else
         return (XXH128_hash_t){ XXH3_avalanche(acc1), XXH3_avalanche(acc2) };
+#endif
     }
 }
 
@@ -721,7 +738,14 @@ XXH3_len_9to16_128b(const void* data, size_t len, const void* keyPtr, XXH64_hash
         U64 const ll2 = XXH_readLE64((const BYTE*)data + len - 8);
         acc1 += XXH3_mul128(ll1 + XXH3_readKey64(key64+0), ll2 + XXH3_readKey64(key64+1));
         acc2 += XXH3_mul128(ll1 + XXH3_readKey64(key64+2), ll2 + XXH3_readKey64(key64+3));
+#ifdef _MSC_VER
+        XXH128_hash_t ret;
+        ret.low64  = XXH3_avalanche(acc1);
+        ret.high64 = XXH3_avalanche(acc2);
+        return ret;
+#else
         return (XXH128_hash_t){ XXH3_avalanche(acc1), XXH3_avalanche(acc2) };
+#endif
     }
 }
 
@@ -733,7 +757,14 @@ XXH3_len_0to16_128b(const void* data, size_t len, XXH64_hash_t seed)
     {   if (len > 8) return XXH3_len_9to16_128b(data, len, kKey, seed);
         if (len >= 4) return XXH3_len_4to8_128b(data, len, kKey, seed);
         if (len) return XXH3_len_1to3_128b(data, len, kKey, seed);
+#ifdef _MSC_VER
+        XXH128_hash_t ret;
+        ret.low64  = seed;
+        ret.high64 = -seed;
+        return ret;
+#else
         return (XXH128_hash_t) { seed, -seed };
+#endif
     }
 }
 
@@ -749,7 +780,14 @@ XXH3_hashLong_128b(const void* data, size_t len, XXH64_hash_t seed)
     assert(sizeof(acc) == 64);
     {   U64 const low64 = XXH3_mergeAccs(acc, kKey, (U64)len * PRIME64_1);
         U64 const high64 = XXH3_mergeAccs(acc, kKey+16, ((U64)len+1) * PRIME64_2);
+#ifdef _MSC_VER
+        XXH128_hash_t ret;
+        ret.low64  = low64;
+        ret.high64 = high64;
+        return ret;
+#else
         return (XXH128_hash_t) { low64, high64 };
+#endif
     }
 }
 
@@ -785,7 +823,14 @@ XXH3_128bits_withSeed(const void* data, size_t len, XXH64_hash_t seed)
 
         {   U64 const part1 = acc1 + acc2;
             U64 const part2 = (acc1 * PRIME64_3) + (acc2 * PRIME64_4) + ((len - seed) * PRIME64_2);
+#ifdef _MSC_VER
+            XXH128_hash_t ret;
+            ret.low64  = XXH3_avalanche(part1);
+            ret.high64 = -XXH3_avalanche(part2);
+            return ret;
+#else
             return (XXH128_hash_t) { XXH3_avalanche(part1), -XXH3_avalanche(part2) };
+#endif
         }
     }
 }
