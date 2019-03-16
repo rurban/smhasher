@@ -3,86 +3,102 @@ SMhasher
 
 | Hash function                         |      MiB/sec  |cycles/hash| Quality problems              |
 |:--------------------------------------|--------------:|---------:|--------------------------------|
-| [donothing32](doc/donothing32)        |  23271327.59  |    5.00  | test NOP                       |
-| [donothing64](doc/donothing64)        |  22524919.33  |    5.00  | test NOP                       |
-| [donothing128](doc/donothing128)      |  35531868.85  |    5.00  | test NOP                       |
-| [NOP_OAAT_read64](doc/NOP_OAAT_read64)|      2098.56  |   33.66  | test NOP                       |
-| [BadHash](doc/BadHash)                |       452.47  |  108.78  | test FAIL                      |
-| [sumhash](doc/sumhash)                |      7220.74  |   33.77  | test FAIL                      |
-| [sumhash32](doc/sumhash32)            |     21605.70  |   14.16  | test FAIL                      |
+| [donothing32](doc/donothing32)        |  12954965.31  |     4.64 | test NOP                       |
+| [donothing64](doc/donothing64)        |   9224792.69  |     4.72 | test NOP                       |
+| [donothing128](doc/donothing128)      |   9074269.36  |     4.47 | test NOP                       |
+| [NOP_OAAT_read64](doc/NOP_OAAT_read64)|      3909.83  |    16.34 | test NOP                       |
+| [BadHash](doc/BadHash)                |       900.52  |    58.13 | test FAIL                      |
+| [sumhash](doc/sumhash)                |     20379.60  |    21.60 | test FAIL                      |
+| [sumhash32](doc/sumhash32)            |     74930.18  |    11.33 | test FAIL                      |
 | --------------------------------------|               |          |                                |
-| [crc32](doc/crc32)                    |      392.09	|   135.20 | insecure, 8589.93x collisions, distrib  |
-| [md5_32a](doc/md5_32a)                |      352.25	|   674.76 | 8589.93x collisions, distrib   |
-| [sha1_32a](doc/sha1_32a)              |      373.41	|  1492.19 | collisions, 36.6% distrib      |
-| [hasshe2](doc/hasshe2)                |     3139.96	|    70.18 | insecure, 100% bias, collisions, distrib |
-| [crc32_hw](doc/crc32_hw)              |     6331.24	|    29.89 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
-| [crc32_hw1](doc/crc32_hw1)            |    23011.78	|    35.72 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
-| [crc64_hw](doc/crc64_hw)              |     8423.86	|    29.36 | insecure, 100% bias, collisions, distrib, machine-specific (x86_64 SSE4.2) |
-| [FNV1a](doc/FNV1a)                    |      790.45	|    69.32 | zeros, 100% bias, collisions, distrib    |
-| [FNV1a_YT](doc/FNV1a_YT)              |     8949.71	|    27.97 | 100% bias, collisions, distrib   |
-| [FNV64](doc/FNV64)                    |      791.85	|    69.31 | 100% bias, collisions, distrib   |
-| [bernstein](doc/bernstein)            |      791.84	|    67.09 | 100% bias, collisions, distrib   |
-| [sdbm](doc/sdbm)                      |      790.50	|    66.69 | 100% bias, collisions, distrib   |
-| [x17](doc/x17)                        |      527.91	|    96.67 | 99.98% bias, collisions, distrib |
-| [JenkinsOOAT](doc/JenkinsOOAT)        |      452.49	|   141.18 | 53.5% bias, collisions, distrib  |
-| [JenkinsOOAT_pl](doc/JenkinsOOAT_perl)|      452.49	|   118.65 | 1.5-11.5% bias, 7.2x collisions  |
-| [MicroOAAT](doc/MicroOAAT)            |      972.14	|    59.82 | 100% bias, distrib               |
-| [jodyhash32](doc/jodyhash32)          |     1428.46	|    44.25 | bias, collisions, distr    |
-| [jodyhash64](doc/jodyhash64)          |     2843.60	|    39.53 | bias, collisions, distr    |
-| [lookup3](doc/lookup3)                |     1744.87	|    47.23 | 28% bias, collisions, 30% distr  |
-| [superfast](doc/superfast)            |     1570.59	|    57.55 | 91% bias, 5273.01x collisions, 37% distr |
-| [MurmurOAAT](doc/MurmurOAAT)          |      451.66	|   114.34 | collisions, 99.998% distr          |
-| [Crap8](doc/Crap8)                    |     3149.87	|    34.14 | 2.42% bias, collisions, 2% distrib |
-| [Murmur2](doc/Murmur2)                |     3139.49	|    40.63 | 1.7% bias, 81x coll, 1.7% distrib  |
-| [Murmur2A](doc/Murmur2A)              |     3139.50	|    45.14 | 12.7% bias                         |
-| [Murmur2B](doc/Murmur2B)              |     4867.23	|    46.49 | 1.8% bias, collisions, 3.4% distrib|
-| [Murmur2C](doc/Murmur2C)              |     3919.19	|    46.27 | 91% bias, collisions, distr        |
-| [HalfSipHash](doc/HalfSipHash)        |      747.06	|   121.13 | zeroes                     |
-| [SipHash13](doc/SipHash13)            |     1865.13	|   100.55 | 0.9% bias                  |
+| [crc32](doc/crc32)                    |       544.84  |    92.65 | insecure, 8589.93x collisions, distrib  |
+| [md5_32a](doc/md5_32a)                |       399.30  |   550.28 | 8589.93x collisions, distrib   |
+| [sha1_32a](doc/sha1_32a)              |       648.72  |   850.86 | collisions, 36.6% distrib      |
+| [hasshe2](doc/hasshe2)                |      2054.39  |    76.60 | insecure, 100% bias, collisions, distrib |
+| [crc32_hw](doc/crc32_hw)              |      9310.60  |    24.63 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
+| [crc32_hw1](doc/crc32_hw1)            |     30145.28  |    30.98 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
+| [crc64_hw](doc/crc64_hw)              |     10181.36  |    23.46 | insecure, 100% bias, collisions, distrib, machine-specific (x86_64 SSE4.2) |
+| [FNV1a](doc/FNV1a)                    |       937.85  |    56.63 | zeros, 100% bias, collisions, distrib    |
+| [FNV1a_YT](doc/FNV1a_YT)              |     15425.31  |    21.51 | 100% bias, collisions, distrib   |
+| [FNV64](doc/FNV64)                    |       893.70  |    56.94 | 100% bias, collisions, distrib   |
+| [bernstein](doc/bernstein)            |      1261.71  |    46.20 | 100% bias, collisions, distrib   |
+| [sdbm](doc/sdbm)                      |       929.94  |    54.35 | 100% bias, collisions, distrib   |
+| [x17](doc/x17)                        |      1174.99  |    53.62 | 99.98% bias, collisions, distrib |
+| [JenkinsOOAT](doc/JenkinsOOAT)        |       736.83  |    86.43 | 53.5% bias, collisions, distrib  |
+| [JenkinsOOAT_pl](doc/JenkinsOOAT_perl)|       741.41  |    71.78 | 1.5-11.5% bias, 7.2x collisions  |
+| [MicroOAAT](doc/MicroOAAT)            |       819.52  |    63.24 | 100% bias, distrib               |
+| [jodyhash32](doc/jodyhash32)          |      1864.24  |    34.43 | bias, collisions, distr    |
+| [jodyhash64](doc/jodyhash64)          |      3764.44  |    30.13 | bias, collisions, distr    |
+| [lookup3](doc/lookup3)                |      3133.07  |    30.65 | 28% bias, collisions, 30% distr  |
+| [superfast](doc/superfast)            |      2918.47  |    34.62 | 91% bias, 5273.01x collisions, 37% distr |
+| [MurmurOAAT](doc/MurmurOAAT)          |       669.46  |    74.54 | collisions, 99.998% distr          |
+| [Crap8](doc/Crap8)                    |      3962.47  |    26.98 | 2.42% bias, collisions, 2% distrib |
+| [Murmur2](doc/Murmur2)                |      3712.67  |    31.32 | 1.7% bias, 81x coll, 1.7% distrib  |
+| [Murmur2A](doc/Murmur2A)              |      3875.69  |    34.80 | 12.7% bias                         |
+| [Murmur2B](doc/Murmur2B)              |      7336.97  |    34.43 | 1.8% bias, collisions, 3.4% distrib|
+| [Murmur2C](doc/Murmur2C)              |      5050.30  |    34.10 | 91% bias, collisions, distr        |
+| [HalfSipHash](doc/HalfSipHash)        |      1105.93  |    79.31 | zeroes                     |
+| [SipHash13](doc/SipHash13)            |      2124.26  |    84.20 | 0.9% bias                  |
 | --------------------------------------|               |          |                            |
-| [SipHash](doc/SipHash)                |       978.37	|   139.56 |                            |
-| [GoodOAAT](doc/GoodOAAT)              |      1047.85	|    71.39 |                            |
-| [PMurHash32](doc/PMurHash32)          |      2348.59	|    57.56 |                            |
-| [Murmur3A](doc/Murmur3A)              |      2329.88	|    50.22 |                            |
-| [Murmur3C](doc/Murmur3C)              |      3186.78	|    66.49 |                            |
-| [Murmur3F](doc/Murmur3F)              |      5256.15	|    50.23 |                            |
-| [fasthash32](doc/fasthash32)          |      4661.31	|    50.81 |                            |
-| [fasthash64](doc/fasthash64)          |      4612.00	|    48.14 |                            |
-| [MUM](doc/MUM)                        |      6564.38	|    39.85 | machine-specific (32/64 differs) |
-| [City32](doc/City32)                  |      3818.33	|    53.02 |                            |
-| [City64](doc/City64)                  |      9200.87	|    55.70 | 2 minor collisions         |
-| [City128](doc/City128)                |     10105.87	|    89.41 |                            |
-| [CityCrc128](doc/CityCrc128)          |     12638.87	|    90.65 |                            |
-| [FarmHash64](doc/FarmHash64)         	|      9187.94	|    62.93 |                            |
-| [FarmHash128](doc/FarmHash128)        |      9877.60	|    82.89 |                            |
-| [FarmHash32](doc/FarmHash32)         	|     24831.45  |    24.99 | machine-specific (x86_64 SSE4/AVX) |
-| [farmhash32_c](doc/farmhash32_c)      |     24647.21  |    25.36 | machine-specific (x86_64 SSE4/AVX) |
-| [farmhash64_c](doc/farmhash64_c)     	|      9149.44	|    74.39 |                            |
-| [farmhash128_c](doc/farmhash128_c)    |      9959.95	|    99.01 |                            |
-| [xxHash32](doc/xxHash32)              |      5414.57	|    46.85 | collisions with 4bit diff  |
-| [xxHash64](doc/xxHash64)              |     10288.36	|    58.79 |                            |
-| [Spooky32](doc/Spooky32)              |      9899.74	|    68.10 |                            |
-| [Spooky64](doc/Spooky64)              |      9885.49	|    68.00 |                            |
-| [Spooky128](doc/Spooky128)            |      9901.48	|    68.56 |                            |
-| [metrohash64_1](doc/metrohash64_1)    |      9541.68	|    50.85 |                            |
-| [metrohash64_2](doc/metrohash64_2)    |      9569.20	|    50.86 |                            |
-| [metrohash128_1](doc/metrohash128_1)  |      9908.72	|    81.39 |                            |
-| [metrohash128_2](doc/metrohash128_2)  |      9943.95	|    81.31 |                            |
-| [metrohash64crc_1](doc/metrohash64crc_1)  | 14007.26	|    55.84 | cyclic collisions 8 byte, machine-specific (x86_64 SSE4.2) |
-| [metrohash64crc_2](doc/metrohash64crc_2)  | 13932.90	|    55.90 | cyclic collisions 8 byte, machine-specific (x86_64  SSE4.2) |
-| [metrohash128crc_1](doc/metrohash128crc_1)| 13993.55	|    86.92 | machine-specific (x86_64 SSE4.2) |
-| [metrohash128crc_2](doc/metrohash128crc_2)| 13929.50	|    86.90 | machine-specific (x86_64 SSE4.2) |
-| [cmetrohash64_1o](doc/cmetrohash64_1o)    |  8665.09	|    50.82 |                            |
-| [cmetrohash64_1](doc/cmetrohash64_1)      |  9522.76	|    51.04 |                            |
-| [cmetrohash64_2](doc/cmetrohash64_2)      |  9470.74	|    50.80 |                            |
-| [falkhash](doc/falkhash)              |     19984.13	|   173.46 | machine-specific (x86_64 AES-NI) |
-| [t1ha_64be](doc/t1ha_64be)            |      7146.84	|    39.78 |                            |
-| [t1ha_32le](doc/t1ha_32le)            |      5577.12	|    42.53 |                            |
-| [t1ha_32be](doc/t1ha_32be)            |      4266.89	|    41.72 |                            |
-| [t1ha](doc/t1ha)                      |      9590.96	|    36.51 |                            |
-| [t1ha_crc](doc/t1ha_crc)              |     13775.04	|    35.87 | machine-specific (x86 SSE4.2) |
-| [t1ha_aes](doc/t1ha_aes)              |     19927.77	|    36.02 | machine-specific (x86 AES-NI) |
-| [wyhash](doc/wyhash)                  |     10388.38	|    23.46 |                            |
+| [SipHash](doc/SipHash)                |      1124.24  |   115.72 |                            |
+| [GoodOAAT](doc/GoodOAAT)              |      1237.86  |    52.75 |                            |
+| [PMurHash32](doc/PMurHash32)          |      3070.82  |    44.13 |                            |
+| [Murmur3A](doc/Murmur3A)              |      3166.17  |    38.70 |                            |
+| [Murmur3C](doc/Murmur3C)              |      3404.34  |    48.65 |                            |
+| [Murmur3F](doc/Murmur3F)              |      6853.24  |    38.15 |                            |
+| [fasthash32](doc/fasthash32)          |      6693.98  |    36.67 |                            |
+| [fasthash64](doc/fasthash64)          |      7020.23  |    35.51 |                            |
+| [MUM](doc/MUM)                        |     12790.65  |    29.63 | machine-specific (32/64 differs) |
+| [MUMlow](doc/MUMlow)                  |     12973.97  |    34.67 |                            |
+| [MUMhigh](doc/MUMhigh)                |     12465.58  |    35.64 |                            |
+| [City32](doc/City32)                  |      5802.91  |    40.73 |                            |
+| [City64noSeed](doc/City64noSeed)      |     14124.43  |    29.41 |                            |
+| [City64](doc/City64)                  |     13964.74  |    39.84 | 2 minor collisions         |
+| [City64low](doc/City64low)            |     13888.28  |    45.66 |                            |
+| [City64high](doc/City64high)          |     14340.83  |    45.69 |                            |
+| [City128](doc/City128)                |     16000.61  |    45.74 |                            |
+| [CityCrc128](doc/CityCrc128)          |     19348.29  |    48.34 |                            |
+| [FarmHash64](doc/FarmHash64)         	|     14899.89  |    42.41 |                            |
+| [FarmHash128](doc/FarmHash128)        |     15998.86  |    58.12 |                            |
+| [FarmHash32](doc/FarmHash32)         	|     24831.45  |    24.99| machine-specific (x86_64 SSE4/AVX) |
+| [farmhash32_c](doc/farmhash32_c)      |     24647.21  |    25.36| machine-specific (x86_64 SSE4/AVX) |
+| [farmhash64_c](doc/farmhash64_c)     	|     14967.76  |    42.01 |                            |
+| [farmhash128_c](doc/farmhash128_c)    |     15097.31  |    61.00 |                            |
+| [xxHash32](doc/xxHash32)              |      7297.39	|    36.91 | collisions with 4bit diff  |
+| [xxHash64](doc/xxHash64)              |     14879.09	|    44.11 |                            |
+| [xxh3](doc/xxh3)                      |     43021.12	|    26.00 |                            |
+| [xxh3low](doc/xxh3low)                |     37670.92	|    26.39 |                            |
+| [xxh3high](doc/xxh3high)              |     45932.74	|    27.29 |                            |
+| [xxh128](doc/xxh128)                  |     44407.83	|    26.89 |                            |
+| [xxh128low](doc/xxh128low)            |     43661.23	|    25.86 |                            |
+| [xxh128high](doc/xxh128high)          |     41762.05	|    28.81 |                            |
+| [Spooky32](doc/Spooky32)              |     14213.99  |    48.03 |                            |
+| [Spooky64](doc/Spooky64)              |     14839.81  |    46.62 |                            |
+| [Spooky128](doc/Spooky128)            |     14833.63  |    47.50 |                            |
+| [metrohash64_1](doc/metrohash64_1)    |     15491.63  |    37.56 |                            |
+| [metrohash64_2](doc/metrohash64_2)    |     16316.71  |    37.82 |                            |
+| [metrohash128_1](doc/metrohash128_1)  |     15902.48  |    43.79 |                            |
+| [metrohash128_2](doc/metrohash128_2)  |     16374.31  |    46.21 |                            |
+| [metrohash64crc_1](doc/metrohash64crc_1)  | 25856.64	|    41.24 | cyclic collisions 8 byte, machine-specific (x64 SSE4.2) |
+| [metrohash64crc_2](doc/metrohash64crc_2)  | 26450.83	|    39.74 | cyclic collisions 8 byte, machine-specific (x64  SSE4.2) |
+| [metrohash128crc_1](doc/metrohash128crc_1)| 25404.51	|    49.07 | machine-specific (x64 SSE4.2) |
+| [metrohash128crc_2](doc/metrohash128crc_2)| 25248.70	|    49.57 | machine-specific (x64 SSE4.2) |
+| [cmetrohash64_1o](doc/cmetrohash64_1o)    |  15997.88	|    37.07 |                            |
+| [cmetrohash64_1](doc/cmetrohash64_1)      |  17094.64	|    36.85 |                            |
+| [cmetrohash64_2](doc/cmetrohash64_2)      |  15952.55	|    38.87 |                            |
+| [falkhash](doc/falkhash)              |     37742.94	|   108.59 | machine-specific (x86_64 AES-NI) |
+| [t1ha2_atonce](doc/t1ha2_atonce)      |     14747.01	|    36.09 |                            |
+| [t1ha2_stream](doc/t1ha2_stream)      |      6376.62	|    82.41 |                            |
+| [t1ha2_atonce128](doc/t1ha2_atonce128)|     14007.67	|    50.51 |                            |
+| [t1ha2_stream128](doc/t1ha2_stream128)|      7274.53	|    93.11 |                            |
+| [t1ha1_64le](doc/t1ha1_64le)          |     16255.08	|    27.63 |                            |
+| [t1ha1_64be](doc/t1ha1_64be)          |     12285.15	|    28.84 |                            |
+| [t1ha0_32le](doc/t1ha0_32le)          |      8866.04	|    36.95 |                            |
+| [t1ha0_32be](doc/t1ha0_32be)          |      7859.07	|    38.63 |                            |
+| [t1ha0_aes_noavx](doc/t1ha0_aes_noavx)|     21264.27	|    35.63 | machine-specific (x86 AES-NI) |
+| [t1ha0_aes_avx1](doc/t1ha0_aes_avx1)  |     20443.32	|    36.05 | machine-specific (x64 AVX)    |
+| [t1ha0_aes_avx2](doc/t1ha0_aes_avx2)  |     36436.51	|    36.31 | machine-specific (x64 AVX2)   |
+| [wyhash](doc/wyhash)                  |     10315.00	|    25.10 |                            |
 
 Summary
 -------
