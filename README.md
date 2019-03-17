@@ -14,23 +14,25 @@ SMhasher
 | [crc32](doc/crc32)                    |       544.84  |    92.65 | insecure, 8589.93x collisions, distrib  |
 | [md5_32a](doc/md5_32a)                |       399.30  |   550.28 | 8589.93x collisions, distrib   |
 | [sha1_32a](doc/sha1_32a)              |       648.72  |   850.86 | collisions, 36.6% distrib      |
-| [hasshe2](doc/hasshe2)                |      2054.39  |    76.60 | insecure, 100% bias, collisions, distrib |
+| [hasshe2](doc/hasshe2)                |      2054.39  |    76.60 | insecure, fails all tests      |
 | [crc32_hw](doc/crc32_hw)              |      9310.60  |    24.63 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
 | [crc32_hw1](doc/crc32_hw1)            |     30145.28  |    30.98 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
 | [crc64_hw](doc/crc64_hw)              |     10181.36  |    23.46 | insecure, 100% bias, collisions, distrib, machine-specific (x86_64 SSE4.2) |
-| [fibonacci](doc/fibonacci)            |     20706.41  |    19.38 | zeros, 100% bias, collisions, distrib    |
-| [FNV1a](doc/FNV1a)                    |       937.85  |    56.63 | zeros, 100% bias, collisions, distrib    |
-| [FNV1a_YT](doc/FNV1a_YT)              |     15425.31  |    21.51 | 100% bias, collisions, distrib   |
-| [FNV64](doc/FNV64)                    |       893.70  |    56.94 | 100% bias, collisions, distrib   |
-| [FNV2](doc/FNV2)                      |      7885.43  |    28.71 | 100% bias, collisions, distrib   |
-| [bernstein](doc/bernstein)            |      1261.71  |    46.20 | 100% bias, collisions, distrib   |
-| [sdbm](doc/sdbm)                      |       929.94  |    54.35 | 100% bias, collisions, distrib   |
-| [x17](doc/x17)                        |      1174.99  |    53.62 | 99.98% bias, collisions, distrib |
-| [JenkinsOOAT](doc/JenkinsOOAT)        |       736.83  |    86.43 | 53.5% bias, collisions, distrib  |
+| [fibonacci](doc/fibonacci)            |     20706.41  |    19.38 | zeros, fails all tests       |
+| [FNV1a](doc/FNV1a)                    |       937.85  |    56.63 | zeros, fails all tests       |
+| [FNV1a_YT](doc/FNV1a_YT)              |     15425.31  |    21.51 | fails all tests              |
+| [FNV64](doc/FNV64)                    |       893.70  |    56.94 | fails all tests              |
+| [FNV2](doc/FNV2)                      |      7885.43  |    28.71 | fails all tests              |
+| [fletcher2](doc/fletcher2)            |     26241.42  |    19.01 | fails all tests              |
+| [fletcher4](doc/fletcher4)            |      9526.54  |    19.53 | fails all tests              |
+| [bernstein](doc/bernstein)            |      1261.71  |    46.20 | fails all tests              |
+| [sdbm](doc/sdbm)                      |       929.94  |    54.35 | fails all tests              |
+| [x17](doc/x17)                        |      1174.99  |    53.62 | 99.98% bias, fails all tests |
+| [JenkinsOOAT](doc/JenkinsOOAT)        |       736.83  |    86.43 | 53.5% bias, fails all tests  |
 | [JenkinsOOAT_pl](doc/JenkinsOOAT_perl)|       741.41  |    71.78 | 1.5-11.5% bias, 7.2x collisions  |
-| [MicroOAAT](doc/MicroOAAT)            |       819.52  |    63.24 | 100% bias, distrib               |
-| [jodyhash32](doc/jodyhash32)          |      1864.24  |    34.43 | bias, collisions, distr    |
-| [jodyhash64](doc/jodyhash64)          |      3764.44  |    30.13 | bias, collisions, distr    |
+| [MicroOAAT](doc/MicroOAAT)            |       819.52  |    63.24 | 100% bias, distrib           |
+| [jodyhash32](doc/jodyhash32)          |      1864.24  |    34.43 | bias, collisions, distr      |
+| [jodyhash64](doc/jodyhash64)          |      3764.44  |    30.13 | bias, collisions, distr      |
 | [lookup3](doc/lookup3)                |      3133.07  |    30.65 | 28% bias, collisions, 30% distr  |
 | [superfast](doc/superfast)            |      2918.47  |    34.62 | 91% bias, 5273.01x collisions, 37% distr |
 | [MurmurOAAT](doc/MurmurOAAT)          |       669.46  |    74.54 | collisions, 99.998% distr          |

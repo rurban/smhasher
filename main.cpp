@@ -131,6 +131,10 @@ HashInfo g_hashes[] =
                                           "fibonacci",   "wordwise Fibonacci" },
   { FNV32a,               32, 0xE3CBBE91, "FNV1a",       "Fowler-Noll-Vo hash, 32-bit" },
   { FNV32a_YoshimitsuTRIAD,32,0xD8AFFD71, "FNV1a_YT",    "FNV1a-YoshimitsuTRIAD 32-bit sanmayce" },
+#if 0 /* TODO */
+  { Jesteress,            32, 0x0, "FNV1a_Jesteress",  "FNV1a-Jesteress 32-bit sanmayce" },
+  { Meiyan,       	  32, 0x0, "FNV1a_Meiyan",     "FNV1a-Meiyan 32-bit sanmayce" },
+#endif
   { FNV64a,               64, 0x103455FC, "FNV64",       "Fowler-Noll-Vo hash, 64-bit" },
   { FNV2,    __WORDSIZE,
 #ifdef HAVE_BIT32
@@ -139,12 +143,8 @@ HashInfo g_hashes[] =
     0x1967C625,
 #endif
                                           "FNV2",        "wordwise FNV" },  
-#if 0 /* TODO */
-  { fletcher2,            64, 0x0, "fletcher2",  "fletcher2 ZFS"} //TODO
-  { fletcher4,            64, 0x0, "fletcher4",  "fletcher4 ZFS"} //TODO
-  { Jesteress,            32, 0x0, "Jesteress",  "FNV1a-Jesteress 32-bit sanmayce" },
-  { Meiyan,       	  32, 0x0, "Meiyan",     "FNV1a-Meiyan 32-bit sanmayce" },
-#endif
+  { fletcher2,            64, 0x890767C0, "fletcher2",   "fletcher2 ZFS"},
+  { fletcher4,            64, 0x47660EB7, "fletcher4",   "fletcher4 ZFS"},
   { Bernstein,            32, 0xBDB4B640, "bernstein",   "Bernstein, 32-bit" },
   { sdbm,                 32, 0x582AF769, "sdbm",        "sdbm as in perl5" },
   { x17_test,             32, 0x8128E14C, "x17",         "x17" },
