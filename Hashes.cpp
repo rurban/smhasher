@@ -94,6 +94,25 @@ MurmurOAAT_test(const void *key, int len, uint32_t seed, void *out)
 //----------------------------------------------------------------------------
 
 void
+fibonacci(const void *key, int len, uint32_t seed, void *out)
+{
+  size_t h = (size_t)seed;
+  size_t *dw = (size_t *)key; //word stepper
+  const size_t *endw = &((const size_t*)key)[len/sizeof(size_t)];
+  for (; dw < endw; dw++) {
+    h += *dw * BIG_CONSTANT(11400714819323198485);
+  }
+  if (len & (sizeof(size_t)-1)) {
+    uint8_t *dc = (uint8_t*)dw; //byte stepper
+    const uint8_t *endc = &((const uint8_t*)key)[len];
+    for (; dc < endc; dc++) {
+      h += *dc * BIG_CONSTANT(11400714819323198485);
+    }
+  }
+  *(size_t *) out = h;
+}
+
+void
 FNV32a(const void *key, int len, uint32_t seed, void *out)
 {
   unsigned int	  h = seed;

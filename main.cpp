@@ -10,6 +10,14 @@
 #include <stdint.h>
 #include <time.h>
 
+#ifndef __WORDSIZE
+# ifdef HAVE_BIT32
+#  define __WORDSIZE 32
+# else
+#  define __WORDSIZE 64
+# endif
+#endif
+
 //-----------------------------------------------------------------------------
 // Configuration. TODO - move these to command-line flags
 
@@ -114,6 +122,13 @@ HashInfo g_hashes[] =
   // elf64 or macho64 only
   { fhtw_test,            64, 0x0,        "fhtw",        "fhtw asm" },
 #endif
+  { fibonacci,    __WORDSIZE,
+#ifdef HAVE_BIT32
+    0x09952480,
+#else
+    0xFE3BD380,
+#endif
+                                          "fibonacci",   "wordwise Fibonacci" },
   { FNV32a,               32, 0xE3CBBE91, "FNV1a",       "Fowler-Noll-Vo hash, 32-bit" },
   { FNV32a_YoshimitsuTRIAD,32,0xD8AFFD71, "FNV1a_YT",    "FNV1a-YoshimitsuTRIAD 32-bit sanmayce" },
   { FNV64a,               64, 0x103455FC, "FNV64",       "Fowler-Noll-Vo hash, 64-bit" },

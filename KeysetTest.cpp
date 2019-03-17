@@ -70,7 +70,7 @@ bool VerificationTest ( pfHash hash, const int hashbits, uint32_t expected, bool
 
 bool SanityTest ( pfHash hash, const int hashbits )
 {
-  printf("Running sanity check 1    ");
+  printf("Running sanity check 1     ");
 
   Rand r(883741);
 
@@ -136,11 +136,11 @@ bool SanityTest ( pfHash hash, const int hashbits )
 
   if(result == false)
   {
-    printf("FAIL  !!!!!\n");
+    printf(" FAIL  !!!!!\n");
   }
   else
   {
-    printf("PASS\n");
+    printf(" PASS\n");
   }
 
   delete [] buffer1;
@@ -186,7 +186,7 @@ void AppendedZeroesTest ( pfHash hash, const int hashbits )
 
       if(memcmp(h1,h2,hashbytes) == 0)
       {
-        printf("FAIL !!!!!\n");
+        printf(" FAIL !!!!!\n");
         return;
       }
 
@@ -194,7 +194,7 @@ void AppendedZeroesTest ( pfHash hash, const int hashbits )
     }
   }
 
-  printf("PASS\n");
+  printf(" PASS\n");
 }
 
 //-----------------------------------------------------------------------------

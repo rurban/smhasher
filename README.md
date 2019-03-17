@@ -18,6 +18,7 @@ SMhasher
 | [crc32_hw](doc/crc32_hw)              |      9310.60  |    24.63 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
 | [crc32_hw1](doc/crc32_hw1)            |     30145.28  |    30.98 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
 | [crc64_hw](doc/crc64_hw)              |     10181.36  |    23.46 | insecure, 100% bias, collisions, distrib, machine-specific (x86_64 SSE4.2) |
+| [fibonacci](doc/fibonacci)            |     20706.41  |    19.38 | zeros, 100% bias, collisions, distrib    |
 | [FNV1a](doc/FNV1a)                    |       937.85  |    56.63 | zeros, 100% bias, collisions, distrib    |
 | [FNV1a_YT](doc/FNV1a_YT)              |     15425.31  |    21.51 | 100% bias, collisions, distrib   |
 | [FNV64](doc/FNV64)                    |       893.70  |    56.94 | 100% bias, collisions, distrib   |

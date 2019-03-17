@@ -60,6 +60,7 @@ void CityHashCrc64_test    ( const void * key, int len, uint32_t seed, void * ou
 void CityHashCrc128_test   ( const void * key, int len, uint32_t seed, void * out );
 void falkhash_test_cxx     ( const void * key, int len, uint32_t seed, void * out );
 #endif
+void fibonacci             ( const void * key, int len, uint32_t seed, void * out );
 void FNV32a                ( const void * key, int len, uint32_t seed, void * out );
 void FNV32a_YoshimitsuTRIAD( const void * key, int len, uint32_t seed, void * out );
 void FNV64a                ( const void * key, int len, uint32_t seed, void * out );
