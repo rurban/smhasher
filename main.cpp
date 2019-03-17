@@ -132,6 +132,13 @@ HashInfo g_hashes[] =
   { FNV32a,               32, 0xE3CBBE91, "FNV1a",       "Fowler-Noll-Vo hash, 32-bit" },
   { FNV32a_YoshimitsuTRIAD,32,0xD8AFFD71, "FNV1a_YT",    "FNV1a-YoshimitsuTRIAD 32-bit sanmayce" },
   { FNV64a,               64, 0x103455FC, "FNV64",       "Fowler-Noll-Vo hash, 64-bit" },
+  { FNV2,    __WORDSIZE,
+#ifdef HAVE_BIT32
+    0x739801C5,
+#else
+    0x1967C625,
+#endif
+                                          "FNV2",        "wordwise FNV" },  
 #if 0 /* TODO */
   { fletcher2,            64, 0x0, "fletcher2",  "fletcher2 ZFS"} //TODO
   { fletcher4,            64, 0x0, "fletcher4",  "fletcher4 ZFS"} //TODO

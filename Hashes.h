@@ -64,6 +64,7 @@ void fibonacci             ( const void * key, int len, uint32_t seed, void * ou
 void FNV32a                ( const void * key, int len, uint32_t seed, void * out );
 void FNV32a_YoshimitsuTRIAD( const void * key, int len, uint32_t seed, void * out );
 void FNV64a                ( const void * key, int len, uint32_t seed, void * out );
+void FNV2                  ( const void * key, int len, uint32_t seed, void * out );
 void Bernstein             ( const void * key, int len, uint32_t seed, void * out );
 void sdbm                  ( const void * key, int len, uint32_t seed, void * out );
 void x17_test              ( const void * key, int len, uint32_t seed, void * out );

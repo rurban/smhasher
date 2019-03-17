@@ -113,6 +113,40 @@ fibonacci(const void *key, int len, uint32_t seed, void *out)
 }
 
 void
+FNV2(const void *key, int len, uint32_t seed, void *out)
+{
+  size_t h = (size_t)seed;
+  size_t *dw = (size_t *)key; //word stepper
+  const size_t *endw = &((const size_t*)key)[len/sizeof(size_t)];
+#ifdef HAVE_BIT32
+  h ^= BIG_CONSTANT(2166136261);
+#else
+  h ^= BIG_CONSTANT(0xcbf29ce484222325);
+#endif
+  for (; dw < endw; dw++) {
+    h ^= *dw;
+#ifdef HAVE_BIT32
+    h *= BIG_CONSTANT(16777619);
+#else
+    h *= BIG_CONSTANT(0x100000001b3);
+#endif
+  }
+  if (len & (sizeof(size_t)-1)) {
+    uint8_t *dc = (uint8_t*)dw; //byte stepper
+    const uint8_t *endc = &((const uint8_t*)key)[len];
+    for (; dc < endc; dc++) {
+      h ^= *dc;
+#ifdef HAVE_BIT32
+      h *= BIG_CONSTANT(16777619);
+#else
+      h *= BIG_CONSTANT(0x100000001b3);
+#endif
+    }
+  }
+  *(size_t *) out = h;
+}
+
+void
 FNV32a(const void *key, int len, uint32_t seed, void *out)
 {
   unsigned int	  h = seed;

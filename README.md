@@ -22,6 +22,7 @@ SMhasher
 | [FNV1a](doc/FNV1a)                    |       937.85  |    56.63 | zeros, 100% bias, collisions, distrib    |
 | [FNV1a_YT](doc/FNV1a_YT)              |     15425.31  |    21.51 | 100% bias, collisions, distrib   |
 | [FNV64](doc/FNV64)                    |       893.70  |    56.94 | 100% bias, collisions, distrib   |
+| [FNV2](doc/FNV2)                      |      7885.43  |    28.71 | 100% bias, collisions, distrib   |
 | [bernstein](doc/bernstein)            |      1261.71  |    46.20 | 100% bias, collisions, distrib   |
 | [sdbm](doc/sdbm)                      |       929.94  |    54.35 | 100% bias, collisions, distrib   |
 | [x17](doc/x17)                        |      1174.99  |    53.62 | 99.98% bias, collisions, distrib |
@@ -111,12 +112,12 @@ See also the old [https://code.google.com/p/smhasher/w/list](https://code.google
 So the fastest hash functions on x86_64 without quality problems are:
 
 - wyhash
+- xxh3
 - t1ha
 - falkhash (_macho64 and elf64 nasm only, with HW AES extension_)
 - Metro (_but not 64crc yet, WIP_)
 - FarmHash (_not portable, too machine specific: 64 vs 32bit, old gcc, ..._)
 - Spooky32
-- xxHash64
 - fasthash
 - City (_deprecated_)
 - mum (_machine specific, mum: different results on 32/64-bit archs_)
