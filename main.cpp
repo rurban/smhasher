@@ -142,7 +142,7 @@ HashInfo g_hashes[] =
 #else
     0x1967C625,
 #endif
-                                          "FNV2",        "wordwise FNV" },  
+                                          "FNV2",        "wordwise FNV" },
   { fletcher2,            64, 0x890767C0, "fletcher2",   "fletcher2 ZFS"},
   { fletcher4,            64, 0x47660EB7, "fletcher4",   "fletcher4 ZFS"},
   { Bernstein,            32, 0xBDB4B640, "bernstein",   "Bernstein, 32-bit" },
@@ -187,13 +187,11 @@ HashInfo g_hashes[] =
 #endif
   { mum_hash_test,        64, MUM_SEED,   "MUM",         "github.com/vnmakarov/mum-hash" },
   { mum_low_test,         32, MUM_SEED,   "MUMlow",      "github.com/vnmakarov/mum-hash" },
-  { mum_high_test,        32, MUM_SEED,   "MUMhigh",     "github.com/vnmakarov/mum-hash" },
 
   { CityHash32_test,      32, 0x5C28AD62, "City32",      "Google CityHash32WithSeed (old)" },
   { CityHash64noSeed_test,64, 0x63FC6063, "City64noSeed","Google CityHash64 without seed (default version, misses one final avalanche)" },
   { CityHash64_test,      64, 0x25A20825, "City64",      "Google CityHash64WithSeed (old)" },
   { CityHash64_low_test,  32, 0xCC5BC861, "City64low",   "Google CityHash64WithSeed (low 32-bits)" },
-  { CityHash64_high_test, 32, 0xC94A0E6B, "City64high",  "Google CityHash64WithSeed (high 32-bits)" },
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { CityHash128_test,    128, 0x6531F54E, "City128",     "Google CityHash128WithSeed (old)" },
   { CityHashCrc128_test, 128, 0xD4389C97, "CityCrc128",  "Google CityHashCrc128WithSeed SSE4.2 (old)" },
@@ -218,10 +216,8 @@ HashInfo g_hashes[] =
   { xxHash64_test,        64, 0x024B7CF4, "xxHash64",    "xxHash, 64-bit" },
   { xxh3_test,            64, 0xF6FED399, "xxh3",        "xxHash v3, 64-bit" },
   { xxh3low_test,         32, 0xECA5AAE7, "xxh3low",     "xxHash v3, 64-bit, low 32-bits part" },
-  { xxh3high_test,        32, 0xECA5AAE7, "xxh3high",    "xxHash v3, 64-bit, high 32-bits part" },
   { xxh128_test,         128, 0xECA5AAE7, "xxh128",      "xxHash v3, 128-bit" },
   { xxh128low_test,       64, 0xECA5AAE7, "xxh128low",   "xxHash v3, 128-bit, low 64-bits part" },
-  { xxh128high_test,      64, 0xECA5AAE7, "xxh128high",  "xxHash v3, 128-bit, high 64-bits part" },
 #if 0
   { xxhash256_test,       64, 0x024B7CF4, "xxhash256",   "xxhash256, 64-bit unportable" },
 #endif
@@ -403,6 +399,8 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       result &= AvalancheTest< Blob<1536>,hashtype > (hash,300000);
     }
 
+    result &= AvalancheTest< Blob<9992>,hashtype > (hash,300000);
+
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
     fflush(NULL);
@@ -485,7 +483,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       fflush(NULL);
 
       bool result = true;
-     
+
       uint32_t blocks[] = { 0, 1, 2, 3, 4, 5, 6, 7 };
 
       result &= CombinationKeyTest<hashtype>(hash,7,blocks,sizeof(blocks) / sizeof(uint32_t),
@@ -501,7 +499,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       fflush(NULL);
 
       bool result = true;
-     
+
       uint32_t blocks[] =
       {
         0x00000000,
@@ -520,7 +518,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       printf("Combination Hi-Lo Tests:\n");
 
       bool result = true;
-     
+
       uint32_t blocks[] =
       {
         0x00000000,
@@ -541,7 +539,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       fflush(NULL);
 
       bool result = true;
-     
+
       uint32_t blocks[] =
       {
         0x00000000,
@@ -560,7 +558,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       printf("Combination 0x0000001 Tests:\n");
 
       bool result = true;
-     
+
       uint32_t blocks[] =
       {
         0x00000000,
@@ -580,7 +578,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       fflush(NULL);
 
       bool result = true;
-     
+
       uint64_t blocks[] =
       {
         0x0000000000000000ULL,
@@ -600,7 +598,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       fflush(NULL);
 
       bool result = true;
-     
+
       uint64_t blocks[] =
       {
         0x0000000000000000ULL,
@@ -620,7 +618,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       fflush(NULL);
 
       bool result = true;
-     
+
       block16 blocks[2];
       memset(blocks, 0, sizeof(blocks));
       blocks[0].c[0] = 1;   // presumes little endian
@@ -637,7 +635,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       fflush(NULL);
 
       bool result = true;
-     
+
       size_t const nbElts = 2;
       block16 blocks[nbElts];
       memset(blocks, 0, sizeof(blocks));
@@ -655,7 +653,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       fflush(NULL);
 
       bool result = true;
-     
+
       block32 blocks[2];
       memset(blocks, 0, sizeof(blocks));
       blocks[0].c[0] = 1;   // presumes little endian
@@ -672,7 +670,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       fflush(NULL);
 
       bool result = true;
-     
+
       size_t const nbElts = 2;
       block32 blocks[nbElts];
       memset(blocks, 0, sizeof(blocks));
@@ -690,7 +688,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       fflush(NULL);
 
       bool result = true;
-     
+
       block64 blocks[2];
       memset(blocks, 0, sizeof(blocks));
       blocks[0].c[0] = 1;   // presumes little endian
@@ -707,7 +705,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       fflush(NULL);
 
       bool result = true;
-     
+
       size_t const nbElts = 2;
       block64 blocks[nbElts];
       memset(blocks, 0, sizeof(blocks));
@@ -725,7 +723,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       fflush(NULL);
 
       bool result = true;
-     
+
       block128 blocks[2];
       memset(blocks, 0, sizeof(blocks));
       blocks[0].c[0] = 1;   // presumes little endian
@@ -742,7 +740,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       fflush(NULL);
 
       bool result = true;
-     
+
       size_t const nbElts = 2;
       block128 blocks[nbElts];
       memset(blocks, 0, sizeof(blocks));
@@ -772,7 +770,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     bool result = true;
     bool testCollision = true;
     bool testDistribution = g_testExtra;
-   
+
     result &= WindowedKeyTest< Blob<hashbits*2+2>, hashtype >
       ( hash, 20, testCollision, testDistribution, g_drawDiagram );
 
@@ -791,7 +789,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     fflush(NULL);
 
     bool result = true;
-   
+
 #if 0
     result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+0,8,100000, g_drawDiagram);
 #else
@@ -845,7 +843,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("[[[ Keyset 'Text' Tests ]]]\n\n");
 
     bool result = true;
-   
+
     const char * alnum = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     result &= TextKeyTest( hash, "Foo",    alnum, 4, "Bar",    g_drawDiagram );
@@ -865,7 +863,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("[[[ Keyset 'Zeroes' Tests ]]]\n\n");
 
     bool result = true;
-   
+
     result &= ZeroKeyTest<hashtype>( hash, g_drawDiagram );
 
     if(!result) printf("*********FAIL*********\n");
@@ -881,7 +879,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("[[[ Keyset 'Seed' Tests ]]]\n\n");
 
     bool result = true;
-   
+
     result &= SeedTest<hashtype>( hash, 5000000, g_drawDiagram );
 
     if(!result) printf("*********FAIL*********\n");

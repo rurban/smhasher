@@ -80,11 +80,11 @@ inline void lshift ( void * blob, int len, int c )
 {
   if((len & 3) == 0)
   {
-    lshift32(blob,len,c);
+    lshift32(blob, len, c);
   }
   else
   {
-    lshift8(blob,len,c);
+    lshift8(blob, len, c);
   }
 }
 
@@ -92,11 +92,11 @@ inline void rshift ( void * blob, int len, int c )
 {
   if((len & 3) == 0)
   {
-    rshift32(blob,len,c);
+    rshift32(blob, len, c);
   }
   else
   {
-    rshift8(blob,len,c);
+    rshift8(blob, len, c);
   }
 }
 
@@ -230,13 +230,13 @@ inline uint32_t window ( T & blob, int start, int count )
   }
 }
 
-template<> 
+template<>
 inline uint32_t window ( uint32_t & blob, int start, int count )
 {
   return ROTR32(blob,start) & ((1<<count)-1);
 }
 
-template<> 
+template<>
 inline uint32_t window ( uint64_t & blob, int start, int count )
 {
   return (uint32_t)ROTR64(blob,start) & ((1<<count)-1);
