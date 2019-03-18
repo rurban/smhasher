@@ -1020,7 +1020,6 @@ int main ( int argc, const char ** argv )
   else {
     int i = 1;
     hashToTest = argv[i];
-    i++;
 
     if (strncmp(hashToTest,"--", 2) == 0) {
       if (strcmp(hashToTest,"--help") == 0) {
@@ -1043,6 +1042,7 @@ int main ( int argc, const char ** argv )
       }
       if (strcmp(hashToTest,"--verbose") == 0) {
         g_drawDiagram = true;
+        i++;
         if (argc > i)
           hashToTest = argv[i];
         else
@@ -1050,6 +1050,7 @@ int main ( int argc, const char ** argv )
       }
       if (strcmp(hashToTest,"--extra") == 0) {
         g_testExtra = true;
+        i++;
         if (argc > i)
           hashToTest = argv[i];
         else
@@ -1085,6 +1086,7 @@ int main ( int argc, const char ** argv )
           }
         } while (p);
       }
+      i++;
       if (argc > i)
         hashToTest = argv[i];
       else
