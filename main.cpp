@@ -358,7 +358,8 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
   //-----------------------------------------------------------------------------
   // Avalanche tests
-  // 1m30 with xxh3
+  // 1m30 for xxh3
+  // 13m  for xxh3 with --extra
 
   if(g_testAvalanche || g_testAll)
   {
@@ -381,8 +382,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     result &= AvalancheTest< Blob<128>, hashtype > (hash,300000);
     result &= AvalancheTest< Blob<160>, hashtype > (hash,300000);
 
-    if(g_testExtra)
-    {
+    if(g_testExtra) {
       result &= AvalancheTest< Blob<192>, hashtype > (hash,300000);
       result &= AvalancheTest< Blob<224>, hashtype > (hash,300000);
       result &= AvalancheTest< Blob<256>, hashtype > (hash,300000);
@@ -390,13 +390,15 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       result &= AvalancheTest< Blob<320>, hashtype > (hash,300000);
       result &= AvalancheTest< Blob<384>, hashtype > (hash,300000);
       result &= AvalancheTest< Blob<448>, hashtype > (hash,300000);
+    }
       result &= AvalancheTest< Blob<512>, hashtype > (hash,300000);
-
+    if(g_testExtra) {
       result &= AvalancheTest< Blob<640>, hashtype > (hash,300000);
       result &= AvalancheTest< Blob<768>, hashtype > (hash,300000);
       result &= AvalancheTest< Blob<896>, hashtype > (hash,300000);
+    }
       result &= AvalancheTest< Blob<1024>,hashtype > (hash,300000);
-
+    if(g_testExtra) {
       result &= AvalancheTest< Blob<1280>,hashtype > (hash,300000);
       result &= AvalancheTest< Blob<1536>,hashtype > (hash,300000);
     }
@@ -408,7 +410,8 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
   //-----------------------------------------------------------------------------
   // Keyset 'Sparse' - keys with all bits 0 except a few
-  // 1m50 with xxh3
+  // 3m30 for xxh3
+  // 14m  for xxh3 with --extra
 
   if(g_testSparse || g_testAll)
   {
@@ -417,50 +420,50 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
     bool result = true;
    
-    result &= SparseKeyTest<  16,hashtype>(hash,9,true,true,true, g_drawDiagram);
-    result &= SparseKeyTest<  24,hashtype>(hash,8,true,true,true, g_drawDiagram);
-    result &= SparseKeyTest<  32,hashtype>(hash,7,true,true,true, g_drawDiagram);
-    result &= SparseKeyTest<  40,hashtype>(hash,6,true,true,true, g_drawDiagram);
-    result &= SparseKeyTest<  48,hashtype>(hash,6,true,true,true, g_drawDiagram);
-    result &= SparseKeyTest<  56,hashtype>(hash,5,true,true,true, g_drawDiagram);
-    result &= SparseKeyTest<  64,hashtype>(hash,5,true,true,true, g_drawDiagram);
-    result &= SparseKeyTest<  72,hashtype>(hash,5,true,true,true, g_drawDiagram);
-    result &= SparseKeyTest<  96,hashtype>(hash,4,true,true,true, g_drawDiagram);
-    if (g_testExtra)
-      {
-        result &= SparseKeyTest< 112,hashtype>(hash,4,true,true,true, g_drawDiagram);
-        result &= SparseKeyTest< 128,hashtype>(hash,4,true,true,true, g_drawDiagram);
-        result &= SparseKeyTest< 144,hashtype>(hash,4,true,true,true, g_drawDiagram);
-        result &= SparseKeyTest< 160,hashtype>(hash,4,true,true,true, g_drawDiagram);
-        result &= SparseKeyTest< 192,hashtype>(hash,4,true,true,true, g_drawDiagram);
-      }
-    result &= SparseKeyTest< 256,hashtype>(hash,3,true,true,true, g_drawDiagram);
-    if (g_testExtra)
-      {
-        result &= SparseKeyTest< 288,hashtype>(hash,3,true,true,true, g_drawDiagram);
-        result &= SparseKeyTest< 320,hashtype>(hash,3,true,true,true, g_drawDiagram);
-        result &= SparseKeyTest< 384,hashtype>(hash,3,true,true,true, g_drawDiagram);
-        result &= SparseKeyTest< 448,hashtype>(hash,3,true,true,true, g_drawDiagram);
-        result &= SparseKeyTest< 512,hashtype>(hash,3,true,true,true, g_drawDiagram);
-        result &= SparseKeyTest< 640,hashtype>(hash,3,true,true,true, g_drawDiagram);
-        result &= SparseKeyTest< 768,hashtype>(hash,3,true,true,true, g_drawDiagram);
-        result &= SparseKeyTest< 896,hashtype>(hash,2,true,true,true, g_drawDiagram);
-      }
-    result &= SparseKeyTest<1024,hashtype>(hash,2,true,true,true, g_drawDiagram);
-    if (g_testExtra)
-      {
-        result &= SparseKeyTest<1280,hashtype>(hash,2,true,true,true, g_drawDiagram);
-        result &= SparseKeyTest<1536,hashtype>(hash,2,true,true,true, g_drawDiagram);
-      }
-    result &= SparseKeyTest<2048,hashtype>(hash,2,true,true,true, g_drawDiagram);
-    if (g_testExtra)
-      {
-        result &= SparseKeyTest<3072,hashtype>(hash,2,true,true,true, g_drawDiagram);
-        result &= SparseKeyTest<4096,hashtype>(hash,2,true,true,true, g_drawDiagram);
-        result &= SparseKeyTest<6144,hashtype>(hash,2,true,true,true, g_drawDiagram);
-        result &= SparseKeyTest<8192,hashtype>(hash,2,true,true,true, g_drawDiagram);
-        result &= SparseKeyTest<9992,hashtype>(hash,2,true,true,true, g_drawDiagram);
-      }
+      result &= SparseKeyTest<  16,hashtype>(hash,9,true,true,true, g_drawDiagram);
+      result &= SparseKeyTest<  24,hashtype>(hash,8,true,true,true, g_drawDiagram);
+      result &= SparseKeyTest<  32,hashtype>(hash,7,true,true,true, g_drawDiagram);
+      result &= SparseKeyTest<  40,hashtype>(hash,6,true,true,true, g_drawDiagram);
+      result &= SparseKeyTest<  48,hashtype>(hash,6,true,true,true, g_drawDiagram);
+      result &= SparseKeyTest<  56,hashtype>(hash,5,true,true,true, g_drawDiagram);
+      result &= SparseKeyTest<  64,hashtype>(hash,5,true,true,true, g_drawDiagram);
+      result &= SparseKeyTest<  72,hashtype>(hash,5,true,true,true, g_drawDiagram);
+      result &= SparseKeyTest<  96,hashtype>(hash,4,true,true,true, g_drawDiagram);
+    if (g_testExtra) {
+      result &= SparseKeyTest< 112,hashtype>(hash,4,true,true,true, g_drawDiagram);
+      result &= SparseKeyTest< 128,hashtype>(hash,4,true,true,true, g_drawDiagram);
+      result &= SparseKeyTest< 144,hashtype>(hash,4,true,true,true, g_drawDiagram);
+    }
+      result &= SparseKeyTest< 160,hashtype>(hash,4,true,true,true, g_drawDiagram);
+    if (g_testExtra) {
+      result &= SparseKeyTest< 192,hashtype>(hash,4,true,true,true, g_drawDiagram);
+    }
+      result &= SparseKeyTest< 256,hashtype>(hash,3,true,true,true, g_drawDiagram);
+    if (g_testExtra) {
+      result &= SparseKeyTest< 288,hashtype>(hash,3,true,true,true, g_drawDiagram);
+      result &= SparseKeyTest< 320,hashtype>(hash,3,true,true,true, g_drawDiagram);
+      result &= SparseKeyTest< 384,hashtype>(hash,3,true,true,true, g_drawDiagram);
+      result &= SparseKeyTest< 448,hashtype>(hash,3,true,true,true, g_drawDiagram);
+    }
+      result &= SparseKeyTest< 512,hashtype>(hash,3,true,true,true, g_drawDiagram);
+    if (g_testExtra) {
+      result &= SparseKeyTest< 640,hashtype>(hash,3,true,true,true, g_drawDiagram);
+      result &= SparseKeyTest< 768,hashtype>(hash,3,true,true,true, g_drawDiagram);
+      result &= SparseKeyTest< 896,hashtype>(hash,2,true,true,true, g_drawDiagram);
+    }
+      result &= SparseKeyTest<1024,hashtype>(hash,2,true,true,true, g_drawDiagram);
+    if (g_testExtra) {
+      result &= SparseKeyTest<1280,hashtype>(hash,2,true,true,true, g_drawDiagram);
+      result &= SparseKeyTest<1536,hashtype>(hash,2,true,true,true, g_drawDiagram);
+    }
+      result &= SparseKeyTest<2048,hashtype>(hash,2,true,true,true, g_drawDiagram);
+    if (g_testExtra) {
+      result &= SparseKeyTest<3072,hashtype>(hash,2,true,true,true, g_drawDiagram);
+      result &= SparseKeyTest<4096,hashtype>(hash,2,true,true,true, g_drawDiagram);
+      result &= SparseKeyTest<6144,hashtype>(hash,2,true,true,true, g_drawDiagram);
+      result &= SparseKeyTest<8192,hashtype>(hash,2,true,true,true, g_drawDiagram);
+      result &= SparseKeyTest<9992,hashtype>(hash,2,true,true,true, g_drawDiagram);
+    }
 
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
@@ -806,8 +809,12 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
   //-----------------------------------------------------------------------------
   // Keyset 'TwoBytes' - all keys up to N bytes containing two non-zero bytes
+  // 3m40 for crc32_hw (32bit), 8m30 for xxh3 --extra (64bit)
+  // 4m16 for xxh3
+  // 4m50 for metrohash128crc_1
 
-  // This generates some huge keysets, 128-bit tests will take ~1.3 gigs of RAM.
+  // With --extra this generates some huge keysets,
+  // 128-bit tests will take ~1.3 gigs of RAM.
 
   if(g_testTwoBytes || g_testAll)
   {
@@ -815,10 +822,14 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     fflush(NULL);
 
     bool result = true;
-   
-    for(int i = 4; i <= 24; i += 4)
+    int maxlen = 24;
+    if (!g_testExtra && (info->hashbits > 32)) {
+      maxlen = (info->hashbits < 128) ? 20 : 16;
+    }
+
+    for(int i = 4; i <= maxlen; i += 4)
     {
-      result &= TwoBytesTest2<hashtype>(hash,i, g_drawDiagram);
+      result &= TwoBytesTest2<hashtype>(hash, i, g_drawDiagram);
     }
 
     if(!result) printf("*********FAIL*********\n");
