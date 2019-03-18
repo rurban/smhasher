@@ -63,7 +63,7 @@ int FindCollisions ( std::vector<hashtype> & hashes,
   return collcount;
 }
 
-static double estimateNbCollisions(int nbH, int nbBits)
+static double EstimateNbCollisions(int nbH, int nbBits)
 {
     return (double(nbH) * double(nbH-1)) / pow(2.0, double(nbBits + 1));
 }
@@ -77,7 +77,7 @@ bool CountHighbitsCollisions ( std::vector<hashtype> & hashes, int nbHBits)
   if (shiftBy <= 0) return 0;
 
   size_t const nbH = hashes.size();
-  double expected = estimateNbCollisions(nbH, nbHBits);
+  double expected = EstimateNbCollisions(nbH, nbHBits);
   printf("Testing collisions (high %3i-bit)  - Expected %8.2f, ", nbHBits, expected);
   int collcount = 0;
 
@@ -227,6 +227,21 @@ double TestDistribution ( std::vector<hashtype> & hashes, bool drawDiagram )
 
 //----------------------------------------------------------------------------
 
+static int FindNbBitsForCollisionTarget(int targetNbCollisions, int nbHashes)
+{
+    int nb;
+    double const target = (double)targetNbCollisions;
+    for (nb=2; nb<64; nb++) {
+        double nbColls = EstimateNbCollisions(nbHashes, nb);
+        if (nbColls < target) break;
+    }
+
+    if ((EstimateNbCollisions(nbHashes, nb)) > targetNbCollisions/5)
+        return nb;
+
+    return nb-1;
+}
+
 template < typename hashtype >
 bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & collisions, bool testDist, bool drawDiagram )
 {
@@ -234,17 +249,12 @@ bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & coll
 
   {
     size_t count = hashes.size();
-
-    double expected = estimateNbCollisions(count, sizeof(hashtype) * 8);
-
+    double expected = EstimateNbCollisions(count, sizeof(hashtype) * 8);
     printf("Testing collisions (     %3i-bit)  - Expected %8.2f, ", (int)sizeof(hashtype)*8, expected);
 
     double collcount = 0;
-
     HashSet<hashtype> collisions;
-
     collcount = FindCollisions(hashes, collisions, 1000);
-
     printf("actual %6i (%5.2fx)", (int)collcount, collcount / expected);
 
     if(sizeof(hashtype) == sizeof(uint32_t))
@@ -255,11 +265,11 @@ bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & coll
     // of a scale factor, otherwise we fail erroneously if there are a small expected number
     // of collisions
 
-    if(double(collcount) / double(expected) > 2.0)
-    {
-      printf(" !!!!! ");
-      result = false;
-    }
+        if(double(collcount) / double(expected) > 2.0)
+        {
+          printf(" !!!!! ");
+          result = false;
+        }
     }
     else
     {
@@ -274,12 +284,16 @@ bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & coll
     }
 
     printf("\n");
+
+    result &= CountHighbitsCollisions(hashes, 256);
+    result &= CountHighbitsCollisions(hashes, 128);
+    result &= CountHighbitsCollisions(hashes,  64);
+    result &= CountHighbitsCollisions(hashes,  32);
+
+    int const optimalNbBits = FindNbBitsForCollisionTarget(100, count);
+    result &= CountHighbitsCollisions(hashes, optimalNbBits);
   }
 
-  result &= CountHighbitsCollisions(hashes, 256);
-  result &= CountHighbitsCollisions(hashes, 128);
-  result &= CountHighbitsCollisions(hashes,  64);
-  result &= CountHighbitsCollisions(hashes,  32);
 
   //----------
 
