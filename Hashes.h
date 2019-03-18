@@ -87,11 +87,6 @@ inline void CityHash64_low_test ( const void * key, int len, uint32_t seed, void
   CityHash64_test(key, len, seed, &result);
   *(uint32_t*)out = (uint32_t)result;
 }
-inline void CityHash64_high_test ( const void * key, int len, uint32_t seed, void * out ) {
-  uint64_t result;
-  CityHash64_test(key, len, seed, &result);
-  *(uint32_t*)out = (uint32_t)(result>>32);
-}
 void CityHash128_test      ( const void * key, int len, uint32_t seed, void * out );
 void FarmHash32_test       ( const void * key, int len, uint32_t seed, void * out );
 void FarmHash64_test       ( const void * key, int len, uint32_t seed, void * out );
@@ -172,11 +167,6 @@ inline void xxh3low_test( const void * key, int len, uint32_t seed, void * out )
   *(uint32_t*)out = (uint32_t) XXH3_64bits(key, (size_t) len);
 }
 
-inline void xxh3high_test( const void * key, int len, uint32_t seed, void * out ) {
-  (void)seed;
-  *(uint32_t*)out = (uint32_t) (XXH3_64bits(key, (size_t) len) >> 32);
-}
-
 inline void xxh128_test( const void * key, int len, uint32_t seed, void * out ) {
   (void)seed;
   *(XXH128_hash_t*)out = XXH128(key, (size_t) len, seed);
@@ -185,11 +175,6 @@ inline void xxh128_test( const void * key, int len, uint32_t seed, void * out ) 
 inline void xxh128low_test( const void * key, int len, uint32_t seed, void * out ) {
   (void)seed;
   *(uint64_t*)out = (uint64_t) (XXH128(key, (size_t) len, seed).low64);
-}
-
-inline void xxh128high_test( const void * key, int len, uint32_t seed, void * out ) {
-  (void)seed;
-  *(uint64_t*)out = (uint64_t) (XXH128(key, (size_t) len, seed).high64);
 }
 
 
@@ -242,11 +227,6 @@ inline void mum_low_test ( const void * key, int len, uint32_t seed, void * out 
   uint64_t result;
   mum_hash_test(key, len, seed, &result);
   *(uint32_t*)out = (uint32_t)result;
-}
-inline void mum_high_test ( const void * key, int len, uint32_t seed, void * out ) {
-  uint64_t result;
-  mum_hash_test(key, len, seed, &result);
-  *(uint32_t*)out = (uint32_t)(result>>32);
 }
 
 

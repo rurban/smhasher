@@ -271,7 +271,7 @@ public:
 
   bool operator < ( const Blob & k ) const
   {
-    for(size_t i = 0; i < sizeof(bytes); i++)
+    for(int i = sizeof(bytes) -1; i >= 0; i--)
     {
       if(bytes[i] < k.bytes[i]) return true;
       if(bytes[i] > k.bytes[i]) return false;
@@ -337,7 +337,7 @@ public:
   {
     Blob t = *this;
 
-    lshift(&t.bytes[0],sizeof(bytes),c);
+    lshift(&t.bytes[0], sizeof(bytes), c);
 
     return t;
   }
@@ -346,21 +346,21 @@ public:
   {
     Blob t = *this;
 
-    rshift(&t.bytes[0],sizeof(bytes),c);
+    rshift(&t.bytes[0], sizeof(bytes), c);
 
     return t;
   }
 
   Blob & operator <<= ( int c )
   {
-    lshift(&bytes[0],sizeof(bytes),c);
+    lshift(&bytes[0], sizeof(bytes), c);
 
     return *this;
   }
 
   Blob & operator >>= ( int c )
   {
-    rshift(&bytes[0],sizeof(bytes),c);
+    rshift(&bytes[0], sizeof(bytes), c);
 
     return *this;
   }

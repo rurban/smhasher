@@ -51,7 +51,6 @@ int FindCollisions ( std::vector<hashtype> & hashes,
   {
     if(hashes[hnb] == hashes[hnb-1])
     {
-      //unsigned uh; memcpy(&uh, &hashes[hnb], sizeof(uh)); printf("collision found : 0x%08X \n", uh);
       collcount++;
 
       if((int)collisions.size() < maxCollisions)
@@ -62,6 +61,46 @@ int FindCollisions ( std::vector<hashtype> & hashes,
   }
 
   return collcount;
+}
+
+static double estimateNbCollisions(int nbH, int nbBits)
+{
+    return (double(nbH) * double(nbH-1)) / pow(2.0, double(nbBits + 1));
+}
+
+template< typename hashtype >
+bool CountHighbitsCollisions ( std::vector<hashtype> & hashes, int nbHBits)
+{
+  int origBits = sizeof(hashtype) * 8;
+  int shiftBy = origBits - nbHBits;
+
+  if (shiftBy <= 0) return 0;
+
+  size_t const nbH = hashes.size();
+  double expected = estimateNbCollisions(nbH, nbHBits);
+  printf("Testing collisions (high %3i-bit)  - Expected %8.2f, ", nbHBits, expected);
+  int collcount = 0;
+
+  for (size_t hnb = 1; hnb < nbH; hnb++)
+  {
+    hashtype const h1 = hashes[hnb]   >> shiftBy;
+    hashtype const h2 = hashes[hnb-1] >> shiftBy;
+    if(h1 == h2)
+    {
+      collcount++;
+    }
+  }
+
+  printf("actual %6i (%5.2fx)", collcount, collcount / expected);
+
+  if(double(collcount) / double(expected) > 2.0)
+  {
+    printf(" !!!!! \n");
+    return false;
+  }
+
+  printf(" \n");
+  return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -196,17 +235,17 @@ bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & coll
   {
     size_t count = hashes.size();
 
-    double expected = (double(count) * double(count-1)) / pow(2.0,double(sizeof(hashtype) * 8 + 1));
+    double expected = estimateNbCollisions(count, sizeof(hashtype) * 8);
 
-    printf("Testing collisions   - Expected %8.2f, ",expected);
+    printf("Testing collisions (     %3i-bit)  - Expected %8.2f, ", (int)sizeof(hashtype)*8, expected);
 
     double collcount = 0;
 
     HashSet<hashtype> collisions;
 
-    collcount = FindCollisions(hashes,collisions,1000);
+    collcount = FindCollisions(hashes, collisions, 1000);
 
-    printf("actual %8.2f (%5.2fx)",collcount, collcount / expected);
+    printf("actual %6i (%5.2fx)", (int)collcount, collcount / expected);
 
     if(sizeof(hashtype) == sizeof(uint32_t))
     {
@@ -236,6 +275,11 @@ bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & coll
 
     printf("\n");
   }
+
+  result &= CountHighbitsCollisions(hashes, 256);
+  result &= CountHighbitsCollisions(hashes, 128);
+  result &= CountHighbitsCollisions(hashes,  64);
+  result &= CountHighbitsCollisions(hashes,  32);
 
   //----------
 

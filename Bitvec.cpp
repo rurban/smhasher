@@ -63,7 +63,7 @@ void printhex32 ( const void * blob, int len )
 
   printf("{ ");
 
-  for(int i = 0; i < len/4; i++) 
+  for(int i = 0; i < len/4; i++)
   {
     printf("0x%08x, ",d[i]);
   }
@@ -125,7 +125,7 @@ uint32_t getbit ( const void * block, int len, uint32_t bit )
 
   int byte = bit >> 3;
   bit = bit & 0x7;
-  
+
   if(byte < len) return (b[byte] >> bit) & 1;
 
   return 0;
@@ -137,9 +137,9 @@ uint32_t getbit_wrap ( const void * block, int len, uint32_t bit )
 
   int byte = bit >> 3;
   bit = bit & 0x7;
-  
+
   byte %= len;
-    
+
   return (b[byte] >> bit) & 1;
 }
 
@@ -149,7 +149,7 @@ void setbit ( void * block, int len, uint32_t bit )
 
   int byte = bit >> 3;
   bit = bit & 0x7;
-  
+
   if(byte < len) b[byte] |= (1 << bit);
 }
 
@@ -164,7 +164,7 @@ void clearbit ( void * block, int len, uint32_t bit )
 
   int byte = bit >> 3;
   bit = bit & 0x7;
-  
+
   if(byte < len) b[byte] &= ~(1 << bit);
 }
 
@@ -174,7 +174,7 @@ void flipbit ( void * block, int len, uint32_t bit )
 
   int byte = bit >> 3;
   bit = bit & 0x7;
-  
+
   if(byte < len) b[byte] ^= (1 << bit);
 }
 
@@ -283,11 +283,11 @@ void rshift1 ( void * blob, int len, int c )
 
 void rshift8 ( void * blob, int nbytes, int c )
 {
-  uint8_t * k = (uint8_t*)blob;
+  uint8_t* k = (uint8_t*)blob;
 
   if(c == 0) return;
 
-  int b = c >> 3;
+  int const b = c >> 3;
   c &= 7;
 
   for(int i = 0; i < nbytes-b; i++)
@@ -579,7 +579,7 @@ uint32_t window8 ( void * blob, int len, int start, int count )
 
     uint32_t a = k[ia];
     uint32_t b = k[ib];
-    
+
     uint32_t m = (a << (8-c)) | (b >> c);
 
     t |= (m << (8*i));
@@ -614,7 +614,7 @@ uint32_t window32 ( void * blob, int len, int start, int count )
 
   uint32_t a = k[ia];
   uint32_t b = k[ib];
-  
+
   uint32_t t = (a << (32-c)) | (b >> c);
 
   t &= ((1 << count)-1);
@@ -669,7 +669,7 @@ template < int nbits >
 bool test_window2 ( void )
 {
   Rand r(83874);
-  
+
   struct keytype
   {
     uint8_t bytes[nbits/8];
@@ -708,7 +708,7 @@ bool test_window2 ( void )
 bool test_window ( void )
 {
   Rand r(48402);
-  
+
   int reps = 10000;
 
   for(int j = 0; j < reps; j++)
@@ -726,7 +726,7 @@ bool test_window ( void )
       {
         uint32_t a = (uint32_t)ROTR64(x,start);
         a &= ((1 << count)-1);
-        
+
         uint32_t b = window1 (&x,nbytes,start,count);
         uint32_t c = window8 (&x,nbytes,start,count);
         uint32_t d = window32(&x,nbytes,start,count);
