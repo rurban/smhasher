@@ -242,13 +242,13 @@ namespace {
 
     int horribleCollisionsFound;
     int horribleCollisionsShown;
-
     Hash curhash;
     size_t addrmask;
     size_t *addrptr;
     size_t *skipptr;
     size_t duphashto;
 
+    bool drawDiagram;
     bool foundCollisionYet;
     size_t hashesStored;
     uint64_t hashtabLookups;
@@ -504,18 +504,21 @@ namespace {
         if( !passing && base.length >= worstBase.length + 20 )
           break;
 
-        if( base.length % 16 == 0 || base.length == MAXMSGBYTES )
-          fprintf(stderr, "[%zu]", base.length);
-        else
-          fprintf(stderr, ".");
+        if (drawDiagram) {
+          if( base.length % 16 == 0 || base.length == MAXMSGBYTES )
+            fprintf(stderr, "[%zu]", base.length);
+          else
+            fprintf(stderr, ".");
+        }
       }
-      fprintf(stderr, "\n");
+      if (drawDiagram)
+        fprintf(stderr, "\n");
       return passing;
     }
 
   public:
 
-    TestLongNeighbors(pfHash hashfunc, unsigned hashbits):
+    TestLongNeighbors(pfHash hashfunc, unsigned hashbits, bool verbose):
       hashfunc(hashfunc),
       hashbits(hashbits),
       hashbytes(hashbits/8),
@@ -525,7 +528,9 @@ namespace {
       genRange1(makeRange(MAXRANGE_1DELTA, hashbits/2.0)),
       genRange2(makeRange(MAXRANGE_2DELTA, hashbits/4.0)),
       genRange3(makeRange(MAXRANGE_3DELTA, hashbits/6.0))
-    { }
+    {
+      drawDiagram = verbose;
+    }
 
     ~TestLongNeighbors() {
       delete[] hashTable;
@@ -561,12 +566,12 @@ namespace {
 
 }
 
-bool testLongNeighbors(pfHash hashFunc, int hashbits) {
+bool testLongNeighbors(pfHash hashFunc, int hashbits, bool drawDiagram) {
   if( hashbits % 8 != 0 ) {
     printf("(Omitting because a %d-bit has doe not fit into a whole number of bytes.)\n", hashbits);
     return true;
   }
-  TestLongNeighbors tester(hashFunc, hashbits);
+  TestLongNeighbors tester(hashFunc, hashbits, drawDiagram);
   return tester.run();
 }
 
