@@ -64,8 +64,8 @@ SMhasher
 | [CityCrc128](doc/CityCrc128)          |     19348.29  |    48.34 |                            |
 | [FarmHash64](doc/FarmHash64)         	|     14899.89  |    42.41 |                            |
 | [FarmHash128](doc/FarmHash128)        |     15998.86  |    58.12 |                            |
-| [FarmHash32](doc/FarmHash32)         	|     24831.45  |    24.99| machine-specific (x86_64 SSE4/AVX) |
-| [farmhash32_c](doc/farmhash32_c)      |     24647.21  |    25.36| machine-specific (x86_64 SSE4/AVX) |
+| [FarmHash32](doc/FarmHash32)         	|     24831.45  |    24.99 | machine-specific (x86_64 SSE4/AVX) |
+| [farmhash32_c](doc/farmhash32_c)      |     24647.21  |    25.36 | machine-specific (x86_64 SSE4/AVX) |
 | [farmhash64_c](doc/farmhash64_c)     	|     14967.76  |    42.01 |                            |
 | [farmhash128_c](doc/farmhash128_c)    |     15097.31  |    61.00 |                            |
 | [xxHash32](doc/xxHash32)              |      7297.39	|    36.91 | collisions with 4bit diff  |
@@ -87,10 +87,10 @@ SMhasher
 | [metrohash64crc_2](doc/metrohash64crc_2)  | 26450.83	|    39.74 | cyclic collisions 8 byte, machine-specific (x64  SSE4.2) |
 | [metrohash128crc_1](doc/metrohash128crc_1)| 25404.51	|    49.07 | machine-specific (x64 SSE4.2) |
 | [metrohash128crc_2](doc/metrohash128crc_2)| 25248.70	|    49.57 | machine-specific (x64 SSE4.2) |
-| [cmetrohash64_1o](doc/cmetrohash64_1o)    |  15997.88	|    37.07 |                            |
-| [cmetrohash64_1](doc/cmetrohash64_1)      |  17094.64	|    36.85 |                            |
-| [cmetrohash64_2](doc/cmetrohash64_2)      |  15952.55	|    38.87 |                            |
-| [falkhash](doc/falkhash)              |     37742.94	|   108.59 | machine-specific (x86_64 AES-NI) |
+| [cmetrohash64_1o](doc/cmetrohash64_1o)    | 15997.88	|    37.07 | LongNeighbors              |
+| [cmetrohash64_1](doc/cmetrohash64_1)      | 17094.64	|    36.85 |                            |
+| [cmetrohash64_2](doc/cmetrohash64_2)      | 15952.55	|    38.87 |                            |
+| [falkhash](doc/falkhash)              |     37742.94	|   108.59 | LongNeighbors, machine-specific (x86_64 AES-NI) |
 | [t1ha2_atonce](doc/t1ha2_atonce)      |     14747.01	|    36.09 |                            |
 | [t1ha2_stream](doc/t1ha2_stream)      |      6376.62	|    82.41 |                            |
 | [t1ha2_atonce128](doc/t1ha2_atonce128)|     14007.67	|    50.51 |                            |
@@ -116,13 +116,11 @@ So the fastest hash functions on x86_64 without quality problems are:
 - wyhash
 - xxh3
 - t1ha
-- falkhash (_macho64 and elf64 nasm only, with HW AES extension_)
 - Metro (_but not 64crc yet, WIP_)
 - FarmHash (_not portable, too machine specific: 64 vs 32bit, old gcc, ..._)
 - Spooky32
 - fasthash
-- City (_deprecated_)
-- mum (_machine specific, mum: different results on 32/64-bit archs_)
+- MUM (_machine specific, mum: different results on 32/64-bit archs_)
 
 Hash functions for symbol tables or hash tables typically use 32 bit
 hashes, for databases, file systems and file checksums typically 64 or
@@ -145,7 +143,7 @@ The fast hash functions tested here are recommendable as fast for file
 digests and maybe bigger databases, but not for 32bit hash tables.  The
 "Quality problems" lead to less uniform distribution, i.e.  more collisions
 and worse performance, but are rarely related to real security attacks, just
-the 2nd sanity test against `\0` invariance is security relevant.
+the 2nd sanity zeroes test against `\0` invariance is security relevant.
 
 Other
 -----
