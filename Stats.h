@@ -78,7 +78,7 @@ bool CountHighbitsCollisions ( std::vector<hashtype> & hashes, int nbHBits)
 
   size_t const nbH = hashes.size();
   double expected = EstimateNbCollisions(nbH, nbHBits);
-  printf("Testing collisions (high %3i-bit)  - Expected %8.2f, ", nbHBits, expected);
+  printf("Testing collisions (high %2i-bit) - Expected %8.2f, ", nbHBits, expected);
   int collcount = 0;
 
   for (size_t hnb = 1; hnb < nbH; hnb++)
@@ -218,7 +218,8 @@ double TestDistribution ( std::vector<hashtype> & hashes, bool drawDiagram )
 
   double pct = worst * 100.0;
 
-  printf("Worst bias is the %3d-bit window at bit %3d - %5.3f%%",worstWidth,worstStart,pct);
+  printf("Worst bias is the %3d-bit window at bit %3d - %5.3f%%",
+         worstWidth, worstStart, pct);
   if(pct >= 1.0) printf(" !!!!! ");
   printf("\n");
 
@@ -243,14 +244,15 @@ static int FindNbBitsForCollisionTarget(int targetNbCollisions, int nbHashes)
 }
 
 template < typename hashtype >
-bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & collisions, bool testDist, bool drawDiagram )
+bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & collisions,
+                    bool testDist, bool drawDiagram, bool testHighBits = true )
 {
   bool result = true;
 
   {
     size_t count = hashes.size();
     double expected = EstimateNbCollisions(count, sizeof(hashtype) * 8);
-    printf("Testing collisions (     %3i-bit)  - Expected %8.2f, ", (int)sizeof(hashtype)*8, expected);
+    printf("Testing collisions (    %3i-bit) - Expected %8.2f, ", (int)sizeof(hashtype)*8, expected);
 
     double collcount = 0;
     HashSet<hashtype> collisions;
@@ -285,13 +287,15 @@ bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & coll
 
     printf("\n");
 
-    result &= CountHighbitsCollisions(hashes, 256);
-    result &= CountHighbitsCollisions(hashes, 128);
-    result &= CountHighbitsCollisions(hashes,  64);
-    result &= CountHighbitsCollisions(hashes,  32);
+    if (testHighBits) {
+        result &= CountHighbitsCollisions(hashes, 256);
+        result &= CountHighbitsCollisions(hashes, 128);
+        result &= CountHighbitsCollisions(hashes,  64);
+        result &= CountHighbitsCollisions(hashes,  32);
 
-    int const optimalNbBits = FindNbBitsForCollisionTarget(100, count);
-    result &= CountHighbitsCollisions(hashes, optimalNbBits);
+        int const optimalNbBits = FindNbBitsForCollisionTarget(100, count);
+        result &= CountHighbitsCollisions(hashes, optimalNbBits);
+    }
   }
 
 
@@ -308,11 +312,11 @@ bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & coll
 //----------
 
 template < typename hashtype >
-bool TestHashList ( std::vector<hashtype> & hashes, bool /*testColl*/, bool testDist, bool drawDiagram )
+bool TestHashList ( std::vector<hashtype> & hashes, bool /*testColl*/, bool testDist, bool drawDiagram, bool testHighBits = true )
 {
   std::vector<hashtype> collisions;
 
-  return TestHashList(hashes,collisions,testDist,drawDiagram);
+  return TestHashList(hashes, collisions, testDist, drawDiagram, testHighBits);
 }
 
 //-----------------------------------------------------------------------------
