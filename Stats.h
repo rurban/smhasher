@@ -243,7 +243,8 @@ static int FindNbBitsForCollisionTarget(int targetNbCollisions, int nbHashes)
 }
 
 template < typename hashtype >
-bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & collisions, bool testDist, bool drawDiagram )
+bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & collisions,
+                    bool testDist, bool drawDiagram, bool testHighBits = true )
 {
   bool result = true;
 
@@ -285,13 +286,15 @@ bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & coll
 
     printf("\n");
 
-    result &= CountHighbitsCollisions(hashes, 256);
-    result &= CountHighbitsCollisions(hashes, 128);
-    result &= CountHighbitsCollisions(hashes,  64);
-    result &= CountHighbitsCollisions(hashes,  32);
+    if (testHighBits) {
+        result &= CountHighbitsCollisions(hashes, 256);
+        result &= CountHighbitsCollisions(hashes, 128);
+        result &= CountHighbitsCollisions(hashes,  64);
+        result &= CountHighbitsCollisions(hashes,  32);
 
-    int const optimalNbBits = FindNbBitsForCollisionTarget(100, count);
-    result &= CountHighbitsCollisions(hashes, optimalNbBits);
+        int const optimalNbBits = FindNbBitsForCollisionTarget(100, count);
+        result &= CountHighbitsCollisions(hashes, optimalNbBits);
+    }
   }
 
 
@@ -308,11 +311,11 @@ bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & coll
 //----------
 
 template < typename hashtype >
-bool TestHashList ( std::vector<hashtype> & hashes, bool /*testColl*/, bool testDist, bool drawDiagram )
+bool TestHashList ( std::vector<hashtype> & hashes, bool /*testColl*/, bool testDist, bool drawDiagram, bool testHighBits = true )
 {
   std::vector<hashtype> collisions;
 
-  return TestHashList(hashes,collisions,testDist,drawDiagram);
+  return TestHashList(hashes, collisions, testDist, drawDiagram, testHighBits);
 }
 
 //-----------------------------------------------------------------------------
