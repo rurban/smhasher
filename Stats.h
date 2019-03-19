@@ -8,6 +8,7 @@
 #include <algorithm>   // for std::sort
 #include <string.h>    // for memset
 #include <stdio.h>     // for printf
+#include <assert.h>
 
 double calcScore ( const int * bins, const int bincount, const int ballcount );
 
