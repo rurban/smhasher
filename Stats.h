@@ -74,7 +74,7 @@ bool CountHighbitsCollisions ( std::vector<hashtype> & hashes, int nbHBits)
   int origBits = sizeof(hashtype) * 8;
   int shiftBy = origBits - nbHBits;
 
-  if (shiftBy <= 0) return 0;
+  if (shiftBy <= 0) return true;
 
   size_t const nbH = hashes.size();
   double expected = EstimateNbCollisions(nbH, nbHBits);
