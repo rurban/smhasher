@@ -66,12 +66,8 @@ TestOpts g_testopts[] =
 //-----------------------------------------------------------------------------
 // This is the list of all hashes that SMHasher can test.
 
-enum HashQuality
-{
- SKIP,
- POOR,
- GOOD
-};
+const char* quality_str[3] = { "SKIP", "POOR", "GOOD" };
+enum HashQuality             {  SKIP, POOR, GOOD };
 struct HashInfo
 {
   pfHash hash;
@@ -320,7 +316,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   const int hashbits = sizeof(hashtype) * 8;
 
   printf("-------------------------------------------------------------------------------\n");
-  printf("--- Testing %s \"%s\"\n\n",info->name,info->desc);
+  printf("--- Testing %s \"%s\" %s\n\n", info->name, info->desc, quality_str[info->quality]);
   fflush(NULL);
 
   //-----------------------------------------------------------------------------
@@ -1051,9 +1047,8 @@ int main ( int argc, const char ** argv )
         exit(0);
       }
       if (strcmp(hashToTest,"--list") == 0) {
-        const char* qual[3] = { "SKIP", "POOR", "GOOD" };
         for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++) {
-          printf("%-16s\t\"%s\" %s\n", g_hashes[i].name, g_hashes[i].desc, qual[g_hashes[i].quality]);
+          printf("%-16s\t\"%s\" %s\n", g_hashes[i].name, g_hashes[i].desc, quality_str[g_hashes[i].quality]);
         }
         exit(0);
       }
