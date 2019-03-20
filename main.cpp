@@ -368,40 +368,41 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     fflush(NULL);
 
     bool result = true;
+    bool verbose = g_drawDiagram; //.......... progress dots
 
-    result &= AvalancheTest< Blob< 24>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob< 32>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob< 40>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob< 48>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob< 56>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob< 64>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob< 72>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob< 80>, hashtype > (hash,300000);
+    result &= AvalancheTest< Blob< 24>, hashtype > (hash,300000,verbose);
+    result &= AvalancheTest< Blob< 32>, hashtype > (hash,300000,verbose);
+    result &= AvalancheTest< Blob< 40>, hashtype > (hash,300000,verbose);
+    result &= AvalancheTest< Blob< 48>, hashtype > (hash,300000,verbose);
+    result &= AvalancheTest< Blob< 56>, hashtype > (hash,300000,verbose);
+    result &= AvalancheTest< Blob< 64>, hashtype > (hash,300000,verbose);
+    result &= AvalancheTest< Blob< 72>, hashtype > (hash,300000,verbose);
+    result &= AvalancheTest< Blob< 80>, hashtype > (hash,300000,verbose);
 
-    result &= AvalancheTest< Blob< 96>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob<112>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob<128>, hashtype > (hash,300000);
-    result &= AvalancheTest< Blob<160>, hashtype > (hash,300000);
+    result &= AvalancheTest< Blob< 96>, hashtype > (hash,300000,verbose);
+    result &= AvalancheTest< Blob<112>, hashtype > (hash,300000,verbose);
+    result &= AvalancheTest< Blob<128>, hashtype > (hash,300000,verbose);
+    result &= AvalancheTest< Blob<160>, hashtype > (hash,300000,verbose);
 
     if(g_testExtra) {
-      result &= AvalancheTest< Blob<192>, hashtype > (hash,300000);
-      result &= AvalancheTest< Blob<224>, hashtype > (hash,300000);
-      result &= AvalancheTest< Blob<256>, hashtype > (hash,300000);
+      result &= AvalancheTest< Blob<192>, hashtype > (hash,300000,verbose);
+      result &= AvalancheTest< Blob<224>, hashtype > (hash,300000,verbose);
+      result &= AvalancheTest< Blob<256>, hashtype > (hash,300000,verbose);
 
-      result &= AvalancheTest< Blob<320>, hashtype > (hash,300000);
-      result &= AvalancheTest< Blob<384>, hashtype > (hash,300000);
-      result &= AvalancheTest< Blob<448>, hashtype > (hash,300000);
+      result &= AvalancheTest< Blob<320>, hashtype > (hash,300000,verbose);
+      result &= AvalancheTest< Blob<384>, hashtype > (hash,300000,verbose);
+      result &= AvalancheTest< Blob<448>, hashtype > (hash,300000,verbose);
     }
-      result &= AvalancheTest< Blob<512>, hashtype > (hash,300000);
+      result &= AvalancheTest< Blob<512>, hashtype > (hash,300000,verbose);
     if(g_testExtra) {
-      result &= AvalancheTest< Blob<640>, hashtype > (hash,300000);
-      result &= AvalancheTest< Blob<768>, hashtype > (hash,300000);
-      result &= AvalancheTest< Blob<896>, hashtype > (hash,300000);
+      result &= AvalancheTest< Blob<640>, hashtype > (hash,300000,verbose);
+      result &= AvalancheTest< Blob<768>, hashtype > (hash,300000,verbose);
+      result &= AvalancheTest< Blob<896>, hashtype > (hash,300000,verbose);
     }
-      result &= AvalancheTest< Blob<1024>,hashtype > (hash,300000);
+      result &= AvalancheTest< Blob<1024>,hashtype > (hash,300000,verbose);
     if(g_testExtra) {
-      result &= AvalancheTest< Blob<1280>,hashtype > (hash,300000);
-      result &= AvalancheTest< Blob<1536>,hashtype > (hash,300000);
+      result &= AvalancheTest< Blob<1280>,hashtype > (hash,300000,verbose);
+      result &= AvalancheTest< Blob<1536>,hashtype > (hash,300000,verbose);
     }
 
     if(!result) printf("*********FAIL*********\n");

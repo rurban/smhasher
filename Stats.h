@@ -96,11 +96,11 @@ bool CountHighbitsCollisions ( std::vector<hashtype> & hashes, int nbHBits)
 
   if(double(collcount) / double(expected) > 2.0)
   {
-    printf(" !!!!! \n");
+    printf(" !!!!!\n");
     return false;
   }
 
-  printf(" \n");
+  printf("\n");
   return true;
 }
 
@@ -184,11 +184,11 @@ bool TestHighbitsCollisions ( std::vector<hashtype> & hashes)
         maxCollDevBits, maxCollDevNb, (int)maxCollDevExp, maxCollDev);
 
   if (maxCollDev > 2.0) {
-    printf(" !!!!! \n");
+    printf(" !!!!!\n");
     return false;
   }
 
-  printf(" \n");
+  printf("\n");
   return true;
 }
 
@@ -232,7 +232,7 @@ int PrintCollisions ( hashfunc<hashtype> hash, std::vector<keytype> & keys )
 // Measure the distribution "score" for each possible N-bit span up to 20 bits
 
 template< typename hashtype >
-double TestDistribution ( std::vector<hashtype> & hashes, bool drawDiagram )
+bool TestDistribution ( std::vector<hashtype> & hashes, bool drawDiagram )
 {
   printf("Testing distribution - ");
 
@@ -309,10 +309,14 @@ double TestDistribution ( std::vector<hashtype> & hashes, bool drawDiagram )
 
   printf("Worst bias is the %2d-bit window at bit %2d - %.3f%%",
          worstWidth, worstStart, pct);
-  if(pct >= 1.0) printf(" !!!!! ");
-  printf("\n");
-
-  return worst;
+  if(pct >= 1.0) {
+    printf(" !!!!!\n");
+    return false;
+  }
+  else {
+    printf("\n");
+    return true;
+  }
 }
 
 //----------------------------------------------------------------------------
@@ -358,7 +362,7 @@ bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & coll
 
         if(double(collcount) / double(expected) > 2.0)
         {
-          printf(" !!!!! ");
+          printf(" !!!!!");
           result = false;
         }
     }
@@ -368,9 +372,9 @@ bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & coll
 
       if(collcount > 0)
       {
-        printf(" !!!!! ");
+        printf(" !!!!!");
         result = false;
-        //PrintCollisions(hashes, collisions);
+        //if(drawDiagram) PrintCollisions(hashes, collisions);
       }
     }
 
@@ -396,7 +400,7 @@ bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & coll
 
   if(testDist)
   {
-    TestDistribution(hashes,drawDiagram);
+    result &= TestDistribution(hashes,drawDiagram);
   }
 
   return result;

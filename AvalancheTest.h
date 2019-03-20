@@ -6,7 +6,6 @@
 // cause "echoes" of the patterns in the output, which in turn can cause the
 // hash function to fail to create an even, random distribution of hash values.
 
-
 #pragma once
 
 #include "Types.h"
@@ -25,7 +24,7 @@ double maxBias ( std::vector<int> & counts, int reps );
 //-----------------------------------------------------------------------------
 
 template < typename keytype, typename hashtype >
-void calcBias ( pfHash hash, std::vector<int> & counts, int reps, Rand & r )
+void calcBias ( pfHash hash, std::vector<int> & counts, int reps, Rand & r, bool verbose )
 {
   const int keybytes = sizeof(keytype);
   const int hashbytes = sizeof(hashtype);
@@ -38,7 +37,9 @@ void calcBias ( pfHash hash, std::vector<int> & counts, int reps, Rand & r )
 
   for(int irep = 0; irep < reps; irep++)
   {
-    if(irep % (reps/10) == 0) printf(".");
+    if(verbose) {
+      if(irep % (reps/10) == 0) printf(".");
+    }
 
     r.rand_p(&K,keybytes);
 
@@ -66,7 +67,7 @@ void calcBias ( pfHash hash, std::vector<int> & counts, int reps, Rand & r )
 //-----------------------------------------------------------------------------
 
 template < typename keytype, typename hashtype >
-bool AvalancheTest ( pfHash hash, const int reps )
+bool AvalancheTest ( pfHash hash, const int reps, bool verbose )
 {
   Rand r(48273);
   
@@ -76,13 +77,14 @@ bool AvalancheTest ( pfHash hash, const int reps )
   const int keybits = keybytes * 8;
   const int hashbits = hashbytes * 8;
 
-  printf("Testing %3d-bit keys -> %3d-bit hashes, %8d reps",keybits,hashbits,reps);
+  printf("Testing %4d-bit keys -> %3d-bit hashes, %6d reps",
+         keybits, hashbits, reps);
 
   //----------
 
   std::vector<int> bins(keybits*hashbits,0);
 
-  calcBias<keytype,hashtype>(hash,bins,reps,r);
+  calcBias<keytype,hashtype>(hash,bins,reps,r,verbose);
   
   //----------
 
@@ -90,16 +92,14 @@ bool AvalancheTest ( pfHash hash, const int reps )
 
   double b = maxBias(bins,reps);
 
-  printf(" worst bias is %f%%",b * 100.0);
+  printf(" worst bias is %f%%", b * 100.0);
 
   if(b > AVALANCHE_FAIL)
   {
-    printf(" !!!!! ");
+    printf(" !!!!!");
     result = false;
   }
-
   printf("\n");
-
   return result;
 }
 
@@ -123,8 +123,7 @@ void BicTest ( pfHash hash, const int keybit, const int reps, double & maxBias, 
 
   for(int irep = 0; irep < reps; irep++)
   {
-    if(verbose)
-    {
+    if(verbose) {
       if(irep % (reps/10) == 0) printf(".");
     }
 
