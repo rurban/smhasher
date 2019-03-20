@@ -46,12 +46,12 @@ bool VerificationTest ( pfHash hash, const int hashbits, uint32_t expected, bool
 
   if(expected != verification)
   {
-    if(verbose) printf("Verification value 0x%08X : FAIL! (Expected 0x%08x)\n",verification,expected);
+    if(verbose) printf("Verification value 0x%08X ....... FAIL! (Expected 0x%08x)\n",verification,expected);
     return false;
   }
   else
   {
-    if(verbose) printf("Verification value 0x%08X : PASS\n",verification);
+    if(verbose) printf("Verification value 0x%08X ....... PASS\n",verification);
     return true;
   }
 }
@@ -158,6 +158,8 @@ bool SanityTest ( pfHash hash, const int hashbits )
 
 void AppendedZeroesTest ( pfHash hash, const int hashbits )
 {
+//printf("Verification value 0x%08X ....... PASS\n",verification);
+//printf("Running sanity check 1     ");
   printf("Running AppendedZeroesTest ");
 
   Rand r(173994);

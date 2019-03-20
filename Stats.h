@@ -161,7 +161,7 @@ bool TestHighbitsCollisions ( std::vector<hashtype> & hashes)
   int const maxBits = FindMaxBits_TargetCollisionNb(nbH, 20);
   if (maxBits >= origBits) return true;
 
-  printf("Testing collisions (high [%2i-%2i] bits) : ", minBits, maxBits);
+  printf("Testing collisions (high [%2i-%2i] bits) - ", minBits, maxBits);
   double maxCollDev = 0.0;
   int maxCollDevBits = 0;
   int maxCollDevNb = 0;
@@ -180,7 +180,7 @@ bool TestHighbitsCollisions ( std::vector<hashtype> & hashes)
       }
   }
 
-  printf("worst is %2i bits : %6i/%6i (%5.2fx)",
+  printf("Worst is %2i bits: %2i/%2i (%.2fx)",
         maxCollDevBits, maxCollDevNb, (int)maxCollDevExp, maxCollDev);
 
   if (maxCollDev > 2.0) {
@@ -307,7 +307,7 @@ double TestDistribution ( std::vector<hashtype> & hashes, bool drawDiagram )
 
   double pct = worst * 100.0;
 
-  printf("Worst bias is the %3d-bit window at bit %3d - %5.3f%%",
+  printf("Worst bias is the %2d-bit window at bit %2d - %.3f%%",
          worstWidth, worstStart, pct);
   if(pct >= 1.0) printf(" !!!!! ");
   printf("\n");
@@ -341,12 +341,12 @@ bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & coll
   {
     size_t count = hashes.size();
     double expected = EstimateNbCollisions(count, sizeof(hashtype) * 8);
-    printf("Testing collisions (    %3i-bit) - Expected %8.2f, ", (int)sizeof(hashtype)*8, expected);
+    printf("Testing collisions (%3i-bit) - Expected %8.2f, ", (int)sizeof(hashtype)*8, expected);
 
     double collcount = 0;
     HashSet<hashtype> collisions;
     collcount = FindCollisions(hashes, collisions, 1000);
-    printf("actual %6i (%5.2fx)", (int)collcount, collcount / expected);
+    printf("actual %6i (%.2fx)", (int)collcount, collcount / expected);
 
     if(sizeof(hashtype) == sizeof(uint32_t))
     {
