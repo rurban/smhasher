@@ -1031,7 +1031,7 @@ int main ( int argc, const char ** argv )
 #if (defined(__x86_64__) && __SSE4_2__) || defined(_M_X64) || defined(_X86_64_)
   const char * defaulthash = "xxh3";
 #else
-  const char * defaulthash = "murmur3a";
+  const char * defaulthash = "wyhash";
 #endif
   const char * hashToTest = defaulthash;
 
