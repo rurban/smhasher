@@ -307,3 +307,6 @@ inline void t1ha0_ia32aes_avx2_test(const void * key, int len, uint32_t seed, vo
 inline void wyhash_test (const void * key, int len, uint32_t seed, void * out) {
   *(uint64_t*)out = wyhash(key, (unsigned long long) len, (unsigned long long)seed);
 }
+inline void wyhash32low (const void * key, int len, uint32_t seed, void * out) {
+  *(uint32_t*)out = 0xFFFFFFFF & wyhash(key, (unsigned long long) len, (unsigned long long)seed);
+}

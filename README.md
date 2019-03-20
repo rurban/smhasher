@@ -103,6 +103,7 @@ SMhasher
 | [t1ha0_aes_avx1](doc/t1ha0_aes_avx1)  |     20443.32	|    36.05 | machine-specific (x64 AVX)    |
 | [t1ha0_aes_avx2](doc/t1ha0_aes_avx2)  |     36436.51	|    36.31 | machine-specific (x64 AVX2)   |
 | [wyhash](doc/wyhash)                  |     16269.84	|    21.78 |                            |
+| [wyhash32lo](doc/wyhash32lo)          |     15071.72	|    21.98 |                            |
 
 Summary
 -------
