@@ -102,7 +102,7 @@ SMhasher
 | [t1ha0_aes_noavx](doc/t1ha0_aes_noavx)|     21264.27	|    35.63 | machine-specific (x86 AES-NI) |
 | [t1ha0_aes_avx1](doc/t1ha0_aes_avx1)  |     20443.32	|    36.05 | machine-specific (x64 AVX)    |
 | [t1ha0_aes_avx2](doc/t1ha0_aes_avx2)  |     36436.51	|    36.31 | machine-specific (x64 AVX2)   |
-| [wyhash](doc/wyhash)                  |     10315.00	|    25.10 |                            |
+| [wyhash](doc/wyhash)                  |     16269.84	|    21.78 |                            |
 
 Summary
 -------
@@ -115,7 +115,7 @@ So the fastest hash functions on x86_64 without quality problems are:
 
 - wyhash
 - xxh3
-- t1ha
+- t1ha2_atonce
 - Metro (_but not 64crc yet, WIP_)
 - FarmHash (_not portable, too machine specific: 64 vs 32bit, old gcc, ..._)
 - Spooky32
@@ -133,7 +133,7 @@ When used in a hash table the instruction cache will usually beat the
 CPU and throughput measured here. In my tests the smallest `FNV1A`
 beats the fastest `crc32_hw1` with [Perl 5 hash tables](https://github.com/rurban/perl-hash-stats). 
 Even if those worse hash functions will lead to more collisions, the
-overall speed advantage beats the slightly worse quality.
+overall speed advantage and inline-ability beats the slightly worse quality.
 See e.g. [A Seven-Dimensional Analysis of Hashing Methods and its Implications on Query Processing](https://infosys.cs.uni-saarland.de/publications/p249-richter.pdf)
 for a concise overview of the best hash table strategies, confirming that the
 simplest Mult hashing (bernstein, FNV*, x17, sdbm) always beat "better" hash
@@ -168,7 +168,7 @@ against City, Murmur or Perl JenkinsOAAT or at
 are not included here.
 
 Such an attack avoidance cannot be the problem of the hash
-function, but the hash table collision resolution scheme.  You can
+function, but only the hash table collision resolution scheme.  You can
 attack every single hash function, even the best and most secure if
 you detect the seed, e.g. from language (mis-)features, side-channel
 attacks, collision timings and independly the sort-order, so you need

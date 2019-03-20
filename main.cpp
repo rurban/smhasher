@@ -260,7 +260,7 @@ HashInfo g_hashes[] =
   { t1ha0_ia32aes_avx2_test,     64, 0x8B38C599, "t1ha0_aes_avx2",   "Fast Positive Hash (machine-specific, requires AES-NI & AVX)" },
 #endif /* __AVX2__ */
 #endif /* T1HA0_AESNI_AVAILABLE */
-  { wyhash_test,                 64, 0xDDA7C9C3, "wyhash",     "wyhash (portable, 64-bit, little-endian)" },
+  { wyhash_test,                 64, 0xF00C1E2E, "wyhash",           "wyhash (portable, 64-bit, little-endian)" },
 };
 
 HashInfo * findHash ( const char * name )
