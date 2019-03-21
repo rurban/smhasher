@@ -7,7 +7,7 @@ const	unsigned long long	_wyp3=0xd985068bc5439bd7ull,	_wyp4=0x897f236fb004a8e7ul
 static	inline	unsigned long long	_wymum(unsigned long long	A,	unsigned long long	B){
 #ifdef __SIZEOF_INT128__
 	__uint128_t	r=A;	r*=B;	return	(r>>64)^r;
-#elif	defined(_MSC_VER)
+#elif	defined(_MSC_VER) && defined(_M_X64)
 	A=_umul128(A, B, &B);	return	A^B;
 #else
 	unsigned long long	ha=A>>32,	hb=B>>32,	la=(unsigned int)A,	lb=(unsigned int)B,	hi, lo;
