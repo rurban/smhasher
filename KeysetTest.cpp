@@ -46,12 +46,15 @@ bool VerificationTest ( pfHash hash, const int hashbits, uint32_t expected, bool
 
   if(expected != verification)
   {
-    if(verbose) printf("Verification value 0x%08X ....... FAIL! (Expected 0x%08x)\n",verification,expected);
+    if(verbose)
+      printf("Verification value 0x%08X ....... FAIL! (Expected 0x%08X)\n",
+             verification,expected);
     return false;
   }
   else
   {
-    if(verbose) printf("Verification value 0x%08X ....... PASS\n",verification);
+    if(verbose)
+      printf("Verification value 0x%08X ....... PASS\n", verification);
     return true;
   }
 }
