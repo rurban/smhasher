@@ -79,15 +79,15 @@ bool ProcessDifferentials ( std::vector<keytype> & diffs, int reps, bool dumpCol
     }
   }
 
-  printf("%d total collisions, of which %d single collisions were ignored",(int)diffs.size(),ignore);
+  printf("%d total collisions, of which %d single collisions were ignored",
+         (int)diffs.size(),ignore);
 
   if(result == false)
   {
-    printf(" !!!!! ");
+    printf(" !!!!!");
   }
 
-  printf("\n");
-  printf("\n");
+  printf("\n\n");
 
   return result;
 }
