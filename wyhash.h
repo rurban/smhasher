@@ -11,6 +11,8 @@ const	unsigned long long	_wyp5=0xc104aa67c96b7d55ull;
 inline	unsigned long long	_wymum(unsigned long long	A,	unsigned long long	B){
 #ifdef __SIZEOF_INT128__
 	__uint128_t	r=A;	r*=B;	return	(r>>64)^r;
+#elif	defined(_MSC_VER)
+	A=_umul128(A, B, &B);	return	A^B;
 #else
 	unsigned long long	ha=A>>32,	hb=B>>32,	la=(unsigned int)A,	lb=(unsigned int)B,	hi, lo;
 	unsigned long long	rh=ha*hb,	rm0=ha*lb,	rm1=hb*la,	rl=la*lb,	t=rl+(rm0<<32),	c=t<rl;
