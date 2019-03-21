@@ -29,7 +29,6 @@ bool g_testSanity      = false;
 bool g_testSpeed       = false;
 bool g_testAvalanche   = false;
 bool g_testSparse      = false;
-bool g_testBIC         = false;
 bool g_testPermutation = false;
 bool g_testWindow      = false;
 bool g_testCyclic      = false;
@@ -39,6 +38,7 @@ bool g_testZeroes      = false;
 bool g_testSeed        = false;
 bool g_testDiff        = false;
 bool g_testDiffDist    = false;
+bool g_testBIC         = false;
 
 struct TestOpts {
   bool         &var;
@@ -51,7 +51,6 @@ TestOpts g_testopts[] =
   { g_testSpeed, 	"Speed" },
   { g_testAvalanche, 	"Avalanche" },
   { g_testSparse,	"Sparse" },
-  { g_testBIC, 		"BIC" },
   { g_testPermutation,	"Permutation" },
   { g_testWindow,	"Window" },
   { g_testCyclic,	"Cyclic" },
@@ -60,14 +59,15 @@ TestOpts g_testopts[] =
   { g_testZeroes,	"Zeroes" },
   { g_testSeed,		"Seed" },
   { g_testDiff, 	"Diff" },
-  { g_testDiffDist, 	"DiffDist" }
+  { g_testDiffDist, 	"DiffDist" },
+  { g_testBIC, 		"BIC" }
 };
 
 //-----------------------------------------------------------------------------
 // This is the list of all hashes that SMHasher can test.
 
 const char* quality_str[3] = { "SKIP", "POOR", "GOOD" };
-enum HashQuality             {  SKIP, POOR, GOOD };
+enum HashQuality             {  SKIP,   POOR,   GOOD };
 struct HashInfo
 {
   pfHash hash;
@@ -361,6 +361,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   // Avalanche tests
   // 1m30 for xxh3
   // 13m  for xxh3 with --extra
+  // 3m   for farmhash128_c (was 7m with 512,1024)
 
   if(g_testAvalanche || g_testAll)
   {
@@ -393,13 +394,17 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       result &= AvalancheTest< Blob<384>, hashtype > (hash,300000,verbose);
       result &= AvalancheTest< Blob<448>, hashtype > (hash,300000,verbose);
     }
+    if (g_testExtra || info->hashbits <= 64) {
       result &= AvalancheTest< Blob<512>, hashtype > (hash,300000,verbose);
+    }
     if(g_testExtra) {
       result &= AvalancheTest< Blob<640>, hashtype > (hash,300000,verbose);
       result &= AvalancheTest< Blob<768>, hashtype > (hash,300000,verbose);
       result &= AvalancheTest< Blob<896>, hashtype > (hash,300000,verbose);
     }
+    if (g_testExtra || info->hashbits <= 64) {
       result &= AvalancheTest< Blob<1024>,hashtype > (hash,300000,verbose);
+    }
     if(g_testExtra) {
       result &= AvalancheTest< Blob<1280>,hashtype > (hash,300000,verbose);
       result &= AvalancheTest< Blob<1536>,hashtype > (hash,300000,verbose);
@@ -414,6 +419,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   // Keyset 'Sparse' - keys with all bits 0 except a few
   // 3m30 for xxh3
   // 14m  for xxh3 with --extra
+  // 6m30 for farmhash128_c (was too much with >= 512)
 
   if(g_testSparse || g_testAll)
   {
@@ -446,6 +452,9 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       result &= SparseKeyTest< 320,hashtype>(hash,3,true,true,true, g_drawDiagram);
       result &= SparseKeyTest< 384,hashtype>(hash,3,true,true,true, g_drawDiagram);
       result &= SparseKeyTest< 448,hashtype>(hash,3,true,true,true, g_drawDiagram);
+    } else {
+      if (info->hashbits > 64) //too long
+        goto END_Sparse;
     }
       result &= SparseKeyTest< 512,hashtype>(hash,3,true,true,true, g_drawDiagram);
     if (g_testExtra) {
@@ -466,7 +475,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       result &= SparseKeyTest<8192,hashtype>(hash,2,true,true,true, g_drawDiagram);
       result &= SparseKeyTest<9992,hashtype>(hash,2,true,true,true, g_drawDiagram);
     }
-
+  END_Sparse:
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
     fflush(NULL);
@@ -475,10 +484,17 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   //-----------------------------------------------------------------------------
   // Keyset 'Permutation' - all possible combinations of a set of blocks
   // 9m with xxh3 and maxlen=23, 4m15 with maxlen=22
+  // 120m for farmhash128_c with maxlen=18, 1m20 FAIL with maxlen=12
+  //                                        1m20 PASS with maxlen=14,16,17
 
   if(g_testPermutation || g_testAll)
   {
-    const int maxlen = g_testExtra ? 23 : 22;
+    const int maxlen = g_testExtra
+      ? 23
+      : info->hashbits > 64
+         ? 17
+         : 22;
+
     {
       // This one breaks lookup3, surprisingly
 
@@ -490,7 +506,8 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
       uint32_t blocks[] = { 0, 1, 2, 3, 4, 5, 6, 7 };
 
-      result &= CombinationKeyTest<hashtype>(hash,7,blocks,sizeof(blocks) / sizeof(uint32_t),
+      result &= CombinationKeyTest<hashtype>(hash,7,blocks,
+                                             sizeof(blocks) / sizeof(uint32_t),
                                              true,true, g_drawDiagram);
 
       if(!result) printf("*********FAIL*********\n");
@@ -763,9 +780,11 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   // Keyset 'Window'
 
   // Skip distribution test for these - they're too easy to distribute well,
-  // and it generates a _lot_ of testing
+  // and it generates a _lot_ of testing.
   // 11s for crc32_hw, 28s for xxh3
   // 51s for crc32_hw --extra
+  // 180m for farmhash128_c with 20 windowbits,
+  //      0.19s with windowbits=10, 2s for 14, 9s for 16, 37s for 18
 
   if(g_testWindow || g_testAll)
   {
@@ -774,9 +793,10 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     bool result = true;
     bool testCollision = true;
     bool testDistribution = g_testExtra;
+    const int windowbits = info->hashbits > 64 ? 18 : 20;
 
     result &= WindowedKeyTest< Blob<hashbits*2+2>, hashtype >
-      ( hash, 20, testCollision, testDistribution, g_drawDiagram );
+      ( hash, windowbits, testCollision, testDistribution, g_drawDiagram );
 
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
@@ -786,6 +806,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   //-----------------------------------------------------------------------------
   // Keyset 'Cyclic' - keys of the form "abcdabcdabcd..."
   // 5s for crc32_hw
+  // 18s for farmhash128_c
 
   if(g_testCyclic || g_testAll)
   {
@@ -814,6 +835,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   // 3m40 for crc32_hw (32bit), 8m30 for xxh3 --extra (64bit)
   // 4m16 for xxh3
   // 4m50 for metrohash128crc_1
+  // 260m for farmhash128_c with maxlen=16, 31s with maxlen=10, 2m with 12,14,15
 
   // With --extra this generates some huge keysets,
   // 128-bit tests will take ~1.3 gigs of RAM.
@@ -826,7 +848,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     bool result = true;
     int maxlen = 24;
     if (!g_testExtra && (info->hashbits > 32)) {
-      maxlen = (info->hashbits < 128) ? 20 : 16;
+      maxlen = (info->hashbits < 128) ? 20 : 15;
     }
 
     for(int i = 4; i <= maxlen; i += 4)
@@ -932,18 +954,23 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
   //-----------------------------------------------------------------------------
   // Bit Independence Criteria. Interesting, but doesn't tell us much about
-  // collision or distribution.
+  // collision or distribution. For 128bit hashes only with --extra
   // 4m with xxh3
+  // 152m with farmhash128_c with reps=1000000, => 8m with 100000
 
-  if(g_testBIC)
+  if(g_testBIC || (info->hashbits > 64 && g_testExtra))
   {
     printf("[[[ 'BIC' (Bit Independence Criteria) Tests ]]]\n\n");
     fflush(NULL);
 
     bool result = true;
-
-    //result &= BicTest<uint64_t,hashtype>(hash,2000000);
-    BicTest3<Blob<88>,hashtype>(hash,1000000);
+    if (info->hashbits > 64) {
+      result &= BicTest3<Blob<128>,hashtype>(hash,100000,g_drawDiagram);
+    } else {
+      const long reps = 64000000/info->hashbits;
+      //result &= BicTest<uint64_t,hashtype>(hash,2000000);
+      result &= BicTest3<Blob<88>,hashtype>(hash,(int)reps,g_drawDiagram);
+    }
 
     if(!result) printf("*********FAIL*********\n");
     printf("\n");

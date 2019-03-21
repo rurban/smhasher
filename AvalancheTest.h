@@ -235,7 +235,7 @@ bool BicTest ( pfHash hash, const int reps )
 // afterwards (much faster)
 
 template< typename keytype, typename hashtype >
-void BicTest3 ( pfHash hash, const int reps, bool verbose = true )
+bool BicTest3 ( pfHash hash, const int reps, bool verbose = false )
 {
   const int keybytes = sizeof(keytype);
   const int keybits = keybytes * 8;
@@ -323,7 +323,6 @@ void BicTest3 ( pfHash hash, const int reps, bool verbose = true )
       }
 
       // Finished keybit
-
       if(verbose) printf("\n");
     }
 
@@ -335,6 +334,10 @@ void BicTest3 ( pfHash hash, const int reps, bool verbose = true )
   }
 
   printf("Max bias %f - (%3d : %3d,%3d)\n",maxBias,maxK,maxA,maxB);
+
+  // Bit independence is harder to pass than avalanche, so we're a bit more lax here.
+  bool result = (maxBias < 0.05);
+  return result;
 }
 
 
