@@ -4,7 +4,7 @@ First off, thanks for taking the time to contribute!
 
 ## No Code of Conduct
 
-This project adheres to [No Code of Conduct](https://web.archive.org/web/20150619202349/http://nocodeofconduct.com/). 
+This project adheres to [No Code of Conduct](https://github.com/domgetter/NCoC#what-is-ncoc).
 We are all adults.
 We accept anyone's contributions.
 If you are feeling harassed speak up by yourself.
