@@ -15,11 +15,6 @@ double calcScore ( const int * bins, const int bincount, const int ballcount );
 
 void plot ( double n );
 
-inline double ExpectedCollisions ( double balls, double bins )
-{
-  return balls - bins + bins * pow(1 - 1/bins,balls);
-}
-
 double chooseK ( int b, int k );
 double chooseUpToK ( int n, int k );
 
@@ -65,9 +60,18 @@ int FindCollisions ( std::vector<hashtype> & hashes,
   return collcount;
 }
 
+// TODO This only works for a low number of collisions
+inline double ExpectedCollisions ( double balls, double bins )
+{
+  return balls - bins + bins * pow(1 - 1/bins,balls);
+}
+
+// TODO This is a bit too inacurate for many collisions (80-95%)
 static double EstimateNbCollisions(int nbH, int nbBits)
 {
-    return (double(nbH) * double(nbH-1)) / pow(2.0, double(nbBits + 1));
+  double result = (double(nbH) * double(nbH-1)) / exp2((double)nbBits);
+  return result > nbH ? nbH : result;
+  //return ExpectedCollisions((double)nbH, (double)nbBits);
 }
 
 template< typename hashtype >
