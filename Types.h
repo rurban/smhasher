@@ -325,6 +325,11 @@ public:
     return (*(int*)bytes) & x;
   }
 
+  int operator | ( int x )
+  {
+    return (*(int*)bytes) | x;
+  }
+
   Blob & operator &= ( const Blob & k )
   {
     for(size_t i = 0; i < sizeof(bytes); i++)

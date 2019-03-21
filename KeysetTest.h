@@ -266,7 +266,8 @@ bool WindowedKeyTest ( hashfunc<hashtype> hash, const int windowbits,
     printf("Window at %3d - ",j);
 
     result &= TestHashList(hashes, testCollision, testDistribution, drawDiagram,
-                false);   /* do not test high bits (to not clobber the screen) */
+                           false, false);
+    /* do not test high/low bits (to not clobber the screen) */
 
     //printf("\n");
   }
