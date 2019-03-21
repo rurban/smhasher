@@ -65,7 +65,8 @@ typedef struct { char c[64]; } block64;
 typedef struct { char c[128]; } block128;
 
 template< typename hashtype, typename blocktype >
-bool CombinationKeyTest ( hashfunc<hashtype> hash, int maxlen, blocktype* blocks, int blockcount, bool testColl, bool testDist, bool drawDiagram )
+bool CombinationKeyTest ( hashfunc<hashtype> hash, int maxlen, blocktype* blocks,
+                          int blockcount, bool testColl, bool testDist, bool drawDiagram )
 {
   printf("Keyset 'Combination' - up to %d blocks from a set of %d - ",maxlen,blockcount);
 
@@ -85,7 +86,7 @@ bool CombinationKeyTest ( hashfunc<hashtype> hash, int maxlen, blocktype* blocks
 
   bool result = true;
 
-  result &= TestHashList(hashes,testColl,testDist,drawDiagram);
+  result &= TestHashList(hashes,drawDiagram,testColl,testDist);
 
   printf("\n");
 
@@ -139,7 +140,7 @@ bool PermutationKeyTest ( hashfunc<hashtype> hash, uint32_t * blocks, int blockc
 
   bool result = true;
 
-  result &= TestHashList<hashtype>(hashes,testColl,testDist,drawDiagram);
+  result &= TestHashList<hashtype>(hashes,drawDiagram,testColl,testDist);
 
   printf("\n");
 
@@ -219,7 +220,7 @@ bool SparseKeyTest ( hashfunc<hashtype> hash, const int setbits, bool inclusive,
 
   bool result = true;
 
-  result &= TestHashList<hashtype>(hashes,testColl,testDist,drawDiagram);
+  result &= TestHashList<hashtype>(hashes,drawDiagram,testColl,testDist);
 
   printf("\n");
 
@@ -265,9 +266,9 @@ bool WindowedKeyTest ( hashfunc<hashtype> hash, const int windowbits,
 
     printf("Window at %3d - ",j);
 
-    result &= TestHashList(hashes, testCollision, testDistribution, drawDiagram,
+    result &= TestHashList(hashes, drawDiagram, testCollision, testDistribution,
+                           /* do not test high/low bits (to not clobber the screen) */
                            false, false);
-    /* do not test high/low bits (to not clobber the screen) */
 
     //printf("\n");
   }
@@ -316,7 +317,7 @@ bool CyclicKeyTest ( pfHash hash, int cycleLen, int cycleReps, const int keycoun
 
   bool result = true;
 
-  result &= TestHashList(hashes,true,true,drawDiagram);
+  result &= TestHashList(hashes,drawDiagram);
   printf("\n");
 
   delete [] cycle;
@@ -341,7 +342,7 @@ bool TwoBytesTest2 ( pfHash hash, int maxlen, bool drawDiagram )
 
   bool result = true;
 
-  result &= TestHashList(hashes,true,true,drawDiagram);
+  result &= TestHashList(hashes,drawDiagram);
   printf("\n");
 
   return result;
@@ -394,7 +395,7 @@ bool TextKeyTest ( hashfunc<hashtype> hash, const char * prefix, const char * co
 
   bool result = true;
 
-  result &= TestHashList(hashes,true,true,drawDiagram);
+  result &= TestHashList(hashes,drawDiagram);
 
   printf("\n");
 
@@ -431,7 +432,7 @@ bool ZeroKeyTest ( pfHash hash, bool drawDiagram )
 
   bool result = true;
 
-  result &= TestHashList(hashes,true,true,drawDiagram);
+  result &= TestHashList(hashes,drawDiagram);
 
   printf("\n");
 
@@ -464,7 +465,7 @@ bool SeedTest ( pfHash hash, int keycount, bool drawDiagram )
 
   bool result = true;
 
-  result &= TestHashList(hashes,true,true,drawDiagram);
+  result &= TestHashList(hashes,drawDiagram);
 
   printf("\n");
 

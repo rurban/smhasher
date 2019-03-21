@@ -469,12 +469,13 @@ static inline uint64_t bitreverse(uint64_t i)
 */
 
 template < typename hashtype >
-bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & collisions,
-                    bool testDist, bool drawDiagram,
+bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
+                    bool testCollision = true, bool testDist = true,
                     bool testHighBits = true, bool testLowBits = true )
 {
   bool result = true;
 
+  if(testCollision)
   {
     size_t count = hashes.size();
     double expected = EstimateNbCollisions(count, sizeof(hashtype) * 8);
@@ -566,20 +567,11 @@ bool TestHashList ( std::vector<hashtype> & hashes, std::vector<hashtype> & coll
   return result;
 }
 
-//----------
-
-template < typename hashtype >
-bool TestHashList ( std::vector<hashtype> & hashes, bool /*testColl*/, bool testDist, bool drawDiagram, bool testHighBits = true )
-{
-  std::vector<hashtype> collisions;
-
-  return TestHashList(hashes, collisions, testDist, drawDiagram, testHighBits);
-}
-
 //-----------------------------------------------------------------------------
 
 template < class keytype, typename hashtype >
-bool TestKeyList ( hashfunc<hashtype> hash, std::vector<keytype> & keys, bool testColl, bool testDist, bool drawDiagram )
+bool TestKeyList ( hashfunc<hashtype> hash, std::vector<keytype> & keys,
+                   bool drawDiagram, bool testColl, bool testDist )
 {
   int keycount = (int)keys.size();
 
@@ -600,7 +592,7 @@ bool TestKeyList ( hashfunc<hashtype> hash, std::vector<keytype> & keys, bool te
 
   printf("\n");
 
-  bool result = TestHashList(hashes,testColl,testDist,drawDiagram);
+  bool result = TestHashList(hashes,drawDiagram,testColl,testDist);
 
   printf("\n");
 
