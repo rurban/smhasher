@@ -227,11 +227,12 @@ bool SparseKeyTest ( hashfunc<hashtype> hash, const int setbits, bool inclusive,
 }
 
 //-----------------------------------------------------------------------------
-// Keyset 'Windows' - for all possible N-bit windows of a K-bit key, generate
+// Keyset 'Window' - for all possible N-bit windows of a K-bit key, generate
 // all possible keys with bits set in that window
 
 template < typename keytype, typename hashtype >
-bool WindowedKeyTest ( hashfunc<hashtype> hash, const int windowbits, bool testCollision, bool testDistribution, bool drawDiagram )
+bool WindowedKeyTest ( hashfunc<hashtype> hash, const int windowbits,
+                       bool testCollision, bool testDistribution, bool drawDiagram )
 {
   const int keybits = sizeof(keytype) * 8;
   const int keycount = 1 << windowbits;
@@ -243,7 +244,8 @@ bool WindowedKeyTest ( hashfunc<hashtype> hash, const int windowbits, bool testC
 
   int testcount = keybits;
 
-  printf("Keyset 'Windowed' - %3d-bit key, %3d-bit window - %d tests, %d keys per test\n",keybits,windowbits,testcount,keycount);
+  printf("Keyset 'Window' - %3d-bit key, %3d-bit window - %d tests, %d keys per test\n",
+         keybits,windowbits,testcount,keycount);
 
   for(int j = 0; j <= testcount; j++)
   {
