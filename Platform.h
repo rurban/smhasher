@@ -5,16 +5,16 @@
 
 void SetAffinity ( int cpu );
 
-//-----------------------------------------------------------------------------
-// Microsoft Visual Studio
-
-#if defined(_MSC_VER)
-
 #ifndef __x86_64__
 #if defined(__x86_64) || defined(_M_AMD64) || defined(_M_X64)
   #define  __x86_64__
  #endif
 #endif
+
+//-----------------------------------------------------------------------------
+// Microsoft Visual Studio
+
+#if defined(_MSC_VER)
 
 #define FORCE_INLINE	__forceinline
 #define	NEVER_INLINE  __declspec(noinline)
@@ -39,6 +39,8 @@ void SetAffinity ( int cpu );
 
 #define rdtsc() __rdtsc()
 
+#define popcount8(x)  __popcnt(x)
+
 //-----------------------------------------------------------------------------
 // Other compilers
 
@@ -49,6 +51,12 @@ void SetAffinity ( int cpu );
 
 #define	FORCE_INLINE inline __attribute__((always_inline))
 #define	NEVER_INLINE __attribute__((noinline))
+
+#ifdef __x86_64__
+#define popcount8(x) __builtin_popcountl(x)
+#else
+#define popcount8(x) __builtin_popcountll(x)
+#endif
 
 inline uint32_t rotl32 ( uint32_t x, int8_t r )
 {

@@ -34,6 +34,7 @@ bool g_testPermutation = false;
 bool g_testWindow      = false;
 bool g_testCyclic      = false;
 bool g_testTwoBytes    = false;
+bool g_testMomentChi2  = false;
 //bool g_testLongNeighbors = false;
 bool g_testText        = false;
 bool g_testZeroes      = false;
@@ -57,6 +58,7 @@ TestOpts g_testopts[] =
   { g_testWindow,	"Window" },
   { g_testCyclic,	"Cyclic" },
   { g_testTwoBytes,	"TwoBytes" },
+  { g_testMomentChi2,   "MomentChi2" },
   //{ g_testLongNeighbors,"LongNeighbors" },
   { g_testText,		"Text" },
   { g_testZeroes,	"Zeroes" },
@@ -65,6 +67,8 @@ TestOpts g_testopts[] =
   { g_testDiffDist, 	"DiffDist" },
   { g_testBIC, 		"BIC" }
 };
+
+bool MomentChi2Test ( struct HashInfo *info );
 
 //-----------------------------------------------------------------------------
 // This is the list of all hashes that SMHasher can test.
@@ -864,6 +868,22 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     fflush(NULL);
   }
 
+  // Moment ChiSquare test, over int32_t keys
+  // 10s (16 step interval until 0x7ffffff)
+  // 20s (16 step interval until 0xcffffff)
+  if(g_testMomentChi2 || g_testAll)
+  {
+    printf("[[[ 'MomentChi2' Tests ]]]\n\n");
+
+    bool result = true;
+
+    result &= MomentChi2Test(info);
+
+    if(!result) printf("*********FAIL*********\n");
+    printf("\n");
+    fflush(NULL);
+  }
+  
   //-----------------------------------------------------------------------------
   // LongNeighbors - collisions between long messages of low Hamming distance
   // esp. for testing separate word and then byte-wise processing of unaligned
@@ -1024,6 +1044,55 @@ void VerifyHash ( const void * key, int len, uint32_t seed, void * out )
 
   g_outputVCode = MurmurOAAT(out, g_hashUnderTest->hashbits/8, g_outputVCode);
 }
+
+bool MomentChi2Test ( struct HashInfo *info )
+{
+  pfHash hash = info->hash;
+  const int size = info->hashbits / 8;
+  const int step = 16;
+  unsigned k = 0, s = 0;
+  unsigned long l, h, x;
+  unsigned mx = 0xefffffff;
+  long double sa=0, saa=0, sb=0, sbb=0,	n = mx/step;
+  hash(&k,sizeof(k),s,&l);
+  printf("Running 1st unseeded MomentChi2 for the low 32bits/step %d ... ", step);
+  fflush(NULL);
+  for(unsigned i=1; i<=mx; i+=step){
+    hash(&i,sizeof(i),s,&h);
+    x = popcount8(l^h); // check the lower 32bits only
+    x = x*x*x*x*x;
+    sa+=x; saa+=x*x; l=h;
+  }
+  sa/=n; saa=(saa/n-sa*sa)/n;
+  printf("%Lf - %Lf\n", sa, saa);
+  printf("Running 2nd   seeded MomentChi2 for the low 32bits/step %d ... ", step);
+  fflush(NULL);
+  hash(&k,sizeof(k),s,&l);
+  for(unsigned i=1; i<=mx; i+=step){
+    hash(&k,sizeof(k),i,&h);
+    x = popcount8(l^h);
+    x = x*x*x*x*x;
+    sb += x; sbb+=x*x; l=h;
+  }
+  sb/=n; sbb=(sbb/n-sb*sb)/n;
+
+  double chi2=(sa-sb)*(sa-sb)/(saa+sbb);
+  printf("%Lf - %Lf\nKeySeedMomentChi2:\t%g\t", sb, sbb, chi2);
+  fflush(NULL);
+  if (chi2 > 3.84145882069413)
+  {
+    printf("FAIL!!!!\n");
+    fflush(NULL);
+    return false;
+  }
+  else
+  {
+    printf("PASS\n");
+    fflush(NULL);
+    return true;
+  }
+}
+
 
 //-----------------------------------------------------------------------------
 
