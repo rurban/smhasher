@@ -41,6 +41,18 @@ SMhasher
 | [Murmur2A](doc/Murmur2A)              |      3875.69  |    34.80 | 12.7% bias                         |
 | [Murmur2B](doc/Murmur2B)              |      7336.97  |    34.43 | 1.8% bias, collisions, 3.4% distrib|
 | [Murmur2C](doc/Murmur2C)              |      5050.30  |    34.10 | 91% bias, collisions, distr        |
+| [Murmur3C](doc/Murmur3C)              |      3404.34  |    48.65 | LongNeighbors              |
+| [metrohash64_1](doc/metrohash64_1)    |     15491.63  |    37.56 | LongNeighbors              |
+| [metrohash64_2](doc/metrohash64_2)    |     16316.71  |    37.82 | LongNeighbors              |
+| [metrohash128_1](doc/metrohash128_1)  |     15902.48  |    43.79 | LongNeighbors              |
+| [metrohash128_2](doc/metrohash128_2)  |     16374.31  |    46.21 | LongNeighbors              |
+| [cmetrohash64_1o](doc/cmetrohash64_1o)    | 15997.88	|    37.07 | LongNeighbors              |
+| [cmetrohash64_1](doc/cmetrohash64_1)      | 17094.64	|    36.85 | LongNeighbors              |
+| [cmetrohash64_2](doc/cmetrohash64_2)      | 15952.55	|    38.87 | LongNeighbors              |
+| [falkhash](doc/falkhash)              |     37742.94	|   108.59 | LongNeighbors, machine-specific (x86_64 AES-NI) |
+| [xxHash32](doc/xxHash32)              |      7297.39	|    36.91 | LongNeighbors, collisions with 4bit diff |
+| [t1ha2_atonce128](doc/t1ha2_atonce128)|     14007.67	|    50.51 | LongNeighbors              |
+| [t1ha2_stream128](doc/t1ha2_stream128)|      7274.53	|    93.11 | LongNeighbors              |
 | [HalfSipHash](doc/HalfSipHash)        |      1105.93  |    79.31 | zeroes                     |
 | [SipHash13](doc/SipHash13)            |      2124.26  |    84.20 | 0.9% bias                  |
 | --------------------------------------|               |          |                            |
@@ -48,7 +60,6 @@ SMhasher
 | [GoodOAAT](doc/GoodOAAT)              |      1237.86  |    52.75 |                            |
 | [PMurHash32](doc/PMurHash32)          |      3070.82  |    44.13 |                            |
 | [Murmur3A](doc/Murmur3A)              |      3166.17  |    38.70 |                            |
-| [Murmur3C](doc/Murmur3C)              |      3404.34  |    48.65 |                            |
 | [Murmur3F](doc/Murmur3F)              |      6853.24  |    38.15 |                            |
 | [fasthash32](doc/fasthash32)          |      6693.98  |    36.67 |                            |
 | [fasthash64](doc/fasthash64)          |      7020.23  |    35.51 |                            |
@@ -68,7 +79,6 @@ SMhasher
 | [farmhash32_c](doc/farmhash32_c)      |     24647.21  |    25.36 | machine-specific (x86_64 SSE4/AVX) |
 | [farmhash64_c](doc/farmhash64_c)     	|     14967.76  |    42.01 |                            |
 | [farmhash128_c](doc/farmhash128_c)    |     15097.31  |    61.00 |                            |
-| [xxHash32](doc/xxHash32)              |      7297.39	|    36.91 | collisions with 4bit diff  |
 | [xxHash64](doc/xxHash64)              |     14879.09	|    44.11 |                            |
 | [xxh3](doc/xxh3)                      |     43021.12	|    26.00 |                            |
 | [xxh3low](doc/xxh3low)                |     37670.92	|    26.39 |                            |
@@ -79,22 +89,12 @@ SMhasher
 | [Spooky32](doc/Spooky32)              |     14213.99  |    48.03 |                            |
 | [Spooky64](doc/Spooky64)              |     14839.81  |    46.62 |                            |
 | [Spooky128](doc/Spooky128)            |     14833.63  |    47.50 |                            |
-| [metrohash64_1](doc/metrohash64_1)    |     15491.63  |    37.56 |                            |
-| [metrohash64_2](doc/metrohash64_2)    |     16316.71  |    37.82 |                            |
-| [metrohash128_1](doc/metrohash128_1)  |     15902.48  |    43.79 |                            |
-| [metrohash128_2](doc/metrohash128_2)  |     16374.31  |    46.21 |                            |
 | [metrohash64crc_1](doc/metrohash64crc_1)  | 25856.64	|    41.24 | cyclic collisions 8 byte, machine-specific (x64 SSE4.2) |
 | [metrohash64crc_2](doc/metrohash64crc_2)  | 26450.83	|    39.74 | cyclic collisions 8 byte, machine-specific (x64  SSE4.2) |
 | [metrohash128crc_1](doc/metrohash128crc_1)| 25404.51	|    49.07 | machine-specific (x64 SSE4.2) |
 | [metrohash128crc_2](doc/metrohash128crc_2)| 25248.70	|    49.57 | machine-specific (x64 SSE4.2) |
-| [cmetrohash64_1o](doc/cmetrohash64_1o)    | 15997.88	|    37.07 | LongNeighbors              |
-| [cmetrohash64_1](doc/cmetrohash64_1)      | 17094.64	|    36.85 |                            |
-| [cmetrohash64_2](doc/cmetrohash64_2)      | 15952.55	|    38.87 |                            |
-| [falkhash](doc/falkhash)              |     37742.94	|   108.59 | LongNeighbors, machine-specific (x86_64 AES-NI) |
 | [t1ha2_atonce](doc/t1ha2_atonce)      |     14747.01	|    36.09 |                            |
 | [t1ha2_stream](doc/t1ha2_stream)      |      6376.62	|    82.41 |                            |
-| [t1ha2_atonce128](doc/t1ha2_atonce128)|     14007.67	|    50.51 |                            |
-| [t1ha2_stream128](doc/t1ha2_stream128)|      7274.53	|    93.11 |                            |
 | [t1ha1_64le](doc/t1ha1_64le)          |     16255.08	|    27.63 |                            |
 | [t1ha1_64be](doc/t1ha1_64be)          |     12285.15	|    28.84 |                            |
 | [t1ha0_32le](doc/t1ha0_32le)          |      8866.04	|    36.95 |                            |
@@ -116,8 +116,8 @@ So the fastest hash functions on x86_64 without quality problems are:
 
 - wyhash
 - xxh3
-- t1ha2_atonce
-- Metro (_but not 64crc yet, WIP_)
+- t1ha2_atonce, t1ha1_64le
+- metrohash64crc
 - FarmHash (_not portable, too machine specific: 64 vs 32bit, old gcc, ..._)
 - Spooky32
 - fasthash
@@ -156,9 +156,11 @@ Other
 TODO
 ----
 
-Some popular SSE-improved FNV1 (_sanmayce_) variants, fletcher (_ZFS_), ...
+Some popular SSE-improved FNV1 (_sanmayce_) variants
 and slower cryptographic hashes or more secure hashes are still
 missing. BLAKE2, SHA-2, SHA-3 (Keccak), Grøstl, JH, Skein, ...
+They will pass all tests, and are way too slow compared to our
+candidates here.
 
 SECURITY
 --------

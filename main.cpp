@@ -4,6 +4,7 @@
 #include "SpeedTest.h"
 #include "AvalancheTest.h"
 #include "DifferentialTest.h"
+
 #include "PMurHash.h"
 
 #include <stdio.h>
@@ -33,6 +34,7 @@ bool g_testPermutation = false;
 bool g_testWindow      = false;
 bool g_testCyclic      = false;
 bool g_testTwoBytes    = false;
+//bool g_testLongNeighbors = false;
 bool g_testText        = false;
 bool g_testZeroes      = false;
 bool g_testSeed        = false;
@@ -55,6 +57,7 @@ TestOpts g_testopts[] =
   { g_testWindow,	"Window" },
   { g_testCyclic,	"Cyclic" },
   { g_testTwoBytes,	"TwoBytes" },
+  //{ g_testLongNeighbors,"LongNeighbors" },
   { g_testText,		"Text" },
   { g_testZeroes,	"Zeroes" },
   { g_testSeed,		"Seed" },
@@ -166,6 +169,7 @@ HashInfo g_hashes[] =
   { MurmurHash64A_test,   64, 0x1F0D3804, "Murmur2B",    "MurmurHash2 for x64, 64-bit", POOR },
 #endif
   { MurmurHash64B_test,   64, 0xDD537C05, "Murmur2C",    "MurmurHash2 for x86, 64-bit", POOR },
+  { MurmurHash3_x86_128, 128, 0xB3ECE62A, "Murmur3C",    "MurmurHash3 for x86, 128-bit", POOR },
   { halfsiphash_test,     32, 0xA7A05F72, "HalfSipHash", "HalfSipHash 2-4, 32bit", POOR },
   // as in rust and swift
   { siphash13_test,       64, 0x29C010BF, "SipHash13",   "SipHash 1-3 - SSSE3 optimized", POOR },
@@ -176,7 +180,6 @@ HashInfo g_hashes[] =
   // TODO: Google HighwayHash
   { PMurHash32_test,      32, 0xB0F57EE3, "PMurHash32",  "Shane Day's portable-ized MurmurHash3 for x86, 32-bit", GOOD },
   { MurmurHash3_x86_32,   32, 0xB0F57EE3, "Murmur3A",    "MurmurHash3 for x86, 32-bit", GOOD },
-  { MurmurHash3_x86_128, 128, 0xB3ECE62A, "Murmur3C",    "MurmurHash3 for x86, 128-bit", GOOD },
 #if __WORDSIZE >= 64
   { MurmurHash3_x64_128, 128, 0x6384BA69, "Murmur3F",    "MurmurHash3 for x64, 128-bit", GOOD },
 #endif
@@ -207,14 +210,14 @@ HashInfo g_hashes[] =
 #  define FARM128_SEED        0x9E636AAE
 #endif
   { FarmHash64_test,      64, FARM64_SEED, "FarmHash64",  "Google FarmHash64WithSeed", GOOD },
- { FarmHash64noSeed_test,64, 0xA5B9146C, "Farm64noSeed", "Google FarmHash64 without seed (default, misses on final avalanche)", POOR },
+  { FarmHash64noSeed_test,64, 0xA5B9146C,  "Farm64noSeed","Google FarmHash64 without seed (default, misses on final avalanche)", POOR },
   { FarmHash128_test,    128, FARM128_SEED,"FarmHash128", "Google FarmHash128WithSeed", GOOD },
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { farmhash64_c_test,    64, FARM64_SEED, "farmhash64_c",  "farmhash64_with_seed (C99)", GOOD },
   { farmhash128_c_test,  128, FARM128_SEED,"farmhash128_c", "farmhash128_with_seed (C99)", GOOD },
 #endif
 
-  { xxHash32_test,        32, 0xBA88B743, "xxHash32",    "xxHash, 32-bit for x64", GOOD },
+  { xxHash32_test,        32, 0xBA88B743, "xxHash32",    "xxHash, 32-bit for x64", POOR },
   { xxHash64_test,        64, 0x024B7CF4, "xxHash64",    "xxHash, 64-bit", GOOD },
   { xxh3_test,            64, 0x5921E69E, "xxh3",        "xxHash v3, 64-bit", GOOD },
   { xxh3low_test,         32, 0xECA5AAE7, "xxh3low",     "xxHash v3, 64-bit, low 32-bits part", GOOD },
@@ -227,10 +230,10 @@ HashInfo g_hashes[] =
   { SpookyHash32_test,    32, 0x3F798BBB, "Spooky32",    "Bob Jenkins' SpookyHash, 32-bit result", GOOD },
   { SpookyHash64_test,    64, 0xA7F955F1, "Spooky64",    "Bob Jenkins' SpookyHash, 64-bit result", GOOD },
   { SpookyHash128_test,  128, 0x8D263080, "Spooky128",   "Bob Jenkins' SpookyHash, 128-bit result", GOOD },
-  { metrohash64_1_test,       64, 0xEE88F7D2, "metrohash64_1",     "MetroHash64_1 for 64-bit", GOOD },
-  { metrohash64_2_test,       64, 0xE1FC7C6E, "metrohash64_2",     "MetroHash64_2 for 64-bit", GOOD },
-  { metrohash128_1_test,     128, 0x20E8A1D7, "metrohash128_1",    "MetroHash128_1 for 64-bit", GOOD },
-  { metrohash128_2_test,     128, 0x5437C684, "metrohash128_2",    "MetroHash128_2 for 64-bit", GOOD },
+  { metrohash64_1_test,       64, 0xEE88F7D2, "metrohash64_1",     "MetroHash64_1 for 64-bit", POOR },
+  { metrohash64_2_test,       64, 0xE1FC7C6E, "metrohash64_2",     "MetroHash64_2 for 64-bit", POOR },
+  { metrohash128_1_test,     128, 0x20E8A1D7, "metrohash128_1",    "MetroHash128_1 for 64-bit", POOR },
+  { metrohash128_2_test,     128, 0x5437C684, "metrohash128_2",    "MetroHash128_2 for 64-bit", POOR },
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { metrohash64crc_1_test,    64, 0x29C68A50, "metrohash64crc_1",  "MetroHash64crc_1 for x64", POOR },
   { metrohash64crc_2_test,    64, 0x2C00BD9F, "metrohash64crc_2",  "MetroHash64crc_2 for x64", POOR },
@@ -238,34 +241,34 @@ HashInfo g_hashes[] =
   { metrohash128crc_2_test,  128, 0x1ACF3E77, "metrohash128crc_2", "MetroHash128crc_2 for x64", GOOD },
 #endif
 #if defined(__SSE4_2__)
-  { cmetrohash64_1_optshort_test, 64, 0xEE88F7D2, "cmetrohash64_1o", "cmetrohash64_1 (shorter key optimized) , 64-bit for x64", POOR },
-  { cmetrohash64_1_test,         64, 0xEE88F7D2, "cmetrohash64_1",    "cmetrohash64_1, 64-bit for x64", GOOD },
-  { cmetrohash64_2_test,         64, 0xE1FC7C6E, "cmetrohash64_2",    "cmetrohash64_2, 64-bit for x64", GOOD },
+  { cmetrohash64_1_optshort_test,64, 0xEE88F7D2, "cmetrohash64_1o", "cmetrohash64_1 (shorter key optimized) , 64-bit for x64", POOR },
+  { cmetrohash64_1_test,         64, 0xEE88F7D2, "cmetrohash64_1",  "cmetrohash64_1, 64-bit for x64", POOR },
+  { cmetrohash64_2_test,         64, 0xE1FC7C6E, "cmetrohash64_2",  "cmetrohash64_2, 64-bit for x64", POOR },
 #endif
 #if defined(__SSE4_2__) && defined(__x86_64__)
-  { falkhash_test_cxx,           64, 0x2F99B071, "falkhash",          "falkhash.asm with aesenc, 64-bit for x64", POOR },
+  { falkhash_test_cxx,           64, 0x2F99B071, "falkhash",        "falkhash.asm with aesenc, 64-bit for x64", POOR },
 #endif
-  { t1ha2_atonce_test,           64, 0x8F16C948, "t1ha2_atonce",     "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
-  { t1ha2_stream_test,           64, 0xDED9B580, "t1ha2_stream",     "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
-  { t1ha2_atonce128_test,       128, 0xB44C43A1, "t1ha2_atonce128",  "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
-  { t1ha2_stream128_test,       128, 0xE929E756, "t1ha2_stream128",  "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
+  { t1ha2_atonce_test,           64, 0x8F16C948, "t1ha2_atonce",    "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
+  { t1ha2_stream_test,           64, 0xDED9B580, "t1ha2_stream",    "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
+  { t1ha2_atonce128_test,       128, 0xB44C43A1, "t1ha2_atonce128", "Fast Positive Hash (portable, aims 64-bit, little-endian)", POOR },
+  { t1ha2_stream128_test,       128, 0xE929E756, "t1ha2_stream128", "Fast Positive Hash (portable, aims 64-bit, little-endian)", POOR },
 #if 0
-  { t1ha1_64le_test,             64, 0xD6836381, "t1ha1_64le",       "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
-  { t1ha1_64be_test,             64, 0x93F864DE, "t1ha1_64be",       "Fast Positive Hash (portable, aims 64-bit, big-engian)", GOOD },
-  { t1ha0_32le_test,             64, 0x7F7D7B29, "t1ha0_32le",       "Fast Positive Hash (portable, aims 32-bit, little-endian)", GOOD },
-  { t1ha0_32be_test,             64, 0xDA6A4061, "t1ha0_32be",       "Fast Positive Hash (portable, aims 32-bit, big-endian)", GOOD },
+  { t1ha1_64le_test,             64, 0xD6836381, "t1ha1_64le",      "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
+  { t1ha1_64be_test,             64, 0x93F864DE, "t1ha1_64be",      "Fast Positive Hash (portable, aims 64-bit, big-engian)", GOOD },
+  { t1ha0_32le_test,             64, 0x7F7D7B29, "t1ha0_32le",      "Fast Positive Hash (portable, aims 32-bit, little-endian)", GOOD },
+  { t1ha0_32be_test,             64, 0xDA6A4061, "t1ha0_32be",      "Fast Positive Hash (portable, aims 32-bit, big-endian)", GOOD },
 # if T1HA0_AESNI_AVAILABLE
-  { t1ha0_ia32aes_noavx_test,    64, 0xF07C4DA5, "t1ha0_aes_noavx",  "Fast Positive Hash (machine-specific, requires AES-NI)", GOOD },
+  { t1ha0_ia32aes_noavx_test,    64, 0xF07C4DA5, "t1ha0_aes_noavx", "Fast Positive Hash (machine-specific, requires AES-NI)", GOOD },
 #  if defined(__AVX__)
-  { t1ha0_ia32aes_avx1_test,     64, 0xF07C4DA5, "t1ha0_aes_avx1",   "Fast Positive Hash (machine-specific, requires AES-NI & AVX)", GOOD },
+  { t1ha0_ia32aes_avx1_test,     64, 0xF07C4DA5, "t1ha0_aes_avx1",  "Fast Positive Hash (machine-specific, requires AES-NI & AVX)", GOOD },
 #  endif /* __AVX__ */
 #  if defined(__AVX2__)
-  { t1ha0_ia32aes_avx2_test,     64, 0x8B38C599, "t1ha0_aes_avx2",   "Fast Positive Hash (machine-specific, requires AES-NI & AVX)", GOOD },
+  { t1ha0_ia32aes_avx2_test,     64, 0x8B38C599, "t1ha0_aes_avx2",  "Fast Positive Hash (machine-specific, requires AES-NI & AVX)", GOOD },
 #  endif /* __AVX2__ */
 # endif /* T1HA0_AESNI_AVAILABLE */
 #endif /* older t1ha */
-  { wyhash_test,                 64, 0x2091D6FD, "wyhash",           "wyhash (portable, 64-bit, little-endian)", GOOD },
-  { wyhash32low,                 32, 0xEA17DF96, "wyhash32low",      "wyhash - lower 32bit", GOOD }
+  { wyhash_test,                 64, 0x2091D6FD, "wyhash",          "wyhash (portable, 64-bit, little-endian)", GOOD },
+  { wyhash32low,                 32, 0xEA17DF96, "wyhash32low",     "wyhash - lower 32bit", GOOD }
 };
 
 HashInfo * findHash ( const char * name )
@@ -860,6 +863,30 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("\n");
     fflush(NULL);
   }
+
+  //-----------------------------------------------------------------------------
+  // LongNeighbors - collisions between long messages of low Hamming distance
+  // esp. for testing separate word and then byte-wise processing of unaligned
+  // rest parts. Only with --test=LongNeighbors or --extra
+  // 10s for fasthash32
+  // 7m with xxh3 (64bit)
+  // 10m30s with farmhash128_c
+
+  // Not yet included for licensing reasons
+#if 0
+  if(g_testLongNeighbors || (g_testAll && g_testExtra))
+  {
+    printf("[[[ 'LongNeighbors' Tests ]]]\n\n");
+
+    bool result = true;
+
+    result &= testLongNeighbors(info->hash, info->hashbits, g_drawDiagram);
+
+    if(!result) printf("*********FAIL*********\n");
+    printf("\n");
+    fflush(NULL);
+  }
+#endif
 
   //-----------------------------------------------------------------------------
   // Keyset 'Text'
