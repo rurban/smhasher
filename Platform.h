@@ -107,3 +107,11 @@ __inline__ unsigned long long int rdtsc()
 #endif	//	!defined(_MSC_VER)
 
 //-----------------------------------------------------------------------------
+
+#ifndef __WORDSIZE
+# ifdef HAVE_BIT32
+#  define __WORDSIZE 32
+# else
+#  define __WORDSIZE 64
+# endif
+#endif
