@@ -310,3 +310,9 @@ inline void wyhash_test (const void * key, int len, uint32_t seed, void * out) {
 inline void wyhash32low (const void * key, int len, uint32_t seed, void * out) {
   *(uint32_t*)out = 0xFFFFFFFF & wyhash(key, (unsigned long long) len, (unsigned long long)seed);
 }
+
+#if defined(__SSE4_2__) && defined(__x86_64__)
+#include "clhash.h"
+void clhash_init();
+void clhash_test (const void * key, int len, uint32_t seed, void * out);
+#endif

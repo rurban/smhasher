@@ -92,7 +92,9 @@ bool SanityTest ( pfHash hash, const int hashbits )
   uint8_t * hash2 = new uint8_t[hashbytes];
 
   //----------
-
+  memset(hash1, 1, hashbytes);
+  memset(hash2, 2, hashbytes);
+  
   for(int irep = 0; irep < reps; irep++)
   {
     if(irep % (reps/10) == 0) printf(".");
@@ -119,9 +121,16 @@ bool SanityTest ( pfHash hash, const int hashbits )
           hash(key2,len,0,hash2);
 
           if(memcmp(hash1,hash2,hashbytes) == 0)
-          {
-            result = false;
-          }
+            {
+              for(int i=0; i < hashbytes; i++){
+                if (hash1[i] == hash2[i]) {
+                  printf(" %d: 0x%02X == 0x%02X ", i, hash1[i], hash2[i]);
+                  break;
+                }
+              }
+              result = false;
+              goto end_sanity;
+            }
 
           // Flip it back, hash again -> we should get the original result.
 
@@ -129,14 +138,22 @@ bool SanityTest ( pfHash hash, const int hashbits )
           hash(key2,len,0,hash2);
 
           if(memcmp(hash1,hash2,hashbytes) != 0)
-          {
-            result = false;
-          }
+            {
+              for(int i=0; i < hashbytes; i++){
+                if (hash1[i] != hash2[i]) {
+                  printf(" %d: 0x%02X != 0x%02X ", i, hash1[i], hash2[i]);
+                  break;
+                }
+              }
+              result = false;
+              goto end_sanity;
+            }
         }
       }
     }
   }
 
+ end_sanity:
   if(result == false)
   {
     printf(" FAIL  !!!!!\n");

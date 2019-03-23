@@ -251,6 +251,7 @@ HashInfo g_hashes[] =
 #endif
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { falkhash_test_cxx,           64, 0x2F99B071, "falkhash",        "falkhash.asm with aesenc, 64-bit for x64", POOR },
+  { clhash_test,                 64, 0x91A312FF, "clhash",          "carry-less mult. hash -DBITMIX (64-bit for x64, SSE4.2)", GOOD },
 #endif
   { t1ha2_atonce_test,           64, 0x8F16C948, "t1ha2_atonce",    "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
   { t1ha2_stream_test,           64, 0xDED9B580, "t1ha2_stream",    "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
@@ -296,6 +297,11 @@ void SelfTest ( void )
   {
     HashInfo * info = & g_hashes[i];
 
+#if defined(__SSE4_2__) && defined(__x86_64__)
+  if(info->hash == clhash_test)
+    clhash_init();
+#endif
+
     pass &= VerificationTest(info->hash,info->hashbits,info->verification,false);
   }
 
@@ -325,6 +331,13 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   printf("-------------------------------------------------------------------------------\n");
   printf("--- Testing %s \"%s\" %s\n\n", info->name, info->desc, quality_str[info->quality]);
   fflush(NULL);
+
+  //-----------------------------------------------------------------------------
+  // eventual initializers
+#if defined(__SSE4_2__) && defined(__x86_64__)
+  if(info->hash == clhash_test)
+    clhash_init();
+#endif
 
   //-----------------------------------------------------------------------------
   // Sanity tests

@@ -144,7 +144,8 @@ IF(SSE4_2_FOUND)
 IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
   #enable_language(ASM-NASM)
   #set(CMAKE_ASM_FLAGS "-f elf64")
-  set(X86_64ONLY_SRC farmhash-c.c farmhash-c-test.cc metrohash64crc.cpp metrohash128crc.cpp crc32_hw1.c)
+  set(X86_64ONLY_SRC farmhash-c.c farmhash-c-test.cc metrohash64crc.cpp
+                     metrohash128crc.cpp crc32_hw1.c clhash.c)
 ELSE()
   message(WARNING "32bit only: CMAKE_SIZEOF_VOID_P=${CMAKE_SIZEOF_VOID_P}")
 ENDIF()
@@ -156,7 +157,10 @@ ELSE()
   set(SIPHASH_SRC     siphash.c)
 ENDIF(SSE4_2_FOUND)
 
-set(T1HA_SRC t1ha/t1ha0.c t1ha/t1ha1.c t1ha/t1ha2.c t1ha/t1ha0_ia32aes_noavx.c t1ha/t1ha0_ia32aes_avx.c t1ha/t1ha0_ia32aes_avx2.c)
+set(T1HA_SRC t1ha/t1ha0.c t1ha/t1ha1.c t1ha/t1ha2.c
+             t1ha/t1ha0_ia32aes_noavx.c
+             t1ha/t1ha0_ia32aes_avx.c
+             t1ha/t1ha0_ia32aes_avx2.c)
 if(MSVC)
 set_source_files_properties(t1ha/t1ha0_ia32aes_noavx.c PROPERTIES COMPILE_FLAGS "/arch:ia32")
 set_source_files_properties(t1ha/t1ha0_ia32aes_avx.c PROPERTIES COMPILE_FLAGS "/arch:avx")

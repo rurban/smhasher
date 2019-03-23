@@ -613,3 +613,17 @@ falkhash_test_cxx(const void *input, int len, uint32_t seed, void *out)
   *(uint64_t *) out = hash[0];
 }
 #endif
+
+#if defined(__SSE4_2__) && defined(__x86_64__)
+#include "clhash.h"
+static char clhash_random[RANDOM_BYTES_NEEDED_FOR_CLHASH];
+void clhash_test (const void * key, int len, uint32_t seed, void * out) {
+  memcpy(clhash_random, &seed, 4);
+  *(uint64_t*)out = clhash(&clhash_random, (char*)key, (size_t)len);
+}
+void clhash_init()
+{
+  void* data = get_random_key_for_clhash(UINT64_C(0xb3816f6a2c68e530), 711);
+  memcpy(clhash_random, data, RANDOM_BYTES_NEEDED_FOR_CLHASH);
+}
+#endif

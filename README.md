@@ -93,6 +93,7 @@ SMhasher
 | [metrohash64crc_2](doc/metrohash64crc_2)  | 26450.83	|    39.74 | cyclic collisions 8 byte, machine-specific (x64  SSE4.2) |
 | [metrohash128crc_1](doc/metrohash128crc_1)| 25404.51	|    49.07 | machine-specific (x64 SSE4.2) |
 | [metrohash128crc_2](doc/metrohash128crc_2)| 25248.70	|    49.57 | machine-specific (x64 SSE4.2) |
+| [clhash](doc/clhash)                  |     19322.99	|    57.17 | machine-specific (x64 SSE4.2) |
 | [t1ha2_atonce](doc/t1ha2_atonce)      |     14747.01	|    36.09 |                            |
 | [t1ha2_stream](doc/t1ha2_stream)      |      6376.62	|    82.41 |                            |
 | [t1ha1_64le](doc/t1ha1_64le)          |     16255.08	|    27.63 |                            |
