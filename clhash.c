@@ -402,20 +402,22 @@ uint64_t xorshift128plus(xorshift128plus_key_t * key) {
 }
 
 void * get_random_key_for_clhash(uint64_t seed1, uint64_t seed2) {
+    uint32_t i;
+    void *answer;
+    uint64_t *a64;
     xorshift128plus_key_t k;
     xorshift128plus_init(seed1, seed2, &k);
-    void * answer;
-    if (posix_memalign(&answer, sizeof(__m128i),
+
+    if (posix_memalign((void**)&a64, sizeof(__m128i),
                        RANDOM_BYTES_NEEDED_FOR_CLHASH)) {
         return NULL;
     }
-    uint64_t * a64 = (uint64_t *) answer;
-    for(uint32_t i = 0; i < RANDOM_64BITWORDS_NEEDED_FOR_CLHASH; ++i) {
-        a64[i] =  xorshift128plus(&k);
+    for(i = 0; i < RANDOM_64BITWORDS_NEEDED_FOR_CLHASH; ++i) {
+        a64[i] = xorshift128plus(&k);
     }
     while((a64[128]==0) && (a64[129]==1)) {
-        a64[128] =  xorshift128plus(&k);
-        a64[129] =  xorshift128plus(&k);
+        a64[128] = xorshift128plus(&k);
+        a64[129] = xorshift128plus(&k);
     }
-    return answer;
+    return (void*)a64;
 }
