@@ -314,6 +314,9 @@ add_library(
   sha2/sha512_224.c
   sha2/sha512_256.c
   sha3.c
+  PMP_Multilinear.cpp
+  PMP_Multilinear_64.cpp
+  vmac.cpp
 )
 
 add_executable(
