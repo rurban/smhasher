@@ -131,13 +131,23 @@ HashInfo g_hashes[] =
   // elf64 or macho64 only
   { fhtw_test,            64, 0x0,        "fhtw",        "fhtw asm", POOR },
 #endif
-  { fibonacci,    __WORDSIZE,
 #ifdef HAVE_BIT32
-                              0x09952480,
+ #define FIBONACCI_VERIF      0x09952480
+ #define MULTSHIFT_VERIF      0xFBCB5196
+ #define PAIRMULTSHIFT_VERIF  0x0CE2B2FE
+ #define FNV2_VERIF           0x739801C5
 #else
-                              0xFE3BD380,
+ #define FIBONACCI_VERIF      0xFE3BD380
+ #define MULTSHIFT_VERIF      0xF15F3D1E
+ #define PAIRMULTSHIFT_VERIF  0x638BAE82
+ #define FNV2_VERIF           0x1967C625
 #endif
-                                          "fibonacci",   "wordwise Fibonacci", POOR },
+  { fibonacci,    __WORDSIZE, FIBONACCI_VERIF, "fibonacci",   "wordwise Fibonacci", POOR },
+  // M. Dietzfelbinger, T. Hagerup, J. Katajainen, and M. Penttonen. A reliable randomized
+  // algorithm for the closest-pair problem. J. Algorithms, 25:19–51, 1997.
+  { multiply_shift, __WORDSIZE,MULTSHIFT_VERIF, "multiply_shift", "Dietzfelbinger Multiply-shift on strings", POOR },
+  { pair_multiply_shift, __WORDSIZE, PAIRMULTSHIFT_VERIF, "pair_multiply_shift", "Pair-multiply-shift", POOR },
+
   { FNV32a,               32, 0xE3CBBE91, "FNV1a",       "Fowler-Noll-Vo hash, 32-bit", POOR },
   { FNV32a_YoshimitsuTRIAD,32,0xD8AFFD71, "FNV1a_YT",    "FNV1a-YoshimitsuTRIAD 32-bit sanmayce", POOR },
 #if 0 /* TODO */
@@ -145,13 +155,7 @@ HashInfo g_hashes[] =
   { Meiyan,       	  32, 0x0, "FNV1a_Meiyan",     "FNV1a-Meiyan 32-bit sanmayce", POOR },
 #endif
   { FNV64a,               64, 0x103455FC, "FNV64",       "Fowler-Noll-Vo hash, 64-bit", POOR },
-  { FNV2,    __WORDSIZE,
-#ifdef HAVE_BIT32
-                              0x739801C5,
-#else
-                              0x1967C625,
-#endif
-                                          "FNV2",        "wordwise FNV", POOR },
+  { FNV2,         __WORDSIZE, FNV2_VERIF, "FNV2",        "wordwise FNV", POOR },
   { fletcher2,            64, 0x890767C0, "fletcher2",   "fletcher2 ZFS", POOR},
   { fletcher4,            64, 0x47660EB7, "fletcher4",   "fletcher4 ZFS", POOR},
   { Bernstein,            32, 0xBDB4B640, "bernstein",   "Bernstein, 32-bit", POOR },

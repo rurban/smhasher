@@ -627,3 +627,48 @@ void clhash_init()
   memcpy(clhash_random, data, RANDOM_BYTES_NEEDED_FOR_CLHASH);
 }
 #endif
+
+// just to prove how bad academic papers really are:
+// Thorup "High Speed Hashing for Integers and Strings" 2018
+// https://arxiv.org/pdf/1504.06804.pdf
+void multiply_shift (const void *key, int len, uint32_t seed, void *out) {
+  size_t h   = (size_t)(seed | 1);
+  size_t *dw = (size_t *)key; //word stepper
+  const size_t *endw = &((const size_t*)key)[len/sizeof(size_t)];
+  const unsigned shift = sizeof(size_t) - len;
+  // hashes x universally into len bits using the random odd seed.
+  for (; dw < endw; dw++) {
+    h += (*dw * h) >> shift;
+  }
+  if (len & (sizeof(size_t)-1)) {
+    uint8_t *dc = (uint8_t*)dw; //byte stepper
+    const uint8_t *endc = &((const uint8_t*)key)[len];
+    for (; dc < endc; dc++) {
+      h += (*dc * h) >> shift;
+    }
+  }
+  *(size_t *) out = h + (seed & 8);
+}
+
+void pair_multiply_shift (const void *key, int len, uint32_t seed, void *out) {
+  const uint16_t h1 = (seed & 0xffff) | 0x423d0001;
+  const uint16_t h2 = (seed >> 8)     | 0x1f380001;
+  const uint8_t b   = seed & 8;
+  size_t h = seed | 1;
+  size_t *dw = (size_t *)key; //word stepper
+  const size_t *endw = &((const size_t*)key)[len/sizeof(size_t) - 1];
+  const unsigned shift = sizeof(size_t) - len;
+  // hashes x universally into len bits using the random odd seed pair.
+  for (; dw < endw; dw++, dw++) {
+    h += (*dw + h1) * (*(dw+1) + h2) + b;
+  }
+  h >>= shift;
+  if (len & (sizeof(size_t)-1)) {
+    uint8_t *dc = (uint8_t*)dw; //byte stepper
+    const uint8_t *endc = &((const uint8_t*)key)[len-1];
+    for (; dc < endc; dc++, dc++) {
+      h += (*dw + h1) * (*(dw+1) + h2) + b;
+    }
+  }
+  *(size_t *) out = h;
+}

@@ -316,3 +316,6 @@ inline void wyhash32low (const void * key, int len, uint32_t seed, void * out) {
 void clhash_init();
 void clhash_test (const void * key, int len, uint32_t seed, void * out);
 #endif
+
+void multiply_shift (const void * key, int len, uint32_t seed, void * out);
+void pair_multiply_shift (const void *key, int len, uint32_t seed, void *out);
