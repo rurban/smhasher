@@ -868,9 +868,18 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     fflush(NULL);
   }
 
-  // Moment ChiSquare test, over int32_t keys
+  // Moment Chi-Square test, measuring the probability of the
+  // lowest 32 bits set over the whole key space. Not where the bits are, but how many.
+  // See e.g. https://www.statlect.com/fundamentals-of-probability/moment-generating-function
   // 10s (16 step interval until 0x7ffffff)
   // 20s (16 step interval until 0xcffffff)
+  //   step  time
+  //   1     300s
+  //   2     150s
+  //   3     90s
+  //   7     35s
+  //   13    20s
+  //   16    12s
   if(g_testMomentChi2 || g_testAll)
   {
     printf("[[[ 'MomentChi2' Tests ]]]\n\n");
@@ -1049,10 +1058,10 @@ bool MomentChi2Test ( struct HashInfo *info )
 {
   pfHash hash = info->hash;
   const int size = info->hashbits / 8;
-  const int step = 16;
+  const int step = 3;
   unsigned k = 0, s = 0;
   unsigned long l, h, x;
-  unsigned mx = 0xefffffff;
+  unsigned mx = 0xfffffff0;
   long double sa=0, saa=0, sb=0, sbb=0,	n = mx/step;
   hash(&k,sizeof(k),s,&l);
   printf("Running 1st unseeded MomentChi2 for the low 32bits/step %d ... ", step);
@@ -1072,7 +1081,7 @@ bool MomentChi2Test ( struct HashInfo *info )
     hash(&k,sizeof(k),i,&h);
     x = popcount8(l^h);
     x = x*x*x*x*x;
-    sb += x; sbb+=x*x; l=h;
+    sb+=x; sbb+=x*x; l=h;
   }
   sb/=n; sbb=(sbb/n-sb*sb)/n;
 

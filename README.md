@@ -58,11 +58,11 @@ SMhasher
 | --------------------------------------|               |          |                            |
 | [SipHash](doc/SipHash)                |      1124.24  |   115.72 |                            |
 | [GoodOAAT](doc/GoodOAAT)              |      1237.86  |    52.75 |                            |
-| [PMurHash32](doc/PMurHash32)          |      3070.82  |    44.13 | Moment Chi2 136 !          |
-| [Murmur3A](doc/Murmur3A)              |      3166.17  |    38.70 | Moment Chi2 136 !          |
+| [PMurHash32](doc/PMurHash32)          |      3070.82  |    44.13 | Moment Chi2 69             |
+| [Murmur3A](doc/Murmur3A)              |      3166.17  |    38.70 | Moment Chi2 69             |
 | [Murmur3F](doc/Murmur3F)              |      6853.24  |    38.15 |                            |
 | [fasthash32](doc/fasthash32)          |      6693.98  |    36.67 |                            |
-| [fasthash64](doc/fasthash64)          |      7020.23  |    35.51 | Moment Chi2 408 !          |
+| [fasthash64](doc/fasthash64)          |      7020.23  |    35.51 | Moment Chi2 5159 !         |
 | [MUM](doc/MUM)                        |     12790.65  |    29.63 | machine-specific (32/64 differs) |
 | [MUMlow](doc/MUMlow)                  |     12973.97  |    34.67 |                            |
 | [MUMhigh](doc/MUMhigh)                |     12465.58  |    35.64 |                            |
@@ -73,18 +73,18 @@ SMhasher
 | [City64high](doc/City64high)          |     14340.83  |    45.69 |                            |
 | [City128](doc/City128)                |     16000.61  |    45.74 |                            |
 | [CityCrc128](doc/CityCrc128)          |     19348.29  |    48.34 |                            |
-| [FarmHash64](doc/FarmHash64)         	|     14899.89  |    42.41 | Moment Chi2 5.9            |
+| [FarmHash64](doc/FarmHash64)         	|     14899.89  |    42.41 |                            |
 | [FarmHash128](doc/FarmHash128)        |     15998.86  |    58.12 |                            |
 | [FarmHash32](doc/FarmHash32)         	|     24831.45  |    24.99 | machine-specific (x86_64 SSE4/AVX) |
 | [farmhash32_c](doc/farmhash32_c)      |     24647.21  |    25.36 | machine-specific (x86_64 SSE4/AVX) |
-| [farmhash64_c](doc/farmhash64_c)     	|     14967.76  |    42.01 | Moment Chi2 5.9            |
+| [farmhash64_c](doc/farmhash64_c)     	|     14967.76  |    42.01 |                            |
 | [farmhash128_c](doc/farmhash128_c)    |     15097.31  |    61.00 |                            |
 | [xxHash64](doc/xxHash64)              |     14879.09	|    44.11 |                            |
-| [xxh3](doc/xxh3)                      |     43021.12	|    26.00 | Moment Chi2 940 !          |
-| [xxh3low](doc/xxh3low)                |     37670.92	|    26.39 | Moment Chi2 3.3e+8 !          |
+| [xxh3](doc/xxh3)                      |     43021.12	|    26.00 | Moment Chi2 14974 !        |
+| [xxh3low](doc/xxh3low)                |     37670.92	|    26.39 | Moment Chi2 1.8e+9 !       |
 | [xxh3high](doc/xxh3high)              |     45932.74	|    27.29 |      - " -                 |
 | [xxh128](doc/xxh128)                  |     44407.83	|    26.89 |                            |
-| [xxh128low](doc/xxh128low)            |     43661.23	|    25.86 | Moment Chi2 940 !          |
+| [xxh128low](doc/xxh128low)            |     43661.23	|    25.86 | Moment Chi2 14974 !        |
 | [xxh128high](doc/xxh128high)          |     41762.05	|    28.81 |      - " -                 |
 | [Spooky32](doc/Spooky32)              |     14213.99	|    48.03 |                            |
 | [Spooky64](doc/Spooky64)              |     14839.81	|    46.62 |                            |
