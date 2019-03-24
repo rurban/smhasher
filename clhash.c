@@ -243,7 +243,7 @@ static __m128i __clmulhalfscalarproductOnlyExtraWord(const __m128i * randomsourc
 // an invertible function used to mix the bits
 // borrowed directly from murmurhash
 ////////
-inline uint64_t fmix64 ( uint64_t k ) {
+static inline uint64_t fmix64 ( uint64_t k ) {
     k ^= k >> 33;
     k *= 0xff51afd7ed558ccdULL;
     k ^= k >> 33;
