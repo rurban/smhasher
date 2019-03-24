@@ -349,14 +349,14 @@ if (CMAKE_SIZEOF_VOID_P EQUAL 4)
   set_source_files_properties(Hashes.cpp PROPERTIES COMPILE_FLAGS "-DWYHASH32")
 endif()
 
-find_library(HIGHWAY highwayhash)
-if (HIGHWAY)
-  if (CMAKE_SIZEOF_VOID_P EQUAL 8)
-    set(HIGHWAY_SRC HighwayHash.cpp)
-    set(HIGHWAY_LIB highwayhash)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_HIGHWAYHASH")
-  endif()
-endif()
+#find_library(HIGHWAY highwayhash)
+#if (HIGHWAY)
+#  if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+#    set(HIGHWAY_SRC HighwayHash.cpp)
+#    set(HIGHWAY_LIB highwayhash)
+#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_HIGHWAYHASH")
+#  endif()
+#endif()
 
 if (SSE4_2_FOUND AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
   # Rust staticlib (PR #9) WIP
@@ -412,6 +412,32 @@ endif()
 #    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_FANOM_HASH")
 #ENDIF()
 
+set(HIGHWAYHASH_SRC
+  highwayhash/arch_specific.cc
+  highwayhash/instruction_sets.cc
+  highwayhash/os_specific.cc
+  )
+set(HH_CXX "-I. -I.. -std=c++11")
+IF(SSE4_2_FOUND)
+  set(HIGHWAYHASH_SRC ${HIGHWAYHASH_SRC}
+    #highwayhash/hh_avx2.cc
+    highwayhash/hh_sse41.cc
+    #highwayhash/hh_portable.cc
+    )
+  #set_source_files_properties(highwayhash/hh_avx2.cc PROPERTIES COMPILE_FLAGS ${HH_CXX})
+  set_source_files_properties(highwayhash/hh_sse41.cc PROPERTIES COMPILE_FLAGS ${HH_CXX})
+ELSE()
+  set(HIGHWAYHASH_SRC ${HIGHWAYHASH_SRC}
+    highwayhash/hh_portable.cc
+    )
+ENDIF()
+
+set_source_files_properties(HighWayHash.cpp PROPERTIES COMPILE_FLAGS ${HH_CXX})
+set_source_files_properties(highwayhash/hh_portable.cc PROPERTIES COMPILE_FLAGS ${HH_CXX})
+set_source_files_properties(highwayhash/arch_specific.cc PROPERTIES COMPILE_FLAGS ${HH_CXX})
+set_source_files_properties(highwayhash/instruction_sets.cc PROPERTIES COMPILE_FLAGS ${HH_CXX})
+set_source_files_properties(highwayhash/os_specific.cc PROPERTIES COMPILE_FLAGS ${HH_CXX})
+
 if ((CMAKE_MAJOR_VERSION EQUAL 3 AND CMAKE_MINOR_VERSION GREATER_EQUAL 9)
     AND (CMAKE_BUILD_TYPE STREQUAL "Release"))
   cmake_policy(SET CMP0069 NEW)
@@ -430,7 +456,8 @@ add_library(SMHasherSupport STATIC
   DifferentialTest.cpp
   HashMapTest.cpp
   Hashes.cpp
-  ${HIGHWAY_SRC}
+  HighwayHash.cpp
+  ${HIGHWAYHASH_SRC}
   ${SSE2_SRC}
   ${SSE4_SRC}
   KeysetTest.cpp
@@ -507,7 +534,7 @@ endif()
 target_link_libraries(
   SMHasher
   SMHasherSupport
-  ${HIGHWAY_LIB}
+  # ${HIGHWAY_LIB}
   ${BLAKE3_LIB}
   ${CMAKE_THREAD_LIBS_INIT}
   )

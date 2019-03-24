@@ -1,8 +1,16 @@
 #include <stdlib.h>
-#include <string.h>
-#include "highwayhash/c_bindings.h"
+#include <cstring>
 
-static uint64_t HighwayHash_key[4];
+//#include "highwayhash/c_bindings.h"
+#include "highwayhash/highwayhash_target.h"
+//#include "highwayhash/instruction_sets.h"
+//using highwayhash::InstructionSets;
+
+using highwayhash::HighwayHash;
+using highwayhash::HHKey;
+using highwayhash::HHResult64;
+
+static HHKey HighwayHash_key;
 
 void HighwayHash_init()
 {
@@ -12,8 +20,9 @@ void HighwayHash_init()
   }
 }
 
-void HighwayHash64_test(const void *bytes, int len, uint32_t seed, void *out)
+void HighwayHash64(const void *bytes, int len, uint32_t seed, void *out)
 {
   memcpy(&HighwayHash_key, &seed, 4);
-  *(uint64_t*)out = HighwayHash64(HighwayHash_key, (const char*)bytes, (uint64_t)len);
+  HighwayHash<4>(&HighwayHash_key, (const char*)bytes, (uint64_t)len,
+                 reinterpret_cast<HHResult64*>(out));
 }

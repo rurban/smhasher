@@ -303,7 +303,10 @@ HashInfo g_hashes[] =
   { clhash_test,          64, 0x00000000, "clhash",      "carry-less mult. hash -DBITMIX (64-bit for x64, SSE4.2)", GOOD },
 #endif
 #ifdef HAVE_HIGHWAYHASH
-  { HighwayHash64_test,   64, 0x00000000,        "HighwayHash64", "Google HighwayHash (portable with dylib overhead)", GOOD },
+  { HighwayHash64_test,   64, 0x00000000, "HighwayHash64", "Google HighwayHash (portable with dylib overhead)", GOOD },
+#endif
+#if defined(__SSE4_2__) && defined(__x86_64__)
+  { HighwayHash64,        64, 0x7B14EEE5, "HighwayHash64", "Google HighwayHash SSE4.1", GOOD },
 #endif
 #if __WORDSIZE >= 64
   { MurmurHash3_x64_128, 128, 0x6384BA69, "Murmur3F",    "MurmurHash3 for x64, 128-bit", GOOD },
@@ -434,12 +437,56 @@ void Hash_init (HashInfo* info) {
 
 void SelfTest(bool verbose) {
   bool pass = true;
+<<<<<<< HEAD
   for (size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++) {
     HashInfo *info = &g_hashes[i];
     if (verbose)
       printf("%20s - ", info->name);
     pass &= VerificationTest(info->hash, info->hashbits, info->verification,
                              verbose);
+||||||| merged common ancestors
+
+  for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++)
+  {
+    HashInfo * info = & g_hashes[i];
+
+    pass &= VerificationTest(info->hash,info->hashbits,info->verification,
+                             false);
+=======
+
+  for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++)
+  {
+    HashInfo * info = & g_hashes[i];
+
+<<<<<<< HEAD
+    pass &= VerificationTest(info->hash,info->hashbits,info->verification,
+                             false);
+||||||| merged common ancestors
+#if defined(__SSE4_2__) && defined(__x86_64__)
+  if(info->hash == clhash_test)
+    clhash_init();
+#endif
+#ifdef HAVE_HIGHWAYHASH
+  if(info->hash == HighwayHash64_test)
+    HighwayHash_init();
+#endif
+
+    pass &= VerificationTest(info->hash,info->hashbits,info->verification,false);
+=======
+#if defined(__SSE4_2__) && defined(__x86_64__)
+  if(info->hash == clhash_test)
+    clhash_init();
+  if(info->hash == HighwayHash64)
+    HighwayHash_init();
+#endif
+#ifdef HAVE_HIGHWAYHASH
+  if(info->hash == HighwayHash64_test)
+    HighwayHash_init();
+#endif
+
+    pass &= VerificationTest(info->hash,info->hashbits,info->verification,false);
+>>>>>>> WIP add HighwayHash
+>>>>>>> WIP add HighwayHash
   }
 
   if (!pass) {
@@ -468,7 +515,29 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   }
 
   // eventual initializers
+<<<<<<< HEAD
   Hash_init (info);
+||||||| merged common ancestors
+#if defined(__SSE4_2__) && defined(__x86_64__)
+  if(info->hash == clhash_test)
+    clhash_init();
+#endif
+#ifdef HAVE_HIGHWAYHASH
+  if(info->hash == HighwayHash64_test)
+    HighwayHash_init();
+#endif
+=======
+#if defined(__SSE4_2__) && defined(__x86_64__)
+  if(info->hash == clhash_test)
+    clhash_init();
+  if(info->hash == HighwayHash64)
+    HighwayHash_init();
+#endif
+#ifdef HAVE_HIGHWAYHASH
+  if(info->hash == HighwayHash64_test)
+    HighwayHash_init();
+#endif
+>>>>>>> WIP add HighwayHash
 
   //-----------------------------------------------------------------------------
   // Sanity tests
