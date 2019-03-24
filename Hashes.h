@@ -319,3 +319,6 @@ void clhash_test (const void * key, int len, uint32_t seed, void * out);
 
 void multiply_shift (const void * key, int len, uint32_t seed, void * out);
 void pair_multiply_shift (const void *key, int len, uint32_t seed, void *out);
+
+void HighwayHash_init();
+void HighwayHash64_test (const void * key, int len, uint32_t seed, void * out);

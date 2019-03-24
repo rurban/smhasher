@@ -84,9 +84,9 @@ if (CMAKE_COMPILER_IS_GNUCC
     OR (CMAKE_C_COMPILER_ID STREQUAL Intel))
   set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
   set(CMAKE_C_FLAGS_RELEASE "-O3")
-  set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+  set(CMAKE_CXX_FLAGS_RELEASE "-I. -O3")
   set(CMAKE_C_FLAGS_DEBUG "-g")
-  set(CMAKE_CXX_FLAGS_DEBUG "-g")
+  set(CMAKE_CXX_FLAGS_DEBUG "-I. -g")
   #IF (SSE2_TRUE)
   #  set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -msse2")
   #  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse2")
@@ -100,11 +100,11 @@ if (CMAKE_COMPILER_IS_GNUCC
   #  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -maes")
   #ENDIF (AES_TRUE)
   set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -march=native")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native -I.")
 elseif (MSVC)
   # using Visual Studio C++, already the default with VS17
   set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} /arch:SSE2")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2 -I.")
 else()
   message(WARNING "Unknown ${CMAKE_CXX_COMPILER_ID} compiler")
 # TODO: BSD and ARM8 crc detection
@@ -171,6 +171,13 @@ set_source_files_properties(t1ha/t1ha0_ia32aes_avx.c PROPERTIES COMPILE_FLAGS "-
 set_source_files_properties(t1ha/t1ha0_ia32aes_avx2.c PROPERTIES COMPILE_FLAGS "-mavx -mavx2 -maes")
 endif()
 
+find_library(HIGHWAY highwayhash)
+if(HIGHWAY)
+  set(HIGHWAY_SRC HighwayHash.cpp)
+  set(HIGHWAY_LIB highwayhash)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_HIGHWAYHASH")
+endif()
+
 add_library(
   SMHasherSupport
   AvalancheTest.cpp
@@ -181,6 +188,7 @@ add_library(
   crc.cpp
   DifferentialTest.cpp
   Hashes.cpp
+  ${HIGHWAY_SRC}
   ${SSE2_SRC}
   ${SSE4_SRC}
   KeysetTest.cpp
@@ -223,5 +231,6 @@ add_executable(
 target_link_libraries(
   SMHasher
   SMHasherSupport
+  ${HIGHWAY_LIB}
   ${CMAKE_THREAD_LIBS_INIT}
 )

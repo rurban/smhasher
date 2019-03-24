@@ -176,8 +176,10 @@ HashInfo g_hashes[] =
 
   // and now the quality hash funcs
   { siphash_test,         64, 0xC58D7F9C, "SipHash",     "SipHash 2-4 - SSSE3 optimized", GOOD },
+#ifdef HAVE_HIGHWAYHASH
+  { HighwayHash64_test,   64, 0x98B8B976, "HighwayHash64", "Google HighwayHash (portable with overhead from the lib)", GOOD },
+#endif
   { GoodOAAT,             32, 0x7B14EEE5, "GoodOAAT",    "Small non-multiplicative OAAT", GOOD },
-  // TODO: Google HighwayHash
   { PMurHash32_test,      32, 0xB0F57EE3, "PMurHash32",  "Shane Day's portable-ized MurmurHash3 for x86, 32-bit", GOOD },
   { MurmurHash3_x86_32,   32, 0xB0F57EE3, "Murmur3A",    "MurmurHash3 for x86, 32-bit", GOOD },
 #if __WORDSIZE >= 64
@@ -297,6 +299,10 @@ void SelfTest ( void )
   if(info->hash == clhash_test)
     clhash_init();
 #endif
+#ifdef HAVE_HIGHWAYHASH
+  if(info->hash == HighwayHash64_test)
+    HighwayHash_init();
+#endif
 
     pass &= VerificationTest(info->hash,info->hashbits,info->verification,false);
   }
@@ -333,6 +339,10 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 #if defined(__SSE4_2__) && defined(__x86_64__)
   if(info->hash == clhash_test)
     clhash_init();
+#endif
+#ifdef HAVE_HIGHWAYHASH
+  if(info->hash == HighwayHash64_test)
+    HighwayHash_init();
 #endif
 
   //-----------------------------------------------------------------------------

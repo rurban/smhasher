@@ -615,6 +615,7 @@ falkhash_test_cxx(const void *input, int len, uint32_t seed, void *out)
 #endif
 
 #if defined(__SSE4_2__) && defined(__x86_64__)
+
 #include "clhash.h"
 static char clhash_random[RANDOM_BYTES_NEEDED_FOR_CLHASH];
 void clhash_test (const void * key, int len, uint32_t seed, void * out) {
@@ -626,6 +627,7 @@ void clhash_init()
   void* data = get_random_key_for_clhash(UINT64_C(0xb3816f6a2c68e530), 711);
   memcpy(clhash_random, data, RANDOM_BYTES_NEEDED_FOR_CLHASH);
 }
+
 #endif
 
 // just to prove how bad academic papers really are:

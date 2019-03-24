@@ -59,6 +59,7 @@ SMhasher
 | [SipHash13](doc/SipHash13)            |      2124.26  |    84.20 | 0.9% bias                  |
 | --------------------------------------|               |          |                            |
 | [SipHash](doc/SipHash)                |      1124.24  |   115.72 |                            |
+| [HighwayHash64](doc/HighwayHash64)    |     14997.76  |    78.50 |                            |
 | [GoodOAAT](doc/GoodOAAT)              |      1237.86  |    52.75 |                            |
 | [PMurHash32](doc/PMurHash32)          |      3070.82  |    44.13 | Moment Chi2 69             |
 | [Murmur3A](doc/Murmur3A)              |      3166.17  |    38.70 | Moment Chi2 69             |
