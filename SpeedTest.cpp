@@ -150,10 +150,9 @@ void FilterOutliers2 ( std::vector<double> & v )
 
 NEVER_INLINE int64_t timehash ( pfHash hash, const void * key, int len, int seed )
 {
-  volatile register int64_t begin,end;
-  
+  volatile int64_t begin, end;
   uint32_t temp[16];
-  
+
   begin = rdtsc();
   
   hash(key,len,seed,temp);

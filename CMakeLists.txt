@@ -84,9 +84,9 @@ if (CMAKE_COMPILER_IS_GNUCC
     OR (CMAKE_C_COMPILER_ID STREQUAL Intel))
   set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
   set(CMAKE_C_FLAGS_RELEASE "-O3")
-  set(CMAKE_CXX_FLAGS_RELEASE "-I. -O3")
+  set(CMAKE_CXX_FLAGS_RELEASE "-O3")
   set(CMAKE_C_FLAGS_DEBUG "-g")
-  set(CMAKE_CXX_FLAGS_DEBUG "-I. -g")
+  set(CMAKE_CXX_FLAGS_DEBUG "-g")
   #IF (SSE2_TRUE)
   #  set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -msse2")
   #  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse2")
@@ -100,11 +100,11 @@ if (CMAKE_COMPILER_IS_GNUCC
   #  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -maes")
   #ENDIF (AES_TRUE)
   set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -march=native")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native -I.")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
 elseif (MSVC)
   # using Visual Studio C++, already the default with VS17
   set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} /arch:SSE2")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2 -I.")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")
 else()
   message(WARNING "Unknown ${CMAKE_CXX_COMPILER_ID} compiler")
 # TODO: BSD and ARM8 crc detection
@@ -142,15 +142,15 @@ IF(SSE4_2_FOUND)
   SET(CMAKE_THREAD_LIBS_INIT "-lpthread")
   set(SSE2_SRC        hasshe2.c)
   set(SSE4_SRC        crc32_hw.c)
-# 64bit only:
-IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
-  #enable_language(ASM-NASM)
-  #set(CMAKE_ASM_FLAGS "-f elf64")
-  set(X86_64ONLY_SRC farmhash-c.c farmhash-c-test.cc metrohash64crc.cpp
-                     metrohash128crc.cpp crc32_hw1.c clhash.c)
-ELSE()
-  message(WARNING "32bit only: CMAKE_SIZEOF_VOID_P=${CMAKE_SIZEOF_VOID_P}")
-ENDIF()
+  # 64bit only:
+  IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    #enable_language(ASM-NASM)
+    #set(CMAKE_ASM_FLAGS "-f elf64") # or macho64/win64
+    set(X86_64ONLY_SRC farmhash-c.c farmhash-c-test.cc metrohash64crc.cpp
+                       metrohash128crc.cpp crc32_hw1.c clhash.c)
+  ELSE()
+    message(WARNING "32bit only: CMAKE_SIZEOF_VOID_P=${CMAKE_SIZEOF_VOID_P}")
+  ENDIF()
   set(SIPHASH_SRC     siphash_ssse3.c)
 ELSEIF(SSE2_FOUND)
   set(SSE2_SRC        hasshe2.c)
@@ -180,10 +180,12 @@ set_source_files_properties(t1ha/t1ha0_ia32aes_avx2.c PROPERTIES COMPILE_FLAGS "
 endif()
 
 find_library(HIGHWAY highwayhash)
-if(HIGHWAY)
-  set(HIGHWAY_SRC HighwayHash.cpp)
-  set(HIGHWAY_LIB highwayhash)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_HIGHWAYHASH")
+if (HIGHWAY)
+  if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(HIGHWAY_SRC HighwayHash.cpp)
+    set(HIGHWAY_LIB highwayhash)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_HIGHWAYHASH")
+  endif()
 endif()
 
 add_library(

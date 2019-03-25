@@ -15,11 +15,12 @@ BadHash(const void *key, int len, uint32_t seed, void *out)
 {
   uint32_t	  h = seed;
   const uint8_t  *data = (const uint8_t *)key;
+  const uint8_t *const end = &data[len];
 
-  for (int i = 0; i < len; i++) {
+  while (data < end) {
     h ^= h >> 3;
     h ^= h << 5;
-    h ^= data[i];
+    h ^= *data++;
   }
 
   *(uint32_t *) out = h;
@@ -28,11 +29,12 @@ BadHash(const void *key, int len, uint32_t seed, void *out)
 void
 sumhash(const void *key, int len, uint32_t seed, void *out)
 {
-  uint32_t	  h = seed;
-  const uint8_t  *data = (const uint8_t *)key;
+  uint32_t	 h = seed;
+  const uint8_t *data = (const uint8_t *)key;
+  const uint8_t *const end = &data[len];
 
-  for (int i = 0; i < len; i++) {
-    h += data[i];
+  while (data < end) {
+    h += *data++;
   }
 
   *(uint32_t *) out = h;
@@ -43,9 +45,17 @@ sumhash32(const void *key, int len, uint32_t seed, void *out)
 {
   uint32_t	  h = seed;
   const uint32_t *data = (const uint32_t *)key;
+  const uint32_t *const end = &data[len/4];
 
-  for (int i = 0; i < len / 4; i++) {
-    h += data[i];
+  while (data < end) {
+    h += *data++;
+  }
+  if (len & 3) {
+    uint8_t *dc = (uint8_t*)data; //byte stepper
+    const uint8_t *const endc = &((const uint8_t*)key)[len];
+    while (dc < endc) {
+      h += *dc++ * BIG_CONSTANT(11400714819323198485);
+    }
   }
 
   *(uint32_t *) out = h;
@@ -59,13 +69,14 @@ DoNothingHash(const void *, int, uint32_t, void *)
 void
 NoopOAATReadHash(const void *key, int len, uint32_t seed, void *out)
 {
-	volatile uint8_t c;
-	const uint8_t *ptr = (uint8_t *)key;
+  uint32_t	 h = seed;
+  const uint8_t *data = (const uint8_t *)key;
+  const uint8_t *const end = &data[len];
 
-	for(int i=0; i < len; i++)
-	{
-			c=ptr[i];
-	}
+  while (data < end) {
+    h = *data++;
+  }
+  *(uint32_t *) out = h;
 }
 
 //-----------------------------------------------------------------------------
@@ -73,11 +84,12 @@ NoopOAATReadHash(const void *key, int len, uint32_t seed, void *out)
 
 uint32_t MurmurOAAT(const void *key, int len, uint32_t seed)
 {
-  const uint8_t  *data = (const uint8_t *)key;
-  uint32_t	  h = seed;
+  uint32_t	 h = seed;
+  const uint8_t *data = (const uint8_t *)key;
+  const uint8_t *const end = &data[len];
 
-  for (int i = 0; i < len; i++) {
-    h ^= data[i];
+  while (data < end) {
+    h ^= *data++;
     h *= 0x5bd1e995;
     h ^= h >> 15;
   }
@@ -98,15 +110,15 @@ fibonacci(const void *key, int len, uint32_t seed, void *out)
 {
   size_t h = (size_t)seed;
   size_t *dw = (size_t *)key; //word stepper
-  const size_t *endw = &((const size_t*)key)[len/sizeof(size_t)];
-  for (; dw < endw; dw++) {
-    h += *dw * BIG_CONSTANT(11400714819323198485);
+  const size_t *const endw = &((const size_t*)key)[len/sizeof(size_t)];
+  while (dw < endw) {
+    h += *dw++ * BIG_CONSTANT(11400714819323198485);
   }
   if (len & (sizeof(size_t)-1)) {
     uint8_t *dc = (uint8_t*)dw; //byte stepper
-    const uint8_t *endc = &((const uint8_t*)key)[len];
-    for (; dc < endc; dc++) {
-      h += *dc * BIG_CONSTANT(11400714819323198485);
+    const uint8_t *const endc = &((const uint8_t*)key)[len];
+    while (dc < endc) {
+      h += *dc++ * BIG_CONSTANT(11400714819323198485);
     }
   }
   *(size_t *) out = h;
@@ -117,14 +129,14 @@ FNV2(const void *key, int len, uint32_t seed, void *out)
 {
   size_t h = (size_t)seed;
   size_t *dw = (size_t *)key; //word stepper
-  const size_t *endw = &((const size_t*)key)[len/sizeof(size_t)];
+  const size_t *const endw = &((const size_t*)key)[len/sizeof(size_t)];
 #ifdef HAVE_BIT32
   h ^= BIG_CONSTANT(2166136261);
 #else
   h ^= BIG_CONSTANT(0xcbf29ce484222325);
 #endif
-  for (; dw < endw; dw++) {
-    h ^= *dw;
+  while (dw < endw) {
+    h ^= *dw++;
 #ifdef HAVE_BIT32
     h *= BIG_CONSTANT(16777619);
 #else
@@ -133,9 +145,9 @@ FNV2(const void *key, int len, uint32_t seed, void *out)
   }
   if (len & (sizeof(size_t)-1)) {
     uint8_t *dc = (uint8_t*)dw; //byte stepper
-    const uint8_t *endc = &((const uint8_t*)key)[len];
-    for (; dc < endc; dc++) {
-      h ^= *dc;
+    const uint8_t *const endc = &((const uint8_t*)key)[len];
+    while (dc < endc) {
+      h ^= *dc++;
 #ifdef HAVE_BIT32
       h *= BIG_CONSTANT(16777619);
 #else
@@ -212,13 +224,13 @@ FNV32a_YoshimitsuTRIAD(const void *key, int len, uint32_t seed, void *out)
 void
 FNV64a(const void *key, int len, uint32_t seed, void *out)
 {
-  uint64_t	  h = (uint64_t) seed;
-  const uint8_t  *data = (const uint8_t *)key;
+  uint64_t  h = (uint64_t) seed & 0xFFFFFFFF;
+  uint8_t  *data = (uint8_t *)key;
+  const uint8_t *const end = &data[len];
 
   h ^= BIG_CONSTANT(0xcbf29ce484222325);
-
-  for (int i = 0; i < len; i++) {
-    h ^= data[i];
+  while (data < end) {
+    h ^= *data++;
     h *= 0x100000001b3ULL;
   }
 
@@ -227,14 +239,15 @@ FNV64a(const void *key, int len, uint32_t seed, void *out)
 
 //-----------------------------------------------------------------------------
 
+static inline
 uint32_t x17(const void *key, int len, uint32_t h)
 {
-  const uint8_t  *data = (const uint8_t *)key;
+  uint8_t *data = (uint8_t *)key;
+  const uint8_t *const end = &data[len];
 
-  for (int i = 0; i < len; ++i) {
-    h = 17 * h + (data[i] - ' ');
+  while (data < end) {
+    h = 17 * h + (*data++ - ' ');
   }
-
   return h ^ (h >> 16);
 }
 
@@ -252,7 +265,7 @@ void
 fletcher2(const void *key, int len, uint32_t seed, void *out)
 {
   uint64_t *dataw = (uint64_t *)key;
-  const uint64_t *endw = &((const uint64_t*)key)[len/8];
+  const uint64_t *const endw = &((const uint64_t*)key)[len/8];
   uint64_t A = seed, B = 0;
   for (; dataw < endw; dataw++) {
     A += *dataw;
@@ -260,7 +273,7 @@ fletcher2(const void *key, int len, uint32_t seed, void *out)
   }
   if (len & 7) {
     uint8_t *datac = (uint8_t*)dataw; //byte stepper
-    const uint8_t *endc = &((const uint8_t*)key)[len];
+    const uint8_t *const endc = &((const uint8_t*)key)[len];
     for (; datac < endc; datac++) {
       A += *datac;
       B += A;
@@ -274,19 +287,19 @@ void
 fletcher4(const void *key, int len, uint32_t seed, void *out)
 {
   uint32_t *dataw = (uint32_t *)key;
-  const uint32_t *endw = &((const uint32_t*)key)[len/4];
+  const uint32_t *const endw = &((const uint32_t*)key)[len/4];
   uint64_t A = seed, B = 0, C = 0, D = 0;
-  for (; dataw < endw; dataw++) {
-    A += *dataw;
+  while (dataw < endw) {
+    A += *dataw++;
     B += A;
     C += B;
     D += C;
   }
   if (len & 3) {
     uint8_t *datac = (uint8_t*)dataw; //byte stepper
-    const uint8_t *endc = &((const uint8_t*)key)[len];
-    for (; datac < endc; datac++) {
-      A += *datac;
+    const uint8_t *const endc = &((const uint8_t*)key)[len];
+    while (datac < endc) {
+      A += *datac++;
       B += A;
       C += B;
       D += C;
@@ -302,12 +315,11 @@ void
 Bernstein(const void *key, int len, uint32_t seed, void *out)
 {
   const uint8_t  *data = (const uint8_t *)key;
-
-  for (int i = 0; i < len; ++i) {
-    //seed = ((seed << 5) + seed) + data[i];
-    seed = 33 * seed + data[i];
+  const uint8_t *const end = &data[len];
+  while (data < end) {
+    //seed = ((seed << 5) + seed) + *data++;
+    seed = 33 * seed + *data++;
   }
-
   *(uint32_t *) out = seed;
 }
 
@@ -362,6 +374,7 @@ JenkinsOOAT(const void *key, int len, uint32_t hash, void *out)
   hash += (hash << 3);
   hash ^= (hash >> 11);
   hash = hash + (hash << 15);
+
   *(uint32_t *) out = hash;
 }
 
@@ -423,8 +436,8 @@ void MicroOAAT(const void *key, int len, uint32_t seed, void *out) {
   const unsigned char *const end = (const unsigned char *)str + len;
   uint32_t h1 = seed ^ 0x3b00;
   uint32_t h2 = grol(seed, 15);
-  for (;str != end; str++) {
-    h1 += str[0];
+  while (str < end) {
+    h1 += *str++;
     h1 += h1 << 3; // h1 *= 9
     h2 -= h1;
     // unfortunately, clang produces bad code here,
@@ -460,7 +473,7 @@ uint32_t Crap8(const uint8_t * key, uint32_t len, uint32_t seed)
     c8mix(key4[0] & ((1 << (len * 8)) - 1))
   }
   c8fold(h ^ k, n, k, k)
-    return k;
+  return k;
 }
 
 void
@@ -469,7 +482,7 @@ Crap8_test(const void *key, int len, uint32_t seed, void *out)
   *(uint32_t *) out = Crap8((const uint8_t *)key, len, seed);
 }
 
-extern		"C" {
+extern "C" {
 #ifdef __SSE2__
   void		  hasshe2 (const void *input, int len, uint32_t seed, void *out);
 #endif
@@ -490,7 +503,7 @@ hasshe2_test(const void *input, int len, uint32_t seed, void *out)
   }
   if (len % 16) {
     //add pad NUL
-      len += 16 - (len % 16);
+    len += 16 - (len % 16);
   }
   hasshe2(input, len, seed, out);
 }
@@ -636,17 +649,17 @@ void clhash_init()
 void multiply_shift (const void *key, int len, uint32_t seed, void *out) {
   size_t h   = (size_t)(seed | 1);
   size_t *dw = (size_t *)key; //word stepper
-  const size_t *endw = &((const size_t*)key)[len/sizeof(size_t)];
+  const size_t *const endw = &((const size_t*)key)[len/sizeof(size_t)];
   const unsigned shift = sizeof(size_t) - len;
   // hashes x universally into len bits using the random odd seed.
-  for (; dw < endw; dw++) {
-    h += (*dw * h) >> shift;
+  while (dw < endw) {
+    h += (*dw++ * h) >> shift;
   }
   if (len & (sizeof(size_t)-1)) {
     uint8_t *dc = (uint8_t*)dw; //byte stepper
-    const uint8_t *endc = &((const uint8_t*)key)[len];
-    for (; dc < endc; dc++) {
-      h += (*dc * h) >> shift;
+    const uint8_t *const endc = &((const uint8_t*)key)[len];
+    while (dc < endc) {
+      h += (*dc++ * h) >> shift;
     }
   }
   *(size_t *) out = h + (seed & 8);
@@ -658,18 +671,20 @@ void pair_multiply_shift (const void *key, int len, uint32_t seed, void *out) {
   const uint8_t b   = seed & 8;
   size_t h = seed | 1;
   size_t *dw = (size_t *)key; //word stepper
-  const size_t *endw = &((const size_t*)key)[len/sizeof(size_t) - 1];
+  const size_t *const endw = &((const size_t*)key)[len/sizeof(size_t) - 1];
   const unsigned shift = sizeof(size_t) - len;
   // hashes x universally into len bits using the random odd seed pair.
-  for (; dw < endw; dw++, dw++) {
+  while (dw < endw) {
     h += (*dw + h1) * (*(dw+1) + h2) + b;
+    dw++; dw++;
   }
   h >>= shift;
   if (len & (sizeof(size_t)-1)) {
     uint8_t *dc = (uint8_t*)dw; //byte stepper
-    const uint8_t *endc = &((const uint8_t*)key)[len-1];
-    for (; dc < endc; dc++, dc++) {
-      h += (*dw + h1) * (*(dw+1) + h2) + b;
+    const uint8_t *const endc = &((const uint8_t*)key)[len-1];
+    while (dc < endc) {
+      h += (*dc + h1) * (*(dc+1) + h2) + b;
+      dc++; dc++;
     }
   }
   *(size_t *) out = h;

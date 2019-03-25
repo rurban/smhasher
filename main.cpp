@@ -87,17 +87,17 @@ HashInfo g_hashes[] =
   { NoopOAATReadHash,     64, 0x00000000, "NOP_OAAT_read64", "Noop function (only valid for measuring call + OAAT reading overhead)", SKIP },
   { BadHash,     	  32, 0xAB432E23, "BadHash", 	 "very simple XOR shift", SKIP },
   { sumhash,     	  32, 0x0000A9AC, "sumhash", 	 "sum all bytes", SKIP },
-  { sumhash32,     	  32, 0xF5562C80, "sumhash32",   "sum all 32bit words", SKIP },
+  { sumhash32,     	  32, 0x3D6DC280, "sumhash32",   "sum all 32bit words", SKIP },
 
   // here start the real hashes. the problematic ones:
   { crc32,                32, 0x3719DB20, "crc32",       "CRC-32 soft", POOR },
   { md5_32,               32, 0xF7192210, "md5_32a",     "MD5, first 32 bits of result", POOR },
 #ifdef _MSC_VER /* truncated long to 32 */
-#  define SHA1_SEED           0xDCB02360
+#  define SHA1_VERIF          0xDCB02360
 #else
-#  define SHA1_SEED           0x7FE8C80E
+#  define SHA1_VERIF          0x7FE8C80E
 #endif
-  { sha1_32a,             32, SHA1_SEED,  "sha1_32a",    "SHA1, first 32 bits of result", POOR},
+  { sha1_32a,             32, SHA1_VERIF, "sha1_32a",    "SHA1, first 32 bits of result", POOR},
 #if 0
   { sha1_64a,             32, 0x00000000, "sha1_64a",    "SHA1 64-bit, first 64 bits of result", POOR },
   { sha2_32a,             32, 0x00000000, "sha2_32a",    "SHA2, first 32 bits of result", POOR },
@@ -125,13 +125,13 @@ HashInfo g_hashes[] =
 #endif
 #ifdef HAVE_BIT32
  #define FIBONACCI_VERIF      0x09952480
- #define MULTSHIFT_VERIF      0xFBCB5196
- #define PAIRMULTSHIFT_VERIF  0x0CE2B2FE
+ #define MULTSHIFT_VERIF      0x90FA041A
+ #define PAIRMULTSHIFT_VERIF  0x0C211550
  #define FNV2_VERIF           0x739801C5
 #else
  #define FIBONACCI_VERIF      0xFE3BD380
  #define MULTSHIFT_VERIF      0xF15F3D1E
- #define PAIRMULTSHIFT_VERIF  0x638BAE82
+ #define PAIRMULTSHIFT_VERIF  0xB070283D
  #define FNV2_VERIF           0x1967C625
 #endif
   { fibonacci,    __WORDSIZE, FIBONACCI_VERIF, "fibonacci",   "wordwise Fibonacci", POOR },
@@ -188,12 +188,14 @@ HashInfo g_hashes[] =
   { fasthash32_test,      32, 0xE9481AFC, "fasthash32",  "fast-hash 32bit", GOOD },
   { fasthash64_test,      64, 0xA16231A7, "fasthash64",  "fast-hash 64bit", GOOD },
 #if defined(__GNUC__) && UINT_MAX != ULONG_MAX
- #define MUM_SEED             0x3EEAE2D4
+ #define MUM_VERIF            0x3EEAE2D4
+ #define MUMLOW_VERIF         0x520263F5
 #else
- #define MUM_SEED             0xA973C6C0
+ #define MUM_VERIF            0xA973C6C0
+ #define MUMLOW_VERIF         0x7F898826
 #endif
-  { mum_hash_test,        64, MUM_SEED,   "MUM",         "github.com/vnmakarov/mum-hash", GOOD },
-  { mum_low_test,         32, MUM_SEED,   "MUMlow",      "github.com/vnmakarov/mum-hash", GOOD },
+  { mum_hash_test,        64, MUM_VERIF,  "MUM",         "github.com/vnmakarov/mum-hash", GOOD },
+  { mum_low_test,         32, MUMLOW_VERIF,"MUMlow",     "github.com/vnmakarov/mum-hash", GOOD },
 
   { CityHash32_test,      32, 0x5C28AD62, "City32",      "Google CityHash32WithSeed (old)", GOOD },
   { CityHash64noSeed_test,64, 0x63FC6063, "City64noSeed","Google CityHash64 without seed (default version, misses one final avalanche)", POOR },
@@ -205,26 +207,26 @@ HashInfo g_hashes[] =
 #endif
 
 #ifdef _MSC_VER /* truncated long to 32 */
-#  define FARM64_SEED         0xEBC4A679
-#  define FARM128_SEED        0x305C0D9A
+#  define FARM64_VERIF        0xEBC4A679
+#  define FARM128_VERIF       0x305C0D9A
 #else
-#  define FARM64_SEED         0x35F84A93
-#  define FARM128_SEED        0x9E636AAE
+#  define FARM64_VERIF        0x35F84A93
+#  define FARM128_VERIF       0x9E636AAE
 #endif
-  { FarmHash64_test,      64, FARM64_SEED, "FarmHash64",  "Google FarmHash64WithSeed", GOOD },
-  { FarmHash64noSeed_test,64, 0xA5B9146C,  "Farm64noSeed","Google FarmHash64 without seed (default, misses on final avalanche)", POOR },
-  { FarmHash128_test,    128, FARM128_SEED,"FarmHash128", "Google FarmHash128WithSeed", GOOD },
+  { FarmHash64_test,      64, FARM64_VERIF, "FarmHash64",  "Google FarmHash64WithSeed", GOOD },
+ //{ FarmHash64noSeed_test,64, 0xA5B9146C,  "Farm64noSeed","Google FarmHash64 without seed (default, misses on final avalanche)", POOR },
+  { FarmHash128_test,    128, FARM128_VERIF,"FarmHash128", "Google FarmHash128WithSeed", GOOD },
 #if defined(__SSE4_2__) && defined(__x86_64__)
-  { farmhash64_c_test,    64, FARM64_SEED, "farmhash64_c",  "farmhash64_with_seed (C99)", GOOD },
-  { farmhash128_c_test,  128, FARM128_SEED,"farmhash128_c", "farmhash128_with_seed (C99)", GOOD },
+  { farmhash64_c_test,    64, FARM64_VERIF, "farmhash64_c",  "farmhash64_with_seed (C99)", GOOD },
+  { farmhash128_c_test,  128, FARM128_VERIF,"farmhash128_c", "farmhash128_with_seed (C99)", GOOD },
 #endif
 
   { xxHash32_test,        32, 0xBA88B743, "xxHash32",    "xxHash, 32-bit for x64", POOR },
   { xxHash64_test,        64, 0x024B7CF4, "xxHash64",    "xxHash, 64-bit", GOOD },
   { xxh3_test,            64, 0x5921E69E, "xxh3",        "xxHash v3, 64-bit", GOOD },
-  { xxh3low_test,         32, 0xECA5AAE7, "xxh3low",     "xxHash v3, 64-bit, low 32-bits part", GOOD },
-  { xxh128_test,         128, 0xECA5AAE7, "xxh128",      "xxHash v3, 128-bit", GOOD },
-  { xxh128low_test,       64, 0xECA5AAE7, "xxh128low",   "xxHash v3, 128-bit, low 64-bits part", GOOD },
+  { xxh3low_test,         32, 0xAC902311, "xxh3low",     "xxHash v3, 64-bit, low 32-bits part", GOOD },
+  { xxh128_test,         128, 0x80E5D1DF, "xxh128",      "xxHash v3, 128-bit", GOOD },
+  { xxh128low_test,       64, 0xB1BB6A50, "xxh128low",   "xxHash v3, 128-bit, low 64-bits part", GOOD },
 #if 0
   { xxhash256_test,       64, 0x024B7CF4, "xxhash256",   "xxhash256, 64-bit unportable", GOOD },
 #endif
