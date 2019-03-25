@@ -1182,7 +1182,7 @@ static char* strndup(char const *s, size_t n)
 int main ( int argc, const char ** argv )
 {
 #if (defined(__x86_64__) && __SSE4_2__) || defined(_M_X64) || defined(_X86_64_)
-  const char * defaulthash = "xxh3";
+  const char * defaulthash = "xxh3"; // because it fails some tests
 #else
   const char * defaulthash = "wyhash";
 #endif
