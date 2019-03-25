@@ -17,6 +17,7 @@
 bool g_drawDiagram     = false;
 bool g_testAll         = true;
 bool g_testExtra       = false; // excessive torture tests: Sparse, Avalanche, DiffDist
+bool g_testVerifyAll   = false;
 
 bool g_testSanity      = false;
 bool g_testSpeed       = false;
@@ -42,6 +43,7 @@ struct TestOpts {
 TestOpts g_testopts[] =
 {
   { g_testAll, 		"All" },
+  { g_testVerifyAll,    "VerifyAll" },
   { g_testSanity, 	"Sanity" },
   { g_testSpeed, 	"Speed" },
   { g_testAvalanche, 	"Avalanche" },
@@ -125,14 +127,14 @@ HashInfo g_hashes[] =
 #endif
 #ifdef HAVE_BIT32
  #define FIBONACCI_VERIF      0x09952480
+ #define FNV2_VERIF           0x739801C5
  #define MULTSHIFT_VERIF      0x90FA041A
  #define PAIRMULTSHIFT_VERIF  0x0C211550
- #define FNV2_VERIF           0x739801C5
 #else
  #define FIBONACCI_VERIF      0xFE3BD380
+ #define FNV2_VERIF           0x1967C625
  #define MULTSHIFT_VERIF      0xF15F3D1E
  #define PAIRMULTSHIFT_VERIF  0xB070283D
- #define FNV2_VERIF           0x1967C625
 #endif
   { fibonacci,    __WORDSIZE, FIBONACCI_VERIF, "fibonacci",   "wordwise Fibonacci", POOR },
   // M. Dietzfelbinger, T. Hagerup, J. Katajainen, and M. Penttonen. A reliable randomized
@@ -177,7 +179,7 @@ HashInfo g_hashes[] =
   // and now the quality hash funcs
   { siphash_test,         64, 0xC58D7F9C, "SipHash",     "SipHash 2-4 - SSSE3 optimized", GOOD },
 #ifdef HAVE_HIGHWAYHASH
-  { HighwayHash64_test,   64, 0x98B8B976, "HighwayHash64", "Google HighwayHash (portable with overhead from the lib)", GOOD },
+  { HighwayHash64_test,   64, 0x53BE18F1, "HighwayHash64", "Google HighwayHash (portable with overhead from the lib)", GOOD },
 #endif
   { GoodOAAT,             32, 0x7B14EEE5, "GoodOAAT",    "Small non-multiplicative OAAT", GOOD },
   { PMurHash32_test,      32, 0xB0F57EE3, "PMurHash32",  "Shane Day's portable-ized MurmurHash3 for x86, 32-bit", GOOD },
@@ -251,7 +253,7 @@ HashInfo g_hashes[] =
 #endif
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { falkhash_test_cxx,           64, 0x2F99B071, "falkhash",        "falkhash.asm with aesenc, 64-bit for x64", POOR },
-  { clhash_test,                 64, 0x91A312FF, "clhash",          "carry-less mult. hash -DBITMIX (64-bit for x64, SSE4.2)", GOOD },
+  { clhash_test,                 64, 0xFF27B919, "clhash",          "carry-less mult. hash -DBITMIX (64-bit for x64, SSE4.2)", GOOD },
 #endif
   { t1ha2_atonce_test,           64, 0x8F16C948, "t1ha2_atonce",    "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
   { t1ha2_stream_test,           64, 0xDED9B580, "t1ha2_stream",    "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
@@ -297,16 +299,8 @@ void SelfTest ( void )
   {
     HashInfo * info = & g_hashes[i];
 
-#if defined(__SSE4_2__) && defined(__x86_64__)
-  if(info->hash == clhash_test)
-    clhash_init();
-#endif
-#ifdef HAVE_HIGHWAYHASH
-  if(info->hash == HighwayHash64_test)
-    HighwayHash_init();
-#endif
-
-    pass &= VerificationTest(info->hash,info->hashbits,info->verification,false);
+    pass &= VerificationTest(info->hash,info->hashbits,info->verification,
+                             false);
   }
 
   if(!pass)
@@ -317,8 +311,9 @@ void SelfTest ( void )
     {
       HashInfo * info = & g_hashes[i];
 
-      printf("%16s - ",info->name);
-      pass &= VerificationTest(info->hash,info->hashbits,info->verification,true);
+      printf("%20s - ",info->name);
+      pass &= VerificationTest(info->hash,info->hashbits,info->verification,
+                               true);
     }
 
     exit(1);
@@ -333,10 +328,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   const int hashbits = sizeof(hashtype) * 8;
 
   printf("-------------------------------------------------------------------------------\n");
-  printf("--- Testing %s \"%s\" %s\n\n", info->name, info->desc, quality_str[info->quality]);
-  fflush(NULL);
 
-  //-----------------------------------------------------------------------------
   // eventual initializers
 #if defined(__SSE4_2__) && defined(__x86_64__)
   if(info->hash == clhash_test)
@@ -349,6 +341,16 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
   //-----------------------------------------------------------------------------
   // Sanity tests
+
+  if(g_testVerifyAll)
+  {
+    printf("[[[ VerifyAll Tests ]]]\n\n"); fflush(NULL);
+    SelfTest();
+    printf("PASS\n\n"); fflush(NULL); // if not it does exit(1)
+  }
+
+  printf("--- Testing %s \"%s\" %s\n\n", info->name, info->desc, quality_str[info->quality]);
+  fflush(NULL);
 
   if(g_testSanity || g_testAll)
   {
@@ -1132,7 +1134,7 @@ void testHash ( const char * name )
 
   if(pInfo == NULL)
   {
-    printf("Invalid hash '%s' specified\n",name);
+    printf("Invalid hash '%s' specified\n", name);
     return;
   }
   else
@@ -1141,7 +1143,7 @@ void testHash ( const char * name )
 
     if(pInfo->hashbits == 32)
     {
-      test<uint32_t>( VerifyHash, pInfo );
+      test<uint32_t>( pInfo->hash, pInfo );
     }
     else if(pInfo->hashbits == 64)
     {
@@ -1157,7 +1159,8 @@ void testHash ( const char * name )
     }
     else
     {
-      printf("Invalid hash bit width %d for hash '%s'",pInfo->hashbits,pInfo->name);
+      printf("Invalid hash bit width %d for hash '%s'",
+             pInfo->hashbits, pInfo->name);
     }
   }
 }
