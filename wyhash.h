@@ -1,13 +1,13 @@
 /*Author: Wang Yi <godspeed_china@yeah.net>*/
-#ifndef wyhash_included
-#define wyhash_included
-#define wyhash_version	20190321
+#ifndef wyhash_20190324
+#define wyhash_20190324
+#include	<string.h>
 #if defined(_MSC_VER) && defined(_M_X64)
-#include <intrin.h>
-#pragma intrinsic(_umul128)
+	#include <intrin.h>
+	#pragma	intrinsic(_umul128)
 #endif
-const	unsigned long long	_wyp0=0x60bee2bee120fc15ull,	_wyp1=0xa3b195354a39b70dull,	_wyp2=0x1b03738712fad5c9ull;
-const	unsigned long long	_wyp3=0xd985068bc5439bd7ull,	_wyp4=0x897f236fb004a8e7ull,	_wyp5=0xc104aa67c96b7d55ull;
+const	unsigned long long	_wyp0=0xa0761d6478bd642full,	_wyp1=0xe7037ed1a0b428dbull,	_wyp2=0x8ebc6af09c88c6e3ull;
+const	unsigned long long	_wyp3=0x589965cc75374cc3ull,	_wyp4=0x1d8e4e27c47d124full,	_wyp5=0xeb44accab455d165ull;
 static	inline	unsigned long long	_wymum(unsigned long long	A,	unsigned long long	B){
 #ifdef __SIZEOF_INT128__
 	__uint128_t	r=A;	r*=B;	return	(r>>64)^r;
@@ -20,15 +20,15 @@ static	inline	unsigned long long	_wymum(unsigned long long	A,	unsigned long long
 	return hi^lo;
 #endif
 }
-#include	<string.h>
 static	inline	unsigned long long	_wyr08(const	unsigned char	*p){	unsigned char v;	memcpy(&v,	p,	1);	return	v;	}
 static	inline	unsigned long long	_wyr16(const	unsigned char	*p){	unsigned short v;	memcpy(&v,	p,	2);	return	v;	}
 static	inline	unsigned long long	_wyr32(const	unsigned char	*p){	unsigned int v;	memcpy(&v,	p,	4);	return	v;	}
 static	inline	unsigned long long	_wyr64(const	unsigned char	*p){	unsigned long long v;	memcpy(&v,	p,	8);	return	v;	}
-#define __wyr64(p)	((_wyr32(p)<<32)|_wyr32(p+4))
+static	inline	unsigned long long	__wyr64(const	unsigned char	*p){	return	(_wyr32(p)<<32)|_wyr32(p+4);	}
 static	inline	unsigned long long	wyhash(const void* key,	unsigned long long	len, unsigned long long	seed){
 	const	unsigned char	*p=(const	unsigned char*)key;	unsigned long long i;
-	for(i=0,	seed^=_wyp0;	i+32<=len;	i+=32,	p+=32)	seed=_wymum(seed,	_wymum(_wyr64(p)^_wyp1,_wyr64(p+8)^_wyp2)+_wymum(_wyr64(p+16)^_wyp3,_wyr64(p+24)^_wyp4));
+	for(i=0;	i+32<=len;	i+=32,	p+=32)	seed=_wymum(seed^_wyp0,	_wymum(_wyr64(p)^_wyp1,_wyr64(p+8)^_wyp2)^_wymum(_wyr64(p+16)^_wyp3,_wyr64(p+24)^_wyp4));
+	seed^=_wyp0;
 	switch(len&31){
 	case	1:	seed=_wymum(seed,_wyr08(p)^_wyp1);	break;
 	case	2:	seed=_wymum(seed,_wyr16(p)^_wyp1);	break;
@@ -65,6 +65,6 @@ static	inline	unsigned long long	wyhash(const void* key,	unsigned long long	len,
 	return	_wymum(seed,	len^_wyp5);
 }
 static	inline	unsigned long long	wyhash64(unsigned long long	A, unsigned long long	B){	return	_wymum(_wymum(A^_wyp0,	B^_wyp1),	_wyp2);	}
-static	inline	unsigned long long	wyrng(unsigned long long *s){	*s+=_wyp0;	return	_wymum(*s^_wyp1,*s);	}
-static	inline	double	wyrngu01(unsigned long long	*seed){	unsigned long long	r=(wyrng(seed)&0xfffffffffffffull)|0x3ff0000000000000ull;	return	*((double*)&r)-1.0;		}
+static	inline	unsigned long long	wyrand(unsigned long long *s){	*s+=_wyp0;	return	_wymum(*s^_wyp1,*s);	}
+static	inline	double	wyrandu01(unsigned long long	*seed){	const	double	_wynorm=1.0/(1ull<<52);	return	(wyrand(seed)&0x000fffffffffffffull)*_wynorm; }
 #endif

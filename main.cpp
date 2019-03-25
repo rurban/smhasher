@@ -274,8 +274,8 @@ HashInfo g_hashes[] =
 #  endif /* __AVX2__ */
 # endif /* T1HA0_AESNI_AVAILABLE */
 #endif /* older t1ha */
-  { wyhash_test,                 64, 0x2091D6FD, "wyhash",          "wyhash (portable, 64-bit, little-endian)", GOOD },
-  { wyhash32low,                 32, 0xEA17DF96, "wyhash32low",     "wyhash - lower 32bit", GOOD }
+  { wyhash_test,                 64, 0x1196BB84, "wyhash",          "wyhash (portable, 64-bit, little-endian)", GOOD },
+  { wyhash32low,                 32, 0x2199CEDD, "wyhash32low",     "wyhash - lower 32bit", GOOD }
 };
 
 HashInfo * findHash ( const char * name )
