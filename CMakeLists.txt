@@ -166,8 +166,10 @@ IF(AES_FOUND)
     t1ha/t1ha0.c t1ha/t1ha1.c t1ha/t1ha2.c
     t1ha/t1ha0_ia32aes_noavx.c t1ha/t1ha0_ia32aes_avx.c
     t1ha/t1ha0_ia32aes_avx2.c)
+  set(CN_SLOW_HASH_SRC PowerHash/pow_hash/cn_slow_hash_hard_intel.cpp)
 ELSE()
   set(T1HA_SRC t1ha/t1ha0.c t1ha/t1ha1.c t1ha/t1ha2.c)
+  set(CN_SLOW_HASH_SRC PowerHash/pow_hash/cn_slow_hash_soft.cpp)
 ENDIF()
 if(MSVC)
 set_source_files_properties(t1ha/t1ha0_ia32aes_noavx.c PROPERTIES COMPILE_FLAGS "/arch:ia32")
@@ -231,6 +233,7 @@ add_library(
   jody_hash32.c
   jody_hash64.c
   ${X86_64ONLY_SRC}
+  ${CN_SLOW_HASH_SRC}
 )
 
 add_executable(
