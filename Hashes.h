@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Platform.h"
 #include "Types.h"
 
 #include "MurmurHash1.h"
@@ -63,7 +64,7 @@ void falkhash_test_cxx     ( const void * key, int len, uint32_t seed, void * ou
 void fibonacci             ( const void * key, int len, uint32_t seed, void * out );
 void FNV32a                ( const void * key, int len, uint32_t seed, void * out );
 void FNV32a_YoshimitsuTRIAD( const void * key, int len, uint32_t seed, void * out );
-#ifndef HAVE_BIT32
+#ifdef HAVE_INT64
 void FNV1A_Totenschiff     ( const void * key, int len, uint32_t seed, void * out );
 #endif
 #if 0 /* TODO */
@@ -136,44 +137,53 @@ inline void MurmurHash2A_test ( const void * key, int len, uint32_t seed, void *
   *(uint32_t*)out = MurmurHash2A(key,len,seed);
 }
 
+#if __WORDSIZE >= 64
 inline void MurmurHash64A_test ( const void * key, int len, uint32_t seed, void * out )
 {
   *(uint64_t*)out = MurmurHash64A(key,len,seed);
 }
-
+#endif
+#ifdef HAVE_INT64
 inline void MurmurHash64B_test ( const void * key, int len, uint32_t seed, void * out )
 {
   *(uint64_t*)out = MurmurHash64B(key,len,seed);
 }
+#endif
 
 inline void jodyhash32_test( const void * key, int len, uint32_t seed, void * out ) {
   *(uint32_t*)out = jody_block_hash32((const jodyhash32_t *)key, (jodyhash32_t) seed, (size_t) len);
 }
+#ifdef HAVE_INT64
 inline void jodyhash64_test( const void * key, int len, uint32_t seed, void * out ) {
   *(uint64_t*)out = jody_block_hash((const jodyhash_t *)key, (jodyhash_t) seed, (size_t) len);
 }
-
+#endif
 
 inline void xxHash32_test( const void * key, int len, uint32_t seed, void * out ) {
   *(uint32_t*)out = (uint32_t) XXH32(key, (size_t) len, (unsigned) seed);
 }
+#ifdef HAVE_INT64
 inline void xxHash64_test( const void * key, int len, uint32_t seed, void * out ) {
   *(uint64_t*)out = (uint64_t) XXH64(key, (size_t) len, (unsigned long long) seed);
 }
+#endif
 
 #define restrict // oddly enough, seems to choke on this keyword
 #include "xxh3.h"
 
+#ifdef HAVE_INT64
 inline void xxh3_test( const void * key, int len, uint32_t seed, void * out ) {
   (void)seed;
   *(uint64_t*)out = (uint64_t) XXH3_64bits_withSeed(key, (size_t) len, seed);
 }
+#endif
 
 inline void xxh3low_test( const void * key, int len, uint32_t seed, void * out ) {
   (void)seed;
   *(uint32_t*)out = (uint32_t) XXH3_64bits(key, (size_t) len);
 }
 
+#ifdef HAVE_INT64
 inline void xxh128_test( const void * key, int len, uint32_t seed, void * out ) {
   (void)seed;
   *(XXH128_hash_t*)out = XXH128(key, (size_t) len, seed);
@@ -220,13 +230,16 @@ inline void cmetrohash64_1_optshort_test ( const void * key, int len, uint32_t s
 inline void cmetrohash64_2_test ( const void * key, int len, uint32_t seed, void * out ) {
   cmetrohash64_2((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
 }
+#endif
+
 inline void fasthash32_test ( const void * key, int len, uint32_t seed, void * out ) {
   *(uint32_t*)out = fasthash32(key, (size_t) len, seed);
 }
+#ifdef HAVE_INT64
 inline void fasthash64_test ( const void * key, int len, uint32_t seed, void * out ) {
   *(uint64_t*)out = fasthash64(key, (size_t) len, (uint64_t)seed);
 }
-
+#endif
 
 void mum_hash_test(const void * key, int len, uint32_t seed, void * out);
 

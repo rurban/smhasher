@@ -221,7 +221,7 @@ FNV32a_YoshimitsuTRIAD(const void *key, int len, uint32_t seed, void *out)
   *(uint32_t *) out = hash32A ^ (hash32A >> 16);
 }
 
-#ifndef HAVE_BIT32
+#ifdef HAVE_INT64
 void FNV1A_Totenschiff(const void *key, int len, uint32_t seed, void *out)
 {
 #define _PADr_KAZE(x, n) (((x) << (n)) >> (n))
@@ -236,7 +236,7 @@ void FNV1A_Totenschiff(const void *key, int len, uint32_t seed, void *out)
   const char *p = (char *)key;
   const uint32_t PRIME = 591798841;
   uint32_t hash32 = 2166136261;
-  uint64_t hash64 = 14695981039346656037LU; // 2166136261;
+  uint64_t hash64 = __UINT64_C(14695981039346656037); // 2166136261;
   uint64_t PADDEDby8;
 
   for (; len > 2 * sizeof(uint32_t);
@@ -257,7 +257,6 @@ void FNV1A_Totenschiff(const void *key, int len, uint32_t seed, void *out)
 #undef ROLInBits
 #undef _rotl64_KAZE
 }
-#endif
 
 void
 FNV64a(const void *key, int len, uint32_t seed, void *out)
@@ -274,6 +273,7 @@ FNV64a(const void *key, int len, uint32_t seed, void *out)
 
   *(uint64_t *) out = h;
 }
+#endif
 
 //-----------------------------------------------------------------------------
 

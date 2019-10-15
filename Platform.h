@@ -6,8 +6,14 @@
 void SetAffinity ( int cpu );
 
 #ifndef __x86_64__
-#if defined(__x86_64) || defined(_M_AMD64) || defined(_M_X64)
+ #if defined(__x86_64) || defined(_M_AMD64) || defined(_M_X64)
   #define  __x86_64__
+ #endif
+#endif
+
+#ifndef HAVE_INT64
+ #if (__WORDSIZE >= 64) || defined(HAVE_SSE42)
+  #define HAVE_INT64
  #endif
 #endif
 
@@ -35,8 +41,7 @@ void SetAffinity ( int cpu );
 
 #define BIG_CONSTANT(x) (x)
 
-// RDTSC == Read Time Stamp Counter
-
+// Read Time Stamp Counter
 #define rdtsc() __rdtsc()
 
 #define popcount8(x)  __popcnt(x)
@@ -44,7 +49,7 @@ void SetAffinity ( int cpu );
 //-----------------------------------------------------------------------------
 // Other compilers
 
-#else	//	defined(_MSC_VER)
+#else	//	!defined(_MSC_VER)
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -52,10 +57,10 @@ void SetAffinity ( int cpu );
 #define	FORCE_INLINE inline __attribute__((always_inline))
 #define	NEVER_INLINE __attribute__((noinline))
 
-#ifdef __x86_64__
-#define popcount8(x) __builtin_popcountl(x)
-#else
+#ifdef HAVE_BIT32
 #define popcount8(x) __builtin_popcountll(x)
+#else
+#define popcount8(x) __builtin_popcountl(x)
 #endif
 
 inline uint32_t rotl32 ( uint32_t x, int8_t r )
@@ -83,7 +88,11 @@ inline uint64_t rotr64 ( uint64_t x, int8_t r )
 #define	ROTR32(x,y)	rotr32(x,y)
 #define ROTR64(x,y)	rotr64(x,y)
 
-#define BIG_CONSTANT(x) (x##LLU)
+#if __WORDSIZE == 64
+#define BIG_CONSTANT(x) (x##UL)
+#else
+#define BIG_CONSTANT(x) (x##ULL)
+#endif
 
 __inline__ unsigned long long int rdtsc()
 {
