@@ -221,6 +221,44 @@ FNV32a_YoshimitsuTRIAD(const void *key, int len, uint32_t seed, void *out)
   *(uint32_t *) out = hash32A ^ (hash32A >> 16);
 }
 
+#ifndef HAVE_BIT32
+void FNV1A_Totenschiff(const void *key, int len, uint32_t seed, void *out)
+{
+#define _PADr_KAZE(x, n) (((x) << (n)) >> (n))
+// 5 in r.1; Caramba: it should be ROR by 5 not ROL, from the very
+// beginning the idea was to mix two bytes by shifting/masking the first 5
+// 'noisy' bits (ASCII 0-31 symbols).  
+#define ROLInBits 27 
+// CAUTION: Add 8 more bytes to the buffer being hashed, usually malloc(...+8) -
+// to prevent out of boundary reads!
+#define _rotl64_KAZE(x, n) (((x) << (n)) | ((x) >> (64 - (n))))
+
+  const char *p = (char *)key;
+  const uint32_t PRIME = 591798841;
+  uint32_t hash32 = 2166136261;
+  uint64_t hash64 = 14695981039346656037LU; // 2166136261;
+  uint64_t PADDEDby8;
+
+  for (; len > 2 * sizeof(uint32_t);
+       len -= 2 * sizeof(uint32_t), p += 2 * sizeof(uint32_t)) {
+    PADDEDby8 = *(uint64_t *)(p + 0);
+    hash64 = (hash64 ^ PADDEDby8) * PRIME;
+  }
+
+  // Here len is 1..8
+  PADDEDby8 =
+      _PADr_KAZE(*(uint64_t *)(p + 0),
+                 (8 - len) << 3); // when (8-8) the QWORD remains intact
+  hash64 = (hash64 ^ PADDEDby8) * PRIME;
+
+  hash32 = (uint32_t)(hash64 ^ (hash64 >> 32));
+  *(uint32_t *)out = hash32 ^ (hash32 >> 16);
+#undef _PADr_KAZE
+#undef ROLInBits
+#undef _rotl64_KAZE
+}
+#endif
+
 void
 FNV64a(const void *key, int len, uint32_t seed, void *out)
 {

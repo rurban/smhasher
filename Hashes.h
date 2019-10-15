@@ -63,6 +63,13 @@ void falkhash_test_cxx     ( const void * key, int len, uint32_t seed, void * ou
 void fibonacci             ( const void * key, int len, uint32_t seed, void * out );
 void FNV32a                ( const void * key, int len, uint32_t seed, void * out );
 void FNV32a_YoshimitsuTRIAD( const void * key, int len, uint32_t seed, void * out );
+#ifndef HAVE_BIT32
+void FNV1A_Totenschiff     ( const void * key, int len, uint32_t seed, void * out );
+#endif
+#if 0 /* TODO */
+void FNV1A_Jesteress       ( const void * key, int len, uint32_t seed, void * out );
+void FNV1A_Meiyan          ( const void * key, int len, uint32_t seed, void * out );
+#endif
 void FNV64a                ( const void * key, int len, uint32_t seed, void * out );
 void FNV2                  ( const void * key, int len, uint32_t seed, void * out );
 void fletcher2             ( const void * key, int len, uint32_t seed, void * out );
