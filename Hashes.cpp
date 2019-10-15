@@ -229,7 +229,7 @@ void FNV1A_Totenschiff(const void *key, int len, uint32_t seed, void *out)
   const char *p = (char *)key;
   const uint32_t PRIME = 591798841;
   uint32_t hash32;
-  uint64_t hash64 = (uint64_t)seed ^ __UINT64_C(14695981039346656037);
+  uint64_t hash64 = (uint64_t)seed ^ BIG_CONSTANT(14695981039346656037);
   uint64_t PADDEDby8;
 
   for (; len > 8; len -= 8, p += 8) {
