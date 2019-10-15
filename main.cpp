@@ -145,8 +145,8 @@ HashInfo g_hashes[] =
   { FNV32a,               32, 0xE3CBBE91, "FNV1a",       "Fowler-Noll-Vo hash, 32-bit", POOR },
   { FNV32a_YoshimitsuTRIAD,32,0xD8AFFD71, "FNV1a_YT",    "FNV1a-YoshimitsuTRIAD 32-bit sanmayce", POOR },
 #ifdef HAVE_INT64
-  //self-seeded!
-  { FNV1A_Totenschiff,    32, 0x57594BEF, "FNV1A_Totenschiff",  "FNV1A_Totenschiff_v1 64-bit sanmayce", POOR },
+  // zero insensitive (trivially insecure)
+  { FNV1A_Totenschiff,    32, 0x95D95ACF, "FNV1A_Totenschiff",  "FNV1A_Totenschiff_v1 64-bit sanmayce", POOR },
 #if 0 /* TODO */
   { FNV1A_Jesteress,      32, 0x0, "FNV1a_Jesteress",  "FNV1a-Jesteress 32-bit sanmayce", POOR },
   { FNV1A_Meiyan,         32, 0x0, "FNV1a_Meiyan",     "FNV1a-Meiyan 32-bit sanmayce", POOR },

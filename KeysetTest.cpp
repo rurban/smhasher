@@ -9,6 +9,8 @@
 //-----------------------------------------------------------------------------
 // This should hopefully be a thorough and uambiguous test of whether a hash
 // is correctly implemented on a given platform
+// Note that some newer hash are self-seeded (using the randomized address of the key),
+// denoted by expected = 0.
 
 bool VerificationTest ( pfHash hash, const int hashbits, uint32_t expected, bool verbose )
 {
@@ -35,8 +37,8 @@ bool VerificationTest ( pfHash hash, const int hashbits, uint32_t expected, bool
 
   // The first four bytes of that hash, interpreted as a little-endian integer, is our
   // verification value
-
-  uint32_t verification = (final[0] << 0) | (final[1] << 8) | (final[2] << 16) | (final[3] << 24);
+  uint32_t verification =
+      (final[0] << 0) | (final[1] << 8) | (final[2] << 16) | (final[3] << 24);
 
   delete [] key;
   delete [] hashes;
@@ -44,16 +46,20 @@ bool VerificationTest ( pfHash hash, const int hashbits, uint32_t expected, bool
 
   //----------
 
-  if(expected != verification)
-  {
-    if(verbose)
-      printf("Verification value 0x%08X ....... FAIL! (Expected 0x%08X)\n",
-             verification,expected);
-    return false;
-  }
-  else
-  {
-    if(verbose)
+  if (expected != verification) {
+    if (!expected) {
+      if (verbose)
+        printf("Verification value 0x%08X ....... SKIP (self-seeded)\n",
+               verification);
+      return true;
+    } else {
+      if (verbose)
+        printf("Verification value 0x%08X ....... FAIL! (Expected 0x%08X)\n",
+               verification, expected);
+      return false;
+    }
+  } else {
+    if (verbose)
       printf("Verification value 0x%08X ....... PASS\n", verification);
     return true;
   }
