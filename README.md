@@ -105,8 +105,8 @@ SMhasher
 | [t1ha0_aes_noavx](doc/t1ha0_aes_noavx)|     21264.27	|    35.63 | machine-specific (x86 AES-NI) |
 | [t1ha0_aes_avx1](doc/t1ha0_aes_avx1)  |     20443.32	|    36.05 | machine-specific (x64 AVX)    |
 | [t1ha0_aes_avx2](doc/t1ha0_aes_avx2)  |     36436.51	|    36.31 | machine-specific (x64 AVX2)   |
-| [wyhash](doc/wyhash)                  |      8812.04  |    24.44 |                            |
-| [wyhash32low](doc/wyhash32low)        |      8784.23  |    24.43 |                            |
+| [wyhash](doc/wyhash)                  |     12327.50  |    34.98 |                            |
+| [wyhash32low](doc/wyhash32low)        |     12295.53  |    35.01 | Moment Chi2 4.2            |
 
 Summary
 -------
@@ -117,8 +117,8 @@ See also the old [https://code.google.com/p/smhasher/w/list](https://code.google
 
 So the fastest hash functions on x86_64 without quality problems are:
 
-- wyhash
-- xxh3
+- wyhash v3
+- xxh3 (faster with random len)
 - t1ha2_atonce, t1ha1_64le
 - metrohash64crc
 - FarmHash (_not portable, too machine specific: 64 vs 32bit, old gcc, ..._)
