@@ -93,8 +93,8 @@ SMhasher
 | [Spooky32](doc/Spooky32)              |      9563.88  |    70.22 |                            |
 | [Spooky64](doc/Spooky64)              |      9548.01  |    69.33 |                            |
 | [Spooky128](doc/Spooky128)            |      9898.77  |    70.72 |                            |
-| [metrohash128crc_1](doc/metrohash128crc_1)  13867.67  |    83.29 | machine-specific (x64 SSE4.2) |
-| [metrohash128crc_2](doc/metrohash128crc_2)  14224.59  |    83.26 | machine-specific (x64 SSE4.2) |
+| [metrohash128crc_1](doc/metrohash128crc_1)| 13867.67  |    83.29 | machine-specific (x64 SSE4.2) |
+| [metrohash128crc_2](doc/metrohash128crc_2)| 14224.59  |    83.26 | machine-specific (x64 SSE4.2) |
 | [clhash](doc/clhash)                  |      4070.68  |    81.56 | machine-specific (x64 SSE4.2) |
 | [t1ha2_atonce](doc/t1ha2_atonce)      |      8459.94  |    46.74 |                            |
 | [t1ha2_stream](doc/t1ha2_stream)      |      8884.03  |    91.16 |                            |
