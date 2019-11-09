@@ -100,6 +100,7 @@ void FarmHash32_test       ( const void * key, int len, uint32_t seed, void * ou
 void FarmHash64_test       ( const void * key, int len, uint32_t seed, void * out );
 void FarmHash64noSeed_test ( const void * key, int len, uint32_t seed, void * out );
 void FarmHash128_test      ( const void * key, int len, uint32_t seed, void * out );
+// objsize: 0x2c70-0x2f6a farmhash32_su_with_seed
 void farmhash32_c_test     ( const void * key, int len, uint32_t seed, void * out );
 void farmhash64_c_test     ( const void * key, int len, uint32_t seed, void * out );
 void farmhash128_c_test    ( const void * key, int len, uint32_t seed, void * out );

@@ -10,6 +10,7 @@
 // ----------------------------------------------------------------------------
 //fake / bad hashes
 
+// objsize: 0x2f-0x0: 47
 void
 BadHash(const void *key, int len, uint32_t seed, void *out)
 {
@@ -26,6 +27,7 @@ BadHash(const void *key, int len, uint32_t seed, void *out)
   *(uint32_t *) out = h;
 }
 
+// objsize: 0x19b-0x30: 363
 void
 sumhash(const void *key, int len, uint32_t seed, void *out)
 {
@@ -40,6 +42,7 @@ sumhash(const void *key, int len, uint32_t seed, void *out)
   *(uint32_t *) out = h;
 }
 
+// objsize: 0x4ff-0x1a0: 863
 void
 sumhash32(const void *key, int len, uint32_t seed, void *out)
 {
@@ -61,11 +64,13 @@ sumhash32(const void *key, int len, uint32_t seed, void *out)
   *(uint32_t *) out = h;
 }
 
+// objsize: 0x50d-0x500: 13
 void
 DoNothingHash(const void *, int, uint32_t, void *)
 {
 }
 
+// objsize: 0x53f-0x510: 47
 void
 NoopOAATReadHash(const void *key, int len, uint32_t seed, void *out)
 {
@@ -82,6 +87,7 @@ NoopOAATReadHash(const void *key, int len, uint32_t seed, void *out)
 //-----------------------------------------------------------------------------
 //One - byte - at - a - time hash based on Murmur 's mix
 
+// objsize: 0x540-0x56f: 47
 uint32_t MurmurOAAT(const void *key, int len, uint32_t seed)
 {
   uint32_t	 h = seed;
@@ -105,6 +111,7 @@ MurmurOAAT_test(const void *key, int len, uint32_t seed, void *out)
 
 //----------------------------------------------------------------------------
 
+// objsize: 0x5a0-0xc3c: 1692
 void
 fibonacci(const void *key, int len, uint32_t seed, void *out)
 {
@@ -124,6 +131,7 @@ fibonacci(const void *key, int len, uint32_t seed, void *out)
   *(size_t *) out = h;
 }
 
+// objsize: 0xc40-0xd56: 278
 void
 FNV2(const void *key, int len, uint32_t seed, void *out)
 {
@@ -158,6 +166,8 @@ FNV2(const void *key, int len, uint32_t seed, void *out)
   *(size_t *) out = h;
 }
 
+// i.e. FNV1a
+// objsize: 0xd60-0xe2c: 204
 void
 FNV32a(const void *key, int len, uint32_t seed, void *out)
 {
@@ -174,6 +184,7 @@ FNV32a(const void *key, int len, uint32_t seed, void *out)
   *(uint32_t *) out = h;
 }
 
+// objsize: 0xe30-0xf71: 321
 void
 FNV32a_YoshimitsuTRIAD(const void *key, int len, uint32_t seed, void *out)
 {
@@ -222,6 +233,7 @@ FNV32a_YoshimitsuTRIAD(const void *key, int len, uint32_t seed, void *out)
 }
 
 #ifdef HAVE_INT64
+// objsize: 0xf80-0x108e: 270
 void FNV1A_Totenschiff(const void *key, int len, uint32_t seed, void *out)
 {
 #define _PADr_KAZE(x, n) (((x) << (n)) >> (n))
@@ -246,6 +258,7 @@ void FNV1A_Totenschiff(const void *key, int len, uint32_t seed, void *out)
 #undef _PADr_KAZE
 }
 
+// objsize: 0x1090-0x10df: 79
 void
 FNV64a(const void *key, int len, uint32_t seed, void *out)
 {
@@ -265,6 +278,7 @@ FNV64a(const void *key, int len, uint32_t seed, void *out)
 
 //-----------------------------------------------------------------------------
 
+// objsize: 0x1090-0x10df: 79
 static inline
 uint32_t x17(const void *key, int len, uint32_t h)
 {
@@ -287,6 +301,7 @@ x17_test(const void *key, int len, uint32_t seed, void *out)
 //note the original fletcher2 assumes 128bit aligned data, and
 //can hereby advance the inner loop by 2 64bit words.
 //both fletcher's return 4 words, 256 bit. Both are nevertheless very weak hashes.
+// objsize: 0x1120-0x1218: 248
 void
 fletcher2(const void *key, int len, uint32_t seed, void *out)
 {
@@ -309,6 +324,7 @@ fletcher2(const void *key, int len, uint32_t seed, void *out)
 }
 
 //64bit, ZFS
+// objsize: 0x1220-0x1393: 371
 void
 fletcher4(const void *key, int len, uint32_t seed, void *out)
 {
@@ -337,6 +353,7 @@ fletcher4(const void *key, int len, uint32_t seed, void *out)
 //-----------------------------------------------------------------------------
 
 //also used in perl5 as djb2
+// objsize: 0x13a0-0x13c9: 41
 void
 Bernstein(const void *key, int len, uint32_t seed, void *out)
 {
@@ -350,6 +367,7 @@ Bernstein(const void *key, int len, uint32_t seed, void *out)
 }
 
 //as used in perl5
+// objsize: 0x13a0-0x13c9: 41
 void
 sdbm(const void *key, int len, uint32_t hash, void *out)
 {
@@ -363,6 +381,7 @@ sdbm(const void *key, int len, uint32_t hash, void *out)
 }
 
 //as used in perl5 as one_at_a_time_hard
+// objsize: 0x1400-0x1499: 153
 void
 JenkinsOOAT(const void *key, int len, uint32_t hash, void *out)
 {
@@ -405,6 +424,7 @@ JenkinsOOAT(const void *key, int len, uint32_t hash, void *out)
 }
 
 //as used in perl5 until 5.17(one_at_a_time_old)
+// objsize: 0x14a0-0x14e1: 65
 void JenkinsOOAT_perl(const void *key, int len, uint32_t hash, void *out)
 {
   unsigned char  *str = (unsigned char *)key;
@@ -424,6 +444,7 @@ void JenkinsOOAT_perl(const void *key, int len, uint32_t hash, void *out)
 // One of a smallest non-multiplicative One-At-a-Time function
 // that passes whole SMHasher.
 // Author: Sokolov Yura aka funny-falcon <funny.falcon@gmail.com>
+// objsize: 0x14f0-0x15dd: 237
 void GoodOAAT(const void *key, int len, uint32_t seed, void *out) {
 #define grol(x,n) (((x)<<(n))|((x)>>(32-(n))))
 #define gror(x,n) (((x)>>(n))|((x)<<(32-(n))))
@@ -455,6 +476,7 @@ void GoodOAAT(const void *key, int len, uint32_t seed, void *out) {
 // MicroOAAT suitable for hash-tables using prime numbers.
 // It passes all collision checks.
 // Author: Sokolov Yura aka funny-falcon <funny.falcon@gmail.com>
+// objsize: 0x15e0-0x1624: 68
 void MicroOAAT(const void *key, int len, uint32_t seed, void *out) {
 #define grol(x,n) (((x)<<(n))|((x)>>(32-(n))))
 #define gror(x,n) (((x)>>(n))|((x)<<(32-(n))))
@@ -478,6 +500,7 @@ void MicroOAAT(const void *key, int len, uint32_t seed, void *out) {
 //-----------------------------------------------------------------------------
 //Crap8 hash from http://www.team5150.com / ~andrew / noncryptohashzoo / Crap8.html
 
+// objsize: 0x1630-0x1786: 342
 uint32_t Crap8(const uint8_t * key, uint32_t len, uint32_t seed)
 {
 #define c8fold( a, b, y, z ) { p = (uint32_t)(a) * (uint64_t)(b); y ^= (uint32_t)p; z ^= (uint32_t)(p >> 32); }
@@ -531,6 +554,7 @@ hasshe2_test(const void *input, int len, uint32_t seed, void *out)
     //add pad NUL
     len += 16 - (len % 16);
   }
+  // objsize: 0-1bd: 445
   hasshe2(input, len, seed, out);
 }
 #endif
@@ -546,6 +570,7 @@ crc32c_hw_test(const void *input, int len, uint32_t seed, void *out)
     *(uint32_t *) out = 0;
     return;
   }
+  // objsize: 0-28d: 653
   *(uint32_t *) out = crc32c_hw(input, len, seed);
 }
 /* Faster Adler SSE4.2 crc32 in HW */
@@ -556,6 +581,7 @@ crc32c_hw1_test(const void *input, int len, uint32_t seed, void *out)
     *(uint32_t *) out = 0;
     return;
   }
+  // objsize: 0-29f: 671
   *(uint32_t *) out = crc32c(input, len, seed);
 }
 #if defined(__SSE4_2__) && defined(__x86_64__)
@@ -567,6 +593,7 @@ crc64c_hw_test(const void *input, int len, uint32_t seed, void *out)
     *(uint64_t *) out = 0;
     return;
   }
+  // objsize: 0x290-0x51c: 652
   *(uint64_t *) out = crc64c_hw(input, len, seed);
 }
 #endif
@@ -610,6 +637,7 @@ siphash_test(const void *input, int len, uint32_t seed, void *out)
     return;
   }
   memcpy(key, &seed, sizeof(seed));
+  // objsize: 0-0x42f: 1071
   *(uint64_t *) out = siphash(key, (const unsigned char *)input, (size_t) len);
 }
 void
@@ -621,6 +649,7 @@ siphash13_test(const void *input, int len, uint32_t seed, void *out)
     return;
   }
   memcpy(key, &seed, sizeof(seed));
+  // objsize: 0x450-0x75a: 778
   *(uint64_t *) out = siphash13(key, (const unsigned char *)input, (size_t) len);
 }
 void
@@ -632,6 +661,7 @@ halfsiphash_test(const void *input, int len, uint32_t seed, void *out)
     return;
   }
   memcpy(key, &seed, sizeof(seed));
+  // objsize: 0x780-0xa3c: 700
   *(uint32_t *) out = halfsiphash(key, (const unsigned char *)input, (size_t) len);
 }
 
@@ -648,6 +678,7 @@ falkhash_test_cxx(const void *input, int len, uint32_t seed, void *out)
     *(uint32_t *) out = 0;
     return;
   }
+  // objsize: 0-0x108: 264
   falkhash_test((uint8_t *)input, (uint64_t)len, seed, hash);
   *(uint64_t *) out = hash[0];
 }
@@ -659,6 +690,7 @@ falkhash_test_cxx(const void *input, int len, uint32_t seed, void *out)
 static char clhash_random[RANDOM_BYTES_NEEDED_FOR_CLHASH];
 void clhash_test (const void * key, int len, uint32_t seed, void * out) {
   memcpy(clhash_random, &seed, 4);
+  // objsize: 0-0x711: 1809  
   *(uint64_t*)out = clhash(&clhash_random, (char*)key, (size_t)len);
 }
 void clhash_init()
@@ -672,6 +704,7 @@ void clhash_init()
 // just to prove how bad academic papers really are:
 // Thorup "High Speed Hashing for Integers and Strings" 2018
 // https://arxiv.org/pdf/1504.06804.pdf
+// objsize: 0x1bc0-0x1d19: 345
 void multiply_shift (const void *key, int len, uint32_t seed, void *out) {
   size_t h   = (size_t)(seed | 1);
   size_t *dw = (size_t *)key; //word stepper
@@ -691,6 +724,7 @@ void multiply_shift (const void *key, int len, uint32_t seed, void *out) {
   *(size_t *) out = h + (seed & 8);
 }
 
+// objsize: 0x1d20-0x1f81: 609
 void pair_multiply_shift (const void *key, int len, uint32_t seed, void *out) {
   const uint16_t h1 = (seed & 0xffff) | 0x423d0001;
   const uint16_t h2 = (seed >> 8)     | 0x1f380001;
