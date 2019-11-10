@@ -36,27 +36,27 @@ SMhasher
 | [MicroOAAT](doc/MicroOAAT)            |        960.78 |    60.71 |  68 | 100% bias, distrib           |
 | [jodyhash32](doc/jodyhash32)          |       1400.31 |    44.98 | 102 | bias, collisions, distr      |
 | [jodyhash64](doc/jodyhash64)          |       2794.20 |    40.30 | 118 | bias, collisions, distr      |
-| [lookup3](doc/lookup3)                |       1718.05 |    47.46 |     | 28% bias, collisions, 30% distr  |
-| [superfast](doc/superfast)            |       1549.70 |    58.59 |     | 91% bias, 5273.01x collisions, 37% distr |
+| [lookup3](doc/lookup3)                |       1718.05 |    47.46 | 341 | 28% bias, collisions, 30% distr  |
+| [superfast](doc/superfast)            |       1549.70 |    58.59 | 210 | 91% bias, 5273.01x collisions, 37% distr |
 | [MurmurOAAT](doc/MurmurOAAT)          |        445.94 |   114.28 |  47 | collisions, 99.998% distr          |
 | [Crap8](doc/Crap8)                    |       3121.92 |    34.33 | 342 | 2.42% bias, collisions, 2% distrib |
-| [Murmur2](doc/Murmur2)                |       3111.73 |    40.97 |     | 1.7% bias, 81x coll, 1.7% distrib  |
-| [Murmur2A](doc/Murmur2A)              |       3112.94 |    45.53 |     | 12.7% bias                         |
-| [Murmur2B](doc/Murmur2B)              |       4824.52 |    46.78 |     | 1.8% bias, collisions, 3.4% distrib|
-| [Murmur2C](doc/Murmur2C)              |       3902.16 |    46.76 |     | 91% bias, collisions, distr        |
-| [Murmur3C](doc/Murmur3C)              |       3120.97 |    66.80 |     | LongNeighbors              |
-| [xxHash32](doc/xxHash32)              |       6051.56 |    47.59 |     | LongNeighbors, collisions with 4bit diff |
-| [metrohash64_1](doc/metrohash64_1)    |       9328.47 |    49.28 |     | LongNeighbors              |
-| [metrohash64_2](doc/metrohash64_2)    |       9574.39 |    49.45 |     | LongNeighbors              |
-| [metrohash64crc_1](doc/metrohash64crc_1)  |  13970.56 |    54.34 |     | cyclic collisions 8 byte, machine-specific (x64 SSE4.2) |
-| [metrohash64crc_2](doc/metrohash64crc_2)  |  13881.83 |    54.34 |     | cyclic collisions 8 byte, machine-specific (x64  SSE4.2) |
-| [metrohash128_1](doc/metrohash128_1)  |       9557.24 |    77.21 |     | LongNeighbors              |
-| [metrohash128_2](doc/metrohash128_2)  |       9559.81 |    77.18 |     | LongNeighbors              |
-| [cmetrohash64_1o](doc/cmetrohash64_1o)    |   9135.34 |    49.01 |     | LongNeighbors              |
-| [cmetrohash64_1](doc/cmetrohash64_1)      |   9574.61 |    49.24 |     | LongNeighbors              |
-| [cmetrohash64_2](doc/cmetrohash64_2)      |   9567.94 |    49.51 |     | LongNeighbors              |
-| [City64noSeed](doc/City64noSeed)      |       9207.73 |    38.69 |     |                            |
-| [City64](doc/City64)                  |       9086.82 |    55.99 |     | 2 minor collisions         |
+| [Murmur2](doc/Murmur2)                |       3111.73 |    40.97 | 358 | 1.7% bias, 81x coll, 1.7% distrib  |
+| [Murmur2A](doc/Murmur2A)              |       3112.94 |    45.53 | 407 | 12.7% bias                         |
+| [Murmur2B](doc/Murmur2B)              |       4824.52 |    46.78 | 433 | 1.8% bias, collisions, 3.4% distrib|
+| [Murmur2C](doc/Murmur2C)              |       3902.16 |    46.76 | 444 | 91% bias, collisions, distr        |
+| [Murmur3C](doc/Murmur3C)              |       3120.97 |    66.80 | 859 | LongNeighbors              |
+| [xxHash32](doc/xxHash32)              |       6051.56 |    47.59 | 738 | LongNeighbors, collisions with 4bit diff |
+| [metrohash64_1](doc/metrohash64_1)    |       9328.47 |    49.28 | 624 | LongNeighbors              |
+| [metrohash64_2](doc/metrohash64_2)    |       9574.39 |    49.45 | 627 | LongNeighbors              |
+| [metrohash64crc_1](doc/metrohash64crc_1)  |  13970.56 |    54.34 | 632 | cyclic collisions 8 byte, machine-specific (x64 SSE4.2) |
+| [metrohash64crc_2](doc/metrohash64crc_2)  |  13881.83 |    54.34 | 632 | cyclic collisions 8 byte, machine-specific (x64  SSE4.2) |
+| [metrohash128_1](doc/metrohash128_1)  |       9557.24 |    77.21 | 773 | LongNeighbors              |
+| [metrohash128_2](doc/metrohash128_2)  |       9559.81 |    77.18 | 773 | LongNeighbors              |
+| [cmetrohash64_1o](doc/cmetrohash64_1o)    |   9135.34 |    49.01 |3506 | LongNeighbors              |
+| [cmetrohash64_1](doc/cmetrohash64_1)      |   9574.61 |    49.24 | 652 | LongNeighbors              |
+| [cmetrohash64_2](doc/cmetrohash64_2)      |   9567.94 |    49.51 | 655 | LongNeighbors              |
+| [City64noSeed](doc/City64noSeed)      |       9207.73 |    38.69 |1038 |                            |
+| [City64](doc/City64)                  |       9086.82 |    55.99 |1120 | 2 minor collisions         |
 | [falkhash](doc/falkhash)              |      20355.06 |   169.62 | 264 | LongNeighbors, machine-specific (x86_64 AES-NI) |
 | [t1ha2_atonce128](doc/t1ha2_atonce128)|       8469.18 |    63.76 |     | LongNeighbors              |
 | [t1ha2_stream128](doc/t1ha2_stream128)|       8905.72 |   115.38 |     | LongNeighbors              |
@@ -66,30 +66,30 @@ SMhasher
 | [SipHash](doc/SipHash)                |       953.74  |   142.65 |1071 |                            |
 | [HighwayHash64](doc/HighwayHash64)    |      6194.33  |    99.06 |     |                            |
 | [GoodOAAT](doc/GoodOAAT)              |      1049.83  |    71.56 | 237 |                            |
-| [PMurHash32](doc/PMurHash32)          |      2329.73  |    57.27 |     | Moment Chi2 69             |
-| [Murmur3A](doc/Murmur3A)              |      2402.80  |    50.29 |     | Moment Chi2 69             |
-| [Murmur3F](doc/Murmur3F)              |      5179.38  |    49.98 |     |                            |
-| [fasthash32](doc/fasthash32)          |      4621.08  |    50.70 |     |                            |
-| [fasthash64](doc/fasthash64)          |      4621.33  |    47.89 |     | Moment Chi2 5159 !         |
-| [MUM](doc/MUM)                        |      6902.42  |    40.16 |     | machine-specific (32/64 differs) |
+| [PMurHash32](doc/PMurHash32)          |      2329.73  |    57.27 |1862 | Moment Chi2 69             |
+| [Murmur3A](doc/Murmur3A)              |      2402.80  |    50.29 | 351 | Moment Chi2 69             |
+| [Murmur3F](doc/Murmur3F)              |      5179.38  |    49.98 | 699 |                            |
+| [fasthash32](doc/fasthash32)          |      4621.08  |    50.70 | 566 |                            |
+| [fasthash64](doc/fasthash64)          |      4621.33  |    47.89 | 509 | Moment Chi2 5159 !         |
+| [MUM](doc/MUM)                        |      6902.42  |    40.16 |1912 | machine-specific (32/64 differs) |
 | [MUMlow](doc/MUMlow)                  |      6840.70  |    46.22 |     |                            |
 | [MUMhigh](doc/MUMhigh)                |     12465.58  |    35.64 |     |                            |
-| [City32](doc/City32)                  |      3800.14  |    53.12 |     |                            |
-| [City64low](doc/City64low)            |      9104.84  |    62.12 |     |                            |
-| [City64high](doc/City64high)          |     14340.83  |    45.69 |     |                            |
-| [City128](doc/City128)                |      9917.86  |    75.12 |     |                            |
-| [CityCrc128](doc/CityCrc128)          |     13218.72  |    75.27 |     |                            |
+| [City32](doc/City32)                  |      3800.14  |    53.12 |1319 |                            |
+| [City64low](doc/City64low)            |      9104.84  |    62.12 |1120 |                            |
+| [City64high](doc/City64high)          |     14340.83  |    45.69 |1120 |                            |
+| [City128](doc/City128)                |      9917.86  |    75.12 |1841 |                            |
+| [CityCrc128](doc/CityCrc128)          |     13218.72  |    75.27 | 295 |                            |
 | [FarmHash64](doc/FarmHash64)         	|      8756.99  |    63.40 |     |                            |
 | [FarmHash128](doc/FarmHash128)        |      9772.55  |    82.70 |     |                            |
 | [FarmHash32](doc/FarmHash32)         	|     24831.45  |    24.99 |     | machine-specific (x86_64 SSE4/AVX) |
 | [farmhash32_c](doc/farmhash32_c)      |     24647.21  |    25.36 |     | machine-specific (x86_64 SSE4/AVX) |
 | [farmhash64_c](doc/farmhash64_c)     	|      8620.92  |    75.04 |     |                            |
 | [farmhash128_c](doc/farmhash128_c)    |     10071.77  |    97.70 |     |                            |
-| [xxHash64](doc/xxHash64)              |      9031.87  |    57.10 |     |                            |
-| [xxh3](doc/xxh3)                      |     14169.25  |    37.01 |     | Moment Chi2 14974 !        |
-| [xxh3low](doc/xxh3low)                |     13865.81  |    36.89 |     | Moment Chi2 1.8e+9 !       |
-| [xxh128](doc/xxh128)                  |     14151.13  |    41.32 |     |                            |
-| [xxh128low](doc/xxh128low)            |     13811.03  |    38.57 |     | Moment Chi2 14974 !        |
+| [xxHash64](doc/xxHash64)              |      9031.87  |    57.10 |1999 |                            |
+| [xxh3](doc/xxh3)                      |     14169.25  |    37.01 | 744 | Moment Chi2 14974 !        |
+| [xxh3low](doc/xxh3low)                |     13865.81  |    36.89 | 756 | Moment Chi2 1.8e+9 !       |
+| [xxh128](doc/xxh128)                  |     14151.13  |    41.32 |1012 |                            |
+| [xxh128low](doc/xxh128low)            |     13811.03  |    38.57 |1012 | Moment Chi2 14974 !        |
 | [Spooky32](doc/Spooky32)              |      9563.88  |    70.22 |     |                            |
 | [Spooky64](doc/Spooky64)              |      9548.01  |    69.33 |     |                            |
 | [Spooky128](doc/Spooky128)            |      9898.77  |    70.72 |     |                            |
@@ -153,12 +153,16 @@ Columns
 -------
 
 MiB/sec: The average of the Bulk key speed test for alignments 0-7 with 262144-byte keys.
+The higher the better.
 
 cycl./hash: The average of the Small key speed test for 1-31 byte keys.
+The smaller the better.
 
 size: The object size in byte on AMD64. This affects the inlinability in e.g. hash tables.
+The smaller the better.
 
 Quality problems: See the failures in the linked doc.
+The less the better.
 
 Other
 -----

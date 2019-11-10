@@ -17,6 +17,7 @@
 
 //-----------------------------------------------------------------------------
 
+// objsize: 0-0x157: 343
 uint32_t MurmurHash1 ( const void * key, int len, uint32_t seed )
 {
   const unsigned int m = 0xc6a4a793;
@@ -72,6 +73,7 @@ uint32_t MurmurHash1 ( const void * key, int len, uint32_t seed )
 // on certain platforms. 
 
 // Performance should be equal to or better than the simple version.
+// objsize: 0x160-0x4e3: 899
 
 unsigned int MurmurHash1Aligned ( const void * key, int len, unsigned int seed )
 {

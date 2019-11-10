@@ -25,9 +25,10 @@ FORCE_INLINE uint16_t get16bits ( const void * p )
   return *(const uint16_t*)p;
 }
 
+// objsize: 0-d2: 210
 uint32_t SuperFastHash (const signed char * data, int len) {
-uint32_t hash = 0, tmp;
-int rem;
+  uint32_t hash = 0, tmp;
+  int rem;
 
   if (len <= 0 || data == NULL) return 0;
 

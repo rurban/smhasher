@@ -172,6 +172,7 @@ on big endian machines, or a byte-by-byte read if the endianess is unknown.
     } }while(0)
 
 /*---------------------------------------------------------------------------*/
+// objsize: 0x0-0x64a-6b7-746: 1862
 
 /* Main hashing function. Initialise carry to 0 and h1 to 0 or an initial seed
  * if wanted. Both ph1 and pcarry are required arguments. */

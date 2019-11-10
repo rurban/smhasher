@@ -25,6 +25,7 @@
   c ^= b; c -= rot(b,24); \
 }
 
+// objsize: 0x0-0x155: 341
 uint32_t lookup3 ( const void * key, int length, uint32_t initval )
 {
   uint32_t a,b,c;                                          /* internal state */

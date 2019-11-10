@@ -161,10 +161,12 @@ inline void jodyhash64_test( const void * key, int len, uint32_t seed, void * ou
 #endif
 
 inline void xxHash32_test( const void * key, int len, uint32_t seed, void * out ) {
+  // objsize 10-104 + 3e0-5ce: 738
   *(uint32_t*)out = (uint32_t) XXH32(key, (size_t) len, (unsigned) seed);
 }
 #ifdef HAVE_INT64
 inline void xxHash64_test( const void * key, int len, uint32_t seed, void * out ) {
+  // objsize 630-7fc + c10-1213: 1999
   *(uint64_t*)out = (uint64_t) XXH64(key, (size_t) len, (unsigned long long) seed);
 }
 #endif
@@ -174,45 +176,51 @@ inline void xxHash64_test( const void * key, int len, uint32_t seed, void * out 
 
 #ifdef HAVE_INT64
 inline void xxh3_test( const void * key, int len, uint32_t seed, void * out ) {
-  (void)seed;
+  // objsize 12d0-15b8: 744
   *(uint64_t*)out = (uint64_t) XXH3_64bits_withSeed(key, (size_t) len, seed);
 }
 #endif
 
 inline void xxh3low_test( const void * key, int len, uint32_t seed, void * out ) {
   (void)seed;
+  // objsize 12d0-15b8: 744 + 1f50-1f5c: 756
   *(uint32_t*)out = (uint32_t) XXH3_64bits(key, (size_t) len);
 }
 
 #ifdef HAVE_INT64
 inline void xxh128_test( const void * key, int len, uint32_t seed, void * out ) {
-  (void)seed;
+  // objsize 1f60-2354: 1012
   *(XXH128_hash_t*)out = XXH128(key, (size_t) len, seed);
 }
 
 inline void xxh128low_test( const void * key, int len, uint32_t seed, void * out ) {
-  (void)seed;
   *(uint64_t*)out = (uint64_t) (XXH128(key, (size_t) len, seed).low64);
 }
 
 
 inline void metrohash64_1_test ( const void * key, int len, uint32_t seed, void * out ) {
+  // objsize 0-270: 624
   metrohash64_1((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
 }
 inline void metrohash64_2_test ( const void * key, int len, uint32_t seed, void * out ) {
+  // objsize 270-4e3: 627
   metrohash64_2((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
 }
 inline void metrohash128_1_test ( const void * key, int len, uint32_t seed, void * out ) {
+  // objsize 0-305: 773
   metrohash128_1((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
 }
 inline void metrohash128_2_test ( const void * key, int len, uint32_t seed, void * out ) {
+  // objsize 310-615: 773
   metrohash128_2((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
 }
 #if defined(__SSE4_2__) && defined(__x86_64__)
 inline void metrohash64crc_1_test ( const void * key, int len, uint32_t seed, void * out ) {
+  // objsize 0-278: 632
   metrohash64crc_1((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
 }
 inline void metrohash64crc_2_test ( const void * key, int len, uint32_t seed, void * out ) {
+  // objsize 280-4f8: 632
   metrohash64crc_2((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
 }
 inline void metrohash128crc_1_test ( const void * key, int len, uint32_t seed, void * out ) {
@@ -223,12 +231,15 @@ inline void metrohash128crc_2_test ( const void * key, int len, uint32_t seed, v
 }
 #endif
 inline void cmetrohash64_1_test ( const void * key, int len, uint32_t seed, void * out ) {
+  // objsize 0-28c: 652
   cmetrohash64_1((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
 }
 inline void cmetrohash64_1_optshort_test ( const void * key, int len, uint32_t seed, void * out ) {
+  // objsize 0-db2: 3506
   cmetrohash64_1_optshort((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
 }
 inline void cmetrohash64_2_test ( const void * key, int len, uint32_t seed, void * out ) {
+  // objsize 290-51f: 655
   cmetrohash64_2((const uint8_t *)key,(uint64_t)len,seed,(uint8_t *)out);
 }
 #endif
@@ -242,6 +253,7 @@ inline void fasthash64_test ( const void * key, int len, uint32_t seed, void * o
 }
 #endif
 
+// objsize 0-778: 1912
 void mum_hash_test(const void * key, int len, uint32_t seed, void * out);
 
 inline void mum_low_test ( const void * key, int len, uint32_t seed, void * out ) {
