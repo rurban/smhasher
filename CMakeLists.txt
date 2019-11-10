@@ -208,6 +208,7 @@ add_library(
   City.cpp
   crc.cpp
   DifferentialTest.cpp
+  HashMapTest.cpp
   Hashes.cpp
   ${HIGHWAY_SRC}
   ${SSE2_SRC}
