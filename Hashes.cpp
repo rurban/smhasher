@@ -749,3 +749,11 @@ void pair_multiply_shift (const void *key, int len, uint32_t seed, void *out) {
   }
   *(size_t *) out = h;
 }
+
+void wyhash_test (const void * key, int len, uint32_t seed, void * out) {
+  // objsize 20-a12: 2546
+  *(uint64_t*)out = wyhash(key, (uint64_t)len, (uint64_t)seed);
+}
+void wyhash32low (const void * key, int len, uint32_t seed, void * out) {
+  *(uint32_t*)out = 0xFFFFFFFF & wyhash(key, (uint64_t)len, (uint64_t)seed);
+}
