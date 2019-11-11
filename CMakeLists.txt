@@ -263,3 +263,9 @@ add_test(Speed     SMHasher --test=Speed)
 add_test(Cyclic    SMHasher --test=Cyclic)
 add_test(Zeroes    SMHasher --test=Zeroes)
 add_test(Seed      SMHasher --test=Seed)
+
+add_custom_target (
+    TAGS
+    COMMAND etags --language=c++ *.cpp *.cc *.h
+    DEPENDS ${SRCS}
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} )
