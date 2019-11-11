@@ -201,6 +201,7 @@ HashInfo g_hashes[] =
 #ifdef HAVE_HIGHWAYHASH
   { HighwayHash64_test,   64, 0x98B8B976, "HighwayHash64", "Google HighwayHash (portable with overhead from the lib)", GOOD },
 #endif
+  { tsip_test,            64, 0x8E48155B, "TSip",        "Damian Gryski's Tiny SipHash variant", GOOD },
   { GoodOAAT,             32, 0x7B14EEE5, "GoodOAAT",    "Small non-multiplicative OAAT", GOOD },
   { PMurHash32_test,      32, 0xB0F57EE3, "PMurHash32",  "Shane Day's portable-ized MurmurHash3 for x86, 32-bit", GOOD },
   { MurmurHash3_x86_32,   32, 0xB0F57EE3, "Murmur3A",    "MurmurHash3 for x86, 32-bit", GOOD },
@@ -368,6 +369,8 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   if(info->hash == HighwayHash64_test)
     HighwayHash_init();
 #endif
+  if(info->hash == tsip_test)
+    tsip_init();
 
   //-----------------------------------------------------------------------------
   // Sanity tests

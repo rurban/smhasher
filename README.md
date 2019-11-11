@@ -61,11 +61,12 @@ SMhasher
 | [t1ha2_atonce128](doc/t1ha2_atonce128)|       8469.18 |    63.76 | 346.96 (5)| 613 | LongNeighbors              |
 | [t1ha2_stream128](doc/t1ha2_stream128)|       8905.72 |   115.38 | 416.44 (5)|1665 | LongNeighbors              |
 | [HalfSipHash](doc/HalfSipHash)        |        747.09 |   123.52 | 386.21 (4)| 700 | zeroes                     |
-| [SipHash13](doc/SipHash13)            |       1748.73 |   103.22 | 380.05 (14)| 778 | 0.9% bias                  |
+| [SipHash13](doc/SipHash13)            |       1748.73 |   103.22 | 380.05 (14)| 778 | 0.9% bias                 |
 | --------------------------------------|               |          |           |     |                            |
 | [SipHash](doc/SipHash)                |       953.74  |   142.65 | 406.63 (3)|1071 |                            |
 | [HighwayHash64](doc/HighwayHash64)    |      6194.33  |    99.06 | 397.56 (6)|2546 |                            |
 | [GoodOAAT](doc/GoodOAAT)              |      1049.83  |    71.56 | 324.00 (4)| 237 |                            |
+| [TSip](doc/TSip)                      |      3284.28  |    61.10 | 347.05 (9)| 519 |                            |
 | [PMurHash32](doc/PMurHash32)          |      2329.73  |    57.27 | 342.57 (4)|1862 | Moment Chi2 69             |
 | [Murmur3A](doc/Murmur3A)              |      2402.80  |    50.29 | 327.60 (5)| 351 | Moment Chi2 69             |
 | [Murmur3F](doc/Murmur3F)              |      5179.38  |    49.98 | 357.37 (5)| 699 |                            |
@@ -78,7 +79,7 @@ SMhasher
 | [mirhashstrict](doc/mirhashstrict)    |      2006.89  |    71.61 | 322.50 (10)|1112 |                            |
 | [mirhashstrict32low](doc/mirhashstrict32low)|2016.85	|    70.89 | 302.77 (4) |1112 |                            |
 | [City32](doc/City32)                  |      3800.14  |    53.12 | 331.86 (15)|1319 |                            |
-| [City64low](doc/City64low)            |      9104.84  |    62.12 | 406.76 (146)|1120 |                            |
+| [City64low](doc/City64low)            |      9104.84  |    62.12 | 406.76 (146)|1120 |                           |
 | [City128](doc/City128)                |      9917.86  |    75.12 | 343.65 (5) |1841 |                            |
 | [CityCrc128](doc/CityCrc128)          |     13218.72  |    75.27 | 346.39 (3) | 295 |                            |
 | [FarmHash32](doc/FarmHash32)         	|     24831.45  |    24.99 | 343.12 (14)|11489| machine-specific (x86_64 SSE4/AVX) |
@@ -100,13 +101,13 @@ SMhasher
 | [clhash](doc/clhash)                  |      4070.68  |    81.56 | 373.09 (5) |1809 | machine-specific (x64 SSE4.2) |
 | [t1ha2_atonce](doc/t1ha2_atonce)      |      8459.94  |    46.74 | 315.28 (4) | 541 |                            |
 | [t1ha2_stream](doc/t1ha2_stream)      |      8884.03  |    91.16 | 414.67 (5) |1665 |                            |
-| [t1ha1_64le](doc/t1ha1_64le)          |      9526.17  |    37.65 | 313.70 (5)| 517 |                            |
-| [t1ha1_64be](doc/t1ha1_64be)          |      7240.97  |    39.77 | 318.98 (8)| 555 |                            |
-| [t1ha0_32le](doc/t1ha0_32le)          |      5074.19  |    53.07 | 318.20 (4)| 509 |                            |
-| [t1ha0_32be](doc/t1ha0_32be)          |      4359.59  |    53.20 | 322.56 (4)| 533 |                            |
-| [t1ha0_aes_noavx](doc/t1ha0_aes_noavx)|     20547.70  |    46.60 | 325.61 (7)| 925 | machine-specific (x86 AES-NI) |
-| [t1ha0_aes_avx1](doc/t1ha0_aes_avx1)  |     22278.29  |    46.58 | 319.81 (6)| 843 | machine-specific (x64 AVX)    |
-| [t1ha0_aes_avx2](doc/t1ha0_aes_avx2)  |     36436.51	|    36.31 | ?         | 792 | machine-specific (x64 AVX2)   |
+| [t1ha1_64le](doc/t1ha1_64le)          |      9526.17  |    37.65 | 313.70 (5) | 517 |                            |
+| [t1ha1_64be](doc/t1ha1_64be)          |      7240.97  |    39.77 | 318.98 (8) | 555 |                            |
+| [t1ha0_32le](doc/t1ha0_32le)          |      5074.19  |    53.07 | 318.20 (4) | 509 |                            |
+| [t1ha0_32be](doc/t1ha0_32be)          |      4359.59  |    53.20 | 322.56 (4) | 533 |                            |
+| [t1ha0_aes_noavx](doc/t1ha0_aes_noavx)|     20547.70  |    46.60 | 325.61 (7) | 925 | machine-specific (x86 AES-NI) |
+| [t1ha0_aes_avx1](doc/t1ha0_aes_avx1)  |     22278.29  |    46.58 | 319.81 (6) | 843 | machine-specific (x64 AVX)    |
+| [t1ha0_aes_avx2](doc/t1ha0_aes_avx2)  |     36436.51	|    36.31 | ?          | 792 | machine-specific (x64 AVX2)   |
 | [wyhash](doc/wyhash)                  |     12327.50  |    34.98 | 347.00 (5)  |2546 |                            |
 | [wyhash32low](doc/wyhash32low)        |     12295.53  |    35.01 | 447.85 (107)|2546 | Moment Chi2 4.2            |
 

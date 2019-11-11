@@ -232,6 +232,16 @@ if (HIGHWAY)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_HIGHWAYHASH")
   endif()
 endif()
+#IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/BeagleHashes_test.c")
+#    set(BEAGLE_SRC BeagleHashes_test.c)
+#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_BEAGLE_HASHES")
+#ENDIF()
+#IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/funny_hash.h")
+#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_FUNNY_HASH")
+#ENDIF()
+#IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/fanom_hash.h")
+#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_FANOM_HASH")
+#ENDIF()
 
 add_library(
   SMHasherSupport
@@ -276,6 +286,9 @@ add_library(
   mum.cc
   jody_hash32.c
   jody_hash64.c
+  # https://github.com/dgryski/trifles/tree/master/tsip
+  tsip.c
+  # ${BEAGLE_SRC}
   ${X86_64ONLY_SRC}
 )
 
