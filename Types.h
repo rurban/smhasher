@@ -32,8 +32,19 @@ void MixVCode ( const void * blob, int len );
 
 
 //-----------------------------------------------------------------------------
+typedef void (*pfHash)(const void *blob, const int len, const uint32_t seed,
+                       void *out);
 
-typedef void (*pfHash) ( const void * blob, const int len, const uint32_t seed, void * out );
+enum HashQuality             {  SKIP,   POOR,   GOOD };
+struct HashInfo
+{
+  pfHash hash;
+  int hashbits;
+  uint32_t verification;
+  const char * name;
+  const char * desc;
+  enum HashQuality quality;
+};
 
 struct ByteVec : public std::vector<uint8_t>
 {

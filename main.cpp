@@ -66,16 +66,6 @@ bool MomentChi2Test ( struct HashInfo *info );
 // This is the list of all hashes that SMHasher can test.
 
 const char* quality_str[3] = { "SKIP", "POOR", "GOOD" };
-enum HashQuality             {  SKIP,   POOR,   GOOD };
-struct HashInfo
-{
-  pfHash hash;
-  int hashbits;
-  uint32_t verification;
-  const char * name;
-  const char * desc;
-  enum HashQuality quality;
-};
 
 // sorted by quality and speed
 HashInfo g_hashes[] =
