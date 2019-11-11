@@ -6,9 +6,11 @@
 #include "MurmurHash1.h"
 #include "MurmurHash2.h"
 #include "MurmurHash3.h"
+#include "PMurHash.h"
 
 #define XXH_INLINE_ALL
 #include "xxhash.h"
+
 #include "metrohash.h"
 #include "cmetrohash.h"
 #include "opt_cmetrohash.h"
@@ -68,6 +70,7 @@ void FNV32a_YoshimitsuTRIAD( const void * key, int len, uint32_t seed, void * ou
 void FNV1A_Totenschiff     ( const void * key, int len, uint32_t seed, void * out );
 #endif
 #if 0 /* TODO */
+void FNV1A_Pippip_Yurii    ( const void * key, int len, uint32_t seed, void * out );
 void FNV1A_Jesteress       ( const void * key, int len, uint32_t seed, void * out );
 void FNV1A_Meiyan          ( const void * key, int len, uint32_t seed, void * out );
 #endif

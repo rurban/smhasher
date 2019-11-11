@@ -5,8 +5,6 @@
 #include "AvalancheTest.h"
 #include "DifferentialTest.h"
 
-#include "PMurHash.h"
-
 #include <stdio.h>
 #include <stdint.h>
 #include <time.h>
@@ -146,8 +144,9 @@ HashInfo g_hashes[] =
 #ifdef HAVE_INT64
   { FNV1A_Totenschiff,    32, 0x95D95ACF, "FNV1A_Totenschiff",  "FNV1A_Totenschiff_v1 64-bit sanmayce", POOR },
 #if 0 /* TODO */
-  { FNV1A_Jesteress,      32, 0x0, "FNV1a_Jesteress",  "FNV1a-Jesteress 32-bit sanmayce", POOR },
-  { FNV1A_Meiyan,         32, 0x0, "FNV1a_Meiyan",     "FNV1a-Meiyan 32-bit sanmayce", POOR },
+  { FNV1A_Pippip_Yurii,   32, 0x0, "FNV1A_Pippip_Yurii", "FNV1A-Pippip_Yurii 32-bit sanmayce",
+  { FNV1A_Jesteress,      32, 0x0, "FNV1A_Jesteress",  "FNV1A-Jesteress 32-bit sanmayce", POOR },
+  { FNV1A_Meiyan,         32, 0x0, "FNV1A_Meiyan",     "FNV1A-Meiyan 32-bit sanmayce", POOR },
 #endif
   { FNV32a_YoshimitsuTRIAD,32,0xD8AFFD71, "FNV1a_YT",    "FNV1a-YoshimitsuTRIAD 32-bit sanmayce", POOR },
   { FNV64a,               64, 0x103455FC, "FNV64",       "Fowler-Noll-Vo hash, 64-bit", POOR },
