@@ -258,6 +258,35 @@ void FNV1A_Totenschiff(const void *key, int len, uint32_t seed, void *out)
 #undef _PADr_KAZE
 }
 
+// Dedicated to Pippip, the main character in the 'Das Totenschiff' roman, actually the B.Traven himself, his real name was Hermann Albert Otto Maksymilian Feige.
+// CAUTION: Add 8 more bytes to the buffer being hashed, usually malloc(...+8) - to prevent out of boundary reads!
+// Many thanks go to Yurii 'Hordi' Hordiienko, he lessened with 3 instructions the original 'Pippip', thus:
+// objsize: 0x1090-0x1123: 147
+void FNV1A_Pippip_Yurii(const void *key, int wrdlen, uint32_t seed, void *out)
+{
+#define _PADr_KAZE(x, n) ( ((x) << (n))>>(n) )
+  const char *str = (char *)key;
+  const uint32_t PRIME = 591798841;
+  uint32_t hash32;
+  uint64_t hash64 = (uint64_t)seed ^ BIG_CONSTANT(14695981039346656037);
+  size_t Cycles, NDhead;
+  if (wrdlen > 8) {
+    Cycles = ((wrdlen - 1) >> 4) + 1;
+    NDhead = wrdlen - (Cycles << 3);
+#pragma nounroll
+    for (; Cycles--; str += 8) {
+      hash64 = (hash64 ^ (*(uint64_t *)(str))) * PRIME;
+      hash64 = (hash64 ^ (*(uint64_t *)(str + NDhead))) * PRIME;
+    }
+  } else {
+    hash64 = (hash64 ^ _PADr_KAZE(*(uint64_t *)(str + 0), (8 - wrdlen) << 3)) *
+             PRIME;
+  }
+  hash32 = (uint32_t)(hash64 ^ (hash64 >> 32));
+  *(uint32_t *)out = hash32 ^ (hash32 >> 16);
+#undef _PADr_KAZE
+} // Last update: 2019-Oct-30, 14 C lines strong, Kaze.
+
 // objsize: 0x1090-0x10df: 79
 void
 FNV64a(const void *key, int len, uint32_t seed, void *out)

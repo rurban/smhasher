@@ -136,8 +136,8 @@ HashInfo g_hashes[] =
   { FNV32a,               32, 0xE3CBBE91, "FNV1a",       "Fowler-Noll-Vo hash, 32-bit", POOR },
 #ifdef HAVE_INT64
   { FNV1A_Totenschiff,    32, 0x95D95ACF, "FNV1A_Totenschiff",  "FNV1A_Totenschiff_v1 64-bit sanmayce", POOR },
+  { FNV1A_Pippip_Yurii,   32, 0xE79AE3E4, "FNV1A_Pippip_Yurii", "FNV1A-Pippip_Yurii 32-bit sanmayce", POOR },
 #if 0 /* TODO */
-  { FNV1A_Pippip_Yurii,   32, 0x0, "FNV1A_Pippip_Yurii", "FNV1A-Pippip_Yurii 32-bit sanmayce",
   { FNV1A_Jesteress,      32, 0x0, "FNV1A_Jesteress",  "FNV1A-Jesteress 32-bit sanmayce", POOR },
   { FNV1A_Meiyan,         32, 0x0, "FNV1A_Meiyan",     "FNV1A-Meiyan 32-bit sanmayce", POOR },
 #endif

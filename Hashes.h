@@ -68,9 +68,9 @@ void FNV32a                ( const void * key, int len, uint32_t seed, void * ou
 void FNV32a_YoshimitsuTRIAD( const void * key, int len, uint32_t seed, void * out );
 #ifdef HAVE_INT64
 void FNV1A_Totenschiff     ( const void * key, int len, uint32_t seed, void * out );
+void FNV1A_Pippip_Yurii    ( const void * key, int len, uint32_t seed, void * out );
 #endif
 #if 0 /* TODO */
-void FNV1A_Pippip_Yurii    ( const void * key, int len, uint32_t seed, void * out );
 void FNV1A_Jesteress       ( const void * key, int len, uint32_t seed, void * out );
 void FNV1A_Meiyan          ( const void * key, int len, uint32_t seed, void * out );
 #endif

@@ -23,6 +23,7 @@ SMhasher
 | [fibonacci](doc/fibonacci)            |      9292.44  |    33.24 | 1377.87 (6) |1692 | zeros, fails all tests       |
 | [FNV1a](doc/FNV1a)                    |        774.91 |    70.52 | 316.55 (4)| 204 | zeros, fails all tests       |
 | [FNV1A_Totenschiff](doc/FNV1A_Totenschiff)|   6142.04 |    36.84 | 326.69 (7)| 270 | zeros, fails all tests       |
+| [FNV1A_Pippip_Yurii](doc/FNV1A_Pippip_Yurii)| 6260.14 |    36.87 | 316.83 (6)| 147 | sanity, fails all tests       |
 | [FNV1a_YT](doc/FNV1a_YT)              |       8783.51 |    28.35 | 306.86 (3)| 321 | fails all tests              |
 | [FNV2](doc/FNV2)                      |       6143.11 |    38.91 | 314.15 (4)| 278 | fails all tests              |
 | [FNV64](doc/FNV64)                    |        774.56 |    70.52 | 301.66 (4)|  79 | fails all tests              |
