@@ -43,7 +43,7 @@ static	inline	uint64_t	_wyr8(const	uint8_t	*p) {	return	(_wyr4(p)<<32)|_wyr4(p+4
 static	inline	uint64_t	__wyr8(const	uint8_t	*p) {	uint64_t v;	memcpy(&v,	p,	8);	return	v;}
 //to avoid attacks, seed should be initialized as a secret.
 static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed) {
-#ifndef	WYHASH_SAFE
+#ifdef	WYHASH_UNSAFE
 	const   uint64_t    *q=(const   uint64_t*)key;
 	if(len<=8)	return	_wymum(len^_wyp4,_wymum((q[0]<<((8-(len&7))<<3))^seed^_wyp0,seed^_wyp1));	
 	if(len<=16)	return	_wymum(len^_wyp4,_wymum(q[0]^seed^_wyp0,(q[1]<<((8-(len&7))<<3))^seed^_wyp1));
