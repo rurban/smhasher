@@ -1,5 +1,6 @@
 #include "Platform.h"
 #include "HashMapTest.h"
+#include "SpeedTest.h"
 #include "Random.h"
 
 #include <string>
@@ -14,9 +15,8 @@ using namespace std;
 // This should be a realistic I-Cache test, when our hash is used inlined
 // in a hash table. There the size matters more than the bulk speed.
 
-std::set<std::string> HashMapInit(bool verbose) {
-  std::set<std::string> words;
-  std::set<std::string>::iterator it;
+std::vector<std::string> HashMapInit(bool verbose) {
+  std::vector<std::string> words;
   std::string line;
   std::string filename = "/usr/share/dict/words";
   int lines = 0, sum = 0;
@@ -29,11 +29,7 @@ std::set<std::string> HashMapInit(bool verbose) {
     int len = line.length();
     lines++;
     sum += len;
-    words.insert(line);
-    //line.append("!");
-    //words.insert(line);
-    //line.append("!");
-    //words.insert(line);
+    words.push_back(line);
   }
   wordfile.close();
   if (verbose) {
@@ -43,27 +39,16 @@ std::set<std::string> HashMapInit(bool verbose) {
   return words;
 }
 
-bool HashMapTest ( pfHash pfhash, std::set<std::string> words,
-                   const int hashbits, bool verbose )
+bool HashMapTest ( pfHash pfhash, 
+                   const int hashbits, std::vector<std::string> words,
+                   const int trials, bool verbose )
 {
-  const int hashbytes = hashbits / 8;
-  Rand r(82762);
-  const uint32_t seed = r.rand_u32();
-  unordered_map<string,int,function<size_t ( const string &key)>>
-    hashmap(words.size(), []( const string &key)
-                  {
-                    const void* out;
-                    size_t result;
-                    pfhash(key.c_str(), key.length(), seed, out);
-                    memcpy(&result, out, hashbits);
-                    return result;
-                  });
-  
   printf("Running HashMapTest     ");
+  double mean = HashMapSpeedTest( pfhash, hashbits, words, 1, verbose); //warmup
+  mean = HashMapSpeedTest( pfhash, hashbits, words, trials, verbose);
+  printf(" %0.3f cycles/op  ", mean);
 
-  //----------
-
-  delete hashmap;
+  //delete hashmap;
   printf(" ....... PASS\n");
   return true;
 }

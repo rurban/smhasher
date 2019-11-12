@@ -7,6 +7,7 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <string>
 
 //-----------------------------------------------------------------------------
 // If the optimizer detects that a value in a speed test is constant or unused,

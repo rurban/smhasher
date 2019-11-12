@@ -1,11 +1,17 @@
 #include "SpeedTest.h"
-
 #include "Random.h"
 
 #include <stdio.h>   // for printf
 #include <memory.h>  // for memset
 #include <math.h>    // for sqrt
 #include <algorithm> // for sort
+#include <string>
+
+#include <unordered_map>
+#include <functional>
+
+typedef std::unordered_map<std::string, int,
+  std::function<size_t (const std::string &key)>> string_hashmap;
 
 //-----------------------------------------------------------------------------
 // We view our timing values as a series of random variables V that has been
@@ -159,7 +165,7 @@ NEVER_INLINE int64_t timehash ( pfHash hash, const void * key, int len, int seed
   
   end = rdtsc();
   
-  return end-begin;
+  return end - begin;
 }
 
 //-----------------------------------------------------------------------------
@@ -262,9 +268,9 @@ void BulkSpeedTest ( pfHash hash, uint32_t seed )
   for(int align = 7; align >= 0; align--)
   {
     double cycles = SpeedTest(hash,seed,trials,blocksize,align);
-    
+
     double bestbpc = double(blocksize)/cycles;
-    
+
     double bestbps = (bestbpc * 3000000000.0 / 1048576.0);
     printf("Alignment %2d - %6.3f bytes/cycle - %7.2f MiB/sec @ 3 ghz\n",align,bestbpc,bestbps);
     sumbpc += bestbpc;
@@ -285,6 +291,64 @@ double TinySpeedTest ( pfHash hash, int hashsize, int keysize, uint32_t seed, bo
   
   printf("%8.2f cycles/hash\n",cycles);
   return cycles;
+}
+
+double HashMapSpeedTest ( pfHash pfhash, int hashbits,
+                          std::vector<std::string> words,
+                          const int trials, bool verbose )
+{
+  Rand r(82762);
+  const uint32_t seed = r.rand_u32();
+  string_hashmap hashmap(words.size(), [=](const std::string &key)
+                  {
+                    uint128_t out;
+                    size_t result;
+                    pfhash(key.c_str(), key.length(), seed, &out);
+                    memcpy(&result, &out, hashbits/8);
+                    return result;
+                  });
+  
+  std::vector<std::string>::iterator it;
+  std::vector<double> times;
+  double t1;
+  times.reserve(trials);
+  { // hash inserts and 1% deletes
+    volatile int64_t begin, end;
+    int i = 0;
+    begin = rdtsc();
+    for (it = words.begin(); it != words.end(); it++, i++) {
+      std::string line = *it;
+      hashmap[line] = 1;
+      if (i % 100 == 0)
+        hashmap.erase(line);
+    }
+    end = rdtsc();
+    t1 = (double)(end - begin) / (double)words.size();
+  }
+  if (verbose)
+    printf ("(init: %0.3f cycles/op)", t1);
+  for(int itrial = 0; itrial < trials; itrial++)
+    { // hash query
+      volatile int64_t begin, end;
+      int i = 0, found = 0;
+      double t;
+      begin = rdtsc();
+      for ( it = words.begin(); it != words.end(); it++, i++ )
+        {
+          std::string line = *it;
+          if (hashmap[line])
+            found++;
+        }
+      end = rdtsc();
+      t = (double)(end - begin) / (double)words.size();
+      if(t > 0) times.push_back(t);
+    }
+  hashmap.clear();
+
+  std::sort(times.begin(),times.end());
+  FilterOutliers(times);
+  //hashmap.~unordered_map();
+  return CalcMean(times);
 }
 
 //-----------------------------------------------------------------------------

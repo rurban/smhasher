@@ -4,6 +4,7 @@
 #include "SpeedTest.h"
 #include "AvalancheTest.h"
 #include "DifferentialTest.h"
+#include "HashMapTest.h"
 
 #include <stdio.h>
 #include <stdint.h>
@@ -33,6 +34,7 @@ bool g_testSeed        = false;
 bool g_testDiff        = false;
 bool g_testDiffDist    = false;
 bool g_testBIC         = false;
+bool g_testHashmap     = false;
 
 struct TestOpts {
   bool         &var;
@@ -57,7 +59,8 @@ TestOpts g_testopts[] =
   { g_testSeed,		"Seed" },
   { g_testDiff, 	"Diff" },
   { g_testDiffDist, 	"DiffDist" },
-  { g_testBIC, 		"BIC" }
+  { g_testBIC, 		"BIC" },
+  { g_testHashmap,      "Hashmap" }
 };
 
 bool MomentChi2Test ( struct HashInfo *info );
@@ -1063,7 +1066,22 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     fflush(NULL);
   }
 
-
+  if(g_testHashmap || g_testAll)
+  {
+    printf("[[[ 'Hashmap' Tests (when inlined) ]]]\n\n");
+    fflush(NULL);
+    bool result = true;
+    if (info->quality == SKIP) {
+      result = false;
+    } else {
+      std::vector<std::string> words = HashMapInit(g_drawDiagram);
+      result &= HashMapTest(hash,info->hashbits,words,10,g_drawDiagram);
+    }
+    if(!result) printf("*********FAIL*********\n");
+    printf("\n");
+    fflush(NULL);
+  }
+  
 }
 
 //-----------------------------------------------------------------------------

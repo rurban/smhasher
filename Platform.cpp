@@ -5,8 +5,7 @@
 void testRDTSC ( void )
 {
   int64_t temp = rdtsc();
-
-  printf("%d",(int)temp);
+  printf("%ld",(long)temp);
 }
 
 #if defined(_MSC_VER)
