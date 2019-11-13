@@ -369,6 +369,14 @@ inline void t1ha0_ia32aes_avx2_test(const void * key, int len, uint32_t seed, vo
 void wyhash_test (const void * key, int len, uint32_t seed, void * out);
 void wyhash32low (const void * key, int len, uint32_t seed, void * out);
 
+//https://github.com/vnmakarov/mir/blob/master/mir-hash.h
+#include "mir-hash.h"
+
+void mirhash_test (const void * key, int len, uint32_t seed, void * out);
+void mirhash32low (const void * key, int len, uint32_t seed, void * out);
+void mirhashstrict_test (const void * key, int len, uint32_t seed, void * out);
+void mirhashstrict32low (const void * key, int len, uint32_t seed, void * out);
+
 #if defined(__SSE4_2__) && defined(__x86_64__)
 #include "clhash.h"
 void clhash_init();
