@@ -81,6 +81,22 @@ HashInfo g_hashes[] =
   { BadHash,     	  32, 0xAB432E23, "BadHash", 	 "very simple XOR shift", SKIP },
   { sumhash,     	  32, 0x0000A9AC, "sumhash", 	 "sum all bytes", SKIP },
   { sumhash32,     	  32, 0x3D6DC280, "sumhash32",   "sum all 32bit words", SKIP },
+#ifdef HAVE_BIT32
+ #define FIBONACCI_VERIF      0x09952480
+ #define FNV2_VERIF           0x739801C5
+ #define MULTSHIFT_VERIF      0x90FA041A
+ #define PAIRMULTSHIFT_VERIF  0x0C211550
+#else
+ #define FIBONACCI_VERIF      0xFE3BD380
+ #define FNV2_VERIF           0x1967C625
+ #define MULTSHIFT_VERIF      0xF15F3D1E
+ #define PAIRMULTSHIFT_VERIF  0xB070283D
+#endif
+  // M. Dietzfelbinger, T. Hagerup, J. Katajainen, and M. Penttonen. A reliable randomized
+  // algorithm for the closest-pair problem. J. Algorithms, 25:19–51, 1997.
+  // must be skipped for hashmaps, extremly bad!
+  { multiply_shift, __WORDSIZE,MULTSHIFT_VERIF, "multiply_shift", "Dietzfelbinger Multiply-shift on strings", POOR },
+  { pair_multiply_shift, __WORDSIZE, PAIRMULTSHIFT_VERIF, "pair_multiply_shift", "Pair-multiply-shift", POOR },
 
   // here start the real hashes. the problematic ones:
   { crc32,                32, 0x3719DB20, "crc32",       "CRC-32 soft", POOR },
@@ -116,23 +132,7 @@ HashInfo g_hashes[] =
   // elf64 or macho64 only
   { fhtw_test,            64, 0x0,        "fhtw",        "fhtw asm", POOR },
 #endif
-#ifdef HAVE_BIT32
- #define FIBONACCI_VERIF      0x09952480
- #define FNV2_VERIF           0x739801C5
- #define MULTSHIFT_VERIF      0x90FA041A
- #define PAIRMULTSHIFT_VERIF  0x0C211550
-#else
- #define FIBONACCI_VERIF      0xFE3BD380
- #define FNV2_VERIF           0x1967C625
- #define MULTSHIFT_VERIF      0xF15F3D1E
- #define PAIRMULTSHIFT_VERIF  0xB070283D
-#endif
   { fibonacci,    __WORDSIZE, FIBONACCI_VERIF, "fibonacci",   "wordwise Fibonacci", POOR },
-  // M. Dietzfelbinger, T. Hagerup, J. Katajainen, and M. Penttonen. A reliable randomized
-  // algorithm for the closest-pair problem. J. Algorithms, 25:19–51, 1997.
-  { multiply_shift, __WORDSIZE,MULTSHIFT_VERIF, "multiply_shift", "Dietzfelbinger Multiply-shift on strings", POOR },
-  { pair_multiply_shift, __WORDSIZE, PAIRMULTSHIFT_VERIF, "pair_multiply_shift", "Pair-multiply-shift", POOR },
-
   { FNV32a,               32, 0xE3CBBE91, "FNV1a",       "Fowler-Noll-Vo hash, 32-bit", POOR },
 #ifdef HAVE_INT64
   { FNV1A_Totenschiff,    32, 0x95D95ACF, "FNV1A_Totenschiff",  "FNV1A_Totenschiff_v1 64-bit sanmayce", POOR },
@@ -411,6 +411,22 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     }
     sum = sum / 31.0;
     printf("Average                                    %6.3f cycles/hash\n",sum);
+    printf("\n");
+    fflush(NULL);
+  }
+
+  if(g_testHashmap || g_testAll)
+  {
+    printf("[[[ 'Hashmap' Speed Tests (when inlined) ]]]\n\n");
+    fflush(NULL);
+    bool result = true;
+    if (info->quality == SKIP) {
+      result = false;
+    } else {
+      std::vector<std::string> words = HashMapInit(g_drawDiagram);
+      result &= HashMapTest(hash,info->hashbits,words,10,g_drawDiagram);
+    }
+    if(!result) printf("*********FAIL*********\n");
     printf("\n");
     fflush(NULL);
   }
@@ -1079,22 +1095,6 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       result &= BicTest3<Blob<88>,hashtype>(hash,(int)reps,g_drawDiagram);
     }
 
-    if(!result) printf("*********FAIL*********\n");
-    printf("\n");
-    fflush(NULL);
-  }
-
-  if(g_testHashmap || g_testAll)
-  {
-    printf("[[[ 'Hashmap' Tests (when inlined) ]]]\n\n");
-    fflush(NULL);
-    bool result = true;
-    if (info->quality == SKIP) {
-      result = false;
-    } else {
-      std::vector<std::string> words = HashMapInit(g_drawDiagram);
-      result &= HashMapTest(hash,info->hashbits,words,100,g_drawDiagram);
-    }
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
     fflush(NULL);

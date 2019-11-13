@@ -66,6 +66,11 @@ double CalcStdv ( std::vector<double> & v, int a, int b )
   return stdv;
 }
 
+double CalcStdv ( std::vector<double> & v )
+{
+  return CalcStdv(v, 0, v.size());
+}
+
 // Return true if the largest value in v[0,len) is more than three
 // standard deviations from the mean
 
@@ -301,7 +306,7 @@ double HashMapSpeedTest ( pfHash pfhash, int hashbits,
   const uint32_t seed = r.rand_u32();
   string_hashmap hashmap(words.size(), [=](const std::string &key)
                   {
-                    uint128_t out;
+                    char out[256]; // hasshe2
                     size_t result;
                     pfhash(key.c_str(), key.length(), seed, &out);
                     memcpy(&result, &out, hashbits/8);
@@ -311,6 +316,8 @@ double HashMapSpeedTest ( pfHash pfhash, int hashbits,
   std::vector<std::string>::iterator it;
   std::vector<double> times;
   double t1;
+
+  printf("std::unordered_map:\n");
   times.reserve(trials);
   { // hash inserts and 1% deletes
     volatile int64_t begin, end;
@@ -325,8 +332,14 @@ double HashMapSpeedTest ( pfHash pfhash, int hashbits,
     end = rdtsc();
     t1 = (double)(end - begin) / (double)words.size();
   }
-  if (verbose)
-    printf ("(init: %0.3f cycles/op)", t1);
+  printf("Init HashMapTest:    %0.3f cycles/op (%lu inserts, 1%% deletions)\n",
+         t1, words.size());
+  printf("Running HashMapTest: ");
+  if (t1 > 10000.) { // e.g. multiply_shift 459271.700
+    printf("SKIP");
+    return 0.;
+  }
+
   for(int itrial = 0; itrial < trials; itrial++)
     { // hash query
       volatile int64_t begin, end;
@@ -341,14 +354,18 @@ double HashMapSpeedTest ( pfHash pfhash, int hashbits,
         }
       end = rdtsc();
       t = (double)(end - begin) / (double)words.size();
-      if(t > 0) times.push_back(t);
+      if(found > 0 && t > 0) times.push_back(t);
     }
   hashmap.clear();
 
   std::sort(times.begin(),times.end());
   FilterOutliers(times);
-  //hashmap.~unordered_map();
-  return CalcMean(times);
+  double mean = CalcMean(times);
+  double stdv = CalcStdv(times);
+  printf("%0.3f cycles/op", mean);
+  printf(" (%0.1f stdv) ", stdv);
+
+  return mean;
 }
 
 //-----------------------------------------------------------------------------

@@ -43,12 +43,11 @@ bool HashMapTest ( pfHash pfhash,
                    const int hashbits, std::vector<std::string> words,
                    const int trials, bool verbose )
 {
-  printf("Running HashMapTest     ");
-  double mean = HashMapSpeedTest( pfhash, hashbits, words, 1, verbose); //warmup
-  mean = HashMapSpeedTest( pfhash, hashbits, words, trials, verbose);
-  printf(" %0.3f cycles/op  ", mean);
-
-  //delete hashmap;
-  printf(" ....... PASS\n");
+  double mean = HashMapSpeedTest( pfhash, hashbits, words, trials, verbose);
+  // if faster than ~sha1
+  if (mean > 5. && mean < 1500.)
+    printf(" ....... PASS\n");
+  else
+    printf(" ....... FAIL\n");
   return true;
 }
