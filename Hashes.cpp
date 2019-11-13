@@ -757,3 +757,20 @@ void wyhash_test (const void * key, int len, uint32_t seed, void * out) {
 void wyhash32low (const void * key, int len, uint32_t seed, void * out) {
   *(uint32_t*)out = 0xFFFFFFFF & wyhash(key, (uint64_t)len, (uint64_t)seed);
 }
+
+void mirhash_test (const void * key, int len, uint32_t seed, void * out) {
+  // objsize 20-a12: 2546
+  *(uint64_t*)out = mir_hash(key, (uint64_t)len, (uint64_t)seed);
+}
+void mirhash32low (const void * key, int len, uint32_t seed, void * out) {
+  *(uint32_t*)out = 0xFFFFFFFF & mir_hash(key, (uint64_t)len, (uint64_t)seed);
+}
+
+void mirhashstrict_test (const void * key, int len, uint32_t seed, void * out) {
+  // objsize 20-a12: 2546
+  *(uint64_t*)out = mir_hash_strict(key, (uint64_t)len, (uint64_t)seed);
+}
+void mirhashstrict32low (const void * key, int len, uint32_t seed, void * out) {
+  *(uint32_t*)out = 0xFFFFFFFF & mir_hash_strict(key, (uint64_t)len, (uint64_t)seed);
+}
+

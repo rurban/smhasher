@@ -289,8 +289,20 @@ HashInfo g_hashes[] =
 # define WYHASH_VERIF     0xBB297DC4
 # define WYHASH32L_VERIF  0x640C4656
 #endif
+
   { wyhash_test,                 64, WYHASH_VERIF, "wyhash",          "wyhash v3 (portable, 64-bit, little-endian)", GOOD },
-  { wyhash32low,                 32, WYHASH32L_VERIF,"wyhash32low",   "wyhash v3 - lower 32bit", GOOD }
+  { wyhash32low,                 32, WYHASH32L_VERIF,"wyhash32low",   "wyhash v3 - lower 32bit", GOOD },
+#if defined(__GNUC__) && UINT_MAX != ULONG_MAX
+ #define MIR_VERIF            0x00A393C8
+ #define MIRLOW_VERIF         0xE320CE68
+#else
+ #define MIR_VERIF            0x422A66FC
+ #define MIRLOW_VERIF         0xD50D1F09
+#endif
+  { mirhash_test,                64, MIR_VERIF,    "mirhash",            "mirhash", GOOD },
+  { mirhash32low,                32, MIRLOW_VERIF, "mirhash32low",       "mirhash - lower 32bit", GOOD },
+  { mirhashstrict_test,          64, 0x422A66FC,   "mirhashstrict",      "mirhashstrict (portable, 64-bit, little-endian)", GOOD },
+  { mirhashstrict32low,          32, 0xD50D1F09,   "mirhashstrict32low", "mirhashstrict - lower 32bit", GOOD }
 };
 
 HashInfo * findHash ( const char * name )
