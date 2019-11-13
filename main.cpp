@@ -277,12 +277,17 @@ HashInfo g_hashes[] =
 #  endif /* __AVX2__ */
 # endif /* T1HA0_AESNI_AVAILABLE */
 #endif /* older t1ha */
-#if defined(_MSC_VER) && defined(HAVE_BIT32)
-#  define WYHASH_VERIF        0x5F19A75D
-#  define WYHASH32L_VERIF     0x62BB066F
+#ifdef WYHASH_UNSAFE
+# if defined(_MSC_VER) && defined(HAVE_BIT32)
+#  define WYHASH_VERIF    0x5F19A75D
+#  define WYHASH32L_VERIF 0x62BB066F
+# else
+#  define WYHASH_VERIF    0xAF221AA1
+#  define WYHASH32L_VERIF 0x166FEAF9
+# endif
 #else
-#  define WYHASH_VERIF        0xAF221AA1
-#  define WYHASH32L_VERIF     0x166FEAF9
+# define WYHASH_VERIF     0xBB297DC4
+# define WYHASH32L_VERIF  0x640C4656
 #endif
   { wyhash_test,                 64, WYHASH_VERIF, "wyhash",          "wyhash v3 (portable, 64-bit, little-endian)", GOOD },
   { wyhash32low,                 32, WYHASH32L_VERIF,"wyhash32low",   "wyhash v3 - lower 32bit", GOOD }
