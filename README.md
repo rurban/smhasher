@@ -100,13 +100,13 @@ SMhasher
 | [clhash](doc/clhash)                  |      4070.68  |    81.56 | 373.09 (5) |1809 | machine-specific (x64 SSE4.2) |
 | [t1ha2_atonce](doc/t1ha2_atonce)      |      8459.94  |    46.74 | 315.28 (4) | 541 |                            |
 | [t1ha2_stream](doc/t1ha2_stream)      |      8884.03  |    91.16 | 414.67 (5) |1665 |                            |
-| [t1ha1_64le](doc/t1ha1_64le)          |     16255.08	|    27.63 |  | 517 |                            |
-| [t1ha1_64be](doc/t1ha1_64be)          |     12285.15	|    28.84 |  | 555 |                            |
-| [t1ha0_32le](doc/t1ha0_32le)          |      8866.04	|    36.95 |  | 509 |                            |
-| [t1ha0_32be](doc/t1ha0_32be)          |      7859.07	|    38.63 |  | 533 |                            |
-| [t1ha0_aes_noavx](doc/t1ha0_aes_noavx)|     21264.27	|    35.63 |  | 925 | machine-specific (x86 AES-NI) |
-| [t1ha0_aes_avx1](doc/t1ha0_aes_avx1)  |     20443.32	|    36.05 |  | 843 | machine-specific (x64 AVX)    |
-| [t1ha0_aes_avx2](doc/t1ha0_aes_avx2)  |     36436.51	|    36.31 |  | 792 | machine-specific (x64 AVX2)   |
+| [t1ha1_64le](doc/t1ha1_64le)          |      9526.17  |    37.65 | 313.70 (5)| 517 |                            |
+| [t1ha1_64be](doc/t1ha1_64be)          |      7240.97  |    39.77 | 318.98 (8)| 555 |                            |
+| [t1ha0_32le](doc/t1ha0_32le)          |      5074.19  |    53.07 | 318.20 (4)| 509 |                            |
+| [t1ha0_32be](doc/t1ha0_32be)          |      4359.59  |    53.20 | 322.56 (4)| 533 |                            |
+| [t1ha0_aes_noavx](doc/t1ha0_aes_noavx)|     20547.70  |    46.60 | 325.61 (7)| 925 | machine-specific (x86 AES-NI) |
+| [t1ha0_aes_avx1](doc/t1ha0_aes_avx1)  |     22278.29  |    46.58 | 319.81 (6)| 843 | machine-specific (x64 AVX)    |
+| [t1ha0_aes_avx2](doc/t1ha0_aes_avx2)  |     36436.51	|    36.31 | ?         | 792 | machine-specific (x64 AVX2)   |
 | [wyhash](doc/wyhash)                  |     12327.50  |    34.98 | 347.00 (5)  |2546 |                            |
 | [wyhash32low](doc/wyhash32low)        |     12295.53  |    35.01 | 447.85 (107)|2546 | Moment Chi2 4.2            |
 

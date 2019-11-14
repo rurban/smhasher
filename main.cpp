@@ -274,7 +274,7 @@ HashInfo g_hashes[] =
 #endif
   { t1ha2_atonce_test,           64, 0x8F16C948, "t1ha2_atonce",    "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
   { t1ha2_stream_test,           64, 0xDED9B580, "t1ha2_stream",    "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
-#if 0
+#if 1
   { t1ha1_64le_test,             64, 0xD6836381, "t1ha1_64le",      "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
   { t1ha1_64be_test,             64, 0x93F864DE, "t1ha1_64be",      "Fast Positive Hash (portable, aims 64-bit, big-engian)", GOOD },
   { t1ha0_32le_test,             64, 0x7F7D7B29, "t1ha0_32le",      "Fast Positive Hash (portable, aims 32-bit, little-endian)", GOOD },
@@ -284,8 +284,8 @@ HashInfo g_hashes[] =
 #  if defined(__AVX__)
   { t1ha0_ia32aes_avx1_test,     64, 0xF07C4DA5, "t1ha0_aes_avx1",  "Fast Positive Hash (machine-specific, requires AES-NI & AVX)", GOOD },
 #  endif /* __AVX__ */
-#  if defined(__AVX2__)
-  { t1ha0_ia32aes_avx2_test,     64, 0x8B38C599, "t1ha0_aes_avx2",  "Fast Positive Hash (machine-specific, requires AES-NI & AVX)", GOOD },
+#  ifndef __e2k__
+  { t1ha0_ia32aes_avx2_test,     64, 0x8B38C599, "t1ha0_aes_avx2",  "Fast Positive Hash (machine-specific, requires AES-NI & AVX2)", GOOD },
 #  endif /* __AVX2__ */
 # endif /* T1HA0_AESNI_AVAILABLE */
 #endif /* older t1ha */
