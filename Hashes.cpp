@@ -774,3 +774,12 @@ void mirhashstrict32low (const void * key, int len, uint32_t seed, void * out) {
   *(uint32_t*)out = 0xFFFFFFFF & mir_hash_strict(key, (uint64_t)len, (uint64_t)seed);
 }
 
+#include "seahash.h"
+
+void seahash_test (const void * key, int len, uint32_t seed, void * out) {
+  *(uint64_t*)out = seahash((const uint8_t*)key, (uint64_t)len, seed);
+}
+
+void seahash32low (const void * key, int len, uint32_t seed, void * out) {
+  *(uint32_t*)out = 0xFFFFFFFF & seahash((const uint8_t*)key, (uint64_t)len, seed);
+}

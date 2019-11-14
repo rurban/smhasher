@@ -389,3 +389,6 @@ void pair_multiply_shift (const void *key, int len, uint32_t seed, void *out);
 void HighwayHash_init();
   // objsize 20-a12: 2546
 void HighwayHash64_test (const void * key, int len, uint32_t seed, void * out);
+
+void seahash_test (const void * key, int len, uint32_t seed, void * out);
+void seahash32low (const void * key, int len, uint32_t seed, void * out);

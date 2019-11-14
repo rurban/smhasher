@@ -303,7 +303,9 @@ HashInfo g_hashes[] =
 #endif
 
   { wyhash_test,                 64, WYHASH_VERIF, "wyhash",          "wyhash v3 (portable, 64-bit, little-endian)", GOOD },
-  { wyhash32low,                 32, WYHASH32L_VERIF,"wyhash32low",   "wyhash v3 - lower 32bit", GOOD }
+  { wyhash32low,                 32, WYHASH32L_VERIF,"wyhash32low",   "wyhash v3 - lower 32bit", GOOD },
+  { seahash_test,                64, 0x5449DB26,   "seahash",            "seahash (portable, 64-bit, little-endian)", GOOD },
+  { seahash32low,                32, 0xFD867C5F,   "seahash32low",       "seahash - lower 32bit", GOOD },
 };
 
 HashInfo * findHash ( const char * name )
