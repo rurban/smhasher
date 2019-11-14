@@ -397,4 +397,7 @@ void tsip_init();
 void tsip_test (const void * key, int len, uint32_t seed, void * out);
 // objsize 0-207: 519
 extern "C" uint64_t tsip(const unsigned char *seed, const unsigned char *m, uint64_t len);
+
+void seahash_test (const void * key, int len, uint32_t seed, void * out);
+void seahash32low (const void * key, int len, uint32_t seed, void * out);
 #endif

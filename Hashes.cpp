@@ -790,4 +790,14 @@ void tsip_test(const void *bytes, int len, uint32_t seed, void *out)
   memcpy(&tsip_key[8], &seed, 4);
   *(uint64_t*)out = tsip(tsip_key, (const unsigned char*)bytes, (uint64_t)len);
 }
-#endif
+
+#include "seahash.h"
+void seahash_test (const void * key, int len, uint32_t seed, void * out) {
+  *(uint64_t*)out = seahash((const uint8_t*)key, (uint64_t)len, seed);
+}
+
+void seahash32low (const void * key, int len, uint32_t seed, void * out) {
+  *(uint32_t*)out = 0xFFFFFFFF & seahash((const uint8_t*)key, (uint64_t)len, seed);
+}
+
+#endif /* !MSVC */

@@ -203,6 +203,8 @@ HashInfo g_hashes[] =
 #endif
 #ifndef _MSC_VER
   { tsip_test,            64, 0x8E48155B, "TSip",        "Damian Gryski's Tiny SipHash variant", GOOD },
+  { seahash_test,         64, 0x5449DB26, "seahash",     "seahash (portable, 64-bit, little-endian)", GOOD },
+  { seahash32low,         32, 0xFD867C5F, "seahash32low","seahash - lower 32bit", GOOD },
 #endif
   { GoodOAAT,             32, 0x7B14EEE5, "GoodOAAT",    "Small non-multiplicative OAAT", GOOD },
   { PMurHash32_test,      32, 0xB0F57EE3, "PMurHash32",  "Shane Day's portable-ized MurmurHash3 for x86, 32-bit", GOOD },
