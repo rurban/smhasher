@@ -346,8 +346,9 @@ double HashMapSpeedTest ( pfHash pfhash, int hashbits,
   hashmap.clear();
 
   std::sort(times.begin(),times.end());
-  FilterOutliers(times);
+//  FilterOutliers(times);
   //hashmap.~unordered_map();
-  return CalcMean(times);
+ // return CalcMean(times);
+	return	times[times.size()/2];	//	median is robust, belive me, a statistician :-)
 }
 //-----------------------------------------------------------------------------
