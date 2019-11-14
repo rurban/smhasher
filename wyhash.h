@@ -25,6 +25,13 @@ static	inline	uint64_t	_wyr8(const	uint8_t	*p)	{	uint64_t v; memcpy(&v,  p,  8);
 static	inline	uint64_t	_wyr4(const	uint8_t	*p) {	uint32_t v;	memcpy(&v,	p,	4);	return	v;}
 static	inline	uint64_t	_wyr3(const	uint8_t	*p,	unsigned	k){	return	(((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];	}
 static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed) {
+#ifdef	WYHASH_EVIL_FAST
+	const   uint64_t    *q=(const   uint64_t*)key;
+	if(len<=8)	return	_wymum(len^_wyp4,_wymum((q[0]<<((8-(len&7))<<3))^seed^_wyp0,seed^_wyp1));	
+	if(len<=16)	return	_wymum(len^_wyp4,_wymum(q[0]^seed^_wyp0,(q[1]<<((8-(len&7))<<3))^seed^_wyp1));
+	if(len<=24)	return	_wymum(len^_wyp4,_wymum(q[0]^seed^_wyp0,q[1]^seed^_wyp1)^_wymum((q[2]<<((8-(len&7))<<3))^seed^_wyp2,seed^_wyp3));
+	if(len<=32)	return	_wymum(len^_wyp4,_wymum(q[0]^seed^_wyp0,q[1]^seed^_wyp1)^_wymum(q[2]^seed^_wyp2,(q[3]<<((8-(len&7))<<3))^seed^_wyp3));
+#endif
 	if(!len)	return	0;
 	const	uint8_t	*p=(const	uint8_t*)key;	uint64_t	see1=seed,	i=len;
 	for(;i>32;i-=32,p+=32){	seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1);	see1=_wymum(_wyr8(p+16)^see1^_wyp2,_wyr8(p+24)^see1^_wyp3);	}
