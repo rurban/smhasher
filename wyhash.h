@@ -28,11 +28,12 @@ static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed) {
 	if(!len)	return	0;
 	const	uint8_t	*p=(const	uint8_t*)key;	uint64_t	see1=seed,	i=len;
 	for(;i>32;i-=32,p+=32){	seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1);	see1=_wymum(_wyr8(p+16)^see1^_wyp2,_wyr8(p+24)^see1^_wyp3);	}
-	if(i<4)	return	_wymum(len^_wyp4,_wymum(_wyr3(p,i)^seed^_wyp0,seed^_wyp1));
-	if(i<=8)	return	_wymum(len^_wyp4,_wymum(_wyr4(p)^seed^_wyp0,_wyr4(p+i-4)^seed^_wyp1));
-	if(i<=16)	return	_wymum(len^_wyp4,_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+i-8)^seed^_wyp1));
-	if(i<=24)	return	_wymum(len^_wyp4,_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1)^_wymum(_wyr8(p+i-8)^see1^_wyp2,see1^_wyp3));
-	return	_wymum(len^_wyp4,_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1)^_wymum(_wyr8(p+16)^see1^_wyp2,_wyr8(p+i-8)^see1^_wyp3));
+	if(i<4)	seed=_wymum(_wyr3(p,i)^seed^_wyp0,seed^_wyp1);
+	else	if(i<=8)	seed=_wymum(_wyr4(p)^seed^_wyp0,_wyr4(p+i-4)^seed^_wyp1);
+	else	if(i<=16)	seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+i-8)^seed^_wyp1);
+	else	if(i<=24){	seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1);	see1=_wymum(_wyr8(p+i-8)^see1^_wyp2,see1^_wyp3);	}
+	else{	seed=_wymum(_wyr8(p)^seed^_wyp0,_wyr8(p+8)^seed^_wyp1);	see1=_wymum(_wyr8(p+16)^see1^_wyp2,_wyr8(p+i-8)^see1^_wyp3);	}
+	return	_wymum(seed^see1,len^_wyp4);
 }
 static	inline	uint64_t	wyhash64(uint64_t	A, uint64_t	B) {	return	_wymum(_wymum(A^_wyp0,	B^_wyp1),	_wyp2);}
 static	inline	double	wy2u01(uint64_t	r) {	const	double	_wynorm=1.0/(1ull<<52);	return	(r&0x000fffffffffffffull)*_wynorm;}
