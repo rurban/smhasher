@@ -9,10 +9,8 @@
 
 #include <unordered_map>
 #include <functional>
-#include "flat_hash_map/bytell_hash_map.hpp"
 
-//typedef std::unordered_map<std::string, int,
-typedef ska::bytell_hash_map<std::string, int,
+typedef std::unordered_map<std::string, int,
   std::function<size_t (const std::string &key)>> string_hashmap;
 
 //-----------------------------------------------------------------------------
