@@ -73,6 +73,10 @@ SMhasher
 | [fasthash64](doc/fasthash64)          |      4621.33  |    47.89 | 509 | Moment Chi2 5159 !         |
 | [MUM](doc/MUM)                        |      6902.42  |    40.16 |1912 | machine-specific (32/64 differs) |
 | [MUMlow](doc/MUMlow)                  |      6840.70  |    46.22 |1912 |                            |
+| [mirhash](doc/mirhash)                |      5310.60	|    43.51 |1112 | machine-specific (32/64 differs) |
+| [mirhash32low](doc/mirhash32low)      |      5337.43	|    42.95 |1112 | machine-specific (32/64 differs) |
+| [mirhashstrict](doc/mirhashstrict)    |      2006.89	|    71.61 |1112 |                            |
+| [mirhashstrict32low](doc/mirhashstrict32low)|2016.85	|    70.89 |1112 |                            |
 | [City32](doc/City32)                  |      3800.14  |    53.12 |1319 |                            |
 | [City64low](doc/City64low)            |      9104.84  |    62.12 |1120 |                            |
 | [City64high](doc/City64high)          |     14340.83  |    45.69 |1120 |                            |

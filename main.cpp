@@ -218,6 +218,18 @@ HashInfo g_hashes[] =
 #endif
   { mum_hash_test,        64, MUM_VERIF,  "MUM",         "github.com/vnmakarov/mum-hash", GOOD },
   { mum_low_test,         32, MUMLOW_VERIF,"MUMlow",     "github.com/vnmakarov/mum-hash", GOOD },
+#if defined(__GNUC__) && UINT_MAX != ULONG_MAX
+ #define MIR_VERIF            0x00A393C8
+ #define MIRLOW_VERIF         0xE320CE68
+#else
+ #define MIR_VERIF            0x422A66FC
+ #define MIRLOW_VERIF         0xD50D1F09
+#endif
+  // improved MUM:
+  { mirhash_test,         64, MIR_VERIF,    "mirhash",            "mirhash", GOOD },
+  { mirhash32low,         32, MIRLOW_VERIF, "mirhash32low",       "mirhash - lower 32bit", GOOD },
+  { mirhashstrict_test,   64, 0x422A66FC,   "mirhashstrict",      "mirhashstrict (portable, 64-bit, little-endian)", GOOD },
+  { mirhashstrict32low,   32, 0xD50D1F09,   "mirhashstrict32low", "mirhashstrict - lower 32bit", GOOD },
 
   { CityHash32_test,      32, 0x5C28AD62, "City32",      "Google CityHash32WithSeed (old)", GOOD },
   { CityHash64_low_test,  32, 0xCC5BC861, "City64low",   "Google CityHash64WithSeed (low 32-bits)", GOOD },
@@ -291,18 +303,7 @@ HashInfo g_hashes[] =
 #endif
 
   { wyhash_test,                 64, WYHASH_VERIF, "wyhash",          "wyhash v3 (portable, 64-bit, little-endian)", GOOD },
-  { wyhash32low,                 32, WYHASH32L_VERIF,"wyhash32low",   "wyhash v3 - lower 32bit", GOOD },
-#if defined(__GNUC__) && UINT_MAX != ULONG_MAX
- #define MIR_VERIF            0x00A393C8
- #define MIRLOW_VERIF         0xE320CE68
-#else
- #define MIR_VERIF            0x422A66FC
- #define MIRLOW_VERIF         0xD50D1F09
-#endif
-  { mirhash_test,                64, MIR_VERIF,    "mirhash",            "mirhash", GOOD },
-  { mirhash32low,                32, MIRLOW_VERIF, "mirhash32low",       "mirhash - lower 32bit", GOOD },
-  { mirhashstrict_test,          64, 0x422A66FC,   "mirhashstrict",      "mirhashstrict (portable, 64-bit, little-endian)", GOOD },
-  { mirhashstrict32low,          32, 0xD50D1F09,   "mirhashstrict32low", "mirhashstrict - lower 32bit", GOOD }
+  { wyhash32low,                 32, WYHASH32L_VERIF,"wyhash32low",   "wyhash v3 - lower 32bit", GOOD }
 };
 
 HashInfo * findHash ( const char * name )
