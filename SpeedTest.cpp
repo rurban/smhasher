@@ -9,8 +9,10 @@
 
 #include <unordered_map>
 #include <functional>
+#include "flat_hash_map/bytell_hash_map.hpp"
 
-typedef std::unordered_map<std::string, int,
+//typedef std::unordered_map<std::string, int,
+typedef ska::bytell_hash_map<std::string, int,
   std::function<size_t (const std::string &key)>> string_hashmap;
 
 //-----------------------------------------------------------------------------
@@ -317,10 +319,10 @@ double HashMapSpeedTest ( pfHash pfhash, int hashbits,
     int i = 0;
     begin = rdtsc();
     for (it = words.begin(); it != words.end(); it++, i++) {
-      std::string line = *it;
-      hashmap[line] = 1;
+  //    std::string line = *it;
+      hashmap[*it] = 1;
       if (i % 100 == 0)
-        hashmap.erase(line);
+        hashmap.erase(*it);
     }
     end = rdtsc();
     t1 = (double)(end - begin) / (double)words.size();
@@ -335,8 +337,8 @@ double HashMapSpeedTest ( pfHash pfhash, int hashbits,
       begin = rdtsc();
       for ( it = words.begin(); it != words.end(); it++, i++ )
         {
-          std::string line = *it;
-          if (hashmap[line])
+         // std::string line = *it;
+          if (hashmap[*it])
             found++;
         }
       end = rdtsc();
@@ -350,5 +352,4 @@ double HashMapSpeedTest ( pfHash pfhash, int hashbits,
   //hashmap.~unordered_map();
   return CalcMean(times);
 }
-
 //-----------------------------------------------------------------------------
