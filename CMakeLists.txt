@@ -182,7 +182,7 @@ IF(SSE4_2_FOUND)
   set(SSE2_SRC        hasshe2.c)
   set(SSE4_SRC        crc32_hw.c)
   # 64bit only:
-  IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
+  IF((CMAKE_SIZEOF_VOID_P EQUAL 8) AND (NOT MSVC))
     #enable_language(ASM-NASM)
     #set(CMAKE_ASM_FLAGS "-f elf64") # or macho64/win64
     set(X86_64ONLY_SRC farmhash-c.c farmhash-c-test.cc metrohash64crc.cpp
@@ -200,23 +200,25 @@ ENDIF(SSE4_2_FOUND)
 
 IF(AES_FOUND)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_AESNI")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_AESNI")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_AESNI") 
   set(T1HA_SRC
-    t1ha/t1ha0.c t1ha/t1ha1.c t1ha/t1ha2.c
-    t1ha/t1ha0_ia32aes_noavx.c t1ha/t1ha0_ia32aes_avx.c
-    t1ha/t1ha0_ia32aes_avx2.c)
+      t1ha/t1ha0.c t1ha/t1ha1.c t1ha/t1ha2.c
+      t1ha/t1ha0_ia32aes_noavx.c t1ha/t1ha0_ia32aes_avx.c t1ha/t1ha0_ia32aes_avx2.c)
+  if(MSVC)
+    #ignoring unknown option '/arch:ia32'
+    #set_source_files_properties(t1ha/t1ha0_ia32aes_noavx.c PROPERTIES COMPILE_FLAGS "/arch:ia32")
+    set_source_files_properties(t1ha/t1ha0_ia32aes_avx.c PROPERTIES COMPILE_FLAGS "/arch:avx")
+    set_source_files_properties(t1ha/t1ha0_ia32aes_avx2.c PROPERTIES COMPILE_FLAGS "/arch:avx2")
+  else()
+    set_source_files_properties(t1ha/t1ha0_ia32aes_noavx.c PROPERTIES COMPILE_FLAGS "-mno-avx2 -mno-avx -maes")
+    set_source_files_properties(t1ha/t1ha0_ia32aes_avx.c PROPERTIES COMPILE_FLAGS "-mno-avx2 -mavx -maes")
+    set_source_files_properties(t1ha/t1ha0_ia32aes_avx2.c PROPERTIES COMPILE_FLAGS "-mavx -mavx2 -maes")
+  endif()
 ELSE()
   set(T1HA_SRC t1ha/t1ha0.c t1ha/t1ha1.c t1ha/t1ha2.c)
 ENDIF()
-if(MSVC)
-  set_source_files_properties(t1ha/t1ha0_ia32aes_noavx.c PROPERTIES COMPILE_FLAGS "/arch:ia32")
-  set_source_files_properties(t1ha/t1ha0_ia32aes_avx.c PROPERTIES COMPILE_FLAGS "/arch:avx")
-  set_source_files_properties(t1ha/t1ha0_ia32aes_avx2.c PROPERTIES COMPILE_FLAGS "/arch:avx2")
-else()
-  set_source_files_properties(t1ha/t1ha0_ia32aes_noavx.c PROPERTIES COMPILE_FLAGS "-mno-avx2 -mno-avx -maes")
-  set_source_files_properties(t1ha/t1ha0_ia32aes_avx.c PROPERTIES COMPILE_FLAGS "-mno-avx2 -mavx -maes")
-  set_source_files_properties(t1ha/t1ha0_ia32aes_avx2.c PROPERTIES COMPILE_FLAGS "-mavx -mavx2 -maes")
 
+if(NOT MSVC)
   set_source_files_properties(HashMapTest.cpp PROPERTIES COMPILE_FLAGS "-std=c++11")
   set_source_files_properties(SpeedTest.cpp PROPERTIES COMPILE_FLAGS "-std=c++0x")
   set_source_files_properties(main.cpp PROPERTIES COMPILE_FLAGS "-std=c++0x")

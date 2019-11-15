@@ -38,8 +38,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#ifndef _MSC_VER
 #include <unistd.h>
 #include <pthread.h>
+#endif
 
 /* CRC-32C (iSCSI) polynomial in reversed bit order. */
 #define POLY 0x82f63b78

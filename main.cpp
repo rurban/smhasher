@@ -280,11 +280,13 @@ HashInfo g_hashes[] =
   { t1ha0_32le_test,             64, 0x7F7D7B29, "t1ha0_32le",      "Fast Positive Hash (portable, aims 32-bit, little-endian)", GOOD },
   { t1ha0_32be_test,             64, 0xDA6A4061, "t1ha0_32be",      "Fast Positive Hash (portable, aims 32-bit, big-endian)", GOOD },
 # if T1HA0_AESNI_AVAILABLE
+#  ifndef _MSC_VER
   { t1ha0_ia32aes_noavx_test,    64, 0xF07C4DA5, "t1ha0_aes_noavx", "Fast Positive Hash (machine-specific, requires AES-NI)", GOOD },
+#  endif
 #  if defined(__AVX__)
   { t1ha0_ia32aes_avx1_test,     64, 0xF07C4DA5, "t1ha0_aes_avx1",  "Fast Positive Hash (machine-specific, requires AES-NI & AVX)", GOOD },
 #  endif /* __AVX__ */
-#  ifndef __e2k__
+#  if defined(__AVX2__)
   { t1ha0_ia32aes_avx2_test,     64, 0x8B38C599, "t1ha0_aes_avx2",  "Fast Positive Hash (machine-specific, requires AES-NI & AVX2)", GOOD },
 #  endif /* __AVX2__ */
 # endif /* T1HA0_AESNI_AVAILABLE */

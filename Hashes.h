@@ -340,25 +340,27 @@ inline void t1ha0_32be_test(const void * key, int len, uint32_t seed, void * out
 }
 
 #if T1HA0_AESNI_AVAILABLE
+#ifndef _MSC_VER
 inline void t1ha0_ia32aes_noavx_test(const void * key, int len, uint32_t seed, void * out)
 {
   // objsize 0-39d: 925
   *(uint64_t*)out = t1ha0_ia32aes_noavx(key, len, seed);
 }
+#endif
 #if defined(__AVX__)
 inline void t1ha0_ia32aes_avx1_test(const void * key, int len, uint32_t seed, void * out)
 {
   // objsize 0-34b: 843
   *(uint64_t*)out = t1ha0_ia32aes_avx(key, len, seed);
 }
-#ifndef __e2k__
+#endif /* __AVX__ */
+#if defined(__AVX2__)
 inline void t1ha0_ia32aes_avx2_test(const void * key, int len, uint32_t seed, void * out)
 {
   // objsize 0-318: 792
   *(uint64_t*)out = t1ha0_ia32aes_avx2(key, len, seed);
 }
 #endif /* __AVX2__ */
-#endif /* __AVX__ */
 #endif /* T1HA0_AESNI_AVAILABLE */
 
 //https://github.com/wangyi-fudan/wyhash
