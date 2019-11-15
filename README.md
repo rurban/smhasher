@@ -66,7 +66,9 @@ SMhasher
 | [SipHash](doc/SipHash)                |       953.74  |   142.65 | 406.63 (3)|1071 |                            |
 | [HighwayHash64](doc/HighwayHash64)    |      6194.33  |    99.06 | 397.56 (6)|2546 |                            |
 | [GoodOAAT](doc/GoodOAAT)              |      1049.83  |    71.56 | 324.00 (4)| 237 |                            |
-| [TSip](doc/TSip)                      |      3284.28  |    61.10 | 347.05 (9)| 519 |                            |
+| [TSip](doc/TSip)                      |      3284.28  |    61.10 | 347.05 (9)| 519 | !msvc                      |
+| [seahash](doc/seahash)                |      4236.59  |    64.37 | 336.60 (5)| 871 | !msvc                      |
+| [seahash32low](doc/seahash32low)      |      4234.97  |    64.37 | 415.25 (74)|871 | !msvc                      |
 | [PMurHash32](doc/PMurHash32)          |      2329.73  |    57.27 | 342.57 (4)|1862 | Moment Chi2 69             |
 | [Murmur3A](doc/Murmur3A)              |      2402.80  |    50.29 | 327.60 (5)| 351 | Moment Chi2 69             |
 | [Murmur3F](doc/Murmur3F)              |      5179.38  |    49.98 | 357.37 (5)| 699 |                            |

@@ -56,6 +56,7 @@ uint64_t seahash(const void *key, int len, uint64_t seed) {
   }
 
   switch (len) {
+    // illegal msvc 15 syntax
     case 25 ... 31:
       a ^= *p++;
       b ^= *p++;
