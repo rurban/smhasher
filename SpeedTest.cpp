@@ -211,12 +211,10 @@ NEVER_INLINE int64_t timehash_small ( pfHash hash, const void * key, int len, in
 double SpeedTest ( pfHash hash, uint32_t seed, const int trials, const int blocksize, const int align )
 {
   Rand r(seed);
-  
   uint8_t * buf = new uint8_t[blocksize + 512];
-
   uint64_t t1 = reinterpret_cast<uint64_t>(buf);
   
-  t1 = (t1 + 255) & BIG_CONSTANT(0xFFFFFFFFFFFFFF00);
+  t1 = (t1 + 255) & UINT64_C(0xFFFFFFFFFFFFFF00);
   t1 += align;
   
   uint8_t * block = reinterpret_cast<uint8_t*>(t1);

@@ -13,17 +13,17 @@ SMhasher
 | [multiply_shift](doc/multiply_shift)  |      4818.75  |    45.99 | skipped  | 345 | fails all tests              |
 | [pair_multiply_shift](doc/pair_multiply_shift)| 13635.23|  32.96 | skipped  | 609 | fails all tests              |
 | --------------------------            |               |          |          |     |                                |
-| [crc32](doc/crc32)                    |       392.06  |   129.92 | 342.08 (15)| 422 | insecure, 8589.93x collisions, distrib  |
-| [md5_32a](doc/md5_32a)                |       352.19  |   668.69 |1053.14 (149)|4419 | 8589.93x collisions, distrib   |
-| [sha1_32a](doc/sha1_32a)              |       364.78  |  1514.25 |1967.21 (14)|5126 | collisions, 36.6% distrib      |
-| [hasshe2](doc/hasshe2)                |      2325.03  |    77.15 | 349.99 (6)| 445 | insecure, fails all tests      |
+| [crc32](doc/crc32)                    |       392.06  |   129.92 | 342.08 (15)| 422 | insecure, 8590x collisions, distrib |
+| [md5_32a](doc/md5_32a)                |       352.19  |   668.69 |1053.14 (149)|4419 | 8590x collisions, distrib |
+| [sha1_32a](doc/sha1_32a)              |       364.78  |  1514.25 |1967.21 (14)|5126 | collisions, 36.6% distrib   |
+| [hasshe2](doc/hasshe2)                |      2325.03  |    77.15 | 349.99 (6)| 445 | insecure, fails all tests    |
 | [crc32_hw](doc/crc32_hw)              |      6216.21  |    30.45 | 308.09 (5)| 653 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
 | [crc32_hw1](doc/crc32_hw1)            |     22324.27  |    36.62 | 324.70 (5)| 671 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
 | [crc64_hw](doc/crc64_hw)              |      8282.08  |    30.02 | 293.76 (5)| 652 | insecure, 100% bias, collisions, distrib, machine-specific (x86_64 SSE4.2) |
-| [fibonacci](doc/fibonacci)            |      9292.44  |    33.24 | 1377.87 (6) |1692 | zeros, fails all tests       |
+| [fibonacci](doc/fibonacci)            |      9292.44  |    33.24 | 1377.87 (6) |1692 | zeros, fails all tests     |
 | [FNV1a](doc/FNV1a)                    |        774.91 |    70.52 | 316.55 (4)| 204 | zeros, fails all tests       |
 | [FNV1A_Totenschiff](doc/FNV1A_Totenschiff)|   6142.04 |    36.84 | 326.69 (7)| 270 | zeros, fails all tests       |
-| [FNV1A_Pippip_Yurii](doc/FNV1A_Pippip_Yurii)| 6260.14 |    36.87 | 316.83 (6)| 147 | sanity, fails all tests       |
+| [FNV1A_Pippip_Yurii](doc/FNV1A_Pippip_Yurii)| 6260.14 |    36.87 | 316.83 (6)| 147 | sanity, fails all tests      |
 | [FNV1a_YT](doc/FNV1a_YT)              |       8783.51 |    28.35 | 306.86 (3)| 321 | fails all tests              |
 | [FNV2](doc/FNV2)                      |       6143.11 |    38.91 | 314.15 (4)| 278 | fails all tests              |
 | [FNV64](doc/FNV64)                    |        774.56 |    70.52 | 301.66 (4)|  79 | fails all tests              |
@@ -36,7 +36,7 @@ SMhasher
 | [JenkinsOOAT_pl](doc/JenkinsOOAT_perl)|        442.05 |   120.53 | 336.30 (4)|  65 | 1.5-11.5% bias, 7.2x collisions  |
 | [MicroOAAT](doc/MicroOAAT)            |        960.78 |    60.71 | 319.82 (4)|  68 | 100% bias, distrib           |
 | [jodyhash32](doc/jodyhash32)          |       1400.31 |    44.98 | 333.17 (4)| 102 | bias, collisions, distr      |
-| [jodyhash64](doc/jodyhash64)          |       2794.20 |    40.30 | 311.01 (13) | 118 | bias, collisions, distr      |
+| [jodyhash64](doc/jodyhash64)          |       2794.20 |    40.30 | 311.01 (13) | 118 | bias, collisions, distr    |
 | [lookup3](doc/lookup3)                |       1718.05 |    47.46 | 314.46 (4)| 341 | 28% bias, collisions, 30% distr  |
 | [superfast](doc/superfast)            |       1549.70 |    58.59 | 325.88 (4)| 210 | 91% bias, 5273.01x collisions, 37% distr |
 | [MurmurOAAT](doc/MurmurOAAT)          |        445.94 |   114.28 | 336.35 (4)|  47 | collisions, 99.998% distr          |

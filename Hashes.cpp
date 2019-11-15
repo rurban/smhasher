@@ -57,7 +57,7 @@ sumhash32(const void *key, int len, uint32_t seed, void *out)
     uint8_t *dc = (uint8_t*)data; //byte stepper
     const uint8_t *const endc = &((const uint8_t*)key)[len];
     while (dc < endc) {
-      h += *dc++ * BIG_CONSTANT(11400714819323198485);
+      h += *dc++ * UINT64_C(11400714819323198485);
     }
   }
 
@@ -119,13 +119,13 @@ fibonacci(const void *key, int len, uint32_t seed, void *out)
   size_t *dw = (size_t *)key; //word stepper
   const size_t *const endw = &((const size_t*)key)[len/sizeof(size_t)];
   while (dw < endw) {
-    h += *dw++ * BIG_CONSTANT(11400714819323198485);
+    h += *dw++ * UINT64_C(11400714819323198485);
   }
   if (len & (sizeof(size_t)-1)) {
     uint8_t *dc = (uint8_t*)dw; //byte stepper
     const uint8_t *const endc = &((const uint8_t*)key)[len];
     while (dc < endc) {
-      h += *dc++ * BIG_CONSTANT(11400714819323198485);
+      h += *dc++ * UINT64_C(11400714819323198485);
     }
   }
   *(size_t *) out = h;
@@ -139,16 +139,16 @@ FNV2(const void *key, int len, uint32_t seed, void *out)
   size_t *dw = (size_t *)key; //word stepper
   const size_t *const endw = &((const size_t*)key)[len/sizeof(size_t)];
 #ifdef HAVE_BIT32
-  h ^= BIG_CONSTANT(2166136261);
+  h ^= UINT32_C(2166136261);
 #else
-  h ^= BIG_CONSTANT(0xcbf29ce484222325);
+  h ^= UINT64_C(0xcbf29ce484222325);
 #endif
   while (dw < endw) {
     h ^= *dw++;
 #ifdef HAVE_BIT32
-    h *= BIG_CONSTANT(16777619);
+    h *= UINT32_C(16777619);
 #else
-    h *= BIG_CONSTANT(0x100000001b3);
+    h *= UINT64_C(0x100000001b3);
 #endif
   }
   if (len & (sizeof(size_t)-1)) {
@@ -157,9 +157,9 @@ FNV2(const void *key, int len, uint32_t seed, void *out)
     while (dc < endc) {
       h ^= *dc++;
 #ifdef HAVE_BIT32
-      h *= BIG_CONSTANT(16777619);
+      h *= UINT32_C(16777619);
 #else
-      h *= BIG_CONSTANT(0x100000001b3);
+      h *= UINT64_C(0x100000001b3);
 #endif
     }
   }
@@ -174,7 +174,7 @@ FNV32a(const void *key, int len, uint32_t seed, void *out)
   unsigned int	  h = seed;
   const uint8_t  *data = (const uint8_t *)key;
 
-  h ^= BIG_CONSTANT(2166136261);
+  h ^= UINT32_C(2166136261);
 
   for (int i = 0; i < len; i++) {
     h ^= data[i];
@@ -190,9 +190,9 @@ FNV32a_YoshimitsuTRIAD(const void *key, int len, uint32_t seed, void *out)
 {
   const uint8_t  *p = (const uint8_t *)key;
   const uint32_t  PRIME = 709607;
-  uint32_t	  hash32A = seed ^ BIG_CONSTANT(2166136261);
-  uint32_t	  hash32B = BIG_CONSTANT(2166136261) + len;
-  uint32_t	  hash32C = BIG_CONSTANT(2166136261);
+  uint32_t	  hash32A = seed ^ UINT32_C(2166136261);
+  uint32_t	  hash32B = UINT32_C(2166136261) + len;
+  uint32_t	  hash32C = UINT32_C(2166136261);
 
   for (; len >= 3 * 2 * sizeof(uint32_t); len -= 3 * 2 * sizeof(uint32_t), p += 3 * 2 * sizeof(uint32_t)) {
     hash32A = (hash32A ^ (ROTL32(*(uint32_t *) (p + 0), 5)  ^ *(uint32_t *) (p + 4)))  * PRIME;
@@ -241,7 +241,7 @@ void FNV1A_Totenschiff(const void *key, int len, uint32_t seed, void *out)
   const char *p = (char *)key;
   const uint32_t PRIME = 591798841;
   uint32_t hash32;
-  uint64_t hash64 = (uint64_t)seed ^ BIG_CONSTANT(14695981039346656037);
+  uint64_t hash64 = (uint64_t)seed ^ UINT64_C(14695981039346656037);
   uint64_t PADDEDby8;
 
   for (; len > 8; len -= 8, p += 8) {
@@ -268,7 +268,7 @@ void FNV1A_Pippip_Yurii(const void *key, int wrdlen, uint32_t seed, void *out)
   const char *str = (char *)key;
   const uint32_t PRIME = 591798841;
   uint32_t hash32;
-  uint64_t hash64 = (uint64_t)seed ^ BIG_CONSTANT(14695981039346656037);
+  uint64_t hash64 = (uint64_t)seed ^ UINT64_C(14695981039346656037);
   size_t Cycles, NDhead;
   if (wrdlen > 8) {
     Cycles = ((wrdlen - 1) >> 4) + 1;
@@ -295,10 +295,10 @@ FNV64a(const void *key, int len, uint32_t seed, void *out)
   uint8_t  *data = (uint8_t *)key;
   const uint8_t *const end = &data[len];
 
-  h ^= BIG_CONSTANT(0xcbf29ce484222325);
+  h ^= UINT64_C(0xcbf29ce484222325);
   while (data < end) {
     h ^= *data++;
-    h *= BIG_CONSTANT(0x100000001b3);
+    h *= UINT64_C(0x100000001b3);
   }
 
   *(uint64_t *) out = h;

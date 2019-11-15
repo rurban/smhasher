@@ -88,12 +88,6 @@ inline uint64_t rotr64 ( uint64_t x, int8_t r )
 #define	ROTR32(x,y)	rotr32(x,y)
 #define ROTR64(x,y)	rotr64(x,y)
 
-#if __WORDSIZE == 64
-#define BIG_CONSTANT(x) (x##UL)
-#else
-#define BIG_CONSTANT(x) (x##ULL)
-#endif
-
 __inline__ unsigned long long int rdtsc()
 {
 #ifdef __x86_64__
