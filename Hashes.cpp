@@ -774,6 +774,8 @@ void mirhashstrict32low (const void * key, int len, uint32_t seed, void * out) {
   *(uint32_t*)out = 0xFFFFFFFF & mir_hash_strict(key, (uint64_t)len, (uint64_t)seed);
 }
 
+//TODO MSVC
+#ifndef _MSC_VER
 static uint8_t tsip_key[16];
 void tsip_init()
 {
@@ -788,3 +790,4 @@ void tsip_test(const void *bytes, int len, uint32_t seed, void *out)
   memcpy(&tsip_key[8], &seed, 4);
   *(uint64_t*)out = tsip(tsip_key, (const unsigned char*)bytes, (uint64_t)len);
 }
+#endif

@@ -222,6 +222,8 @@ if(NOT MSVC)
   set_source_files_properties(HashMapTest.cpp PROPERTIES COMPILE_FLAGS "-std=c++11")
   set_source_files_properties(SpeedTest.cpp PROPERTIES COMPILE_FLAGS "-std=c++0x")
   set_source_files_properties(main.cpp PROPERTIES COMPILE_FLAGS "-std=c++0x")
+  # https://github.com/dgryski/trifles/tree/master/tsip
+  set(TSIP_SRC tsip.c)
 endif()
 
 find_library(HIGHWAY highwayhash)
@@ -286,8 +288,7 @@ add_library(
   mum.cc
   jody_hash32.c
   jody_hash64.c
-  # https://github.com/dgryski/trifles/tree/master/tsip
-  tsip.c
+  ${TSIP_SRC}
   # ${BEAGLE_SRC}
   ${X86_64ONLY_SRC}
 )

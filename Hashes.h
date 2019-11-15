@@ -391,7 +391,10 @@ void HighwayHash_init();
 // objsize 20-a12: 2546
 void HighwayHash64_test (const void * key, int len, uint32_t seed, void * out);
 
+//TODO MSVC
+#ifndef _MSC_VER
 void tsip_init();
 void tsip_test (const void * key, int len, uint32_t seed, void * out);
 // objsize 0-207: 519
 extern "C" uint64_t tsip(const unsigned char *seed, const unsigned char *m, uint64_t len);
+#endif
