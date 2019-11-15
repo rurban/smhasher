@@ -203,8 +203,10 @@ HashInfo g_hashes[] =
 #endif
 #ifndef _MSC_VER
   { tsip_test,            64, 0x8E48155B, "TSip",        "Damian Gryski's Tiny SipHash variant", GOOD },
+#ifdef HAVE_INT64
   { seahash_test,         64, 0x5449DB26, "seahash",     "seahash (portable, 64-bit, little-endian)", GOOD },
   { seahash32low,         32, 0xFD867C5F, "seahash32low","seahash - lower 32bit", GOOD },
+#endif
 #endif
   { GoodOAAT,             32, 0x7B14EEE5, "GoodOAAT",    "Small non-multiplicative OAAT", GOOD },
   { PMurHash32_test,      32, 0xB0F57EE3, "PMurHash32",  "Shane Day's portable-ized MurmurHash3 for x86, 32-bit", GOOD },
@@ -230,12 +232,13 @@ HashInfo g_hashes[] =
  #define MIR_VERIF            0x422A66FC
  #define MIRLOW_VERIF         0xD50D1F09
 #endif
+#ifdef HAVE_INT64
   // improved MUM:
   { mirhash_test,         64, MIR_VERIF,    "mirhash",            "mirhash", GOOD },
   { mirhash32low,         32, MIRLOW_VERIF, "mirhash32low",       "mirhash - lower 32bit", GOOD },
   { mirhashstrict_test,   64, 0x422A66FC,   "mirhashstrict",      "mirhashstrict (portable, 64-bit, little-endian)", GOOD },
   { mirhashstrict32low,   32, 0xD50D1F09,   "mirhashstrict32low", "mirhashstrict - lower 32bit", GOOD },
-
+#endif
   { CityHash32_test,      32, 0x5C28AD62, "City32",      "Google CityHash32WithSeed (old)", GOOD },
   { CityHash64_low_test,  32, 0xCC5BC861, "City64low",   "Google CityHash64WithSeed (low 32-bits)", GOOD },
 #if defined(__SSE4_2__) && defined(__x86_64__)
@@ -296,6 +299,8 @@ HashInfo g_hashes[] =
 #  endif /* __AVX2__ */
 # endif /* T1HA0_AESNI_AVAILABLE */
 #endif /* older t1ha */
+
+#ifdef HAVE_INT64
 #ifdef WYHASH_UNSAFE
 # if defined(_MSC_VER) && defined(HAVE_BIT32)
 #  define WYHASH_VERIF    0x5F19A75D
@@ -308,9 +313,10 @@ HashInfo g_hashes[] =
 # define WYHASH_VERIF     0xBB297DC4
 # define WYHASH32L_VERIF  0x640C4656
 #endif
-
   { wyhash_test,                 64, WYHASH_VERIF, "wyhash",          "wyhash v3 (portable, 64-bit, little-endian)", GOOD },
   { wyhash32low,                 32, WYHASH32L_VERIF,"wyhash32low",   "wyhash v3 - lower 32bit", GOOD }
+#endif
+
 };
 
 HashInfo * findHash ( const char * name )

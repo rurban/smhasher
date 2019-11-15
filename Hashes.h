@@ -363,21 +363,6 @@ inline void t1ha0_ia32aes_avx2_test(const void * key, int len, uint32_t seed, vo
 #endif /* __AVX2__ */
 #endif /* T1HA0_AESNI_AVAILABLE */
 
-//https://github.com/wangyi-fudan/wyhash
-#include "wyhash.h"
-
-// objsize 20-a12: 2546
-void wyhash_test (const void * key, int len, uint32_t seed, void * out);
-void wyhash32low (const void * key, int len, uint32_t seed, void * out);
-
-//https://github.com/vnmakarov/mir/blob/master/mir-hash.h
-#include "mir-hash.h"
-
-void mirhash_test (const void * key, int len, uint32_t seed, void * out);
-void mirhash32low (const void * key, int len, uint32_t seed, void * out);
-void mirhashstrict_test (const void * key, int len, uint32_t seed, void * out);
-void mirhashstrict32low (const void * key, int len, uint32_t seed, void * out);
-
 #if defined(__SSE4_2__) && defined(__x86_64__)
 #include "clhash.h"
 void clhash_init();
@@ -391,6 +376,20 @@ void HighwayHash_init();
 // objsize 20-a12: 2546
 void HighwayHash64_test (const void * key, int len, uint32_t seed, void * out);
 
+#ifdef HAVE_INT64
+//https://github.com/wangyi-fudan/wyhash
+#include "wyhash.h"
+// objsize 20-a12: 2546
+void wyhash_test (const void * key, int len, uint32_t seed, void * out);
+void wyhash32low (const void * key, int len, uint32_t seed, void * out);
+
+//https://github.com/vnmakarov/mir/blob/master/mir-hash.h
+#include "mir-hash.h"
+void mirhash_test (const void * key, int len, uint32_t seed, void * out);
+void mirhash32low (const void * key, int len, uint32_t seed, void * out);
+void mirhashstrict_test (const void * key, int len, uint32_t seed, void * out);
+void mirhashstrict32low (const void * key, int len, uint32_t seed, void * out);
+
 //TODO MSVC
 #ifndef _MSC_VER
 void tsip_init();
@@ -401,3 +400,4 @@ extern "C" uint64_t tsip(const unsigned char *seed, const unsigned char *m, uint
 void seahash_test (const void * key, int len, uint32_t seed, void * out);
 void seahash32low (const void * key, int len, uint32_t seed, void * out);
 #endif
+#endif /* HAVE_INT64 */
