@@ -39,8 +39,7 @@ void SetAffinity ( int cpu );
 #pragma warning(disable : 4100)
 #pragma warning(disable : 4702)
 
-#define BIG_CONSTANT(x) (x)
-
+#pragma intrinsic(__rdtsc)
 // Read Time Stamp Counter
 #define rdtsc() __rdtsc()
 
@@ -88,16 +87,22 @@ inline uint64_t rotr64 ( uint64_t x, int8_t r )
 #define	ROTR32(x,y)	rotr32(x,y)
 #define ROTR64(x,y)	rotr64(x,y)
 
-__inline__ unsigned long long int rdtsc()
+__inline__ uint64_t rdtsc()
 {
-#ifdef __x86_64__
-    unsigned int a, d;
+#ifdef _MSC_VER
+    return __rdtsc();
+#elif defined (__i386__) || defined (__x86_64__)
+    return __builtin_ia32_rdtsc();
+    /*
+#elif defined __x86_64__
+    uint32_t a, d;
     __asm__ volatile ("rdtsc" : "=a" (a), "=d" (d));
-    return (unsigned long)a | ((unsigned long)d << 32);
+    return a | (d << 32);
 #elif defined(__i386__)
-    unsigned long long int x;
+    uint64_t x;
     __asm__ volatile ("rdtsc" : "=A" (x));
     return x;
+    */
 #else
 #define NO_CYCLE_COUNTER
     return 0;
