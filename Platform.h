@@ -41,7 +41,9 @@ void SetAffinity ( int cpu );
 
 #pragma intrinsic(__rdtsc)
 // Read Time Stamp Counter
-#define rdtsc() __rdtsc()
+#define rdtsc()       __rdtsc()
+#define timer_start() __rdtsc()
+#define timer_end()   __rdtsc()
 
 #define popcount8(x)  __popcnt(x)
 
@@ -93,21 +95,65 @@ __inline__ uint64_t rdtsc()
     return __rdtsc();
 #elif defined (__i386__) || defined (__x86_64__)
     return __builtin_ia32_rdtsc();
-    /*
-#elif defined __x86_64__
-    uint32_t a, d;
-    __asm__ volatile ("rdtsc" : "=a" (a), "=d" (d));
-    return a | (d << 32);
-#elif defined(__i386__)
-    uint64_t x;
-    __asm__ volatile ("rdtsc" : "=A" (x));
-    return x;
-    */
 #else
 #define NO_CYCLE_COUNTER
     return 0;
 #endif
 }
+
+// see https://www.intel.com/content/dam/www/public/us/en/documents/white-papers/ia-32-ia-64-benchmark-code-execution-paper.pdf 3.2.1 The Improved Benchmarking Method
+__inline__ uint64_t timer_start()
+{
+#if defined(__i386__) && !defined(HAVE_INT64)
+  uint32_t cycles_high, cycles_low;
+  __asm__ volatile
+      ("cpuid\n\t"
+       "rdtsc\n\t"
+       "mov %%edx, %0\n\t"
+       "mov %%eax, %1\n\t": "=r" (cycles_high), "=r" (cycles_low)::
+       "%eax", "%ebx", "%ecx", "%edx");
+    return ((uint64_t)cycles_high << 32) | cycles_low;
+#elif defined __x86_64__
+  uint32_t cycles_high, cycles_low;
+  __asm__ volatile
+      ("cpuid\n\t"
+       "rdtsc\n\t"
+       "mov %%edx, %0\n\t"
+       "mov %%eax, %1\n\t": "=r" (cycles_high), "=r" (cycles_low)::
+       "%rax", "%rbx", "%rcx", "%rdx");
+    return ((uint64_t)cycles_high << 32) | cycles_low;
+#else
+#define NO_CYCLE_COUNTER
+    return 0;
+#endif
+}
+
+__inline__ uint64_t timer_end()
+{
+#if defined(__i386__) && !defined(HAVE_INT64)
+  uint32_t cycles_high, cycles_low;
+  __asm__ volatile
+      ("rdtscp\n\t"
+       "mov %%edx, %0\n\t"
+       "mov %%eax, %1\n\t"
+       "cpuid\n\t": "=r" (cycles_high), "=r" (cycles_low)::
+       "%eax", "%ebx", "%ecx", "%edx");
+    return ((uint64_t)cycles_high << 32) | cycles_low;
+#elif defined __x86_64__
+  uint32_t cycles_high, cycles_low;
+  __asm__ volatile
+      ("rdtscp\n\t"
+       "mov %%edx, %0\n\t"
+       "mov %%eax, %1\n\t"
+       "cpuid\n\t": "=r" (cycles_high), "=r" (cycles_low)::
+       "%rax", "%rbx", "%rcx", "%rdx");
+    return ((uint64_t)cycles_high << 32) | cycles_low;
+#else
+#define NO_CYCLE_COUNTER
+    return 0;
+#endif
+}
+
 
 #include <strings.h>
 #define _stricmp strcasecmp

@@ -164,11 +164,11 @@ NEVER_INLINE int64_t timehash ( pfHash hash, const void * key, int len, int seed
   volatile int64_t begin, end;
   uint32_t temp[16];
 
-  begin = rdtsc();
+  begin = timer_start();
   
   hash(key,len,seed,temp);
   
-  end = rdtsc();
+  end = timer_end();
   
   return end - begin;
 }
@@ -185,7 +185,7 @@ NEVER_INLINE int64_t timehash_small ( pfHash hash, const void * key, int len, in
   uint32_t *buf = new uint32_t[(len + 3) / 4];
   memcpy(buf,key,len);
 
-  begin = rdtsc();
+  begin = timer_start();
 
   for(int i = 0; i < NUM_TRIALS; i++) {
     hash(buf,len,seed,hash_temp);
@@ -200,7 +200,7 @@ NEVER_INLINE int64_t timehash_small ( pfHash hash, const void * key, int len, in
     buf[0] ^= hash_temp[0];
   }
 
-  end = rdtsc();
+  end = timer_end();
   delete[] buf;
 
   return (int64_t)((end - begin) / (double)NUM_TRIALS);
@@ -320,14 +320,14 @@ double HashMapSpeedTest ( pfHash pfhash, int hashbits,
   { // hash inserts and 1% deletes
     volatile int64_t begin, end;
     int i = 0;
-    begin = rdtsc();
+    begin = timer_start();
     for (it = words.begin(); it != words.end(); it++, i++) {
       std::string line = *it;
       hashmap[line] = 1;
       if (i % 100 == 0)
         hashmap.erase(line);
     }
-    end = rdtsc();
+    end = timer_end();
     t1 = (double)(end - begin) / (double)words.size();
   }
   printf("Init HashMapTest:    %0.3f cycles/op (%lu inserts, 1%% deletions)\n",
@@ -343,14 +343,14 @@ double HashMapSpeedTest ( pfHash pfhash, int hashbits,
       volatile int64_t begin, end;
       int i = 0, found = 0;
       double t;
-      begin = rdtsc();
+      begin = timer_start();
       for ( it = words.begin(); it != words.end(); it++, i++ )
         {
           std::string line = *it;
           if (hashmap[line])
             found++;
         }
-      end = rdtsc();
+      end = timer_end();
       t = (double)(end - begin) / (double)words.size();
       if(found > 0 && t > 0) times.push_back(t);
     }
