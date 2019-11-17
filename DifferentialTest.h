@@ -146,8 +146,10 @@ bool DiffTest ( pfHash hash, int diffbits, int reps, bool dumpCollisions )
   keytype k1,k2;
   hashtype h1,h2;
 
-  printf("Testing %0.f up-to-%d-bit differentials in %d-bit keys -> %d bit hashes.\n",diffcount,diffbits,keybits,hashbits);
-  printf("%d reps, %0.f total tests, expecting %2.2f random collisions",reps,testcount,expected);
+  printf("Testing %0.f up-to-%d-bit differentials in %d-bit keys -> %d bit hashes.\n",
+         diffcount,diffbits,keybits,hashbits);
+  printf("%d reps, %0.f total tests, expecting %2.2f random collisions",
+         reps,testcount,expected);
 
   for(int i = 0; i < reps; i++)
   {

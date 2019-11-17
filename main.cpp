@@ -81,6 +81,8 @@ HashInfo g_hashes[] =
   { BadHash,     	  32, 0xAB432E23, "BadHash", 	 "very simple XOR shift", SKIP },
   { sumhash,     	  32, 0x0000A9AC, "sumhash", 	 "sum all bytes", SKIP },
   { sumhash32,     	  32, 0x3D6DC280, "sumhash32",   "sum all 32bit words", SKIP },
+
+ // here start the real hashes. first the problematic ones:
 #ifdef HAVE_BIT32
  #define FIBONACCI_VERIF      0x09952480
  #define FNV2_VERIF           0x739801C5
@@ -97,8 +99,6 @@ HashInfo g_hashes[] =
   // must be skipped for hashmaps, extremly bad!
   { multiply_shift, __WORDSIZE,MULTSHIFT_VERIF, "multiply_shift", "Dietzfelbinger Multiply-shift on strings", POOR },
   { pair_multiply_shift, __WORDSIZE, PAIRMULTSHIFT_VERIF, "pair_multiply_shift", "Pair-multiply-shift", POOR },
-
-  // here start the real hashes. the problematic ones:
   { crc32,                32, 0x3719DB20, "crc32",       "CRC-32 soft", POOR },
   { md5_32,               32, 0xF7192210, "md5_32a",     "MD5, first 32 bits of result", POOR },
 #ifdef _MSC_VER /* truncated long to 32 */
@@ -400,6 +400,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   printf("--- Testing %s \"%s\" %s\n\n", info->name, info->desc, quality_str[info->quality]);
   fflush(NULL);
 
+  // sha1_32a runs 30s
   if(g_testSanity || g_testAll)
   {
     printf("[[[ Sanity Tests ]]]\n\n");
@@ -435,16 +436,22 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     fflush(NULL);
   }
 
+  // sha1_32a runs 30s
   if(g_testHashmap || g_testAll)
   {
     printf("[[[ 'Hashmap' Speed Tests (when inlined) ]]]\n\n");
     fflush(NULL);
+    int trials = 50;
+    if ((hash == md5_32 || hash == sha1_32a ||
+         hash == multiply_shift || hash == pair_multiply_shift)
+         && !g_testExtra)
+      trials = 5;
     bool result = true;
     if (info->quality == SKIP) {
       result = false;
     } else {
       std::vector<std::string> words = HashMapInit(g_drawDiagram);
-      result &= HashMapTest(hash,info->hashbits,words,10,g_drawDiagram);
+      result &= HashMapTest(hash,info->hashbits,words,trials,g_drawDiagram);
     }
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
@@ -1059,6 +1066,8 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   //-----------------------------------------------------------------------------
   // Differential tests
   // 5m30 with xxh3
+  // less reps with slow hashes: sha1_32a, md5_32a
+  // md5: 1h38m with 1000 reps!
 
   if(g_testDiff || g_testAll)
   {
@@ -1067,10 +1076,13 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
     bool result = true;
     bool dumpCollisions = g_drawDiagram; // from --verbose
+    int reps = 1000;
+    if ((hash == md5_32 || hash == sha1_32a) && !g_testExtra)
+      reps = 50; // sha1: 7m, md5: 4m53
 
-    result &= DiffTest< Blob<64>,  hashtype >(hash,5,1000,dumpCollisions);
-    result &= DiffTest< Blob<128>, hashtype >(hash,4,1000,dumpCollisions);
-    result &= DiffTest< Blob<256>, hashtype >(hash,3,1000,dumpCollisions);
+    result &= DiffTest< Blob<64>,  hashtype >(hash,5,reps,dumpCollisions);
+    result &= DiffTest< Blob<128>, hashtype >(hash,4,reps,dumpCollisions);
+    result &= DiffTest< Blob<256>, hashtype >(hash,3,reps,dumpCollisions);
 
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
@@ -1140,14 +1152,15 @@ void VerifyHash ( const void * key, int len, uint32_t seed, void * out )
   g_outputVCode = MurmurOAAT(out, g_hashUnderTest->hashbits/8, g_outputVCode);
 }
 
+// sha1_32a: 23m with step 3
 bool MomentChi2Test ( struct HashInfo *info )
 {
   pfHash hash = info->hash;
   const int size = info->hashbits / 8;
-  const int step = 3;
+  const int step = ((hash == md5_32 || hash == sha1_32a) && !g_testExtra) ? 6 : 3;
   unsigned k = 0, s = 0;
   unsigned long l, h, x;
-  unsigned mx = 0xfffffff0;
+  const unsigned mx = 0xfffffff0;
   long double sa=0, saa=0, sb=0, sbb=0,	n = mx/step;
   hash(&k,sizeof(k),s,&l);
   printf("Running 1st unseeded MomentChi2 for the low 32bits/step %d ... ", step);
