@@ -1,57 +1,63 @@
 -------------------------------------------------------------------------------
---- Testing clhash "clhash (64-bit for x64, SSE4.2)" POOR
+--- Testing clhash "carry-less mult. hash -DBITMIX (64-bit for x64, SSE4.2)" GOOD
 
 [[[ Sanity Tests ]]]
 
-Verification value 0x91A312FF ....... PASS
+Verification value 0x91A312FF ....... FAIL! (Expected 0xFF27B919)
 Running sanity check 1     .......... PASS
 Running AppendedZeroesTest .......... PASS
 
 [[[ Speed Tests ]]]
 
 Bulk speed test - 262144-byte keys
-Alignment  7 -  6.489 bytes/cycle - 18564.38 MiB/sec @ 3 ghz
-Alignment  6 -  7.113 bytes/cycle - 20351.43 MiB/sec @ 3 ghz
-Alignment  5 -  6.984 bytes/cycle - 19981.20 MiB/sec @ 3 ghz
-Alignment  4 -  6.873 bytes/cycle - 19663.07 MiB/sec @ 3 ghz
-Alignment  3 -  6.870 bytes/cycle - 19654.61 MiB/sec @ 3 ghz
-Alignment  2 -  6.746 bytes/cycle - 19301.12 MiB/sec @ 3 ghz
-Alignment  1 -  6.902 bytes/cycle - 19747.69 MiB/sec @ 3 ghz
-Alignment  0 -  7.814 bytes/cycle - 22355.25 MiB/sec @ 3 ghz
-Average      -  6.974 bytes/cycle - 19952.34 MiB/sec @ 3 ghz
+Alignment  7 -  1.402 bytes/cycle - 4011.99 MiB/sec @ 3 ghz
+Alignment  6 -  1.402 bytes/cycle - 4011.49 MiB/sec @ 3 ghz
+Alignment  5 -  1.402 bytes/cycle - 4012.18 MiB/sec @ 3 ghz
+Alignment  4 -  1.403 bytes/cycle - 4012.84 MiB/sec @ 3 ghz
+Alignment  3 -  1.403 bytes/cycle - 4012.59 MiB/sec @ 3 ghz
+Alignment  2 -  1.403 bytes/cycle - 4012.98 MiB/sec @ 3 ghz
+Alignment  1 -  1.403 bytes/cycle - 4012.76 MiB/sec @ 3 ghz
+Alignment  0 -  1.422 bytes/cycle - 4068.52 MiB/sec @ 3 ghz
+Average      -  1.405 bytes/cycle - 4019.42 MiB/sec @ 3 ghz
 
-Small key speed test -    1-byte keys -    55.00 cycles/hash
-Small key speed test -    2-byte keys -    56.00 cycles/hash
-Small key speed test -    3-byte keys -    57.00 cycles/hash
-Small key speed test -    4-byte keys -    57.72 cycles/hash
-Small key speed test -    5-byte keys -    58.00 cycles/hash
-Small key speed test -    6-byte keys -    59.00 cycles/hash
-Small key speed test -    7-byte keys -    59.95 cycles/hash
-Small key speed test -    8-byte keys -    47.41 cycles/hash
-Small key speed test -    9-byte keys -    65.23 cycles/hash
-Small key speed test -   10-byte keys -    57.00 cycles/hash
-Small key speed test -   11-byte keys -    57.00 cycles/hash
-Small key speed test -   12-byte keys -    58.00 cycles/hash
-Small key speed test -   13-byte keys -    59.00 cycles/hash
-Small key speed test -   14-byte keys -    59.98 cycles/hash
-Small key speed test -   15-byte keys -    60.00 cycles/hash
-Small key speed test -   16-byte keys -    43.73 cycles/hash
-Small key speed test -   17-byte keys -    55.00 cycles/hash
-Small key speed test -   18-byte keys -    55.00 cycles/hash
-Small key speed test -   19-byte keys -    56.00 cycles/hash
-Small key speed test -   20-byte keys -    57.00 cycles/hash
-Small key speed test -   21-byte keys -    57.00 cycles/hash
-Small key speed test -   22-byte keys -    58.00 cycles/hash
-Small key speed test -   23-byte keys -    59.00 cycles/hash
-Small key speed test -   24-byte keys -    44.00 cycles/hash
-Small key speed test -   25-byte keys -    55.29 cycles/hash
-Small key speed test -   26-byte keys -    56.00 cycles/hash
-Small key speed test -   27-byte keys -    58.15 cycles/hash
-Small key speed test -   28-byte keys -    57.27 cycles/hash
-Small key speed test -   29-byte keys -    58.00 cycles/hash
-Small key speed test -   30-byte keys -    59.00 cycles/hash
-Small key speed test -   31-byte keys -    59.69 cycles/hash
-Average                                    56.595 cycles/hash
+Small key speed test -    1-byte keys -    77.26 cycles/hash
+Small key speed test -    2-byte keys -    77.99 cycles/hash
+Small key speed test -    3-byte keys -    78.79 cycles/hash
+Small key speed test -    4-byte keys -    79.99 cycles/hash
+Small key speed test -    5-byte keys -    80.44 cycles/hash
+Small key speed test -    6-byte keys -    83.98 cycles/hash
+Small key speed test -    7-byte keys -    84.92 cycles/hash
+Small key speed test -    8-byte keys -    71.38 cycles/hash
+Small key speed test -    9-byte keys -    79.00 cycles/hash
+Small key speed test -   10-byte keys -    79.00 cycles/hash
+Small key speed test -   11-byte keys -    79.42 cycles/hash
+Small key speed test -   12-byte keys -    80.00 cycles/hash
+Small key speed test -   13-byte keys -    81.00 cycles/hash
+Small key speed test -   14-byte keys -    85.00 cycles/hash
+Small key speed test -   15-byte keys -    85.96 cycles/hash
+Small key speed test -   16-byte keys -    72.00 cycles/hash
+Small key speed test -   17-byte keys -    80.93 cycles/hash
+Small key speed test -   18-byte keys -    81.95 cycles/hash
+Small key speed test -   19-byte keys -    83.00 cycles/hash
+Small key speed test -   20-byte keys -    84.00 cycles/hash
+Small key speed test -   21-byte keys -    84.89 cycles/hash
+Small key speed test -   22-byte keys -    86.00 cycles/hash
+Small key speed test -   23-byte keys -    88.85 cycles/hash
+Small key speed test -   24-byte keys -    72.78 cycles/hash
+Small key speed test -   25-byte keys -    82.37 cycles/hash
+Small key speed test -   26-byte keys -    83.00 cycles/hash
+Small key speed test -   27-byte keys -    84.00 cycles/hash
+Small key speed test -   28-byte keys -    84.00 cycles/hash
+Small key speed test -   29-byte keys -    85.94 cycles/hash
+Small key speed test -   30-byte keys -    88.41 cycles/hash
+Small key speed test -   31-byte keys -    89.67 cycles/hash
+Average                                    81.803 cycles/hash
+
+[[[ 'Hashmap' Speed Tests (when inlined) ]]]
+
+std::unordered_map:
+Init HashMapTest:    512.810 cycles/op (102401 inserts, 1% deletions)
+Running HashMapTest: 387.082 cycles/op (4.1 stdv)  ....... PASS
 
 [[[ Avalanche Tests ]]]
 
@@ -1531,5 +1537,5 @@ Testing collisions (low   8-bit) - Expected    2097152.0, actual 2096896 (1.00x)
 
 
 Input vcode 0x00000001, Output vcode 0x00000001, Result vcode 0x00000001
-Verification value is 0x00000001 - Testing took 1872.630792 seconds
+Verification value is 0x00000001 - Testing took 1883.191027 seconds
 -------------------------------------------------------------------------------
