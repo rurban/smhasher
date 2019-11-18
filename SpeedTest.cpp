@@ -4,7 +4,7 @@
 #include <stdio.h>   // for printf
 #include <memory.h>  // for memset
 #include <math.h>    // for sqrt
-#include <algorithm> // for sort
+#include <algorithm> // for sort, min
 #include <string>
 
 #include <unordered_map>
@@ -296,7 +296,7 @@ double TinySpeedTest ( pfHash hash, int hashsize, int keysize, uint32_t seed, bo
   return cycles;
 }
 
-double HashMapSpeedTest ( pfHash pfhash, int hashbits,
+double HashMapSpeedTest ( pfHash pfhash, const int hashbits,
                           std::vector<std::string> words,
                           const int trials, bool verbose )
 {
@@ -304,10 +304,10 @@ double HashMapSpeedTest ( pfHash pfhash, int hashbits,
   const uint32_t seed = r.rand_u32();
   string_hashmap hashmap(words.size(), [=](const std::string &key)
                   {
-                    char out[256]; // hasshe2
-                    size_t result;
+                    static char out[256]; // 256 for hasshe2, but stripped to 64/32
+                    size_t result = 0;
                     pfhash(key.c_str(), key.length(), seed, &out);
-                    memcpy(&result, &out, hashbits/8);
+                    memcpy(&result, &out, std::min((const int)sizeof(size_t),hashbits/8));
                     return result;
                   });
   
