@@ -309,18 +309,19 @@ double HashMapSpeedTest ( pfHash pfhash, const int hashbits,
   const uint32_t seed = r.rand_u32();
   std_hashmap hashmap(words.size(), [=](const std::string &key)
                   {
-                    char out[256]; // hasshe2
-                    size_t result;
+                    // 256 needed for hasshe2, but only size_t used
+                    static char out[256] = { 0 };
+                    size_t result = 0;
                     pfhash(key.c_str(), key.length(), seed, &out);
-                    memcpy(&result, &out, hashbits/8);
+                    memcpy(&result, &out, sizeof(size_t));
                     return result;
                   });
   fast_hashmap phashmap(words.size(), [=](const std::string &key)
                   {
-                    static char out[256]; // 256 for hasshe2, but stripped to 64/32
+                    static char out[256] = { 0 }; // 256 for hasshe2, but stripped to 64/32
                     size_t result = 0;
                     pfhash(key.c_str(), key.length(), seed, &out);
-                    memcpy(&result, &out, std::min((const int)sizeof(size_t),hashbits/8));
+                    memcpy(&result, &out, sizeof(size_t));
                     return result;
                   });
   
