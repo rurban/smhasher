@@ -347,7 +347,7 @@ double HashMapSpeedTest ( pfHash pfhash, const int hashbits,
     t1 = (double)(end - begin) / (double)words.size();
   }
   fflush(NULL);
-  printf("%0.3f cycles/op (%lu inserts, 1%% deletions)\n",
+  printf("%0.3f cycles/op (%zu inserts, 1%% deletions)\n",
          t1, words.size());
   printf("Running std HashMapTest:  ");
   if (t1 > 10000.) { // e.g. multiply_shift 459271.700
@@ -401,7 +401,7 @@ double HashMapSpeedTest ( pfHash pfhash, const int hashbits,
     t1 = (double)(end - begin) / (double)words.size();
   }
   fflush(NULL);
-  printf("%0.3f cycles/op (%lu inserts, 1%% deletions)\n",
+  printf("%0.3f cycles/op (%zu inserts, 1%% deletions)\n",
          t1, words.size());
   printf("Running fast HashMapTest: ");
   if (t1 > 10000.) { // e.g. multiply_shift 459271.700
