@@ -37,7 +37,7 @@ static	inline	uint64_t	wyhash(const void* key,	uint64_t	len,	uint64_t	seed) {
 #if defined(__GNUC__) || defined(__INTEL_COMPILER)
 	if(__builtin_expect(!len,0))	return	0;
 	if(__builtin_expect(len>32,0))
-#elif
+#else
 	if(!len)	return	0;
 	if(len>32)
 #endif	
