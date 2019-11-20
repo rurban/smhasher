@@ -111,8 +111,8 @@ SMhasher
 | [t1ha0_aes_noavx](doc/t1ha0_aes_noavx)        |     18221.09 |    51.46 | 180.06 (2) | 925 | machine-specific (x86 AES-NI) |
 | [t1ha0_aes_avx1](doc/t1ha0_aes_avx1)          |     19583.35 |    51.65 | 182.17 (4) | 843 | machine-specific (x64 AVX)    |
 | [t1ha0_aes_avx2](doc/t1ha0_aes_avx2)          |     36436.51 |    36.31 | ?          | 792 | machine-specific (x64 AVX2)   |
-| [wyhash](doc/wyhash)                          |     11285.57 |    31.34 | 170.14 (2) |2546 |                            |
-| [wyhash32low](doc/wyhash32low)                |     11322.31 |    30.41 | 193.02 (4) |2546 | Moment Chi2 4.2            |
+| [wyhash](doc/wyhash)                          |     10839.95 |    30.19 | 171.64 (2) |1373 |                            |
+| [wyhash32low](doc/wyhash32low)                |     10715.27 |    30.15 | 189.52 (2) |1373 | Moment Chi2 4.2            |
 
 Summary
 -------

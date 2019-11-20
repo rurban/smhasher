@@ -304,17 +304,17 @@ HashInfo g_hashes[] =
 #endif /* older t1ha */
 
 #ifdef HAVE_INT64
-#ifdef WYHASH_UNSAFE
+#ifdef WYHASH_EVIL_FAST
 # if defined(_MSC_VER) && defined(HAVE_BIT32)
-#  define WYHASH_VERIF    0x5F19A75D
-#  define WYHASH32L_VERIF 0x62BB066F
+#  define WYHASH_VERIF    0x0
+#  define WYHASH32L_VERIF 0x0
 # else
-#  define WYHASH_VERIF    0xAF221AA1
-#  define WYHASH32L_VERIF 0x166FEAF9
+#  define WYHASH_VERIF    0x2EF5FBDE
+#  define WYHASH32L_VERIF 0x59835713
 # endif
 #else
-# define WYHASH_VERIF     0xBB297DC4
-# define WYHASH32L_VERIF  0x640C4656
+# define WYHASH_VERIF     0x1226FA61
+# define WYHASH32L_VERIF  0xD09A85B3
 #endif
   { wyhash_test,                 64, WYHASH_VERIF, "wyhash",          "wyhash v3 (portable, 64-bit, little-endian)", GOOD },
   { wyhash32low,                 32, WYHASH32L_VERIF,"wyhash32low",   "wyhash v3 - lower 32bit", GOOD }

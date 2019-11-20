@@ -378,8 +378,9 @@ void HighwayHash64_test (const void * key, int len, uint32_t seed, void * out);
 
 #ifdef HAVE_INT64
 //https://github.com/wangyi-fudan/wyhash
+//#define WYHASH_EVIL_FAST
 #include "wyhash.h"
-// objsize 20-a12: 2546
+// objsize 19c0-1f1d: 1373
 void wyhash_test (const void * key, int len, uint32_t seed, void * out);
 void wyhash32low (const void * key, int len, uint32_t seed, void * out);
 
