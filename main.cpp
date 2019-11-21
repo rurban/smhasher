@@ -74,10 +74,10 @@ const char* quality_str[3] = { "SKIP", "POOR", "GOOD" };
 HashInfo g_hashes[] =
 {
   // first the bad hash funcs, failing tests:
- { DoNothingHash,        32, 0x00000000, "donothing32", "Do-Nothing function (only valid for measuring call overhead)", SKIP },
-  { DoNothingHash,        64, 0x00000000, "donothing64", "Do-Nothing function (only valid for measuring call overhead)", SKIP },
-  { DoNothingHash,       128, 0x00000000, "donothing128", "Do-Nothing function (only valid for measuring call overhead)", SKIP },
-  { NoopOAATReadHash,     64, 0x00000000, "NOP_OAAT_read64", "Noop function (only valid for measuring call + OAAT reading overhead)", SKIP },
+ { DoNothingHash,        32, 0x00000000, "donothing32", "Do-Nothing function (measure call overhead)", SKIP },
+  { DoNothingHash,        64, 0x00000000, "donothing64", "Do-Nothing function (measure call overhead)", SKIP },
+  { DoNothingHash,       128, 0x00000000, "donothing128", "Do-Nothing function (measure call overhead)", SKIP },
+  { NoopOAATReadHash,     64, 0x00000000, "NOP_OAAT_read64", "Noop function (measure call + OAAT reading overhead)", SKIP },
   { BadHash,     	  32, 0xAB432E23, "BadHash", 	 "very simple XOR shift", SKIP },
   { sumhash,     	  32, 0x0000A9AC, "sumhash", 	 "sum all bytes", SKIP },
   { sumhash32,     	  32, 0x3D6DC280, "sumhash32",   "sum all 32bit words", SKIP },
@@ -132,37 +132,33 @@ HashInfo g_hashes[] =
   // elf64 or macho64 only
   { fhtw_test,            64, 0x0,        "fhtw",        "fhtw asm", POOR },
 #endif
-  { fibonacci,    __WORDSIZE, FIBONACCI_VERIF, "fibonacci",   "wordwise Fibonacci", POOR },
-  { FNV32a,               32, 0xE3CBBE91, "FNV1a",       "Fowler-Noll-Vo hash, 32-bit", POOR },
+  { fibonacci_test, __WORDSIZE, FIBONACCI_VERIF, "fibonacci",   "wordwise Fibonacci", POOR },
+  { FNV32a_test,          32, 0xE3CBBE91, "FNV1a",       "Fowler-Noll-Vo hash, 32-bit", POOR },
 #ifdef HAVE_INT64
-  { FNV1A_Totenschiff,    32, 0x95D95ACF, "FNV1A_Totenschiff",  "FNV1A_Totenschiff_v1 64-bit sanmayce", POOR },
-  { FNV1A_Pippip_Yurii,   32, 0xE79AE3E4, "FNV1A_Pippip_Yurii", "FNV1A-Pippip_Yurii 32-bit sanmayce", POOR },
-#if 0 /* TODO */
-  { FNV1A_Jesteress,      32, 0x0, "FNV1A_Jesteress",  "FNV1A-Jesteress 32-bit sanmayce", POOR },
-  { FNV1A_Meiyan,         32, 0x0, "FNV1A_Meiyan",     "FNV1A-Meiyan 32-bit sanmayce", POOR },
+  { FNV1A_Totenschiff_test,32,0x95D95ACF, "FNV1A_Totenschiff",  "FNV1A_Totenschiff_v1 64-bit sanmayce", POOR },
+  { FNV1A_PY_test,        32, 0xE79AE3E4, "FNV1A_Pippip_Yurii", "FNV1A-Pippip_Yurii 32-bit sanmayce", POOR },
+  { FNV32a_YT_test,       32, 0xD8AFFD71, "FNV1a_YT",    "FNV1a-YoshimitsuTRIAD 32-bit sanmayce", POOR },
+  { FNV64a_test,          64, 0x103455FC, "FNV64",       "Fowler-Noll-Vo hash, 64-bit", POOR },
 #endif
-  { FNV32a_YoshimitsuTRIAD,32,0xD8AFFD71, "FNV1a_YT",    "FNV1a-YoshimitsuTRIAD 32-bit sanmayce", POOR },
-  { FNV64a,               64, 0x103455FC, "FNV64",       "Fowler-Noll-Vo hash, 64-bit", POOR },
-#endif
-  { FNV2,         __WORDSIZE, FNV2_VERIF, "FNV2",        "wordwise FNV", POOR },
-  { fletcher2,            64, 0x890767C0, "fletcher2",   "fletcher2 ZFS", POOR},
-  { fletcher4,            64, 0x47660EB7, "fletcher4",   "fletcher4 ZFS", POOR},
-  { Bernstein,            32, 0xBDB4B640, "bernstein",   "Bernstein, 32-bit", POOR },
-  { sdbm,                 32, 0x582AF769, "sdbm",        "sdbm as in perl5", POOR },
+  { FNV2_test,    __WORDSIZE, FNV2_VERIF, "FNV2",        "wordwise FNV", POOR },
+  { fletcher2_test,       64, 0x890767C0, "fletcher2",   "fletcher2 ZFS", POOR},
+  { fletcher4_test,       64, 0x47660EB7, "fletcher4",   "fletcher4 ZFS", POOR},
+  { Bernstein_test,       32, 0xBDB4B640, "bernstein",   "Bernstein, 32-bit", POOR },
+  { sdbm_test,            32, 0x582AF769, "sdbm",        "sdbm as in perl5", POOR },
   { x17_test,             32, 0x8128E14C, "x17",         "x17", POOR },
   // also called jhash:
-  { JenkinsOOAT,          32, 0x83E133DA, "JenkinsOOAT", "Bob Jenkins' OOAT as in perl 5.18", POOR },
-  { JenkinsOOAT_perl,     32, 0xEE05869B, "JenkinsOOAT_perl", "Bob Jenkins' OOAT as in old perl5", POOR },
+  { JenkinsOOAT_test,     32, 0x83E133DA, "JenkinsOOAT", "Bob Jenkins' OOAT as in perl 5.18", POOR },
+  { JenkinsOOAT_perl_test,32, 0xEE05869B, "JenkinsOOAT_perl", "Bob Jenkins' OOAT as in old perl5", POOR },
   { halfsiphash_test,     32, 0xA7A05F72, "HalfSipHash", "HalfSipHash 2-4, 32bit", POOR },
   // as in rust and swift
   { siphash13_test,       64, 0x29C010BF, "SipHash13",   "SipHash 1-3 - SSSE3 optimized", POOR },
-  { MicroOAAT,            32, 0x16F1BA97, "MicroOAAT",   "Small non-multiplicative OAAT (by funny-falcon)", POOR },
+  { MicroOAAT_test,       32, 0x16F1BA97, "MicroOAAT",   "Small non-multiplicative OAAT (by funny-falcon)", POOR },
   { jodyhash32_test,      32, 0xFB47D60D, "jodyhash32",  "jodyhash, 32-bit (v5)", POOR },
 #ifdef HAVE_INT64
   { jodyhash64_test,      64, 0x9F09E57F, "jodyhash64",  "jodyhash, 64-bit (v5)", POOR },
 #endif
   { lookup3_test,         32, 0x3D83917A, "lookup3",     "Bob Jenkins' lookup3", POOR },
-  { SuperFastHash,        32, 0x980ACD1D, "superfast",   "Paul Hsieh's SuperFastHash", POOR },
+  { SuperFastHash_test,   32, 0x980ACD1D, "superfast",   "Paul Hsieh's SuperFastHash", POOR },
   { MurmurOAAT_test,      32, 0x5363BD98, "MurmurOAAT",  "Murmur one-at-a-time", POOR },
   { Crap8_test,           32, 0x743E97A1, "Crap8",       "Crap8", POOR },
   { xxHash32_test,        32, 0xBA88B743, "xxHash32",    "xxHash, 32-bit for x64", POOR },
@@ -227,7 +223,7 @@ HashInfo g_hashes[] =
   { seahash32low,         32, 0xFD867C5F, "seahash32low","seahash - lower 32bit", GOOD },
 #endif
 #endif
-  { GoodOAAT,             32, 0x7B14EEE5, "GoodOAAT",    "Small non-multiplicative OAAT", GOOD },
+  { GoodOAAT_test,        32, 0x7B14EEE5, "GoodOAAT",    "Small non-multiplicative OAAT", GOOD },
   { fasthash32_test,      32, 0xE9481AFC, "fasthash32",  "fast-hash 32bit", GOOD },
   { fasthash64_test,      64, 0xA16231A7, "fasthash64",  "fast-hash 64bit", GOOD },
 #if defined(__GNUC__) && UINT_MAX != ULONG_MAX
@@ -1144,12 +1140,12 @@ HashInfo * g_hashUnderTest = NULL;
 
 void VerifyHash ( const void * key, int len, uint32_t seed, void * out )
 {
-  g_inputVCode = MurmurOAAT(key, len, g_inputVCode);
-  g_inputVCode = MurmurOAAT(&seed, sizeof(uint32_t), g_inputVCode);
+  g_inputVCode = MurmurOAAT((const char *)key, len, g_inputVCode);
+  g_inputVCode = MurmurOAAT((const char *)&seed, sizeof(uint32_t), g_inputVCode);
 
   g_hashUnderTest->hash(key, len, seed, out);
 
-  g_outputVCode = MurmurOAAT(out, g_hashUnderTest->hashbits/8, g_outputVCode);
+  g_outputVCode = MurmurOAAT((const char *)out, g_hashUnderTest->hashbits/8, g_outputVCode);
 }
 
 // sha1_32a: 23m with step 3

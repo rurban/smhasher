@@ -22,23 +22,19 @@
 //----------
 // These are _not_ hash functions (even though people tend to use crc32 as one...)
 
-void BadHash               ( const void * key, int len, uint32_t seed, void * out );
-void sumhash               ( const void * key, int len, uint32_t seed, void * out );
-void sumhash32             ( const void * key, int len, uint32_t seed, void * out );
+void BadHash(const void *key, int len, uint32_t seed, void *out);
+void sumhash(const void *key, int len, uint32_t seed, void *out);
+void sumhash32(const void *key, int len, uint32_t seed, void *out);
 
-void DoNothingHash         ( const void * key, int len, uint32_t seed, void * out );
-void NoopOAATReadHash	   ( const void * key, int len, uint32_t seed, void * out );
-void crc32                 ( const void * key, int len, uint32_t seed, void * out );
-
-void randhash_32           ( const void * key, int len, uint32_t seed, void * out );
-void randhash_64           ( const void * key, int len, uint32_t seed, void * out );
-void randhash_128          ( const void * key, int len, uint32_t seed, void * out );
+void DoNothingHash(const void *key, int len, uint32_t seed, void *out);
+void NoopOAATReadHash(const void *key, int len, uint32_t seed, void *out);
+void crc32(const void *key, int len, uint32_t seed, void *out);
 
 //----------
-// Cryptographic hashes
+// Cryptographic hashes (but very bad in the used range)
 
-void md5_32                ( const void * key, int len, uint32_t seed, void * out );
-void sha1_32a              ( const void * key, int len, uint32_t seed, void * out );
+void md5_32(const void *key, int len, uint32_t seed, void *out);
+void sha1_32a(const void *key, int len, uint32_t seed, void *out);
 #if 0
 void sha1_64a              ( const void * key, int len, uint32_t seed, void * out );
 void sha2_32a              ( const void * key, int len, uint32_t seed, void * out );
@@ -53,52 +49,109 @@ void scrypt_64a            ( const void * key, int len, uint32_t seed, void * ou
 // General purpose hashes
 
 #ifdef __SSE2__
-void hasshe2_test          ( const void * key, int len, uint32_t seed, void * out );
+void hasshe2_test(const void *key, int len, uint32_t seed, void *out);
 #endif
 #if defined(__SSE4_2__) && defined(__x86_64__)
-void crc32c_hw_test        ( const void * key, int len, uint32_t seed, void * out );
-void crc32c_hw1_test       ( const void * key, int len, uint32_t seed, void * out );
-void crc64c_hw_test        ( const void * key, int len, uint32_t seed, void * out );
-void CityHashCrc64_test    ( const void * key, int len, uint32_t seed, void * out );
-void CityHashCrc128_test   ( const void * key, int len, uint32_t seed, void * out );
-void falkhash_test_cxx     ( const void * key, int len, uint32_t seed, void * out );
+void crc32c_hw_test(const void *key, int len, uint32_t seed, void *out);
+void crc32c_hw1_test(const void *key, int len, uint32_t seed, void *out);
+void crc64c_hw_test(const void *key, int len, uint32_t seed, void *out);
+void CityHashCrc64_test(const void *key, int len, uint32_t seed, void *out);
+void CityHashCrc128_test(const void *key, int len, uint32_t seed, void *out);
+void falkhash_test_cxx(const void *key, int len, uint32_t seed, void *out);
 #endif
-void fibonacci             ( const void * key, int len, uint32_t seed, void * out );
-void FNV32a                ( const void * key, int len, uint32_t seed, void * out );
-void FNV32a_YoshimitsuTRIAD( const void * key, int len, uint32_t seed, void * out );
+size_t fibonacci(const char *key, int len, uint32_t seed);
+inline void fibonacci_test(const void *key, int len, uint32_t seed, void *out) {
+  *(size_t *)out = fibonacci((const char *)key, len, seed);
+}
+size_t FNV2(const char *key, int len, size_t seed);
+inline void FNV2_test(const void *key, int len, uint32_t seed, void *out) {
+  *(size_t *)out = FNV2((const char *)key, len, (size_t)seed);
+}
+uint32_t FNV32a(const void *key, int len, uint32_t seed);
+inline void FNV32a_test(const void *key, int len, uint32_t seed, void *out) {
+  *(uint32_t *)out = FNV32a((const char *)key, len, seed);
+}
+uint32_t FNV32a_YoshimitsuTRIAD(const char *key, int len, uint32_t seed);
+inline void FNV32a_YT_test(const void *key, int len, uint32_t seed, void *out) {
+  *(uint32_t *)out = FNV32a_YoshimitsuTRIAD((const char *)key, len, seed);
+}
 #ifdef HAVE_INT64
-void FNV1A_Totenschiff     ( const void * key, int len, uint32_t seed, void * out );
-void FNV1A_Pippip_Yurii    ( const void * key, int len, uint32_t seed, void * out );
+uint32_t FNV1A_Totenschiff(const char *key, int len, uint32_t seed);
+inline void FNV1A_Totenschiff_test(const void *key, int len, uint32_t seed,
+                                   void *out) {
+  *(uint32_t *)out = FNV1A_Totenschiff((const char *)key, len, seed);
+}
+uint32_t FNV1A_Pippip_Yurii(const char *key, int wrdlen, uint32_t seed);
+inline void FNV1A_PY_test(const void *key, int len, uint32_t seed, void *out) {
+  *(uint32_t *)out = FNV1A_Pippip_Yurii((const char *)key, len, seed);
+}
 #endif
-#if 0 /* TODO */
-void FNV1A_Jesteress       ( const void * key, int len, uint32_t seed, void * out );
-void FNV1A_Meiyan          ( const void * key, int len, uint32_t seed, void * out );
-#endif
-void FNV64a                ( const void * key, int len, uint32_t seed, void * out );
-void FNV2                  ( const void * key, int len, uint32_t seed, void * out );
-void fletcher2             ( const void * key, int len, uint32_t seed, void * out );
-void fletcher4             ( const void * key, int len, uint32_t seed, void * out );
-void Bernstein             ( const void * key, int len, uint32_t seed, void * out );
-void sdbm                  ( const void * key, int len, uint32_t seed, void * out );
-void x17_test              ( const void * key, int len, uint32_t seed, void * out );
-void JenkinsOOAT           ( const void * key, int len, uint32_t seed, void * out );
-void JenkinsOOAT_perl      ( const void * key, int len, uint32_t seed, void * out );
-void GoodOAAT              ( const void * key, int len, uint32_t seed, void * out );
-void MicroOAAT             ( const void * key, int len, uint32_t seed, void * out );
-void SuperFastHash         ( const void * key, int len, uint32_t seed, void * out );
-void lookup3_test          ( const void * key, int len, uint32_t seed, void * out );
-void MurmurOAAT_test       ( const void * key, int len, uint32_t seed, void * out );
-void Crap8_test            ( const void * key, int len, uint32_t seed, void * out );
+uint64_t FNV64a(const char *key, int len, uint64_t seed);
+inline void FNV64a_test(const void *key, int len, uint32_t seed, void *out) {
+  *(uint64_t *)out = FNV64a((const char *)key, len, (uint64_t)seed);
+}
+uint64_t fletcher2(const char *key, int len, uint64_t seed);
+inline void fletcher2_test(const void *key, int len, uint32_t seed, void *out) {
+  *(uint64_t *) out = fletcher2((const char *)key, len, (uint64_t)seed);
+}
+uint64_t fletcher4(const char *key, int len, uint64_t seed);
+inline void fletcher4_test(const void *key, int len, uint32_t seed, void *out) {
+  *(uint64_t *) out = fletcher2((const char *)key, len, (uint64_t)seed);
+}
+uint32_t Bernstein(const char *key, int len, uint32_t seed);
+inline void Bernstein_test(const void *key, int len, uint32_t seed, void *out) {
+  *(uint32_t *) out = Bernstein((const char *)key, len, seed);
+}
+uint32_t sdbm(const char *key, int len, uint32_t hash);
+inline void sdbm_test(const void *key, int len, uint32_t seed, void *out) {
+  *(uint32_t *) out = sdbm((const char *)key, len, seed);
+}
+uint32_t x17(const char *key, int len, uint32_t h);
+inline void x17_test(const void *key, int len, uint32_t seed, void *out) {
+  *(uint32_t *) out = x17((const char *)key, len, seed);
+}
+uint32_t JenkinsOOAT(const char *key, int len, uint32_t hash);
+inline void JenkinsOOAT_test(const void *key, int len, uint32_t seed, void *out) {
+  *(uint32_t *) out = JenkinsOOAT((const char *)key, len, seed);
+}
+uint32_t JenkinsOOAT_perl(const char *key, int len, uint32_t hash);
+inline void JenkinsOOAT_perl_test(const void *key, int len, uint32_t seed, void *out) {
+  *(uint32_t *) out = JenkinsOOAT_perl((const char *)key, len, seed);
+}
+uint32_t GoodOAAT(const char *key, int len, uint32_t hash);
+inline void GoodOAAT_test(const void *key, int len, uint32_t seed, void *out) {
+  *(uint32_t *) out = GoodOAAT((const char *)key, len, seed);
+}
+uint32_t MicroOAAT(const char *key, int len, uint32_t hash);
+inline void MicroOAAT_test(const void *key, int len, uint32_t seed, void *out) {
+  *(uint32_t *) out = MicroOAAT((const char *)key, len, seed);
+}
+uint32_t SuperFastHash (const char * data, int len, int32_t hash);
+inline void SuperFastHash_test(const void *key, int len, uint32_t seed, void *out) {
+  *(uint32_t*)out = SuperFastHash((const char*)key, len, seed);
+}
+uint32_t lookup3(const char *key, int len, uint32_t hash);
+inline void lookup3_test(const void *key, int len, uint32_t seed, void *out) {
+  *(uint32_t *) out = lookup3((const char *)key, len, seed);
+}
+uint32_t MurmurOAAT(const char *key, int len, uint32_t hash);
+inline void MurmurOAAT_test(const void *key, int len, uint32_t seed, void *out) {
+  *(uint32_t *) out = MurmurOAAT((const char *)key, len, seed);
+}
+uint32_t Crap8(const uint8_t * key, uint32_t len, uint32_t seed);
+inline void Crap8_test(const void *key, int len, uint32_t seed, void *out) {
+  *(uint32_t *) out = Crap8((const uint8_t *)key, len, seed);
+}
 
-void CityHash32_test       ( const void * key, int len, uint32_t seed, void * out );
-void CityHash64noSeed_test ( const void * key, int len, uint32_t seed, void * out );
-void CityHash64_test       ( const void * key, int len, uint32_t seed, void * out );
-inline void CityHash64_low_test ( const void * key, int len, uint32_t seed, void * out ) {
+void CityHash32_test(const void *key, int len, uint32_t seed, void *out);
+void CityHash64noSeed_test(const void *key, int len, uint32_t seed, void *out);
+void CityHash64_test(const void *key, int len, uint32_t seed, void *out);
+inline void CityHash64_low_test(const void *key, int len, uint32_t seed, void *out) {
   uint64_t result;
   CityHash64_test(key, len, seed, &result);
-  *(uint32_t*)out = (uint32_t)result;
+  *(uint32_t *)out = (uint32_t)result;
 }
-void CityHash128_test      ( const void * key, int len, uint32_t seed, void * out );
+void CityHash128_test(const void *key, int len, uint32_t seed, void *out);
 // objsize: eb0-3b91: 11489 (mult. variants per len)
 void FarmHash32_test       ( const void * key, int len, uint32_t seed, void * out );
 // objsize: 0-eae: 3758 (mult. variants per len)
@@ -119,9 +172,10 @@ void SpookyHash32_test     ( const void * key, int len, uint32_t seed, void * ou
 void SpookyHash64_test     ( const void * key, int len, uint32_t seed, void * out );
 void SpookyHash128_test    ( const void * key, int len, uint32_t seed, void * out );
 
-uint32_t MurmurOAAT ( const void * key, int len, uint32_t seed );
-
 //----------
+// Used internally as C++
+uint32_t MurmurOAAT ( const char * key, int len, uint32_t seed );
+
 // MurmurHash2
 void MurmurHash2_test      ( const void * key, int len, uint32_t seed, void * out );
 void MurmurHash2A_test     ( const void * key, int len, uint32_t seed, void * out );
@@ -381,15 +435,29 @@ void HighwayHash64_test (const void * key, int len, uint32_t seed, void * out);
 //#define WYHASH_EVIL_FAST
 #include "wyhash.h"
 // objsize 19c0-1f1d: 1373
-void wyhash_test (const void * key, int len, uint32_t seed, void * out);
-void wyhash32low (const void * key, int len, uint32_t seed, void * out);
+inline void wyhash_test (const void * key, int len, uint32_t seed, void * out) {
+  *(uint64_t*)out = wyhash(key, (uint64_t)len, (uint64_t)seed);
+}
+inline void wyhash32low (const void * key, int len, uint32_t seed, void * out) {
+  *(uint32_t*)out = 0xFFFFFFFF & wyhash(key, (uint64_t)len, (uint64_t)seed);
+}
 
 //https://github.com/vnmakarov/mir/blob/master/mir-hash.h
 #include "mir-hash.h"
-void mirhash_test (const void * key, int len, uint32_t seed, void * out);
-void mirhash32low (const void * key, int len, uint32_t seed, void * out);
-void mirhashstrict_test (const void * key, int len, uint32_t seed, void * out);
-void mirhashstrict32low (const void * key, int len, uint32_t seed, void * out);
+inline void mirhash_test (const void * key, int len, uint32_t seed, void * out) {
+  // objsize 2950-2da8: 1112
+  *(uint64_t*)out = mir_hash(key, (uint64_t)len, (uint64_t)seed);
+}
+inline void mirhash32low (const void * key, int len, uint32_t seed, void * out) {
+  *(uint32_t*)out = 0xFFFFFFFF & mir_hash(key, (uint64_t)len, (uint64_t)seed);
+}
+inline void mirhashstrict_test (const void * key, int len, uint32_t seed, void * out) {
+  // objsize 2950-2da8: 1112
+  *(uint64_t*)out = mir_hash_strict(key, (uint64_t)len, (uint64_t)seed);
+}
+inline void mirhashstrict32low (const void * key, int len, uint32_t seed, void * out) {
+  *(uint32_t*)out = 0xFFFFFFFF & mir_hash_strict(key, (uint64_t)len, (uint64_t)seed);
+}
 
 //TODO MSVC
 #ifndef _MSC_VER
@@ -398,8 +466,13 @@ void tsip_test (const void * key, int len, uint32_t seed, void * out);
 // objsize 0-207: 519
 extern "C" uint64_t tsip(const unsigned char *seed, const unsigned char *m, uint64_t len);
 
+#include "seahash.h"
 // objsize 29b0-2d17: 871
-void seahash_test (const void * key, int len, uint32_t seed, void * out);
-void seahash32low (const void * key, int len, uint32_t seed, void * out);
-#endif
+inline void seahash_test (const void * key, int len, uint32_t seed, void * out) {
+  *(uint64_t*)out = seahash((const uint8_t*)key, (uint64_t)len, seed);
+}
+inline void seahash32low (const void * key, int len, uint32_t seed, void * out) {
+  *(uint32_t*)out = 0xFFFFFFFF & seahash((const uint8_t*)key, (uint64_t)len, seed);
+}
+#endif /* !MSVC */
 #endif /* HAVE_INT64 */

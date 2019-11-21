@@ -1,5 +1,4 @@
 #include "Platform.h"
-#include <stdio.h> // for NULL
 
 /* By Paul Hsieh (C) 2004, 2005.  Covered under the Paul Hsieh derivative 
    license. See: 
@@ -26,11 +25,11 @@ FORCE_INLINE uint16_t get16bits ( const void * p )
 }
 
 // objsize: 0-d2: 210
-uint32_t SuperFastHash (const signed char * data, int len) {
-  uint32_t hash = 0, tmp;
+uint32_t SuperFastHash (const char * data, int len, int32_t hash) {
+  uint32_t tmp;
   int rem;
 
-  if (len <= 0 || data == NULL) return 0;
+  if (len <= 0 || !data) return 0;
 
   rem = len & 3;
   len >>= 2;
@@ -69,9 +68,4 @@ uint32_t SuperFastHash (const signed char * data, int len) {
   hash += hash >> 6;
 
   return hash;
-}
-
-void SuperFastHash     ( const void * key, int len, uint32_t /*seed*/, void * out )
-{
-  *(uint32_t*)out = SuperFastHash((const signed char*)key,len);
 }
