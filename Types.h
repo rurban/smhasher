@@ -90,9 +90,13 @@ public:
   inline T operator () ( const void * key, const int len, const uint32_t seed )
   {
     T result;
-
-    m_hash(key,len,seed,(uint32_t*)&result);
-
+    m_hash(key,len,seed,(unsigned*)&result);
+    return result;
+  }
+  inline T operator () ( const void * key, const int len, const uint64_t seed )
+  {
+    T result;
+    m_hash(key,len,seed,(unsigned*)&result);
     return result;
   }
 

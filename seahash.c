@@ -31,7 +31,7 @@ static inline uint64_t diffuse(uint64_t val)
   return val;
 }
 
-uint64_t seahash(const void *key, int len, uint64_t seed) {
+uint64_t seahash(const char *key, int len, uint64_t seed) {
   uint64_t a, b, c, d;
   uint64_t s = seed;
   uint64_t *p;

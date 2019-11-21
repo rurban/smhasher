@@ -2,7 +2,7 @@
 #include "Random.h"
 
 #include <stdlib.h>
-//#include <stdint.h>
+#include <stdint.h>
 #include <assert.h>
 //#include <emmintrin.h>
 //#include <xmmintrin.h>
@@ -764,6 +764,7 @@ void pair_multiply_shift (const void *key, int len, uint32_t seed, void *out) {
 }
 
 //TODO MSVC
+#ifdef HAVE_INT64
 #ifndef _MSC_VER
 static uint8_t tsip_key[16];
 void tsip_init()

@@ -142,7 +142,7 @@ HashInfo g_hashes[] =
 #endif
   { FNV2_test,    __WORDSIZE, FNV2_VERIF, "FNV2",        "wordwise FNV", POOR },
   { fletcher2_test,       64, 0x890767C0, "fletcher2",   "fletcher2 ZFS", POOR},
-  { fletcher4_test,       64, 0x47660EB7, "fletcher4",   "fletcher4 ZFS", POOR},
+  { fletcher4_test,       64, 0x890767C0, "fletcher4",   "fletcher4 ZFS", POOR},
   { Bernstein_test,       32, 0xBDB4B640, "bernstein",   "Bernstein, 32-bit", POOR },
   { sdbm_test,            32, 0x582AF769, "sdbm",        "sdbm as in perl5", POOR },
   { x17_test,             32, 0x8128E14C, "x17",         "x17", POOR },
@@ -158,7 +158,7 @@ HashInfo g_hashes[] =
   { jodyhash64_test,      64, 0x9F09E57F, "jodyhash64",  "jodyhash, 64-bit (v5)", POOR },
 #endif
   { lookup3_test,         32, 0x3D83917A, "lookup3",     "Bob Jenkins' lookup3", POOR },
-  { SuperFastHash_test,   32, 0x980ACD1D, "superfast",   "Paul Hsieh's SuperFastHash", POOR },
+  { SuperFastHash_test,   32, 0xC4CB7C07, "superfast",   "Paul Hsieh's SuperFastHash", POOR },
   { MurmurOAAT_test,      32, 0x5363BD98, "MurmurOAAT",  "Murmur one-at-a-time", POOR },
   { Crap8_test,           32, 0x743E97A1, "Crap8",       "Crap8", POOR },
   { xxHash32_test,        32, 0xBA88B743, "xxHash32",    "xxHash, 32-bit for x64", POOR },
@@ -221,8 +221,8 @@ HashInfo g_hashes[] =
 #ifdef HAVE_INT64
   { seahash_test,         64, 0x5449DB26, "seahash",     "seahash (portable, 64-bit, little-endian)", GOOD },
   { seahash32low,         32, 0xFD867C5F, "seahash32low","seahash - lower 32bit", GOOD },
-#endif
-#endif
+#endif /* HAVE_INT64 */
+#endif /* !MSVC */
   { GoodOAAT_test,        32, 0x7B14EEE5, "GoodOAAT",    "Small non-multiplicative OAAT", GOOD },
   { fasthash32_test,      32, 0xE9481AFC, "fasthash32",  "fast-hash 32bit", GOOD },
   { fasthash64_test,      64, 0xA16231A7, "fasthash64",  "fast-hash 64bit", GOOD },
@@ -435,7 +435,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   // sha1_32a runs 30s
   if(g_testHashmap || g_testAll)
   {
-    printf("[[[ 'Hashmap' Speed Tests (when inlined) ]]]\n\n");
+    printf("[[[ 'Hashmap' Speed Tests ]]]\n\n");
     fflush(NULL);
     int trials = 50;
     if ((hash == md5_32 || hash == sha1_32a ||

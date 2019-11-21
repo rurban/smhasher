@@ -186,7 +186,7 @@ IF(SSE4_2_FOUND)
     #enable_language(ASM-NASM)
     #set(CMAKE_ASM_FLAGS "-f elf64") # or macho64/win64
     set(X86_64ONLY_SRC farmhash-c.c farmhash-c-test.cc metrohash64crc.cpp
-                       metrohash128crc.cpp crc32_hw1.c clhash.c)
+                       metrohash128crc.cpp crc32_hw1.c clhash.c )
   ELSE()
     message(WARNING "32bit only: CMAKE_SIZEOF_VOID_P=${CMAKE_SIZEOF_VOID_P}")
   ENDIF()
@@ -219,6 +219,7 @@ ELSE()
 ENDIF()
 
 if(NOT MSVC)
+  set(NOTMSVC_SRC seahash.c)
   set_source_files_properties(HashMapTest.cpp PROPERTIES COMPILE_FLAGS "-std=c++11")
   set_source_files_properties(SpeedTest.cpp PROPERTIES COMPILE_FLAGS "-std=c++0x -I${CMAKE_SOURCE_DIR}")
   set_source_files_properties(main.cpp PROPERTIES COMPILE_FLAGS "-std=c++0x")
@@ -292,6 +293,7 @@ add_library(
   jody_hash64.c
   ${TSIP_SRC}
   # ${BEAGLE_SRC}
+  ${NOTMSVC_SRC}
   ${X86_64ONLY_SRC}
 )
 
