@@ -11,6 +11,15 @@
 #define TOMCRYPT_CUSTOM_H_
 
 /* macros for various libc functions you can change for embedded targets */
+#undef zeromem
+#undef crypt_argchk
+#define zeromem(a,l) memset(a,0,l)
+#define crypt_argchk(v,s,d)
+
+#ifdef _MSC_VER
+#define LTC_NO_PROTOTYPES
+#endif
+
 #ifndef XMALLOC
 #define XMALLOC  malloc
 #endif

@@ -55,7 +55,7 @@ int hkdf(int hash_idx,
 
 /* ---- MEM routines ---- */
 int mem_neq(const void *a, const void *b, size_t len);
-void zeromem(volatile void *dst, size_t len);
+//void zeromem(volatile void *dst, size_t len);
 void burn_stack(unsigned long len);
 
 const char *error_to_string(int err);

@@ -479,9 +479,9 @@ inline void seahash32low (const void *key, int len, uint32_t seed, void *out) {
 #endif /* HAVE_INT64 */
 
 #include "tomcrypt.h"
-hash_state blake2_state;
-int blake2b_init(hash_state * md, unsigned long outlen,
-                 const unsigned char *key, unsigned long keylen);
+#ifndef main_cpp
+extern hash_state blake2_state;
+#endif
 inline void blake2b32_test(const void * key, int len, uint32_t seed, void * out)
 {
   // objsize
@@ -496,5 +496,23 @@ inline void blake2b64_test(const void * key, int len, uint32_t seed, void * out)
   unsigned char tmp[32];
   blake2b_process(&blake2_state, (unsigned char *)key, len);
   blake2b_done(&blake2_state, tmp);
+  *(uint64_t*)out = *(uint64_t *)tmp;
+}
+int blake2s_init(hash_state * md, unsigned long outlen,
+                 const unsigned char *key, unsigned long keylen);
+inline void blake2s32_test(const void * key, int len, uint32_t seed, void * out)
+{
+  // objsize
+  unsigned char tmp[32];
+  blake2s_process(&blake2_state, (unsigned char *)key, len);
+  blake2s_done(&blake2_state, tmp);
+  *(uint32_t*)out = *(uint32_t *)tmp;
+}
+inline void blake2s64_test(const void * key, int len, uint32_t seed, void * out)
+{
+  // objsize
+  unsigned char tmp[32];
+  blake2s_process(&blake2_state, (unsigned char *)key, len);
+  blake2s_done(&blake2_state, tmp);
   *(uint64_t*)out = *(uint64_t *)tmp;
 }

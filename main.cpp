@@ -1,4 +1,7 @@
+#define main_cpp
 #include "Platform.h"
+#include "tomcrypt.h"
+hash_state blake2_state;
 #include "Hashes.h"
 #include "KeysetTest.h"
 #include "SpeedTest.h"
@@ -9,6 +12,9 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <time.h>
+
+int blake2b_init(hash_state * md, unsigned long outlen,
+                 const unsigned char *key, unsigned long keylen);
 
 //-----------------------------------------------------------------------------
 // Configuration. TODO - move these to command-line flags
@@ -116,8 +122,10 @@ HashInfo g_hashes[] =
   { bcrypt_64a,           64, 0x00000000, "bcrypt_64a",  "bcrypt, first 64 bits of result", POOR },
   { scrypt_64a,           64, 0x00000000, "scrypt_64a",  "scrypt, first 64 bits of result", POOR },
 #endif
-  { blake2b32_test,       32, 0x00000000, "blake2b32",   "BLAKE2b, first 32 bits of result", POOR },
-  { blake2b64_test,       64, 0x00000000, "blake2b64",   "BLAKE2b, first 64 bits of result", POOR },
+  { blake2b32_test,       32, 0xC051570E, "blake2b32",   "BLAKE2b, first 32 bits of result", POOR },
+  { blake2b64_test,       64, 0xC051570E, "blake2b64",   "BLAKE2b, first 64 bits of result", POOR },
+  { blake2s32_test,       32, 0x307A2169, "blake2s32",   "BLAKE2s, first 32 bits of result", POOR },
+  { blake2s64_test,       64, 0x307A2169, "blake2s64",   "BLAKE2s, first 64 bits of result", POOR },
 
 #ifdef __SSE2__
   { hasshe2_test,        256, 0xF5D39DFE, "hasshe2",     "SSE2 hasshe2, 256-bit", POOR },
@@ -370,20 +378,22 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   printf("-------------------------------------------------------------------------------\n");
 
   // eventual initializers
+  if(info->hash == blake2b32_test || info->hash == blake2b64_test)
+    blake2b_init(&blake2_state, 32, NULL, 0);
+  else if(info->hash == blake2s32_test || info->hash == blake2s64_test)
+    blake2s_init(&blake2_state, 32, NULL, 0);
 #if defined(__SSE4_2__) && defined(__x86_64__)
-  if(info->hash == clhash_test)
+  else if(info->hash == clhash_test)
     clhash_init();
 #endif
 #ifdef HAVE_HIGHWAYHASH
-  if(info->hash == HighwayHash64_test)
+  else if(info->hash == HighwayHash64_test)
     HighwayHash_init();
 #endif
 #ifndef _MSC_VER
-  if(info->hash == tsip_test)
+  else if(info->hash == tsip_test)
     tsip_init();
 #endif
-  if(info->hash == blake2b32_test || info->hash == blake2b64_test)
-    blake2b_init(&blake2_state, 32, NULL, 0);
 
   //-----------------------------------------------------------------------------
   // Sanity tests

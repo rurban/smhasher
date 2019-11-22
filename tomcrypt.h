@@ -19,7 +19,7 @@
 #include <limits.h>
 
 /* use configuration data */
-#include <tomcrypt_custom.h>
+#include "tomcrypt_custom.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -81,17 +81,17 @@ enum {
    CRYPT_HASH_OVERFLOW      /* Hash applied to too many bits */
 };
 
-#include <tomcrypt_cfg.h>
-#include <tomcrypt_macros.h>
-#include <tomcrypt_cipher.h>
-#include <tomcrypt_hash.h>
-#include <tomcrypt_mac.h>
-#include <tomcrypt_prng.h>
-#include <tomcrypt_pk.h>
-#include <tomcrypt_math.h>
-#include <tomcrypt_misc.h>
-#include <tomcrypt_argchk.h>
-#include <tomcrypt_pkcs.h>
+#include "tomcrypt_cfg.h"
+#include "tomcrypt_macros.h"
+#include "tomcrypt_cipher.h"
+#include "tomcrypt_hash.h"
+#include "tomcrypt_mac.h"
+#include "tomcrypt_prng.h"
+#include "tomcrypt_pk.h"
+#include "tomcrypt_math.h"
+#include "tomcrypt_misc.h"
+#include "tomcrypt_argchk.h"
+#include "tomcrypt_pkcs.h"
 
 #ifdef __cplusplus
    }

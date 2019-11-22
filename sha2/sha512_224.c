@@ -11,7 +11,7 @@
    SHA512/224 hash included in sha512.c
 */
 
-#include "tomcrypt.h"
+#include "../tomcrypt.h"
 
 #if defined(LTC_SHA512_224) && defined(LTC_SHA512)
 

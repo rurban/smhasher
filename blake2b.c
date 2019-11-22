@@ -80,7 +80,7 @@ const struct ltc_hash_descriptor blake2b_160_desc =
     &blake2b_160_init,
     &blake2b_process,
     &blake2b_done,
-    &blake2b_160_test,
+    NULL, //&blake2b_160_test,
     NULL
 };
 
@@ -95,7 +95,7 @@ const struct ltc_hash_descriptor blake2b_256_desc =
     &blake2b_256_init,
     &blake2b_process,
     &blake2b_done,
-    &blake2b_256_test,
+    NULL, //&blake2b_256_test,
     NULL
 };
 
@@ -110,7 +110,7 @@ const struct ltc_hash_descriptor blake2b_384_desc =
     &blake2b_384_init,
     &blake2b_process,
     &blake2b_done,
-    &blake2b_384_test,
+    NULL, //&blake2b_384_test,
     NULL
 };
 
@@ -125,7 +125,7 @@ const struct ltc_hash_descriptor blake2b_512_desc =
     &blake2b_512_init,
     &blake2b_process,
     &blake2b_done,
-    &blake2b_512_test,
+    NULL, //&blake2b_512_test,
     NULL
 };
 
@@ -389,6 +389,8 @@ int blake2b_done(hash_state *md, unsigned char *out)
    return CRYPT_OK;
 }
 
+#ifdef TEST
+
 /**
   Self-test the hash
   @return CRYPT_OK if successful, CRYPT_NOP if self-tests have been disabled
@@ -580,6 +582,7 @@ int blake2b_160_test(void)
    return CRYPT_OK;
 #endif
 }
+#endif /* TEST */
 
 #endif
 

@@ -24,7 +24,7 @@ const struct ltc_hash_descriptor sha3_224_desc =
    &sha3_224_init,
    &sha3_process,
    &sha3_done,
-   &sha3_224_test,
+   NULL, /*&sha3_224_test,*/
    NULL
 };
 
@@ -39,7 +39,7 @@ const struct ltc_hash_descriptor sha3_256_desc =
    &sha3_256_init,
    &sha3_process,
    &sha3_done,
-   &sha3_256_test,
+   NULL, /*&sha3_256_test,*/
    NULL
 };
 
@@ -54,7 +54,7 @@ const struct ltc_hash_descriptor sha3_384_desc =
    &sha3_384_init,
    &sha3_process,
    &sha3_done,
-   &sha3_384_test,
+   NULL, /*&sha3_384_test,*/
    NULL
 };
 
@@ -69,7 +69,7 @@ const struct ltc_hash_descriptor sha3_512_desc =
    &sha3_512_init,
    &sha3_process,
    &sha3_done,
-   &sha3_512_test,
+   NULL, /*&sha3_512_test,*/
    NULL
 };
 

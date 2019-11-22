@@ -228,6 +228,7 @@ if(NOT MSVC)
 else()
   set_source_files_properties(SpeedTest.cpp PROPERTIES COMPILE_FLAGS "-I${CMAKE_SOURCE_DIR}")
 endif()
+set_source_files_properties(Hashes.cpp PROPERTIES COMPILE_FLAGS "-I${CMAKE_SOURCE_DIR}")
 
 find_library(HIGHWAY highwayhash)
 if (HIGHWAY)
