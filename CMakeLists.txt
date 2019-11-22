@@ -295,6 +295,16 @@ add_library(
   # ${BEAGLE_SRC}
   ${NOTMSVC_SRC}
   ${X86_64ONLY_SRC}
+  blake2b.c
+  blake2s.c
+  rmd128.c
+  rmd160.c
+  rmd256.c
+  sha2/sha224.c
+  sha2/sha256.c
+  sha2/sha512_224.c
+  sha2/sha512_256.c
+  sha3.c
 )
 
 add_executable(

@@ -113,11 +113,11 @@ HashInfo g_hashes[] =
   { sha2_64a,             64, 0x00000000, "sha2_64a",    "SHA2, first 64 bits of result", POOR },
   { sha3_32a,             32, 0x00000000, "sha3_32a",    "SHA3, first 32 bits of result", POOR },
   { sha3_64a,             64, 0x00000000, "sha3_64a",    "SHA3, first 64 bits of result", POOR },
-  { BLAKE2_32a,           32, 0x00000000, "blake2_32a",  "BLAKE2, first 32 bits of result", POOR },
-  { BLAKE2_64a,           64, 0x00000000, "blake2_64a",  "BLAKE2, first 64 bits of result", POOR },
   { bcrypt_64a,           64, 0x00000000, "bcrypt_64a",  "bcrypt, first 64 bits of result", POOR },
   { scrypt_64a,           64, 0x00000000, "scrypt_64a",  "scrypt, first 64 bits of result", POOR },
 #endif
+  { blake2b32_test,       32, 0x00000000, "blake2b32",   "BLAKE2b, first 32 bits of result", POOR },
+  { blake2b64_test,       64, 0x00000000, "blake2b64",   "BLAKE2b, first 64 bits of result", POOR },
 
 #ifdef __SSE2__
   { hasshe2_test,        256, 0xF5D39DFE, "hasshe2",     "SSE2 hasshe2, 256-bit", POOR },
@@ -382,6 +382,8 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   if(info->hash == tsip_test)
     tsip_init();
 #endif
+  if(info->hash == blake2b32_test || info->hash == blake2b64_test)
+    blake2b_init(&blake2_state, 32, NULL, 0);
 
   //-----------------------------------------------------------------------------
   // Sanity tests
@@ -1224,6 +1226,14 @@ void testHash ( const char * name )
     else if(pInfo->hashbits == 128)
     {
       test<uint128_t>( pInfo->hash, pInfo );
+    }
+    else if(pInfo->hashbits == 160)
+    {
+      test<Blob<160>>( pInfo->hash, pInfo );
+    }
+    else if(pInfo->hashbits == 224)
+    {
+      test<Blob<224>>( pInfo->hash, pInfo );
     }
     else if(pInfo->hashbits == 256)
     {
