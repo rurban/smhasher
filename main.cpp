@@ -1,7 +1,5 @@
-#define main_cpp
+#define _MAIN_CPP
 #include "Platform.h"
-#include "tomcrypt.h"
-hash_state blake2_state;
 #include "Hashes.h"
 #include "KeysetTest.h"
 #include "SpeedTest.h"
@@ -12,9 +10,6 @@ hash_state blake2_state;
 #include <stdio.h>
 #include <stdint.h>
 #include <time.h>
-
-int blake2b_init(hash_state * md, unsigned long outlen,
-                 const unsigned char *key, unsigned long keylen);
 
 //-----------------------------------------------------------------------------
 // Configuration. TODO - move these to command-line flags
@@ -122,10 +117,8 @@ HashInfo g_hashes[] =
   { bcrypt_64a,           64, 0x00000000, "bcrypt_64a",  "bcrypt, first 64 bits of result", POOR },
   { scrypt_64a,           64, 0x00000000, "scrypt_64a",  "scrypt, first 64 bits of result", POOR },
 #endif
-  { blake2b32_test,       32, 0xC051570E, "blake2b32",   "BLAKE2b, first 32 bits of result", POOR },
-  { blake2b64_test,       64, 0xC051570E, "blake2b64",   "BLAKE2b, first 64 bits of result", POOR },
-  { blake2s32_test,       32, 0x307A2169, "blake2s32",   "BLAKE2s, first 32 bits of result", POOR },
-  { blake2s64_test,       64, 0x307A2169, "blake2s64",   "BLAKE2s, first 64 bits of result", POOR },
+  { blake2b160_test,     160, 0xA5F72E2D, "blake2b-160",  "blake2b-160", POOR },
+  { blake2s128_test,     128, 0xC0EF86D1, "blake2s-128",  "blake2s-128", POOR },
 
 #ifdef __SSE2__
   { hasshe2_test,        256, 0xF5D39DFE, "hasshe2",     "SSE2 hasshe2, 256-bit", POOR },
@@ -336,34 +329,41 @@ HashInfo * findHash ( const char * name )
   return NULL;
 }
 
+// optional hash state initializers
+void Hash_init (HashInfo* info) {
+#if defined(__SSE4_2__) && defined(__x86_64__)
+  if(info->hash == clhash_test)
+    clhash_init();
+#endif
+#ifdef HAVE_HIGHWAYHASH
+  if(info->hash == HighwayHash64_test)
+    HighwayHash_init();
+#endif
+#ifndef _MSC_VER
+  if(info->hash == tsip_test)
+    tsip_init();
+#endif
+}
+
 //-----------------------------------------------------------------------------
 // Self-test on startup - verify that all installed hashes work correctly.
 
-void SelfTest ( void )
-{
+void SelfTest(void) {
   bool pass = true;
-
-  for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++)
-  {
-    HashInfo * info = & g_hashes[i];
-
-    pass &= VerificationTest(info->hash,info->hashbits,info->verification,
-                             false);
+  for (size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++) {
+    HashInfo *info = &g_hashes[i];
+    pass &=
+        VerificationTest(info->hash, info->hashbits, info->verification, false);
   }
 
-  if(!pass)
-  {
+  if (!pass) {
     printf("Self-test FAILED!\n");
-
-    for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++)
-    {
-      HashInfo * info = & g_hashes[i];
-
-      printf("%20s - ",info->name);
-      pass &= VerificationTest(info->hash,info->hashbits,info->verification,
+    for (size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++) {
+      HashInfo *info = &g_hashes[i];
+      printf("%20s - ", info->name);
+      pass &= VerificationTest(info->hash, info->hashbits, info->verification,
                                true);
     }
-
     exit(1);
   }
 }
@@ -378,22 +378,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   printf("-------------------------------------------------------------------------------\n");
 
   // eventual initializers
-  if(info->hash == blake2b32_test || info->hash == blake2b64_test)
-    blake2b_init(&blake2_state, 32, NULL, 0);
-  else if(info->hash == blake2s32_test || info->hash == blake2s64_test)
-    blake2s_init(&blake2_state, 32, NULL, 0);
-#if defined(__SSE4_2__) && defined(__x86_64__)
-  else if(info->hash == clhash_test)
-    clhash_init();
-#endif
-#ifdef HAVE_HIGHWAYHASH
-  else if(info->hash == HighwayHash64_test)
-    HighwayHash_init();
-#endif
-#ifndef _MSC_VER
-  else if(info->hash == tsip_test)
-    tsip_init();
-#endif
+  Hash_init (info);
 
   //-----------------------------------------------------------------------------
   // Sanity tests

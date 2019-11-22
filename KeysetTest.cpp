@@ -49,7 +49,7 @@ bool VerificationTest ( pfHash hash, const int hashbits, uint32_t expected, bool
   if (expected != verification) {
     if (!expected) {
       if (verbose)
-        printf("Verification value 0x%08X ....... SKIP (self-seeded)\n",
+        printf("Verification value 0x%08X ....... SKIP (self- or unseeded)\n",
                verification);
       return true;
     } else {
