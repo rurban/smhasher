@@ -45,23 +45,23 @@ TestOpts g_testopts[] =
 {
   { g_testAll, 		"All" },
   { g_testVerifyAll,    "VerifyAll" },
-  { g_testSanity, 	"Sanity" },
-  { g_testSpeed, 	"Speed" },
-  { g_testAvalanche, 	"Avalanche" },
-  { g_testSparse,	"Sparse" },
-  { g_testPermutation,	"Permutation" },
-  { g_testWindow,	"Window" },
-  { g_testCyclic,	"Cyclic" },
-  { g_testTwoBytes,	"TwoBytes" },
+  { g_testSanity,       "Sanity" },
+  { g_testSpeed,        "Speed" },
+  { g_testHashmap,      "Hashmap" },
+  { g_testAvalanche,    "Avalanche" },
+  { g_testSparse,       "Sparse" },
+  { g_testPermutation,  "Permutation" },
+  { g_testWindow,       "Window" },
+  { g_testCyclic,       "Cyclic" },
+  { g_testTwoBytes,     "TwoBytes" },
   { g_testMomentChi2,   "MomentChi2" },
   //{ g_testLongNeighbors,"LongNeighbors" },
-  { g_testText,		"Text" },
-  { g_testZeroes,	"Zeroes" },
-  { g_testSeed,		"Seed" },
-  { g_testDiff, 	"Diff" },
-  { g_testDiffDist, 	"DiffDist" },
-  { g_testBIC, 		"BIC" },
-  { g_testHashmap,      "Hashmap" }
+  { g_testText,	        "Text" },
+  { g_testZeroes,       "Zeroes" },
+  { g_testSeed,	        "Seed" },
+  { g_testDiff,         "Diff" },
+  { g_testDiffDist,     "DiffDist" },
+  { g_testBIC, 	        "BIC" }
 };
 
 bool MomentChi2Test ( struct HashInfo *info );
@@ -377,6 +377,7 @@ template < typename hashtype >
 void test ( hashfunc<hashtype> hash, HashInfo* info )
 {
   const int hashbits = sizeof(hashtype) * 8;
+  double g_speed = 0.0;
 
   printf("-------------------------------------------------------------------------------\n");
 
@@ -426,10 +427,31 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     {
       sum += TinySpeedTest(hashfunc<hashtype>(info->hash),sizeof(hashtype),i,info->verification,true);
     }
-    sum = sum / 31.0;
+    g_speed = sum = sum / 31.0;
     printf("Average                                    %6.3f cycles/hash\n",sum);
     printf("\n");
     fflush(NULL);
+  } else {
+    // known slow hashes, cycle/hash
+    const struct { pfHash h; double cycles; } speeds[] =
+    {{ md5_32, 668.69 },
+     { sha1_32a, 1514.25 },
+     { sha2_224, 1354.81 },
+     { sha2_224_64, 1360.10 },
+     { rmd128, 672.35 },
+     { rmd160, 1045.79 },
+     { rmd256, 638.30 },
+     { blake2s128_test, 698.09 },
+     { blake2b160_test, 1236.84 },
+     { sha3_256, 3877.18},
+     { sha3_256_64, 3877.18}
+    };
+    for (int i=0; i<sizeof(speeds)/sizeof(speeds[0]); i++) {
+      if (speeds[i].h == hash)
+        {
+          g_speed = speeds[i].cycles; break;
+        }
+    }
   }
 
   // sha1_32a runs 30s
@@ -438,8 +460,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("[[[ 'Hashmap' Speed Tests ]]]\n\n");
     fflush(NULL);
     int trials = 50;
-    if ((hash == md5_32 || hash == sha1_32a ||
-         hash == multiply_shift || hash == pair_multiply_shift)
+    if ((g_speed > 500 || hash == multiply_shift || hash == pair_multiply_shift )
          && !g_testExtra)
       trials = 5;
     bool result = true;
@@ -594,7 +615,6 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
     {
       // This one breaks lookup3, surprisingly
-
       printf("[[[ Keyset 'Permutation' Tests ]]]\n\n");
       printf("Combination Lowbits Tests:\n");
       fflush(NULL);
@@ -890,7 +910,9 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     bool result = true;
     bool testCollision = true;
     bool testDistribution = g_testExtra;
-    const int windowbits = info->hashbits > 64 ? 18 : 20;
+    int windowbits = info->hashbits > 64 ? 18 : 20;
+    if (g_speed > 500.0)
+      windowbits = 12;
 
     result &= WindowedKeyTest< Blob<hashbits*2+2>, hashtype >
       ( hash, windowbits, testCollision, testDistribution, g_drawDiagram );
@@ -909,19 +931,16 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   {
     printf("[[[ Keyset 'Cyclic' Tests ]]]\n\n");
     fflush(NULL);
-
+    const int reps = g_speed > 500.0 ? 100000 : 1000000;
     bool result = true;
 
-#if 0
-    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+0,8,100000, g_drawDiagram);
-#else
-    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+0,8,1000000, g_drawDiagram);
-    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+1,8,1000000, g_drawDiagram);
-    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+2,8,1000000, g_drawDiagram);
-    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+3,8,1000000, g_drawDiagram);
-    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+4,8,1000000, g_drawDiagram);
-    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+8,8,1000000, g_drawDiagram);
-#endif
+    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+0,8,reps, g_drawDiagram);
+    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+1,8,reps, g_drawDiagram);
+    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+2,8,reps, g_drawDiagram);
+    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+3,8,reps, g_drawDiagram);
+    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+4,8,reps, g_drawDiagram);
+    result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+8,8,reps, g_drawDiagram);
+
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
     fflush(NULL);
@@ -946,11 +965,13 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     int maxlen = 24;
     if (!g_testExtra && (info->hashbits > 32)) {
       maxlen = (info->hashbits < 128) ? 20 : 15;
+      if (g_speed > 500.0)
+        maxlen = 8;
     }
 
-    for(int i = 4; i <= maxlen; i += 4)
+    for(int len = 4; len <= maxlen; len += 4)
     {
-      result &= TwoBytesTest2<hashtype>(hash, i, g_drawDiagram);
+      result &= TwoBytesTest2<hashtype>(hash, len, g_drawDiagram);
     }
 
     if(!result) printf("*********FAIL*********\n");
@@ -1073,7 +1094,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     bool result = true;
     bool dumpCollisions = g_drawDiagram; // from --verbose
     int reps = 1000;
-    if ((hash == md5_32 || hash == sha1_32a) && !g_testExtra)
+    if ((g_speed > 500.0 || info->hashbits > 128) && !g_testExtra)
       reps = 50; // sha1: 7m, md5: 4m53
 
     result &= DiffTest< Blob<64>,  hashtype >(hash,5,reps,dumpCollisions);
@@ -1115,7 +1136,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     fflush(NULL);
 
     bool result = true;
-    if (info->hashbits > 64) {
+    if (info->hashbits > 64 || g_speed > 500.0) {
       result &= BicTest3<Blob<128>,hashtype>(hash,100000,g_drawDiagram);
     } else {
       const long reps = 64000000/info->hashbits;
@@ -1153,7 +1174,8 @@ bool MomentChi2Test ( struct HashInfo *info )
 {
   pfHash hash = info->hash;
   const int size = info->hashbits / 8;
-  const int step = ((hash == md5_32 || hash == sha1_32a) && !g_testExtra) ? 6 : 3;
+  const int step = ((hash == md5_32 || hash == sha1_32a || info->hashbits > 128)
+                    && !g_testExtra) ? 6 : 3;
   unsigned k = 0, s = 0;
   unsigned long l, h, x;
   const unsigned mx = 0xfffffff0;
