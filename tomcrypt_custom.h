@@ -15,6 +15,7 @@
 #undef crypt_argchk
 #define zeromem(a,l) memset(a,0,l)
 #define crypt_argchk(v,s,d)
+#define LTC_NO_TEST
 
 #ifdef _MSC_VER
 #define LTC_NO_PROTOTYPES

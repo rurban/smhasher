@@ -75,7 +75,7 @@ const char* quality_str[3] = { "SKIP", "POOR", "GOOD" };
 HashInfo g_hashes[] =
 {
   // first the bad hash funcs, failing tests:
- { DoNothingHash,        32, 0x00000000, "donothing32", "Do-Nothing function (measure call overhead)", SKIP },
+  { DoNothingHash,        32, 0x00000000, "donothing32", "Do-Nothing function (measure call overhead)", SKIP },
   { DoNothingHash,        64, 0x00000000, "donothing64", "Do-Nothing function (measure call overhead)", SKIP },
   { DoNothingHash,       128, 0x00000000, "donothing128", "Do-Nothing function (measure call overhead)", SKIP },
   { NoopOAATReadHash,     64, 0x00000000, "NOP_OAAT_read64", "Noop function (measure call + OAAT reading overhead)", SKIP },
@@ -88,37 +88,35 @@ HashInfo g_hashes[] =
  #define FIBONACCI_VERIF      0x09952480
  #define FNV2_VERIF           0x739801C5
  #define MULTSHIFT_VERIF      0x90FA041A
- #define PAIRMULTSHIFT_VERIF  0x0C211550
+ #define PAIRMS_VERIF         0x0C211550
 #else
  #define FIBONACCI_VERIF      0xFE3BD380
  #define FNV2_VERIF           0x1967C625
  #define MULTSHIFT_VERIF      0xF15F3D1E
- #define PAIRMULTSHIFT_VERIF  0xB070283D
+ #define PAIRMS_VERIF         0xB070283D
 #endif
   // M. Dietzfelbinger, T. Hagerup, J. Katajainen, and M. Penttonen. A reliable randomized
   // algorithm for the closest-pair problem. J. Algorithms, 25:19–51, 1997.
   // must be skipped for hashmaps, extremly bad!
   { multiply_shift, __WORDSIZE,MULTSHIFT_VERIF, "multiply_shift", "Dietzfelbinger Multiply-shift on strings", POOR },
-  { pair_multiply_shift, __WORDSIZE, PAIRMULTSHIFT_VERIF, "pair_multiply_shift", "Pair-multiply-shift", POOR },
+  { pair_multiply_shift, __WORDSIZE, PAIRMS_VERIF, "pair_multiply_shift", "Pair-multiply-shift", POOR },
   { crc32,                32, 0x3719DB20, "crc32",       "CRC-32 soft", POOR },
-  { md5_32,               32, 0xF7192210, "md5_32a",     "MD5, first 32 bits of result", POOR },
+  { md5_32,               32, 0xF7192210, "md5_32a",     "MD5, low 32 bits", POOR },
 #ifdef _MSC_VER /* truncated long to 32 */
 #  define SHA1_VERIF          0xDCB02360
 #else
 #  define SHA1_VERIF          0x7FE8C80E
 #endif
-  { sha1_32a,             32, SHA1_VERIF, "sha1_32a",    "SHA1, first 32 bits of result", POOR},
-#if 0
-  { sha1_64a,             32, 0x00000000, "sha1_64a",    "SHA1 64-bit, first 64 bits of result", POOR },
-  { sha2_32a,             32, 0x00000000, "sha2_32a",    "SHA2, first 32 bits of result", POOR },
-  { sha2_64a,             64, 0x00000000, "sha2_64a",    "SHA2, first 64 bits of result", POOR },
-  { sha3_32a,             32, 0x00000000, "sha3_32a",    "SHA3, first 32 bits of result", POOR },
-  { sha3_64a,             64, 0x00000000, "sha3_64a",    "SHA3, first 64 bits of result", POOR },
-  { bcrypt_64a,           64, 0x00000000, "bcrypt_64a",  "bcrypt, first 64 bits of result", POOR },
-  { scrypt_64a,           64, 0x00000000, "scrypt_64a",  "scrypt, first 64 bits of result", POOR },
-#endif
-  { blake2b160_test,     160, 0xA5F72E2D, "blake2b-160",  "blake2b-160", POOR },
+  { sha1_32a,             32, SHA1_VERIF, "sha1_32a",     "SHA1, low 32 bits", POOR},
+  { sha2_224,            224, 0x60424E90, "sha2-224",     "SHA2-224", POOR },
+  { sha2_224_64,          64, 0x7EF6BB61, "sha2-224_64",  "SHA2-224, low 64 bits", POOR },
+  { rmd128,              128, 0xFF576977, "rmd128",       "RIPEMD-128", POOR },
+  { rmd160,              160, 0x30B37AC6, "rmd160",       "RIPEMD-160", POOR },
+  { rmd256,              256, 0xEB16FAD7, "rmd256",       "RIPEMD-256", POOR },
   { blake2s128_test,     128, 0xC0EF86D1, "blake2s-128",  "blake2s-128", POOR },
+  { blake2b160_test,     160, 0xA5F72E2D, "blake2b-160",  "blake2b-160", POOR },
+  { sha3_256,            256, 0xB85F6DD9, "sha3-256",     "SHA3-256", POOR },
+  { sha3_256_64,          64, 0x86EC71EF, "sha3-256_64",  "SHA3-256, low 64 bits", POOR },
 
 #ifdef __SSE2__
   { hasshe2_test,        256, 0xF5D39DFE, "hasshe2",     "SSE2 hasshe2, 256-bit", POOR },
@@ -323,7 +321,8 @@ HashInfo * findHash ( const char * name )
 {
   for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++)
   {
-    if(_stricmp(name,g_hashes[i].name) == 0) return &g_hashes[i];
+    if(_stricmp(name,g_hashes[i].name) == 0)
+      return &g_hashes[i];
   }
 
   return NULL;
@@ -331,16 +330,20 @@ HashInfo * findHash ( const char * name )
 
 // optional hash state initializers
 void Hash_init (HashInfo* info) {
+  if (info->hash == sha2_224_64)
+    sha224_init(&ltc_state);
+  else if (info->hash == rmd128)
+    rmd128_init(&ltc_state);
 #if defined(__SSE4_2__) && defined(__x86_64__)
-  if(info->hash == clhash_test)
+  else if(info->hash == clhash_test)
     clhash_init();
 #endif
 #ifdef HAVE_HIGHWAYHASH
-  if(info->hash == HighwayHash64_test)
+  else if(info->hash == HighwayHash64_test)
     HighwayHash_init();
 #endif
 #ifndef _MSC_VER
-  if(info->hash == tsip_test)
+  else if(info->hash == tsip_test)
     tsip_init();
 #endif
 }
