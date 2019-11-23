@@ -150,6 +150,9 @@ HashInfo g_hashes[] =
   { blake2b256_64,        64, 0x3C59D62D, "blake2b-256_64","blake2b-256, low 64 bits", GOOD },
   { sha3_256,            256, 0xB85F6DD9, "sha3-256",     "SHA3-256 (Keccak)", GOOD },
   { sha3_256_64,          64, 0x86EC71EF, "sha3-256_64",  "SHA3-256 (Keccak), low 64 bits", GOOD },
+#if defined (HAVE_SSE2) && defined(HAVE_AESNI) && !defined(_MSC_VER) // FIXME
+  { aesni_cbc_sha1_avx,  160, 0, "aesni_cbc_sha1_avx",    "OpenSSL aesni_cbc_sha1_avx.S", GOOD },
+#endif
 
 #ifdef __SSE2__
   { hasshe2_test,        256, 0xF5D39DFE, "hasshe2",     "SSE2 hasshe2, 256-bit", POOR },

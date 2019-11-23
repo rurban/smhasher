@@ -446,6 +446,27 @@ if(AES_FOUND AND (PROCESSOR_FAMILY STREQUAL "Intel"))
                                 PROPERTIES COMPILE_FLAGS "-mavx -mavx2 -maes")
   endif()
 else()
+  if((CMAKE_SIZEOF_VOID_P EQUAL 8) AND (NOT MSVC))
+    if (CMAKE_COMPILER_IS_GNUCC)
+      set(AESNI_SHA1_SRC aesni-sha1-x86_64-gcc.s)
+      #set_source_files_properties(aesni-sha1-x86_64-gcc.s
+      #  PROPERTIES COMPILE_FLAGS "-m64 -Wall -O3 -DL_ENDIAN")
+      #add_custom_target (
+      #  aesni-sha1-x86_64.o
+      #  COMMAND gcc -m64 -Wall -O3 -DL_ENDIAN aesni-sha1-x86_64.o aesni-sha1-x86_64-gcc.s
+      #  DEPENDS aesni-sha1-x86_64-gcc.s )
+    elseif((CMAKE_C_COMPILER_ID STREQUAL AppleClang)
+          OR (CMAKE_C_COMPILER_ID STREQUAL Clang))
+      set(AESNI_SHA1_SRC aesni-sha1-x86_64-clang.s)
+      #set_source_files_properties(aesni-sha1-x86_64-clang.s
+      #  PROPERTIES COMPILE_FLAGS "-arch x86_64 -O3 -Wall -DL_ENDIAN")
+      #add_custom_target (
+      #  aesni-sha1-x86_64.o
+      #  COMMAND gcc -arch x86_64 -O3 -Wall -DL_ENDIAN -c -o aesni-sha1-x86_64.o aesni-sha1-x86_64-clang.s
+      #  DEPENDS aesni-sha1-x86_64-clang.s )
+    endif()
+  endif()
+else()
   set(T1HA_SRC t1ha/t1ha0.c t1ha/t1ha1.c t1ha/t1ha2.c)
 endif()
 if(CLMUL_FOUND)
@@ -601,6 +622,7 @@ add_library(
   FarmTest.cc
   ${SSE4_OBJ}
   # ${FHTW_OBJ}
+  ${AESNI_SHA1_SRC}
   ${T1HA_SRC}
   ${SHA_SRC}
   mum.cc

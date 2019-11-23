@@ -24,6 +24,7 @@
 #include "fasthash.h"
 #include "jody_hash32.h"
 #include "jody_hash64.h"
+#include "sha1.h"
 
 // objsize: 0-0x113 = 276
 #include "tifuhash.h"
@@ -952,7 +953,30 @@ inline void sha2ni_256_64(const void *key, int len, uint32_t seed, void *out)
 }
 #endif
 
+// intel only
 #ifdef HAVE_SSE2
+
+#if defined(HAVE_AESNI) && !defined(_MSC_VER)
+typedef struct aes_key_st {
+    unsigned long rd_key[4 * 15];
+    int rounds;
+} AES_KEY;
+extern "C" void aesni_cbc_sha1_enc_avx(const void *inp, void *out, size_t blocks,
+                                       const AES_KEY *key, unsigned char iv[16],
+                                       SHA1_CTX *ctx, const void *in0);
+inline void aesni_cbc_sha1_avx(const void *key, int len, uint32_t seed, void *out)
+{
+  SHA1_CTX context;
+  AES_KEY aes_key;
+  //uint8_t digest[20];
+  unsigned char ivec[16];
+  SHA1_Init(&context);
+  context.state[0] ^= seed;
+  memset(ivec,0,sizeof(ivec));
+  aesni_cbc_sha1_enc_avx(key, out, len, &aes_key, ivec, &context, NULL);
+}
+#endif
+
 # if defined(_MAIN_CPP)
 #  include "farsh.h"
 # else
