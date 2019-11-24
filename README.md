@@ -16,6 +16,15 @@ SMhasher
 | [crc32](doc/crc32)                            |       392.05 |   130.08 | 199.87 (3) | 422 | insecure, 8590x collisions, distrib |
 | [md5_32a](doc/md5_32a)                        |       352.19 |   668.69 |1053.14 (149)|4419| 8590x collisions, distrib |
 | [sha1_32a](doc/sha1_32a)                      |       364.78 |  1514.25 |1967.21 (14)|5126 | collisions, 36.6% distrib   |
+| [sha2-224](doc/sha2-224)                      |       147.13 |  1354.81 |1589.92 (12)|     | collisions  |
+| [sha2-224_64](doc/sha2-224_64)                |       147.60 |  1360.10 |1620.93 (13)|     | collisions  |
+| [rmd128](doc/rmd128)                          |       332.78 |   672.35 | 897.29 (8) |     | collisions  |
+| [rmd160](doc/rmd160)                          |       202.16 |  1045.79 |1287.74 (16)|     | collisions  |
+| [rmd256](doc/rmd256)                          |       356.57 |   638.30 | 833.96 (10)|     | collisions  |
+| [blake2s-128](doc/blake2s-128)                |       295.30 |   698.09 |1059.24 (51)|     | collisions  |
+| [blake2b-160](doc/blake2b-160)                |       356.08 |  1236.84 |1458.15 (12)|     | collisions  |
+| [sha3-256](doc/sha3-256)                      |       100.58 |  3877.18 |4159.79 (37)|     | collisions  |
+| [sha3-256_64](doc/sha3-256_64)                |       100.57 |  3909.00 |4174.63 (16)|     | collisions  |
 | [hasshe2](doc/hasshe2)                        |      2357.32 |    76.10 | 348.10 (6) | 445 | insecure, fails all tests    |
 | [crc32_hw](doc/crc32_hw)                      |      6292.63 |    30.38 | 204.19 (18) | 653 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
 | [crc32_hw1](doc/crc32_hw1)                    |     23382.53 |    36.84 | 197.39 (20) | 671 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |

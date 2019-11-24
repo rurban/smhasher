@@ -432,19 +432,19 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("\n");
     fflush(NULL);
   } else {
-    // known slow hashes, cycle/hash
+    // known slow hashes (> 500), cycle/hash
     const struct { pfHash h; double cycles; } speeds[] =
-    {{ md5_32, 668.69 },
-     { sha1_32a, 1514.25 },
-     { sha2_224, 1354.81 },
-     { sha2_224_64, 1360.10 },
-     { rmd128, 672.35 },
-     { rmd160, 1045.79 },
-     { rmd256, 638.30 },
-     { blake2s128_test, 698.09 },
+    {{ md5_32,           668.69 },
+     { sha1_32a,        1514.25 },
+     { sha2_224,        1354.81 },
+     { sha2_224_64,     1360.10 },
+     { rmd128,           672.35 },
+     { rmd160,          1045.79 },
+     { rmd256,           638.30 },
+     { blake2s128_test,  698.09 },
      { blake2b160_test, 1236.84 },
-     { sha3_256, 3877.18},
-     { sha3_256_64, 3877.18}
+     { sha3_256,        3877.18 },
+     { sha3_256_64,     3909.00 }
     };
     for (int i=0; i<sizeof(speeds)/sizeof(speeds[0]); i++) {
       if (speeds[i].h == hash)
