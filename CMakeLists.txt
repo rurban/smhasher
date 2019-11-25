@@ -36,6 +36,9 @@ if(NOT CMAKE_BUILD_TYPE)
   RelWithDebInfo MinSizeRel."
   FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
+if(CMAKE_BUILD_TYPE STREQUAL Debug)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEBUG")
+endif()
 
 include (CheckTypeSize)
 check_type_size (__int64 __INT64)
@@ -223,6 +226,7 @@ if(NOT MSVC)
   set_source_files_properties(HashMapTest.cpp PROPERTIES COMPILE_FLAGS "-std=c++11")
   set_source_files_properties(SpeedTest.cpp PROPERTIES COMPILE_FLAGS "-std=c++0x -I${CMAKE_SOURCE_DIR}")
   set_source_files_properties(main.cpp PROPERTIES COMPILE_FLAGS "-std=c++0x")
+  set_source_files_properties(bittest.cpp PROPERTIES COMPILE_FLAGS "-std=c++0x")
   # https://github.com/dgryski/trifles/tree/master/tsip
   set(TSIP_SRC tsip.c)
 else()
@@ -319,6 +323,17 @@ target_link_libraries(
   ${HIGHWAY_LIB}
   ${CMAKE_THREAD_LIBS_INIT}
   )
+
+#add_executable(
+#  bittest
+#  bittest.cpp
+#)
+#
+#target_link_libraries(
+#  bittest
+#  SMHasherSupport
+#  ${CMAKE_THREAD_LIBS_INIT}
+#  )
 
 enable_testing()
 add_test(VerifyAll SMHasher --test=VerifyAll)

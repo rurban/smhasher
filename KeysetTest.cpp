@@ -40,9 +40,9 @@ bool VerificationTest ( pfHash hash, const int hashbits, uint32_t expected, bool
   uint32_t verification =
       (final[0] << 0) | (final[1] << 8) | (final[2] << 16) | (final[3] << 24);
 
-  delete [] key;
-  delete [] hashes;
   delete [] final;
+  delete [] hashes;
+  delete [] key;
 
   //----------
 

@@ -194,9 +194,11 @@ void SparseKeygenRecurse ( pfHash hash, int start, int bitsleft, bool inclusive,
 //----------
 
 template < int keybits, typename hashtype >
-bool SparseKeyTest ( hashfunc<hashtype> hash, const int setbits, bool inclusive, bool testColl, bool testDist, bool drawDiagram  )
+bool SparseKeyTest ( hashfunc<hashtype> hash, const int setbits, bool inclusive,
+                     bool testColl, bool testDist, bool drawDiagram )
 {
-  printf("Keyset 'Sparse' - %d-bit keys with %s %d bits set - ",keybits, inclusive ? "up to" : "exactly", setbits);
+  printf("Keyset 'Sparse' - %d-bit keys with %s %d bits set - ",keybits,
+         inclusive ? "up to" : "exactly", setbits);
 
   typedef Blob<keybits> keytype;
 
@@ -207,11 +209,8 @@ bool SparseKeyTest ( hashfunc<hashtype> hash, const int setbits, bool inclusive,
 
   if(inclusive)
   {
-    hashtype h;
-
-    hash(&k,sizeof(keytype),0,&h);
-
-    hashes.push_back(h);
+    hashes.resize(1);
+    hash(&k,sizeof(keytype),0,&hashes[0]);
   }
 
   SparseKeygenRecurse(hash,0,setbits,inclusive,k,hashes);
@@ -320,8 +319,8 @@ bool CyclicKeyTest ( pfHash hash, int cycleLen, int cycleReps, const int keycoun
   result &= TestHashList(hashes,drawDiagram);
   printf("\n");
 
-  delete [] cycle;
   delete [] key;
+  delete [] cycle;
 
   return result;
 }

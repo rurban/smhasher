@@ -644,3 +644,8 @@ inline void sha3_256(const void *key, int len, uint32_t seed, void *out)
   sha3_process(&ltc_state, (unsigned char *)key, len);
   sha3_done(&ltc_state, (unsigned char *)out);
 }
+inline void wysha(const void *key, int len, unsigned seed, void *out) {
+  uint64_t s[4] = {wyhash(key, len, seed + 0), wyhash(key, len, seed + 1),
+                   wyhash(key, len, seed + 2), wyhash(key, len, seed + 3)};
+  memcpy(out, s, 32);
+}

@@ -89,12 +89,14 @@ bool CountLowbitsCollisions ( std::vector<hashtype> & revhashes, int nbLBits)
 
   for (size_t hnb = 1; hnb < nbH; hnb++)
   {
+#ifdef DEBUG
+    hashtype const h1x = revhashes[hnb-1];
+    hashtype const h2x = revhashes[hnb];
+#endif
     hashtype const h1 = revhashes[hnb-1] >> shiftBy;
     hashtype const h2 = revhashes[hnb]   >> shiftBy;
     if(h1 == h2)
-    {
       collcount++;
-    }
   }
 
   printf("actual %6i (%.2fx)", collcount, collcount / expected);
@@ -126,12 +128,14 @@ bool CountHighbitsCollisions ( std::vector<hashtype> & hashes, int nbHBits)
 
   for (size_t hnb = 1; hnb < nbH; hnb++)
   {
+#ifdef DEBUG
+    hashtype const h1x = hashes[hnb-1];
+    hashtype const h2x = hashes[hnb];
+#endif
     hashtype const h1 = hashes[hnb-1] >> shiftBy;
     hashtype const h2 = hashes[hnb]   >> shiftBy;
     if(h1 == h2)
-    {
       collcount++;
-    }
   }
 
   printf("actual %6i (%.2fx)", collcount, collcount / expected);
@@ -421,27 +425,20 @@ static int FindNbBitsForCollisionTarget(int targetNbCollisions, int nbHashes)
     return nb-1;
 }
 
+// 0xf00f1001 => 0x8008f00f
 template <typename hashtype>
 hashtype bitreverse(hashtype n, size_t b = sizeof(hashtype) * 8)
 {
     assert(b <= std::numeric_limits<hashtype>::digits);
     hashtype rv = 0;
-    for (size_t i = 0; i < b; ++i, n >>= 1) {
-        rv = (rv << 1) | (n & 0x01);
+    for (size_t i = 0; i < b; i += 8) {
+        rv <<= 8;
+        rv |= bitrev(n & 0xff);
+        n >>= 8;
     }
     return rv;
 }
-
 /*
-static inline uint8_t bitrev(uint8_t b)
-{
-  unsigned char revbits[16] =
-    {
-     0x0, 0x8, 0x4, 0xc, 0x2, 0xa, 0x6, 0xe,
-     0x1, 0x9, 0x5, 0xd, 0x3, 0xb, 0x7, 0xf
-    };
-  return (revbits[ b & 0b1111 ] << 4) | revbits[ b >> 4 ];
-}
 static inline uint32_t bitreverse(uint32_t i)
 {
   union {
@@ -516,7 +513,8 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
     printf("\n");
 
     if (testHighBits) {
-      result &= CountHighbitsCollisions(hashes, 256);
+      result &= CountHighbitsCollisions(hashes, 224);
+      result &= CountHighbitsCollisions(hashes, 160);
       result &= CountHighbitsCollisions(hashes, 128);
       result &= CountHighbitsCollisions(hashes,  64);
       result &= CountHighbitsCollisions(hashes,  32);
@@ -534,10 +532,12 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
       // reverse: bitwise flip the hashes. lowest bits first
       std::vector<hashtype> revhashes = hashes;
       for (size_t i = 0; i < revhashes.size(); i++) {
-        revhashes[i] = bitreverse(revhashes[i]);
+        revhashes[i] = bitreverse(hashes[i]);
       }
       std::sort(revhashes.begin(), revhashes.end());
 
+      result &= CountLowbitsCollisions(revhashes, 224);
+      result &= CountLowbitsCollisions(revhashes, 160);
       result &= CountLowbitsCollisions(revhashes, 128);
       result &= CountLowbitsCollisions(revhashes,  64);
       result &= CountLowbitsCollisions(revhashes,  32);
@@ -551,7 +551,7 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
       result &= CountLowbitsCollisions(revhashes,   12);
       result &= CountLowbitsCollisions(revhashes,   8);
 
-      std::vector<hashtype>().swap(revhashes);
+      //std::vector<hashtype>().swap(revhashes);
       //revhashes.clear();
     }
   }

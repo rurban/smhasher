@@ -8,6 +8,7 @@
 #include <map>
 #include <set>
 #include <string>
+#include <assert.h>
 
 //-----------------------------------------------------------------------------
 // If the optimizer detects that a value in a speed test is constant or unused,
@@ -18,6 +19,16 @@
 
 void     blackhole ( uint32_t x );
 uint32_t whitehole ( void );
+
+static inline uint8_t bitrev(uint8_t b)
+{
+  static const unsigned char revbits[16] =
+    {
+     0x0, 0x8, 0x4, 0xc, 0x2, 0xa, 0x6, 0xe,
+     0x1, 0x9, 0x5, 0xd, 0x3, 0xb, 0x7, 0xf
+    };
+  return (revbits[ b & 0b1111 ] << 4) | revbits[ b >> 4 ];
+}
 
 //-----------------------------------------------------------------------------
 // We want to verify that every test produces the same result on every platform
@@ -227,8 +238,15 @@ public:
     {
       bytes[i] = 0;
     }
-
     *(int*)bytes = x;
+  }
+  Blob ( unsigned long long x )
+  {
+    *(unsigned long long*)bytes = x;
+  }
+  Blob ( unsigned long x )
+  {
+    *(unsigned long*)bytes = x;
   }
 
   Blob ( const Blob & k )
@@ -332,7 +350,6 @@ public:
     {
       bytes[i] ^= k.bytes[i];
     }
-
     return *this;
   }
 
@@ -340,10 +357,23 @@ public:
   {
     return (*(int*)bytes) & x;
   }
-
   int operator | ( int x )
   {
     return (*(int*)bytes) | x;
+  }
+
+  Blob & operator |= ( const Blob & k )
+  {
+    for(size_t i = 0; i < sizeof(bytes); i++)
+    {
+      bytes[i] |= k.bytes[i];
+    }
+    return *this;
+  }
+  Blob & operator |= ( uint8_t k )
+  {
+    bytes[0] |= k;
+    return *this;
   }
 
   Blob & operator &= ( const Blob & k )
@@ -352,6 +382,7 @@ public:
     {
       bytes[i] &= k.bytes[i];
     }
+    return *this;
   }
 
   Blob operator << ( int c )
@@ -383,6 +414,16 @@ public:
   {
     rshift(&bytes[0], sizeof(bytes), c);
 
+    return *this;
+  }
+
+  Blob & bitreverse ( void )
+  {
+    assert (_bits % 8 == 0);
+    const int j = _bits / 8;
+    for (int i = 0; i < j; i++) {
+      bytes[j - i] = bitrev(bytes[i]);
+    }
     return *this;
   }
 
