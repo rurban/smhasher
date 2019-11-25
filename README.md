@@ -16,24 +16,24 @@ SMhasher
 | [crc32](doc/crc32)                            |       392.05 |   130.08 | 199.87 (3) | 422 | insecure, 8590x collisions, distrib |
 | [md5_32a](doc/md5_32a)                        |       352.19 |   668.69 |1053.14(149)|4419 | 8590x collisions, distrib |
 | [sha1_32a](doc/sha1_32a)                      |       364.78 |  1514.25 |1967.21 (14)|5126 | collisions, 36.6% distrib |
-| [sha2-224](doc/sha2-224)                      |       147.13 |  1354.81 |1589.92 (12)|     | collisions++  |
-| [sha2-224_64](doc/sha2-224_64)                |       147.60 |  1360.10 |1620.93 (13)|     | collisions++  |
-| [sha2-256](doc/sha2-256)                      |       147.80 |  1374.90 |1606.06 (16)|     | collisions++, Moment Chi2 4  |
+| [sha2-224](doc/sha2-224)                      |       147.13 |  1354.81 |1589.92 (12)|     |               |
+| [sha2-224_64](doc/sha2-224_64)                |       147.60 |  1360.10 |1620.93 (13)|     |               |
+| [sha2-256](doc/sha2-256)                      |       147.80 |  1374.90 |1606.06 (16)|     | Moment Chi2 4 |
 | [sha2-256_64](doc/sha2-256_64)                |       148.01 |  1376.34 |1624.71 (16)|     | Moment Chi2 7 |
-| [rmd128](doc/rmd128)                          |       332.78 |   672.35 | 897.29 (8) |     | collisions++  |
-| [rmd160](doc/rmd160)                          |       202.16 |  1045.79 |1287.74 (16)|     | collisions++  |
-| [rmd256](doc/rmd256)                          |       356.57 |   638.30 | 833.96 (10)|     | collisions++  |
-| [blake2s-128](doc/blake2s-128)                |       295.30 |   698.09 |1059.24 (51)|     | collisions++  |
-| [blake2s-160](doc/blake2s-160)                |       215.01 |  1026.74 |1239.54 (11)|     | collisions++  |
-| [blake2s-224](doc/blake2s-224)                |       207.06 |  1063.86 |1236.50 (20)|     | collisions++  |
-| [blake2s-256](doc/blake2s-256)                |       215.28 |  1014.88 |1230.38 (28)|     | collisions++  |
+| [rmd128](doc/rmd128)                          |       332.78 |   672.35 | 897.29 (8) |     |               |
+| [rmd160](doc/rmd160)                          |       202.16 |  1045.79 |1287.74 (16)|     |               |
+| [rmd256](doc/rmd256)                          |       356.57 |   638.30 | 833.96 (10)|     |               |
+| [blake2s-128](doc/blake2s-128)                |       295.30 |   698.09 |1059.24 (51)|     |               |
+| [blake2s-160](doc/blake2s-160)                |       215.01 |  1026.74 |1239.54 (11)|     |               |
+| [blake2s-224](doc/blake2s-224)                |       207.06 |  1063.86 |1236.50 (20)|     |               |
+| [blake2s-256](doc/blake2s-256)                |       215.28 |  1014.88 |1230.38 (28)|     |               |
 | [blake2s-256_64](doc/blake2s-256_64)          |       211.52 |  1044.22 |1228.43 (8) |     |               |
-| [blake2b-160](doc/blake2b-160)                |       356.08 |  1236.84 |1458.15 (12)|     | collisions++  |
-| [blake2b-224](doc/blake2b-224)                |       356.59 |  1228.50 |1425.87 (16)|     | collisions++  |
-| [blake2b-256](doc/blake2b-256)                |       355.97 |  1232.22 |1443.31 (19)|     | collisions++  |
+| [blake2b-160](doc/blake2b-160)                |       356.08 |  1236.84 |1458.15 (12)|     |               |
+| [blake2b-224](doc/blake2b-224)                |       356.59 |  1228.50 |1425.87 (16)|     |               |
+| [blake2b-256](doc/blake2b-256)                |       355.97 |  1232.22 |1443.31 (19)|     |               |
 | [blake2b-256_64](doc/blake2b-256_64)          |       356.97 |  1222.76 |1435.03 (9) |     |               |
-| [sha3-256](doc/sha3-256)                      |       100.58 |  3877.18 |4159.79 (37)|     | collisions++  |
-| [sha3-256_64](doc/sha3-256_64)                |       100.57 |  3909.00 |4174.63 (16)|     | collisions++  |
+| [sha3-256](doc/sha3-256)                      |       100.58 |  3877.18 |4159.79 (37)|     |               |
+| [sha3-256_64](doc/sha3-256_64)                |       100.57 |  3909.00 |4174.63 (16)|     |               |
 | [hasshe2](doc/hasshe2)                        |      2357.32 |    76.10 | 348.10 (6) | 445 | insecure, fails all tests    |
 | [crc32_hw](doc/crc32_hw)                      |      6292.63 |    30.38 | 204.19 (18)| 653 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
 | [crc32_hw1](doc/crc32_hw1)                    |     23382.53 |    36.84 | 197.39 (20)| 671 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
@@ -239,3 +239,36 @@ bits tested here cannot be considered "secure" at all.
 
 The '\0' vulnerability attack with binary keys is tested in the 2nd
 Sanity Zero test.
+
+CRYPTO
+------
+
+The official NIST hash function testsuite does not do such extensive
+statistical tests, to search for weak ranges in the bits. Also crypto
+does not change the initial state, which we do here for our random
+32bit seed. Crypto mostly cares about unreversable key -> hash
+functions without changing the initial fixed state and
+timings/sidechannel attacks.
+
+The NIST "Cryptographic Algorithm Validation Program" (CAVP) involves
+the testing of the implementations of FIPS-approved and
+NIST-recommended cryptographic algorithms. During the NIST SHA-3
+competition, the testing methodology was borrowed from the "CAVP",
+as the KATs and MCTs of the [SHA-3 Competition Test Suite](https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Algorithm-Validation-Program/documents/sha3/sha3vs.pdf)
+were based on the CAVP tests for SHA-2. In addition to this, the “Extremely Long
+Message Test,” not present in the CAVP for SHA-2, required the
+submitters to generate the hash value corresponding to a message with
+a length of 1 GiB. “NIST - Cryptographic Algorithm Validation Program (CAVP),”
+June 2017. Available: http://csrc.nist.gov/groups/STM/cavp
+(No testing source code provided, just high-level descriptions)
+
+Two other independent third party testsuites found an extensive number
+of bugs and weaknesses in the SHA3 candidates.
+"Finding Bugs in Cryptographic Hash Function Implementations",
+Nicky Mouha, Mohammad S Raunak, D. Richard Kuhn, and Raghu Kacker, 2017.
+https://eprint.iacr.org/2017/891.pdf
+
+Maybe independent researchers should come together to do a better
+public SHA-4 round, based on better and more testing methods, open
+source code for the tests, and using standard industry practices, such
+as valgrind, address-sanitizer and ubsan to detect obvious bugs.
