@@ -494,12 +494,62 @@ inline void blake2b160_test(const void *key, int len, uint32_t seed, void *out)
   blake2b_process(&ltc_state, (unsigned char *)key, len);
   blake2b_done(&ltc_state, (unsigned char *)out);
 }
+inline void blake2b224_test(const void *key, int len, uint32_t seed, void *out)
+{
+  // objsize
+  blake2b_init(&ltc_state, 28, NULL, 0);
+  ltc_state.blake2b.h[0] = CONST64(0x6a09e667f3bcc908) ^ seed;
+  blake2b_process(&ltc_state, (unsigned char *)key, len);
+  blake2b_done(&ltc_state, (unsigned char *)out);
+}
+inline void blake2b256_test(const void *key, int len, uint32_t seed, void *out)
+{
+  // objsize
+  blake2b_init(&ltc_state, 32, NULL, 0);
+  ltc_state.blake2b.h[0] = CONST64(0x6a09e667f3bcc908) ^ seed;
+  blake2b_process(&ltc_state, (unsigned char *)key, len);
+  blake2b_done(&ltc_state, (unsigned char *)out);
+}
+inline void blake2b256_64(const void *key, int len, uint32_t seed, void *out)
+{
+  // objsize
+  unsigned char buf[32];
+  blake2b_init(&ltc_state, 32, NULL, 0);
+  ltc_state.blake2b.h[0] = CONST64(0x6a09e667f3bcc908) ^ seed;
+  blake2b_process(&ltc_state, (unsigned char *)key, len);
+  blake2b_done(&ltc_state, buf);
+  memcpy(out, buf, 8);
+}
 int blake2s_init(hash_state * md, unsigned long outlen,
                  const unsigned char *key, unsigned long keylen);
 inline void blake2s128_test(const void * key, int len, uint32_t seed, void * out)
 {
   // objsize
   blake2s_init(&ltc_state, 16, NULL, 0);
+  ltc_state.blake2s.h[0] = 0x6A09E667UL ^ seed;
+  blake2s_process(&ltc_state, (unsigned char *)key, len);
+  blake2s_done(&ltc_state, (unsigned char *)out);
+}
+inline void blake2s160_test(const void * key, int len, uint32_t seed, void * out)
+{
+  // objsize
+  blake2s_init(&ltc_state, 20, NULL, 0);
+  ltc_state.blake2s.h[0] = 0x6A09E667UL ^ seed;
+  blake2s_process(&ltc_state, (unsigned char *)key, len);
+  blake2s_done(&ltc_state, (unsigned char *)out);
+}
+inline void blake2s224_test(const void * key, int len, uint32_t seed, void * out)
+{
+  // objsize
+  blake2s_init(&ltc_state, 28, NULL, 0);
+  ltc_state.blake2s.h[0] = 0x6A09E667UL ^ seed;
+  blake2s_process(&ltc_state, (unsigned char *)key, len);
+  blake2s_done(&ltc_state, (unsigned char *)out);
+}
+inline void blake2s256_test(const void * key, int len, uint32_t seed, void * out)
+{
+  // objsize
+  blake2s_init(&ltc_state, 32, NULL, 0);
   ltc_state.blake2s.h[0] = 0x6A09E667UL ^ seed;
   blake2s_process(&ltc_state, (unsigned char *)key, len);
   blake2s_done(&ltc_state, (unsigned char *)out);
@@ -521,6 +571,24 @@ inline void sha2_224_64(const void *key, int len, uint32_t seed, void *out)
   ltc_state.sha256.state[0] = 0xc1059ed8UL ^ seed;
   sha224_process(&ltc_state, (unsigned char *)key, len);
   sha224_done(&ltc_state, buf);
+  memcpy(out, buf, 8);
+}
+inline void sha2_256(const void *key, int len, uint32_t seed, void *out)
+{
+  // objsize
+  sha256_init(&ltc_state);
+  ltc_state.sha256.state[0] = 0xc1059ed8UL ^ seed;
+  sha256_process(&ltc_state, (unsigned char *)key, len);
+  sha256_done(&ltc_state, (unsigned char *)out);
+}
+inline void sha2_256_64(const void *key, int len, uint32_t seed, void *out)
+{
+  // objsize
+  unsigned char buf[32];
+  sha256_init(&ltc_state);
+  ltc_state.sha256.state[0] = 0xc1059ed8UL ^ seed;
+  sha256_process(&ltc_state, (unsigned char *)key, len);
+  sha256_done(&ltc_state, buf);
   memcpy(out, buf, 8);
 }
 inline void rmd128(const void *key, int len, uint32_t seed, void *out)

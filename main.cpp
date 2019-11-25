@@ -21,6 +21,7 @@ bool g_testVerifyAll   = false;
 
 bool g_testSanity      = false;
 bool g_testSpeed       = false;
+bool g_testHashmap     = false;
 bool g_testAvalanche   = false;
 bool g_testSparse      = false;
 bool g_testPermutation = false;
@@ -35,7 +36,6 @@ bool g_testSeed        = false;
 bool g_testDiff        = false;
 bool g_testDiffDist    = false;
 bool g_testBIC         = false;
-bool g_testHashmap     = false;
 
 struct TestOpts {
   bool         &var;
@@ -110,13 +110,21 @@ HashInfo g_hashes[] =
   { sha1_32a,             32, SHA1_VERIF, "sha1_32a",     "SHA1, low 32 bits", POOR},
   { sha2_224,            224, 0x60424E90, "sha2-224",     "SHA2-224", POOR },
   { sha2_224_64,          64, 0x7EF6BB61, "sha2-224_64",  "SHA2-224, low 64 bits", POOR },
+  { sha2_256,            256, 0x436AF740, "sha2-256",     "SHA2-256", GOOD },
+  { sha2_256_64,          64, 0x933637CE, "sha2-256_64",  "SHA2-256, low 64 bits", POOR },
   { rmd128,              128, 0xFF576977, "rmd128",       "RIPEMD-128", POOR },
   { rmd160,              160, 0x30B37AC6, "rmd160",       "RIPEMD-160", POOR },
   { rmd256,              256, 0xEB16FAD7, "rmd256",       "RIPEMD-256", POOR },
   { blake2s128_test,     128, 0xC0EF86D1, "blake2s-128",  "blake2s-128", POOR },
+  { blake2s160_test,     160, 0xE56D3359, "blake2s-160",  "blake2s-160", POOR },
+  { blake2s224_test,     224, 0x1C56E1A2, "blake2s-224",  "blake2s-224", POOR },
+  { blake2s256_test,     256, 0x846611DB, "blake2s-256",  "blake2s-256", POOR },
   { blake2b160_test,     160, 0xA5F72E2D, "blake2b-160",  "blake2b-160", POOR },
-  { sha3_256,            256, 0xB85F6DD9, "sha3-256",     "SHA3-256", POOR },
-  { sha3_256_64,          64, 0x86EC71EF, "sha3-256_64",  "SHA3-256, low 64 bits", POOR },
+  { blake2b224_test,     224, 0x0D95F0AE, "blake2b-224",  "blake2b-224", POOR },
+  { blake2b256_test,     256, 0xC0B0AD0C, "blake2b-256",  "blake2b-256", GOOD },
+  { blake2b256_64,        64, 0x3C59D62D, "blake2b-256_64","blake2b-256, low 64 bits", GOOD },
+  { sha3_256,            256, 0xB85F6DD9, "sha3-256",     "SHA3-256 (Keccak)", POOR },
+  { sha3_256_64,          64, 0x86EC71EF, "sha3-256_64",  "SHA3-256 (Keccak), low 64 bits", POOR },
 
 #ifdef __SSE2__
   { hasshe2_test,        256, 0xF5D39DFE, "hasshe2",     "SSE2 hasshe2, 256-bit", POOR },
@@ -438,11 +446,19 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
      { sha1_32a,        1514.25 },
      { sha2_224,        1354.81 },
      { sha2_224_64,     1360.10 },
+     { sha2_256,        1374.90 },
+     { sha2_256_64,     1376.34 },
      { rmd128,           672.35 },
      { rmd160,          1045.79 },
      { rmd256,           638.30 },
      { blake2s128_test,  698.09 },
+     { blake2s160_test, 1026.74 },
+     { blake2s224_test, 1063.86 },
+     { blake2s256_test, 1014.88 },
      { blake2b160_test, 1236.84 },
+     { blake2b224_test, 1228.50 },
+     { blake2b256_test, 1232.22 },
+     { blake2b256_64,   1236.84 },
      { sha3_256,        3877.18 },
      { sha3_256_64,     3909.00 }
     };
