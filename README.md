@@ -1,21 +1,21 @@
 SMhasher
 ========
 
-| Hash function                                 |      MiB/sec |cycl./hash|cycl./map | size| Quality problems               |
-|:----------------------------------------------|-------------:|---------:|---------:|----:|--------------------------------|
-| [donothing32](doc/donothing32)                |  14924689.47 |     6.00 | - |  13 | test NOP                       |
-| [donothing64](doc/donothing64)                |  14942317.78 |     6.00 | - |  13 | test NOP                       |
-| [donothing128](doc/donothing128)              |  14943678.61 |     6.00 | - |  13 | test NOP                       |
-| [NOP_OAAT_read64](doc/NOP_OAAT_read64)        |     29794.83 |    35.50 | - |  47 | test NOP                       |
-| [BadHash](doc/BadHash)                        |       522.75 |    96.39 | - |  47 | test FAIL                      |
-| [sumhash](doc/sumhash)                        |      7135.41 |    31.14 | - | 363 | test FAIL                      |
-| [sumhash32](doc/sumhash32)                    |     23873.87 |    22.49 | - | 863 | test FAIL                      |
-| [multiply_shift](doc/multiply_shift)          |      4909.57 |    45.28 | too slow | 345 | fails all tests                |
-| [pair_multiply_shift](doc/pair_multiply_shift)|     13604.46 |    31.71 | too slow | 609 | fails all tests                |
-| --------------------------                    |              |          |          |     |                                |
+| Hash function                                 |      MiB/sec |cycl./hash|cycl./map   | size| Quality problems               |
+|:----------------------------------------------|-------------:|---------:|-----------:|----:|--------------------------------|
+| [donothing32](doc/donothing32)                |  14924689.47 |     6.00 |     -      |  13 | test NOP                       |
+| [donothing64](doc/donothing64)                |  14942317.78 |     6.00 |     -      |  13 | test NOP                       |
+| [donothing128](doc/donothing128)              |  14943678.61 |     6.00 |     -      |  13 | test NOP                       |
+| [NOP_OAAT_read64](doc/NOP_OAAT_read64)        |     29794.83 |    35.50 |     -      |  47 | test NOP                       |
+| [BadHash](doc/BadHash)                        |       522.75 |    96.39 |     -      |  47 | test FAIL                      |
+| [sumhash](doc/sumhash)                        |      7135.41 |    31.14 |     -      | 363 | test FAIL                      |
+| [sumhash32](doc/sumhash32)                    |     23873.87 |    22.49 |     -      | 863 | test FAIL                      |
+| [multiply_shift](doc/multiply_shift)          |      4909.57 |    45.28 |  too slow  | 345 | fails all tests                |
+| [pair_multiply_shift](doc/pair_multiply_shift)|     13604.46 |    31.71 |  too slow  | 609 | fails all tests                |
+| --------------------------                    |              |          |            |     |                                |
 | [crc32](doc/crc32)                            |       392.05 |   130.08 | 199.87 (3) | 422 | insecure, 8590x collisions, distrib |
-| [md5_32a](doc/md5_32a)                        |       352.19 |   668.69 |1053.14 (149)|4419| 8590x collisions, distrib |
-| [sha1_32a](doc/sha1_32a)                      |       364.78 |  1514.25 |1967.21 (14)|5126 | collisions, 36.6% distrib   |
+| [md5_32a](doc/md5_32a)                        |       352.19 |   668.69 |1053.14(149)|4419 | 8590x collisions, distrib |
+| [sha1_32a](doc/sha1_32a)                      |       364.78 |  1514.25 |1967.21 (14)|5126 | collisions, 36.6% distrib |
 | [sha2-224](doc/sha2-224)                      |       147.13 |  1354.81 |1589.92 (12)|     | collisions++  |
 | [sha2-224_64](doc/sha2-224_64)                |       147.60 |  1360.10 |1620.93 (13)|     | collisions++  |
 | [sha2-256](doc/sha2-256)                      |       147.80 |  1374.90 |1606.06 (16)|     | collisions++, Moment Chi2 4  |
@@ -24,19 +24,20 @@ SMhasher
 | [rmd160](doc/rmd160)                          |       202.16 |  1045.79 |1287.74 (16)|     | collisions++  |
 | [rmd256](doc/rmd256)                          |       356.57 |   638.30 | 833.96 (10)|     | collisions++  |
 | [blake2s-128](doc/blake2s-128)                |       295.30 |   698.09 |1059.24 (51)|     | collisions++  |
-| [blake2s-160](doc/blake2s-160)                |       215.01 |  1026.74 |1239.54 (11)|     | ?  |
-| [blake2s-224](doc/blake2s-224)                |       207.06 |  1063.86 |1236.50 (20)|     | ?  |
-| [blake2s-256](doc/blake2s-256)                |       215.28 |  1014.88 |1230.38 (28)|     | ?  |
+| [blake2s-160](doc/blake2s-160)                |       215.01 |  1026.74 |1239.54 (11)|     | collisions++  |
+| [blake2s-224](doc/blake2s-224)                |       207.06 |  1063.86 |1236.50 (20)|     | collisions++  |
+| [blake2s-256](doc/blake2s-256)                |       215.28 |  1014.88 |1230.38 (28)|     | collisions++  |
+| [blake2s-256_64](doc/blake2s-256_64)          |       211.52 |  1044.22 |1228.43 (8) |     |               |
 | [blake2b-160](doc/blake2b-160)                |       356.08 |  1236.84 |1458.15 (12)|     | collisions++  |
-| [blake2b-224](doc/blake2b-224)                |       356.59 |  1228.50 |1425.87 (16)|     | ?  |
-| [blake2b-256](doc/blake2b-256)                |       355.97 |  1232.22 |1443.31 (19)|     |               |
+| [blake2b-224](doc/blake2b-224)                |       356.59 |  1228.50 |1425.87 (16)|     | collisions++  |
+| [blake2b-256](doc/blake2b-256)                |       355.97 |  1232.22 |1443.31 (19)|     | collisions++  |
 | [blake2b-256_64](doc/blake2b-256_64)          |       356.97 |  1222.76 |1435.03 (9) |     |               |
 | [sha3-256](doc/sha3-256)                      |       100.58 |  3877.18 |4159.79 (37)|     | collisions++  |
 | [sha3-256_64](doc/sha3-256_64)                |       100.57 |  3909.00 |4174.63 (16)|     | collisions++  |
 | [hasshe2](doc/hasshe2)                        |      2357.32 |    76.10 | 348.10 (6) | 445 | insecure, fails all tests    |
 | [crc32_hw](doc/crc32_hw)                      |      6292.63 |    30.38 | 204.19 (18)| 653 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
 | [crc32_hw1](doc/crc32_hw1)                    |     23382.53 |    36.84 | 197.39 (20)| 671 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
-| [crc64_hw](doc/crc64_hw)                      |      8387.01 |    29.96 | 161.44 (13)| 652 | insecure, 100% bias, collisions, distrib, machine-specific (x86_64 SSE4.2) |
+| [crc64_hw](doc/crc64_hw)                      |      8387.01 |    29.96 | 161.44 (13)| 652 | insecure, 100% bias, collisions, distrib, machine-specific (x64 SSE4.2) |
 | [fibonacci](doc/fibonacci)                    |      9462.17 |    33.52 | 774.87 (14)|1692 | zeros, fails all tests     |
 | [FNV1a](doc/FNV1a)                            |       780.53 |    69.65 | 197.06 (20)| 204 | zeros, fails all tests       |
 | [FNV1A_Totenschiff](doc/FNV1A_Totenschiff)    |      6235.86 |    36.56 | 214.61 (18)| 270 | zeros, fails all tests       |
@@ -72,7 +73,7 @@ SMhasher
 | [metrohash64_1](doc/metrohash64_1)            |      9274.60 |    50.85 | 201.37 (19)| 624 | LongNeighbors              |
 | [metrohash64_2](doc/metrohash64_2)            |      9281.99 |    51.04 | 191.44 (20)| 627 | LongNeighbors              |
 | [metrohash64crc_1](doc/metrohash64crc_1)      |     13641.79 |    56.19 | 193.28 (19)| 632 | cyclic collisions 8 byte, machine-specific (x64 SSE4.2) |
-| [metrohash64crc_2](doc/metrohash64crc_2)      |     13550.77 |    56.17 | 204.84 (18)| 632 | cyclic collisions 8 byte, machine-specific (x64  SSE4.2) |
+| [metrohash64crc_2](doc/metrohash64crc_2)      |     13550.77 |    56.17 | 204.84 (18)| 632 | cyclic collisions 8 byte, machine-specific (x64 SSE4.2) |
 | [metrohash128crc_1](doc/metrohash128crc_1)    |     13668.29 |    85.94 | 249.99 (18)| 723 | low 32bit coll. machine-specific (x64 SSE4.2) |
 | [metrohash128crc_2](doc/metrohash128crc_2)    |     13600.83 |    85.92 | 239.28 (20)| 723 | low 32bit coll. machine-specific (x64 SSE4.2) |
 | [metrohash128_1](doc/metrohash128_1)          |      9263.64 |    79.71 | 240.70 (20)| 773 | LongNeighbors              |
@@ -198,13 +199,6 @@ Other
 * [http://bench.cr.yp.to/primitives-hash.html](http://bench.cr.yp.to/primitives-hash.html) lists the benchmarks of all currently tested secure hashes.
 * The [Hash Function Lounge](http://www.larc.usp.br/~pbarreto/hflounge.html) overviews the known weaknesses and attacks.
 
-TODO
-----
-
-Some slower cryptographic hashes or more secure hashes are still
-missing. BLAKE2, SHA-2, SHA-3 (Keccak), Grøstl, JH, Skein, ...
-They will pass all tests, and are way too slow compared to our
-candidates here.
 
 SECURITY
 --------

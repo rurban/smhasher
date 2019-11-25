@@ -1,34 +1,46 @@
 #!/usr/bin/perl
 use strict;
 use File::Copy 'mv';
-my $ln = @ARGV ? shift : "log.speed";
-open(my $l, "<", $ln) or die "open $ln $!";
-my ($n,$speed,$hash);
 my $endtest = qr(^(?:---|\[\[\[|Input vcode 0x));
-while (<$l>) {
-  if (/^--- Testing (\w+) \"/) {
-    if ($n) { # fixup previous name
-      fixup($n,$speed,$hash);
-    }
-    $n = $1; $speed = $hash = undef;
-  } elsif (/^\[\[\[ 'Hashmap' Speed/) {
-    while (<$l>) {
-      last if $_ =~ $endtest;
-      $hash .= $_;
-    }
-  } elsif (/^\[\[\[ Speed Tests/) {
-    while (<$l>) {
-      last if $_ =~ $endtest;
-      $speed .= $_;
+
+if (@ARGV) {
+  readf($_) for @ARGV;
+} else {
+  readf("log.speed");
+}
+
+sub readf {
+  my $fn = shift;
+  my ($n,$speed,$hash);
+  open(my $l, "<", $fn) or die "open $fn $!";
+  while (<$l>) {
+    if (/^--- Testing ([\w-_]+) \"/) {
+      if ($n) { # fixup previous name
+        fixup($n,$speed,$hash,$fn) if $hash or $speed;
+      }
+      $n = $1; $speed = $hash = undef;
+    } elsif (/^\[\[\[ 'Hashmap' Speed/) {
+      while (<$l>) {
+        last if $_ =~ $endtest;
+        $hash .= $_;
+      }
+    } elsif (/^\[\[\[ Speed Tests/) {
+      while (<$l>) {
+        last if $_ =~ $endtest;
+        $speed .= $_;
+      }
+    } elsif (/^\[\[\[ /) {
+      last;
     }
   }
+  fixup($n,$speed,$hash,$fn) if $n; # fixup last name
 }
-fixup($n,$speed,$hash) if $n;
 
 sub fixup {
-  my ($n,$speed,$hash) = @_;
+  my ($n,$speed,$hash,$fn) = @_;
   return unless $n;
   return if !defined($speed) && !defined($hash);
+  return if "doc/$n" eq $fn;
   open(my $I, "<", "doc/$n") or die "open doc/$n $!";
   open(my $O, ">", "doc/$n.new") or die "open doc/$n.new $!";
   my $found;

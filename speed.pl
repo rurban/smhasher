@@ -5,7 +5,7 @@ my $ln = @ARGV ? shift : "log.speed";
 open(my $l, "<", $ln) or die "open $ln $!";
 my ($n,$bulk,$small,$hash);
 while (<$l>) {
-  if (/^--- Testing (\w+) \"/) {
+  if (/^--- Testing ([\w_-]+) \"/) {
     if ($n) {
       fixup($n,$bulk,$small,$hash);
     }

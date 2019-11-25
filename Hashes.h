@@ -554,6 +554,16 @@ inline void blake2s256_test(const void * key, int len, uint32_t seed, void * out
   blake2s_process(&ltc_state, (unsigned char *)key, len);
   blake2s_done(&ltc_state, (unsigned char *)out);
 }
+inline void blake2s256_64(const void * key, int len, uint32_t seed, void * out)
+{
+  // objsize
+  unsigned char buf[32];
+  blake2s_init(&ltc_state, 32, NULL, 0);
+  ltc_state.blake2s.h[0] = 0x6A09E667UL ^ seed;
+  blake2s_process(&ltc_state, (unsigned char *)key, len);
+  blake2s_done(&ltc_state, buf);
+  memcpy(out, buf, 8);
+}
 inline void sha2_224(const void *key, int len, uint32_t seed, void *out)
 {
   // objsize

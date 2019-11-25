@@ -37,6 +37,8 @@ bool g_testDiff        = false;
 bool g_testDiffDist    = false;
 bool g_testBIC         = false;
 
+double g_speed = 0.0;
+
 struct TestOpts {
   bool         &var;
   const char*  name;
@@ -110,7 +112,7 @@ HashInfo g_hashes[] =
   { sha1_32a,             32, SHA1_VERIF, "sha1_32a",     "SHA1, low 32 bits", POOR},
   { sha2_224,            224, 0x60424E90, "sha2-224",     "SHA2-224", POOR },
   { sha2_224_64,          64, 0x7EF6BB61, "sha2-224_64",  "SHA2-224, low 64 bits", POOR },
-  { sha2_256,            256, 0x436AF740, "sha2-256",     "SHA2-256", GOOD },
+  { sha2_256,            256, 0x436AF740, "sha2-256",     "SHA2-256", POOR },
   { sha2_256_64,          64, 0x933637CE, "sha2-256_64",  "SHA2-256, low 64 bits", POOR },
   { rmd128,              128, 0xFF576977, "rmd128",       "RIPEMD-128", POOR },
   { rmd160,              160, 0x30B37AC6, "rmd160",       "RIPEMD-160", POOR },
@@ -119,9 +121,10 @@ HashInfo g_hashes[] =
   { blake2s160_test,     160, 0xE56D3359, "blake2s-160",  "blake2s-160", POOR },
   { blake2s224_test,     224, 0x1C56E1A2, "blake2s-224",  "blake2s-224", POOR },
   { blake2s256_test,     256, 0x846611DB, "blake2s-256",  "blake2s-256", POOR },
+  { blake2s256_64,        64, 0x2521E50B, "blake2s-256_64","blake2s-256, low 64 bits", GOOD },
   { blake2b160_test,     160, 0xA5F72E2D, "blake2b-160",  "blake2b-160", POOR },
   { blake2b224_test,     224, 0x0D95F0AE, "blake2b-224",  "blake2b-224", POOR },
-  { blake2b256_test,     256, 0xC0B0AD0C, "blake2b-256",  "blake2b-256", GOOD },
+  { blake2b256_test,     256, 0xC0B0AD0C, "blake2b-256",  "blake2b-256", POOR },
   { blake2b256_64,        64, 0x3C59D62D, "blake2b-256_64","blake2b-256, low 64 bits", GOOD },
   { sha3_256,            256, 0xB85F6DD9, "sha3-256",     "SHA3-256 (Keccak)", POOR },
   { sha3_256_64,          64, 0x86EC71EF, "sha3-256_64",  "SHA3-256 (Keccak), low 64 bits", POOR },
@@ -385,7 +388,6 @@ template < typename hashtype >
 void test ( hashfunc<hashtype> hash, HashInfo* info )
 {
   const int hashbits = sizeof(hashtype) * 8;
-  double g_speed = 0.0;
 
   printf("-------------------------------------------------------------------------------\n");
 
@@ -455,6 +457,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
      { blake2s160_test, 1026.74 },
      { blake2s224_test, 1063.86 },
      { blake2s256_test, 1014.88 },
+     { blake2s256_64,   1014.88 },
      { blake2b160_test, 1236.84 },
      { blake2b224_test, 1228.50 },
      { blake2b256_test, 1232.22 },
@@ -1190,7 +1193,7 @@ bool MomentChi2Test ( struct HashInfo *info )
 {
   pfHash hash = info->hash;
   const int size = info->hashbits / 8;
-  const int step = ((hash == md5_32 || hash == sha1_32a || info->hashbits > 128)
+  const int step = ((g_speed > 500 || info->hashbits > 128)
                     && !g_testExtra) ? 6 : 3;
   unsigned k = 0, s = 0;
   unsigned long l, h, x;
