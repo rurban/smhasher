@@ -28,14 +28,14 @@ bool g_testPermutation = false;
 bool g_testWindow      = false;
 bool g_testCyclic      = false;
 bool g_testTwoBytes    = false;
-bool g_testMomentChi2  = false;
-//bool g_testLongNeighbors = false;
 bool g_testText        = false;
 bool g_testZeroes      = false;
 bool g_testSeed        = false;
 bool g_testDiff        = false;
 bool g_testDiffDist    = false;
+bool g_testMomentChi2  = false;
 bool g_testBIC         = false;
+//bool g_testLongNeighbors = false;
 
 double g_speed = 0.0;
 
@@ -56,14 +56,14 @@ TestOpts g_testopts[] =
   { g_testWindow,       "Window" },
   { g_testCyclic,       "Cyclic" },
   { g_testTwoBytes,     "TwoBytes" },
-  { g_testMomentChi2,   "MomentChi2" },
-  //{ g_testLongNeighbors,"LongNeighbors" },
   { g_testText,	        "Text" },
   { g_testZeroes,       "Zeroes" },
   { g_testSeed,	        "Seed" },
   { g_testDiff,         "Diff" },
   { g_testDiffDist,     "DiffDist" },
+  { g_testMomentChi2,   "MomentChi2" },
   { g_testBIC, 	        "BIC" }
+  //{ g_testLongNeighbors,"LongNeighbors" }
 };
 
 bool MomentChi2Test ( struct HashInfo *info );
@@ -99,35 +99,39 @@ HashInfo g_hashes[] =
 #endif
   // M. Dietzfelbinger, T. Hagerup, J. Katajainen, and M. Penttonen. A reliable randomized
   // algorithm for the closest-pair problem. J. Algorithms, 25:19–51, 1997.
-  // must be skipped for hashmaps, extremly bad!
+  // must be skipped for hashmaps, extremly bad! FIXME
   { multiply_shift, __WORDSIZE,MULTSHIFT_VERIF, "multiply_shift", "Dietzfelbinger Multiply-shift on strings", POOR },
   { pair_multiply_shift, __WORDSIZE, PAIRMS_VERIF, "pair_multiply_shift", "Pair-multiply-shift", POOR },
   { crc32,                32, 0x3719DB20, "crc32",       "CRC-32 soft", POOR },
-  { md5_32,               32, 0xF7192210, "md5_32a",     "MD5, low 32 bits", POOR },
+  { md5_128,             128, 0xF263F96F, "md5-128",     "MD5", GOOD },
+  { md5_32,               32, 0x634E5AEC, "md5_32a",     "MD5, low 32 bits", POOR },
 #ifdef _MSC_VER /* truncated long to 32 */
-#  define SHA1_VERIF          0xDCB02360
+#  define SHA1_VERIF          0xED2F35E4
+#  define SHA1a_VERIF         0x480A2B09
 #else
-#  define SHA1_VERIF          0x7FE8C80E
+#  define SHA1_VERIF          0x6AF411D8
+#  define SHA1a_VERIF         0xB3122757
 #endif
-  { sha1_32a,             32, SHA1_VERIF, "sha1_32a",     "SHA1, low 32 bits", POOR},
-  { sha2_224,            224, 0x60424E90, "sha2-224",     "SHA2-224", POOR },
-  { sha2_224_64,          64, 0x7EF6BB61, "sha2-224_64",  "SHA2-224, low 64 bits", POOR },
-  { sha2_256,            256, 0x436AF740, "sha2-256",     "SHA2-256", POOR },
-  { sha2_256_64,          64, 0x933637CE, "sha2-256_64",  "SHA2-256, low 64 bits", POOR },
-  { rmd128,              128, 0xFF576977, "rmd128",       "RIPEMD-128", POOR },
-  { rmd160,              160, 0x30B37AC6, "rmd160",       "RIPEMD-160", POOR },
-  { rmd256,              256, 0xEB16FAD7, "rmd256",       "RIPEMD-256", POOR },
-  { blake2s128_test,     128, 0xC0EF86D1, "blake2s-128",  "blake2s-128", POOR },
-  { blake2s160_test,     160, 0xE56D3359, "blake2s-160",  "blake2s-160", POOR },
-  { blake2s224_test,     224, 0x1C56E1A2, "blake2s-224",  "blake2s-224", POOR },
-  { blake2s256_test,     256, 0x846611DB, "blake2s-256",  "blake2s-256", POOR },
+  { sha1_160,            160, SHA1_VERIF, "sha1-160",     "SHA1", GOOD},
+  { sha1_32a,             32, SHA1a_VERIF,"sha1_32a",     "SHA1, low 32 bits", POOR},
+  { sha2_224,            224, 0x60424E90, "sha2-224",     "SHA2-224", GOOD },
+  { sha2_224_64,          64, 0x7EF6BB61, "sha2-224_64",  "SHA2-224, low 64 bits", GOOD },
+  { sha2_256,            256, 0x436AF740, "sha2-256",     "SHA2-256", GOOD },
+  { sha2_256_64,          64, 0x933637CE, "sha2-256_64",  "SHA2-256, low 64 bits", GOOD },
+  { rmd128,              128, 0xFF576977, "rmd128",       "RIPEMD-128", GOOD },
+  { rmd160,              160, 0x30B37AC6, "rmd160",       "RIPEMD-160", GOOD },
+  { rmd256,              256, 0xEB16FAD7, "rmd256",       "RIPEMD-256", GOOD },
+  { blake2s128_test,     128, 0xC0EF86D1, "blake2s-128",  "blake2s-128", GOOD },
+  { blake2s160_test,     160, 0xE56D3359, "blake2s-160",  "blake2s-160", GOOD },
+  { blake2s224_test,     224, 0x1C56E1A2, "blake2s-224",  "blake2s-224", GOOD },
+  { blake2s256_test,     256, 0x846611DB, "blake2s-256",  "blake2s-256", GOOD },
   { blake2s256_64,        64, 0x2521E50B, "blake2s-256_64","blake2s-256, low 64 bits", GOOD },
-  { blake2b160_test,     160, 0xA5F72E2D, "blake2b-160",  "blake2b-160", POOR },
-  { blake2b224_test,     224, 0x0D95F0AE, "blake2b-224",  "blake2b-224", POOR },
-  { blake2b256_test,     256, 0xC0B0AD0C, "blake2b-256",  "blake2b-256", POOR },
+  { blake2b160_test,     160, 0xA5F72E2D, "blake2b-160",  "blake2b-160", GOOD },
+  { blake2b224_test,     224, 0x0D95F0AE, "blake2b-224",  "blake2b-224", GOOD },
+  { blake2b256_test,     256, 0xC0B0AD0C, "blake2b-256",  "blake2b-256", GOOD },
   { blake2b256_64,        64, 0x3C59D62D, "blake2b-256_64","blake2b-256, low 64 bits", GOOD },
-  { sha3_256,            256, 0xB85F6DD9, "sha3-256",     "SHA3-256 (Keccak)", POOR },
-  { sha3_256_64,          64, 0x86EC71EF, "sha3-256_64",  "SHA3-256 (Keccak), low 64 bits", POOR },
+  { sha3_256,            256, 0xB85F6DD9, "sha3-256",     "SHA3-256 (Keccak)", GOOD },
+  { sha3_256_64,          64, 0x86EC71EF, "sha3-256_64",  "SHA3-256 (Keccak), low 64 bits", GOOD },
 
 #ifdef __SSE2__
   { hasshe2_test,        256, 0xF5D39DFE, "hasshe2",     "SSE2 hasshe2, 256-bit", POOR },
@@ -1007,55 +1011,6 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     fflush(NULL);
   }
 
-  // Moment Chi-Square test, measuring the probability of the
-  // lowest 32 bits set over the whole key space. Not where the bits are, but how many.
-  // See e.g. https://www.statlect.com/fundamentals-of-probability/moment-generating-function
-  // 10s (16 step interval until 0x7ffffff)
-  // 20s (16 step interval until 0xcffffff)
-  //   step  time
-  //   1     300s
-  //   2     150s
-  //   3     90s
-  //   7     35s
-  //   13    20s
-  //   16    12s
-  if(g_testMomentChi2 || g_testAll)
-  {
-    printf("[[[ 'MomentChi2' Tests ]]]\n\n");
-
-    bool result = true;
-
-    result &= MomentChi2Test(info);
-
-    if(!result) printf("*********FAIL*********\n");
-    printf("\n");
-    fflush(NULL);
-  }
-  
-  //-----------------------------------------------------------------------------
-  // LongNeighbors - collisions between long messages of low Hamming distance
-  // esp. for testing separate word and then byte-wise processing of unaligned
-  // rest parts. Only with --test=LongNeighbors or --extra
-  // 10s for fasthash32
-  // 7m with xxh3 (64bit)
-  // 10m30s with farmhash128_c
-
-  // Not yet included for licensing reasons
-#if 0
-  if(g_testLongNeighbors || (g_testAll && g_testExtra))
-  {
-    printf("[[[ 'LongNeighbors' Tests ]]]\n\n");
-
-    bool result = true;
-
-    result &= testLongNeighbors(info->hash, info->hashbits, g_drawDiagram);
-
-    if(!result) printf("*********FAIL*********\n");
-    printf("\n");
-    fflush(NULL);
-  }
-#endif
-
   //-----------------------------------------------------------------------------
   // Keyset 'Text'
 
@@ -1151,6 +1106,55 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("\n");
     fflush(NULL);
   }
+
+  // Moment Chi-Square test, measuring the probability of the
+  // lowest 32 bits set over the whole key space. Not where the bits are, but how many.
+  // See e.g. https://www.statlect.com/fundamentals-of-probability/moment-generating-function
+  // 10s (16 step interval until 0x7ffffff)
+  // 20s (16 step interval until 0xcffffff)
+  //   step  time
+  //   1     300s
+  //   2     150s
+  //   3     90s
+  //   7     35s
+  //   13    20s
+  //   16    12s
+  if(g_testMomentChi2 || g_testAll)
+  {
+    printf("[[[ 'MomentChi2' Tests ]]]\n\n");
+
+    bool result = true;
+
+    result &= MomentChi2Test(info);
+
+    if(!result) printf("*********FAIL*********\n");
+    printf("\n");
+    fflush(NULL);
+  }
+
+  //-----------------------------------------------------------------------------
+  // LongNeighbors - collisions between long messages of low Hamming distance
+  // esp. for testing separate word and then byte-wise processing of unaligned
+  // rest parts. Only with --test=LongNeighbors or --extra
+  // 10s for fasthash32
+  // 7m with xxh3 (64bit)
+  // 10m30s with farmhash128_c
+
+  // Not yet included for licensing reasons
+#if 0
+  if(g_testLongNeighbors || (g_testAll && g_testExtra))
+  {
+    printf("[[[ 'LongNeighbors' Tests ]]]\n\n");
+
+    bool result = true;
+
+    result &= testLongNeighbors(info->hash, info->hashbits, g_drawDiagram);
+
+    if(!result) printf("*********FAIL*********\n");
+    printf("\n");
+    fflush(NULL);
+  }
+#endif
 
   //-----------------------------------------------------------------------------
   // Bit Independence Criteria. Interesting, but doesn't tell us much about

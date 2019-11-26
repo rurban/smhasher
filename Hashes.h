@@ -31,21 +31,6 @@ void NoopOAATReadHash(const void *key, int len, uint32_t seed, void *out);
 void crc32(const void *key, int len, uint32_t seed, void *out);
 
 //----------
-// Cryptographic hashes (but very bad in the used range)
-
-void md5_32(const void *key, int len, uint32_t seed, void *out);
-void sha1_32a(const void *key, int len, uint32_t seed, void *out);
-#if 0
-void sha1_64a              ( const void * key, int len, uint32_t seed, void * out );
-void sha2_32a              ( const void * key, int len, uint32_t seed, void * out );
-void sha2_64a              ( const void * key, int len, uint32_t seed, void * out );
-void BLAKE2_32a            ( const void * key, int len, uint32_t seed, void * out );
-void BLAKE2_64a            ( const void * key, int len, uint32_t seed, void * out );
-void bcrypt_64a            ( const void * key, int len, uint32_t seed, void * out );
-void scrypt_64a            ( const void * key, int len, uint32_t seed, void * out );
-#endif
-
-//----------
 // General purpose hashes
 
 #ifdef __SSE2__
@@ -478,6 +463,51 @@ inline void seahash32low (const void *key, int len, uint32_t seed, void *out) {
 #endif /* !MSVC */
 #endif /* HAVE_INT64 */
 
+//----------
+// Cryptographic hashes
+
+#include "md5.h"
+inline void md5_128(const void *key, int len, uint32_t seed, void *out) {
+  md5_context ctx;
+  md5_starts( &ctx );
+  ctx.state[0] ^= seed;
+  md5_update( &ctx, (unsigned char *)key, len );
+  md5_finish( &ctx, (unsigned char *)out );
+  //memset( &ctx.buffer, 0, 64+64+64 ); // for buffer, ipad, opad
+}
+
+inline void md5_32(const void *key, int len, uint32_t seed, void *out) {
+  unsigned char hash[16];
+  md5_context ctx;
+  md5_starts( &ctx );
+  ctx.state[0] ^= seed;
+  md5_update( &ctx, (unsigned char *)key, len );
+  md5_finish( &ctx, hash );
+  //memset( &ctx.buffer, 0, 64+64+64 ); // for buffer, ipad, opad
+  memcpy(out, hash, 4);
+}
+
+#include "sha1.h"
+inline void sha1_160(const void *key, int len, uint32_t seed, void *out) {
+  SHA1_CTX context;
+  uint8_t digest[20];
+
+  SHA1_Init(&context);
+  context.state[0] ^= seed;
+  SHA1_Update(&context, (uint8_t*)key, len);
+  SHA1_Final(&context, (uint8_t*)out);
+}
+inline void sha1_32a(const void *key, int len, uint32_t seed, void *out) {
+  SHA1_CTX context;
+  uint8_t digest[20];
+
+  SHA1_Init(&context);
+  context.state[0] ^= seed;
+  SHA1_Update(&context, (uint8_t *)key, len);
+  SHA1_Final(&context, digest);
+  memcpy(out, digest, 4);
+}
+
 #include "tomcrypt.h"
 #ifndef _MAIN_CPP
 extern
@@ -625,6 +655,7 @@ inline void rmd256(const void *key, int len, uint32_t seed, void *out)
   rmd256_process(&ltc_state, (unsigned char *)key, len);
   rmd256_done(&ltc_state, (unsigned char *)out);
 }
+// Keccak:
 inline void sha3_256_64(const void *key, int len, uint32_t seed, void *out)
 {
   // objsize
