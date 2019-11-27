@@ -2,14 +2,18 @@
 use strict;
 use File::Copy 'mv';
 my $endtest = qr(^(?:---|\[\[\[|Input vcode 0x));
-# mkdir lowcoll; build/SMHasher --list|perl -alne'print $F[0] if (/^(rmd|sha|blake2|md5)/ && !/_32/) || /128/' | parallel -j4 --bar 'build/SMHasher --test=Sparse,Permutation,Cyclic,TwoBytes,DiffDist,Text,Zeroes,Seed {} >lowcoll/{}'
-my @lowcolls = qw(Sparse Permutation Cyclic TwoBytes DiffDist Text Zeroes Seed);
-my %lowcolls = map {$_ => 1} @lowcolls;
+# mkdir partests; build/SMHasher --list|perl -alne'print $F[0] | parallel -j4 --bar 'build/SMHasher --test=Sparse,Permutation,Cyclic,TwoBytes,DiffDist,Text,Zeroes,Seed,Sanity,Avalanche,BIC,LongNeighbors,Diff,MomentChi2 {} >partests/{}'
+# build/SMHasher --list|perl -alne'print $F[0] | parallel -j4 --bar 'build/SMHasher --test=Sparse,Permutation,Cyclic,TwoBytes,DiffDist,Text,Zeroes,Seed {} >lowcoll/{}'
+my @keysettests = qw(Sparse Permutation Cyclic TwoBytes Window DiffDist Text Zeroes Seed);
+my @othertests = qw(Sanity Avalanche BIC LongNeighbors Diff MomentChi2);
+my %tests = map {$_ => 1} @keysettests, @othertests;
+my $testrx = '(' . join('|',@othertests) . ')';
+$testrx = qr($testrx);
 
 if (@ARGV) {
   readf($_) for @ARGV;
 } else {
-  readf($_) for <lowcoll/*>;
+  readf($_) for <partests/*>;
 }
 
 sub readf {
@@ -22,14 +26,14 @@ sub readf {
         fixup($n,\%r,$fn) if %r;
       }
       $n = $1; %r = ();
-    } elsif (/^\[\[\[ Keyset '(.+?)' Tests/ && $lowcolls{$1}) {
+    } elsif (/^\[\[\[ Keyset '(.+?)' Tests/ && $tests{$1}) {
       my $t = $1;
       while (<$l>) {
         last if $_ =~ $endtest;
         $r{$t} .= $_;
       }
-    } elsif (/^\[\[\[ DiffDist /) {
-      my $t = 'DiffDist';
+    } elsif (/^\[\[\[ $testrx /) {
+      my $t = $1;
       while (<$l>) {
         last if $_ =~ $endtest;
         $r{$t} .= $_;
@@ -63,8 +67,8 @@ sub fixup {
         last if $_ =~ $endtest;
       }
       print $O $_;
-    } elsif ($found && /^\[\[\[ DiffDist / && $r{DiffDist}) {
-      my $t = 'DiffDist';
+    } elsif ($found && /^\[\[\[ $testrx / && $r{$1}) {
+      my $t = $1;
       print $O $r{$t};
       while (<$I>) {
         last if $_ =~ $endtest;

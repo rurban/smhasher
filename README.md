@@ -34,7 +34,7 @@ SMhasher
 | [blake2b-256_64](doc/blake2b-256_64)          |       356.97 |  1222.76 |1435.03 (9) |     |               |
 | [sha3-256](doc/sha3-256)                      |       100.58 |  3877.18 |4159.79 (37)|     |               |
 | [sha3-256_64](doc/sha3-256_64)                |       100.57 |  3909.00 |4174.63 (16)|     |               |
-| [hasshe2](doc/hasshe2)                        |      2357.32 |    76.10 | 348.10 (6) | 445 | insecure, fails all tests  |
+| [hasshe2](doc/hasshe2)                        |      2357.32 |    76.10 | 348.10 (6) | 445 | insecure, Permutation,TwoBytes  |
 | [crc32_hw](doc/crc32_hw)                      |      6292.63 |    30.38 | 204.19 (18)| 653 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
 | [crc32_hw1](doc/crc32_hw1)                    |     23382.53 |    36.84 | 197.39 (20)| 671 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
 | [crc64_hw](doc/crc64_hw)                      |      8387.01 |    29.96 | 161.44 (13)| 652 | insecure, 100% bias, collisions, distrib, machine-specific (x64 SSE4.2) |

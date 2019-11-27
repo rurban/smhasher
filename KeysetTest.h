@@ -231,17 +231,26 @@ bool SparseKeyTest ( hashfunc<hashtype> hash, const int setbits, bool inclusive,
 // all possible keys with bits set in that window
 
 template < typename keytype, typename hashtype >
-bool WindowedKeyTest ( hashfunc<hashtype> hash, const int windowbits,
+bool WindowedKeyTest ( hashfunc<hashtype> hash, int windowbits,
                        bool testCollision, bool testDistribution, bool drawDiagram )
 {
   const int keybits = sizeof(keytype) * 8;
-  const int keycount = 1 << windowbits;
+  // calc keycount to expect min. 0.5 collisions: EstimateNbCollisions, except for 64++bit.
+  // there limit to 2^25 = 33554432 keys
+  int keycount = 1 << windowbits;
+  while (EstimateNbCollisions(keycount, sizeof(hashtype) * 8) < 0.5 && windowbits < 25) {
+    if ((int)log2(2.0 * keycount) < 0) // overflow
+      break;
+    keycount *= 2;
+    windowbits = (int)log2(1.0 * keycount);
+    //printf (" enlarge windowbits to %d (%d keys)\n", windowbits, keycount);
+    //fflush (NULL);
+  }
 
   std::vector<hashtype> hashes;
   hashes.resize(keycount);
 
   bool result = true;
-
   int testcount = keybits;
 
   printf("Keyset 'Window' - %3d-bit key, %3d-bit window - %d tests, %d keys per test\n",
@@ -250,25 +259,20 @@ bool WindowedKeyTest ( hashfunc<hashtype> hash, const int windowbits,
   for(int j = 0; j <= testcount; j++)
   {
     int minbit = j;
-
     keytype key;
 
     for(int i = 0; i < keycount; i++)
     {
       key = i;
       //key = key << minbit;
-
       lrot(&key,sizeof(keytype),minbit);
-
       hash(&key,sizeof(keytype),0,&hashes[i]);
     }
 
     printf("Window at %3d - ",j);
-
     result &= TestHashList(hashes, drawDiagram, testCollision, testDistribution,
                            /* do not test high/low bits (to not clobber the screen) */
                            false, false);
-
     //printf("\n");
   }
 

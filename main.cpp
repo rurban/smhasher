@@ -930,6 +930,8 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   // 51s for crc32_hw --extra
   // 180m for farmhash128_c with 20 windowbits,
   //      0.19s with windowbits=10, 2s for 14, 9s for 16, 37s for 18
+  // 7m for FNV64 with windowbits=27 / 32bit keys
+  // 5m35 for hasshe2 with windowbits=25 / 32bit keys
 
   if(g_testWindow || g_testAll)
   {
@@ -938,11 +940,13 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     bool result = true;
     bool testCollision = true;
     bool testDistribution = g_testExtra;
-    int windowbits = info->hashbits > 64 ? 18 : 20;
-    if (g_speed > 500.0)
-      windowbits = 12;
+    // This value is now adjusted to generate at least 0.5 collisions per window,
+    // except for 64++bit where it unrealistic. There use smaller but more keys,
+    // to get a higher collision percentage.
+    int windowbits = 20;
+    const int keybits = (hashbits >= 64) ? 32 : hashbits*2+2;
 
-    result &= WindowedKeyTest< Blob<hashbits*2+2>, hashtype >
+    result &= WindowedKeyTest< Blob<keybits>, hashtype >
       ( hash, windowbits, testCollision, testDistribution, g_drawDiagram );
 
     if(!result) printf("*********FAIL*********\n");
@@ -1066,7 +1070,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   //-----------------------------------------------------------------------------
   // Differential tests
   // 5m30 with xxh3
-  // less reps with slow hashes: sha1_32a, md5_32a
+  // less reps with slow hashes
   // md5: 1h38m with 1000 reps!
 
   if(g_testDiff || g_testAll)
@@ -1078,7 +1082,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     bool dumpCollisions = g_drawDiagram; // from --verbose
     int reps = 1000;
     if ((g_speed > 500.0 || info->hashbits > 128) && !g_testExtra)
-      reps = 50; // sha1: 7m, md5: 4m53
+      reps = 100; // sha1: 7m, md5: 4m53
 
     result &= DiffTest< Blob<64>,  hashtype >(hash,5,reps,dumpCollisions);
     result &= DiffTest< Blob<128>, hashtype >(hash,4,reps,dumpCollisions);
@@ -1121,7 +1125,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   //   16    12s
   if(g_testMomentChi2 || g_testAll)
   {
-    printf("[[[ 'MomentChi2' Tests ]]]\n\n");
+    printf("[[[ MomentChi2 Tests ]]]\n\n");
 
     bool result = true;
 
@@ -1144,7 +1148,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 #if 0
   if(g_testLongNeighbors || (g_testAll && g_testExtra))
   {
-    printf("[[[ 'LongNeighbors' Tests ]]]\n\n");
+    printf("[[[ LongNeighbors Tests ]]]\n\n");
 
     bool result = true;
 
@@ -1164,7 +1168,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
   if(g_testBIC || (info->hashbits > 64 && g_testExtra))
   {
-    printf("[[[ 'BIC' (Bit Independence Criteria) Tests ]]]\n\n");
+    printf("[[[ BIC 'Bit Independence Criteria' Tests ]]]\n\n");
     fflush(NULL);
 
     bool result = true;

@@ -433,37 +433,11 @@ hashtype bitreverse(hashtype n, size_t b = sizeof(hashtype) * 8)
     hashtype rv = 0;
     for (size_t i = 0; i < b; i += 8) {
         rv <<= 8;
-        rv |= bitrev(n & 0xff);
+        rv |= bitrev(n & 0xff); // ensure overloaded |= op for Blob not underflowing
         n >>= 8;
     }
     return rv;
 }
-/*
-static inline uint32_t bitreverse(uint32_t i)
-{
-  union {
-    uint32_t i,
-    uint8_t c[4],
-  } c;
-  c.i = i;
-  return
-     bitrev(c.c[0])        |
-    (bitrev(c.c[1]) << 8)  |
-    (bitrev(c.c[2]) << 16) |
-    (bitrev(c.c[3]) << 24);
-}
-static inline uint64_t bitreverse(uint64_t i)
-{
-  union {
-    uint64_t i,
-    uint32_t w[2],
-  } w;
-  w.i = i;
-  return
-    bitreverse(w.w[0]) |
-    (bitreverse(w.w[1]) << 8);
-}
-*/
 
 template < typename hashtype >
 bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
@@ -476,7 +450,7 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
   {
     size_t count = hashes.size();
     double expected = EstimateNbCollisions(count, sizeof(hashtype) * 8);
-    printf("Testing collisions (%3i-bit)     - Expected %12.1f, ",
+    printf("Testing collisions (%3i-bit) - Expected %6.1f, ",
            (int)sizeof(hashtype)*8, expected);
 
     double collcount = 0;
