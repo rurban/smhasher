@@ -1,11 +1,11 @@
 #!/usr/bin/perl
 use strict;
 use File::Copy 'mv';
-my $endtest = qr(^(?:---|\[\[\[|Input vcode 0x));
+my $endtest = qr(^(?:---|\[\[\[ |Input vcode 0x));
 # mkdir partests; build/SMHasher --list|perl -alne'print $F[0] | parallel -j4 --bar 'build/SMHasher --test=Sparse,Permutation,Cyclic,TwoBytes,DiffDist,Text,Zeroes,Seed,Sanity,Avalanche,BIC,LongNeighbors,Diff,MomentChi2 {} >partests/{}'
 # build/SMHasher --list|perl -alne'print $F[0] | parallel -j4 --bar 'build/SMHasher --test=Sparse,Permutation,Cyclic,TwoBytes,DiffDist,Text,Zeroes,Seed {} >lowcoll/{}'
-my @keysettests = qw(Sparse Permutation Cyclic TwoBytes Window DiffDist Text Zeroes Seed);
-my @othertests = qw(Sanity Avalanche BIC LongNeighbors Diff MomentChi2);
+my @keysettests = qw(Sparse Permutation Cyclic TwoBytes Window Text Zeroes Seed);
+my @othertests = qw(Sanity Avalanche  Diff DiffDist BIC LongNeighbors MomentChi2);
 my %tests = map {$_ => 1} @keysettests, @othertests;
 my $testrx = '(' . join('|',@othertests) . ')';
 $testrx = qr($testrx);
@@ -21,24 +21,28 @@ sub readf {
   my ($n,%r);
   open(my $l, "<", $fn) or die "open $fn $!";
   while (<$l>) {
-    if (/^--- Testing ([\w-_]+) \"/) {
+    if (/^--- Testing ([\w_-]+) \"/) {
       if ($n) { # fixup previous name
         fixup($n,\%r,$fn) if %r;
       }
       $n = $1; %r = ();
-    } elsif (/^\[\[\[ Keyset '(.+?)' Tests/ && $tests{$1}) {
+    }
+  NEXT:
+    if (/^\[\[\[ Keyset '(.+?)' Tests/) {
       my $t = $1;
       while (<$l>) {
-        last if $_ =~ $endtest;
+        goto NEXT if $_ =~ $endtest;
         $r{$t} .= $_;
       }
-    } elsif (/^\[\[\[ $testrx /) {
+    }
+    if (/^\[\[\[ '?$testrx'? /) {
       my $t = $1;
       while (<$l>) {
-        last if $_ =~ $endtest;
+        goto NEXT if $_ =~ $endtest;
         $r{$t} .= $_;
       }
-    } elsif (/^\[\[\[ /) {
+    }
+    if (/^Input vcode 0x/) {
       last;
     }
   }
@@ -58,23 +62,39 @@ sub fixup {
     print $O $_;
     # search for $n in doc
     if (/^--- Testing /) {
+      if ($found && %r) {
+        print STDERR "tests not in doc/$n:\n", sort keys %r, "\n";
+      }
       $found = /^--- Testing $n /;
     }
-    elsif ($found && /^\[\[\[ Keyset '(.+?)' Tests/ && $r{$1}) {
+  NEXT1:
+    if ($found && /^\[\[\[ Keyset '(.+?)' Tests/ && $r{$1}) {
       my $t = $1;
       print $O $r{$t};
+      delete $r{$t};
       while (<$I>) {
-        last if $_ =~ $endtest;
-      }
-      print $O $_;
-    } elsif ($found && /^\[\[\[ $testrx / && $r{$1}) {
-      my $t = $1;
-      print $O $r{$t};
-      while (<$I>) {
-        last if $_ =~ $endtest;
+        if ($_ =~ $endtest) {
+          print $O $_;
+          goto NEXT1;
+        }
       }
       print $O $_;
     }
+    if ($found && /^\[\[\[ '?$testrx'? / && $r{$1}) {
+      my $t = $1;
+      print $O $r{$t};
+      delete $r{$t};
+      while (<$I>) {
+        if ($_ =~ $endtest) {
+          print $O $_;
+          goto NEXT1;
+        }
+      }
+      print $O $_;
+    }
+  }
+  if (%r) {
+    print STDERR "finally tests not found in doc/$n:\n", join(" ",sort keys %r), "\n";
   }
   close $I;
   close $O;

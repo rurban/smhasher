@@ -61,8 +61,8 @@ TestOpts g_testopts[] =
   { g_testSeed,	        "Seed" },
   { g_testDiff,         "Diff" },
   { g_testDiffDist,     "DiffDist" },
-  { g_testMomentChi2,   "MomentChi2" },
-  { g_testBIC, 	        "BIC" }
+  { g_testBIC, 	        "BIC" },
+  { g_testMomentChi2,   "MomentChi2" }
   //{ g_testLongNeighbors,"LongNeighbors" }
 };
 
@@ -116,8 +116,8 @@ HashInfo g_hashes[] =
   { sha1_32a,             32, SHA1a_VERIF,"sha1_32a",     "SHA1, low 32 bits", GOOD},
   { sha2_224,            224, 0x60424E90, "sha2-224",     "SHA2-224", GOOD },
   { sha2_224_64,          64, 0x7EF6BB61, "sha2-224_64",  "SHA2-224, low 64 bits", GOOD },
-  { sha2_256,            256, 0x436AF740, "sha2-256",     "SHA2-256", GOOD },
-  { sha2_256_64,          64, 0x933637CE, "sha2-256_64",  "SHA2-256, low 64 bits", GOOD },
+  { sha2_256,            256, 0x436AF740, "sha2-256",     "SHA2-256", POOR },
+  { sha2_256_64,          64, 0x933637CE, "sha2-256_64",  "SHA2-256, low 64 bits", POOR },
   { rmd128,              128, 0xFF576977, "rmd128",       "RIPEMD-128", GOOD },
   { rmd160,              160, 0x30B37AC6, "rmd160",       "RIPEMD-160", GOOD },
   { rmd256,              256, 0xEB16FAD7, "rmd256",       "RIPEMD-256", GOOD },
@@ -128,13 +128,13 @@ HashInfo g_hashes[] =
   { blake2s256_64,        64, 0x2521E50B, "blake2s-256_64","blake2s-256, low 64 bits", GOOD },
   { blake2b160_test,     160, 0xA5F72E2D, "blake2b-160",  "blake2b-160", GOOD },
   { blake2b224_test,     224, 0x0D95F0AE, "blake2b-224",  "blake2b-224", GOOD },
-  { blake2b256_test,     256, 0xC0B0AD0C, "blake2b-256",  "blake2b-256", GOOD },
+  { blake2b256_test,     256, 0xC0B0AD0C, "blake2b-256",  "blake2b-256", POOR },
   { blake2b256_64,        64, 0x3C59D62D, "blake2b-256_64","blake2b-256, low 64 bits", GOOD },
   { sha3_256,            256, 0xB85F6DD9, "sha3-256",     "SHA3-256 (Keccak)", GOOD },
   { sha3_256_64,          64, 0x86EC71EF, "sha3-256_64",  "SHA3-256 (Keccak), low 64 bits", GOOD },
 
 #ifdef __SSE2__
-  { hasshe2_test,        256, 0xF5D39DFE, "hasshe2",     "SSE2 hasshe2, 256-bit", GOOD },
+  { hasshe2_test,        256, 0xF5D39DFE, "hasshe2",     "SSE2 hasshe2, 256-bit", POOR },
 #endif
 #if defined(__SSE4_2__) && defined(__x86_64__)
   /* Even 32 uses crc32q, quad only */
@@ -163,9 +163,6 @@ HashInfo g_hashes[] =
   // also called jhash:
   { JenkinsOOAT_test,     32, 0x83E133DA, "JenkinsOOAT", "Bob Jenkins' OOAT as in perl 5.18", POOR },
   { JenkinsOOAT_perl_test,32, 0xEE05869B, "JenkinsOOAT_perl", "Bob Jenkins' OOAT as in old perl5", POOR },
-  { halfsiphash_test,     32, 0xA7A05F72, "HalfSipHash", "HalfSipHash 2-4, 32bit", POOR },
-  // as in rust and swift
-  { siphash13_test,       64, 0x29C010BF, "SipHash13",   "SipHash 1-3 - SSSE3 optimized", POOR },
   { MicroOAAT_test,       32, 0x16F1BA97, "MicroOAAT",   "Small non-multiplicative OAAT (by funny-falcon)", POOR },
   { jodyhash32_test,      32, 0xFB47D60D, "jodyhash32",  "jodyhash, 32-bit (v5)", POOR },
 #ifdef HAVE_INT64
@@ -184,52 +181,43 @@ HashInfo g_hashes[] =
 #ifdef HAVE_INT64
   { MurmurHash64B_test,   64, 0xDD537C05, "Murmur2C",    "MurmurHash64B for x86, 64-bit", POOR },
 #endif
-  { MurmurHash3_x86_128, 128, 0xB3ECE62A, "Murmur3C",    "MurmurHash3 for x86, 128-bit", POOR },
-  { PMurHash32_test,      32, 0xB0F57EE3, "PMurHash32",  "Shane Day's portable-ized MurmurHash3 for x86, 32-bit", POOR },
   { MurmurHash3_x86_32,   32, 0xB0F57EE3, "Murmur3A",    "MurmurHash3 for x86, 32-bit", POOR },
-#if __WORDSIZE >= 64
-  { MurmurHash3_x64_128, 128, 0x6384BA69, "Murmur3F",    "MurmurHash3 for x64, 128-bit", GOOD },
-#endif
-  { metrohash64_1_test,       64, 0xEE88F7D2, "metrohash64_1",     "MetroHash64_1 for 64-bit", POOR },
-  { metrohash64_2_test,       64, 0xE1FC7C6E, "metrohash64_2",     "MetroHash64_2 for 64-bit", POOR },
-  { metrohash128_1_test,     128, 0x20E8A1D7, "metrohash128_1",    "MetroHash128_1 for 64-bit", POOR },
-  { metrohash128_2_test,     128, 0x5437C684, "metrohash128_2",    "MetroHash128_2 for 64-bit", POOR },
+  { PMurHash32_test,      32, 0xB0F57EE3, "PMurHash32",  "Shane Day's portable-ized MurmurHash3 for x86, 32-bit", POOR },
+  { MurmurHash3_x86_128, 128, 0xB3ECE62A, "Murmur3C",    "MurmurHash3 for x86, 128-bit", POOR },
+  { fasthash64_test,      64, 0xA16231A7, "fasthash64",  "fast-hash 64bit", POOR },
+  { CityHash32_test,      32, 0x5C28AD62, "City32",      "Google CityHash32WithSeed (old)", POOR },
+  { metrohash64_1_test,   64, 0xEE88F7D2, "metrohash64_1",     "MetroHash64_1 for 64-bit", POOR },
 #if defined(__SSE4_2__) && defined(__x86_64__)
-  { metrohash64crc_1_test,    64, 0x29C68A50, "metrohash64crc_1",  "MetroHash64crc_1 for x64", POOR },
-  { metrohash64crc_2_test,    64, 0x2C00BD9F, "metrohash64crc_2",  "MetroHash64crc_2 for x64", POOR },
-  { metrohash128crc_1_test,  128, 0x5E75144E, "metrohash128crc_1", "MetroHash128crc_1 for x64", GOOD },
-  { metrohash128crc_2_test,  128, 0x1ACF3E77, "metrohash128crc_2", "MetroHash128crc_2 for x64", GOOD },
-#endif
-#if defined(__SSE4_2__)
+  { metrohash64crc_1_test,64, 0x29C68A50, "metrohash64crc_1",  "MetroHash64crc_1 for x64", POOR },
+  { metrohash64crc_2_test,64, 0x2C00BD9F, "metrohash64crc_2",  "MetroHash64crc_2 for x64", POOR },
   { cmetrohash64_1_optshort_test,64, 0xEE88F7D2, "cmetrohash64_1o", "cmetrohash64_1 (shorter key optimized) , 64-bit for x64", POOR },
-  { cmetrohash64_1_test,         64, 0xEE88F7D2, "cmetrohash64_1",  "cmetrohash64_1, 64-bit for x64", POOR },
-  { cmetrohash64_2_test,         64, 0xE1FC7C6E, "cmetrohash64_2",  "cmetrohash64_2, 64-bit for x64", POOR },
+  { cmetrohash64_1_test,   64, 0xEE88F7D2, "cmetrohash64_1",  "cmetrohash64_1, 64-bit for x64", POOR },
 #endif
-  { CityHash64noSeed_test,64, 0x63FC6063, "City64noSeed","Google CityHash64 without seed (default version, misses one final avalanche)", POOR },
-  { CityHash64_test,      64, 0x25A20825, "City64",      "Google CityHash64WithSeed (old)", POOR },
+  { CityHash64noSeed_test, 64, 0x63FC6063, "City64noSeed",    "Google CityHash64 without seed (default version, misses one final avalanche)", POOR },
+  { CityHash64_test,       64, 0x25A20825, "City64",          "Google CityHash64WithSeed (old)", POOR },
 #ifdef _MSC_VER /* truncated long to 32 */
 #  define FARM128_VERIF       0x305C0D9A
 #else
 #  define FARM128_VERIF       0x9E636AAE
 #endif
 #if defined(__SSE4_2__) && defined(__x86_64__)
-  { falkhash_test_cxx,    64, 0x2F99B071, "falkhash",        "falkhash.asm with aesenc, 64-bit for x64", POOR },
-  { farmhash128_c_test,  128, FARM128_VERIF,"farmhash128_c", "farmhash128_with_seed (C99)", GOOD },
+  { falkhash_test_cxx,    64, 0x2F99B071, "falkhash",    "falkhash.asm with aesenc, 64-bit for x64", POOR },
 #endif
-  { FarmHash128_test,    128, FARM128_VERIF,"FarmHash128", "Google FarmHash128WithSeed", GOOD },
-  { t1ha2_atonce128_test,128, 0xB44C43A1, "t1ha2_atonce128", "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
-  { t1ha2_stream128_test,128, 0xE929E756, "t1ha2_stream128", "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
-  { SpookyHash128_test,  128, 0x8D263080, "Spooky128",   "Bob Jenkins' SpookyHash, 128-bit result", GOOD },
+  { t1ha1_64le_test,      64, 0xD6836381, "t1ha1_64le",  "Fast Positive Hash (portable, aims 64-bit, little-endian)", POOR },
+  { t1ha1_64be_test,      64, 0x93F864DE, "t1ha1_64be",  "Fast Positive Hash (portable, aims 64-bit, big-engian)", POOR },
+  { t1ha0_32le_test,      64, 0x7F7D7B29, "t1ha0_32le",  "Fast Positive Hash (portable, aims 32-bit, little-endian)", POOR },
+  { t1ha0_32be_test,      64, 0xDA6A4061, "t1ha0_32be",  "Fast Positive Hash (portable, aims 32-bit, big-endian)", POOR },
   { xxh3_test,            64, 0x5921E69E, "xxh3",        "xxHash v3, 64-bit", POOR },
   { xxh3low_test,         32, 0xAC902311, "xxh3low",     "xxHash v3, 64-bit, low 32-bits part", POOR },
-  { xxh128_test,         128, 0x80E5D1DF, "xxh128",      "xxHash v3, 128-bit", GOOD },
+  { xxh128_test,         128, 0x80E5D1DF, "xxh128",      "xxHash v3, 128-bit", POOR },
   { xxh128low_test,       64, 0xB1BB6A50, "xxh128low",   "xxHash v3, 128-bit, low 64-bits part", POOR },
 
   // and now the quality hash funcs
   { siphash_test,         64, 0xC58D7F9C, "SipHash",     "SipHash 2-4 - SSSE3 optimized", GOOD },
-#ifdef HAVE_HIGHWAYHASH
-  { HighwayHash64_test,   64, 0x0,        "HighwayHash64", "Google HighwayHash (portable with dylib overhead)", GOOD },
-#endif
+  { halfsiphash_test,     32, 0xA7A05F72, "HalfSipHash", "HalfSipHash 2-4, 32bit", GOOD },
+  { GoodOAAT_test,        32, 0x7B14EEE5, "GoodOAAT",    "Small non-multiplicative OAAT", GOOD },
+  // as in rust and swift:
+  { siphash13_test,       64, 0x29C010BF, "SipHash13",   "SipHash 1-3 - SSSE3 optimized", GOOD },
 #ifndef _MSC_VER
   { tsip_test,            64, 0x8E48155B, "TSip",        "Damian Gryski's Tiny SipHash variant", GOOD },
 #ifdef HAVE_INT64
@@ -237,9 +225,16 @@ HashInfo g_hashes[] =
   { seahash32low,         32, 0xFD867C5F, "seahash32low","seahash - lower 32bit", GOOD },
 #endif /* HAVE_INT64 */
 #endif /* !MSVC */
-  { GoodOAAT_test,        32, 0x7B14EEE5, "GoodOAAT",    "Small non-multiplicative OAAT", GOOD },
+#if defined(__SSE4_2__) && defined(__x86_64__)
+  { clhash_test,                 64, 0x0, "clhash",      "carry-less mult. hash -DBITMIX (64-bit for x64, SSE4.2)", GOOD },
+#endif
+#ifdef HAVE_HIGHWAYHASH
+  { HighwayHash64_test,   64, 0x0,        "HighwayHash64", "Google HighwayHash (portable with dylib overhead)", GOOD },
+#endif
+#if __WORDSIZE >= 64
+  { MurmurHash3_x64_128, 128, 0x6384BA69, "Murmur3F",    "MurmurHash3 for x64, 128-bit", GOOD },
+#endif
   { fasthash32_test,      32, 0xE9481AFC, "fasthash32",  "fast-hash 32bit", GOOD },
-  { fasthash64_test,      64, 0xA16231A7, "fasthash64",  "fast-hash 64bit", GOOD },
 #if defined(__GNUC__) && UINT_MAX != ULONG_MAX
  #define MUM_VERIF            0x3EEAE2D4
  #define MUMLOW_VERIF         0x520263F5
@@ -261,9 +256,8 @@ HashInfo g_hashes[] =
   { mirhash_test,         64, MIR_VERIF,    "mirhash",            "mirhash", GOOD },
   { mirhash32low,         32, MIRLOW_VERIF, "mirhash32low",       "mirhash - lower 32bit", GOOD },
   { mirhashstrict_test,   64, 0x422A66FC,   "mirhashstrict",      "mirhashstrict (portable, 64-bit, little-endian)", GOOD },
-  { mirhashstrict32low,   32, 0xD50D1F09,   "mirhashstrict32low", "mirhashstrict - lower 32bit", GOOD },
+  { mirhashstrict32low,   32, 0xD50D1F09,   "mirhashstrict32low", "mirhashstrict - lower 32bit", POOR },
 #endif
-  { CityHash32_test,      32, 0x5C28AD62, "City32",      "Google CityHash32WithSeed (old)", GOOD },
   { CityHash64_low_test,  32, 0xCC5BC861, "City64low",   "Google CityHash64WithSeed (low 32-bits)", GOOD },
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { CityHash128_test,    128, 0x6531F54E, "City128",     "Google CityHash128WithSeed (old)", GOOD },
@@ -278,28 +272,31 @@ HashInfo g_hashes[] =
   { FarmHash32_test,      32, 0/*0x2E226C14*/,   "FarmHash32",  "Google FarmHash32WithSeed", GOOD },
   { FarmHash64_test,      64, FARM64_VERIF, "FarmHash64",  "Google FarmHash64WithSeed", GOOD },
  //{ FarmHash64noSeed_test,64, 0xA5B9146C,  "Farm64noSeed","Google FarmHash64 without seed (default, misses on final avalanche)", POOR },
+  { FarmHash128_test,    128, FARM128_VERIF,"FarmHash128", "Google FarmHash128WithSeed", GOOD },
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { farmhash32_c_test,    32, 0/*0xA2E45238*/,   "farmhash32_c", "farmhash32_with_seed (C99)", GOOD },
   { farmhash64_c_test,    64, FARM64_VERIF, "farmhash64_c",  "farmhash64_with_seed (C99)", GOOD },
+  { farmhash128_c_test,  128, FARM128_VERIF,"farmhash128_c", "farmhash128_with_seed (C99)", GOOD },
+  { metrohash64_2_test,   64, 0xE1FC7C6E, "metrohash64_2",     "MetroHash64_2 for 64-bit", GOOD },
+  { cmetrohash64_2_test,   64, 0xE1FC7C6E, "cmetrohash64_2",  "cmetrohash64_2, 64-bit for x64", GOOD },
+  { metrohash128_1_test, 128, 0x20E8A1D7,   "metrohash128_1","MetroHash128_1 for 64-bit", GOOD },
+  { metrohash128_2_test, 128, 0x5437C684,   "metrohash128_2","MetroHash128_2 for 64-bit", GOOD },
+  { metrohash128crc_1_test,  128, 0x5E75144E, "metrohash128crc_1", "MetroHash128crc_1 for x64", GOOD },
+  { metrohash128crc_2_test,  128, 0x1ACF3E77, "metrohash128crc_2", "MetroHash128crc_2 for x64", GOOD },
 #endif
 
   { xxHash64_test,        64, 0x024B7CF4, "xxHash64",    "xxHash, 64-bit", GOOD },
 #if 0
   { xxhash256_test,       64, 0x024B7CF4, "xxhash256",   "xxhash256, 64-bit unportable", GOOD },
 #endif
-
   { SpookyHash32_test,    32, 0x3F798BBB, "Spooky32",    "Bob Jenkins' SpookyHash, 32-bit result", GOOD },
   { SpookyHash64_test,    64, 0xA7F955F1, "Spooky64",    "Bob Jenkins' SpookyHash, 64-bit result", GOOD },
-#if defined(__SSE4_2__) && defined(__x86_64__)
-  { clhash_test,                 64, 0x0, "clhash",      "carry-less mult. hash -DBITMIX (64-bit for x64, SSE4.2)", GOOD },
-#endif
+  { SpookyHash128_test,  128, 0x8D263080, "Spooky128",   "Bob Jenkins' SpookyHash, 128-bit result", GOOD },
   { t1ha2_atonce_test,           64, 0x8F16C948, "t1ha2_atonce",    "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
-  { t1ha2_stream_test,           64, 0xDED9B580, "t1ha2_stream",    "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
+  { t1ha2_stream_test,           64, 0xDED9B580, "t1ha2_stream",    "Fast Positive Hash (portable, aims 64-bit, little-endian)", POOR },
+  { t1ha2_atonce128_test,       128, 0xB44C43A1, "t1ha2_atonce128", "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
+  { t1ha2_stream128_test,       128, 0xE929E756, "t1ha2_stream128", "Fast Positive Hash (portable, aims 64-bit, little-endian)", POOR },
 #if 1
-  { t1ha1_64le_test,             64, 0xD6836381, "t1ha1_64le",      "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
-  { t1ha1_64be_test,             64, 0x93F864DE, "t1ha1_64be",      "Fast Positive Hash (portable, aims 64-bit, big-engian)", GOOD },
-  { t1ha0_32le_test,             64, 0x7F7D7B29, "t1ha0_32le",      "Fast Positive Hash (portable, aims 32-bit, little-endian)", GOOD },
-  { t1ha0_32be_test,             64, 0xDA6A4061, "t1ha0_32be",      "Fast Positive Hash (portable, aims 32-bit, big-endian)", GOOD },
 # if T1HA0_AESNI_AVAILABLE
 #  ifndef _MSC_VER
   { t1ha0_ia32aes_noavx_test,    64, 0xF07C4DA5, "t1ha0_aes_noavx", "Fast Positive Hash (machine-specific, requires AES-NI)", GOOD },
@@ -398,7 +395,9 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 {
   const int hashbits = sizeof(hashtype) * 8;
 
-  printf("-------------------------------------------------------------------------------\n");
+  if (g_testAll) {
+    printf("-------------------------------------------------------------------------------\n");
+  }
 
   // eventual initializers
   Hash_init (info);
@@ -413,8 +412,10 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("PASS\n\n"); fflush(NULL); // if not it does exit(1)
   }
 
-  printf("--- Testing %s \"%s\" %s\n\n", info->name, info->desc, quality_str[info->quality]);
-  fflush(NULL);
+  if (g_testAll) {
+    printf("--- Testing %s \"%s\" %s\n\n", info->name, info->desc, quality_str[info->quality]);
+    fflush(NULL);
+  }
 
   // sha1_32a runs 30s
   if(g_testSanity || g_testAll)
@@ -1410,7 +1411,7 @@ int main ( int argc, const char ** argv )
     }
   }
 
-  // Code runs on the 3rd CPU by default
+  // Code runs on the 3rd CPU by default? only for speed tests
   //SetAffinity((1 << 2));
   //SelfTest();
 
@@ -1422,9 +1423,14 @@ int main ( int argc, const char ** argv )
 
   printf("\n");
   fflush(NULL);
-  printf("Input vcode 0x%08x, Output vcode 0x%08x, Result vcode 0x%08x\n", g_inputVCode, g_outputVCode, g_resultVCode);
-  printf("Verification value is 0x%08x - Testing took %f seconds\n", g_verify, double(timeEnd-timeBegin)/double(CLOCKS_PER_SEC));
-  printf("-------------------------------------------------------------------------------\n");
-  fflush(NULL);
+  if (g_testAll) {
+    printf("Input vcode 0x%08x, Output vcode 0x%08x, Result vcode 0x%08x\n", g_inputVCode, g_outputVCode, g_resultVCode);
+    printf("Verification value is 0x%08x - Testing took %f seconds\n", g_verify, double(timeEnd-timeBegin)/double(CLOCKS_PER_SEC));
+    printf("-------------------------------------------------------------------------------\n");
+  } else {
+    fprintf(stderr, "Input vcode 0x%08x, Output vcode 0x%08x, Result vcode 0x%08x\n", g_inputVCode, g_outputVCode, g_resultVCode);
+    fprintf(stderr, "Verification value is 0x%08x - Testing took %f seconds\n", g_verify, double(timeEnd-timeBegin)/double(CLOCKS_PER_SEC));
+  }
+    fflush(NULL);
   return 0;
 }
