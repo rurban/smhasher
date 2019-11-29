@@ -132,6 +132,8 @@ SMhasher
 | [wyhash](doc/wyhash)                          |     10423.42 |    31.12 | 219.26 (19)|1373 |                            |
 | [wyhash32low](doc/wyhash32low)                |     10407.09 |    31.14 | 239.93 (18)|1373 | Moment Chi2 4.2            |
 
+The [sortable table variant](http://rurban.github.io/smhasher/doc/table.html)
+
 Summary
 -------
 
