@@ -1,0 +1,1096 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.1/css/theme.default.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.1/js/jquery.tablesorter.js"></script>
+<script type="text/javascript">
+$(function() {
+    $("table thead th:eq(0)").data("sorter", false);
+    $("#myTable").tablesorter({sortReset: true});
+});
+</script>
+<style><!-- FIXME -->
+tr.skip {background-color:#eee}
+tr.poor {background-color:#fbb}
+tr.good {background-color:#afa}
+</style>
+</head><body>
+<h1 id="smhasher">SMhasher</h1>
+<table id="myTable" class="tablesorter">
+<thead>
+<tr class="header">
+<th align="left">Hash function</th>
+<th align="right">MiB/sec</th>
+<th align="right">cycl./hash</th>
+<th align="right">cycl./map</th>
+<th align="right">size</th>
+<th align="left">Quality problems</th>
+</tr>
+</thead>
+<tbody>
+<tr class="skip">
+<td align="left"><a href="doc/donothing32">donothing32</a></td>
+<td align="right">14924689.47</td>
+<td align="right">6.00</td>
+<td align="right">-</td>
+<td align="right">13</td>
+<td align="left">test NOP</td>
+</tr>
+<tr class="skip">
+<td align="left"><a href="doc/donothing64">donothing64</a></td>
+<td align="right">14942317.78</td>
+<td align="right">6.00</td>
+<td align="right">-</td>
+<td align="right">13</td>
+<td align="left">test NOP</td>
+</tr>
+<tr class="skip">
+<td align="left"><a href="doc/donothing128">donothing128</a></td>
+<td align="right">14943678.61</td>
+<td align="right">6.00</td>
+<td align="right">-</td>
+<td align="right">13</td>
+<td align="left">test NOP</td>
+</tr>
+<tr class="skip">
+<td align="left"><a href="doc/NOP_OAAT_read64">NOP_OAAT_read64</a></td>
+<td align="right">29794.83</td>
+<td align="right">35.50</td>
+<td align="right">-</td>
+<td align="right">47</td>
+<td align="left">test NOP</td>
+</tr>
+<tr class="skip">
+<td align="left"><a href="doc/BadHash">BadHash</a></td>
+<td align="right">522.75</td>
+<td align="right">96.39</td>
+<td align="right">-</td>
+<td align="right">47</td>
+<td align="left">test FAIL</td>
+</tr>
+<tr class="skip">
+<td align="left"><a href="doc/sumhash">sumhash</a></td>
+<td align="right">7135.41</td>
+<td align="right">31.14</td>
+<td align="right">-</td>
+<td align="right">363</td>
+<td align="left">test FAIL</td>
+</tr>
+<tr class="skip">
+<td align="left"><a href="doc/sumhash32">sumhash32</a></td>
+<td align="right">23873.87</td>
+<td align="right">22.49</td>
+<td align="right">-</td>
+<td align="right">863</td>
+<td align="left">test FAIL</td>
+</tr>
+<tr class="skip">
+<td align="left"><a href="doc/multiply_shift">multiply_shift</a></td>
+<td align="right">4909.57</td>
+<td align="right">45.28</td>
+<td align="right">too slow</td>
+<td align="right">345</td>
+<td align="left">fails all tests</td>
+</tr>
+<tr class="skip">
+<td align="left"><a href="doc/pair_multiply_shift">pair_multiply_shift</a></td>
+<td align="right">13604.46</td>
+<td align="right">31.71</td>
+<td align="right">too slow</td>
+<td align="right">609</td>
+<td align="left">fails all tests</td>
+</tr>
+<tr class="poor">
+<td align="left"><hr/></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/crc32">crc32</a></td>
+<td align="right">392.05</td>
+<td align="right">130.08</td>
+<td align="right">199.87 (3)</td>
+<td align="right">422</td>
+<td align="left">insecure, 8590x collisions, distrib</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/md5_32a">md5_32a</a></td>
+<td align="right">317.78</td>
+<td align="right">730.30</td>
+<td align="right">933.08 (13)</td>
+<td align="right">4419</td>
+<td align="left">8590x collisions, distrib</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/sha1_32a">sha1_32a</a></td>
+<td align="right">364.95</td>
+<td align="right">1470.55</td>
+<td align="right">1794.16 (13)</td>
+<td align="right">5126</td>
+<td align="left">collisions, 36.6% distrib</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/sha2-224">sha2-224</a></td>
+<td align="right">147.13</td>
+<td align="right">1354.81</td>
+<td align="right">1589.92 (12)</td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/sha2-224_64">sha2-224_64</a></td>
+<td align="right">147.60</td>
+<td align="right">1360.10</td>
+<td align="right">1620.93 (13)</td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/sha2-256">sha2-256</a></td>
+<td align="right">147.80</td>
+<td align="right">1374.90</td>
+<td align="right">1606.06 (16)</td>
+<td align="right"></td>
+<td align="left">Moment Chi2 4</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/sha2-256_64">sha2-256_64</a></td>
+<td align="right">148.01</td>
+<td align="right">1376.34</td>
+<td align="right">1624.71 (16)</td>
+<td align="right"></td>
+<td align="left">Moment Chi2 7</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/rmd128">rmd128</a></td>
+<td align="right">332.78</td>
+<td align="right">672.35</td>
+<td align="right">897.29 (8)</td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/rmd160">rmd160</a></td>
+<td align="right">202.16</td>
+<td align="right">1045.79</td>
+<td align="right">1287.74 (16)</td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/rmd256">rmd256</a></td>
+<td align="right">356.57</td>
+<td align="right">638.30</td>
+<td align="right">833.96 (10)</td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/blake2s-128">blake2s-128</a></td>
+<td align="right">295.30</td>
+<td align="right">698.09</td>
+<td align="right">1059.24 (51)</td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/blake2s-160">blake2s-160</a></td>
+<td align="right">215.01</td>
+<td align="right">1026.74</td>
+<td align="right">1239.54 (11)</td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/blake2s-224">blake2s-224</a></td>
+<td align="right">207.06</td>
+<td align="right">1063.86</td>
+<td align="right">1236.50 (20)</td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/blake2s-256">blake2s-256</a></td>
+<td align="right">215.28</td>
+<td align="right">1014.88</td>
+<td align="right">1230.38 (28)</td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/blake2s-256_64">blake2s-256_64</a></td>
+<td align="right">211.52</td>
+<td align="right">1044.22</td>
+<td align="right">1228.43 (8)</td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/blake2b-160">blake2b-160</a></td>
+<td align="right">356.08</td>
+<td align="right">1236.84</td>
+<td align="right">1458.15 (12)</td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/blake2b-224">blake2b-224</a></td>
+<td align="right">356.59</td>
+<td align="right">1228.50</td>
+<td align="right">1425.87 (16)</td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/blake2b-256">blake2b-256</a></td>
+<td align="right">355.97</td>
+<td align="right">1232.22</td>
+<td align="right">1443.31 (19)</td>
+<td align="right"></td>
+<td align="left">Sparse high 32-bit</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/blake2b-256_64">blake2b-256_64</a></td>
+<td align="right">356.97</td>
+<td align="right">1222.76</td>
+<td align="right">1435.03 (9)</td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/sha3-256">sha3-256</a></td>
+<td align="right">100.58</td>
+<td align="right">3877.18</td>
+<td align="right">4159.79 (37)</td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/sha3-256_64">sha3-256_64</a></td>
+<td align="right">100.57</td>
+<td align="right">3909.00</td>
+<td align="right">4174.63 (16)</td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/hasshe2">hasshe2</a></td>
+<td align="right">2357.32</td>
+<td align="right">76.10</td>
+<td align="right">348.10 (6)</td>
+<td align="right">445</td>
+<td align="left">insecure, Permutation,TwoBytes,Zeroes,Seed</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/crc32_hw">crc32_hw</a></td>
+<td align="right">6292.63</td>
+<td align="right">30.38</td>
+<td align="right">204.19 (18)</td>
+<td align="right">653</td>
+<td align="left">insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2)</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/crc32_hw1">crc32_hw1</a></td>
+<td align="right">23382.53</td>
+<td align="right">36.84</td>
+<td align="right">197.39 (20)</td>
+<td align="right">671</td>
+<td align="left">insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2)</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/crc64_hw">crc64_hw</a></td>
+<td align="right">8387.01</td>
+<td align="right">29.96</td>
+<td align="right">161.44 (13)</td>
+<td align="right">652</td>
+<td align="left">insecure, 100% bias, collisions, distrib, machine-specific (x64 SSE4.2)</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/fibonacci">fibonacci</a></td>
+<td align="right">9462.17</td>
+<td align="right">33.52</td>
+<td align="right">774.87 (14)</td>
+<td align="right">1692</td>
+<td align="left">zeros, fails all tests</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/FNV1a">FNV1a</a></td>
+<td align="right">780.53</td>
+<td align="right">69.65</td>
+<td align="right">197.06 (20)</td>
+<td align="right">204</td>
+<td align="left">zeros, fails all tests</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/FNV1A_Totenschiff">FNV1A_Totenschiff</a></td>
+<td align="right">6235.86</td>
+<td align="right">36.56</td>
+<td align="right">214.61 (18)</td>
+<td align="right">270</td>
+<td align="left">zeros, fails all tests</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/FNV1A_Pippip_Yurii">FNV1A_Pippip_Yurii</a></td>
+<td align="right">6238.08</td>
+<td align="right">37.22</td>
+<td align="right">218.06 (25)</td>
+<td align="right">147</td>
+<td align="left">sanity, fails all tests</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/FNV1a_YT">FNV1a_YT</a></td>
+<td align="right">9618.28</td>
+<td align="right">28.26</td>
+<td align="right">192.33 (18)</td>
+<td align="right">321</td>
+<td align="left">fails all tests</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/FNV2">FNV2</a></td>
+<td align="right">6244.26</td>
+<td align="right">38.25</td>
+<td align="right">168.46 (15)</td>
+<td align="right">278</td>
+<td align="left">fails all tests</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/FNV64">FNV64</a></td>
+<td align="right">791.82</td>
+<td align="right">69.82</td>
+<td align="right">184.87 (19)</td>
+<td align="right">79</td>
+<td align="left">fails all tests</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/fletcher2">fletcher2</a></td>
+<td align="right">11809.88</td>
+<td align="right">26.85</td>
+<td align="right">321.91 (13)</td>
+<td align="right">248</td>
+<td align="left">fails all tests</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/fletcher4">fletcher4</a></td>
+<td align="right">11973.55</td>
+<td align="right">26.94</td>
+<td align="right">324.53 (12)</td>
+<td align="right">371</td>
+<td align="left">fails all tests</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/bernstein">bernstein</a></td>
+<td align="right">791.83</td>
+<td align="right">67.15</td>
+<td align="right">200.11 (17)</td>
+<td align="right">41</td>
+<td align="left">fails all tests</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/sdbm">sdbm</a></td>
+<td align="right">785.84</td>
+<td align="right">67.02</td>
+<td align="right">209.44 (17)</td>
+<td align="right">41</td>
+<td align="left">fails all tests</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/x17">x17</a></td>
+<td align="right">522.46</td>
+<td align="right">97.51</td>
+<td align="right">214.03 (18)</td>
+<td align="right">79</td>
+<td align="left">99.98% bias, fails all tests</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/JenkinsOOAT">JenkinsOOAT</a></td>
+<td align="right">446.57</td>
+<td align="right">142.43</td>
+<td align="right">245.34 (20)</td>
+<td align="right">153</td>
+<td align="left">53.5% bias, fails all tests</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/JenkinsOOAT_perl">JenkinsOOAT_pl</a></td>
+<td align="right">442.05</td>
+<td align="right">120.53</td>
+<td align="right">336.30 (4)</td>
+<td align="right">65</td>
+<td align="left">1.5-11.5% bias, 7.2x collisions, LongNeighbors</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/MicroOAAT">MicroOAAT</a></td>
+<td align="right">950.84</td>
+<td align="right">62.23</td>
+<td align="right">233.94 (19)</td>
+<td align="right">68</td>
+<td align="left">100% bias, distrib</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/jodyhash32">jodyhash32</a></td>
+<td align="right">1386.76</td>
+<td align="right">46.13</td>
+<td align="right">232.12 (21)</td>
+<td align="right">102</td>
+<td align="left">bias, collisions, distr</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/jodyhash64">jodyhash64</a></td>
+<td align="right">2765.84</td>
+<td align="right">40.89</td>
+<td align="right">222.41 (20)</td>
+<td align="right">118</td>
+<td align="left">bias, collisions, distr</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/lookup3">lookup3</a></td>
+<td align="right">1702.13</td>
+<td align="right">48.25</td>
+<td align="right">243.90 (19)</td>
+<td align="right">341</td>
+<td align="left">28% bias, collisions, 30% distr</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/superfast">superfast</a></td>
+<td align="right">1899.70</td>
+<td align="right">54.19</td>
+<td align="right">240.49 (19)</td>
+<td align="right">210</td>
+<td align="left">91% bias, 5273.01x collisions, 37% distr, BIC</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/MurmurOAAT">MurmurOAAT</a></td>
+<td align="right">437.03</td>
+<td align="right">117.00</td>
+<td align="right">236.62 (19)</td>
+<td align="right">47</td>
+<td align="left">collisions, 99.998% distr., BIC</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/Crap8">Crap8</a></td>
+<td align="right">3060.17</td>
+<td align="right">35.25</td>
+<td align="right">242.59 (20)</td>
+<td align="right">342</td>
+<td align="left">2.42% bias, collisions, 2% distrib</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/Murmur2">Murmur2</a></td>
+<td align="right">3032.69</td>
+<td align="right">41.97</td>
+<td align="right">233.68 (19)</td>
+<td align="right">358</td>
+<td align="left">1.7% bias, 81x coll, 1.7% distrib, BIC</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/Murmur2A">Murmur2A</a></td>
+<td align="right">3033.56</td>
+<td align="right">46.63</td>
+<td align="right">227.70 (20)</td>
+<td align="right">407</td>
+<td align="left">12.7% bias</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/Murmur2B">Murmur2B</a></td>
+<td align="right">4728.94</td>
+<td align="right">47.90</td>
+<td align="right">192.82 (18)</td>
+<td align="right">433</td>
+<td align="left">1.8% bias, collisions, 3.4% distrib, BIC</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/Murmur2C">Murmur2C</a></td>
+<td align="right">3817.99</td>
+<td align="right">47.67</td>
+<td align="right">207.53 (18)</td>
+<td align="right">444</td>
+<td align="left">91% bias, collisions, distr, BIC</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/Murmur3A">Murmur3A</a></td>
+<td align="right">2347.90</td>
+<td align="right">51.38</td>
+<td align="right">237.58 (19)</td>
+<td align="right">351</td>
+<td align="left">Moment Chi2 69</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/PMurHash32">PMurHash32</a></td>
+<td align="right">2281.97</td>
+<td align="right">58.65</td>
+<td align="right">259.59 (20)</td>
+<td align="right">1862</td>
+<td align="left">Moment Chi2 69</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/Murmur3C">Murmur3C</a></td>
+<td align="right">3093.46</td>
+<td align="right">68.53</td>
+<td align="right">256.49 (19)</td>
+<td align="right">859</td>
+<td align="left">LongNeighbors, DiffDist</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/xxHash32">xxHash32</a></td>
+<td align="right">5868.40</td>
+<td align="right">49.08</td>
+<td align="right">222.09 (21)</td>
+<td align="right">738</td>
+<td align="left">LongNeighbors, collisions with 4bit diff, MomentChi2 220</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/metrohash64_1">metrohash64_1</a></td>
+<td align="right">9274.60</td>
+<td align="right">50.85</td>
+<td align="right">201.37 (19)</td>
+<td align="right">624</td>
+<td align="left">LongNeighbors, BIC</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/metrohash64crc_1">metrohash64crc_1</a></td>
+<td align="right">13641.79</td>
+<td align="right">56.19</td>
+<td align="right">193.28 (19)</td>
+<td align="right">632</td>
+<td align="left">cyclic collisions 8 byte, BIC, machine-specific (x64 SSE4.2)</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/metrohash64crc_2">metrohash64crc_2</a></td>
+<td align="right">13550.77</td>
+<td align="right">56.17</td>
+<td align="right">204.84 (18)</td>
+<td align="right">632</td>
+<td align="left">cyclic collisions 8 byte, BIC, machine-specific (x64 SSE4.2)</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/metrohash128crc_1">metrohash128crc_1</a></td>
+<td align="right">13668.29</td>
+<td align="right">85.94</td>
+<td align="right">249.99 (18)</td>
+<td align="right">723</td>
+<td align="left">machine-specific (x64 SSE4.2)</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/metrohash128crc_2">metrohash128crc_2</a></td>
+<td align="right">13600.83</td>
+<td align="right">85.92</td>
+<td align="right">239.28 (20)</td>
+<td align="right">723</td>
+<td align="left">machine-specific (x64 SSE4.2)</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/metrohash128_1">metrohash128_1</a></td>
+<td align="right">9263.64</td>
+<td align="right">79.71</td>
+<td align="right">240.70 (20)</td>
+<td align="right">773</td>
+<td align="left">LongNeighbors</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/metrohash128_2">metrohash128_2</a></td>
+<td align="right">9060.39</td>
+<td align="right">79.74</td>
+<td align="right">240.46 (20)</td>
+<td align="right">773</td>
+<td align="left">LongNeighbors</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/cmetrohash64_1o">cmetrohash64_1o</a></td>
+<td align="right">8851.32</td>
+<td align="right">50.59</td>
+<td align="right">193.19 (18)</td>
+<td align="right">3506</td>
+<td align="left">LongNeighbors</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/cmetrohash64_1">cmetrohash64_1</a></td>
+<td align="right">9074.37</td>
+<td align="right">50.92</td>
+<td align="right">201.33 (18)</td>
+<td align="right">652</td>
+<td align="left">LongNeighbors</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/City64noSeed">City64noSeed</a></td>
+<td align="right">8873.07</td>
+<td align="right">38.70</td>
+<td align="right">171.57 (4)</td>
+<td align="right">1038</td>
+<td align="left">Avalanche, Sparse, TwoBytes, MomentChi2, Seed</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/City64">City64</a></td>
+<td align="right">9213.05</td>
+<td align="right">55.52</td>
+<td align="right">200.24 (2)</td>
+<td align="right">1120</td>
+<td align="left">Sparse, TwoBytes</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/falkhash">falkhash</a></td>
+<td align="right">20374.98</td>
+<td align="right">169.84</td>
+<td align="right">328.42 (5)</td>
+<td align="right">264</td>
+<td align="left">LongNeighbors, machine-specific (x64 AES-NI)</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/t1ha1_64le">t1ha1_64le</a></td>
+<td align="right">9541.33</td>
+<td align="right">39.33</td>
+<td align="right">239.04 (16)</td>
+<td align="right">517</td>
+<td align="left">Avalanche</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/t1ha1_64be">t1ha1_64be</a></td>
+<td align="right">6848.76</td>
+<td align="right">41.08</td>
+<td align="right">230.22 (17)</td>
+<td align="right">555</td>
+<td align="left">Avalanche</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/t1ha0_32le">t1ha0_32le</a></td>
+<td align="right">4913.74</td>
+<td align="right">55.00</td>
+<td align="right">233.39 (18)</td>
+<td align="right">509</td>
+<td align="left">Sparse, LongNeighbors</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/t1ha0_32be">t1ha0_32be</a></td>
+<td align="right">4241.68</td>
+<td align="right">55.12</td>
+<td align="right">236.50 (18)</td>
+<td align="right">533</td>
+<td align="left">Sparse, LongNeighbors</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/t1ha2_stream">t1ha2_stream</a></td>
+<td align="right">8558.73</td>
+<td align="right">93.45</td>
+<td align="right">305.03 (16)</td>
+<td align="right">1665</td>
+<td align="left">Sparse, Permutation</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/t1ha2_stream128">t1ha2_stream128</a></td>
+<td align="right">8846.52</td>
+<td align="right">117.19</td>
+<td align="right">270.95 (2)</td>
+<td align="right">1665</td>
+<td align="left">Sparse, Permutation, LongNeighbors</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/xxh3">xxh3</a></td>
+<td align="right">11694.36</td>
+<td align="right">37.07</td>
+<td align="right">169.43 (2)</td>
+<td align="right">744</td>
+<td align="left">Moment Chi2 14974, BIC</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/xxh3low">xxh3low</a></td>
+<td align="right">10664.58</td>
+<td align="right">36.96</td>
+<td align="right">196.75 (3)</td>
+<td align="right">756</td>
+<td align="left">Moment Chi2 1.8e+9 !</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/xxh128">xxh128</a></td>
+<td align="right">11553.50</td>
+<td align="right">41.68</td>
+<td align="right">184.25 (2)</td>
+<td align="right">1012</td>
+<td align="left">Moment Chi2 14974</td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/xxh128low">xxh128low</a></td>
+<td align="right">11482.39</td>
+<td align="right">37.60</td>
+<td align="right">168.17 (4)</td>
+<td align="right">1012</td>
+<td align="left">Moment Chi2 14974, BIC</td>
+</tr>
+<tr class="poor">
+<td align="left"><hr/></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/SipHash">SipHash</a></td>
+<td align="right">958.78</td>
+<td align="right">141.84</td>
+<td align="right">278.15 (3)</td>
+<td align="right">1071</td>
+<td align="left"></td>
+</tr>
+<tr class="poor">
+<td align="left"><a href="doc/HalfSipHash">HalfSipHash</a></td>
+<td align="right">741.59</td>
+<td align="right">122.25</td>
+<td align="right">256.22 (20)</td>
+<td align="right">700</td>
+<td align="left">zeroes</td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/GoodOAAT">GoodOAAT</a></td>
+<td align="right">1052.90</td>
+<td align="right">70.80</td>
+<td align="right">208.00 (3)</td>
+<td align="right">237</td>
+<td align="left"></td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/SipHash13">SipHash13</a></td>
+<td align="right">1762.44</td>
+<td align="right">104.61</td>
+<td align="right">304.84 (17)</td>
+<td align="right">778</td>
+<td align="left">0.9% bias</td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/TSip">TSip</a></td>
+<td align="right">3346.72</td>
+<td align="right">60.02</td>
+<td align="right">203.82 (5)</td>
+<td align="right">519</td>
+<td align="left">!msvc</td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/seahash">seahash</a></td>
+<td align="right">4517.87</td>
+<td align="right">65.03</td>
+<td align="right">212.61 (3)</td>
+<td align="right">871</td>
+<td align="left">!msvc</td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/seahash32low">seahash32low</a></td>
+<td align="right">4589.52</td>
+<td align="right">64.53</td>
+<td align="right">212.74 (3)</td>
+<td align="right">871</td>
+<td align="left">!msvc</td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/clhash">clhash</a></td>
+<td align="right">4405.28</td>
+<td align="right">85.35</td>
+<td align="right">288.20 (14)</td>
+<td align="right">1809</td>
+<td align="left">machine-specific (x64 SSE4.2)</td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/HighwayHash64">HighwayHash64</a></td>
+<td align="right">6239.64</td>
+<td align="right">98.65</td>
+<td align="right">263.94 (4)</td>
+<td align="right">2546</td>
+<td align="left"></td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/Murmur3F">Murmur3F</a></td>
+<td align="right">5076.20</td>
+<td align="right">51.66</td>
+<td align="right">222.39 (18)</td>
+<td align="right">699</td>
+<td align="left"></td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/fasthash32">fasthash32</a></td>
+<td align="right">4658.24</td>
+<td align="right">50.50</td>
+<td align="right">181.96 (2)</td>
+<td align="right">566</td>
+<td align="left"></td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/fasthash64">fasthash64</a></td>
+<td align="right">4657.64</td>
+<td align="right">47.71</td>
+<td align="right">168.22 (3)</td>
+<td align="right">509</td>
+<td align="left">Moment Chi2 5159 !</td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/MUM">MUM</a></td>
+<td align="right">6890.75</td>
+<td align="right">39.90</td>
+<td align="right">174.94 (3)</td>
+<td align="right">1912</td>
+<td align="left">machine-specific (32/64 differs)</td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/MUMlow">MUMlow</a></td>
+<td align="right">6893.98</td>
+<td align="right">46.02</td>
+<td align="right">191.55 (3)</td>
+<td align="right">1912</td>
+<td align="left"></td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/mirhash">mirhash</a></td>
+<td align="right">5453.50</td>
+<td align="right">42.31</td>
+<td align="right">163.35 (2)</td>
+<td align="right">1112</td>
+<td align="left">LongNeighbors, machine-specific (32/64 differs)</td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/mirhash32low">mirhash32low</a></td>
+<td align="right">5452.48</td>
+<td align="right">42.31</td>
+<td align="right">190.92 (2)</td>
+<td align="right">1112</td>
+<td align="left">LongNeighbors, machine-specific (32/64 differs)</td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/mirhashstrict">mirhashstrict</a></td>
+<td align="right">2217.70</td>
+<td align="right">65.39</td>
+<td align="right">175.38 (3)</td>
+<td align="right">1112</td>
+<td align="left"></td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/mirhashstrict32low">mirhashstrict32low</a></td>
+<td align="right">2217.87</td>
+<td align="right">64.72</td>
+<td align="right">188.44 (4)</td>
+<td align="right">1112</td>
+<td align="left">MomentChi2 9</td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/City32">City32</a></td>
+<td align="right">3833.52</td>
+<td align="right">52.97</td>
+<td align="right">211.69 (4)</td>
+<td align="right">1319</td>
+<td align="left"></td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/City64low">City64low</a></td>
+<td align="right">9209.88</td>
+<td align="right">63.55</td>
+<td align="right">274.62 (17)</td>
+<td align="right">1120</td>
+<td align="left"></td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/City128">City128</a></td>
+<td align="right">9747.33</td>
+<td align="right">77.22</td>
+<td align="right">269.02 (14)</td>
+<td align="right">1841</td>
+<td align="left"></td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/CityCrc128">CityCrc128</a></td>
+<td align="right">12958.29</td>
+<td align="right">77.31</td>
+<td align="right">267.14 (17)</td>
+<td align="right">295</td>
+<td align="left"></td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/FarmHash32">FarmHash32</a></td>
+<td align="right">16663.96</td>
+<td align="right">63.67</td>
+<td align="right">265.35 (19)</td>
+<td align="right">11489</td>
+<td align="left">machine-specific (x64 SSE4/AVX)</td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/FarmHash64">FarmHash64</a></td>
+<td align="right">8476.56</td>
+<td align="right">65.05</td>
+<td align="right">251.81 (17)</td>
+<td align="right">3758</td>
+<td align="left"></td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/FarmHash128">FarmHash128</a></td>
+<td align="right">9814.32</td>
+<td align="right">82.06</td>
+<td align="right">229.38 (4)</td>
+<td align="right">163</td>
+<td align="left"></td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/farmhash32_c">farmhash32_c</a></td>
+<td align="right">17335.51</td>
+<td align="right">63.77</td>
+<td align="right">277.75 (18)</td>
+<td align="right">762</td>
+<td align="left">machine-specific (x64 SSE4/AVX)</td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/farmhash64_c">farmhash64_c</a></td>
+<td align="right">8335.98</td>
+<td align="right">77.01</td>
+<td align="right">266.15 (18)</td>
+<td align="right">3688</td>
+<td align="left"></td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/farmhash128_c">farmhash128_c</a></td>
+<td align="right">10158.20</td>
+<td align="right">98.80</td>
+<td align="right">232.00 (2)</td>
+<td align="right">1890</td>
+<td align="left"></td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/metrohash64_2">metrohash64_2</a></td>
+<td align="right">9281.99</td>
+<td align="right">51.04</td>
+<td align="right">191.44 (20)</td>
+<td align="right">627</td>
+<td align="left">LongNeighbors</td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/cmetrohash64_2">cmetrohash64_2</a></td>
+<td align="right">9302.98</td>
+<td align="right">51.09</td>
+<td align="right">194.04 (18)</td>
+<td align="right">655</td>
+<td align="left">LongNeighbors</td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/xxHash64">xxHash64</a></td>
+<td align="right">8719.19</td>
+<td align="right">59.22</td>
+<td align="right">210.40 (16)</td>
+<td align="right">1999</td>
+<td align="left"></td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/Spooky32">Spooky32</a></td>
+<td align="right">9570.40</td>
+<td align="right">70.27</td>
+<td align="right">250.23 (18)</td>
+<td align="right">2221</td>
+<td align="left"></td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/Spooky64">Spooky64</a></td>
+<td align="right">9603.18</td>
+<td align="right">70.19</td>
+<td align="right">231.73 (17)</td>
+<td align="right">2221</td>
+<td align="left"></td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/Spooky128">Spooky128</a></td>
+<td align="right">9865.67</td>
+<td align="right">70.84</td>
+<td align="right">185.64 (2)</td>
+<td align="right">2221</td>
+<td align="left"></td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/t1ha2_atonce">t1ha2_atonce</a></td>
+<td align="right">8192.03</td>
+<td align="right">48.48</td>
+<td align="right">230.46 (14)</td>
+<td align="right">541</td>
+<td align="left"></td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/t1ha2_atonce128">t1ha2_atonce128</a></td>
+<td align="right">8382.53</td>
+<td align="right">64.15</td>
+<td align="right">199.63 (4)</td>
+<td align="right">613</td>
+<td align="left">LongNeighbors</td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/t1ha0_aes_noavx">t1ha0_aes_noavx</a></td>
+<td align="right">21782.86</td>
+<td align="right">48.17</td>
+<td align="right">238.14 (18)</td>
+<td align="right">925</td>
+<td align="left">LongNeighbors, machine-specific (x86 AES-NI)</td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/t1ha0_aes_avx1">t1ha0_aes_avx1</a></td>
+<td align="right">22714.85</td>
+<td align="right">48.12</td>
+<td align="right">226.52 (16)</td>
+<td align="right">843</td>
+<td align="left">LongNeighbors, machine-specific (x64 AVX)</td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/t1ha0_aes_avx2">t1ha0_aes_avx2</a></td>
+<td align="right">36436.51</td>
+<td align="right">36.31</td>
+<td align="right">?</td>
+<td align="right">792</td>
+<td align="left">LongNeighbors, machine-specific (x64 AVX2)</td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/wyhash">wyhash</a></td>
+<td align="right">10423.42</td>
+<td align="right">31.12</td>
+<td align="right">219.26 (19)</td>
+<td align="right">1373</td>
+<td align="left"></td>
+</tr>
+<tr class="good">
+<td align="left"><a href="doc/wyhash32low">wyhash32low</a></td>
+<td align="right">10407.09</td>
+<td align="right">31.14</td>
+<td align="right">239.93 (18)</td>
+<td align="right">1373</td>
+<td align="left">Moment Chi2 4.2</td>
+</tr>
+</tbody>
+</table>
+<h2 id="summary">Summary</h2>
+<p>I added some SSE assisted hashes and fast intel/arm CRC32-C and AES HW variants, but not the fastest <a href="https://code.google.com/p/crcutil/">crcutil</a> yet. See <a href="https://github.com/rurban/smhasher/blob/master/doc/crcutil">our crcutil results</a>. See also the old <a href="https://code.google.com/p/smhasher/w/list">https://code.google.com/p/smhasher/w/list</a>.</p>
+<p>So the fastest hash functions on x86_64 without quality problems are:</p>
+<ul>
+<li>wyhash v3</li>
+<li>t1ha2_atonce</li>
+<li>metrohash64crc (x86 only)</li>
+<li>FarmHash (<em>not portable, too machine specific: 64 vs 32bit, old gcc, ...</em>)</li>
+<li>Spooky32</li>
+<li>fasthash</li>
+<li>MUM/mir (<em>different results on 32/64-bit archs</em>)</li>
+</ul>
+<p>Hash functions for symbol tables or hash tables typically use 32 bit hashes, for databases, file systems and file checksums typically 64 or 128bit, for crypto now starting with 256 bit.</p>
+<p>Typical median key size in perl5 is 20, the most common 4. Similar for all other dynamic languages. See <a href="https://github.com/rurban/perl-hash-stats">github.com/rurban/perl-hash-stats</a></p>
+<p>When used in a hash table the instruction cache will usually beat the CPU and throughput measured here. In my tests the smallest <code>FNV1A</code> beats the fastest <code>crc32_hw1</code> with <a href="https://github.com/rurban/perl-hash-stats">Perl 5 hash tables</a>. Even if those worse hash functions will lead to more collisions, the overall speed advantage and inline-ability beats the slightly worse quality. See e.g. <a href="https://infosys.cs.uni-saarland.de/publications/p249-richter.pdf">A Seven-Dimensional Analysis of Hashing Methods and its Implications on Query Processing</a> for a concise overview of the best hash table strategies, confirming that the simplest Mult hashing (bernstein, FNV*, x17, sdbm) always beat &quot;better&quot; hash functions (Tabulation, Murmur, Farm, ...) when used in a hash table.</p>
+<p>The fast hash functions tested here are recommendable as fast for file digests and maybe bigger databases, but not for 32bit hash tables. The &quot;Quality problems&quot; lead to less uniform distribution, i.e. more collisions and worse performance, but are rarely related to real security attacks, just the 2nd sanity zeroes test against <code>\0</code> invariance is security relevant.</p>
+<h2 id="columns">Columns</h2>
+<p>MiB/sec: The average of the Bulk key speed test for alignments 0-7 with 262144-byte keys. The higher the better.</p>
+<p>cycl./hash: The average of the Small key speed test for 1-31 byte keys. The smaller the better.</p>
+<p>cycl./map: The result of the Hashmap test for /usr/dict/words with std::unordered_map get queries, with the standard deviation in brackets. This tests the inlinability of the hash function (see size). The smaller the better.</p>
+<p>size: The object size in byte on AMD64. This affects the inlinability in e.g. hash tables. The smaller the better.</p>
+<p>Quality problems: See the failures in the linked doc. The less the better.</p>
+<h2 id="other">Other</h2>
+<ul>
+<li><a href="http://www.strchr.com/hash_functions">http://www.strchr.com/hash_functions</a> lists other benchmarks and quality of most simple and fast hash functions.</li>
+<li><a href="http://bench.cr.yp.to/primitives-hash.html">http://bench.cr.yp.to/primitives-hash.html</a> lists the benchmarks of all currently tested secure hashes.</li>
+<li>The <a href="http://www.larc.usp.br/~pbarreto/hflounge.html">Hash Function Lounge</a> overviews the known weaknesses and attacks.</li>
+</ul>
+<h2 id="security">SECURITY</h2>
+<p>The hash table attacks described in <a href="https://131002.net/siphash/">SipHash</a> against City, Murmur or Perl JenkinsOAAT or at <a href="http://www.larc.usp.br/~pbarreto/hflounge.html">Hash Function Lounge</a> are not included here.</p>
+<p>Such an attack avoidance cannot be the problem of the hash function, but only the hash table collision resolution scheme. You can attack every single hash function, even the best and most secure if you detect the seed, e.g. from language (mis-)features, side-channel attacks, collision timings and independly the sort-order, so you need to protect your collision handling scheme from the worst-case O(n), i.e. separate chaining with linked lists. Linked lists chaining allows high load factors, but is very cache-unfriendly. The only recommendable linked list scheme is inlining the key or hash into the array. Nowadays everybody uses fast open addressing, even if the load factor needs to be ~50%, unless you use Cuckoo Hashing.</p>
+<p>I.e. the usage of SipHash for their hash table in Python 3.4, ruby, rust, systemd, OpenDNS, Haskell and OpenBSD is pure security theatre. SipHash is not secure enough for security purposes and not fast enough for general usage. Brute-force generation of ~32k collisions need 2-4m for all these hashes. siphash being the slowest needs max 4m, other typically max 2m30s, with &lt;10s for practical 16k collision attacks with all hash functions. Using Murmur is usually slower than a simple Mult, even in the worst case. Provable secure is only uniform hashing, i.e. 2-5 independent Mult or Tabulation, or using a guaranteed logarithmic collision scheme (a tree) or a linear collision scheme, such as Robin Hood or Cockoo hashing with collision counting.</p>
+<p>One more note regarding security: Nowadays even SHA1 can be solved in a solver, like Z3 (or faster ones) for practical hash table collision attacks (i.e. 14-20 bits). So all hash functions with less than 256 bits tested here cannot be considered &quot;secure&quot; at all.</p>
+<p>The '' vulnerability attack with binary keys is tested in the 2nd Sanity Zero test.</p>
+<h2 id="crypto">CRYPTO</h2>
+<p>The official NIST hash function testsuite does not do such extensive statistical tests, to search for weak ranges in the bits. Also crypto does not change the initial state, which we do here for our random 32bit seed. Crypto mostly cares about unreversable key -&gt; hash functions without changing the initial fixed state and timings/sidechannel attacks.</p>
+<p>The NIST &quot;Cryptographic Algorithm Validation Program&quot; (CAVP) involves the testing of the implementations of FIPS-approved and NIST-recommended cryptographic algorithms. During the NIST SHA-3 competition, the testing methodology was borrowed from the &quot;CAVP&quot;, as the KATs and MCTs of the <a href="https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Algorithm-Validation-Program/documents/sha3/sha3vs.pdf">SHA-3 Competition Test Suite</a> were based on the CAVP tests for SHA-2. In addition to this, the “Extremely Long Message Test,” not present in the CAVP for SHA-2, required the submitters to generate the hash value corresponding to a message with a length of 1 GiB. “NIST - Cryptographic Algorithm Validation Program (CAVP),” June 2017. Available: http://csrc.nist.gov/groups/STM/cavp (No testing source code provided, just high-level descriptions)</p>
+<p>Two other independent third party testsuites found an extensive number of bugs and weaknesses in the SHA3 candidates. &quot;Finding Bugs in Cryptographic Hash Function Implementations&quot;, Nicky Mouha, Mohammad S Raunak, D. Richard Kuhn, and Raghu Kacker, 2017. https://eprint.iacr.org/2017/891.pdf</p>
+<p>Maybe independent researchers should come together to do a better public SHA-4 round, based on better and more testing methods, open source code for the tests, and using standard industry practices, such as valgrind, address-sanitizer and ubsan to detect obvious bugs.</p>
+</body></html>
