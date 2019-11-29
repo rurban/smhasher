@@ -417,12 +417,15 @@ void HighwayHash64_test (const void * key, int len, uint32_t seed, void * out);
 
 #ifdef HAVE_INT64
 //https://github.com/wangyi-fudan/wyhash
-//#define WYHASH_EVIL_FAST
 #include "wyhash.h"
 // objsize 19c0-1f1d: 1373
 inline void wyhash_test (const void * key, int len, uint32_t seed, void * out) {
   *(uint64_t*)out = wyhash(key, (uint64_t)len, (uint64_t)seed);
 }
+/*#undef wyhash_version_3
+#undef WYRAND_MAX
+#define WYHASH32
+#include "wyhash.h"*/
 inline void wyhash32low (const void * key, int len, uint32_t seed, void * out) {
   *(uint32_t*)out = 0xFFFFFFFF & wyhash(key, (uint64_t)len, (uint64_t)seed);
 }

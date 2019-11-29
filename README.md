@@ -129,8 +129,8 @@ SMhasher
 | [t1ha0_aes_noavx](doc/t1ha0_aes_noavx)        |     21782.86 |    48.17 | 238.14 (18)| 925 | LongNeighbors, machine-specific (x86 AES-NI) |
 | [t1ha0_aes_avx1](doc/t1ha0_aes_avx1)          |     22714.85 |    48.12 | 226.52 (16)| 843 | LongNeighbors, machine-specific (x64 AVX)    |
 | [t1ha0_aes_avx2](doc/t1ha0_aes_avx2)          |     36436.51 |    36.31 | ?          | 792 | LongNeighbors, machine-specific (x64 AVX2)   |
-| [wyhash](doc/wyhash)                          |     10423.42 |    31.12 | 219.26 (19)|1373 |                            |
-| [wyhash32low](doc/wyhash32low)                |     10407.09 |    31.14 | 239.93 (18)|1373 | Moment Chi2 4.2            |
+| [wyhash](doc/wyhash)                          |      9377.14 |    29.14 | 167.15 (2) |1373 |                            |
+| [wyhash32low](doc/wyhash32low)                |      9281.60 |    27.54 | 191.05 (4) |1373 | Moment Chi2 4.2            |
 
 The [sortable table variant](http://rurban.github.io/smhasher/doc/table.html)
 
