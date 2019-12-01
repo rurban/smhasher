@@ -51,18 +51,18 @@ SMhasher
 | [sdbm](doc/sdbm)                              |       785.84 |    67.02 | 209.44 (17)|  41 | fails all tests              |
 | [x17](doc/x17)                                |       522.46 |    97.51 | 214.03 (18)|  79 | 99.98% bias, fails all tests |
 | [JenkinsOOAT](doc/JenkinsOOAT)                |       446.57 |   142.43 | 245.34 (20)| 153 | 53.5% bias, fails all tests  |
-| [JenkinsOOAT_pl](doc/JenkinsOOAT_perl)        |       442.05 |   120.53 | 336.30 (4) |  65 | 1.5-11.5% bias, 7.2x collisions  |
+| [JenkinsOOAT_pl](doc/JenkinsOOAT_perl)        |       442.05 |   120.53 | 336.30 (4) |  65 | 1.5-11.5% bias, 7.2x collisions, LongNeighbors |
 | [MicroOAAT](doc/MicroOAAT)                    |       950.84 |    62.23 | 233.94 (19)|  68 | 100% bias, distrib           |
-| [jodyhash32](doc/jodyhash32)                  |      1386.76 |    46.13 | 232.12 (21)| 102 | bias, collisions, distr      |
-| [jodyhash64](doc/jodyhash64)                  |      2765.84 |    40.89 | 222.41 (20)| 118 | bias, collisions, distr      |
+| [jodyhash32](doc/jodyhash32)                  |      1386.76 |    46.13 | 232.12 (21)| 102 | bias, collisions, distr, LongNeighbors |
+| [jodyhash64](doc/jodyhash64)                  |      2765.84 |    40.89 | 222.41 (20)| 118 | bias, collisions, distr, LongNeighbors |
 | [lookup3](doc/lookup3)                        |      1702.13 |    48.25 | 243.90 (19)| 341 | 28% bias, collisions, 30% distr  |
 | [superfast](doc/superfast)                    |      1899.70 |    54.19 | 240.49 (19)| 210 | 91% bias, 5273.01x collisions, 37% distr, BIC |
-| [MurmurOAAT](doc/MurmurOAAT)                  |       437.03 |   117.00 | 236.62 (19)|  47 | collisions, 99.998% distr., BIC    |
+| [MurmurOAAT](doc/MurmurOAAT)                  |       437.03 |   117.00 | 236.62 (19)|  47 | collisions, 99.998% distr., BIC, LongNeighbors |
 | [Crap8](doc/Crap8)                            |      3060.17 |    35.25 | 242.59 (20)| 342 | 2.42% bias, collisions, 2% distrib |
 | [Murmur2](doc/Murmur2)                        |      3032.69 |    41.97 | 233.68 (19)| 358 | 1.7% bias, 81x coll, 1.7% distrib, BIC |
-| [Murmur2A](doc/Murmur2A)                      |      3033.56 |    46.63 | 227.70 (20)| 407 | 12.7% bias                         |
+| [Murmur2A](doc/Murmur2A)                      |      3033.56 |    46.63 | 227.70 (20)| 407 | 12.7% bias, LongNeighbors          |
 | [Murmur2B](doc/Murmur2B)                      |      4728.94 |    47.90 | 192.82 (18)| 433 | 1.8% bias, collisions, 3.4% distrib, BIC |
-| [Murmur2C](doc/Murmur2C)                      |      3817.99 |    47.67 | 207.53 (18)| 444 | 91% bias, collisions, distr, BIC   |
+| [Murmur2C](doc/Murmur2C)                      |      3817.99 |    47.67 | 207.53 (18)| 444 | 91% bias, collisions, distr, BIC, LongNeighbors |
 | [Murmur3A](doc/Murmur3A)                      |      2347.90 |    51.38 | 237.58 (19)| 351 | Moment Chi2 69             |
 | [PMurHash32](doc/PMurHash32)                  |      2281.97 |    58.65 | 259.59 (20)|1862 | Moment Chi2 69             |
 | [Murmur3C](doc/Murmur3C)                      |      3093.46 |    68.53 | 256.49 (19)| 859 | LongNeighbors, DiffDist    |
@@ -83,7 +83,7 @@ SMhasher
 | [t1ha1_64be](doc/t1ha1_64be)                  |      6848.76 |    41.08 | 230.22 (17)| 555 | Avalanche                  |
 | [t1ha0_32le](doc/t1ha0_32le)                  |      4913.74 |    55.00 | 233.39 (18)| 509 | Sparse, LongNeighbors      |
 | [t1ha0_32be](doc/t1ha0_32be)                  |      4241.68 |    55.12 | 236.50 (18)| 533 | Sparse, LongNeighbors      |
-| [t1ha2_stream](doc/t1ha2_stream)              |      8558.73 |    93.45 | 305.03 (16)|1665 | Sparse, Permutation        |
+| [t1ha2_stream](doc/t1ha2_stream)              |      8558.73 |    93.45 | 305.03 (16)|1665 | Sparse, Permutation, LongNeighbors |
 | [t1ha2_stream128](doc/t1ha2_stream128)        |      8846.52 |   117.19 | 270.95 (2) |1665 | Sparse, Permutation, LongNeighbors |
 | [xxh3](doc/xxh3)                              |     11694.36 |    37.07 | 169.43 (2) | 744 | Moment Chi2 14974, BIC     |
 | [xxh3low](doc/xxh3low)                        |     10664.58 |    36.96 | 196.75 (3) | 756 | Moment Chi2 1.8e+9 !       |
