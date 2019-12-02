@@ -212,7 +212,14 @@ HashInfo g_hashes[] =
   { xxh128_test,         128, 0x80E5D1DF, "xxh128",      "xxHash v3, 128-bit", POOR },
   { xxh128low_test,       64, 0xB1BB6A50, "xxh128low",   "xxHash v3, 128-bit, low 64-bits part", POOR },
 
-  // and now the quality hash funcs
+#if __WORDSIZE >= 64
+# define TIFU_VERIF       0x644236D4
+#else
+  // broken on certain travis
+# define TIFU_VERIF       0x0
+#endif
+  // and now the quality hash funcs, slowest first
+  { tifuhash_64,          64, TIFU_VERIF, "tifuhash_64", "Tiny Floatingpoint Unique Hash with continued egyptian fractions", GOOD },
   { siphash_test,         64, 0xC58D7F9C, "SipHash",     "SipHash 2-4 - SSSE3 optimized", GOOD },
   { halfsiphash_test,     32, 0xA7A05F72, "HalfSipHash", "HalfSipHash 2-4, 32bit", GOOD },
   { GoodOAAT_test,        32, 0x7B14EEE5, "GoodOAAT",    "Small non-multiplicative OAAT", GOOD },
@@ -226,10 +233,10 @@ HashInfo g_hashes[] =
 #endif /* HAVE_INT64 */
 #endif /* !MSVC */
 #if defined(__SSE4_2__) && defined(__x86_64__)
-  { clhash_test,                 64, 0x0, "clhash",      "carry-less mult. hash -DBITMIX (64-bit for x64, SSE4.2)", GOOD },
+  { clhash_test,          64, 0x00000000, "clhash",      "carry-less mult. hash -DBITMIX (64-bit for x64, SSE4.2)", GOOD },
 #endif
 #ifdef HAVE_HIGHWAYHASH
-  { HighwayHash64_test,   64, 0x0,        "HighwayHash64", "Google HighwayHash (portable with dylib overhead)", GOOD },
+  { HighwayHash64_test,   64, 0x00000000,        "HighwayHash64", "Google HighwayHash (portable with dylib overhead)", GOOD },
 #endif
 #if __WORDSIZE >= 64
   { MurmurHash3_x64_128, 128, 0x6384BA69, "Murmur3F",    "MurmurHash3 for x64, 128-bit", GOOD },

@@ -19,6 +19,9 @@
 #include "jody_hash32.h"
 #include "jody_hash64.h"
 
+// objsize: 0-0x113 = 276
+#include "tifuhash.h"
+
 //----------
 // These are _not_ hash functions (even though people tend to use crc32 as one...)
 

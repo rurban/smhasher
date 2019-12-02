@@ -287,6 +287,7 @@ add_library(
   SuperFastHash.cpp
   Types.cpp
   PMurHash.c
+  tifuhash.cpp
   fasthash.cpp
   xxhash.c
   metrohash64.cpp
