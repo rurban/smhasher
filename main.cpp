@@ -316,7 +316,17 @@ HashInfo g_hashes[] =
 #  endif /* __AVX2__ */
 # endif /* T1HA0_AESNI_AVAILABLE */
 #endif /* older t1ha */
-
+#if defined(HAVE_AESNI) && defined(__SIZEOF_INT128__)
+# if defined(HAVE_BIT32)
+#  define MEOW_VERIF           0x2736F5A8
+#  define MEOW32_VERIF         0x8872DE1A
+# else
+#  define MEOW_VERIF           0xA0D29861
+#  define MEOW32_VERIF         0x8872DE1A
+# endif
+  { MeowHash128_test,     128, MEOW_VERIF, "MeowHash",  "Meow hash (requires x64 AES-NI)", GOOD },
+  { MeowHash32_test,       32, MEOW32_VERIF, "MeowHash32low",  "Meow hash lower 32bit (requires x64 AES-NI)", GOOD },
+#endif
 #ifdef HAVE_INT64
 #ifdef WYHASH_EVIL_FAST
 # if defined(_MSC_VER) && defined(HAVE_BIT32)

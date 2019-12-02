@@ -129,7 +129,9 @@ SMhasher
 | [t1ha2_atonce128](doc/t1ha2_atonce128)        |      8382.53 |    64.15 | 199.63 (4) | 613 | LongNeighbors              |
 | [t1ha0_aes_noavx](doc/t1ha0_aes_noavx)        |     21782.86 |    48.17 | 238.14 (18)| 925 | LongNeighbors, machine-specific (x86 AES-NI) |
 | [t1ha0_aes_avx1](doc/t1ha0_aes_avx1)          |     22714.85 |    48.12 | 226.52 (16)| 843 | LongNeighbors, machine-specific (x64 AVX)    |
-| [t1ha0_aes_avx2](doc/t1ha0_aes_avx2)          |     36436.51 |    36.31 | ?          | 792 | LongNeighbors, machine-specific (x64 AVX2)   |
+| [t1ha0_aes_avx2](doc/t1ha0_aes_avx2)          |     22345.33 |    44.38 | 556.47 (89)| 792 | LongNeighbors, machine-specific (x64 AVX2)   |
+| [MeowHash](doc/MeowHash)                      |     36695.65 |    58.09 | 423.03 (22)|1764 | Sparse low32, machine-specific (x64 AES-NI)  |
+| [MeowHash32low](doc/MeowHash32low)            |     17247.34 |    87.32 | 256.73 (3) |1764 | Sparse, machine-specific (x64 AES-NI)        |
 | [wyhash](doc/wyhash)                          |      9377.14 |    29.14 | 167.15 (2) |1373 |                            |
 | [wyhash32low](doc/wyhash32low)                |      9281.60 |    27.54 | 191.05 (4) |1373 | Moment Chi2 4.2            |
 
@@ -198,6 +200,7 @@ The less the better.
 Other
 -----
 
+* http://nohatcoder.dk/2019-05-19-1.html gives a new, useful hash level classification 1-5.
 * [http://www.strchr.com/hash_functions](http://www.strchr.com/hash_functions) lists other benchmarks and quality of most simple and fast hash functions.
 * [http://bench.cr.yp.to/primitives-hash.html](http://bench.cr.yp.to/primitives-hash.html) lists the benchmarks of all currently tested secure hashes.
 * The [Hash Function Lounge](http://www.larc.usp.br/~pbarreto/hflounge.html) overviews the known weaknesses and attacks.
