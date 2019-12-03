@@ -135,14 +135,14 @@
 #define meow_u64 long long unsigned
 #define meow_u128 __m128i
 
-#if __x86_64__ || _M_AMD64
+#if defined(__x86_64__) || defined(_M_AMD64)
 #define meow_umm long long unsigned
 #define MeowU64From(A, I) (_mm_extract_epi64((A), (I)))
-#elif __i386__  || _M_IX86
+#elif defined(__i386__)  || defined(_M_IX86)
 #define meow_umm int unsigned
 #define MeowU64From(A, I) (*(meow_u64 *)&(A))
 #else
-#error Cannot determine architecture to use!
+#error Cannot determine architecture to use. Valid only x86_64 and i386
 #endif
 
 #define MeowU32From(A, I) (_mm_extract_epi32((A), (I)))
