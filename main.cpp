@@ -190,12 +190,22 @@ HashInfo g_hashes[] =
   { MurmurHash3_x86_128, 128, 0xB3ECE62A, "Murmur3C",    "MurmurHash3 for x86, 128-bit", POOR },
   { fasthash64_test,      64, 0xA16231A7, "fasthash64",  "fast-hash 64bit", POOR },
   { CityHash32_test,      32, 0x5C28AD62, "City32",      "Google CityHash32WithSeed (old)", POOR },
-  { metrohash64_1_test,   64, 0xEE88F7D2, "metrohash64_1",     "MetroHash64_1 for 64-bit", POOR },
+#ifdef HAVE_INT64
+  { metrohash64_test,      64, 0x6FA828C9, "metrohash64",    "MetroHash64, 64-bit", POOR },
+  { metrohash64_1_test,    64, 0xEE88F7D2, "metrohash64_1",  "MetroHash64_1, 64-bit (legacy)", POOR },
+  { metrohash64_2_test,    64, 0xE1FC7C6E, "metrohash64_2",  "MetroHash64_2, 64-bit (legacy)", POOR },
+  { metrohash128_test,    128, 0x4A6673E7, "metrohash128",   "MetroHash128, 128-bit", POOR },
+  { metrohash128_1_test,  128, 0x20E8A1D7, "metrohash128_1", "MetroHash128_1, 128-bit (legacy)", POOR },
+  { metrohash128_2_test,  128, 0x5437C684, "metrohash128_2", "MetroHash128_2, 128-bit (legacy)", POOR },
+#endif
 #if defined(__SSE4_2__) && defined(__x86_64__)
-  { metrohash64crc_1_test,64, 0x29C68A50, "metrohash64crc_1",  "MetroHash64crc_1 for x64", POOR },
-  { metrohash64crc_2_test,64, 0x2C00BD9F, "metrohash64crc_2",  "MetroHash64crc_2 for x64", POOR },
+  { metrohash64crc_1_test, 64, 0x29C68A50, "metrohash64crc_1", "MetroHash64crc_1 for x64 (legacy)", POOR },
+  { metrohash64crc_2_test, 64, 0x2C00BD9F, "metrohash64crc_2", "MetroHash64crc_2 for x64 (legacy)", POOR },
   { cmetrohash64_1_optshort_test,64, 0xEE88F7D2, "cmetrohash64_1o", "cmetrohash64_1 (shorter key optimized) , 64-bit for x64", POOR },
   { cmetrohash64_1_test,   64, 0xEE88F7D2, "cmetrohash64_1",  "cmetrohash64_1, 64-bit for x64", POOR },
+  { cmetrohash64_2_test,   64, 0xE1FC7C6E, "cmetrohash64_2",  "cmetrohash64_2, 64-bit for x64", GOOD },
+  { metrohash128crc_1_test,  128, 0x5E75144E, "metrohash128crc_1", "MetroHash128crc_1 for x64 (legacy)", GOOD },
+  { metrohash128crc_2_test,  128, 0x1ACF3E77, "metrohash128crc_2", "MetroHash128crc_2 for x64 (legacy)", GOOD },
 #endif
   { CityHash64noSeed_test, 64, 0x63FC6063, "City64noSeed",    "Google CityHash64 without seed (default version, misses one final avalanche)", POOR },
   { CityHash64_test,       64, 0x25A20825, "City64",          "Google CityHash64WithSeed (old)", POOR },
@@ -288,12 +298,6 @@ HashInfo g_hashes[] =
   { farmhash32_c_test,    32, 0/*0xA2E45238*/,   "farmhash32_c", "farmhash32_with_seed (C99)", GOOD },
   { farmhash64_c_test,    64, FARM64_VERIF, "farmhash64_c",  "farmhash64_with_seed (C99)", GOOD },
   { farmhash128_c_test,  128, FARM128_VERIF,"farmhash128_c", "farmhash128_with_seed (C99)", GOOD },
-  { metrohash64_2_test,   64, 0xE1FC7C6E, "metrohash64_2",     "MetroHash64_2 for 64-bit", GOOD },
-  { cmetrohash64_2_test,   64, 0xE1FC7C6E, "cmetrohash64_2",  "cmetrohash64_2, 64-bit for x64", GOOD },
-  { metrohash128_1_test, 128, 0x20E8A1D7,   "metrohash128_1","MetroHash128_1 for 64-bit", GOOD },
-  { metrohash128_2_test, 128, 0x5437C684,   "metrohash128_2","MetroHash128_2 for 64-bit", GOOD },
-  { metrohash128crc_1_test,  128, 0x5E75144E, "metrohash128crc_1", "MetroHash128crc_1 for x64", GOOD },
-  { metrohash128crc_2_test,  128, 0x1ACF3E77, "metrohash128crc_2", "MetroHash128crc_2 for x64", GOOD },
 #endif
 
   { xxHash64_test,        64, 0x024B7CF4, "xxHash64",    "xxHash, 64-bit", GOOD },
