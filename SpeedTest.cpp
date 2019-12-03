@@ -311,18 +311,14 @@ double HashMapSpeedTest ( pfHash pfhash, const int hashbits,
                   {
                     // 256 needed for hasshe2, but only size_t used
                     static char out[256] = { 0 };
-                    size_t result = 0;
                     pfhash(key.c_str(), key.length(), seed, &out);
-                    memcpy(&result, &out, sizeof(size_t));
-                    return result;
+                    return *(size_t*)out;
                   });
   fast_hashmap phashmap(words.size(), [=](const std::string &key)
                   {
                     static char out[256] = { 0 }; // 256 for hasshe2, but stripped to 64/32
-                    size_t result = 0;
                     pfhash(key.c_str(), key.length(), seed, &out);
-                    memcpy(&result, &out, sizeof(size_t));
-                    return result;
+                    return *(size_t*)out;
                   });
   
   std::vector<std::string>::iterator it;
