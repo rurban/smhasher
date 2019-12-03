@@ -507,6 +507,63 @@ uint32_t JenkinsOOAT_perl(const char *key, int len, uint32_t hash)
   return hash;
 }
 
+// -----------------------------------------------
+// ktprime, from https://github.com/ktprime/ktprime/blob/master/hash_table6.hpp#L1489
+// for integers or pointers only
+static inline uint32_t ktprime_hash32(uint32_t key)
+{
+#if 0
+  key = ((key >> 16) ^ key) * 0x45d9f3b;
+  key = ((key >> 16) ^ key) * 0x45d9f3b; //0x119de1f3
+  //key = ((key >> 13) ^ key) * 0xc2b2ae35;
+  key = (key >> 16) ^ key;
+  return key;
+#elif 1
+  uint64_t const r = key * UINT64_C(0xca4bcaa75ec3f625);
+  const uint32_t h = static_cast<uint32_t>(r >> 32);
+  const uint32_t l = static_cast<uint32_t>(r);
+  return h + l;
+#elif 1
+  key += ~(key << 15);
+  key ^= (key >> 10);
+  key += (key << 3);
+  key ^= (key >> 6);
+  key += ~(key << 11);
+  key ^= (key >> 16);
+  return key;
+#endif
+}
+
+static inline uint64_t ktprime_hash64(uint64_t key)
+{
+  //       return (key >> 33 ^ key ^ key << 11);
+#ifdef __SIZEOF_INT128__
+  constexpr uint64_t k = UINT64_C(0xde5fb9d2630458e9);
+  __uint128_t r = key; r *= k;
+  return (uint32_t)(r >> 64) + r;
+#elif 1
+  uint64_t const r = key * UINT64_C(0xca4bcaa75ec3f625);
+  const uint32_t h = static_cast<uint32_t>(r >> 32);
+  const uint32_t l = static_cast<uint32_t>(r);
+  return h + l;
+#elif 1
+  //MurmurHash3Mixer
+  uint64_t h = key;
+  h ^= h >> 33;
+  h *= 0xff51afd7ed558ccd;
+  h ^= h >> 33;
+  h *= 0xc4ceb9fe1a85ec53;
+  h ^= h >> 33;
+  return static_cast<size_t>(h);
+#elif 1
+  uint64_t x = key;
+  x = (x ^ (x >> 30)) * UINT64_C(0xbf58476d1ce4e5b9);
+  x = (x ^ (x >> 27)) * UINT64_C(0x94d049bb133111eb);
+  x = x ^ (x >> 31);
+  return x;
+#endif
+}
+
 //------------------------------------------------
 // One of a smallest non-multiplicative One-At-a-Time function
 // that passes whole SMHasher.
