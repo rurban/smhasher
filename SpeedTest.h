@@ -22,9 +22,8 @@ typedef std::unordered_map<std::string, int,
 typedef phmap::flat_hash_map<std::string, int,
   std::function<size_t (const std::string &key)>> fast_hashmap;
 
-template< typename hashtype >
-double HashMapSpeedTest ( pfHash pfhash, const int hashbits,
-                          std::vector<std::string> words,
+template< typename hashtype, pfHash pfhash >
+double HashMapSpeedTest ( std::vector<std::string> words,
                           const int trials, bool verbose )
 {
   //using phmap::flat_node_hash_map;
