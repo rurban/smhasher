@@ -702,3 +702,31 @@ inline void MeowHash32_test(const void *key, int len, unsigned seed, void *out) 
   *(uint32_t *)out = MeowU32From(h, 0);
 }
 #endif
+
+#ifdef _MAIN_CPP
+#include "farsh.h"
+#else
+#ifdef __AVX2__
+#define FARSH_AVX2
+#elif defined HAVE_SSE42
+#define FARSH_SSE2
+#endif
+#include "farsh.c"
+#endif
+// objsize: 0-3b0: 944
+inline void farsh32_test ( const void * key, int len, unsigned seed, void * out )
+{
+  farsh_n(key,len,0,1,seed,out);
+}
+inline void farsh64_test ( const void * key, int len, unsigned seed, void * out )
+{
+  farsh_n(key,len,0,2,seed,out);
+}
+inline void farsh128_test ( const void * key, int len, unsigned seed, void * out )
+{
+  farsh_n(key,len,0,4,seed,out);
+}
+inline void farsh256_test ( const void * key, int len, unsigned seed, void * out )
+{
+  farsh_n(key,len,0,8,seed,out);
+}

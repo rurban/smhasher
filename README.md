@@ -38,7 +38,7 @@ SMhasher
 | [crc32_hw](doc/crc32_hw)                      |      6292.63 |    30.38 | 204.19 (18)| 653 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
 | [crc32_hw1](doc/crc32_hw1)                    |     23382.53 |    36.84 | 197.39 (20)| 671 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
 | [crc64_hw](doc/crc64_hw)                      |      8387.01 |    29.96 | 161.44 (13)| 652 | insecure, 100% bias, collisions, distrib, machine-specific (x64 SSE4.2) |
-| [fibonacci](doc/fibonacci)                    |      9462.17 |    33.52 | 774.87 (14)|1692 | zeros, fails all tests     |
+| [fibonacci](doc/fibonacci)                    |      9462.17 |    33.52 | 774.87 (14)|1692 | zeros, fails all tests       |
 | [FNV1a](doc/FNV1a)                            |       780.53 |    69.65 | 197.06 (20)| 204 | zeros, fails all tests       |
 | [FNV1A_Totenschiff](doc/FNV1A_Totenschiff)    |      6235.86 |    36.56 | 214.61 (18)| 270 | zeros, fails all tests       |
 | [FNV1A_Pippip_Yurii](doc/FNV1A_Pippip_Yurii)  |      6238.08 |    37.22 | 218.06 (25)| 147 | sanity, fails all tests      |
@@ -53,6 +53,8 @@ SMhasher
 | [JenkinsOOAT](doc/JenkinsOOAT)                |       446.57 |   142.43 | 245.34 (20)| 153 | 53.5% bias, fails all tests  |
 | [JenkinsOOAT_pl](doc/JenkinsOOAT_perl)        |       442.05 |   120.53 | 336.30 (4) |  65 | 1.5-11.5% bias, 7.2x collisions, LongNeighbors |
 | [MicroOAAT](doc/MicroOAAT)                    |       950.84 |    62.23 | 233.94 (19)|  68 | 100% bias, distrib           |
+| [farsh32](doc/farsh32)                        |     14053.09 |    74.29 | 230.25 (4) | 944 | insecure: AppendedZeroes, collisions+bias, MomentChi2, LongNeighbors |
+| [farsh64](doc/farsh64)                        |      7216.29 |   130.30 | 296.59 (3) | 944 | insecure: AppendedZeroes, collisions+bias, MomentChi2, LongNeighbors |
 | [jodyhash32](doc/jodyhash32)                  |      1386.76 |    46.13 | 232.12 (21)| 102 | bias, collisions, distr, LongNeighbors |
 | [jodyhash64](doc/jodyhash64)                  |      2765.84 |    40.89 | 222.41 (20)| 118 | bias, collisions, distr, LongNeighbors |
 | [lookup3](doc/lookup3)                        |      1702.13 |    48.25 | 243.90 (19)| 341 | 28% bias, collisions, 30% distr  |
