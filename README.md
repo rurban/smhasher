@@ -16,6 +16,8 @@ SMhasher
 | [crc32](doc/crc32)                            |       392.05 |   130.08 | 205.11 (10) | 422 | insecure, 8590x collisions, distrib |
 | [md5_32a](doc/md5_32a)                        |       317.78 |   730.30 | 842.13 (18) |4419 | 8590x collisions, distrib |
 | [sha1_32a](doc/sha1_32a)                      |       364.95 |  1470.55 |1794.16 (13)|5126 | collisions, 36.6% distrib |
+| [md5-128](doc/md5-128)                        |       317.78 |   730.30 | 830.69 (7) |4419 |               |
+| [sha1-160](doc/sha1-160)                      |       364.95 |  1470.55 |1794.16 (13)|5126 |               |
 | [sha2-224](doc/sha2-224)                      |       147.13 |  1354.81 |1589.92 (12)|     |               |
 | [sha2-224_64](doc/sha2-224_64)                |       147.60 |  1360.10 |1620.93 (13)|     |               |
 | [sha2-256](doc/sha2-256)                      |       147.80 |  1374.90 |1606.06 (16)|     | Moment Chi2 4 |
@@ -51,7 +53,7 @@ SMhasher
 | [sdbm](doc/sdbm)                              |       785.84 |    67.02 | 178.65 (2) |  41 | fails all tests              |
 | [x17](doc/x17)                                |       522.46 |    97.51 | 195.82 (4) |  79 | 99.98% bias, fails all tests |
 | [JenkinsOOAT](doc/JenkinsOOAT)                |       446.57 |   142.43 | 225.28 (3) | 153 | 53.5% bias, fails all tests  |
-| [JenkinsOOAT_pl](doc/JenkinsOOAT_perl)        |       442.05 |   120.53 | 336.30 (4) |  65 | 1.5-11.5% bias, 7.2x collisions, LongNeighbors |
+| [JenkinsOOAT_perl](doc/JenkinsOOAT_perl)      |       442.05 |   120.53 | 196.24 (3) |  65 | 1.5-11.5% bias, 7.2x collisions, LongNeighbors |
 | [MicroOAAT](doc/MicroOAAT)                    |       950.84 |    62.23 | 199.62 (4) |  68 | 100% bias, distrib           |
 | [farsh32](doc/farsh32)                        |     14053.09 |    74.29 | 245.33 (3) | 944 | insecure: AppendedZeroes, collisions+bias, MomentChi2, LongNeighbors |
 | [farsh64](doc/farsh64)                        |      7216.29 |   130.30 | 302.44 (3) | 944 | insecure: AppendedZeroes, collisions+bias, MomentChi2, LongNeighbors |
