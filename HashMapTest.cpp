@@ -39,13 +39,14 @@ std::vector<std::string> HashMapInit(bool verbose) {
   return words;
 }
 
+template <typename hashtype>
 bool HashMapTest ( pfHash pfhash, 
                    const int hashbits, std::vector<std::string> words,
                    const int trials, bool verbose )
 {
   double mean = 0.0;
   try {
-    mean = HashMapSpeedTest( pfhash, hashbits, words, trials, verbose);
+    mean = HashMapSpeedTest<hashtype>( pfhash, hashbits, words, trials, verbose);
   }
   catch (...) {
     printf(" aborted !!!!\n");

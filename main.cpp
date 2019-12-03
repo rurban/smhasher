@@ -576,7 +576,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     } else {
       std::vector<std::string> words = HashMapInit(g_drawDiagram);
       if (words.size())
-        result &= HashMapTest(hash,info->hashbits,words,trials,g_drawDiagram);
+        result &= HashMapTest<hashtype>(hash,info->hashbits,words,trials,g_drawDiagram);
     }
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
