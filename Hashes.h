@@ -28,6 +28,8 @@
 // objsize: 0-0x113 = 276
 #include "tifuhash.h"
 
+#include "vmac.h"
+
 //----------
 // These are _not_ hash functions (even though people tend to use crc32 as one...)
 
@@ -735,3 +737,5 @@ inline void farsh256_test ( const void * key, int len, unsigned seed, void * out
 {
   farsh_n(key,len,0,8,seed,out);
 }
+
+

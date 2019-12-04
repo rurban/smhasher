@@ -163,6 +163,9 @@ HashInfo g_hashes[] =
   // also called jhash:
   { JenkinsOOAT_test,     32, 0x83E133DA, "JenkinsOOAT", "Bob Jenkins' OOAT as in perl 5.18", POOR },
   { JenkinsOOAT_perl_test,32, 0xEE05869B, "JenkinsOOAT_perl", "Bob Jenkins' OOAT as in old perl5", POOR },
+  // FIXME: seed
+  { VHASH_32,             32, 0xF0077651, "VHASH_32",    "VHASH_32 by Ted Krovetz and Wei Dai", POOR },
+  { VHASH_64,             64, 0xF97D84FE, "VHASH_64",    "VHASH_64 by Ted Krovetz and Wei Dai", POOR },
   { MicroOAAT_test,       32, 0x16F1BA97, "MicroOAAT",   "Small non-multiplicative OAAT (by funny-falcon)", POOR },
   { farsh32_test,         32, 0xBCDE332C, "farsh32",     "FARSH 32bit", POOR }, // insecure
   { farsh64_test,         64, 0xDE2FDAEE, "farsh64",     "FARSH 64bit", POOR }, // insecure
@@ -380,6 +383,8 @@ void Hash_init (HashInfo* info) {
   else if(info->hash == clhash_test)
     clhash_init();
 #endif
+  else if (info->hash == VHASH_32 || info->hash == VHASH_64)
+    VHASH_init();
 #ifdef HAVE_HIGHWAYHASH
   else if(info->hash == HighwayHash64_test)
     HighwayHash_init();

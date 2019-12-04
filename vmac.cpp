@@ -21,9 +21,9 @@
 #define VMAC_USE_SSE2    0 // always
 #else // __arm__
 #ifdef VMAC_ARCH_64
-#define VMAC_USE_SSE2    0 // always
+#define VMAC_USE_SSE2    1 // always
 #else // VMAC_ARCH_64
-#define VMAC_USE_SSE2    1 // 0 or 1; further considerations should be applied
+#define VMAC_USE_SSE2    0 // 0 or 1; further considerations should be applied
 #endif // VMAC_ARCH_64
 #endif // __arm__
 
@@ -1126,7 +1126,7 @@ void vmac_set_key(unsigned char user_key[], vmac_ctx_t *ctx)
 /* ----------------------------------------------------------------------- */
 
 
-//#if VMAC_RUN_TESTS
+#if VMAC_RUN_TESTS
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -1174,13 +1174,18 @@ VHASH_initializer vhi;
 
 void VHASH_32( const void * key, int len, uint32_t seed, void * res )
 {
-	(void) seed; //unused
     uint64_t tagl;
+#if _WORDSIZE > 32
+    *(size_t*)res = 0;
+#endif
 #if (VMAC_TAG_LEN == 128)
-	vhash( (unsigned char *)key, len, &tagl, &ctx);
-	*(uint32_t*)res = (uint32_t)tagl;
+    ctx.polytmp[0] = seed;
+    vhash( (unsigned char *)key, len, &tagl, &ctx);
+    *(uint32_t*)res = (uint32_t)tagl;
 #elif (VMAC_TAG_LEN == 64)
-	*(uint32_t*)res = (uint32_t)vhash( (unsigned char *)key, len, &tagl, &(vhi.ctx) );
+    vhi.ctx.polytmp[0] = seed;
+    *(uint32_t*)res = (uint32_t)vhash( (unsigned char *)key, len, &tagl, &(vhi.ctx) );
+
 #else
 #error VMAC_TAG_LEN could be either 64 or 128
 #endif
@@ -1329,15 +1334,16 @@ void VHASH_PADDED_32_but_hashing(const void * key, int len, uint32_t seed, void 
 	//	vhash_abort(&(vhi.ctx));
 }
 
-void VHASH_64( const void * key, int len, uint64_t seed, void * res )
+void VHASH_64( const void * key, int len, uint32_t seed, void * res )
 {
-	(void) seed; //unused
     uint64_t tagl;
 #if (VMAC_TAG_LEN == 128)
-	vhash( (unsigned char *)key, len, &tagl, &ctx);
-	*(uint32_t*)res = (uint32_t)tagl;
+    ctx.polytmp[0] = seed;
+    vhash( (unsigned char *)key, len, &tagl, &ctx);
+    *(uint32_t*)res = (uint32_t)tagl;
 #elif (VMAC_TAG_LEN == 64)
-	*(uint64_t*)res = vhash( (unsigned char *)key, len, &tagl, &(vhi.ctx) );
+    vhi.ctx.polytmp[0] = seed;
+    *(uint64_t*)res = vhash( (unsigned char *)key, len, &tagl, &(vhi.ctx) );
 #else
 #error VMAC_TAG_LEN could be either 64 or 128
 #endif
@@ -1449,3 +1455,9 @@ int VHASH_TestSpeedAlt( const void * key, int len, int iter )
 	}
 	return dummy;
 }
+
+void VHASH_init() {
+  vmac_set_key((unsigned char*)"abcdefghijklmnop", &vhi.ctx);
+}
+
+#endif

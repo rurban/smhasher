@@ -1,5 +1,6 @@
 #include "SpeedTest.h"
 #include "Random.h"
+#include "vmac.h"
 
 #include <stdio.h>   // for printf
 #include <memory.h>  // for memset
@@ -381,6 +382,11 @@ double HashMapSpeedTest ( pfHash pfhash, const int hashbits,
 
   printf("\ngreg7mdp/parallel-hashmap\n");
   printf("Init fast HashMapTest:    ");
+  if ((pfhash == VHASH_32 || pfhash == VHASH_64) && !verbose)
+    {
+      printf("SKIP");
+      return 0.;
+    }
   fflush(NULL);
   times.reserve(trials);
   { // hash inserts and 1% deletes

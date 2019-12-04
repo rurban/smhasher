@@ -43,7 +43,13 @@ bool HashMapTest ( pfHash pfhash,
                    const int hashbits, std::vector<std::string> words,
                    const int trials, bool verbose )
 {
-  double mean = HashMapSpeedTest( pfhash, hashbits, words, trials, verbose);
+  double mean = 0.0;
+  try {
+    mean = HashMapSpeedTest( pfhash, hashbits, words, trials, verbose);
+  }
+  catch (...) {
+    printf(" aborted !!!!\n");
+  }
   // if faster than ~sha1
   if (mean > 5. && mean < 1500.)
     printf(" ....... PASS\n");

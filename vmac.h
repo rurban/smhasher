@@ -6,10 +6,11 @@
 
 /* --------------------------------------------------------------------------
  * VMAC and VHASH Implementation by Ted Krovetz (tdk@acm.org) and Wei Dai.
- * This implementation is herby placed in the public domain.
+ * This implementation is hereby placed in the public domain.
  * The authors offers no warranty. Use at your own risk.
  * Please send bug reports to the authors.
  * Last modified: 17 APR 08, 1700 PDT
+ * https://eprint.iacr.org/2007/338.pdf
  * ----------------------------------------------------------------------- */
 
 /* --------------------------------------------------------------------------
@@ -25,7 +26,7 @@
                             /* of consecutive nonces on 64-bit tags        */
 
 #define VMAC_RUN_TESTS 1  /* Set to non-zero to check vectors and speed    */
-//#define VMAC_HZ (448e6)  /* Set to hz of host machine to get speed        */
+#define VMAC_HZ (3000e6)  /* Set to hz of host machine to get speed        */
 #define VMAC_HASH_ONLY 1  /* Set to non-zero to time hash only (not-mac)   */
 /* Speeds of cpus I have access to
 #define hz (2400e6)  glyme Core 2 "Conroe"
@@ -82,8 +83,10 @@ typedef AES_KEY aes_int_key;
 
 #else
 
-#include "rijndael-alg-fst.h"
-typedef u32 aes_int_key[4*(VMAC_KEY_LEN/32+7)];
+extern "C" {
+  #include "rijndael-alg-fst.h"
+  typedef u32 aes_int_key[4*(VMAC_KEY_LEN/32+7)];
+}
 
 #define aes_encryption(in,out,int_key)                  \
 	    	rijndaelEncrypt((u32 *)(int_key),           \
@@ -160,13 +163,13 @@ uint64_t vhash(unsigned char m[],
 
 void VHASH_32( const void * key, int len, uint32_t seed, void * res );
 void VHASH_PADDED_32( const void * key, int len, uint32_t seed, void * res );
-void VHASH_64( const void * key, int len, uint64_t seed, void * res );
+void VHASH_64( const void * key, int len, uint32_t seed, void * res );
 void VHASH_PADDED_64( const void * key, int len, uint64_t seed, void * res );
 void VHASH_PADDED_32_but_hashing(const void * key, int len, uint32_t seed, void * res);
 void VHASH_PADDED_64_but_hashing(const void * key, int len, uint64_t seed, void * res);
 
 /* --------------------------------------------------------------------------
- * When passed a VMAC_KEY_LEN bit user_key, this function initialazies ctx.
+ * When passed a VMAC_KEY_LEN bit user_key, this function initializes ctx.
  * ----------------------------------------------------------------------- */
 
 void vmac_set_key(unsigned char user_key[], vmac_ctx_t *ctx);
@@ -179,6 +182,8 @@ void vhash_abort(vmac_ctx_t *ctx);
 
 /* --------------------------------------------------------------------- */
 
+void VHASH_init();
+  
 #ifdef  __cplusplus
 }
 #endif

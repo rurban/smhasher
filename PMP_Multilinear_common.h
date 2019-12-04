@@ -37,8 +37,8 @@
 
  
 #if defined(_MSC_VER)
-#include "pstdint.h"
-//#include "stdint.h"
+//#include "pstdint.h"
+#include "stdint.h"
 #else
 #include "stdint.h"
 #ifndef UINT64_C

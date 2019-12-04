@@ -317,6 +317,7 @@ add_library(
   PMP_Multilinear.cpp
   PMP_Multilinear_64.cpp
   vmac.cpp
+  rijndael-alg-fst.c
 )
 
 add_executable(
