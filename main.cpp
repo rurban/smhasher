@@ -212,11 +212,6 @@ HashInfo g_hashes[] =
 #endif
   { CityHash64noSeed_test, 64, 0x63FC6063, "City64noSeed",    "Google CityHash64 without seed (default version, misses one final avalanche)", POOR },
   { CityHash64_test,       64, 0x25A20825, "City64",          "Google CityHash64WithSeed (old)", POOR },
-#ifdef _MSC_VER /* truncated long to 32 */
-#  define FARM128_VERIF       0x305C0D9A
-#else
-#  define FARM128_VERIF       0x9E636AAE
-#endif
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { falkhash_test_cxx,    64, 0x2F99B071, "falkhash",    "falkhash.asm with aesenc, 64-bit for x64", POOR },
 #endif
@@ -290,8 +285,10 @@ HashInfo g_hashes[] =
 
 #ifdef _MSC_VER /* truncated long to 32 */
 #  define FARM64_VERIF        0xEBC4A679
+#  define FARM128_VERIF       0x305C0D9A
 #else
-#  define FARM64_VERIF        0x35F84A93
+#  define FARM64_VERIF        0xEBC4A679
+#  define FARM128_VERIF       0x305C0D9A
 #endif
   { FarmHash32_test,      32, 0/*0x2E226C14*/,   "FarmHash32",  "Google FarmHash32WithSeed", GOOD },
   { FarmHash64_test,      64, FARM64_VERIF, "FarmHash64",  "Google FarmHash64WithSeed", GOOD },
