@@ -17,6 +17,7 @@ while (<$l>) {
     $small = sprintf("%8.2f",$1);
   } elsif (/^Running fast HashMapTest: +(\d\S+) cycles\/op \((\d.+) stdv\)/) {
     $hash = sprintf("%6.2f (%.0f)", $1, $2);
+    $hash .= " " if $2 < 10.0;
   } elsif (/^Running std HashMapTest: SKIP/) {
     $hash = "too slow";
   }
@@ -38,7 +39,7 @@ sub fixupmd {
       $hash  = $3 unless defined $hash;
       $hash  = "   -    " unless $hash;
       my $spc = " " x (38-(2*length($n)));
-      s/$n\)\s*\|\s+\d[\d\.]+\s*\|\s+\d[\d\.]+\s+\|\s+(\d[\d\.]+ \(\d+\)|skipped|too slow|-)\s*\|/$n)$spc| $bulk | $small | $hash |/;
+      s/$n\)\s*\|\s+\d[\d\.]+\s*\|\s+\d[\d\.]+\s+\|\s+(\d[\d\.]+ \(\d+\)|skipped|too slow|-)\s*\|/$n)$spc| $bulk | $small | $hash|/;
       $found++;
     }
     print $O $_;
