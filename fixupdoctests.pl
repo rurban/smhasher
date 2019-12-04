@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use File::Copy 'mv';
+use File::Basename 'basename';
 my $endtest = qr(^(?:---|\[\[\[ |Input vcode 0x));
 # mkdir partests; build/SMHasher --list|perl -alne'print $F[0] | parallel -j4 --bar 'build/SMHasher --test=Sparse,Permutation,Cyclic,TwoBytes,DiffDist,Text,Zeroes,Seed,Sanity,Avalanche,BIC,LongNeighbors,Diff,MomentChi2 {} >partests/{}'
 # build/SMHasher --list|perl -alne'print $F[0] | parallel -j4 --bar 'build/SMHasher --test=Sparse,Permutation,Cyclic,TwoBytes,DiffDist,Text,Zeroes,Seed {} >lowcoll/{}'
@@ -20,6 +21,7 @@ sub readf {
   my $fn = shift;
   my ($n,%r);
   open(my $l, "<", $fn) or die "open $fn $!";
+  $n = basename($fn) unless $fn =~ /^log\./;
   while (<$l>) {
     if (/^--- Testing ([\w_-]+) \"/) {
       if ($n) { # fixup previous name
@@ -63,7 +65,7 @@ sub fixup {
     # search for $n in doc
     if (/^--- Testing /) {
       if ($found && %r) {
-        print STDERR "tests not in doc/$n:\n", sort keys %r, "\n";
+        print STDERR "tests not in doc/$n:\n", join(" ",sort keys %r), "\n";
       }
       $found = /^--- Testing $n /;
     }

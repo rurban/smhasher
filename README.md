@@ -72,16 +72,16 @@ SMhasher
 | [Murmur3C](doc/Murmur3C)                      |      3093.46 |    68.53 | 199.89 (4) | 859 | LongNeighbors, DiffDist    |
 | [xxHash32](doc/xxHash32)                      |      5868.40 |    49.08 | 175.66 (4) | 738 | LongNeighbors, collisions with 4bit diff, MomentChi2 220 |
 | [metrohash64](doc/metrohash64)                |      9490.26 |    49.84 | 150.49 (3) | 624 | LongNeighbors, BIC         |
-| [metrohash64_1](doc/metrohash64_1)            |      9503.26 |    49.94 | 152.19 (2) | 624 | LongNeighbors, BIC         |
-| [metrohash64crc_1](doc/metrohash64crc_1)      |     13904.68 |    54.52 | 161.90 (3) | 632 | cyclic collisions 8 byte, BIC, machine-specific (x64 SSE4.2) |
+| [metrohash64_1](doc/metrohash64_1)            |      9503.26 |    49.94 | 152.19 (2) | 624 | LongNeighbors, BIC, MomentChi2         |
+| [metrohash64_2](doc/metrohash64_2)            |      9239.23 |    50.07 | 160.93 (2) | 627 | LongNeighbors              |
+| [metrohash64crc_1](doc/metrohash64crc_1)      |     13904.68 |    54.52 | 161.90 (3) | 632 | cyclic collisions 8 byte, BIC, MomentChi2, machine-specific (x64 SSE4.2) |
 | [metrohash64crc_2](doc/metrohash64crc_2)      |     13946.94 |    54.48 | 155.40 (2) | 632 | cyclic collisions 8 byte, BIC, machine-specific (x64 SSE4.2) |
-| [metrohash128crc_1](doc/metrohash128crc_1)    |     14035.49 |    83.36 | 201.48 (3) | 723 | machine-specific (x64 SSE4.2) |
-| [metrohash128crc_2](doc/metrohash128crc_2)    |     13912.15 |    83.36 | 188.59 (3) | 723 | machine-specific (x64 SSE4.2) |
 | [metrohash128](doc/metrohash128)              |      9450.78 |    78.18 | 215.79 (2) | 773 | LongNeighbors              |
 | [metrohash128_1](doc/metrohash128_1)          |      9052.44 |    77.84 | 192.30 (3) | 773 | LongNeighbors              |
 | [metrohash128_2](doc/metrohash128_2)          |      9542.49 |    77.53 | 203.38 (2) | 773 | LongNeighbors              |
-| [cmetrohash64_1o](doc/cmetrohash64_1o)        |      9143.16 |    49.09 | 151.13 (2) |3506 | LongNeighbors              |
-| [cmetrohash64_1](doc/cmetrohash64_1)          |      9561.10 |    49.31 | 161.44 (2) | 652 | LongNeighbors              |
+| [cmetrohash64_1o](doc/cmetrohash64_1o)        |      9143.16 |    49.09 | 151.13 (2) |3506 | LongNeighbors, MomentChi2  |
+| [cmetrohash64_1](doc/cmetrohash64_1)          |      9561.10 |    49.31 | 161.44 (2) | 652 | LongNeighbors, BIC, MomentChi2 |
+| [cmetrohash64_2](doc/cmetrohash64_2)          |      9333.04 |    49.49 | 162.22 (2) | 655 | LongNeighbors              |
 | [City64noSeed](doc/City64noSeed)              |      8873.07 |    38.70 | 182.06 (4) |1038 | Avalanche, Sparse, TwoBytes, MomentChi2, Seed |
 | [City64](doc/City64)                          |      9213.05 |    55.52 | 201.39 (4) |1120 | Sparse, TwoBytes           |
 | [falkhash](doc/falkhash)                      |     20374.98 |   169.84 | 333.37 (3) | 264 | LongNeighbors, machine-specific (x64 AES-NI) |
@@ -125,8 +125,8 @@ SMhasher
 | [farmhash32_c](doc/farmhash32_c)              |     17335.51 |    63.77 | 223.20 (5) | 762 | machine-specific (x64 SSE4/AVX) |
 | [farmhash64_c](doc/farmhash64_c)              |      8335.98 |    77.01 | 210.44 (3) |3688 |                            |
 | [farmhash128_c](doc/farmhash128_c)            |     10158.20 |    98.80 | 232.88 (4) |1890 |                            |
-| [metrohash64_2](doc/metrohash64_2)            |      9239.23 |    50.07 | 160.93 (2) | 627 | LongNeighbors              |
-| [cmetrohash64_2](doc/cmetrohash64_2)          |      9333.04 |    49.49 | 162.22 (2) | 655 | LongNeighbors              |
+| [metrohash128crc_1](doc/metrohash128crc_1)    |     14035.49 |    83.36 | 201.48 (3) | 723 | machine-specific (x64 SSE4.2) |
+| [metrohash128crc_2](doc/metrohash128crc_2)    |     13912.15 |    83.36 | 188.59 (3) | 723 | machine-specific (x64 SSE4.2) |
 | [xxHash64](doc/xxHash64)                      |      8719.19 |    59.22 | 169.10 (5) |1999 |                            |
 | [Spooky32](doc/Spooky32)                      |      9570.40 |    70.27 | 195.86 (3) |2221 |                            |
 | [Spooky64](doc/Spooky64)                      |      9603.18 |    70.19 | 187.07 (3) |2221 |                            |
