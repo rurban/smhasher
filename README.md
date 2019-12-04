@@ -10,11 +10,11 @@ SMhasher
 | [BadHash](doc/BadHash)                        |       522.75 |    96.39 |     -      |  47 | test FAIL                      |
 | [sumhash](doc/sumhash)                        |      7135.41 |    31.14 |     -      | 363 | test FAIL                      |
 | [sumhash32](doc/sumhash32)                    |     23873.87 |    22.49 |     -      | 863 | test FAIL                      |
-| [multiply_shift](doc/multiply_shift)          |      4909.57 |    45.28 | too slow | 345 | fails all tests                |
-| [pair_multiply_shift](doc/pair_multiply_shift)|     13604.46 |    31.71 | too slow | 609 | fails all tests                |
+| [multiply_shift](doc/multiply_shift)          |      4909.57 |    45.28 | too slow   | 345 | fails all tests                |
+| [pair_multiply_shift](doc/pair_multiply_shift)|     13604.46 |    31.71 | too slow   | 609 | fails all tests                |
 | --------------------------                    |              |          |            |     |                                |
-| [crc32](doc/crc32)                            |       392.05 |   130.08 | 205.11 (10) | 422 | insecure, 8590x collisions, distrib |
-| [md5_32a](doc/md5_32a)                        |       317.78 |   730.30 | 842.13 (18) |4419 | 8590x collisions, distrib |
+| [crc32](doc/crc32)                            |       392.05 |   130.08 | 205.11 (10)| 422 | insecure, 8590x collisions, distrib |
+| [md5_32a](doc/md5_32a)                        |       317.78 |   730.30 | 842.13 (18)|4419 | 8590x collisions, distrib |
 | [sha1_32a](doc/sha1_32a)                      |       364.95 |  1470.55 |1794.16 (13)|5126 | collisions, 36.6% distrib |
 | [md5-128](doc/md5-128)                        |       317.78 |   730.30 | 830.69 (7) |4419 |               |
 | [sha1-160](doc/sha1-160)                      |       364.95 |  1470.55 |1794.16 (13)|5126 |               |
@@ -22,9 +22,9 @@ SMhasher
 | [sha2-224_64](doc/sha2-224_64)                |       147.60 |  1360.10 |1620.93 (13)|     |               |
 | [sha2-256](doc/sha2-256)                      |       147.80 |  1374.90 |1606.06 (16)|     | Moment Chi2 4 |
 | [sha2-256_64](doc/sha2-256_64)                |       148.01 |  1376.34 |1624.71 (16)|     | Moment Chi2 7 |
-| [rmd128](doc/rmd128)                          |       332.78 |   672.35 | 903.43 (13) |     |               |
+| [rmd128](doc/rmd128)                          |       332.78 |   672.35 | 903.43 (13)|     |               |
 | [rmd160](doc/rmd160)                          |       202.16 |  1045.79 |1287.74 (16)|     |               |
-| [rmd256](doc/rmd256)                          |       356.57 |   638.30 | 815.39 (16) |     |               |
+| [rmd256](doc/rmd256)                          |       356.57 |   638.30 | 815.39 (16)|     |               |
 | [blake2s-128](doc/blake2s-128)                |       295.30 |   698.09 |1059.24 (51)|     |               |
 | [blake2s-160](doc/blake2s-160)                |       215.01 |  1026.74 |1239.54 (11)|     |               |
 | [blake2s-224](doc/blake2s-224)                |       207.06 |  1063.86 |1236.50 (20)|     |               |
