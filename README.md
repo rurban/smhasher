@@ -55,8 +55,8 @@ SMhasher
 | [JenkinsOOAT](doc/JenkinsOOAT)                |       446.57 |   142.43 | 225.28 (3) | 153 | 53.5% bias, fails all tests  |
 | [JenkinsOOAT_perl](doc/JenkinsOOAT_perl)      |       442.05 |   120.53 | 196.24 (3) |  65 | 1.5-11.5% bias, 7.2x collisions, LongNeighbors |
 | [MicroOAAT](doc/MicroOAAT)                    |       950.84 |    62.23 | 199.62 (4) |  68 | 100% bias, distrib           |
-| [VHASH_32](doc/VHASH_32)                      |      9502.36 |    86.97 |    -       |1231 | sanity, Seed, MomentChi2     |
-| [VHASH_64](doc/VHASH_64)                      |      9449.24 |    86.97 |    -       |1231 | sanity, Seed, Sparse         |
+| [VHASH_32](doc/VHASH_32)                      |      9502.36 |    86.97 | 273.67 (8) |1231 | sanity, Seed, MomentChi2     |
+| [VHASH_64](doc/VHASH_64)                      |      9449.24 |    86.97 | 253.42 (9) |1231 | sanity, Seed, Sparse         |
 | [farsh32](doc/farsh32)                        |     14053.09 |    74.29 | 245.33 (3) | 944 | insecure: AppendedZeroes, collisions+bias, MomentChi2, LongNeighbors |
 | [farsh64](doc/farsh64)                        |      7216.29 |   130.30 | 302.44 (3) | 944 | insecure: AppendedZeroes, collisions+bias, MomentChi2, LongNeighbors |
 | [jodyhash32](doc/jodyhash32)                  |      1386.76 |    46.13 | 181.80 (2) | 102 | bias, collisions, distr, LongNeighbors |

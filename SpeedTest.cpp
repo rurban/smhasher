@@ -382,11 +382,13 @@ double HashMapSpeedTest ( pfHash pfhash, const int hashbits,
 
   printf("\ngreg7mdp/parallel-hashmap\n");
   printf("Init fast HashMapTest:    ");
+#ifndef NDEBUG
   if ((pfhash == VHASH_32 || pfhash == VHASH_64) && !verbose)
     {
       printf("SKIP");
       return 0.;
     }
+#endif
   fflush(NULL);
   times.reserve(trials);
   { // hash inserts and 1% deletes
