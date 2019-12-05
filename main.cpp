@@ -89,13 +89,13 @@ HashInfo g_hashes[] =
 #ifdef HAVE_BIT32
  #define FIBONACCI_VERIF      0x09952480
  #define FNV2_VERIF           0x739801C5
- #define MULTSHIFT_VERIF      0x90FA041A
- #define PAIRMS_VERIF         0x0C211550
+ #define MULTSHIFT_VERIF      0x0
+ #define PAIRMS_VERIF         0xE6ABA97D
 #else
  #define FIBONACCI_VERIF      0xFE3BD380
  #define FNV2_VERIF           0x1967C625
- #define MULTSHIFT_VERIF      0xF15F3D1E
- #define PAIRMS_VERIF         0xB070283D
+ #define MULTSHIFT_VERIF      0x0
+ #define PAIRMS_VERIF         0xB6B5D710
 #endif
   // M. Dietzfelbinger, T. Hagerup, J. Katajainen, and M. Penttonen. A reliable randomized
   // algorithm for the closest-pair problem. J. Algorithms, 25:19–51, 1997.
@@ -481,8 +481,12 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   } else {
     // known slow hashes (> 500), cycle/hash
     const struct { pfHash h; double cycles; } speeds[] =
-    {{ md5_32,           668.69 },
+    {{ multiply_shift,    50.50 },
+     { pair_multiply_shift,31.71},
+     { md5_32,           668.69 },
+     { md5_128,          730.30 },
      { sha1_32a,        1514.25 },
+     { sha1_160,        1470.55 },
      { sha2_224,        1354.81 },
      { sha2_224_64,     1360.10 },
      { sha2_256,        1374.90 },
@@ -500,7 +504,8 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
      { blake2b256_test, 1232.22 },
      { blake2b256_64,   1236.84 },
      { sha3_256,        3877.18 },
-     { sha3_256_64,     3909.00 }
+     { sha3_256_64,     3909.00 },
+     { tifuhash_64,     1679.52 }
     };
     for (int i=0; i<sizeof(speeds)/sizeof(speeds[0]); i++) {
       if (speeds[i].h == hash)
@@ -516,7 +521,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("[[[ 'Hashmap' Speed Tests ]]]\n\n");
     fflush(NULL);
     int trials = 50;
-    if ((g_speed > 500 || hash == multiply_shift || hash == pair_multiply_shift )
+    if ((g_speed > 500 /*|| hash == multiply_shift || hash == pair_multiply_shift*/ )
          && !g_testExtra)
       trials = 5;
     bool result = true;
@@ -1109,7 +1114,9 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     bool result = true;
     bool dumpCollisions = g_drawDiagram; // from --verbose
     int reps = 1000;
-    if ((g_speed > 500.0 || info->hashbits > 128) && !g_testExtra)
+    if ((g_speed > 500.0 || info->hashbits > 128 ||
+         hash == multiply_shift || hash == pair_multiply_shift
+         ) && !g_testExtra)
       reps = 100; // sha1: 7m, md5: 4m53
 
     result &= DiffTest< Blob<64>,  hashtype >(hash,5,reps,dumpCollisions);
@@ -1156,10 +1163,9 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("[[[ MomentChi2 Tests ]]]\n\n");
 
     bool result = true;
-
     result &= MomentChi2Test(info);
 
-    if(!result) printf("*********FAIL*********\n");
+    if(!result) printf("\n*********FAIL*********\n");
     printf("\n");
     fflush(NULL);
   }
@@ -1208,7 +1214,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       result &= BicTest3<Blob<88>,hashtype>(hash,(int)reps,g_drawDiagram);
     }
 
-    if(!result) printf("*********FAIL*********\n");
+    if(!result) printf("\n*********FAIL*********\n");
     printf("\n");
     fflush(NULL);
   }

@@ -10,7 +10,7 @@ SMhasher
 | [BadHash](doc/BadHash)                        |       522.75 |    96.39 |     -      |  47 | test FAIL                      |
 | [sumhash](doc/sumhash)                        |      7135.41 |    31.14 |     -      | 363 | test FAIL                      |
 | [sumhash32](doc/sumhash32)                    |     23873.87 |    22.49 |     -      | 863 | test FAIL                      |
-| [multiply_shift](doc/multiply_shift)          |      4909.57 |    45.28 | too slow   | 345 | fails all tests                |
+| [multiply_shift](doc/multiply_shift)          |      4441.54 |    50.51 | too slow| 345 | fails all tests                |
 | [pair_multiply_shift](doc/pair_multiply_shift)|     13604.46 |    31.71 | too slow   | 609 | fails all tests                |
 | --------------------------                    |              |          |            |     |                                |
 | [crc32](doc/crc32)                            |       392.05 |   130.08 | 205.11 (10)| 422 | insecure, 8590x collisions, distrib |

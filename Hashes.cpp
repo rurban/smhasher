@@ -722,12 +722,14 @@ void multiply_shift (const void *key, int len, uint32_t seed, void *out) {
   size_t h   = (size_t)(seed | 1);
   size_t *dw = (size_t *)key; //word stepper
   const size_t *const endw = &((const size_t*)key)[len/sizeof(size_t)];
-  const unsigned shift = sizeof(size_t) - len;
+  const int bits = 8 * sizeof(size_t);
+  const size_t shift = bits - len >= 0
+    ? bits - len : len % bits;
   // hashes x universally into len bits using the random odd seed.
   while (dw < endw) {
     h += (*dw++ * h) >> shift;
   }
-  if (len & (sizeof(size_t)-1)) {
+  if (len & (bits-1)) {
     uint8_t *dc = (uint8_t*)dw; //byte stepper
     const uint8_t *const endc = &((const uint8_t*)key)[len];
     while (dc < endc) {
@@ -745,14 +747,16 @@ void pair_multiply_shift (const void *key, int len, uint32_t seed, void *out) {
   size_t h = seed | 1;
   size_t *dw = (size_t *)key; //word stepper
   const size_t *const endw = &((const size_t*)key)[len/sizeof(size_t) - 1];
-  const unsigned shift = sizeof(size_t) - len;
+  const int bits = 8 * sizeof(size_t);
+  const size_t shift = bits - len >= 0
+    ? bits - len : len % bits;
   // hashes x universally into len bits using the random odd seed pair.
   while (dw < endw) {
     h += (*dw + h1) * (*(dw+1) + h2) + b;
     dw++; dw++;
   }
   h >>= shift;
-  if (len & (sizeof(size_t)-1)) {
+  if (len & (bits-1)) {
     uint8_t *dc = (uint8_t*)dw; //byte stepper
     const uint8_t *const endc = &((const uint8_t*)key)[len-1];
     while (dc < endc) {
