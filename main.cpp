@@ -400,21 +400,25 @@ void Hash_init (HashInfo* info) {
 //-----------------------------------------------------------------------------
 // Self-test on startup - verify that all installed hashes work correctly.
 
-void SelfTest(void) {
+void SelfTest(bool verbose) {
   bool pass = true;
   for (size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++) {
     HashInfo *info = &g_hashes[i];
-    pass &=
-        VerificationTest(info->hash, info->hashbits, info->verification, false);
+    if (verbose)
+      printf("%20s - ", info->name);
+    pass &= VerificationTest(info->hash, info->hashbits, info->verification,
+                             verbose);
   }
 
   if (!pass) {
     printf("Self-test FAILED!\n");
-    for (size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++) {
-      HashInfo *info = &g_hashes[i];
-      printf("%20s - ", info->name);
-      pass &= VerificationTest(info->hash, info->hashbits, info->verification,
-                               true);
+    if (!verbose) {
+      for (size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++) {
+        HashInfo *info = &g_hashes[i];
+        printf("%20s - ", info->name);
+        pass &= VerificationTest(info->hash, info->hashbits, info->verification,
+                                 true);
+      }
     }
     exit(1);
   }
@@ -440,7 +444,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   if(g_testVerifyAll)
   {
     printf("[[[ VerifyAll Tests ]]]\n\n"); fflush(NULL);
-    SelfTest();
+    SelfTest(g_drawDiagram);
     printf("PASS\n\n"); fflush(NULL); // if not it does exit(1)
   }
 
