@@ -58,10 +58,10 @@ void PMPML_32_CPP( const void * key, int len, uint32_t seed, void * res );
 void PMPML_32_CPP_randomize();
 
 #if (defined _WIN64) || (defined __x86_64__)
-void PMPML_64_CPP( const void * key, int len, uint64_t seed, void * res );
+void PMPML_64_CPP( const void * key, int len, uint32_t seed, void * res );
 void PMPML_64_CPP_randomize();
 
-void PMPML_64_CPP_out_32( const void * key, int len, uint64_t seed, void * res );
+void PMPML_64_CPP_out_32( const void * key, int len, uint32_t seed, void * res );
 void PMPML_64_CPP_out_32_randomize();
 int PMPML_TestSpeedAlt_64_out_32( const void * key, int len, int iter );
 #endif

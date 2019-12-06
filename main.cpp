@@ -191,6 +191,9 @@ HashInfo g_hashes[] =
   { MurmurHash3_x86_32,   32, 0xB0F57EE3, "Murmur3A",    "MurmurHash3 for x86, 32-bit", POOR },
   { PMurHash32_test,      32, 0xB0F57EE3, "PMurHash32",  "Shane Day's portable-ized MurmurHash3 for x86, 32-bit", POOR },
   { MurmurHash3_x86_128, 128, 0xB3ECE62A, "Murmur3C",    "MurmurHash3 for x86, 128-bit", POOR },
+  // TODO seeded
+  { PMPML_32_CPP,         32, 0xEAE2E3CC, "PMPML_32",    "PMP_Multilinear 32-bit unseeded", POOR },
+  { PMPML_64_CPP,         64, 0x584CC9DF, "PMPML_64",    "PMP_Multilinear 64-bit unseeded", GOOD },
   { fasthash64_test,      64, 0xA16231A7, "fasthash64",  "fast-hash 64bit", POOR },
   { CityHash32_test,      32, 0x5C28AD62, "City32",      "Google CityHash32WithSeed (old)", POOR },
 #ifdef HAVE_INT64
@@ -1364,8 +1367,8 @@ int main ( int argc, const char ** argv )
 
   if(argc < 2) {
     printf("No test hash given on command line, testing %s.\n", hashToTest);
-    printf("Usage: SMHasher [--list][--tests] [--verbose][--extra]\n"
-           " or --test=Speed,... hash\n");
+    printf("Usage: SMHasher [--list][--listnames][--tests] [--verbose][--extra]\n"
+           "       [--test=Speed,...] hash\n");
   }
   else {
     int i = 1;
@@ -1373,13 +1376,19 @@ int main ( int argc, const char ** argv )
 
     if (strncmp(hashToTest,"--", 2) == 0) {
       if (strcmp(hashToTest,"--help") == 0) {
-        printf("Usage: SMHasher [--list][--tests] [--verbose][--extra]\n"
-               " or --test=Speed,... hash\n");
+        printf("Usage: SMHasher [--list][--listnames][--tests] [--verbose][--extra]\n"
+               "       [--test=Speed,...] hash\n");
         exit(0);
       }
       if (strcmp(hashToTest,"--list") == 0) {
         for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++) {
           printf("%-16s\t\"%s\" %s\n", g_hashes[i].name, g_hashes[i].desc, quality_str[g_hashes[i].quality]);
+        }
+        exit(0);
+      }
+      if (strcmp(hashToTest,"--listnames") == 0) {
+        for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++) {
+          printf("%s\n", g_hashes[i].name);
         }
         exit(0);
       }

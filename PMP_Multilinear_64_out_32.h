@@ -33,7 +33,7 @@
 
 #if !defined __PMP_MULTILINEAR_HASHER_64_OUT_32_H__
 #define __PMP_MULTILINEAR_HASHER_64_OUT_32_H__
-#define __MULTILINEARPRIMESTRINGHASHFUNCTOR_CPP_H__REVISION_ "$Rev: 397 $" /* for automated version information update; could be removed, if not desired */
+//#define __MULTILINEARPRIMESTRINGHASHFUNCTOR_CPP_H__REVISION_ "$Rev: 397 $" /* for automated version information update; could be removed, if not desired */
 
 #if !defined __arm__
 #if (defined _WIN64) || (defined __x86_64__)
@@ -269,7 +269,7 @@ __asm__( "mulq %4\n" \
 class PMP_Multilinear_Hasher_64_out_32
 {
   private:
-  const random_data_for_MPSHF* curr_rd;
+  random_data_for_MPSHF* curr_rd;
 #ifdef PMPML_USE_SSE
   const unsigned char* base_addr;
 #endif
@@ -1515,7 +1515,7 @@ public:
 #ifdef PMPML_USE_SSE
 	base_addr = NULL;
 #endif
-    curr_rd = rd_for_MPSHF;
+        curr_rd = (random_data_for_MPSHF*)rd_for_MPSHF;
   }
   virtual ~PMP_Multilinear_Hasher_64_out_32()
   {
@@ -1578,6 +1578,10 @@ public:
 		curr_rd = temp_curr_rd;
 	}
 #endif
+  }
+  void seed( uint32_t seed )
+  {
+    curr_rd[0].random_coeff[0] ^= (uint64_t)seed;
   }
 };
 

@@ -402,7 +402,7 @@ __asm__( "mull %5\n"
 class PMP_Multilinear_Hasher
 {
   private:
-  const random_data_for_MPSHF* curr_rd;
+  random_data_for_MPSHF* curr_rd;
 #ifdef PMPML_USE_SSE
   const unsigned char* base_addr;
 #endif
@@ -1816,16 +1816,16 @@ public:
 #ifdef PMPML_USE_SSE
 	base_addr = NULL;
 #endif
-    curr_rd = rd_for_MPSHF;
+        curr_rd = (random_data_for_MPSHF*)rd_for_MPSHF;
   }
   virtual ~PMP_Multilinear_Hasher()
   {
 #ifdef PMPML_USE_SSE
-	if ( base_addr != NULL )
-		delete [] base_addr;
+    if ( base_addr != NULL )
+        delete [] base_addr;
 #else
     if ( curr_rd != NULL && curr_rd != rd_for_MPSHF )
-		delete [] curr_rd;
+        delete [] curr_rd;
 #endif
   }
 
@@ -1879,6 +1879,10 @@ public:
 		curr_rd = temp_curr_rd;
 	}
 #endif
+  }
+  void seed( uint32_t seed )
+  {
+    curr_rd[0].const_term ^= seed;
   }
 #if 0
   void calc_vals()

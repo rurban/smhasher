@@ -10,7 +10,7 @@ SMhasher
 | [BadHash](doc/BadHash)                        |       522.75 |    96.39 |     -      |  47 | test FAIL                      |
 | [sumhash](doc/sumhash)                        |      7135.41 |    31.14 |     -      | 363 | test FAIL                      |
 | [sumhash32](doc/sumhash32)                    |     23873.87 |    22.49 |     -      | 863 | test FAIL                      |
-| [multiply_shift](doc/multiply_shift)          |      4441.54 |    50.51 | too slow| 345 | fails all tests                |
+| [multiply_shift](doc/multiply_shift)          |      4441.54 |    50.51 | too slow   | 345 | fails all tests                |
 | [pair_multiply_shift](doc/pair_multiply_shift)|     13604.46 |    31.71 | too slow   | 609 | fails all tests                |
 | --------------------------                    |              |          |            |     |                                |
 | [crc32](doc/crc32)                            |       392.05 |   130.08 | 205.11 (10)| 422 | insecure, 8590x collisions, distrib |
@@ -72,6 +72,8 @@ SMhasher
 | [Murmur3A](doc/Murmur3A)                      |      2347.90 |    51.38 | 180.62 (2) | 351 | Moment Chi2 69             |
 | [PMurHash32](doc/PMurHash32)                  |      2281.97 |    58.65 | 208.84 (2) |1862 | Moment Chi2 69             |
 | [Murmur3C](doc/Murmur3C)                      |      3093.46 |    68.53 | 199.89 (4) | 859 | LongNeighbors, DiffDist    |
+| [PMPML_32](doc/PMPML_32)                      |      6516.19 |    52.60 | 227.47 (8) |1084 | Avalanche >512, unseeded: Seed, MomentChi2 |
+| [PMPML_64](doc/PMPML_64)                      |      8119.83 |    61.49 | 186.24 (4) |1305 | unseeded: Seed, MomentChi2           |
 | [xxHash32](doc/xxHash32)                      |      5868.40 |    49.08 | 175.66 (4) | 738 | LongNeighbors, collisions with 4bit diff, MomentChi2 220 |
 | [metrohash64](doc/metrohash64)                |      9490.26 |    49.84 | 150.49 (3) | 624 | LongNeighbors, BIC         |
 | [metrohash64_1](doc/metrohash64_1)            |      9503.26 |    49.94 | 152.19 (2) | 624 | LongNeighbors, BIC, MomentChi2         |
@@ -156,10 +158,9 @@ So the fastest hash functions on x86_64 without quality problems are:
 
 - wyhash v3
 - t1ha2_atonce
-- metrohash64crc (x86 only)
 - FarmHash (_not portable, too machine specific: 64 vs 32bit, old gcc, ..._)
 - Spooky32
-- fasthash
+- fasthash32
 - MUM/mir (_different results on 32/64-bit archs_)
 
 Hash functions for symbol tables or hash tables typically use 32 bit

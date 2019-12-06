@@ -738,4 +738,6 @@ inline void farsh256_test ( const void * key, int len, unsigned seed, void * out
   farsh_n(key,len,0,8,seed,out);
 }
 
-
+//64 objsize: a50-f69: 1305
+//32 objsize: 1680-1abc: 1084
+#include "PMP_Multilinear_test.h"

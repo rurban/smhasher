@@ -31,6 +31,7 @@
 
 // PMP_Multilinear_test.cpp: interface of PMP+-Multilinear hash family with SMHasher
 
+#include "Platform.h"
 
 #include "PMP_Multilinear_test.h"
 #include "PMP_Multilinear_common.h"
@@ -54,9 +55,9 @@ static UniformRandomNumberGenerator_ rng;
 
 static PMP_Multilinear_Hasher_64_out_32 pmpml_hasher_64_out_32;
 
-void PMPML_64_CPP_out_32( const void * key, int len, uint64_t seed, void * res )
+void PMPML_64_CPP_out_32( const void * key, int len, uint32_t seed, void * res )
 {
-	(void) seed; //unused
+  //pmpml_hasher_64_out_32.seed (seed);
 	*(uint64_t*)res = pmpml_hasher_64_out_32.hash( (const unsigned char*)key, len );
 }
 
@@ -78,9 +79,9 @@ int PMPML_TestSpeedAlt_64_out_32( const void * key, int len, int iter )
 
 static PMP_Multilinear_Hasher_64 pmpml_hasher_64;
 
-void PMPML_64_CPP( const void * key, int len, uint64_t seed, void * res )
+void PMPML_64_CPP( const void * key, int len, uint32_t seed, void * res )
 {
-	(void) seed; //unused
+  //pmpml_hasher_64.seed (seed);
 	*(uint64_t*)res = pmpml_hasher_64.hash( (const unsigned char*)key, len );
 }
 
@@ -109,7 +110,7 @@ int PMPML_TestSpeedAlt_64( const void * key, int len, int iter )
 static PMP_Multilinear_Hasher pmpml_hasher;
 void PMPML_32_CPP( const void * key, int len, uint32_t seed, void * res )
 {
-	(void) seed; //unused
+  //pmpml_hasher.seed (seed);
 	*(uint32_t*)res = pmpml_hasher.hash( (unsigned char*)key, len );
 }
 

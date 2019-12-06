@@ -19,7 +19,7 @@ while (<$l>) {
     $hash = sprintf("%6.2f (%.0f)", $1, $2);
     $hash .= " " if $2 < 10.0;
   } elsif (/^Running std HashMapTest: SKIP/) {
-    $hash = "too slow";
+    $hash = "too slow   ";
   }
 }
 fixupmd($n,$bulk,$small,$hash) if $n;

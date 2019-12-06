@@ -465,7 +465,7 @@ __asm__( "mulq %4\n" \
 class PMP_Multilinear_Hasher_64
 {
   private:
-  const random_data_for_PMPML_64* curr_rd;
+  random_data_for_PMPML_64* curr_rd;
 
   // calls to be done from LEVEL=0
   FORCE_INLINE void hash_of_string_chunk_compact( const uint64_t* coeff, ULARGE_INTEGER__XX constTerm, const uint64_t* x, ULARGELARGE_INTEGER__XX& ret ) const
@@ -1118,7 +1118,7 @@ class PMP_Multilinear_Hasher_64
   public:
   PMP_Multilinear_Hasher_64()
   {
-    curr_rd = rd_for_PMPML_64;
+    curr_rd = (random_data_for_PMPML_64*)rd_for_PMPML_64;
   }
   virtual ~PMP_Multilinear_Hasher_64()
   {
@@ -1167,6 +1167,10 @@ class PMP_Multilinear_Hasher_64
 			delete [] curr_rd;
 		curr_rd = temp_curr_rd;
 	}
+  }
+  void seed( uint32_t seed )
+  {
+    curr_rd[0].random_coeff[0] ^= (uint64_t)seed;
   }
 #if 0
   void calc_vals()

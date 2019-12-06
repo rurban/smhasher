@@ -313,6 +313,7 @@ add_library(
   sha3.c
   PMP_Multilinear.cpp
   PMP_Multilinear_64.cpp
+  PMP_Multilinear_test.cpp
   vmac.cpp
   rijndael-alg-fst.c
 )
