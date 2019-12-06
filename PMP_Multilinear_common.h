@@ -205,12 +205,17 @@ extern const random_data_for_MPSHF rd_for_MPSHF[ PMPML_LEVELS ];
 /////////////////    64-BIT OUTPUT STUFF    /////////////////
 
 //#if !defined (_MSC_VER)
+#ifndef __clang__
 #define PMPML_CHUNK_LOOP_USE_TWO_ACCUMULATORS_64
 //#define PMPML_USE_SSE_64 // makes sense for x86 processors only supporting AVX-2 instruction set (256 bit)
 //#endif
+#endif
 
-#if !defined __arm__
-//#define PMPML_USE_SSE_64 // makes sense for x86 processors only supporting AVX-2 instruction set (256 bit)
+
+#if (defined(__x86_64__) || defined(__x86_64) || defined(_M_AMD64) || defined(_M_X64)) \
+  && defined(__AVX2__)
+# define PMPML_CHUNK_OPTIMIZATION_TYPE_64 1
+# define PMPML_USE_SSE_64   // makes sense for x86 processors only supporting AVX-2 instruction set (256 bit)
 #endif
 
 // constants

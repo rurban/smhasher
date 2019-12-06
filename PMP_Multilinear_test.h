@@ -38,26 +38,12 @@
 //-----------------------------------------------------------------------------
 // Platform-specific functions and macros
 
-// Microsoft Visual Studio
-
-#if defined(_MSC_VER)
-
-typedef unsigned char uint8_t;
-typedef unsigned long uint32_t;
-typedef unsigned __int64 uint64_t;
-
-// Other compilers
-
-#else	// defined(_MSC_VER)
-
 #include <stdint.h>
-
-#endif // !defined(_MSC_VER)
 
 void PMPML_32_CPP( const void * key, int len, uint32_t seed, void * res );
 void PMPML_32_CPP_randomize();
 
-#if (defined _WIN64) || (defined __x86_64__)
+#if defined(_WIN64) || defined(__x86_64__)
 void PMPML_64_CPP( const void * key, int len, uint32_t seed, void * res );
 void PMPML_64_CPP_randomize();
 
