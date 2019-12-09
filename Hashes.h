@@ -630,7 +630,7 @@ inline void sha2_256(const void *key, int len, uint32_t seed, void *out)
 {
   // objsize
   sha256_init(&ltc_state);
-  ltc_state.sha256.state[0] = 0xc1059ed8UL ^ seed;
+  ltc_state.sha256.state[0] = 0x6A09E667UL ^ seed;
   sha256_process(&ltc_state, (unsigned char *)key, len);
   sha256_done(&ltc_state, (unsigned char *)out);
 }
@@ -639,7 +639,7 @@ inline void sha2_256_64(const void *key, int len, uint32_t seed, void *out)
   // objsize
   unsigned char buf[32];
   sha256_init(&ltc_state);
-  ltc_state.sha256.state[0] = 0xc1059ed8UL ^ seed;
+  ltc_state.sha256.state[0] = 0x6A09E667UL ^ seed;
   sha256_process(&ltc_state, (unsigned char *)key, len);
   sha256_done(&ltc_state, buf);
   memcpy(out, buf, 8);
@@ -707,6 +707,33 @@ inline void MeowHash32_test(const void *key, int len, unsigned seed, void *out) 
   *(int unsigned *)MeowDefaultSeed = seed;
   meow_u128 h = MeowHash(MeowDefaultSeed, (meow_umm)len, (void*)key);
   *(uint32_t *)out = MeowU32From(h, 0);
+}
+#endif
+
+#if defined(HAVE_SHANI) && defined(__x86_64__)
+extern "C" void sha256_process_x86(uint32_t state[8], const uint8_t data[], uint32_t length);
+
+inline void sha2ni_256(const void *key, int len, uint32_t seed, void *out)
+{
+  // objsize
+  uint32_t state[8] = {
+                       0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
+                       0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
+  };
+  state[0] = 0x6a09e667U ^ seed;
+  sha256_process_x86(state, (const uint8_t*)key, (uint32_t)len);
+  memcpy(out, state, 32);
+}
+inline void sha2ni_256_64(const void *key, int len, uint32_t seed, void *out)
+{
+  // objsize
+  uint32_t state[8] = {
+                       0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
+                       0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
+  };
+  state[0] = 0x6a09e667U ^ seed;
+  sha256_process_x86(state, (const uint8_t*)key, (uint32_t)len);
+  *(uint64_t *)out = *(uint64_t *)state;
 }
 #endif
 
