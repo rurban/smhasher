@@ -450,8 +450,10 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
   if (g_testAll) {
     printf("--- Testing %s \"%s\" %s\n\n", info->name, info->desc, quality_str[info->quality]);
-    fflush(NULL);
+  } else {
+    fprintf(stderr, "--- Testing %s \"%s\" %s\n\n", info->name, info->desc, quality_str[info->quality]);
   }
+  fflush(NULL);
 
   // sha1_32a runs 30s
   if(g_testSanity || g_testAll)
