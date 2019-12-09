@@ -242,6 +242,8 @@ ENDIF()
 IF(SHA_FOUND)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_SHANI")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_SHANI")
+  # todo: arm, power
+  set(SHA_SRC SHA-Intrinsics/sha1-x86.c SHA-Intrinsics/sha256-x86.c )
 ENDIF()
 
 if(NOT MSVC)
@@ -320,6 +322,7 @@ add_library(
   ${SSE4_OBJ}
   # ${FHTW_OBJ}
   ${T1HA_SRC}
+  ${SHA_SRC}
   mum.cc
   jody_hash32.c
   jody_hash64.c
