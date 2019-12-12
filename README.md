@@ -22,8 +22,10 @@ SMhasher
 | [sha2-224_64](doc/sha2-224_64)                |       147.60 |  1360.10 |1620.93 (13)|     |               |
 | [sha2-256](doc/sha2-256)                      |       147.80 |  1374.90 |1606.06 (16)|     | Moment Chi2 4 |
 | [sha2-256_64](doc/sha2-256_64)                |       148.01 |  1376.34 |1624.71 (16)|     | Moment Chi2 7 |
-| [sha2ni-256](doc/sha2ni-256)                  |      1880.82 |    37.64 |  too slow  |     | sanity, fails all |
-| [sha2ni-256_64](doc/sha2ni-256_64)            |      1920.36 |    36.88 |  too slow  |     | sanity, fails all |
+| [sha1ni](doc/sha1ni)                          |      2019.96 |   135.84 | 564.40 (6) | 989 | insecure,sanity, Permutation, Zeroes, machine-specific |
+| [sha1ni_32](doc/sha1ni_32)                    |      2019.96 |   134.46 | 590.52 (18)| 989 | insecure,sanity, Permutation, Zeroes, TwoBytes, machine-specific |
+| [sha2ni-256](doc/sha2ni-256)                  |      1906.77 |   145.47 | 603.08 (22)|4241 | insecure,sanity, Permutation, Zeroes, machine-specific |
+| [sha2ni-256_64](doc/sha2ni-256_64)            |      1920.36 |   145.47 | 672.35 (22)|4241 | insecure,sanity, Permutation, Zeroes, machine-specific |
 | [rmd128](doc/rmd128)                          |       332.78 |   672.35 | 903.43 (13)|     |               |
 | [rmd160](doc/rmd160)                          |       202.16 |  1045.79 |1287.74 (16)|     |               |
 | [rmd256](doc/rmd256)                          |       356.57 |   638.30 | 815.39 (16)|     |               |
@@ -38,7 +40,7 @@ SMhasher
 | [blake2b-256_64](doc/blake2b-256_64)          |       356.97 |  1222.76 |1435.03 (9) |     |               |
 | [sha3-256](doc/sha3-256)                      |       100.58 |  3877.18 |4159.79 (37)|     |               |
 | [sha3-256_64](doc/sha3-256_64)                |       100.57 |  3909.00 |4174.63 (16)|     |               |
-| [hasshe2](doc/hasshe2)                        |      2357.32 |    76.10 | 172.41 (3)| 445 | insecure, Permutation,TwoBytes,Zeroes,Seed  |
+| [hasshe2](doc/hasshe2)                        |      2357.32 |    76.10 | 172.41 (3) | 445 | insecure, Permutation,TwoBytes,Zeroes,Seed  |
 | [crc32_hw](doc/crc32_hw)                      |      6292.63 |    30.38 | 204.19 (18)| 653 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
 | [crc32_hw1](doc/crc32_hw1)                    |     23382.53 |    36.84 | 197.39 (20)| 671 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
 | [crc64_hw](doc/crc64_hw)                      |      8387.01 |    29.96 | 161.44 (13)| 652 | insecure, 100% bias, collisions, distrib, machine-specific (x64 SSE4.2) |

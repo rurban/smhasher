@@ -119,8 +119,10 @@ HashInfo g_hashes[] =
   { sha2_256,            256, 0xACFA0A78, "sha2-256",     "SHA2-256", POOR },
   { sha2_256_64,          64, 0xA6C2C1D4, "sha2-256_64",  "SHA2-256, low 64 bits", POOR },
 #if defined(HAVE_SHANI) && defined(__x86_64__)
-  { sha2ni_256,          256, 0xAA7A85CC, "sha2ni-256",   "SHA2_NI-256 (x64 HW SHA ext)", POOR },
-  { sha2ni_256_64,        64, 0x7DA680A5, "sha2ni-256_64","SHA2_NI-256 (x86 HW SHA ext), low 64 bits", POOR },
+  { sha1ni,              160, 0xF0EC15B1, "sha1ni",       "SHA1_NI (amd64 HW SHA ext)", POOR },
+  { sha1ni_32,            32, 0x424B6304, "sha1ni_32",    "SHA1_NI (amd64 HW SHA ext), low 32 bits", POOR },
+  { sha2ni_256,          256, 0x01E45C6F, "sha2ni-256",   "SHA2_NI-256 (amd64 HW SHA ext)", POOR },
+  { sha2ni_256_64,        64, 0x9D929814, "sha2ni-256_64","SHA2_NI-256 (amd64 HW SHA ext), low 64 bits", POOR },
 #endif
   { rmd128,              128, 0xFF576977, "rmd128",       "RIPEMD-128", GOOD },
   { rmd160,              160, 0x30B37AC6, "rmd160",       "RIPEMD-160", GOOD },
@@ -506,10 +508,6 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
      { sha2_224_64,     1360.10 },
      { sha2_256,        1374.90 },
      { sha2_256_64,     1376.34 },
-#if defined(HAVE_SHANI) && defined(__x86_64__)
-     { sha2ni_256,        36.88 },
-     { sha2ni_256_64,     36.88 },
-#endif
      { rmd128,           672.35 },
      { rmd160,          1045.79 },
      { rmd256,           638.30 },
