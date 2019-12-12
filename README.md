@@ -3,15 +3,15 @@ SMhasher
 
 | Hash function                                 |      MiB/sec |cycl./hash|cycl./map   | size| Quality problems               |
 |:----------------------------------------------|-------------:|---------:|-----------:|----:|--------------------------------|
-| [donothing32](doc/donothing32)                |  14924689.47 |     6.00 | -|  13 | test NOP                       |
-| [donothing64](doc/donothing64)                |  14942317.78 |     6.00 | -|  13 | test NOP                       |
-| [donothing128](doc/donothing128)              |  14943678.61 |     6.00 | -|  13 | test NOP                       |
-| [NOP_OAAT_read64](doc/NOP_OAAT_read64)        |     29794.83 |    35.50 | -|  47 | test NOP                       |
-| [BadHash](doc/BadHash)                        |       522.75 |    96.39 | -|  47 | test FAIL                      |
-| [sumhash](doc/sumhash)                        |      7135.41 |    31.14 | -| 363 | test FAIL                      |
-| [sumhash32](doc/sumhash32)                    |     23873.87 |    22.49 | -| 863 | test FAIL                      |
-| [multiply_shift](doc/multiply_shift)          |      4909.57 |    45.28 | too slow| 345 | fails all tests                |
-| [pair_multiply_shift](doc/pair_multiply_shift)|     13604.46 |    31.71 | too slow| 609 | fails all tests                |
+| [donothing32](doc/donothing32)                |  14924689.47 |     6.00 | -          |  13 | test NOP                       |
+| [donothing64](doc/donothing64)                |  14942317.78 |     6.00 | -          |  13 | test NOP                       |
+| [donothing128](doc/donothing128)              |  14943678.61 |     6.00 | -          |  13 | test NOP                       |
+| [NOP_OAAT_read64](doc/NOP_OAAT_read64)        |     29794.83 |    35.50 | -          |  47 | test NOP                       |
+| [BadHash](doc/BadHash)                        |       522.75 |    96.39 | -          |  47 | test FAIL                      |
+| [sumhash](doc/sumhash)                        |      7135.41 |    31.14 | -          | 363 | test FAIL                      |
+| [sumhash32](doc/sumhash32)                    |     23873.87 |    22.49 | -          | 863 | test FAIL                      |
+| [multiply_shift](doc/multiply_shift)          |      4909.57 |    45.28 | too slow   | 345 | fails all tests                |
+| [pair_multiply_shift](doc/pair_multiply_shift)|     13604.46 |    31.71 | too slow   | 609 | fails all tests                |
 | --------------------------                    |              |          |            |     |                                |
 | [crc32](doc/crc32)                            |       392.05 |   130.08 | 199.87 (3) | 422 | insecure, 8590x collisions, distrib |
 | [md5_32a](doc/md5_32a)                        |       351.96 |   670.99 | 863.30 (23)|4419 | 8590x collisions, distrib |
@@ -23,9 +23,9 @@ SMhasher
 | [sha2-256](doc/sha2-256)                      |       147.80 |  1374.90 |1606.06 (16)|     | Moment Chi2 4 |
 | [sha2-256_64](doc/sha2-256_64)                |       148.01 |  1376.34 |1624.71 (16)|     | Moment Chi2 7 |
 | [sha1ni](doc/sha1ni)                          |      2019.96 |   135.84 | 564.40 (6) | 989 | insecure,sanity, Permutation, Zeroes, machine-specific |
-| [sha1ni_32](doc/sha1ni_32)                    |      2019.96 |   134.46 | 590.52 (18)| 989 | insecure,sanity, Permutation, Zeroes, TwoBytes, machine-specific |
+| [sha1ni_32](doc/sha1ni_32)                    |      2019.94 |   136.82 | 589.46 (1) | 989 | machine-specific |
 | [sha2ni-256](doc/sha2ni-256)                  |      1906.77 |   145.47 | 603.08 (22)|4241 | insecure,sanity, Permutation, Zeroes, machine-specific |
-| [sha2ni-256_64](doc/sha2ni-256_64)            |      1920.36 |   145.47 | 672.35 (22)|4241 | insecure,sanity, Permutation, Zeroes, machine-specific |
+| [sha2ni-256_64](doc/sha2ni-256_64)            |      1910.34 |   146.06 | 595.16 (6) |4241 | machine-specific |
 | [rmd128](doc/rmd128)                          |       332.78 |   672.35 | 903.43 (13)|     |               |
 | [rmd160](doc/rmd160)                          |       202.16 |  1045.79 |1287.74 (16)|     |               |
 | [rmd256](doc/rmd256)                          |       356.57 |   638.30 | 815.39 (16)|     |               |
@@ -154,7 +154,7 @@ The [sortable table variant](http://rurban.github.io/smhasher/doc/table.html)
 Summary
 -------
 
-I added some SSE assisted hashes and fast intel/arm CRC32-C and AES HW variants, but not the fastest
+I added some SSE assisted hashes and fast intel/arm CRC32-C, AES and SHA HW variants, but not the fastest
 [crcutil](https://code.google.com/p/crcutil/) yet. See [our crcutil results](https://github.com/rurban/smhasher/blob/master/doc/crcutil).
 See also the old [https://code.google.com/p/smhasher/w/list](https://code.google.com/p/smhasher/w/list).
 
@@ -188,7 +188,7 @@ The fast hash functions tested here are recommendable as fast for file
 digests and maybe bigger databases, but not for 32bit hash tables.  The
 "Quality problems" lead to less uniform distribution, i.e.  more collisions
 and worse performance, but are rarely related to real security attacks, just
-the 2nd sanity zeroes test against `\0` invariance is security relevant.
+the 2nd sanity AppendZeroes test against `\0` invariance is security relevant.
 
 Columns
 -------
@@ -200,8 +200,8 @@ cycl./hash: The average of the Small key speed test for 1-31 byte keys.
 The smaller the better.
 
 cycl./map: The result of the Hashmap test for /usr/dict/words with
-std::unordered_map get queries, with the standard deviation in
-brackets. This tests the inlinability of the hash function (see size).
+fast C++ hashmap get queries, with the standard deviation in
+brackets. This tests the inlinability of the hash function in practise (see size).
 The smaller the better.
 
 size: The object size in byte on AMD64. This affects the inlinability in e.g. hash tables.
@@ -261,6 +261,14 @@ Sanity Zero test.
 
 CRYPTO
 ------
+
+Our crypto hashes are hardened with added seed, mixed into the initial
+state, and the versions which require zero-padding are hardened by
+adding the len also, to prevent from collisions with AppendedZeroes
+for the padding. The libtomcrypt implementations already provide for
+that, but others might not. Without, such crypto hash functions are
+unsuitable for normal tasks, as it's trivial to create collisions by
+padding.
 
 The official NIST hash function testsuite does not do such extensive
 statistical tests, to search for weak ranges in the bits. Also crypto
