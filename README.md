@@ -143,7 +143,7 @@ SMhasher
 | [MeowHash](doc/MeowHash)                      |     36695.65 |    58.09 | 233.81 (3) |1764 | Sparse low32, machine-specific (x64 AES-NI)  |
 | [MeowHash32low](doc/MeowHash32low)            |     17247.34 |    87.32 | 245.98 (3) |1764 | Sparse, machine-specific (x64 AES-NI)        |
 | [wyhash](doc/wyhash)                          |      9377.14 |    29.14 | 168.06 (3) |1373 |                            |
-| [wyhash32low](doc/wyhash32low)                |      9281.60 |    27.54 | 184.27 (2) |1373 | Moment Chi2 4.2            |
+| [wyhash32low](doc/wyhash32low)                |      9281.60 |    27.54 | 184.27 (2) |1373 |                            |
 
 The [sortable table variant](http://rurban.github.io/smhasher/doc/table.html)
 
