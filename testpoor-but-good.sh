@@ -1,4 +1,10 @@
 #!/bin/sh
-for f in `build/SMHasher --list | perl -alne 'print $F[0] if /POOR$/'`; do grep -l 'FAIL' doc/$f >/dev/null || echo good $f; done
+make -C build
 
-for f in `build/SMHasher --list | perl -alne 'print $F[0] if /POOR$/'`; do grep GOOD doc/$f; done
+echo "marked POOR but no FAIL"
+for f in `build/SMHasher --list | perl -alne 'print $F[0] if /POOR$/'`; do
+    grep -q FAIL doc/$f || echo "no FAIL $f"; done
+
+echo "marked POOR labeled as GOOD in doc"
+for f in `build/SMHasher --list | perl -alne 'print $F[0] if /POOR$/'`; do
+    grep GOOD doc/$f; done

@@ -1,6 +1,13 @@
 #!/bin/sh
-for f in `build/SMHasher --list | perl -alne 'print $F[0] if /GOOD$/'`; do grep 'FAIL' doc/$f; done
+make -C build
+echo "marked GOOD but FAIL (ignore HashMapTest and LongNeighbors)"
+for f in `build/SMHasher --list | perl -alne 'print $F[0] if /GOOD$/'`; do
+    grep 'FAIL' doc/$f && echo $f; done
 
-for f in `build/SMHasher --list | perl -alne 'print $F[0] if /GOOD$/'`; do grep '!!!!' doc/$f; done
+echo "marked GOOD but !!!!"
+for f in `build/SMHasher --list | perl -alne 'print $F[0] if /GOOD$/'`; do
+    grep -q '!!!!' doc/$f && echo $f; done
 
-for f in `build/SMHasher --list | perl -alne 'print $F[0] if /GOOD$/'`; do grep 'POOR' doc/$f; done
+echo "marked GOOD but POOR in doc"
+for f in `build/SMHasher --list | perl -alne 'print $F[0] if /GOOD$/'`; do
+    grep 'POOR' doc/$f; done

@@ -81,15 +81,10 @@ SMhasher
 | [xxHash32](doc/xxHash32)                      |      5868.40 |    49.08 | 222.09 (21)| 738 | LongNeighbors, collisions with 4bit diff, MomentChi2 220 |
 | [metrohash64](doc/metrohash64)                |      9490.26 |    49.84 | 150.49 (3) | 624 | LongNeighbors, BIC         |
 | [metrohash64_1](doc/metrohash64_1)            |      9274.60 |    50.85 | 201.37 (19)| 624 | LongNeighbors, BIC, MomentChi2         |
-| [metrohash64_2](doc/metrohash64_2)            |      9281.99 |    51.04 | 191.44 (20)| 627 | LongNeighbors              |
 | [metrohash64crc_1](doc/metrohash64crc_1)      |     13641.79 |    56.19 | 193.28 (19)| 632 | cyclic collisions 8 byte, BIC, MomentChi2, machine-specific (x64 SSE4.2) |
 | [metrohash64crc_2](doc/metrohash64crc_2)      |     13550.77 |    56.17 | 204.84 (18)| 632 | cyclic collisions 8 byte, BIC, machine-specific (x64 SSE4.2) |
-| [metrohash128](doc/metrohash128)              |      9450.78 |    78.18 | 215.79 (2) | 773 | LongNeighbors              |
-| [metrohash128_1](doc/metrohash128_1)          |      9263.64 |    79.71 | 240.70 (20)| 773 | LongNeighbors              |
-| [metrohash128_2](doc/metrohash128_2)          |      9060.39 |    79.74 | 240.46 (20)| 773 | LongNeighbors              |
 | [cmetrohash64_1o](doc/cmetrohash64_1o)        |      8851.32 |    50.59 | 193.19 (18)|3506 | LongNeighbors, MomentChi2  |
 | [cmetrohash64_1](doc/cmetrohash64_1)          |      9074.37 |    50.92 | 201.33 (18)| 652 | LongNeighbors, BIC, MomentChi2 |
-| [cmetrohash64_2](doc/cmetrohash64_2)          |      9302.98 |    51.09 | 194.04 (18)| 655 | LongNeighbors              |
 | [City64noSeed](doc/City64noSeed)              |      8873.07 |    38.70 | 171.57 (4) |1038 | Avalanche, Sparse, TwoBytes, MomentChi2, Seed |
 | [City64](doc/City64)                          |      9213.05 |    55.52 | 200.24 (2) |1120 | Sparse, TwoBytes           |
 | [falkhash](doc/falkhash)                      |     20374.98 |   169.84 | 328.42 (5) | 264 | LongNeighbors, machine-specific (x64 AES-NI) |
@@ -133,6 +128,11 @@ SMhasher
 | [farmhash32_c](doc/farmhash32_c)              |     17335.51 |    63.77 | 277.75 (18)| 762 | machine-specific (x64 SSE4/AVX) |
 | [farmhash64_c](doc/farmhash64_c)              |      8335.98 |    77.01 | 266.15 (18)|3688 |                            |
 | [farmhash128_c](doc/farmhash128_c)            |     10158.20 |    98.80 | 232.00 (2) |1890 |                            |
+| [metrohash64_2](doc/metrohash64_2)            |      9281.99 |    51.04 | 191.44 (20)| 627 | LongNeighbors              |
+| [cmetrohash64_2](doc/cmetrohash64_2)          |      9302.98 |    51.09 | 194.04 (18)| 655 | LongNeighbors              |
+| [metrohash128](doc/metrohash128)              |      9450.78 |    78.18 | 215.79 (2) | 773 | LongNeighbors              |
+| [metrohash128_1](doc/metrohash128_1)          |      9263.64 |    79.71 | 240.70 (20)| 773 | LongNeighbors              |
+| [metrohash128_2](doc/metrohash128_2)          |      9060.39 |    79.74 | 240.46 (20)| 773 | LongNeighbors              |
 | [metrohash128crc_1](doc/metrohash128crc_1)    |     13668.29 |    85.94 | 249.99 (18)| 723 | machine-specific (x64 SSE4.2) |
 | [metrohash128crc_2](doc/metrohash128crc_2)    |     13600.83 |    85.92 | 239.28 (20)| 723 | machine-specific (x64 SSE4.2) |
 | [xxHash64](doc/xxHash64)                      |      8719.19 |    59.22 | 210.40 (16)|1999 |                            |

@@ -113,7 +113,7 @@ HashInfo g_hashes[] =
 #  define SHA1a_VERIF         0xB3122757
 #endif
   { sha1_160,            160, SHA1_VERIF, "sha1-160",     "SHA1", GOOD},
-  { sha1_32a,             32, SHA1a_VERIF,"sha1_32a",     "SHA1, low 32 bits", GOOD},
+  { sha1_32a,             32, SHA1a_VERIF,"sha1_32a",     "SHA1, low 32 bits", POOR},
   { sha2_224,            224, 0x60424E90, "sha2-224",     "SHA2-224", GOOD },
   { sha2_224_64,          64, 0x7EF6BB61, "sha2-224_64",  "SHA2-224, low 64 bits", GOOD },
   { sha2_256,            256, 0xACFA0A78, "sha2-256",     "SHA2-256", POOR },
@@ -122,7 +122,7 @@ HashInfo g_hashes[] =
   { sha1ni,              160, 0xF0EC15B1, "sha1ni",       "SHA1_NI (amd64 HW SHA ext)", POOR },
   { sha1ni_32,            32, 0xE70686CC, "sha1ni_32",    "hardened SHA1_NI (amd64 HW SHA ext), low 32 bits", GOOD },
   { sha2ni_256,          256, 0x01E45C6F, "sha2ni-256",   "SHA2_NI-256 (amd64 HW SHA ext)", POOR },
-  { sha2ni_256_64,        64, 0xF938E80E, "sha2ni-256_64","hardened SHA2_NI-256 (amd64 HW SHA ext), low 64 bits", GOOD },
+  { sha2ni_256_64,        64, 0xF938E80E, "sha2ni-256_64","hardened SHA2_NI-256 (amd64 HW SHA ext), low 64 bits", POOR },
 #endif
   { rmd128,              128, 0xFF576977, "rmd128",       "RIPEMD-128", GOOD },
   { rmd160,              160, 0x30B37AC6, "rmd160",       "RIPEMD-160", GOOD },
@@ -200,24 +200,24 @@ HashInfo g_hashes[] =
   // TODO seeded
   { PMPML_32_CPP,         32, 0xEAE2E3CC, "PMPML_32",    "PMP_Multilinear 32-bit unseeded", POOR },
 #if defined(_WIN64) || defined(__x86_64__)
-  { PMPML_64_CPP,         64, 0x584CC9DF, "PMPML_64",    "PMP_Multilinear 64-bit unseeded", GOOD },
+  { PMPML_64_CPP,         64, 0x584CC9DF, "PMPML_64",    "PMP_Multilinear 64-bit unseeded", POOR },
 #endif
   { fasthash64_test,      64, 0xA16231A7, "fasthash64",  "fast-hash 64bit", POOR },
   { CityHash32_test,      32, 0x5C28AD62, "City32",      "Google CityHash32WithSeed (old)", POOR },
 #ifdef HAVE_INT64
-  { metrohash64_test,      64, 0x6FA828C9, "metrohash64",    "MetroHash64, 64-bit", GOOD },
+  { metrohash64_test,      64, 0x6FA828C9, "metrohash64",    "MetroHash64, 64-bit", POOR },
   { metrohash64_1_test,    64, 0xEE88F7D2, "metrohash64_1",  "MetroHash64_1, 64-bit (legacy)", POOR },
-  { metrohash64_2_test,    64, 0xE1FC7C6E, "metrohash64_2",  "MetroHash64_2, 64-bit (legacy)", POOR },
+  { metrohash64_2_test,    64, 0xE1FC7C6E, "metrohash64_2",  "MetroHash64_2, 64-bit (legacy)", GOOD },
   { metrohash128_test,    128, 0x4A6673E7, "metrohash128",   "MetroHash128, 128-bit", GOOD },
-  { metrohash128_1_test,  128, 0x20E8A1D7, "metrohash128_1", "MetroHash128_1, 128-bit (legacy)", POOR },
-  { metrohash128_2_test,  128, 0x5437C684, "metrohash128_2", "MetroHash128_2, 128-bit (legacy)", POOR },
+  { metrohash128_1_test,  128, 0x20E8A1D7, "metrohash128_1", "MetroHash128_1, 128-bit (legacy)", GOOD },
+  { metrohash128_2_test,  128, 0x5437C684, "metrohash128_2", "MetroHash128_2, 128-bit (legacy)", GOOD },
 #endif
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { metrohash64crc_1_test, 64, 0x29C68A50, "metrohash64crc_1", "MetroHash64crc_1 for x64 (legacy)", POOR },
   { metrohash64crc_2_test, 64, 0x2C00BD9F, "metrohash64crc_2", "MetroHash64crc_2 for x64 (legacy)", POOR },
   { cmetrohash64_1_optshort_test,64, 0xEE88F7D2, "cmetrohash64_1o", "cmetrohash64_1 (shorter key optimized), 64-bit for x64", POOR },
   { cmetrohash64_1_test,   64, 0xEE88F7D2, "cmetrohash64_1",  "cmetrohash64_1, 64-bit for x64", POOR },
-  { cmetrohash64_2_test,   64, 0xE1FC7C6E, "cmetrohash64_2",  "cmetrohash64_2, 64-bit for x64", POOR },
+  { cmetrohash64_2_test,   64, 0xE1FC7C6E, "cmetrohash64_2",  "cmetrohash64_2, 64-bit for x64", GOOD },
   { metrohash128crc_1_test,128, 0x5E75144E, "metrohash128crc_1", "MetroHash128crc_1 for x64 (legacy)", GOOD },
   { metrohash128crc_2_test,128, 0x1ACF3E77, "metrohash128crc_2", "MetroHash128crc_2 for x64 (legacy)", GOOD },
 #endif
@@ -242,7 +242,7 @@ HashInfo g_hashes[] =
 # define TIFU_VERIF       0x0
 #endif
   // and now the quality hash funcs, slowest first
-  { tifuhash_64,          64, TIFU_VERIF, "tifuhash_64", "Tiny Floatingpoint Unique Hash with continued egyptian fractions", GOOD },
+  { tifuhash_64,          64, TIFU_VERIF, "tifuhash_64", "Tiny Floatingpoint Unique Hash with continued egyptian fractions", POOR },
   { siphash_test,         64, 0xC58D7F9C, "SipHash",     "SipHash 2-4 - SSSE3 optimized", GOOD },
   { halfsiphash_test,     32, 0xA7A05F72, "HalfSipHash", "HalfSipHash 2-4, 32bit", GOOD },
   { GoodOAAT_test,        32, 0x7B14EEE5, "GoodOAAT",    "Small non-multiplicative OAAT", GOOD },
@@ -343,8 +343,8 @@ HashInfo g_hashes[] =
 #  define MEOW_VERIF           0xA0D29861
 #  define MEOW32_VERIF         0x8872DE1A
 # endif
-  { MeowHash128_test,     128, MEOW_VERIF, "MeowHash",  "Meow hash (requires x64 AES-NI)", GOOD },
-  { MeowHash32_test,       32, MEOW32_VERIF, "MeowHash32low",  "Meow hash lower 32bit (requires x64 AES-NI)", GOOD },
+  { MeowHash128_test,     128, MEOW_VERIF, "MeowHash",  "Meow hash (requires x64 AES-NI)", POOR },
+  { MeowHash32_test,       32, MEOW32_VERIF, "MeowHash32low",  "Meow hash lower 32bit (requires x64 AES-NI)", POOR },
 #endif
 #ifdef HAVE_INT64
 #ifdef WYHASH_EVIL_FAST
