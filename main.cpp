@@ -356,8 +356,8 @@ HashInfo g_hashes[] =
 #  define WYHASH32L_VERIF 0x59835713
 # endif
 #else
-# define WYHASH_VERIF     0x1226FA61
-# define WYHASH32L_VERIF  0xD09A85B3
+# define WYHASH_VERIF     0x2A65E847
+# define WYHASH32L_VERIF  0x552FA8A2
 #endif
 #ifdef DEBUG
   { wysha,                 32, 0xD09A85B3, "wysha",          "wyhash v3 test", GOOD },
