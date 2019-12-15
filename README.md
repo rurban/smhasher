@@ -156,7 +156,7 @@ Summary
 
 I added some SSE assisted hashes and fast intel/arm CRC32-C, AES and SHA HW variants, but not the fastest
 [crcutil](https://code.google.com/p/crcutil/) yet. See [our crcutil results](https://github.com/rurban/smhasher/blob/master/doc/crcutil).
-See also the old [https://code.google.com/p/smhasher/w/list](https://code.google.com/p/smhasher/w/list).
+See also the old [https://code.google.com/p/smhasher/w/list](https://code.google.com/p/smhasher/w/list) and the improved, but unmaintained fork [https://github.com/demerphq/smhasher](https://github.com/demerphq/smhasher).
 
 So the fastest hash functions on x86_64 without quality problems are:
 
