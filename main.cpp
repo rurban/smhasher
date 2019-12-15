@@ -148,7 +148,8 @@ HashInfo g_hashes[] =
   { crc32c_hw1_test,      32, 0x0C7346F0, "crc32_hw1",   "Faster Adler SSE4.2 crc32 in HW", POOR },
   { crc64c_hw_test,       64, 0xE7C3FD0E, "crc64_hw",    "SSE4.2 crc64 in HW", POOR },
 #endif
-#if defined(HAVE_CLMUL) && !defined(_MSC_VER)
+  // 32bit crashes
+#if defined(HAVE_CLMUL) && !defined(_MSC_VER) && defined(__x86_64__)
   { crc32c_pclmul_test,   32, 0x00000000, "crc32_pclmul","-mpclmul crc32 in asm on HW", POOR },
 #endif
 #if 0 && defined(__x86_64__) && (defined(__linux__) || defined(__APPLE__))
