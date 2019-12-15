@@ -612,19 +612,6 @@ crc64c_hw_test(const void *input, int len, uint32_t seed, void *out)
 #endif
 #endif
 
-/* Cloudflare optimized zlib crc32 with PCLMUL */
-#if 0
-void
-zlib_crc32_test(const void *input, int len, uint32_t seed, void *out)
-{
-    if (!len) {
-      *(uint32_t *) out = 0;
-      return;
-    }
-    *(uint32_t *) out = crc32(seed, input, (unsigned)len);
-}
-#endif
-
 #if 0 && defined(__x86_64__) && (defined(__linux__) || defined(__APPLE__))
 /* asm */
 extern "C" {

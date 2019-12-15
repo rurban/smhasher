@@ -44,6 +44,7 @@ SMhasher
 | [crc32_hw](doc/crc32_hw)                      |      6292.63 |    30.38 | 204.19 (18)| 653 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
 | [crc32_hw1](doc/crc32_hw1)                    |     23382.53 |    36.84 | 197.39 (20)| 671 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
 | [crc64_hw](doc/crc64_hw)                      |      8387.01 |    29.96 | 161.44 (13)| 652 | insecure, 100% bias, collisions, distrib, machine-specific (x64 SSE4.2) |
+| [crc32_pclmul](doc/crc32_pclmul)              |   1932125.24 |     6.50 |   -        | 481 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2+PCLMUL) |
 | [fibonacci](doc/fibonacci)                    |      9462.17 |    33.52 | 774.87 (14)|1692 | zeros, fails all tests       |
 | [FNV1a](doc/FNV1a)                            |       780.53 |    69.65 | 197.06 (20)| 204 | zeros, fails all tests       |
 | [FNV1A_Totenschiff](doc/FNV1A_Totenschiff)    |      6235.86 |    36.56 | 214.61 (18)| 270 | zeros, fails all tests       |
@@ -154,8 +155,7 @@ The [sortable table variant](http://rurban.github.io/smhasher/doc/table.html)
 Summary
 -------
 
-I added some SSE assisted hashes and fast intel/arm CRC32-C, AES and SHA HW variants, but not the fastest
-[crcutil](https://code.google.com/p/crcutil/) yet. See [our crcutil results](https://github.com/rurban/smhasher/blob/master/doc/crcutil).
+I added some SSE assisted hashes and fast intel/arm CRC32-C, AES and SHA HW variants.
 See also the old [https://code.google.com/p/smhasher/w/list](https://code.google.com/p/smhasher/w/list) and the improved, but unmaintained fork [https://github.com/demerphq/smhasher](https://github.com/demerphq/smhasher).
 
 So the fastest hash functions on x86_64 without quality problems are:
