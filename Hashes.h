@@ -67,9 +67,20 @@ inline void crc32c_pclmul_test(const void *key, int len, uint32_t seed, void *ou
   // objsize: 0x1e1 = 481
 #ifdef NDEBUG
   if (((uintptr_t)key & 15) != 0) {
-    unsigned char const *input = (unsigned char const *)malloc(len);
-    *(uint32_t *) out = crc32_pclmul_le_16(input, (size_t)len, seed);
-    free ((void*)input);
+#if 0 // slower
+    if (len < 1024) {
+      unsigned char input[1024];
+      memcpy((void*)input, key, len);
+      *(uint32_t *) out = crc32_pclmul_le_16(input, (size_t)len, seed);
+    }
+    else
+#endif
+    {
+      unsigned char const *input = (unsigned char const *)malloc(len);
+      memcpy((void*)input, key, len);
+      *(uint32_t *) out = crc32_pclmul_le_16(input, (size_t)len, seed);
+      free ((void*)input);
+    }
   }
 #else
   assert(((uintptr_t)key & 15) == 0); // input must be 16byte aligned
