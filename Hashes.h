@@ -973,7 +973,14 @@ inline void aesni_cbc_sha1_avx(const void *key, int len, uint32_t seed, void *ou
   SHA1_Init(&context);
   context.state[0] ^= seed;
   memset(ivec,0,sizeof(ivec));
-  aesni_cbc_sha1_enc_avx(key, out, len, &aes_key, ivec, &context, NULL);
+  if (((uintptr_t)key & 15) != 0) {
+    void *input = malloc(len);
+    memcpy(input, key, len);
+    aesni_cbc_sha1_enc_avx(input, out, len, &aes_key, ivec, &context, NULL);
+    free (input);
+  } else {
+    aesni_cbc_sha1_enc_avx(key, out, len, &aes_key, ivec, &context, NULL);
+  }
 }
 #endif
 

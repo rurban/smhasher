@@ -230,6 +230,7 @@ if(CMAKE_COMPILER_IS_GNUCC
   if(NOT (CMAKE_CROSSCOMPILING))
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -march=native")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
+    set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -march=native")
   endif()
   set_source_files_properties(blake3/blake3.c
                               PROPERTIES COMPILE_FLAGS "-std=c99")
@@ -448,7 +449,7 @@ if(AES_FOUND AND (PROCESSOR_FAMILY STREQUAL "Intel"))
 else()
   if((CMAKE_SIZEOF_VOID_P EQUAL 8) AND (NOT MSVC))
     if (CMAKE_COMPILER_IS_GNUCC)
-      set(AESNI_SHA1_SRC aesni-sha1-x86_64-gcc.s)
+      set(AESNI_SHA1_SRC aesni-sha1-x86_64-gcc.S)
       #set_source_files_properties(aesni-sha1-x86_64-gcc.s
       #  PROPERTIES COMPILE_FLAGS "-m64 -Wall -O3 -DL_ENDIAN")
       #add_custom_target (
@@ -457,7 +458,7 @@ else()
       #  DEPENDS aesni-sha1-x86_64-gcc.s )
     elseif((CMAKE_C_COMPILER_ID STREQUAL AppleClang)
           OR (CMAKE_C_COMPILER_ID STREQUAL Clang))
-      set(AESNI_SHA1_SRC aesni-sha1-x86_64-clang.s)
+      set(AESNI_SHA1_SRC aesni-sha1-x86_64-clang.S)
       #set_source_files_properties(aesni-sha1-x86_64-clang.s
       #  PROPERTIES COMPILE_FLAGS "-arch x86_64 -O3 -Wall -DL_ENDIAN")
       #add_custom_target (

@@ -1,26 +1,34 @@
-.text	
+// from openssl
+#ifdef __APPLE__
+#define ENTRY(name) \
+.private_extern _ ## name; \
+_ ## name:
 
-.p2align	5
-_aesni_cbc_sha1_enc_ssse3:
+#define ENDPROC(name)
 
+#else
+#define ENTRY(name) \
+.globl name; \
+.hidden name; \
+.type name, @function; \
+.align 32; \
+name:
+
+#define ENDPROC(name) \
+.size name, .-name
+#endif
+
+.text
+
+ENTRY(aesni_cbc_sha1_enc_ssse3)
 	movq	8(%rsp),%r10
-
-
 	pushq	%rbx
-
 	pushq	%rbp
-
 	pushq	%r12
-
 	pushq	%r13
-
 	pushq	%r14
-
 	pushq	%r15
-
 	leaq	-104(%rsp),%rsp
-
-
 
 	movq	%rdi,%r12
 	movq	%rsi,%r13
@@ -66,9 +74,9 @@ _aesni_cbc_sha1_enc_ssse3:
 	psubd	%xmm13,%xmm6
 	movups	-112(%r15),%xmm15
 	movups	16-112(%r15),%xmm0
-	jmp	L$oop_ssse3
-.p2align	5
-L$oop_ssse3:
+	jmp	.Loop_ssse3
+.align	32
+.Loop_ssse3:
 	rorl	$2,%ebx
 	movups	0(%r12),%xmm14
 	xorps	%xmm15,%xmm14
@@ -321,17 +329,17 @@ L$oop_ssse3:
 	addl	%ebx,%eax
 	rorl	$7,%ebx
 	cmpl	$11,%r8d
-	jb	L$aesenclast1
+	jb	.Laesenclast1
 	movups	64(%r15),%xmm0
 .byte	102,15,56,220,209
 	movups	80(%r15),%xmm1
 .byte	102,15,56,220,208
-	je	L$aesenclast1
+	je	.Laesenclast1
 	movups	96(%r15),%xmm0
 .byte	102,15,56,220,209
 	movups	112(%r15),%xmm1
 .byte	102,15,56,220,208
-L$aesenclast1:
+.Laesenclast1:
 .byte	102,15,56,221,209
 	movups	16-112(%r15),%xmm0
 	por	%xmm12,%xmm11
@@ -618,17 +626,17 @@ L$aesenclast1:
 	movdqa	%xmm9,%xmm12
 	addl	%edi,%ecx
 	cmpl	$11,%r8d
-	jb	L$aesenclast2
+	jb	.Laesenclast2
 	movups	64(%r15),%xmm0
 .byte	102,15,56,220,209
 	movups	80(%r15),%xmm1
 .byte	102,15,56,220,208
-	je	L$aesenclast2
+	je	.Laesenclast2
 	movups	96(%r15),%xmm0
 .byte	102,15,56,220,209
 	movups	112(%r15),%xmm1
 .byte	102,15,56,220,208
-L$aesenclast2:
+.Laesenclast2:
 .byte	102,15,56,221,209
 	movups	16-112(%r15),%xmm0
 	xorl	%eax,%esi
@@ -893,17 +901,17 @@ L$aesenclast2:
 	addl	%ebx,%eax
 	addl	28(%rsp),%ebp
 	cmpl	$11,%r8d
-	jb	L$aesenclast3
+	jb	.Laesenclast3
 	movups	64(%r15),%xmm0
 .byte	102,15,56,220,209
 	movups	80(%r15),%xmm1
 .byte	102,15,56,220,208
-	je	L$aesenclast3
+	je	.Laesenclast3
 	movups	96(%r15),%xmm0
 .byte	102,15,56,220,209
 	movups	112(%r15),%xmm1
 .byte	102,15,56,220,208
-L$aesenclast3:
+.Laesenclast3:
 .byte	102,15,56,221,209
 	movups	16-112(%r15),%xmm0
 	andl	%ecx,%edi
@@ -1065,7 +1073,7 @@ L$aesenclast3:
 	rorl	$7,%ebp
 	addl	%edx,%ecx
 	cmpq	%r14,%r10
-	je	L$done_ssse3
+	je	.Ldone_ssse3
 	movdqa	64(%r11),%xmm3
 	movdqa	0(%r11),%xmm13
 	movdqu	0(%r10),%xmm4
@@ -1169,17 +1177,17 @@ L$aesenclast3:
 	roll	$5,%edx
 	addl	%edi,%ecx
 	cmpl	$11,%r8d
-	jb	L$aesenclast4
+	jb	.Laesenclast4
 	movups	64(%r15),%xmm0
 .byte	102,15,56,220,209
 	movups	80(%r15),%xmm1
 .byte	102,15,56,220,208
-	je	L$aesenclast4
+	je	.Laesenclast4
 	movups	96(%r15),%xmm0
 .byte	102,15,56,220,209
 	movups	112(%r15),%xmm1
 .byte	102,15,56,220,208
-L$aesenclast4:
+.Laesenclast4:
 .byte	102,15,56,221,209
 	movups	16-112(%r15),%xmm0
 	xorl	%eax,%esi
@@ -1218,9 +1226,9 @@ L$aesenclast4:
 	xorl	%edx,%edi
 	movl	%ebp,16(%r9)
 	andl	%edi,%esi
-	jmp	L$oop_ssse3
+	jmp	.Loop_ssse3
 
-L$done_ssse3:
+.Ldone_ssse3:
 	addl	16(%rsp),%ebx
 	xorl	%ebp,%esi
 	movl	%ecx,%edi
@@ -1305,17 +1313,17 @@ L$done_ssse3:
 	roll	$5,%edx
 	addl	%edi,%ecx
 	cmpl	$11,%r8d
-	jb	L$aesenclast5
+	jb	.Laesenclast5
 	movups	64(%r15),%xmm0
 .byte	102,15,56,220,209
 	movups	80(%r15),%xmm1
 .byte	102,15,56,220,208
-	je	L$aesenclast5
+	je	.Laesenclast5
 	movups	96(%r15),%xmm0
 .byte	102,15,56,220,209
 	movups	112(%r15),%xmm1
 .byte	102,15,56,220,208
-L$aesenclast5:
+.Laesenclast5:
 .byte	102,15,56,221,209
 	movups	16-112(%r15),%xmm0
 	xorl	%eax,%esi
@@ -1358,15 +1366,13 @@ L$aesenclast5:
 	movq	32(%rsi),%rbp
 	movq	40(%rsi),%rbx
 	leaq	48(%rsi),%rsp
-L$epilogue_ssse3:
+.Lepilogue_ssse3:
 	.byte	0xf3,0xc3
+ENDPROC(aesni_cbc_sha1_enc_ssse3)
 
-
-
-.globl	_aesni_cbc_sha1_enc_avx
-.p2align	5
-_aesni_cbc_sha1_enc_avx:
+ENTRY(aesni_cbc_sha1_enc_avx)
 	movq	8(%rsp),%r10
+
 	pushq	%rbx
 	pushq	%rbp
 	pushq	%r12
@@ -1374,6 +1380,8 @@ _aesni_cbc_sha1_enc_avx:
 	pushq	%r14
 	pushq	%r15
 	leaq	-104(%rsp),%rsp
+
+
 	vzeroall
 	movq	%rdi,%r12
 	movq	%rsi,%r13
@@ -1416,9 +1424,9 @@ _aesni_cbc_sha1_enc_avx:
 	vmovdqa	%xmm6,32(%rsp)
 	vmovups	-112(%r15),%xmm15
 	vmovups	16-112(%r15),%xmm14
-	jmp	L$oop_avx
-.p2align	5
-L$oop_avx:
+	jmp	.Loop_avx
+.align	32
+.Loop_avx:
 	shrdl	$2,%ebx,%ebx
 	vmovdqu	0(%r12),%xmm13
 	vpxor	%xmm15,%xmm13,%xmm13
@@ -1652,17 +1660,17 @@ L$oop_avx:
 	vpxor	%xmm8,%xmm7,%xmm7
 	shrdl	$7,%ebx,%ebx
 	cmpl	$11,%r8d
-	jb	L$vaesenclast6
+	jb	.Lvaesenclast6
 	vaesenc	%xmm15,%xmm12,%xmm12
 	vmovups	64(%r15),%xmm14
 	vaesenc	%xmm14,%xmm12,%xmm12
 	vmovups	80(%r15),%xmm15
-	je	L$vaesenclast6
+	je	.Lvaesenclast6
 	vaesenc	%xmm15,%xmm12,%xmm12
 	vmovups	96(%r15),%xmm14
 	vaesenc	%xmm14,%xmm12,%xmm12
 	vmovups	112(%r15),%xmm15
-L$vaesenclast6:
+.Lvaesenclast6:
 	vaesenclast	%xmm15,%xmm12,%xmm12
 	vmovups	-112(%r15),%xmm15
 	vmovups	16-112(%r15),%xmm14
@@ -1931,17 +1939,17 @@ L$vaesenclast6:
 	vmovdqa	%xmm9,0(%rsp)
 	addl	%edi,%ecx
 	cmpl	$11,%r8d
-	jb	L$vaesenclast7
+	jb	.Lvaesenclast7
 	vaesenc	%xmm15,%xmm12,%xmm12
 	vmovups	64(%r15),%xmm14
 	vaesenc	%xmm14,%xmm12,%xmm12
 	vmovups	80(%r15),%xmm15
-	je	L$vaesenclast7
+	je	.Lvaesenclast7
 	vaesenc	%xmm15,%xmm12,%xmm12
 	vmovups	96(%r15),%xmm14
 	vaesenc	%xmm14,%xmm12,%xmm12
 	vmovups	112(%r15),%xmm15
-L$vaesenclast7:
+.Lvaesenclast7:
 	vaesenclast	%xmm15,%xmm12,%xmm12
 	vmovups	-112(%r15),%xmm15
 	vmovups	16-112(%r15),%xmm14
@@ -2193,17 +2201,17 @@ L$vaesenclast7:
 	addl	%ebx,%eax
 	addl	28(%rsp),%ebp
 	cmpl	$11,%r8d
-	jb	L$vaesenclast8
+	jb	.Lvaesenclast8
 	vaesenc	%xmm15,%xmm12,%xmm12
 	vmovups	64(%r15),%xmm14
 	vaesenc	%xmm14,%xmm12,%xmm12
 	vmovups	80(%r15),%xmm15
-	je	L$vaesenclast8
+	je	.Lvaesenclast8
 	vaesenc	%xmm15,%xmm12,%xmm12
 	vmovups	96(%r15),%xmm14
 	vaesenc	%xmm14,%xmm12,%xmm12
 	vmovups	112(%r15),%xmm15
-L$vaesenclast8:
+.Lvaesenclast8:
 	vaesenclast	%xmm15,%xmm12,%xmm12
 	vmovups	-112(%r15),%xmm15
 	vmovups	16-112(%r15),%xmm14
@@ -2361,7 +2369,7 @@ L$vaesenclast8:
 	shrdl	$7,%ebp,%ebp
 	addl	%edx,%ecx
 	cmpq	%r14,%r10
-	je	L$done_avx
+	je	.Ldone_avx
 	vmovdqa	64(%r11),%xmm9
 	vmovdqa	0(%r11),%xmm10
 	vmovdqu	0(%r10),%xmm0
@@ -2463,17 +2471,17 @@ L$vaesenclast8:
 	shldl	$5,%edx,%edx
 	addl	%edi,%ecx
 	cmpl	$11,%r8d
-	jb	L$vaesenclast9
+	jb	.Lvaesenclast9
 	vaesenc	%xmm15,%xmm12,%xmm12
 	vmovups	64(%r15),%xmm14
 	vaesenc	%xmm14,%xmm12,%xmm12
 	vmovups	80(%r15),%xmm15
-	je	L$vaesenclast9
+	je	.Lvaesenclast9
 	vaesenc	%xmm15,%xmm12,%xmm12
 	vmovups	96(%r15),%xmm14
 	vaesenc	%xmm14,%xmm12,%xmm12
 	vmovups	112(%r15),%xmm15
-L$vaesenclast9:
+.Lvaesenclast9:
 	vaesenclast	%xmm15,%xmm12,%xmm12
 	vmovups	-112(%r15),%xmm15
 	vmovups	16-112(%r15),%xmm14
@@ -2512,9 +2520,9 @@ L$vaesenclast9:
 	xorl	%edx,%edi
 	movl	%ebp,16(%r9)
 	andl	%edi,%esi
-	jmp	L$oop_avx
+	jmp	.Loop_avx
 
-L$done_avx:
+.Ldone_avx:
 	addl	16(%rsp),%ebx
 	xorl	%ebp,%esi
 	movl	%ecx,%edi
@@ -2599,17 +2607,17 @@ L$done_avx:
 	shldl	$5,%edx,%edx
 	addl	%edi,%ecx
 	cmpl	$11,%r8d
-	jb	L$vaesenclast10
+	jb	.Lvaesenclast10
 	vaesenc	%xmm15,%xmm12,%xmm12
 	vmovups	64(%r15),%xmm14
 	vaesenc	%xmm14,%xmm12,%xmm12
 	vmovups	80(%r15),%xmm15
-	je	L$vaesenclast10
+	je	.Lvaesenclast10
 	vaesenc	%xmm15,%xmm12,%xmm12
 	vmovups	96(%r15),%xmm14
 	vaesenc	%xmm14,%xmm12,%xmm12
 	vmovups	112(%r15),%xmm15
-L$vaesenclast10:
+.Lvaesenclast10:
 	vaesenclast	%xmm15,%xmm12,%xmm12
 	vmovups	-112(%r15),%xmm15
 	vmovups	16-112(%r15),%xmm14
@@ -2647,26 +2655,18 @@ L$vaesenclast10:
 	vmovups	%xmm12,(%r8)
 	vzeroall
 	leaq	104(%rsp),%rsi
-
 	movq	0(%rsi),%r15
-
 	movq	8(%rsi),%r14
-
 	movq	16(%rsi),%r13
-
 	movq	24(%rsi),%r12
-
 	movq	32(%rsi),%rbp
-
 	movq	40(%rsi),%rbx
-
 	leaq	48(%rsi),%rsp
-
-L$epilogue_avx:
+.Lepilogue_avx:
 	.byte	0xf3,0xc3
+ENDPROC(aesni_cbc_sha1_enc_avx)
 
-
-.p2align	6
+.align	64
 K_XX_XX:
 .long	0x5a827999,0x5a827999,0x5a827999,0x5a827999
 .long	0x6ed9eba1,0x6ed9eba1,0x6ed9eba1,0x6ed9eba1
@@ -2676,10 +2676,8 @@ K_XX_XX:
 .byte	0xf,0xe,0xd,0xc,0xb,0xa,0x9,0x8,0x7,0x6,0x5,0x4,0x3,0x2,0x1,0x0
 
 .byte	65,69,83,78,73,45,67,66,67,43,83,72,65,49,32,115,116,105,116,99,104,32,102,111,114,32,120,56,54,95,54,52,44,32,67,82,89,80,84,79,71,65,77,83,32,98,121,32,60,97,112,112,114,111,64,111,112,101,110,115,115,108,46,111,114,103,62,0
-.p2align	6
-
-.p2align	5
-_aesni_cbc_sha1_enc_shaext:
+.align	64
+ENTRY(aesni_cbc_sha1_enc_shaext)
 	movq	8(%rsp),%r10
 	movdqu	(%r9),%xmm8
 	movd	16(%r9),%xmm9
@@ -2694,10 +2692,10 @@ _aesni_cbc_sha1_enc_shaext:
 
 	pshufd	$27,%xmm8,%xmm8
 	pshufd	$27,%xmm9,%xmm9
-	jmp	L$oop_shaext
+	jmp	.Loop_shaext
 
-.p2align	4
-L$oop_shaext:
+.align	16
+.Loop_shaext:
 	movups	0(%rdi),%xmm14
 	xorps	%xmm15,%xmm14
 	xorps	%xmm14,%xmm2
@@ -2756,17 +2754,17 @@ L$oop_shaext:
 	pxor	%xmm3,%xmm5
 .byte	15,56,201,243
 	cmpl	$11,%r11d
-	jb	L$aesenclast11
+	jb	.Laesenclast11
 	movups	64(%rcx),%xmm0
 .byte	102,15,56,220,209
 	movups	80(%rcx),%xmm1
 .byte	102,15,56,220,208
-	je	L$aesenclast11
+	je	.Laesenclast11
 	movups	96(%rcx),%xmm0
 .byte	102,15,56,220,209
 	movups	112(%rcx),%xmm1
 .byte	102,15,56,220,208
-L$aesenclast11:
+.Laesenclast11:
 .byte	102,15,56,221,209
 	movups	16-112(%rcx),%xmm0
 	movdqa	%xmm8,%xmm10
@@ -2822,17 +2820,17 @@ L$aesenclast11:
 	pxor	%xmm4,%xmm6
 .byte	15,56,201,220
 	cmpl	$11,%r11d
-	jb	L$aesenclast12
+	jb	.Laesenclast12
 	movups	64(%rcx),%xmm0
 .byte	102,15,56,220,209
 	movups	80(%rcx),%xmm1
 .byte	102,15,56,220,208
-	je	L$aesenclast12
+	je	.Laesenclast12
 	movups	96(%rcx),%xmm0
 .byte	102,15,56,220,209
 	movups	112(%rcx),%xmm1
 .byte	102,15,56,220,208
-L$aesenclast12:
+.Laesenclast12:
 .byte	102,15,56,221,209
 	movups	16-112(%rcx),%xmm0
 	movdqa	%xmm8,%xmm9
@@ -2888,17 +2886,17 @@ L$aesenclast12:
 	pxor	%xmm5,%xmm3
 .byte	15,56,201,229
 	cmpl	$11,%r11d
-	jb	L$aesenclast13
+	jb	.Laesenclast13
 	movups	64(%rcx),%xmm0
 .byte	102,15,56,220,209
 	movups	80(%rcx),%xmm1
 .byte	102,15,56,220,208
-	je	L$aesenclast13
+	je	.Laesenclast13
 	movups	96(%rcx),%xmm0
 .byte	102,15,56,220,209
 	movups	112(%rcx),%xmm1
 .byte	102,15,56,220,208
-L$aesenclast13:
+.Laesenclast13:
 .byte	102,15,56,221,209
 	movups	16-112(%rcx),%xmm0
 	movdqa	%xmm8,%xmm10
@@ -2952,17 +2950,17 @@ L$aesenclast13:
 	movups	48(%rcx),%xmm1
 .byte	102,15,56,220,208
 	cmpl	$11,%r11d
-	jb	L$aesenclast14
+	jb	.Laesenclast14
 	movups	64(%rcx),%xmm0
 .byte	102,15,56,220,209
 	movups	80(%rcx),%xmm1
 .byte	102,15,56,220,208
-	je	L$aesenclast14
+	je	.Laesenclast14
 	movups	96(%rcx),%xmm0
 .byte	102,15,56,220,209
 	movups	112(%rcx),%xmm1
 .byte	102,15,56,220,208
-L$aesenclast14:
+.Laesenclast14:
 .byte	102,15,56,221,209
 	movups	16-112(%rcx),%xmm0
 	decq	%rdx
@@ -2970,7 +2968,7 @@ L$aesenclast14:
 	paddd	%xmm11,%xmm8
 	movups	%xmm2,48(%rsi,%rdi,1)
 	leaq	64(%rdi),%rdi
-	jnz	L$oop_shaext
+	jnz	.Loop_shaext
 
 	pshufd	$27,%xmm8,%xmm8
 	pshufd	$27,%xmm9,%xmm9
@@ -2978,4 +2976,4 @@ L$aesenclast14:
 	movdqu	%xmm8,(%r9)
 	movd	%xmm9,16(%r9)
 	.byte	0xf3,0xc3
-
+ENDPROC(aesni_cbc_sha1_enc_shaext)
