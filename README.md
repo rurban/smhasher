@@ -101,7 +101,7 @@ SMhasher
 | [xxh128low](doc/xxh128low)                    |     11482.39 |    37.60 | 168.17 (4) |1012 | Moment Chi2 14974, BIC     |
 | --------------------------------------        |              |          |            |     |                            |
 | [tifuhash_64](doc/tifuhash_64)                |        35.60 |  1679.52 |1212.75 (15)| 276 |                            |
-| [chaskey](doc/chaskey)                        |       678.19 |   167.21 | 510.03 (9) |1609 |                            |
+| [chaskey](doc/chaskey)                        |       735.85 |   168.05 | 336.07 (4) |1609 |                            |
 | [SipHash](doc/SipHash)                        |       958.78 |   141.84 | 278.15 (3) |1071 |                            |
 | [HalfSipHash](doc/HalfSipHash)                |       741.59 |   122.25 | 256.22 (20)| 700 | zeroes                     |
 | [GoodOAAT](doc/GoodOAAT)                      |      1052.90 |    70.80 | 208.00 (3) | 237 |                            |

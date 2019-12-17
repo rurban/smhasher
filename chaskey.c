@@ -56,7 +56,7 @@ void subkeys(uint32_t k1[4], uint32_t k2[4], const uint32_t k[4]) {
   TIMESTWO(k2,k1);
 }
 
-void chaskey(uint8_t *tag, uint32_t taglen, const uint8_t *m, const uint32_t mlen,
+void chaskey(uint32_t *tag, uint32_t taglen, const uint8_t *m, const uint32_t mlen,
              const uint32_t k[4], const uint32_t k1[4], const uint32_t k2[4])
 {
   const uint32_t *M = (uint32_t*) m;
@@ -76,6 +76,15 @@ void chaskey(uint8_t *tag, uint32_t taglen, const uint8_t *m, const uint32_t mle
   v[1] = k[1];
   v[2] = k[2];
   v[3] = k[3];
+  /* rurban: added seeding support */
+  if (taglen >= 16)
+    v[3] ^= tag[3];
+  if (taglen >= 12)
+    v[2] ^= tag[2];
+  if (taglen >= 8)
+    v[1] ^= tag[1];
+  if (taglen >= 4)
+    v[0] ^= tag[0];
 
   if (mlen != 0) {
     for ( ; M != end; M += 4 ) {
@@ -154,16 +163,16 @@ chaskey_init()
 }
 
 void
-chaskey_c(const void *input, int len, uint32_t seed, void *out)
+chaskey_c(const void *input, int len, uint64_t seed, void *out)
 {
 #if 0
   if (!len) {
-    *(uint32_t *) out = 0;
+    *(uint64_t *) out = 0;
     return;
   }
 #endif
-  chaskey((uint8_t *)&seed, 4, input, len, k, k1, k2);
-  *(uint32_t *) out = seed;
+  chaskey((uint32_t *)&seed, 8, input, len, k, k1, k2);
+  *(uint64_t *) out = seed;
 }
 
 #if 0
@@ -237,7 +246,7 @@ const uint32_t vectors[64][4] =
 
 int test_vectors() {
   uint8_t m[64];
-  uint8_t tag[16];
+  uint32_t tag[4];
   uint32_t k[4] = { 0x833D3433, 0x009F389F, 0x2398E64F, 0x417ACF39 };
   uint32_t k1[4], k2[4];
   int i;
