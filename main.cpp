@@ -461,7 +461,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("PASS\n\n"); fflush(NULL); // if not it does exit(1)
   }
 
-  if (g_testAll) {
+  if (g_testAll || g_testSpeed || g_testHashmap) {
     printf("--- Testing %s \"%s\" %s\n\n", info->name, info->desc, quality_str[info->quality]);
   } else {
     fprintf(stderr, "--- Testing %s \"%s\" %s\n\n", info->name, info->desc, quality_str[info->quality]);
