@@ -507,9 +507,9 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     const struct { pfHash h; double cycles; } speeds[] =
     {{ multiply_shift,    50.50 },
      { pair_multiply_shift,31.71},
-     { md5_32,           668.69 },
+     { md5_32,           670.99 },
      { md5_128,          730.30 },
-     { sha1_32a,        1514.25 },
+     { sha1_32a,        1385.80 },
      { sha1_160,        1470.55 },
      { sha2_224,        1354.81 },
      { sha2_224_64,     1360.10 },
