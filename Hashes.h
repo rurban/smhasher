@@ -912,6 +912,50 @@ inline void farsh256_test ( const void * key, int len, unsigned seed, void * out
   farsh_n(key,len,0,8,seed,out);
 }
 
+extern "C" {
+#include "blake3/blake3_impl.h"
+// The C API, serially
+  inline void blake3c_test ( const void * key, int len, unsigned seed, void * out )
+  {
+    blake3_hasher hasher;
+    blake3_hasher_init (&hasher);
+    // mix-in seed. key0 is not enough to pass MomentChi2. but even mixing all does not help
+    //for (int i = 0; i < 8; i++)
+    //  hasher.key[i] ^= (uint32_t)seed;
+    hasher.key[0] ^= (uint32_t)seed;
+    blake3_hasher_update (&hasher, (uint8_t*)key, (size_t)len);
+    blake3_hasher_finalize (&hasher, (uint8_t*)out, BLAKE3_OUT_LEN);
+  }
+}
+
+#ifdef HAVE_BLAKE3
+// The Rust API, parallized
+typedef struct rust_array {
+  char *ptr;
+  size_t len;
+} rs_arr;
+extern "C" rs_arr *blake3_hash (const rs_arr *input);
+
+inline void blake3_test ( const void * key, int len, unsigned seed, void * out )
+{
+  rs_arr input;
+  rs_arr *result;
+  input.ptr = (char*)key;
+  input.len = (size_t)len;
+  result = blake3_hash (&input);
+  memcpy (out, result->ptr, 32);
+}
+inline void blake3_64 ( const void * key, int len, unsigned seed, void * out )
+{
+  rs_arr input;
+  rs_arr *result;
+  input.ptr = (char*)key;
+  input.len = (size_t)len;
+  result = blake3_hash (&input);
+  *(uint64_t *)out = *(uint64_t *)result->ptr;
+}
+#endif
+
 //64 objsize: a50-f69: 1305
 //32 objsize: 1680-1abc: 1084
 #include "PMP_Multilinear_test.h"

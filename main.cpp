@@ -127,6 +127,11 @@ HashInfo g_hashes[] =
   { rmd128,              128, 0xFF576977, "rmd128",       "RIPEMD-128", GOOD },
   { rmd160,              160, 0x30B37AC6, "rmd160",       "RIPEMD-160", GOOD },
   { rmd256,              256, 0xEB16FAD7, "rmd256",       "RIPEMD-256", GOOD },
+  { blake3c_test,        256, 0x170AB674, "blake3_c",     "BLAKE3 c",   GOOD },
+#if defined(HAVE_BLAKE3)
+  { blake3_test,         256, 0x00000000, "blake3",       "BLAKE3 Rust", GOOD },
+  { blake3_64,            64, 0x00000000, "blake3_64",    "BLAKE3 Rust, low 64 bits", GOOD },
+#endif
   { blake2s128_test,     128, 0xC0EF86D1, "blake2s-128",  "blake2s-128", GOOD },
   { blake2s160_test,     160, 0xE56D3359, "blake2s-160",  "blake2s-160", GOOD },
   { blake2s224_test,     224, 0x1C56E1A2, "blake2s-224",  "blake2s-224", GOOD },

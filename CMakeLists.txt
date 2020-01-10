@@ -62,6 +62,10 @@ IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
    STRING(COMPARE EQUAL "pclmulqdq" "${CLMUL_THERE}" CLMUL_TRUE)
    STRING(REGEX REPLACE "^.* (sha_ni) .*$" "\\1" SHA_THERE ${CPUINFO})
    STRING(COMPARE EQUAL "sha_ni" "${SHA_THERE}" SHA_TRUE)
+   STRING(REGEX REPLACE "^.* (avx2) .*$" "\\1" AVX2_THERE ${CPUINFO})
+   STRING(COMPARE EQUAL "avx2" "${AVX2_THERE}" AVX2_TRUE)
+   STRING(REGEX REPLACE "^.* (avx512) .*$" "\\1" AVX512_THERE ${CPUINFO})
+   STRING(COMPARE EQUAL "avx512" "${AVX512_THERE}" AVX512_TRUE)
 ELSEIF(CMAKE_SYSTEM_NAME MATCHES "Darwin")
    EXEC_PROGRAM("/usr/sbin/sysctl -n machdep.cpu.features" OUTPUT_VARIABLE
       CPUINFO)
@@ -79,6 +83,10 @@ ELSEIF(CMAKE_SYSTEM_NAME MATCHES "Darwin")
    STRING(COMPARE EQUAL "SHA" "${SHA_THERE}" SHA_TRUE)
    STRING(REGEX REPLACE "^.*(PCLMUL).*$" "\\1" CLMUL_THERE ${CPUINFO})
    STRING(COMPARE EQUAL "PCLMUL" "${CLMUL_THERE}" CLMUL_TRUE)
+   STRING(REGEX REPLACE "^.* (AVX2) .*$" "\\1" AVX2_THERE ${CPUINFO})
+   STRING(COMPARE EQUAL "AVX2" "${AVX2_THERE}" AVX2_TRUE)
+   STRING(REGEX REPLACE "^.* (AVX512) .*$" "\\1" AVX512_THERE ${CPUINFO})
+   STRING(COMPARE EQUAL "AVX512" "${AVX512_THERE}" AVX512_TRUE)
 ELSEIF(CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
    EXEC_PROGRAM("grep Features /var/run/dmesg.boot" OUTPUT_VARIABLE
       CPUINFO)
@@ -96,6 +104,10 @@ ELSEIF(CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
    STRING(COMPARE EQUAL "PCLMULQDQ" "${CLMUL_THERE}" CLMUL_TRUE)
    STRING(REGEX REPLACE "^.*(SHA).*$" "\\1" SHA_THERE ${CPUINFO}) # SHA1,SHA2 actually
    STRING(COMPARE EQUAL "SHA" "${SHA_THERE}" SHA_TRUE)
+   STRING(REGEX REPLACE "^.* (AVX2) .*$" "\\1" AVX2_THERE ${CPUINFO})
+   STRING(COMPARE EQUAL "AVX2" "${AVX2_THERE}" AVX2_TRUE)
+   STRING(REGEX REPLACE "^.* (AVX512) .*$" "\\1" AVX512_THERE ${CPUINFO})
+   STRING(COMPARE EQUAL "AVX512" "${AVX512_THERE}" AVX512_TRUE)
 ELSEIF(CMAKE_SYSTEM_NAME MATCHES "Windows")
   set(_vendor_id)
   set(_cpu_family)
@@ -125,6 +137,7 @@ ELSEIF(CMAKE_SYSTEM_NAME MATCHES "Windows")
       set(AES_TRUE TRUE)
       set(CLMUL_TRUE TRUE)
       if(_cpu_family GREATER_EQUAL 23) # zen (ryzen,epyc,...) -march=znver1
+        set(AVX2_TRUE TRUE)
         set(SHA_TRUE TRUE)
       endif()
     endif()
@@ -211,6 +224,18 @@ ELSE (SHA_TRUE)
   set(SHA_FOUND false CACHE BOOL "SHA-NI not available")
   message(WARNING "SHA-NI not available")
 ENDIF (SHA_TRUE)
+IF (AVX2_TRUE)
+  set(AVX2_FOUND true CACHE BOOL "AVX2 available")
+ELSE (AVX2_TRUE)
+  set(AVX2_FOUND false CACHE BOOL "AVX2 not available")
+  message(WARNING "AVX2 not available")
+ENDIF (AVX2_TRUE)
+IF (AVX512_TRUE)
+  set(AVX512_FOUND true CACHE BOOL "AVX512 available")
+ELSE (AVX512_TRUE)
+  set(AVX512_FOUND false CACHE BOOL "AVX512 not available")
+  message(WARNING "AVX512 not available")
+ENDIF (AVX512_TRUE)
 
 IF(HAVE_INT64_T)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_INT64")
@@ -305,6 +330,35 @@ if (HIGHWAY)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_HIGHWAYHASH")
   endif()
 endif()
+
+if (SSE4_2_FOUND AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
+  # Rust staticlib (PR #9) WIP
+  find_library(BLAKE3 blake3)
+  #if (BLAKE3)
+  #  set(BLAKE3_LIB ${BLAKE3})
+  #  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_BLAKE3")
+  #endif()
+  set(BLAKE3_SRC
+      blake3/blake3.c
+      blake3/blake3_dispatch.c
+      blake3/blake3_portable.c)
+    if(SSE4_2_FOUND)
+      set(BLAKE3_SRC ${BLAKE3_SRC} blake3/blake3_sse41.c)
+      set_source_files_properties(blake3/blake3_sse41.c PROPERTIES COMPILE_FLAGS
+        "-DBLAKE3_USE_SSE41")
+    endif()
+    if(AVX2_FOUND)
+      set(BLAKE3_SRC ${BLAKE3_SRC} blake3/blake3_avx2.c)
+      set_source_files_properties(blake3/blake3_avx2.c PROPERTIES COMPILE_FLAGS
+        "-DBLAKE3_USE_SSE41 -DBLAKE3_USE_AVX2")
+    endif()
+    if(AVX512_FOUND)
+      set(BLAKE3_SRC ${BLAKE3_SRC} blake3/blake3_avx512.c)
+      set_source_files_properties(blake3/blake3_avx512.c PROPERTIES COMPILE_FLAGS
+        "-DBLAKE3_USE_SSE41 -DBLAKE3_USE_AVX2 -DBLAKE3_USE_AVX512")
+    endif()
+endif()
+
 #IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/BeagleHashes_test.c")
 #    set(BEAGLE_SRC BeagleHashes_test.c)
 #    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_BEAGLE_HASHES")
@@ -382,6 +436,7 @@ add_library(
   PMP_Multilinear_test.cpp
   vmac.cpp
   rijndael-alg-fst.c
+  ${BLAKE3_SRC}
 )
 
 add_executable(
@@ -393,6 +448,7 @@ target_link_libraries(
   SMHasher
   SMHasherSupport
   ${HIGHWAY_LIB}
+  ${BLAKE3_LIB}
   ${CMAKE_THREAD_LIBS_INIT}
   )
 

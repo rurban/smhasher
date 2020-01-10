@@ -26,6 +26,7 @@ SMhasher
 | [sha1ni_32](doc/sha1ni_32)                    |      2019.94 |   136.82 | 589.46 (1) | 989 | machine-specific |
 | [sha2ni-256](doc/sha2ni-256)                  |      1906.77 |   145.47 | 603.08 (22)|4241 | insecure,sanity, Permutation, Zeroes, machine-specific |
 | [sha2ni-256_64](doc/sha2ni-256_64)            |      1910.34 |   146.06 | 595.16 (6) |4241 | machine-specific |
+| [blake3_c](doc/blake3_c)                      |      1233.40 |   360.68 | 524.40 (4) |     | Moment Chi2   |
 | [rmd128](doc/rmd128)                          |       332.78 |   672.35 | 903.43 (13)|     |               |
 | [rmd160](doc/rmd160)                          |       202.16 |  1045.79 |1287.74 (16)|     |               |
 | [rmd256](doc/rmd256)                          |       356.57 |   638.30 | 815.39 (16)|     |               |
