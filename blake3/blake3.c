@@ -246,7 +246,8 @@ void blake3_hasher_update(blake3_hasher *self, const void *input,
     blake3_hash_many(chunks, num_chunks, BLAKE3_CHUNK_LEN / BLAKE3_BLOCK_LEN,
               self->key, self->chunk.chunk_counter, true, self->chunk.flags,
               CHUNK_START, CHUNK_END, out);
-    for (size_t chunk_index = 0; chunk_index < num_chunks; chunk_index++) {
+    size_t chunk_index;
+    for (chunk_index = 0; chunk_index < num_chunks; chunk_index++) {
       // The chunk state is empty here, but it stores the counter of the next
       // chunk hash we need to push. Use that counter, and then move it forward.
       hasher_push_chunk_cv(self, &out[chunk_index * BLAKE3_OUT_LEN],

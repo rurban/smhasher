@@ -244,8 +244,8 @@ void blake3_hash8_avx2(const uint8_t *const *inputs, size_t blocks,
   load_counters(counter, increment_counter, &counter_low_vec,
                 &counter_high_vec);
   uint8_t block_flags = flags | flags_start;
-
-  for (size_t block = 0; block < blocks; block++) {
+  size_t block;
+  for (block = 0; block < blocks; block++) {
     if (block + 1 == blocks) {
       block_flags |= flags_end;
     }

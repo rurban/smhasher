@@ -458,7 +458,8 @@ void blake3_hash4_sse41(const uint8_t *const *inputs, size_t blocks,
                 &counter_high_vec);
   uint8_t block_flags = flags | flags_start;
 
-  for (size_t block = 0; block < blocks; block++) {
+  size_t block;
+  for (block = 0; block < blocks; block++) {
     if (block + 1 == blocks) {
       block_flags |= flags_end;
     }
