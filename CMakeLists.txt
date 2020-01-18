@@ -403,6 +403,7 @@ add_library(
   Types.cpp
   PMurHash.c
   tifuhash.cpp
+  floppsyhash.cpp
   fasthash.cpp
   xxhash.c
   metrohash/metrohash64.cpp
