@@ -127,11 +127,11 @@ HashInfo g_hashes[] =
   { rmd128,              128, 0xFF576977, "rmd128",       "RIPEMD-128", GOOD },
   { rmd160,              160, 0x30B37AC6, "rmd160",       "RIPEMD-160", GOOD },
   { rmd256,              256, 0xEB16FAD7, "rmd256",       "RIPEMD-256", GOOD },
-# if defined(HAVE_BIT32)
+#if defined(HAVE_BIT32) && !defined(_WIN32)
 #  define BLAKE3_VERIF   0x5A11C03C
-# else
+#else
 #  define BLAKE3_VERIF   0x170AB674
-# endif
+#endif
   { blake3c_test,        256, BLAKE3_VERIF, "blake3_c",   "BLAKE3 c",    GOOD },
 #if defined(HAVE_BLAKE3)
   { blake3_test,         256, 0x00000000, "blake3",       "BLAKE3 Rust", GOOD },
