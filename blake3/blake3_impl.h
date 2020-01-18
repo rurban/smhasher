@@ -46,7 +46,11 @@ static const uint8_t MSG_SCHEDULE[7][16] = {
 // Count the number of 1 bits.
 INLINE uint8_t popcnt(uint64_t x) {
 #if __POPCNT__
+#  ifdef __x86_64__
   return (uint8_t)_mm_popcnt_u64(x);
+#else
+  return (uint8_t)(_mm_popcnt_u32(x >> 32) + _mm_popcnt_u32(x && 0xFFFFFFFF));
+#endif
 #else
   uint8_t count = 0;
   while (x > 0) {

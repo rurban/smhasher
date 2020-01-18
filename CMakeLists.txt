@@ -338,25 +338,25 @@ if (SSE4_2_FOUND AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
   #  set(BLAKE3_LIB ${BLAKE3})
   #  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_BLAKE3")
   #endif()
-  set(BLAKE3_SRC
-      blake3/blake3.c
-      blake3/blake3_dispatch.c
-      blake3/blake3_portable.c)
-    if(SSE4_2_FOUND)
-      set(BLAKE3_SRC ${BLAKE3_SRC} blake3/blake3_sse41.c)
-      set_source_files_properties(blake3/blake3_sse41.c PROPERTIES COMPILE_FLAGS
-        "-DBLAKE3_USE_SSE41")
-    endif()
-    if(AVX2_FOUND)
-      set(BLAKE3_SRC ${BLAKE3_SRC} blake3/blake3_avx2.c)
-      set_source_files_properties(blake3/blake3_avx2.c PROPERTIES COMPILE_FLAGS
-        "-DBLAKE3_USE_SSE41 -DBLAKE3_USE_AVX2")
-    endif()
-    if(AVX512_FOUND)
-      set(BLAKE3_SRC ${BLAKE3_SRC} blake3/blake3_avx512.c)
-      set_source_files_properties(blake3/blake3_avx512.c PROPERTIES COMPILE_FLAGS
-        "-DBLAKE3_USE_SSE41 -DBLAKE3_USE_AVX2 -DBLAKE3_USE_AVX512")
-    endif()
+endif()
+set(BLAKE3_SRC
+  blake3/blake3.c
+  blake3/blake3_dispatch.c
+  blake3/blake3_portable.c)
+if(SSE4_2_FOUND)
+  set(BLAKE3_SRC ${BLAKE3_SRC} blake3/blake3_sse41.c)
+  set_source_files_properties(blake3/blake3_sse41.c PROPERTIES COMPILE_FLAGS
+    "-DBLAKE3_USE_SSE41")
+endif()
+if(AVX2_FOUND)
+  set(BLAKE3_SRC ${BLAKE3_SRC} blake3/blake3_avx2.c)
+  set_source_files_properties(blake3/blake3_avx2.c PROPERTIES COMPILE_FLAGS
+    "-DBLAKE3_USE_SSE41 -DBLAKE3_USE_AVX2")
+endif()
+if(AVX512_FOUND)
+  set(BLAKE3_SRC ${BLAKE3_SRC} blake3/blake3_avx512.c)
+  set_source_files_properties(blake3/blake3_avx512.c PROPERTIES COMPILE_FLAGS
+    "-DBLAKE3_USE_SSE41 -DBLAKE3_USE_AVX2 -DBLAKE3_USE_AVX512")
 endif()
 
 #IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/BeagleHashes_test.c")
