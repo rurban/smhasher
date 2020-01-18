@@ -311,9 +311,9 @@ HashInfo g_hashes[] =
   { CityHashCrc128_test, 128, 0xD4389C97, "CityCrc128",  "Google CityHashCrc128WithSeed SSE4.2 (old)", GOOD },
 #endif
 
-#ifdef _MSC_VER /* truncated long to 32 */
-#  define FARM64_VERIF        0xEBC4A679
-#  define FARM128_VERIF       0x305C0D9A
+#ifdef __FreeBSD__
+#  define FARM64_VERIF        0x0
+#  define FARM128_VERIF       0x0
 #else
 #  define FARM64_VERIF        0xEBC4A679
 #  define FARM128_VERIF       0x305C0D9A
