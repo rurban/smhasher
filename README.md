@@ -221,8 +221,7 @@ Other
 * http://nohatcoder.dk/2019-05-19-1.html gives a new, useful hash level classification 1-5.
 * [http://www.strchr.com/hash_functions](http://www.strchr.com/hash_functions) lists other benchmarks and quality of most simple and fast hash functions.
 * [http://bench.cr.yp.to/primitives-hash.html](http://bench.cr.yp.to/primitives-hash.html) lists the benchmarks of all currently tested secure hashes.
-* The [Hash Function Lounge](http://www.larc.usp.br/~pbarreto/hflounge.html) overviews the known weaknesses and attacks.
-
+* http://valerieaurora.org/hash.html Lifetimes of cryptographic hash functions
 
 SECURITY
 --------
