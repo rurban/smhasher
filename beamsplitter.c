@@ -614,8 +614,8 @@ const sbox_t S[4] = {
 
 // State mix function 128 bit -> 128 bit
 static inline
-void mix(uint64_t *s64 /* 2*64 bit*/, const sbox_t box1, const sbox_t box2) {
-  uint8_t q[16]; // 128 bit
+void mix(uint64_t *s64, const sbox_t box1, const sbox_t box2) {
+  uint8_t q[16];               // 128 bit
   uint64_t *t = (uint64_t*)q;
   uint8_t *s8 = (uint8_t*)s64; // 128 bit
   int counter = 0;
@@ -633,24 +633,27 @@ void mix(uint64_t *s64 /* 2*64 bit*/, const sbox_t box1, const sbox_t box2) {
 }
 
 static inline
-void round_fn(uint64_t *state64, uint64_t *m64, int l64) {
-  for (int i = 0; i < l64; i++) {
-    state64[i & 3] ^= m64[i];
-    if (!(i & 1) && i != 0)
+void round_fn(uint64_t *state64, const uint64_t *m64, const int len) {
+  uint32_t *state32 = (uint32_t *)state64;
+  uint32_t *m32 = (uint32_t *)m64;
+  for (int i = 0; i < len / 4; i++) {
+    state32[i % 4] ^= m32[i];
+    if ((i & 3) == 0 && i != 0)
       mix (state64, S[0], S[1]);
   }
   mix (state64, S[2], S[3]);
 }
 
 uint64_t beamsplitter(const uint8_t *key, const int len, const uint64_t seed) {
-  uint64_t seed64[2] = {seed, seed};
-  uint64_t *key64 = (uint64_t *)key;
+  const uint64_t seed64[2] = {seed, seed};
+  const uint64_t *key64 = (uint64_t *)key;
   uint64_t state64[2] = {0L, 0L};
+#ifdef HAVE_ASAN // or valgrind
   uint64_t stack[1024 / 8];
-  int len64;
   int rest = len % 8;
   if (rest)
     {
+      int len64;
       /* safe 0 padding (very unfortunate to copy all) */
       rest = 8 - rest;
       len64 = (len / 8) + 1;
@@ -661,17 +664,16 @@ uint64_t beamsplitter(const uint8_t *key, const int len, const uint64_t seed) {
       memset (&((uint8_t*)key64)[len & 0xfffffff0], 0, 8);
       memcpy (key64, key, len);
     }
-  else
-    {
-      len64 = len / 8;
-    }
+#endif
 
-  round_fn (state64, seed64, 2);
-  round_fn (state64, key64, len64);
-  round_fn (state64, seed64, 2);
-  round_fn (state64, key64, len64);
+  round_fn (state64, seed64, 16);
+  round_fn (state64, key64, len);
+  round_fn (state64, seed64, 16);
+  round_fn (state64, key64, len);
 
+#ifdef HAVE_ASAN // or valgrind
   if (rest && len >= 1024)
     free (key64);
+#endif
   return *(uint64_t*)state64;
 }
