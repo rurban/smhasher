@@ -49,6 +49,7 @@ SMhasher
 | [crc64_hw](doc/crc64_hw)                      |      8387.01 |    29.96 | 161.44 (13)| 652 | insecure, 100% bias, collisions, distrib, machine-specific (x64 SSE4.2) |
 | [crc32_pclmul](doc/crc32_pclmul)              |   1932125.24 |     6.50 |   -        | 481 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2+PCLMUL) |
 | [fibonacci](doc/fibonacci)                    |      9462.17 |    33.52 | 774.87 (14)|1692 | zeros, fails all tests       |
+| [beamsplitter](doc/beamsplitter)              |       362.24 |   336.19 | 790.83 (193) |   | fails all tests              |
 | [FNV1a](doc/FNV1a)                            |       780.53 |    69.65 | 197.06 (20)| 204 | zeros, fails all tests       |
 | [FNV1A_Totenschiff](doc/FNV1A_Totenschiff)    |      6235.86 |    36.56 | 214.61 (18)| 270 | zeros, fails all tests       |
 | [FNV1A_Pippip_Yurii](doc/FNV1A_Pippip_Yurii)  |      6238.08 |    37.22 | 218.06 (25)| 147 | sanity, fails all tests      |
