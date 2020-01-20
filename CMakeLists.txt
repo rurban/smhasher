@@ -422,7 +422,7 @@ add_library(
   tifuhash.cpp
   floppsyhash.cpp
   fasthash.cpp
-  beamsplitter.c
+  beamsplitter.cpp
   xxhash.c
   metrohash/metrohash64.cpp
   metrohash/metrohash128.cpp

@@ -49,7 +49,6 @@ SMhasher
 | [crc64_hw](doc/crc64_hw)                      |      8387.01 |    29.96 | 161.44 (13)| 652 | insecure, 100% bias, collisions, distrib, machine-specific (x64 SSE4.2) |
 | [crc32_pclmul](doc/crc32_pclmul)              |   1932125.24 |     6.50 |   -        | 481 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2+PCLMUL) |
 | [fibonacci](doc/fibonacci)                    |      9462.17 |    33.52 | 774.87 (14)|1692 | zeros, fails all tests       |
-| [beamsplitter](doc/beamsplitter)              |       335.38 |   345.06 |1655.82 (210)|    | fails all tests              |
 | [FNV1a](doc/FNV1a)                            |       780.53 |    69.65 | 197.06 (20)| 204 | zeros, fails all tests       |
 | [FNV1A_Totenschiff](doc/FNV1A_Totenschiff)    |      6235.86 |    36.56 | 214.61 (18)| 270 | zeros, fails all tests       |
 | [FNV1A_Pippip_Yurii](doc/FNV1A_Pippip_Yurii)  |      6238.08 |    37.22 | 218.06 (25)| 147 | sanity, fails all tests      |
@@ -72,6 +71,7 @@ SMhasher
 | [jodyhash64](doc/jodyhash64)                  |      2765.84 |    40.89 | 222.41 (20)| 118 | bias, collisions, distr, LongNeighbors |
 | [lookup3](doc/lookup3)                        |      1702.13 |    48.25 | 243.90 (19)| 341 | 28% bias, collisions, 30% distr  |
 | [superfast](doc/superfast)                    |      1899.70 |    54.19 | 240.49 (19)| 210 | 91% bias, 5273.01x collisions, 37% distr, BIC |
+| [beamsplitter](doc/beamsplitter)              |      3362.94 |   303.01 | 819.59 (4) |     | fails most tests  |
 | [MurmurOAAT](doc/MurmurOAAT)                  |       437.03 |   117.00 | 236.62 (19)|  47 | collisions, 99.998% distr., BIC, LongNeighbors |
 | [Crap8](doc/Crap8)                            |      3060.17 |    35.25 | 242.59 (20)| 342 | 2.42% bias, collisions, 2% distrib |
 | [Murmur2](doc/Murmur2)                        |      3032.69 |    41.97 | 233.68 (19)| 358 | 1.7% bias, 81x coll, 1.7% distrib, BIC |

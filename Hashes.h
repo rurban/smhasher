@@ -961,10 +961,4 @@ inline void blake3_64 ( const void * key, int len, unsigned seed, void * out )
 //32 objsize: 1680-1abc: 1084
 #include "PMP_Multilinear_test.h"
 
-extern "C" {
 #include "beamsplitter.h"
-  inline void beamsplitter_test ( const void * key, int len, unsigned seed, void * out )
-  {
-    *(uint64_t *)out = beamsplitter ((const uint8_t *)key, (const int)len, (const uint64_t)seed);
-  }
-}

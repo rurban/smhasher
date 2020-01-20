@@ -189,7 +189,6 @@ HashInfo g_hashes[] =
   { MicroOAAT_test,       32, 0x16F1BA97, "MicroOAAT",   "Small non-multiplicative OAAT (by funny-falcon)", POOR },
   { farsh32_test,         32, 0xBCDE332C, "farsh32",     "FARSH 32bit", POOR }, // insecure
   { farsh64_test,         64, 0xDE2FDAEE, "farsh64",     "FARSH 64bit", POOR }, // insecure
-  { beamsplitter_test,    64, 0x7C7EE195, "beamsplitter", "A hash made only with S-boxes", POOR },
   //{ farsh128_test,     128, 0x82B6CBEC, "farsh128",    "FARSH 128bit", POOR },
   //{ farsh256_test,     256, 0xFEBEA0BC, "farsh256",    "FARSH 256bit", POOR },
   { jodyhash32_test,      32, 0xFB47D60D, "jodyhash32",  "jodyhash, 32-bit (v5)", POOR },
@@ -198,6 +197,7 @@ HashInfo g_hashes[] =
 #endif
   { lookup3_test,         32, 0x3D83917A, "lookup3",     "Bob Jenkins' lookup3", POOR },
   { SuperFastHash_test,   32, 0xC4CB7C07, "superfast",   "Paul Hsieh's SuperFastHash", POOR },
+  { beamsplitter_64,      64, 0x044AF818, "beamsplitter", "A hash made only with S-boxes", POOR },
   { MurmurOAAT_test,      32, 0x5363BD98, "MurmurOAAT",  "Murmur one-at-a-time", POOR },
   { Crap8_test,           32, 0x743E97A1, "Crap8",       "Crap8", POOR },
   { xxHash32_test,        32, 0xBA88B743, "xxHash32",    "xxHash, 32-bit for x64", POOR },
