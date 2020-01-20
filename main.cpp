@@ -505,7 +505,8 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
     for(int i = 1; i < 32; i++)
     {
-      sum += TinySpeedTest(hashfunc<hashtype>(info->hash),sizeof(hashtype),i,info->verification,true);
+      volatile int j = i;
+      sum += TinySpeedTest(hashfunc<hashtype>(info->hash),sizeof(hashtype),j,info->verification,true);
     }
     g_speed = sum = sum / 31.0;
     printf("Average                                    %6.3f cycles/hash\n",sum);
