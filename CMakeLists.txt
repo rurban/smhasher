@@ -159,6 +159,16 @@ elseif((CMAKE_C_COMPILER_ID STREQUAL AppleClang)
   endif()
 endif()
 
+# AddressSanitize
+set(CMAKE_C_FLAGS_ASAN
+    "-fsanitize=address -fno-optimize-sibling-calls -fsanitize-address-use-after-scope -fno-omit-frame-pointer -g -O1 -DHAVE_ASAN"
+    CACHE STRING "Flags used by the C compiler during AddressSanitizer builds."
+    FORCE)
+set(CMAKE_CXX_FLAGS_ASAN
+    "-fsanitize=address -fno-optimize-sibling-calls -fsanitize-address-use-after-scope -fno-omit-frame-pointer -g -O1 -DHAVE_ASAN"
+    CACHE STRING "Flags used by the C++ compiler during AddressSanitizer builds."
+    FORCE)
+
 if (CMAKE_COMPILER_IS_GNUCC
     OR (CMAKE_C_COMPILER_ID STREQUAL AppleClang)
     OR (CMAKE_C_COMPILER_ID STREQUAL Clang)
@@ -359,6 +369,13 @@ if(AVX512_FOUND)
     "-DBLAKE3_USE_SSE41 -DBLAKE3_USE_AVX2 -DBLAKE3_USE_AVX512")
 endif()
 
+if (NOT (CMAKE_BUILD_TYPE STREQUAL "asan"))
+  set(PMPML_SRC
+    PMP_Multilinear.cpp
+    PMP_Multilinear_64.cpp
+    PMP_Multilinear_test.cpp
+    )
+endif()
 #IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/BeagleHashes_test.c")
 #    set(BEAGLE_SRC BeagleHashes_test.c)
 #    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_BEAGLE_HASHES")
@@ -433,9 +450,7 @@ add_library(
   sha2/sha512_224.c
   sha2/sha512_256.c
   sha3.c
-  PMP_Multilinear.cpp
-  PMP_Multilinear_64.cpp
-  PMP_Multilinear_test.cpp
+  ${PMPML_SRC}
   vmac.cpp
   rijndael-alg-fst.c
   ${BLAKE3_SRC}
