@@ -367,23 +367,13 @@ HashInfo g_hashes[] =
   { MeowHash32_test,       32, MEOW32_VERIF, "MeowHash32low",  "Meow hash lower 32bit (requires x64 AES-NI)", POOR },
 #endif
 #ifdef HAVE_INT64
-#ifdef WYHASH_EVIL_FAST
-# if defined(_MSC_VER) && defined(HAVE_BIT32)
-#  define WYHASH_VERIF    0x0
-#  define WYHASH32L_VERIF 0x0
-# else
-#  define WYHASH_VERIF    0x2EF5FBDE
-#  define WYHASH32L_VERIF 0x59835713
+# define WYHASH_VERIF     0x025E5797
+# define WYHASH32L_VERIF  0x86A66572
+# ifdef DEBUG
+  { wysha,                 32, 0xD09A85B3, "wysha",          "wyhash v4 test", GOOD },
 # endif
-#else
-# define WYHASH_VERIF     0x2A65E847
-# define WYHASH32L_VERIF  0x552FA8A2
-#endif
-#ifdef DEBUG
-  { wysha,                 32, 0xD09A85B3, "wysha",          "wyhash v3 test", GOOD },
-#endif
-  { wyhash_test,           64, WYHASH_VERIF, "wyhash",          "wyhash v3 (portable, 64-bit, little-endian)", GOOD },
-  { wyhash32low,           32, WYHASH32L_VERIF,"wyhash32low",   "wyhash v3 - lower 32bit", GOOD }
+  { wyhash_test,           64, WYHASH_VERIF, "wyhash",          "wyhash v4 (64-bit, little-endian)", GOOD },
+  { wyhash32low,           32, WYHASH32L_VERIF,"wyhash32low",   "wyhash v4 - lower 32bit", GOOD }
 #else
   { NULL }
 #endif

@@ -71,7 +71,7 @@ SMhasher
 | [jodyhash64](doc/jodyhash64)                  |      2765.84 |    40.89 | 222.41 (20)| 118 | bias, collisions, distr, LongNeighbors |
 | [lookup3](doc/lookup3)                        |      1702.13 |    48.25 | 243.90 (19)| 341 | 28% bias, collisions, 30% distr  |
 | [superfast](doc/superfast)                    |      1899.70 |    54.19 | 240.49 (19)| 210 | 91% bias, 5273.01x collisions, 37% distr, BIC |
-| [beamsplitter](doc/beamsplitter)              |      3362.94 |   303.01 | 819.59 (4) |     | fails most tests  |
+| [beamsplitter](doc/beamsplitter)              |      2029.92 |   321.51 | 504.07 (16)|     | fails most tests  |
 | [MurmurOAAT](doc/MurmurOAAT)                  |       437.03 |   117.00 | 236.62 (19)|  47 | collisions, 99.998% distr., BIC, LongNeighbors |
 | [Crap8](doc/Crap8)                            |      3060.17 |    35.25 | 242.59 (20)| 342 | 2.42% bias, collisions, 2% distrib |
 | [Murmur2](doc/Murmur2)                        |      3032.69 |    41.97 | 233.68 (19)| 358 | 1.7% bias, 81x coll, 1.7% distrib, BIC |
@@ -153,8 +153,8 @@ SMhasher
 | [t1ha0_aes_avx2](doc/t1ha0_aes_avx2)          |     22345.33 |    44.38 | 556.47 (89)| 792 | LongNeighbors, machine-specific (x64 AVX2)   |
 | [MeowHash](doc/MeowHash)                      |     36695.65 |    58.09 | 233.81 (3) |1764 | Sparse low32, machine-specific (x64 AES-NI)  |
 | [MeowHash32low](doc/MeowHash32low)            |     17247.34 |    87.32 | 245.98 (3) |1764 | Sparse, machine-specific (x64 AES-NI)        |
-| [wyhash](doc/wyhash)                          |      9377.14 |    29.14 | 168.06 (3) |1373 |                            |
-| [wyhash32low](doc/wyhash32low)                |      9281.60 |    27.54 | 184.27 (2) |1373 |                            |
+| [wyhash](doc/wyhash)                          |      9120.47 |    36.15 | 203.22 (16)| 938 |                            |
+| [wyhash32low](doc/wyhash32low)                |      9132.24 |    33.93 | 218.35 (16)| 922 |                            |
 
 The [sortable table variant](http://rurban.github.io/smhasher/doc/table.html)
 
