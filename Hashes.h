@@ -27,6 +27,7 @@
 
 // objsize: 0-0x113 = 276
 #include "tifuhash.h"
+// objsize: 5f0-85f = 623
 #include "floppsyhash.h"
 
 #include "vmac.h"
