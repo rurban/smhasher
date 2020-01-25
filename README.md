@@ -153,8 +153,8 @@ SMhasher
 | [t1ha0_aes_avx2](doc/t1ha0_aes_avx2)          |     22345.33 |    44.38 | 556.47 (89)| 792 | LongNeighbors, machine-specific (x64 AVX2)   |
 | [MeowHash](doc/MeowHash)                      |     36695.65 |    58.09 | 233.81 (3) |1764 | Sparse low32, machine-specific (x64 AES-NI)  |
 | [MeowHash32low](doc/MeowHash32low)            |     17247.34 |    87.32 | 245.98 (3) |1764 | Sparse, machine-specific (x64 AES-NI)        |
-| [wyhash](doc/wyhash)                          |      9120.47 |    36.15 | 203.22 (16)| 938 |                            |
-| [wyhash32low](doc/wyhash32low)                |      9132.24 |    33.93 | 218.35 (16)| 922 |                            |
+| [wyhash](doc/wyhash)                          |     12248.17 |    32.94 | 178.14 (4) | 938 |                            |
+| [wyhash32low](doc/wyhash32low)                |     12041.57 |    32.93 | 182.88 (2) | 922 |                            |
 
 The [sortable table variant](http://rurban.github.io/smhasher/doc/table.html)
 

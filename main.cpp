@@ -367,8 +367,8 @@ HashInfo g_hashes[] =
   { MeowHash32_test,       32, MEOW32_VERIF, "MeowHash32low",  "Meow hash lower 32bit (requires x64 AES-NI)", POOR },
 #endif
 #ifdef HAVE_INT64
-# define WYHASH_VERIF     0x025E5797
-# define WYHASH32L_VERIF  0x86A66572
+# define WYHASH_VERIF     0x894B14D7
+# define WYHASH32L_VERIF  0xA2D41047
 # ifdef DEBUG
   { wysha,                 32, 0xD09A85B3, "wysha",          "wyhash v4 test", GOOD },
 # endif
