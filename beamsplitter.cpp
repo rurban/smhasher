@@ -100,14 +100,17 @@ const int STATE = 32;
       uint32_t *seed32Arr = (uint32_t *)seedbuf;
       const uint8_t *seed8Arr = (uint8_t *)seedbuf;
 
-      const uint8_t buf[STATE] = {255};
+      const uint8_t buf[STATE] = {0};
       uint8_t *state8 = (uint8_t *)buf;
       uint32_t *state32 = (uint32_t *)buf;
       uint64_t *state = (uint64_t *)buf;
 
+      // the cali number from the Matrix (1999)
+      seed32Arr[0] = 0xc5550690;
       seed32Arr[0] -= seed;
       seed32Arr[1] = ~(1 - seed);
 
+      // nothing up my sleeve
       state[0] = 0x123456789abcdef0;
       state[1] = 0x0fedcba987654321;
       state[2] = 0xaccadacca80081e5;
@@ -120,8 +123,8 @@ const int STATE = 32;
       round( key64Arr, key8Arr, len, state, state8 );
       round( seed64Arr, seed8Arr, 8, state, state8 );
       round( seed64Arr, seed8Arr, 8, state, state8 );
-      round( state, state8, STATE, state, state8 );
-      round( state, state8, STATE, state, state8 );
+      //round( state, state8, STATE, state, state8 );
+      //round( state, state8, STATE, state, state8 );
       round( state, state8, STATE, state, state8 );
 
 
