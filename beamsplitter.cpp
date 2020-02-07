@@ -110,20 +110,21 @@ const int STATE = 32;
 
       state[0] = 0x123456789abcdef0;
       state[1] = 0x0fedcba987654321;
+      state[2] = 0xaccadacca80081e5;
+      state[3] = 0xf00baaf00f00baaa;
 
+      round( key64Arr, key8Arr, len, state, state8 );
+      round( key64Arr, key8Arr, len, state, state8 );
+      round( key64Arr, key8Arr, len, state, state8 );
+      round( key64Arr, key8Arr, len, state, state8 );
       round( key64Arr, key8Arr, len, state, state8 );
       round( seed64Arr, seed8Arr, 8, state, state8 );
-      round( state, state8, STATE, state, state8 );
-
       round( seed64Arr, seed8Arr, 8, state, state8 );
-      round( key64Arr, key8Arr, len, state, state8 );
+      round( state, state8, STATE, state, state8 );
+      round( state, state8, STATE, state, state8 );
       round( state, state8, STATE, state, state8 );
 
-      //round( key64Arr, key8Arr, len, state, state8 );
-      round( key64Arr, key8Arr, len, state, state8 );
 
-      round( key64Arr, key8Arr, len, state, state8 );
-      //round( state, state8, STATE, state, state8 );
 
       /*
       //printf("state = %#018" PRIx64 " %#018" PRIx64 " %#018" PRIx64 " %#018" PRIx64 "\n",
@@ -137,8 +138,8 @@ const int STATE = 32;
       uint64_t *h = (uint64_t *)output;
 
       // The new combination step
-      h[0] = state[0];
-      h[1] = state[1];
+      h[0] = state[2];
+      h[1] = state[3];
 
       h[0] += h[1];
 
