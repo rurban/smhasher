@@ -14,7 +14,7 @@
 
 #endif // !defined(_MSC_VER)
 
-const int STATE = 16;
+const int STATE = 32;
 
   //--------
   // State mix function
@@ -55,24 +55,36 @@ const int STATE = 16;
             uint64_t * state64, uint8_t * state8 )
     {
       int index = 0;
+      int sindex = 0;
 
-      for( int Len = len >> 3; index < Len; index++ ) {
-        state64[index&1] += rot(m64[index] + index + 1, state64[index&1] +index +1);
-        if ( index &1 == 1 ) {
+      for( int Len = len >> 3; index < Len; index++) {
+        state64[sindex] += rot(m64[index] + index + 1, state64[sindex] +index +1);
+        if ( sindex == 1 ) {
           mix(state64, T);
+        } else if ( sindex == 3 ) {
+          mix(state64+2, T);
+          sindex = -1;
         }
+        sindex++;
       }
 
       mix(state64, T);
 
-      for( index <<= 3; index < len; index++ ) {
-        state8[index&15] += rot8(m8[index] + index + 1, state8[index&15] + index+1);
-        mix(state64, T);
+      index <<= 3;
+      sindex = index&31;
+      for( ; index < len; index++) {
+        state8[sindex] += rot8(m8[index] + index + 1, state8[sindex] + index+1);
+        // state64+[0,1,2]
+        mix(state64+(index%3), T);
+        if ( sindex >= 31 ) {
+          sindex = -1;
+        }
+        sindex++;
       }
 
       mix(state64, T);
-      mix(state64, T);
-      mix(state64, T);
+      mix(state64+1, T);
+      mix(state64+2, T);
     }
 
   //---------
@@ -132,4 +144,3 @@ const int STATE = 16;
 
       ((uint64_t *)out)[0] = h[0];
     }
-
