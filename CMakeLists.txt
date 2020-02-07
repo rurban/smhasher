@@ -369,12 +369,15 @@ if(AVX512_FOUND)
     "-DBLAKE3_USE_SSE41 -DBLAKE3_USE_AVX2 -DBLAKE3_USE_AVX512")
 endif()
 
-if (NOT (CMAKE_BUILD_TYPE STREQUAL "asan"))
-  set(PMPML_SRC
-    PMP_Multilinear.cpp
-    PMP_Multilinear_64.cpp
-    PMP_Multilinear_test.cpp
-    )
+if (NOT ( CMAKE_BUILD_TYPE STREQUAL "Debug"))
+  # PMP breaks Debug build
+  if (NOT (CMAKE_BUILD_TYPE STREQUAL "asan"))
+    set(PMPML_SRC
+      PMP_Multilinear.cpp
+      PMP_Multilinear_64.cpp
+      PMP_Multilinear_test.cpp
+      )
+  endif()
 endif()
 #IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/BeagleHashes_test.c")
 #    set(BEAGLE_SRC BeagleHashes_test.c)
