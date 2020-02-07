@@ -19,7 +19,6 @@ uint8_t buf[STATE] = {0};
 uint8_t *state8 = (uint8_t *)buf;
 uint64_t *state = (uint64_t *)buf;
 
-
   //--------
   // State mix function
 
@@ -58,8 +57,8 @@ uint64_t *state = (uint64_t *)buf;
 
     FORCE_INLINE void round( const uint64_t * m64, const uint8_t * m8, int len )
     {
-      register int index = 0;
-      register int sindex = 0;
+      int index = 0;
+      int sindex = 0;
 
       for( int Len = len >> 3; index < Len; index++) {
         state[sindex] += rot(m64[index] + index + 1, state[sindex] +index +1);
