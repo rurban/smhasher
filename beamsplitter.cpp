@@ -58,7 +58,9 @@ const int STATE = 16;
 
       for( int Len = len >> 3; index < Len; index++ ) {
         state64[index&1] += rot(m64[index] + index + 1, state64[index&1] +index +1);
-        mix(state64, T);
+        if ( index &1 == 1 ) {
+          mix(state64, T);
+        }
       }
 
       mix(state64, T);
@@ -69,8 +71,8 @@ const int STATE = 16;
       }
 
       mix(state64, T);
-      mix(state64, T);
-      mix(state64, T);
+      //mix(state64, T);
+      //mix(state64, T);
     }
 
   //---------
