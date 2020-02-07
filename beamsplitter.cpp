@@ -88,7 +88,7 @@ const int STATE = 16;
       uint32_t *seed32Arr = (uint32_t *)seedbuf;
       const uint8_t *seed8Arr = (uint8_t *)seedbuf;
 
-      const uint8_t buf[STATE] = {0};
+      const uint8_t buf[STATE] = {255};
       uint8_t *state8 = (uint8_t *)buf;
       uint32_t *state32 = (uint32_t *)buf;
       uint64_t *state = (uint64_t *)buf;
@@ -96,16 +96,21 @@ const int STATE = 16;
       seed32Arr[0] -= seed;
       seed32Arr[1] = ~(1 - seed);
 
+      state[0] = 0x123456789abcdef0;
+      state[1] = 0x0fedcba987654321;
+
       round( key64Arr, key8Arr, len, state, state8 );
       round( seed64Arr, seed8Arr, 8, state, state8 );
       round( state, state8, STATE, state, state8 );
 
       round( key64Arr, key8Arr, len, state, state8 );
       round( seed64Arr, seed8Arr, 8, state, state8 );
-      round( key64Arr, key8Arr, len, state, state8 );
-      round( key64Arr, key8Arr, len, state, state8 );
+
       //round( key64Arr, key8Arr, len, state, state8 );
-      //round( state, state8, STATE, state, state8 );
+      //round( key64Arr, key8Arr, len, state, state8 );
+
+      round( key64Arr, key8Arr, len, state, state8 );
+      round( state, state8, STATE, state, state8 );
 
       /*
       //printf("state = %#018" PRIx64 " %#018" PRIx64 " %#018" PRIx64 " %#018" PRIx64 "\n",
