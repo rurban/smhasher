@@ -19,19 +19,24 @@ const int STATE = 16;
   //--------
   // State mix function
 
-    FORCE_INLINE void mix( uint64_t * state, int step1, int step2, const uint64_t box[1024] )
+    FORCE_INLINE uint64_t rot( uint64_t v, int n) 
     {
-      const int mask1 = (state[0] >> step1) & 1023;
+			n = n & 63U;
+			if (n)
+					v = (v >> n) | (v << (64-n));
+			return v; 
+    }
 
-      const uint64_t t = T[mask1];
-
-      state[1] ^= t;
-
-      const int mask2 = (state[1] >> step2) & 1023;
-
-      const uint64_t s = T[mask2];
-
-      state[0] ^= s;
+    FORCE_INLINE void mix( uint64_t * state, const uint64_t box[1024] )
+    {
+    	const int rv = state[1] & 63;  
+      state[0] = rot(state[0], rv);
+      const int iv = state[0] & 1023;
+      const int M = T[iv];
+      state[1] += M;
+      const uint64_t Z = state[0];
+      state[0] = state[1];
+      state[1] = Z;
     }
 
   //---------
@@ -41,16 +46,11 @@ const int STATE = 16;
             uint64_t * state64, uint8_t * state8 )
     {
       int index = 0;
-      int step = 0;
 
       for( int Len = len >> 3; index < Len; index++ ) {
         state64[index&1] += (m64[index] + index + 1);
         if ( index &1 == 1 ) {
-          mix(state64, step, step, T);
-          step += 10;
-          if ( step > 54 ) {
-            step = 0;
-          }
+          mix(state64, T);
         }
       }
 
@@ -58,7 +58,7 @@ const int STATE = 16;
         state8[index&15] += (m8[index] + index + 1);
       }
 
-      mix(state64, step, step, T);
+      mix(state64, T);
     }
 
   //---------
@@ -99,13 +99,6 @@ const int STATE = 16;
       // The new combination step
       h[0] = state[0];
       h[1] = state[1];
-      /*
-      h[2] = state[2];
-      h[3] = state[3];
-
-      h[0] = h[0] + h[3];
-      h[1] = h[1] + h[2];
-      */
 
       h[0] += h[1];
 
