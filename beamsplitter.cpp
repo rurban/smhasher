@@ -67,6 +67,7 @@ const int STATE = 16;
       }
 
       mix(state64, T);
+      mix(state64, T);
     }
 
   //---------
