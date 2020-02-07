@@ -103,7 +103,7 @@ const int STATE = 16;
       round( key64Arr, key8Arr, len, state, state8 );
       round( key64Arr, key8Arr, len, state, state8 );
       round( key64Arr, key8Arr, len, state, state8 );
-      round( key64Arr, key8Arr, len, state, state8 );
+      //round( key64Arr, key8Arr, len, state, state8 );
       //round( state, state8, STATE, state, state8 );
 
       /*
