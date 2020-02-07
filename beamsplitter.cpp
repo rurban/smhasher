@@ -57,15 +57,18 @@ const int STATE = 16;
       int index = 0;
 
       for( int Len = len >> 3; index < Len; index++ ) {
-        state64[index&1] += rot(m64[index] + index + 1, index+1);
+        state64[index&1] += rot(m64[index] + index + 1, state64[index&1] +index +1);
         mix(state64, T);
       }
+
+      mix(state64, T);
 
       for( index <<= 3; index < len; index++ ) {
-        state8[index&15] += rot8(m8[index] + index + 1, index+1);
+        state8[index&15] += rot8(m8[index] + index + 1, state8[index&15] + index+1);
         mix(state64, T);
       }
 
+      mix(state64, T);
       mix(state64, T);
       mix(state64, T);
     }
@@ -95,6 +98,21 @@ const int STATE = 16;
       round( seed64Arr, seed8Arr, 8, state, state8 );
       round( state, state8, STATE, state, state8 );
 
+      round( key64Arr, key8Arr, len, state, state8 );
+      round( seed64Arr, seed8Arr, 8, state, state8 );
+      round( state, state8, STATE, state, state8 );
+
+      round( key64Arr, key8Arr, len, state, state8 );
+      round( seed64Arr, seed8Arr, 8, state, state8 );
+      round( state, state8, STATE, state, state8 );
+
+      round( key64Arr, key8Arr, len, state, state8 );
+      round( seed64Arr, seed8Arr, 8, state, state8 );
+      round( state, state8, STATE, state, state8 );
+
+      round( key64Arr, key8Arr, len, state, state8 );
+      round( seed64Arr, seed8Arr, 8, state, state8 );
+      round( state, state8, STATE, state, state8 );
       /*
       //printf("state = %#018" PRIx64 " %#018" PRIx64 " %#018" PRIx64 " %#018" PRIx64 "\n",
       //  state[0], state[1], state[2], state[3] );
