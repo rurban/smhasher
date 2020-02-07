@@ -27,16 +27,26 @@ const int STATE = 16;
 			return v; 
     }
 
+    FORCE_INLINE uint64_t rot8( uint8_t v, int n) 
+    {
+			n = n & 7U;
+			if (n)
+					v = (v >> n) | (v << (8-n));
+			return v; 
+    }
+
     FORCE_INLINE void mix( uint64_t * state, const uint64_t box[1024] )
     {
-    	const int rv = state[1] & 63;  
-      state[0] = rot(state[0], rv);
       const int iv = state[0] & 1023;
       const int M = T[iv];
       state[1] += M;
-      const uint64_t Z = state[0];
-      state[0] = state[1];
-      state[1] = Z;
+      state[0] += state[1];
+
+      state[0] ^= state[1];
+      state[1] ^= state[0];
+      state[0] ^= state[1];
+
+      state[1] = rot(state[1], state[0]);
     }
 
   //---------
@@ -48,16 +58,19 @@ const int STATE = 16;
       int index = 0;
 
       for( int Len = len >> 3; index < Len; index++ ) {
-        state64[index&1] += (m64[index] + index + 1);
+        state64[index&1] += rot(m64[index] + index + 1, index+1);
         if ( index &1 == 1 ) {
+          mix(state64, T);
           mix(state64, T);
         }
       }
 
       for( index <<= 3; index < len; index++ ) {
-        state8[index&15] += (m8[index] + index + 1);
+        state8[index&15] += rot8(m8[index] + index + 1, index+1);
       }
 
+      mix(state64, T);
+      mix(state64, T);
       mix(state64, T);
     }
 
@@ -84,14 +97,15 @@ const int STATE = 16;
 
       round( seed64Arr, seed8Arr, 8, state, state8 );
       round( key64Arr, key8Arr, len, state, state8 );
+      round( state, state8, STATE, state, state8 );
 
       /*
       //printf("state = %#018" PRIx64 " %#018" PRIx64 " %#018" PRIx64 " %#018" PRIx64 "\n",
       //  state[0], state[1], state[2], state[3] );
       */
 
-      printf("state = %#018" PRIx64 " %#018" PRIx64 "\n",
-        state[0], state[1] );
+      //printf("state = %#018" PRIx64 " %#018" PRIx64 "\n",
+      //  state[0], state[1] );
 
       const uint8_t output[STATE] = {0};
       uint64_t *h = (uint64_t *)output;
