@@ -16,6 +16,24 @@
 
 const int STATE = 16;
 
+  //--------
+  // State mix function
+
+    FORCE_INLINE void mix( uint64_t * state, int step1, int step2, const uint64_t box[1024] )
+    {
+      const int mask1 = (state[0] >> step1) & 1023;
+
+      const uint64_t t = T[mask1];
+
+      state[1] ^= t;
+
+      const int mask2 = (state[1] >> step2) & 1023;
+
+      const uint64_t s = T[mask2];
+
+      state[0] ^= s;
+    }
+
   //---------
   // Hash round function 
 
@@ -23,18 +41,24 @@ const int STATE = 16;
             uint64_t * state64, uint8_t * state8 )
     {
       int index = 0;
+      int step = 0;
 
       for( int Len = len >> 3; index < Len; index++ ) {
         state64[index&1] += (m64[index] + index + 1);
+        if ( index &1 == 1 ) {
+          mix(state64, step, step, T);
+          step += 10;
+          if ( step > 54 ) {
+            step = 0;
+          }
+        }
       }
 
       for( index <<= 3; index < len; index++ ) {
         state8[index&15] += (m8[index] + index + 1);
       }
 
-      /** we got to use 64-bit sbox. in other words, 8-bit -> 64 bit sbox. **/
-      /** otherwise it will never be faster than ~ 1Gb/second **/
-      /** we can't use byte ops, have to use 64 bit ops **/
+      mix(state64, step, step, T);
     }
 
   //---------
@@ -66,8 +90,8 @@ const int STATE = 16;
       //  state[0], state[1], state[2], state[3] );
       */
 
-      //printf("state = %#018" PRIx64 " %#018" PRIx64 "\n",
-      //  state[0], state[1] );
+      printf("state = %#018" PRIx64 " %#018" PRIx64 "\n",
+        state[0], state[1] );
 
       const uint8_t output[STATE] = {0};
       uint64_t *h = (uint64_t *)output;
