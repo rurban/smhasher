@@ -15,6 +15,10 @@
 #endif // !defined(_MSC_VER)
 
 const int STATE = 32;
+uint8_t buf[STATE] = {0};
+uint8_t *state8 = (uint8_t *)buf;
+uint64_t *state = (uint64_t *)buf;
+
 
   //--------
   // State mix function
@@ -35,65 +39,56 @@ const int STATE = 32;
 			return v; 
     }
 
-    FORCE_INLINE void mix( uint64_t * state, const uint64_t box[1024] )
+    FORCE_INLINE void mix(const int A)
     {
-      register uint64_t t = 0;
-      register int iv = state[0] & 1023;
-      register uint64_t M = T[iv];
-      state[1] += M + state[0];
+      const int B = A+1;
+      const int iv = state[A] & 1023;
+      const int M = T[iv];
+      state[B] += M + state[A];
 
-      /*
-      state[0] ^= state[1];
-      state[1] ^= state[0];
-      state[0] ^= state[1];
-      */
-      t = state[1];
-      state[1] = state[0];
-      state[0] = t;
+      state[A] ^= state[B];
+      state[B] ^= state[A];
+      state[A] ^= state[B];
 
-      state[1] = rot(state[1], state[0]);
+      state[B] = rot(state[B], state[A]);
     }
 
   //---------
   // Hash round function 
 
-    FORCE_INLINE void round( const uint64_t * m64, const uint8_t * m8, int len, 
-            uint64_t * state64, uint8_t * state8 )
+    FORCE_INLINE void round( const uint64_t * m64, const uint8_t * m8, int len )
     {
       register int index = 0;
       register int sindex = 0;
 
       for( int Len = len >> 3; index < Len; index++) {
-        state64[sindex] += rot(m64[index] + index + 1, state64[sindex] /*+index +1*/);
-        /**
+        state[sindex] += rot(m64[index] + index + 1, state[sindex] +index +1);
         if ( sindex == 1 ) {
-          //mix(state64, T);
-        } else 
-        **/
-        sindex++;
-        if ( sindex > 3 ) {
-          mix(state64+(index%3), T);
-          sindex = 0;
+          mix(0);
+        } else if ( sindex == 3 ) {
+          mix(2);
+          sindex = -1;
         }
+        sindex++;
       }
 
-      mix(state64, T);
+      mix(0);
 
       index <<= 3;
       sindex = index&31;
       for( ; index < len; index++) {
-        state8[sindex] += rot8(m8[index] + index + 1, state8[sindex] /*+ index+1*/);
-        // state64+[0,1,2]
-        mix(state64+(index%3), T);
-        sindex++;
-        if ( sindex > 31 ) {
-          sindex = 0;
+        state8[sindex] += rot8(m8[index] + index + 1, state8[sindex] + index+1);
+        // state+[0,1,2]
+        mix(index%3);
+        if ( sindex >= 31 ) {
+          sindex = -1;
         }
+        sindex++;
       }
 
-      mix(state64, T);
-      mix(state64+1, T);
-      mix(state64+2, T);
+      mix(0);
+      mix(1);
+      mix(2);
     }
 
   //---------
@@ -105,13 +100,9 @@ const int STATE = 32;
       const uint64_t *key64Arr = (uint64_t *)key;
 
       const uint8_t seedbuf[8] = {0};
-      uint32_t *seed32Arr = (uint32_t *)seedbuf;
-      const uint64_t *seed64Arr = (uint64_t *)seedbuf;
       const uint8_t *seed8Arr = (uint8_t *)seedbuf;
-
-      const uint8_t buf[STATE] = {0};
-      uint8_t *state8 = (uint8_t *)buf;
-      register uint64_t *state = (uint64_t *)buf;
+      const uint64_t *seed64Arr = (uint64_t *)seedbuf;
+      uint32_t *seed32Arr = (uint32_t *)seedbuf;
 
       // the cali number from the Matrix (1999)
       seed32Arr[0] = 0xc5550690;
@@ -124,18 +115,14 @@ const int STATE = 32;
       state[2] = 0xaccadacca80081e5;
       state[3] = 0xf00baaf00f00baaa;
 
-      round( key64Arr, key8Arr, len, state, state8 );
-      round( key64Arr, key8Arr, len, state, state8 );
-      round( key64Arr, key8Arr, len, state, state8 );
-      round( key64Arr, key8Arr, len, state, state8 );
-      //round( key64Arr, key8Arr, len, state, state8 );
-      round( seed64Arr, seed8Arr, 8, state, state8 );
-      round( seed64Arr, seed8Arr, 8, state, state8 );
-      //round( state, state8, STATE, state, state8 );
-      //round( state, state8, STATE, state, state8 );
-      round( state, state8, STATE, state, state8 );
-
-
+      round( key64Arr, key8Arr, len );
+      round( key64Arr, key8Arr, len );
+      round( key64Arr, key8Arr, len );
+      round( key64Arr, key8Arr, len );
+      round( key64Arr, key8Arr, len );
+      round( seed64Arr, seed8Arr, 8 );
+      round( seed64Arr, seed8Arr, 8 );
+      round( state, state8, STATE   );
 
       /*
       //printf("state = %#018" PRIx64 " %#018" PRIx64 " %#018" PRIx64 " %#018" PRIx64 "\n",
