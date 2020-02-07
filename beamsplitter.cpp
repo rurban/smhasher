@@ -99,20 +99,11 @@ const int STATE = 16;
       round( state, state8, STATE, state, state8 );
 
       round( key64Arr, key8Arr, len, state, state8 );
-      round( seed64Arr, seed8Arr, 8, state, state8 );
-      round( state, state8, STATE, state, state8 );
-
       round( key64Arr, key8Arr, len, state, state8 );
-      round( seed64Arr, seed8Arr, 8, state, state8 );
-      round( state, state8, STATE, state, state8 );
-
       round( key64Arr, key8Arr, len, state, state8 );
-      round( seed64Arr, seed8Arr, 8, state, state8 );
-      round( state, state8, STATE, state, state8 );
-
       round( key64Arr, key8Arr, len, state, state8 );
-      round( seed64Arr, seed8Arr, 8, state, state8 );
-      round( state, state8, STATE, state, state8 );
+      //round( state, state8, STATE, state, state8 );
+
       /*
       //printf("state = %#018" PRIx64 " %#018" PRIx64 " %#018" PRIx64 " %#018" PRIx64 "\n",
       //  state[0], state[1], state[2], state[3] );
