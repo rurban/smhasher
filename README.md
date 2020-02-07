@@ -71,7 +71,6 @@ SMhasher
 | [jodyhash64](doc/jodyhash64)                  |      2765.84 |    40.89 | 222.41 (20)| 118 | bias, collisions, distr, LongNeighbors |
 | [lookup3](doc/lookup3)                        |      1702.13 |    48.25 | 243.90 (19)| 341 | 28% bias, collisions, 30% distr  |
 | [superfast](doc/superfast)                    |      1899.70 |    54.19 | 240.49 (19)| 210 | 91% bias, 5273.01x collisions, 37% distr, BIC |
-| [beamsplitter](doc/beamsplitter)              |      2029.92 |   321.51 | 504.07 (16)|     | fails most tests  |
 | [MurmurOAAT](doc/MurmurOAAT)                  |       437.03 |   117.00 | 236.62 (19)|  47 | collisions, 99.998% distr., BIC, LongNeighbors |
 | [Crap8](doc/Crap8)                            |      3060.17 |    35.25 | 242.59 (20)| 342 | 2.42% bias, collisions, 2% distrib |
 | [Murmur2](doc/Murmur2)                        |      3032.69 |    41.97 | 233.68 (19)| 358 | 1.7% bias, 81x coll, 1.7% distrib, BIC |
@@ -109,6 +108,7 @@ SMhasher
 | [chaskey](doc/chaskey)                        |       735.85 |   168.05 | 336.07 (4) |1609 |                            |
 | [SipHash](doc/SipHash)                        |       958.78 |   141.84 | 278.15 (3) |1071 |                            |
 | [HalfSipHash](doc/HalfSipHash)                |       741.59 |   122.25 | 256.22 (20)| 700 | zeroes                     |
+| [beamsplitter](doc/beamsplitter)              |       931.24 |   646.13 |1108.82 (309)|    |                            |
 | [GoodOAAT](doc/GoodOAAT)                      |      1052.90 |    70.80 | 208.00 (3) | 237 |                            |
 | [SipHash13](doc/SipHash13)                    |      1762.44 |   104.61 | 304.84 (17)| 778 | 0.9% bias                  |
 | [TSip](doc/TSip)                              |      3346.72 |    60.02 | 203.82 (5) | 519 | !msvc                      |
