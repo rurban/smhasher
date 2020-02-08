@@ -115,12 +115,13 @@ uint64_t *state = (uint64_t *)buf;
       state[2] = 0xaccadacca80081e5;
       state[3] = 0xf00baaf00f00baaa;
 
-      //round( key64Arr, key8Arr, len );
+      round( key64Arr, key8Arr, len );
       round( key64Arr, key8Arr, len );
       round( key64Arr, key8Arr, len );
       round( seed64Arr, seed8Arr, 8 );
-      round( state, state8, STATE   );
+      //round( state, state8, STATE   );
       round( seed64Arr, seed8Arr, 8 );
+      round( key64Arr, key8Arr, len );
       round( key64Arr, key8Arr, len );
       round( key64Arr, key8Arr, len );
 
