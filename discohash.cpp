@@ -14,11 +14,10 @@
 
 #endif // !defined(_MSC_VER)
 
-const int STATE = 32;
-uint8_t buf[STATE] = {0};
-uint64_t MASK = 0xffffffffffffff;
-uint8_t *state8 = (uint8_t *)buf;
-uint64_t *state = (uint64_t *)buf;
+const int STATE = 16;
+uint8_t disco_buf[STATE] = {0};
+uint8_t *ds8 = (uint8_t *)disco_buf;
+uint64_t *ds = (uint64_t *)disco_buf;
 
   //--------
   // State mix function
@@ -39,18 +38,18 @@ uint64_t *state = (uint64_t *)buf;
       return v; 
     }
 
-    FORCE_INLINE void mix(const int A)
+    FORCE_INLINE void mix()
     {
-      const int B = A+1;
-      const int iv = state[A] & 1023;
-      const uint64_t M = T[iv];
-      state[B] += M + state[A];
+      ds[0] += ds[1];
+      ds[0] = rot(ds[0], ds[1]);
+      ds[1] ^= ds[0] + 0xf012ac43;
+      ds[1] *= ds[0] + 0xfac728289;
+      ds[1] = rot(ds[1], 37);
 
-      state[A] ^= state[B];
-      state[B] ^= state[A];
-      state[A] ^= state[B];
-
-      state[B] = rot(state[B], state[A]);
+      ds[1] += ds[0];
+      ds[1] = rot(ds[1], ds[0]);
+      ds[0] ^= ds[1] + 0xaf9217faccceb1;
+      ds[0] = rot(ds[1], 19);
     }
 
   //---------
@@ -62,33 +61,28 @@ uint64_t *state = (uint64_t *)buf;
       int sindex = 0;
 
       for( int Len = len >> 3; index < Len; index++) {
-        state[sindex] += rot(m64[index] + index + 1, state[sindex] +index +1);
+        ds[sindex] += rot(m64[index] + index + 1, ds[sindex] +index +1);
         if ( sindex == 1 ) {
-          mix(0);
-        } else if ( sindex == 3 ) {
-          mix(2);
+          mix();
           sindex = -1;
         }
         sindex++;
       }
 
-      mix(0);
+      mix();
 
       index <<= 3;
-      sindex = index&31;
+      sindex = index&15;
       for( ; index < len; index++) {
-        state8[sindex] += rot8(m8[index] + index + 1, state8[sindex] + index+1);
-        // state+[0,1,2]
-        mix(index%3);
-        if ( sindex >= 31 ) {
+        ds8[sindex] += rot8(m8[index] + index + 1, ds8[sindex] + index+1);
+        mix();
+        if ( sindex >= 15 ) {
           sindex = -1;
         }
         sindex++;
       }
 
-      mix(0);
-      mix(1);
-      mix(2);
+      mix();
     }
 
   //---------
@@ -110,37 +104,24 @@ uint64_t *state = (uint64_t *)buf;
       seed32Arr[1] = ~(1 - seed);
 
       // nothing up my sleeve
-      state[0] = 0x123456789abcdef0;
-      state[1] = 0x0fedcba987654321;
-      state[2] = 0xaccadacca80081e5;
-      state[3] = 0xf00baaf00f00baaa;
+      ds[0] = 0x123456789abcdef0;
+      ds[1] = 0x0fedcba987654321;
+      ds[2] = 0xaccadacca80081e5;
+      ds[3] = 0xf00baaf00f00baaa;
 
       round( key64Arr, key8Arr, len );
-      round( key64Arr, key8Arr, len );
-      round( key64Arr, key8Arr, len );
       round( seed64Arr, seed8Arr, 8 );
-      //round( state, state8, STATE   );
-      round( seed64Arr, seed8Arr, 8 );
-      round( key64Arr, key8Arr, len );
-      round( key64Arr, key8Arr, len );
-      round( key64Arr, key8Arr, len );
+      //round( ds, ds8, STATE   );
 
       /*
-      //printf("state = %#018" PRIx64 " %#018" PRIx64 " %#018" PRIx64 " %#018" PRIx64 "\n",
-      //  state[0], state[1], state[2], state[3] );
+      //printf("ds = %#018" PRIx64 " %#018" PRIx64 "\n",
+      //  ds[0], ds[1]  );
       */
-
-      //printf("state = %#018" PRIx64 " %#018" PRIx64 "\n",
-      //  state[0], state[1] );
 
       const uint8_t output[STATE] = {0};
       uint64_t *h = (uint64_t *)output;
 
-      // The new combination step
-      h[0] = state[2];
-      h[1] = state[3];
-
-      h[0] += h[1];
+      h[0] = ds[1];
 
       ((uint64_t *)out)[0] = h[0];
     }
