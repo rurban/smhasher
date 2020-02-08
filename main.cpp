@@ -197,7 +197,8 @@ HashInfo g_hashes[] =
 #endif
   { lookup3_test,         32, 0x3D83917A, "lookup3",     "Bob Jenkins' lookup3", POOR },
   { SuperFastHash_test,   32, 0xC4CB7C07, "superfast",   "Paul Hsieh's SuperFastHash", POOR },
-  { beamsplitter_64,      64, 0x1BDF358B, "beamsplitter", "A possibly universal hash made with a 10x64 s-box.", GOOD },
+  { beamsplitter_64,      64, 0x1BDF358B, "beamsplitter","A possibly universal hash made with a 10x64 s-box.", GOOD },
+  { discohash_64,         64, 0xF00DACCA, "discohash",   "Spin the discoball with tha ARX hash", GOOD },
   { MurmurOAAT_test,      32, 0x5363BD98, "MurmurOAAT",  "Murmur one-at-a-time", POOR },
   { Crap8_test,           32, 0x743E97A1, "Crap8",       "Crap8", POOR },
   { xxHash32_test,        32, 0xBA88B743, "xxHash32",    "xxHash, 32-bit for x64", POOR },

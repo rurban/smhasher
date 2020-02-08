@@ -963,3 +963,4 @@ inline void blake3_64 ( const void * key, int len, unsigned seed, void * out )
 #endif
 
 #include "beamsplitter.h"
+#include "discohash.h"

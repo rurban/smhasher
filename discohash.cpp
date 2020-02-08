@@ -1,6 +1,6 @@
 #include <cstdio>
 #include <inttypes.h>
-#include "beamsplitter.h"
+#include "discohash.h"
 
 #if defined(_MSC_VER)
 
@@ -16,6 +16,7 @@
 
 const int STATE = 32;
 uint8_t buf[STATE] = {0};
+uint64_t MASK = 0xffffffffffffff;
 uint8_t *state8 = (uint8_t *)buf;
 uint64_t *state = (uint64_t *)buf;
 
@@ -93,7 +94,7 @@ uint64_t *state = (uint64_t *)buf;
   //---------
   // main hash function 
 
-    void beamsplitter_64 ( const void * key, int len, unsigned seed, void * out )
+    void discohash_64 ( const void * key, int len, unsigned seed, void * out )
     {
       const uint8_t *key8Arr = (uint8_t *)key;
       const uint64_t *key64Arr = (uint64_t *)key;
