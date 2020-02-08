@@ -30,7 +30,7 @@ uint64_t *state = (uint64_t *)buf;
       return v; 
     }
 
-    FORCE_INLINE uint64_t rot8( uint8_t v, int n) 
+    FORCE_INLINE uint8_t rot8( uint8_t v, int n) 
     {
       n = n & 7U;
       if (n)
@@ -42,7 +42,7 @@ uint64_t *state = (uint64_t *)buf;
     {
       const int B = A+1;
       const int iv = state[A] & 1023;
-      const int M = T[iv];
+      const uint64_t M = T[iv];
       state[B] += M + state[A];
 
       state[A] ^= state[B];
