@@ -15,8 +15,13 @@
 #endif // !defined(_MSC_VER)
 
 const int STATE = 16;
+const int STATE64 = STATE >> 3;
+const int STATEM = STATE-1;
+const int STATE64M = STATE64-1;
 uint8_t disco_buf[STATE] = {0};
+uint64_t P = 0xFFFFFFFFFFFFFFFF - 58;
 uint8_t *ds8 = (uint8_t *)disco_buf;
+uint32_t *ds32 = (uint32_t *)disco_buf;
 uint64_t *ds = (uint64_t *)disco_buf;
 
   //--------
@@ -30,6 +35,14 @@ uint64_t *ds = (uint64_t *)disco_buf;
       return v; 
     }
 
+    FORCE_INLINE uint64_t rot32( uint64_t v, int n) 
+    {
+      n = n & 31U;
+      if (n)
+          v = (v >> n) | (v << (64-n));
+      return v; 
+    }
+
     FORCE_INLINE uint8_t rot8( uint8_t v, int n) 
     {
       n = n & 7U;
@@ -38,18 +51,29 @@ uint64_t *ds = (uint64_t *)disco_buf;
       return v; 
     }
 
+    FORCE_INLINE void mixA()
+    {
+      int i = ds32[0] & 1;
+      int j = ds32[3] & 3;
+
+      ds[0] = rot(ds[0], ds[i]);
+      ds[i] *= (P % (ds32[j] + 1) + 1);
+      ds[1] += ds32[j];
+    }
+
     FORCE_INLINE void mix()
     {
-      ds[0] += ds[1];
-      ds[0] = rot(ds[0], ds[1]);
-      ds[1] ^= ds[0] + 0xf012ac43;
-      ds[1] *= ds[0] + 0xfac728289;
-      ds[1] = rot(ds[1], 37);
+      ds[0] *= P;
+      ds[0] = rot(ds[0], 23);
+      ds[0] *= 13166748625691186689U;
+      ds[0] = rot(ds[0], 23);
+      
+      ds[1] ^= ds[0];
 
-      ds[1] += ds[0];
-      ds[1] = rot(ds[1], ds[0]);
-      ds[0] ^= ds[1] + 0xaf9217faccceb1;
-      ds[0] = rot(ds[1], 19);
+      ds[1] *= P;
+      ds[1] = rot(ds[1], 23);
+      ds[1] *= 13166748625691186689U;
+      ds[1] = rot(ds[1], 23);
     }
 
   //---------
@@ -59,10 +83,13 @@ uint64_t *ds = (uint64_t *)disco_buf;
     {
       int index = 0;
       int sindex = 0;
+      uint64_t counter = 0xfaccadaccad09997;
+      uint8_t counter8 = 137;
 
       for( int Len = len >> 3; index < Len; index++) {
-        ds[sindex] += rot(m64[index] + index + 1, ds[sindex] +index +1);
-        if ( sindex == 1 ) {
+        ds[sindex] += m64[index] + index + counter;
+        counter += ~m64[index];
+        if ( sindex >= STATE64M ) {
           mix();
           sindex = -1;
         }
@@ -72,11 +99,12 @@ uint64_t *ds = (uint64_t *)disco_buf;
       mix();
 
       index <<= 3;
-      sindex = index&15;
+      sindex = index&(STATEM);
       for( ; index < len; index++) {
-        ds8[sindex] += rot8(m8[index] + index + 1, ds8[sindex] + index+1);
+        ds8[sindex] += m8[index] + index + counter;
+        counter += ~m8[sindex];
         mix();
-        if ( sindex >= 15 ) {
+        if ( sindex >= STATEM ) {
           sindex = -1;
         }
         sindex++;
@@ -114,9 +142,9 @@ uint64_t *ds = (uint64_t *)disco_buf;
       //round( ds, ds8, STATE   );
 
       /*
-      //printf("ds = %#018" PRIx64 " %#018" PRIx64 "\n",
-      //  ds[0], ds[1]  );
-      */
+      printf("ds = %#018" PRIx64 " %#018" PRIx64 "\n",
+        ds[0], ds[1]  );
+        */
 
       const uint8_t output[STATE] = {0};
       uint64_t *h = (uint64_t *)output;
