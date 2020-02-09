@@ -214,6 +214,8 @@ const uint64_t T[1024] = {
   0x7f25bae3c4fea8af,0xecf8ed9dac1367b8,0x1a49274e39668f4e,0xca4a0ae881c7dc39
 };
 
+// commenting these out as they seem to slow build of main significantly
+/**
 const uint64_t T_0[1024] = {
   0xe7731c3c26ba9ef2,0xfbbbe922d8044ba7,0x4db2d1485b9def69,0x3b4f191cc85dcfc2,0xdd34fe9c73b77bae,
   0x94311b3d14b54f08,0xdfa65d0a6c5a3b7b,0x303aae607b2e6485,0x2e61cde90a50f648,0x8f02456b8d6598f5,
@@ -837,6 +839,7 @@ const uint64_t T_2[1024] = {
   0xc4bccd259f92a82f,0x09b91035ff11ae2b,0x3243e4ae122af173,0x3c5751a5f90bf9ff,0x4fde1aaf539c5f02,
   0xf26e70fcbed118df,0x71e99009ff3cb155,0x1d0633e02d362088,0xff34126e2172a9ba
 };
+**/
 
 #if defined(_MSC_VER) && (_MSC_VER < 1600)
 
