@@ -130,6 +130,7 @@ uint64_t *ds = (uint64_t *)disco_buf;
       // the cali number from the Matrix (1999)
       seed32Arr[0] = 0xc5550690;
       seed32Arr[0] -= seed;
+      // if seed mod doesn't work let's try reverse order of seed/key round calls
       seed32Arr[1] = 1 - seed;
 
       // nothing up my sleeve
