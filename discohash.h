@@ -20,7 +20,7 @@ typedef unsigned __int64 uint64_t;
 
 #endif // !defined(_MSC_VER)
 
-void discohash_64          ( const void * key, int len, uint32_t seed, void * out );
+void BEBB4185_64          ( const void * key, int len, uint32_t seed, void * out );
 
 #endif // _DISCOHASH_H
 
