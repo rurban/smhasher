@@ -108,7 +108,7 @@ SMhasher
 | [chaskey](doc/chaskey)                        |       735.85 |   168.05 | 336.07 (4) |1609 |                            |
 | [SipHash](doc/SipHash)                        |       958.78 |   141.84 | 278.15 (3) |1071 |                            |
 | [HalfSipHash](doc/HalfSipHash)                |       741.59 |   122.25 | 256.22 (20)| 700 | zeroes                     |
-| [beamsplitter](doc/beamsplitter)              |       931.24 |   646.13 |1108.82 (309)|    |                            |
+| [beamsplitter](doc/beamsplitter)              |       789.22 |   682.45 |1150.33 (26)|     |                            |
 | [GoodOAAT](doc/GoodOAAT)                      |      1052.90 |    70.80 | 208.00 (3) | 237 |                            |
 | [SipHash13](doc/SipHash13)                    |      1762.44 |   104.61 | 304.84 (17)| 778 | 0.9% bias                  |
 | [TSip](doc/TSip)                              |      3346.72 |    60.02 | 203.82 (5) | 519 | !msvc                      |
