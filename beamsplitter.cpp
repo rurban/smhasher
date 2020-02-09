@@ -19,6 +19,7 @@
 
 const int STATE = 32;
 uint8_t buf[STATE] = {0};
+uint64_t MASK = 0xffffffffffffff;
 uint8_t *state8 = (uint8_t *)buf;
 uint64_t *state = (uint64_t *)buf;
 
