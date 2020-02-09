@@ -4,18 +4,19 @@
 
 #if defined(_MSC_VER)
 
-#define FORCE_INLINE	__forceinline
+#define FORCE_INLINE  __forceinline
 
 // Other compilers
 
-#else	// defined(_MSC_VER)
+#else // defined(_MSC_VER)
 
-#define	FORCE_INLINE inline __attribute__((always_inline))
+#define FORCE_INLINE inline __attribute__((always_inline))
 
 #endif // !defined(_MSC_VER)
 
 const int STATE = 32;
 uint8_t buf[STATE] = {0};
+uint64_t MASK = 0xffffffffffffff;
 uint8_t *state8 = (uint8_t *)buf;
 uint64_t *state = (uint64_t *)buf;
 
@@ -24,25 +25,25 @@ uint64_t *state = (uint64_t *)buf;
 
     FORCE_INLINE uint64_t rot( uint64_t v, int n) 
     {
-			n = n & 63U;
-			if (n)
-					v = (v >> n) | (v << (64-n));
-			return v; 
+      n = n & 63U;
+      if (n)
+          v = (v >> n) | (v << (64-n));
+      return v; 
     }
 
-    FORCE_INLINE uint64_t rot8( uint8_t v, int n) 
+    FORCE_INLINE uint8_t rot8( uint8_t v, int n) 
     {
-			n = n & 7U;
-			if (n)
-					v = (v >> n) | (v << (8-n));
-			return v; 
+      n = n & 7U;
+      if (n)
+          v = (v >> n) | (v << (8-n));
+      return v; 
     }
 
     FORCE_INLINE void mix(const int A)
     {
       const int B = A+1;
       const int iv = state[A] & 1023;
-      const int M = T[iv];
+      const uint64_t M = T[iv];
       state[B] += M + state[A];
 
       state[A] ^= state[B];
@@ -117,11 +118,12 @@ uint64_t *state = (uint64_t *)buf;
       round( key64Arr, key8Arr, len );
       round( key64Arr, key8Arr, len );
       round( key64Arr, key8Arr, len );
+      round( seed64Arr, seed8Arr, 8 );
+      //round( state, state8, STATE   );
+      round( seed64Arr, seed8Arr, 8 );
       round( key64Arr, key8Arr, len );
       round( key64Arr, key8Arr, len );
-      round( seed64Arr, seed8Arr, 8 );
-      round( seed64Arr, seed8Arr, 8 );
-      round( state, state8, STATE   );
+      round( key64Arr, key8Arr, len );
 
       /*
       //printf("state = %#018" PRIx64 " %#018" PRIx64 " %#018" PRIx64 " %#018" PRIx64 "\n",
