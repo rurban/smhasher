@@ -102,8 +102,8 @@ uint64_t *ds = (uint64_t *)disco_buf;
       index <<= 3;
       sindex = index&(STATEM);
       for( ; index < len; index++) {
-        ds8[sindex] += rot8(m8[index] + index + counter + 1, 23);
-        counter += ~m8[sindex] + 1;
+        ds8[sindex] += rot8(m8[index] + index + counter8 + 1, 23);
+        counter8 += ~m8[sindex] + 1;
         mix();
         if ( sindex >= STATEM ) {
           sindex = -1;
