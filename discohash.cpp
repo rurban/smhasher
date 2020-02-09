@@ -122,7 +122,7 @@ uint64_t *ds = (uint64_t *)disco_buf;
       const uint8_t *key8Arr = (uint8_t *)key;
       const uint64_t *key64Arr = (uint64_t *)key;
 
-      const uint8_t seedbuf[8] = {0};
+      const uint8_t seedbuf[16] = {0};
       const uint8_t *seed8Arr = (uint8_t *)seedbuf;
       const uint64_t *seed64Arr = (uint64_t *)seedbuf;
       uint32_t *seed32Arr = (uint32_t *)seedbuf;
@@ -131,7 +131,9 @@ uint64_t *ds = (uint64_t *)disco_buf;
       seed32Arr[0] = 0xc5550690;
       seed32Arr[0] -= seed;
       // if seed mod doesn't work let's try reverse order of seed/key round calls
-      seed32Arr[1] = 1 - seed;
+      seed32Arr[1] = 1 + seed;
+      seed32Arr[2] = ~(1 - seed);
+      seed32Arr[3] = (1+seed) * 0xf00dacca;
 
       // nothing up my sleeve
       ds[0] = 0x123456789abcdef0;
@@ -140,7 +142,7 @@ uint64_t *ds = (uint64_t *)disco_buf;
       ds[3] = 0xf00baaf00f00baaa;
 
       round( key64Arr, key8Arr, len );
-      round( seed64Arr, seed8Arr, 8 );
+      round( seed64Arr, seed8Arr, 16 );
       //round( ds, ds8, STATE   );
 
       /*
