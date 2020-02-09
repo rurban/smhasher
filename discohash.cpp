@@ -67,14 +67,14 @@ uint64_t *ds = (uint64_t *)disco_buf;
       ds[0] *= P;
       ds[0] = rot(ds[0], 23);
       ds[0] *= Q;
-      ds[0] = rot(ds[0], 23);
+      //ds[0] = rot(ds[0], 23);
       
       ds[1] ^= ds[0];
 
       ds[1] *= P;
       ds[1] = rot(ds[1], 23);
       ds[1] *= Q;
-      ds[1] = rot(ds[1], 23);
+      //ds[1] = rot(ds[1], 23);
     }
 
   //---------
@@ -88,8 +88,8 @@ uint64_t *ds = (uint64_t *)disco_buf;
       uint8_t counter8 = 137;
 
       for( int Len = len >> 3; index < Len; index++) {
-        ds[sindex] += m64[index] + index + counter;
-        counter += ~m64[index];
+        ds[sindex] += rot(m64[index] + index + counter + 1, 23);
+        counter += ~m64[index] + 1;
         if ( sindex >= STATE64M ) {
           mix();
           sindex = -1;
@@ -102,8 +102,8 @@ uint64_t *ds = (uint64_t *)disco_buf;
       index <<= 3;
       sindex = index&(STATEM);
       for( ; index < len; index++) {
-        ds8[sindex] += m8[index] + index + counter;
-        counter += ~m8[sindex];
+        ds8[sindex] += rot8(m8[index] + index + counter + 1, 23);
+        counter += ~m8[sindex] + 1;
         mix();
         if ( sindex >= STATEM ) {
           sindex = -1;
