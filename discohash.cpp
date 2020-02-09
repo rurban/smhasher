@@ -20,6 +20,7 @@ const int STATEM = STATE-1;
 const int STATE64M = STATE64-1;
 uint8_t disco_buf[STATE] = {0};
 uint64_t P = 0xFFFFFFFFFFFFFFFF - 58;
+uint64_t Q = 13166748625691186689U;
 uint8_t *ds8 = (uint8_t *)disco_buf;
 uint32_t *ds32 = (uint32_t *)disco_buf;
 uint64_t *ds = (uint64_t *)disco_buf;
@@ -65,14 +66,14 @@ uint64_t *ds = (uint64_t *)disco_buf;
     {
       ds[0] *= P;
       ds[0] = rot(ds[0], 23);
-      ds[0] *= 13166748625691186689U;
+      ds[0] *= Q;
       ds[0] = rot(ds[0], 23);
       
       ds[1] ^= ds[0];
 
       ds[1] *= P;
       ds[1] = rot(ds[1], 23);
-      ds[1] *= 13166748625691186689U;
+      ds[1] *= Q;
       ds[1] = rot(ds[1], 23);
     }
 
@@ -129,7 +130,7 @@ uint64_t *ds = (uint64_t *)disco_buf;
       // the cali number from the Matrix (1999)
       seed32Arr[0] = 0xc5550690;
       seed32Arr[0] -= seed;
-      seed32Arr[1] = ~(1 - seed);
+      seed32Arr[1] = 1 - seed;
 
       // nothing up my sleeve
       ds[0] = 0x123456789abcdef0;
