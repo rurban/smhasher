@@ -1,3 +1,7 @@
+// also known as BEBB4185
+// Copyright 2020 Cris Stringfellow
+// Licensed under GPL-3.0
+// https://github.com/cris691/discohash
 #include <cstdio>
 #include <inttypes.h>
 #include "discohash.h"

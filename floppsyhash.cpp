@@ -1,3 +1,6 @@
+// Copyright 2020 Cris Stringfellow
+// Licensed under GPL-3.0
+// https://github.com/dosyago/floppsy
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include "floppsyhash.h"
