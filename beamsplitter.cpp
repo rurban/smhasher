@@ -102,9 +102,9 @@ uint64_t *state = (uint64_t *)buf;
       const uint8_t *key8Arr = (uint8_t *)key;
       const uint64_t *key64Arr = (uint64_t *)key;
 
-      const uint8_t seedbuf[8] = {0};
-      const uint8_t *seed8Arr = (uint8_t *)seedbuf;
-      const uint64_t *seed64Arr = (uint64_t *)seedbuf;
+      uint8_t seedbuf[8] = {0};
+      uint8_t *seed8Arr = (uint8_t *)seedbuf;
+      uint64_t *seed64Arr = (uint64_t *)seedbuf;
       uint32_t *seed32Arr = (uint32_t *)seedbuf;
 
       // the cali number from the Matrix (1999)
@@ -136,7 +136,7 @@ uint64_t *state = (uint64_t *)buf;
       //printf("state = %#018" PRIx64 " %#018" PRIx64 "\n",
       //  state[0], state[1] );
 
-      const uint8_t output[STATE] = {0};
+      uint8_t output[STATE] = {0};
       uint64_t *h = (uint64_t *)output;
 
       // The new combination step
