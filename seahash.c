@@ -36,6 +36,7 @@ uint64_t seahash(const char *key, int len, uint64_t seed) {
   uint64_t s = seed;
   uint64_t *p;
   uint8_t pad[8] = {0};
+  const uint64_t orig_len = (uint64_t)len;
 
   a = 0x16f11fe89b0d677cULL ^ s;
   b = 0xb480a793d8e6c86cULL;
@@ -116,6 +117,6 @@ uint64_t seahash(const char *key, int len, uint64_t seed) {
   a ^= b;
   c ^= d;
   a ^= c;
-  a ^= (uint64_t)len;
+  a ^= orig_len;
   return sea_swap64(diffuse(a));
 }

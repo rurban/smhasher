@@ -112,8 +112,8 @@ SMhasher
 | [GoodOAAT](doc/GoodOAAT)                      |      1052.90 |    70.80 | 208.00 (3) | 237 |                            |
 | [SipHash13](doc/SipHash13)                    |      1762.44 |   104.61 | 304.84 (17)| 778 | 0.9% bias                  |
 | [TSip](doc/TSip)                              |      3346.72 |    60.02 | 203.82 (5) | 519 | !msvc                      |
-| [seahash](doc/seahash)                        |      4517.87 |    65.03 | 212.61 (3) | 871 | !msvc                      |
-| [seahash32low](doc/seahash32low)              |      4589.52 |    64.53 | 212.74 (3) | 871 | !msvc                      |
+| [seahash](doc/seahash)                        |      4517.87 |    65.03 | 204.84 (3) | 871 | !msvc                      |
+| [seahash32low](doc/seahash32low)              |      4589.52 |    64.53 | 242.36 (8) | 871 | !msvc                      |
 | [clhash](doc/clhash)                          |      4405.28 |    85.35 | 288.20 (14)|1809 | machine-specific (x64 SSE4.2) |
 | [HighwayHash64](doc/HighwayHash64)            |      6239.64 |    98.65 | 263.94 (4) |2546 |                            |
 | [Murmur3F](doc/Murmur3F)                      |      5076.20 |    51.66 | 222.39 (18)| 699 |                            |

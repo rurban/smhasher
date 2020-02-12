@@ -274,8 +274,8 @@ HashInfo g_hashes[] =
 #ifndef _MSC_VER
   { tsip_test,            64, 0x8E48155B, "TSip",        "Damian Gryski's Tiny SipHash variant", GOOD },
 #ifdef HAVE_INT64
-  { seahash_test,         64, 0x5449DB26, "seahash",     "seahash (64-bit, little-endian)", GOOD },
-  { seahash32low,         32, 0xFD867C5F, "seahash32low","seahash - lower 32bit", GOOD },
+  { seahash_test,         64, 0xF0374078, "seahash",     "seahash (64-bit, little-endian)", GOOD },
+  { seahash32low,         32, 0x712F0EE8, "seahash32low","seahash - lower 32bit", GOOD },
 #endif /* HAVE_INT64 */
 #endif /* !MSVC */
 #if defined(__SSE4_2__) && defined(__x86_64__)
