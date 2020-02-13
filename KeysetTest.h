@@ -65,7 +65,8 @@ typedef struct { char c[64]; } block64;
 typedef struct { char c[128]; } block128;
 
 template< typename hashtype, typename blocktype >
-bool CombinationKeyTest ( hashfunc<hashtype> hash, int maxlen, blocktype* blocks, int blockcount, bool testColl, bool testDist, bool drawDiagram )
+bool CombinationKeyTest ( hashfunc<hashtype> hash, int maxlen, blocktype* blocks,
+                          int blockcount, bool testColl, bool testDist, bool drawDiagram )
 {
   printf("Keyset 'Combination' - up to %d blocks from a set of %d - ",maxlen,blockcount);
 
@@ -85,7 +86,7 @@ bool CombinationKeyTest ( hashfunc<hashtype> hash, int maxlen, blocktype* blocks
 
   bool result = true;
 
-  result &= TestHashList(hashes,testColl,testDist,drawDiagram);
+  result &= TestHashList(hashes,drawDiagram,testColl,testDist);
 
   printf("\n");
 
@@ -139,7 +140,7 @@ bool PermutationKeyTest ( hashfunc<hashtype> hash, uint32_t * blocks, int blockc
 
   bool result = true;
 
-  result &= TestHashList<hashtype>(hashes,testColl,testDist,drawDiagram);
+  result &= TestHashList<hashtype>(hashes,drawDiagram,testColl,testDist);
 
   printf("\n");
 
@@ -193,9 +194,11 @@ void SparseKeygenRecurse ( pfHash hash, int start, int bitsleft, bool inclusive,
 //----------
 
 template < int keybits, typename hashtype >
-bool SparseKeyTest ( hashfunc<hashtype> hash, const int setbits, bool inclusive, bool testColl, bool testDist, bool drawDiagram  )
+bool SparseKeyTest ( hashfunc<hashtype> hash, const int setbits, bool inclusive,
+                     bool testColl, bool testDist, bool drawDiagram )
 {
-  printf("Keyset 'Sparse' - %d-bit keys with %s %d bits set - ",keybits, inclusive ? "up to" : "exactly", setbits);
+  printf("Keyset 'Sparse' - %d-bit keys with %s %d bits set - ",keybits,
+         inclusive ? "up to" : "exactly", setbits);
 
   typedef Blob<keybits> keytype;
 
@@ -206,11 +209,8 @@ bool SparseKeyTest ( hashfunc<hashtype> hash, const int setbits, bool inclusive,
 
   if(inclusive)
   {
-    hashtype h;
-
-    hash(&k,sizeof(keytype),0,&h);
-
-    hashes.push_back(h);
+    hashes.resize(1);
+    hash(&k,sizeof(keytype),0,&hashes[0]);
   }
 
   SparseKeygenRecurse(hash,0,setbits,inclusive,k,hashes);
@@ -219,7 +219,7 @@ bool SparseKeyTest ( hashfunc<hashtype> hash, const int setbits, bool inclusive,
 
   bool result = true;
 
-  result &= TestHashList<hashtype>(hashes,testColl,testDist,drawDiagram);
+  result &= TestHashList<hashtype>(hashes,drawDiagram,testColl,testDist);
 
   printf("\n");
 
@@ -227,44 +227,52 @@ bool SparseKeyTest ( hashfunc<hashtype> hash, const int setbits, bool inclusive,
 }
 
 //-----------------------------------------------------------------------------
-// Keyset 'Windows' - for all possible N-bit windows of a K-bit key, generate
+// Keyset 'Window' - for all possible N-bit windows of a K-bit key, generate
 // all possible keys with bits set in that window
 
 template < typename keytype, typename hashtype >
-bool WindowedKeyTest ( hashfunc<hashtype> hash, const int windowbits, bool testCollision, bool testDistribution, bool drawDiagram )
+bool WindowedKeyTest ( hashfunc<hashtype> hash, int windowbits,
+                       bool testCollision, bool testDistribution, bool drawDiagram )
 {
   const int keybits = sizeof(keytype) * 8;
-  const int keycount = 1 << windowbits;
+  // calc keycount to expect min. 0.5 collisions: EstimateNbCollisions, except for 64++bit.
+  // there limit to 2^25 = 33554432 keys
+  int keycount = 1 << windowbits;
+  while (EstimateNbCollisions(keycount, sizeof(hashtype) * 8) < 0.5 && windowbits < 25) {
+    if ((int)log2(2.0 * keycount) < 0) // overflow
+      break;
+    keycount *= 2;
+    windowbits = (int)log2(1.0 * keycount);
+    //printf (" enlarge windowbits to %d (%d keys)\n", windowbits, keycount);
+    //fflush (NULL);
+  }
 
   std::vector<hashtype> hashes;
   hashes.resize(keycount);
 
   bool result = true;
-
   int testcount = keybits;
 
-  printf("Keyset 'Windowed' - %3d-bit key, %3d-bit window - %d tests, %d keys per test\n",keybits,windowbits,testcount,keycount);
+  printf("Keyset 'Window' - %3d-bit key, %3d-bit window - %d tests, %d keys per test\n",
+         keybits,windowbits,testcount,keycount);
 
   for(int j = 0; j <= testcount; j++)
   {
     int minbit = j;
-
     keytype key;
 
     for(int i = 0; i < keycount; i++)
     {
       key = i;
       //key = key << minbit;
-
       lrot(&key,sizeof(keytype),minbit);
-
       hash(&key,sizeof(keytype),0,&hashes[i]);
     }
 
     printf("Window at %3d - ",j);
-
-    result &= TestHashList(hashes,testCollision,testDistribution,drawDiagram);
-
+    result &= TestHashList(hashes, drawDiagram, testCollision, testDistribution,
+                           /* do not test high/low bits (to not clobber the screen) */
+                           false, false);
     //printf("\n");
   }
 
@@ -312,11 +320,11 @@ bool CyclicKeyTest ( pfHash hash, int cycleLen, int cycleReps, const int keycoun
 
   bool result = true;
 
-  result &= TestHashList(hashes,true,true,drawDiagram);
+  result &= TestHashList(hashes,drawDiagram);
   printf("\n");
 
-  delete [] cycle;
   delete [] key;
+  delete [] cycle;
 
   return result;
 }
@@ -337,7 +345,7 @@ bool TwoBytesTest2 ( pfHash hash, int maxlen, bool drawDiagram )
 
   bool result = true;
 
-  result &= TestHashList(hashes,true,true,drawDiagram);
+  result &= TestHashList(hashes,drawDiagram);
   printf("\n");
 
   return result;
@@ -390,7 +398,7 @@ bool TextKeyTest ( hashfunc<hashtype> hash, const char * prefix, const char * co
 
   bool result = true;
 
-  result &= TestHashList(hashes,true,true,drawDiagram);
+  result &= TestHashList(hashes,drawDiagram);
 
   printf("\n");
 
@@ -427,7 +435,7 @@ bool ZeroKeyTest ( pfHash hash, bool drawDiagram )
 
   bool result = true;
 
-  result &= TestHashList(hashes,true,true,drawDiagram);
+  result &= TestHashList(hashes,drawDiagram);
 
   printf("\n");
 
@@ -460,7 +468,7 @@ bool SeedTest ( pfHash hash, int keycount, bool drawDiagram )
 
   bool result = true;
 
-  result &= TestHashList(hashes,true,true,drawDiagram);
+  result &= TestHashList(hashes,drawDiagram);
 
   printf("\n");
 

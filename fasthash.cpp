@@ -34,6 +34,7 @@ static inline uint64_t mix(uint64_t h) {
 	return h;
 }
 
+// objsize: 0-1fd: 509
 uint64_t fasthash64(const void *buf, size_t len, uint64_t seed)
 {
 	const uint64_t    m = 0x880355f21e6d1965ULL;
@@ -67,6 +68,7 @@ uint64_t fasthash64(const void *buf, size_t len, uint64_t seed)
 	return mix(h);
 } 
 
+// objsize: 0-236: 566
 uint32_t fasthash32(const void *buf, size_t len, uint32_t seed)
 {
 	// the following trick converts the 64-bit hashcode to Fermat

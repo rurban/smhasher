@@ -9,6 +9,8 @@
 //-----------------------------------------------------------------------------
 // This should hopefully be a thorough and uambiguous test of whether a hash
 // is correctly implemented on a given platform
+// Note that some newer hash are self-seeded (using the randomized address of the key),
+// denoted by expected = 0.
 
 bool VerificationTest ( pfHash hash, const int hashbits, uint32_t expected, bool verbose )
 {
@@ -18,40 +20,47 @@ bool VerificationTest ( pfHash hash, const int hashbits, uint32_t expected, bool
   uint8_t * hashes = new uint8_t[hashbytes * 256];
   uint8_t * final  = new uint8_t[hashbytes];
 
-  memset(key,0,256);
-  memset(hashes,0,hashbytes*256);
-  memset(final,0,hashbytes);
+  memset (key,0,256);
+  memset (hashes,0,hashbytes*256);
+  memset (final,0,hashbytes);
 
   // Hash keys of the form {0}, {0,1}, {0,1,2}... up to N=255,using 256-N as
   // the seed
   for(int i = 0; i < 256; i++)
   {
     key[i] = (uint8_t)i;
-    hash(key,i,256-i,&hashes[i*hashbytes]);
+    hash (key,i,256-i,&hashes[i*hashbytes]);
   }
 
   // Then hash the result array
-  hash(hashes,hashbytes*256,0,final);
+  hash (hashes,hashbytes*256,0,final);
 
   // The first four bytes of that hash, interpreted as a little-endian integer, is our
   // verification value
+  uint32_t verification =
+      (final[0] << 0) | (final[1] << 8) | (final[2] << 16) | (final[3] << 24);
 
-  uint32_t verification = (final[0] << 0) | (final[1] << 8) | (final[2] << 16) | (final[3] << 24);
-
-  delete [] key;
-  delete [] hashes;
   delete [] final;
+  delete [] hashes;
+  delete [] key;
 
   //----------
 
-  if(expected != verification)
-  {
-    if(verbose) printf("Verification value 0x%08X : FAIL! (Expected 0x%08x)\n",verification,expected);
-    return false;
-  }
-  else
-  {
-    if(verbose) printf("Verification value 0x%08X : PASS\n",verification);
+  if (expected != verification) {
+    if (!expected) {
+      if (verbose)
+        printf("Verification value 0x%08X ....... SKIP (self- or unseeded)\n",
+               verification);
+      return true;
+    } else {
+      if (verbose)
+        printf("Verification value 0x%08X ....... FAIL! (Expected 0x%08X)\n",
+               verification, expected);
+      return false;
+    }
+  } else {
+    if (verbose)
+      printf("Verification value 0x%08X ....... PASS\n", verification);
     return true;
   }
 }
@@ -89,7 +98,9 @@ bool SanityTest ( pfHash hash, const int hashbits )
   uint8_t * hash2 = new uint8_t[hashbytes];
 
   //----------
-
+  memset(hash1, 1, hashbytes);
+  memset(hash2, 2, hashbytes);
+  
   for(int irep = 0; irep < reps; irep++)
   {
     if(irep % (reps/10) == 0) printf(".");
@@ -116,9 +127,16 @@ bool SanityTest ( pfHash hash, const int hashbits )
           hash(key2,len,0,hash2);
 
           if(memcmp(hash1,hash2,hashbytes) == 0)
-          {
-            result = false;
-          }
+            {
+              for(int i=0; i < hashbytes; i++){
+                if (hash1[i] == hash2[i]) {
+                  printf(" %d: 0x%02X == 0x%02X ", i, hash1[i], hash2[i]);
+                  break;
+                }
+              }
+              result = false;
+              goto end_sanity;
+            }
 
           // Flip it back, hash again -> we should get the original result.
 
@@ -126,14 +144,22 @@ bool SanityTest ( pfHash hash, const int hashbits )
           hash(key2,len,0,hash2);
 
           if(memcmp(hash1,hash2,hashbytes) != 0)
-          {
-            result = false;
-          }
+            {
+              for(int i=0; i < hashbytes; i++){
+                if (hash1[i] != hash2[i]) {
+                  printf(" %d: 0x%02X != 0x%02X ", i, hash1[i], hash2[i]);
+                  break;
+                }
+              }
+              result = false;
+              goto end_sanity;
+            }
         }
       }
     }
   }
 
+ end_sanity:
   if(result == false)
   {
     printf(" FAIL  !!!!!\n");
@@ -158,6 +184,8 @@ bool SanityTest ( pfHash hash, const int hashbits )
 
 void AppendedZeroesTest ( pfHash hash, const int hashbits )
 {
+//printf("Verification value 0x%08X ....... PASS\n",verification);
+//printf("Running sanity check 1     ");
   printf("Running AppendedZeroesTest ");
 
   Rand r(173994);

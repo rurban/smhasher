@@ -34,6 +34,7 @@
 
 //-----------------------------------------------------------------------------
 
+// objsize: 0-0x166: 358
 uint32_t MurmurHash2 ( const void * key, int len, uint32_t seed )
 {
   // 'm' and 'r' are mixing constants generated offline.
@@ -92,6 +93,7 @@ uint32_t MurmurHash2 ( const void * key, int len, uint32_t seed )
 // and endian-ness issues if used across multiple platforms.
 
 // 64-bit hash for 64-bit platforms
+// objsize: 0x170-0x321: 433
 
 uint64_t MurmurHash64A ( const void * key, int len, uint64_t seed )
 {
@@ -138,6 +140,7 @@ uint64_t MurmurHash64A ( const void * key, int len, uint64_t seed )
 
 
 // 64-bit hash for 32-bit platforms
+// objsize: 0x340-0x4fc: 444
 
 uint64_t MurmurHash64B ( const void * key, int len, uint64_t seed )
 {
@@ -203,6 +206,7 @@ uint64_t MurmurHash64B ( const void * key, int len, uint64_t seed )
 
 #define mmix(h,k) { k *= m; k ^= k >> r; k *= m; h *= m; h ^= k; }
 
+// objsize: 0x500-0x697: 407
 uint32_t MurmurHash2A ( const void * key, int len, uint32_t seed )
 {
   const uint32_t m = 0x5bd1e995;

@@ -1,6 +1,12 @@
 /* We have conflicting uint128_t types in Types.h (Blob<128>) and farmhash.h */
 
 #undef FARMHASH_UINT128_T_DEFINED
+#ifdef HAVE_SSE42
+# define FARMHASH_ASSUME_SSE42
+#endif
+#ifdef HAVE_AESNI
+# define FARMHASH_ASSUME_AESNI
+#endif
 #include "farmhash.h"
 
 void FarmHash32_test ( const void * key, int len, uint32_t seed, void * out ) {

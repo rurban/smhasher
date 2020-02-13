@@ -1,10 +1,9 @@
 #include "Types.h"
-
 #include "Random.h"
 
 #include <stdio.h>
 
-uint32_t MurmurOAAT ( const void * blob, int len, uint32_t seed );
+uint32_t MurmurOAAT ( const char * blob, int len, uint32_t seed );
 
 //-----------------------------------------------------------------------------
 
@@ -29,11 +28,11 @@ uint32_t g_verify = 1;
 
 void MixVCode ( const void * blob, int len )
 {
-	g_verify = MurmurOAAT(blob,len,g_verify);
+  g_verify = MurmurOAAT((const char*)blob,len,g_verify);
 }
 
 //-----------------------------------------------------------------------------
-
+// unused
 bool isprime ( uint32_t x )
 {
   uint32_t p[] = 
@@ -62,6 +61,7 @@ bool isprime ( uint32_t x )
   return true;
 }
 
+// unused
 void GenerateMixingConstants ( void )
 {
   Rand r(8350147);

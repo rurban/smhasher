@@ -238,21 +238,6 @@ void SHA1_Final(SHA1_CTX *context, uint8_t digest[SHA1_DIGEST_SIZE]) {
 }
 
 //-----------------------------------------------------------------------------
-
-void sha1_32a(const void *key, int len, uint32_t seed, void *out) {
-  SHA1_CTX context;
-
-  uint8_t digest[20];
-
-  SHA1_Init(&context);
-  context.state[0] += seed;
-  SHA1_Update(&context, (uint8_t *)key, len);
-  SHA1_Final(&context, digest);
-
-  memcpy(out, digest, 4);
-}
-
-//-----------------------------------------------------------------------------
 // self test
 
 //#define TEST

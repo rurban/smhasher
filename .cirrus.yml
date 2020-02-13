@@ -1,0 +1,14 @@
+# Build configuration for https://cirrus-ci.com/github/rurban/smhasher
+
+freebsd_instance:
+  image_family: freebsd-12-1-snap
+
+task:
+  install_script:
+    - pkg install -y cmake git
+    - git submodule update --init
+  build_script:
+    - cmake .
+    - make VERBOSE=1
+  test_script:
+    - make test ARGS=-V

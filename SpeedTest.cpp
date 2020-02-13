@@ -1,11 +1,21 @@
 #include "SpeedTest.h"
-
 #include "Random.h"
+#include "vmac.h"
 
 #include <stdio.h>   // for printf
 #include <memory.h>  // for memset
 #include <math.h>    // for sqrt
-#include <algorithm> // for sort
+#include <algorithm> // for sort, min
+#include <string>
+
+#include <unordered_map>
+#include <parallel_hashmap/phmap.h>
+#include <functional>
+
+typedef std::unordered_map<std::string, int,
+  std::function<size_t (const std::string &key)>> std_hashmap;
+typedef phmap::flat_hash_map<std::string, int,
+  std::function<size_t (const std::string &key)>> fast_hashmap;
 
 //-----------------------------------------------------------------------------
 // We view our timing values as a series of random variables V that has been
@@ -58,6 +68,11 @@ double CalcStdv ( std::vector<double> & v, int a, int b )
   stdv = sqrt(stdv / (b-a+1));
   
   return stdv;
+}
+
+double CalcStdv ( std::vector<double> & v )
+{
+  return CalcStdv(v, 0, v.size());
 }
 
 // Return true if the largest value in v[0,len) is more than three
@@ -150,17 +165,16 @@ void FilterOutliers2 ( std::vector<double> & v )
 
 NEVER_INLINE int64_t timehash ( pfHash hash, const void * key, int len, int seed )
 {
-  volatile register int64_t begin,end;
-  
+  volatile int64_t begin, end;
   uint32_t temp[16];
-  
-  begin = rdtsc();
+
+  begin = timer_start();
   
   hash(key,len,seed,temp);
   
-  end = rdtsc();
+  end = timer_end();
   
-  return end-begin;
+  return end - begin;
 }
 
 //-----------------------------------------------------------------------------
@@ -175,7 +189,7 @@ NEVER_INLINE int64_t timehash_small ( pfHash hash, const void * key, int len, in
   uint32_t *buf = new uint32_t[(len + 3) / 4];
   memcpy(buf,key,len);
 
-  begin = rdtsc();
+  begin = timer_start();
 
   for(int i = 0; i < NUM_TRIALS; i++) {
     hash(buf,len,seed,hash_temp);
@@ -190,7 +204,7 @@ NEVER_INLINE int64_t timehash_small ( pfHash hash, const void * key, int len, in
     buf[0] ^= hash_temp[0];
   }
 
-  end = rdtsc();
+  end = timer_end();
   delete[] buf;
 
   return (int64_t)((end - begin) / (double)NUM_TRIALS);
@@ -201,12 +215,10 @@ NEVER_INLINE int64_t timehash_small ( pfHash hash, const void * key, int len, in
 double SpeedTest ( pfHash hash, uint32_t seed, const int trials, const int blocksize, const int align )
 {
   Rand r(seed);
-  
   uint8_t * buf = new uint8_t[blocksize + 512];
-
   uint64_t t1 = reinterpret_cast<uint64_t>(buf);
   
-  t1 = (t1 + 255) & BIG_CONSTANT(0xFFFFFFFFFFFFFF00);
+  t1 = (t1 + 255) & UINT64_C(0xFFFFFFFFFFFFFF00);
   t1 += align;
   
   uint8_t * block = reinterpret_cast<uint8_t*>(t1);
@@ -263,15 +275,16 @@ void BulkSpeedTest ( pfHash hash, uint32_t seed )
   for(int align = 7; align >= 0; align--)
   {
     double cycles = SpeedTest(hash,seed,trials,blocksize,align);
-    
+
     double bestbpc = double(blocksize)/cycles;
-    
+
     double bestbps = (bestbpc * 3000000000.0 / 1048576.0);
     printf("Alignment %2d - %6.3f bytes/cycle - %7.2f MiB/sec @ 3 ghz\n",align,bestbpc,bestbps);
     sumbpc += bestbpc;
   }
   sumbpc = sumbpc / 8.0;
   printf("Average      - %6.3f bytes/cycle - %7.2f MiB/sec @ 3 ghz\n",sumbpc,(sumbpc * 3000000000.0 / 1048576.0));
+  fflush(NULL);
 }
 
 //-----------------------------------------------------------------------------
@@ -286,6 +299,148 @@ double TinySpeedTest ( pfHash hash, int hashsize, int keysize, uint32_t seed, bo
   
   printf("%8.2f cycles/hash\n",cycles);
   return cycles;
+}
+
+double HashMapSpeedTest ( pfHash pfhash, const int hashbits,
+                          std::vector<std::string> words,
+                          const int trials, bool verbose )
+{
+  //using phmap::flat_node_hash_map;
+  Rand r(82762);
+  const uint32_t seed = r.rand_u32();
+  std_hashmap hashmap(words.size(), [=](const std::string &key)
+                  {
+                    // 256 needed for hasshe2, but only size_t used
+                    static char out[256] = { 0 };
+                    pfhash(key.c_str(), key.length(), seed, &out);
+                    return *(size_t*)out;
+                  });
+  fast_hashmap phashmap(words.size(), [=](const std::string &key)
+                  {
+                    static char out[256] = { 0 }; // 256 for hasshe2, but stripped to 64/32
+                    pfhash(key.c_str(), key.length(), seed, &out);
+                    return *(size_t*)out;
+                  });
+  
+  std::vector<std::string>::iterator it;
+  std::vector<double> times;
+  double t1;
+
+  printf("std::unordered_map\n");
+  printf("Init std HashMapTest:     ");
+  fflush(NULL);
+  times.reserve(trials);
+  { // hash inserts and 1% deletes
+    volatile int64_t begin, end;
+    int i = 0;
+    begin = timer_start();
+    for (it = words.begin(); it != words.end(); it++, i++) {
+      std::string line = *it;
+      hashmap[line] = 1;
+      if (i % 100 == 0)
+        hashmap.erase(line);
+    }
+    end = timer_end();
+    t1 = (double)(end - begin) / (double)words.size();
+  }
+  fflush(NULL);
+  printf("%0.3f cycles/op (%zu inserts, 1%% deletions)\n",
+         t1, words.size());
+  printf("Running std HashMapTest:  ");
+  if (t1 > 10000.) { // e.g. multiply_shift 459271.700
+    printf("SKIP");
+    return 0.;
+  }
+  fflush(NULL);
+
+  for(int itrial = 0; itrial < trials; itrial++)
+    { // hash query
+      volatile int64_t begin, end;
+      int i = 0, found = 0;
+      double t;
+      begin = timer_start();
+      for ( it = words.begin(); it != words.end(); it++, i++ )
+        {
+          std::string line = *it;
+          if (hashmap[line])
+            found++;
+        }
+      end = timer_end();
+      t = (double)(end - begin) / (double)words.size();
+      if(found > 0 && t > 0) times.push_back(t);
+    }
+  hashmap.clear();
+
+  std::sort(times.begin(),times.end());
+  FilterOutliers(times);
+  double mean = CalcMean(times);
+  double stdv = CalcStdv(times);
+  printf("%0.3f cycles/op", mean);
+  printf(" (%0.1f stdv)\n", stdv);
+
+  times.clear();
+
+  printf("\ngreg7mdp/parallel-hashmap\n");
+  printf("Init fast HashMapTest:    ");
+#ifndef NDEBUG
+  if ((pfhash == VHASH_32 || pfhash == VHASH_64) && !verbose)
+    {
+      printf("SKIP");
+      return 0.;
+    }
+#endif
+  fflush(NULL);
+  times.reserve(trials);
+  { // hash inserts and 1% deletes
+    volatile int64_t begin, end;
+    int i = 0;
+    begin = timer_start();
+    for (it = words.begin(); it != words.end(); it++, i++) {
+      std::string line = *it;
+      phashmap[line] = 1;
+      if (i % 100 == 0)
+        phashmap.erase(line);
+    }
+    end = timer_end();
+    t1 = (double)(end - begin) / (double)words.size();
+  }
+  fflush(NULL);
+  printf("%0.3f cycles/op (%zu inserts, 1%% deletions)\n",
+         t1, words.size());
+  printf("Running fast HashMapTest: ");
+  if (t1 > 10000.) { // e.g. multiply_shift 459271.700
+    printf("SKIP");
+    return 0.;
+  }
+  fflush(NULL);  
+  for(int itrial = 0; itrial < trials; itrial++)
+    { // hash query
+      volatile int64_t begin, end;
+      int i = 0, found = 0;
+      double t;
+      begin = timer_start();
+      for ( it = words.begin(); it != words.end(); it++, i++ )
+        {
+          std::string line = *it;
+          if (phashmap[line])
+            found++;
+        }
+      end = timer_end();
+      t = (double)(end - begin) / (double)words.size();
+      if(found > 0 && t > 0) times.push_back(t);
+    }
+  phashmap.clear();
+  fflush(NULL);
+
+  std::sort(times.begin(),times.end());
+  FilterOutliers(times);
+  double mean1 = CalcMean(times);
+  double stdv1 = CalcStdv(times);
+  printf("%0.3f cycles/op", mean1);
+  printf(" (%0.1f stdv) ", stdv1);
+  fflush(NULL);
+
+  return mean;
 }
 
 //-----------------------------------------------------------------------------

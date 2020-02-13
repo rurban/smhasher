@@ -7,6 +7,8 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <string>
+#include <assert.h>
 
 //-----------------------------------------------------------------------------
 // If the optimizer detects that a value in a speed test is constant or unused,
@@ -17,6 +19,16 @@
 
 void     blackhole ( uint32_t x );
 uint32_t whitehole ( void );
+
+static inline uint8_t bitrev(uint8_t b)
+{
+  static const unsigned char revbits[16] =
+    {
+     0x0, 0x8, 0x4, 0xc, 0x2, 0xa, 0x6, 0xe,
+     0x1, 0x9, 0x5, 0xd, 0x3, 0xb, 0x7, 0xf
+    };
+  return (revbits[ b & 0b1111 ] << 4) | revbits[ b >> 4 ];
+}
 
 //-----------------------------------------------------------------------------
 // We want to verify that every test produces the same result on every platform
@@ -32,8 +44,19 @@ void MixVCode ( const void * blob, int len );
 
 
 //-----------------------------------------------------------------------------
+typedef void (*pfHash)(const void *blob, const int len, const uint32_t seed,
+                       void *out);
 
-typedef void (*pfHash) ( const void * blob, const int len, const uint32_t seed, void * out );
+enum HashQuality             {  SKIP,   POOR,   GOOD };
+struct HashInfo
+{
+  pfHash hash;
+  int hashbits;
+  uint32_t verification;
+  const char * name;
+  const char * desc;
+  enum HashQuality quality;
+};
 
 struct ByteVec : public std::vector<uint8_t>
 {
@@ -78,9 +101,13 @@ public:
   inline T operator () ( const void * key, const int len, const uint32_t seed )
   {
     T result;
-
-    m_hash(key,len,seed,(uint32_t*)&result);
-
+    m_hash(key,len,seed,(unsigned*)&result);
+    return result;
+  }
+  inline T operator () ( const void * key, const int len, const uint64_t seed )
+  {
+    T result;
+    m_hash(key,len,seed,(unsigned*)&result);
     return result;
   }
 
@@ -211,8 +238,15 @@ public:
     {
       bytes[i] = 0;
     }
-
     *(int*)bytes = x;
+  }
+  Blob ( unsigned long long x )
+  {
+    *(unsigned long long*)bytes = x;
+  }
+  Blob ( unsigned long x )
+  {
+    *(unsigned long*)bytes = x;
   }
 
   Blob ( const Blob & k )
@@ -271,7 +305,7 @@ public:
 
   bool operator < ( const Blob & k ) const
   {
-    for(size_t i = 0; i < sizeof(bytes); i++)
+    for(int i = sizeof(bytes) -1; i >= 0; i--)
     {
       if(bytes[i] < k.bytes[i]) return true;
       if(bytes[i] > k.bytes[i]) return false;
@@ -316,13 +350,30 @@ public:
     {
       bytes[i] ^= k.bytes[i];
     }
-
     return *this;
   }
 
   int operator & ( int x )
   {
     return (*(int*)bytes) & x;
+  }
+  int operator | ( int x )
+  {
+    return (*(int*)bytes) | x;
+  }
+
+  Blob & operator |= ( const Blob & k )
+  {
+    for(size_t i = 0; i < sizeof(bytes); i++)
+    {
+      bytes[i] |= k.bytes[i];
+    }
+    return *this;
+  }
+  Blob & operator |= ( uint8_t k )
+  {
+    bytes[0] |= k;
+    return *this;
   }
 
   Blob & operator &= ( const Blob & k )
@@ -331,13 +382,14 @@ public:
     {
       bytes[i] &= k.bytes[i];
     }
+    return *this;
   }
 
   Blob operator << ( int c )
   {
     Blob t = *this;
 
-    lshift(&t.bytes[0],sizeof(bytes),c);
+    lshift(&t.bytes[0], sizeof(bytes), c);
 
     return t;
   }
@@ -346,22 +398,32 @@ public:
   {
     Blob t = *this;
 
-    rshift(&t.bytes[0],sizeof(bytes),c);
+    rshift(&t.bytes[0], sizeof(bytes), c);
 
     return t;
   }
 
   Blob & operator <<= ( int c )
   {
-    lshift(&bytes[0],sizeof(bytes),c);
+    lshift(&bytes[0], sizeof(bytes), c);
 
     return *this;
   }
 
   Blob & operator >>= ( int c )
   {
-    rshift(&bytes[0],sizeof(bytes),c);
+    rshift(&bytes[0], sizeof(bytes), c);
 
+    return *this;
+  }
+
+  Blob & bitreverse ( void )
+  {
+    assert (_bits % 8 == 0);
+    const int j = _bits / 8;
+    for (int i = 0; i < j; i++) {
+      bytes[j - i] = bitrev(bytes[i]);
+    }
     return *this;
   }
 
