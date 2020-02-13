@@ -250,10 +250,10 @@ HashInfo g_hashes[] =
   { t1ha1_64be_test,      64, 0x93F864DE, "t1ha1_64be",  "Fast Positive Hash (portable, aims 64-bit, big-engian)", POOR },
   { t1ha0_32le_test,      64, 0x7F7D7B29, "t1ha0_32le",  "Fast Positive Hash (portable, aims 32-bit, little-endian)", POOR },
   { t1ha0_32be_test,      64, 0xDA6A4061, "t1ha0_32be",  "Fast Positive Hash (portable, aims 32-bit, big-endian)", POOR },
-  { xxh3_test,            64, 0x5921E69E, "xxh3",        "xxHash v3, 64-bit", POOR },
-  { xxh3low_test,         32, 0xAC902311, "xxh3low",     "xxHash v3, 64-bit, low 32-bits part", POOR },
-  { xxh128_test,         128, 0x80E5D1DF, "xxh128",      "xxHash v3, 128-bit", POOR },
-  { xxh128low_test,       64, 0xB1BB6A50, "xxh128low",   "xxHash v3, 128-bit, low 64-bits part", POOR },
+  { xxh3_test,            64, 0xFC1AA3E6, "xxh3",        "xxHash v3, 64-bit", POOR },
+  { xxh3low_test,         32, 0xE1D08396, "xxh3low",     "xxHash v3, 64-bit, low 32-bits part", POOR },
+  { xxh128_test,         128, 0xA971DCCE, "xxh128",      "xxHash v3, 128-bit", POOR },
+  { xxh128low_test,       64, 0x0EF0C6E0, "xxh128low",   "xxHash v3, 128-bit, low 64-bits part", POOR },
 
 #if __WORDSIZE >= 64
 # define TIFU_VERIF       0x644236D4
@@ -638,7 +638,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     fflush(NULL);
 
     bool result = true;
-   
+
       result &= SparseKeyTest<  16,hashtype>(hash,9,true,true,true, g_drawDiagram);
       result &= SparseKeyTest<  24,hashtype>(hash,8,true,true,true, g_drawDiagram);
       result &= SparseKeyTest<  32,hashtype>(hash,7,true,true,true, g_drawDiagram);
@@ -1250,7 +1250,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("\n");
     fflush(NULL);
   }
-  
+
 }
 
 //-----------------------------------------------------------------------------
