@@ -116,6 +116,7 @@ SMhasher
 | [seahash32low](doc/seahash32low)              |      4589.52 |    64.53 | 242.36 (8) | 871 | !msvc                      |
 | [clhash](doc/clhash)                          |      4405.28 |    85.35 | 288.20 (14)|1809 | machine-specific (x64 SSE4.2) |
 | [HighwayHash64](doc/HighwayHash64)            |      6239.64 |    98.65 | 263.94 (4) |2546 |                            |
+| [BEBB4185](doc/BEBB4185)                      |      5061.46 |   162.18 | 320.75 (23)|     |                            |
 | [Murmur3F](doc/Murmur3F)                      |      5076.20 |    51.66 | 222.39 (18)| 699 |                            |
 | [fasthash32](doc/fasthash32)                  |      4658.24 |    50.50 | 181.96 (2) | 566 |                            |
 | [fasthash64](doc/fasthash64)                  |      4657.64 |    47.71 | 168.22 (3) | 509 | Moment Chi2 5159 !         |
