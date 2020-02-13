@@ -48,6 +48,7 @@ SMhasher
 | [crc32_hw1](doc/crc32_hw1)                    |     23382.53 |    36.84 | 197.39 (20)| 671 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
 | [crc64_hw](doc/crc64_hw)                      |      8387.01 |    29.96 | 161.44 (13)| 652 | insecure, 100% bias, collisions, distrib, machine-specific (x64 SSE4.2) |
 | [crc32_pclmul](doc/crc32_pclmul)              |   1932125.24 |     6.50 |   -        | 481 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2+PCLMUL) |
+| [FastestHash](doc/FastestHash)                |  14635755.30 |    16.04 | 357.77 (3) |     | insecure, zeros, fails all tests |
 | [fibonacci](doc/fibonacci)                    |      9462.17 |    33.52 | 774.87 (14)|1692 | zeros, fails all tests       |
 | [FNV1a](doc/FNV1a)                            |       780.53 |    69.65 | 197.06 (20)| 204 | zeros, fails all tests       |
 | [FNV1A_Totenschiff](doc/FNV1A_Totenschiff)    |      6235.86 |    36.56 | 214.61 (18)| 270 | zeros, fails all tests       |
@@ -154,8 +155,8 @@ SMhasher
 | [t1ha0_aes_avx2](doc/t1ha0_aes_avx2)          |     22345.33 |    44.38 | 556.47 (89)| 792 | LongNeighbors, machine-specific (x64 AVX2)   |
 | [MeowHash](doc/MeowHash)                      |     36695.65 |    58.09 | 233.81 (3) |1764 | Sparse low32, machine-specific (x64 AES-NI)  |
 | [MeowHash32low](doc/MeowHash32low)            |     17247.34 |    87.32 | 245.98 (3) |1764 | Sparse, machine-specific (x64 AES-NI)        |
-| [wyhash](doc/wyhash)                          |     12248.17 |    32.94 | 178.14 (4) | 938 |                            |
-| [wyhash32low](doc/wyhash32low)                |     12041.57 |    32.93 | 182.88 (2) | 922 |                            |
+| [wyhash](doc/wyhash)                          |     15605.07 |    28.14 | 417.90 (10) | 938 |                            |
+| [wyhash32low](doc/wyhash32low)                |     15457.13 |    28.25 | 430.97 (2) | 922 |                            |
 
 The [sortable table variant](http://rurban.github.io/smhasher/doc/table.html)
 

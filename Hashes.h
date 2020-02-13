@@ -476,11 +476,15 @@ void HighwayHash64_test (const void * key, int len, uint32_t seed, void * out);
 #include "wyhash.h"
 // objsize 40c8f0-40cc9a: 938
 inline void wyhash_test (const void * key, int len, uint32_t seed, void * out) {
-  *(uint64_t*)out = wyhash(key, (uint64_t)len, (uint64_t)seed);
+  *(uint64_t*)out = wyhash(key, (uint64_t)len, (uint64_t)seed, _wyp);
 }
 // objsize 407630-4079ca: 922
 inline void wyhash32low (const void * key, int len, uint32_t seed, void * out) {
-  *(uint32_t*)out = 0xFFFFFFFF & wyhash(key, (uint64_t)len, (uint64_t)seed);
+  *(uint32_t*)out = 0xFFFFFFFF & wyhash(key, (uint64_t)len, (uint64_t)seed, _wyp);
+}
+// fixed to be seeded a bit, and to avoid mult. blinding. Still too bad for Diff test
+inline void FastestHash_test (const void * key, int len, uint32_t seed, void * out) {
+  *(uint64_t*)out = FastestHash(key, (size_t)len, (uint64_t)seed);
 }
 
 //https://github.com/vnmakarov/mir/blob/master/mir-hash.h
@@ -752,8 +756,8 @@ inline void sha3_256(const void *key, int len, uint32_t seed, void *out)
   sha3_done(&ltc_state, (unsigned char *)out);
 }
 inline void wysha(const void *key, int len, unsigned seed, void *out) {
-  uint64_t s[4] = {wyhash(key, len, seed + 0), wyhash(key, len, seed + 1),
-                   wyhash(key, len, seed + 2), wyhash(key, len, seed + 3)};
+  uint64_t s[4] = {wyhash(key, len, seed + 0, _wyp), wyhash(key, len, seed + 1, _wyp),
+                   wyhash(key, len, seed + 2, _wyp), wyhash(key, len, seed + 3, _wyp)};
   memcpy(out, s, 32);
 }
 
