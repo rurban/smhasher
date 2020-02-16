@@ -99,8 +99,8 @@ SMhasher
 | [t1ha0_32be](doc/t1ha0_32be)                  |      4241.68 |    55.12 | 236.50 (18)| 533 | Sparse, LongNeighbors      |
 | [t1ha2_stream](doc/t1ha2_stream)              |      8558.73 |    93.45 | 305.03 (16)|1665 | Sparse, Permutation, LongNeighbors |
 | [t1ha2_stream128](doc/t1ha2_stream128)        |      8846.52 |   117.19 | 270.95 (2) |1665 | Sparse, Permutation, LongNeighbors |
-| [xxh3](doc/xxh3)                              |     11694.36 |    37.07 | 169.43 (2) | 744 | Moment Chi2 14974, BIC     |
-| [xxh3low](doc/xxh3low)                        |     10664.58 |    36.96 | 196.75 (3) | 756 | Moment Chi2 1.8e+9 !       |
+| [xxh3](doc/xxh3)                              |     16088.13 |    38.23 | 185.53 (3) | 744 | Moment Chi2 14974, BIC     |
+| [xxh3low](doc/xxh3low)                        |     15999.29 |    38.87 | 200.45 (2) | 756 | Moment Chi2 1.8e+9 !       |
 | [xxh128](doc/xxh128)                          |     11553.50 |    41.68 | 184.25 (2) |1012 | Moment Chi2 14974          |
 | [xxh128low](doc/xxh128low)                    |     11482.39 |    37.60 | 168.17 (4) |1012 | Moment Chi2 14974, BIC     |
 | --------------------------------------        |              |          |            |     |                            |
@@ -113,11 +113,11 @@ SMhasher
 | [GoodOAAT](doc/GoodOAAT)                      |      1052.90 |    70.80 | 208.00 (3) | 237 |                            |
 | [SipHash13](doc/SipHash13)                    |      1762.44 |   104.61 | 304.84 (17)| 778 | 0.9% bias                  |
 | [TSip](doc/TSip)                              |      3346.72 |    60.02 | 203.82 (5) | 519 | !msvc                      |
-| [seahash](doc/seahash)                        |      4517.87 |    65.03 | 204.84 (3) | 871 | !msvc                      |
-| [seahash32low](doc/seahash32low)              |      4589.52 |    64.53 | 242.36 (8) | 871 | !msvc                      |
+| [seahash](doc/seahash)                        |      4529.38 |    65.58 | 240.34 (7) | 871 | !msvc                      |
+| [seahash32low](doc/seahash32low)              |      4524.65 |    65.60 | 253.50 (3) | 871 | !msvc                      |
 | [clhash](doc/clhash)                          |      4405.28 |    85.35 | 288.20 (14)|1809 | machine-specific (x64 SSE4.2) |
 | [HighwayHash64](doc/HighwayHash64)            |      6239.64 |    98.65 | 263.94 (4) |2546 |                            |
-| [BEBB4185](doc/BEBB4185)                      |      5061.46 |   162.18 | 320.75 (23)|     |                            |
+| [BEBB4185](doc/BEBB4185)                      |      2655.75 |   241.48 | 420.58 (7) |     |                            |
 | [Murmur3F](doc/Murmur3F)                      |      5076.20 |    51.66 | 222.39 (18)| 699 |                            |
 | [fasthash32](doc/fasthash32)                  |      4658.24 |    50.50 | 181.96 (2) | 566 |                            |
 | [fasthash64](doc/fasthash64)                  |      4657.64 |    47.71 | 168.22 (3) | 509 | Moment Chi2 5159 !         |
@@ -155,8 +155,8 @@ SMhasher
 | [t1ha0_aes_avx2](doc/t1ha0_aes_avx2)          |     22345.33 |    44.38 | 556.47 (89)| 792 | LongNeighbors, machine-specific (x64 AVX2)   |
 | [MeowHash](doc/MeowHash)                      |     36695.65 |    58.09 | 233.81 (3) |1764 | Sparse low32, machine-specific (x64 AES-NI)  |
 | [MeowHash32low](doc/MeowHash32low)            |     17247.34 |    87.32 | 245.98 (3) |1764 | Sparse, machine-specific (x64 AES-NI)        |
-| [wyhash](doc/wyhash)                          |     15605.07 |    28.14 | 417.90 (10) | 938 |                            |
-| [wyhash32low](doc/wyhash32low)                |     15457.13 |    28.25 | 430.97 (2) | 922 |                            |
+| [wyhash](doc/wyhash)                          |     12063.37 |    38.11 | 208.49 (3) | 938 |                            |
+| [wyhash32low](doc/wyhash32low)                |     12049.79 |    37.95 | 222.17 (4) | 922 |                            |
 
 The [sortable table variant](http://rurban.github.io/smhasher/doc/table.html)
 
