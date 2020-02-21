@@ -21,9 +21,6 @@ bool VerificationTest   ( pfHash hash, const int hashbits, uint32_t expected, bo
 bool SanityTest         ( pfHash hash, const int hashbits );
 void AppendedZeroesTest ( pfHash hash, const int hashbits );
 
-//-----------------------------------------------------------------------------
-// Keyset 'Combination' - all possible combinations of input blocks
-
 static void printKey(const void* key, size_t len)
 {
     const unsigned char* const p = (const unsigned char*)key;
@@ -33,6 +30,66 @@ static void printKey(const void* key, size_t len)
     printf("\n  ");
     for (s=0; s<len; s+=8) printf("%-16zu", s);
 }
+
+//-----------------------------------------------------------------------------
+// Keyset 'Perlin Noise' - X,Y coordinates on input & seed
+
+
+template< typename hashtype >
+void PerlinNoiseTest (int Xbits, int Ybits,
+                      int inputLen, int step,
+                      pfHash hash, std::vector<hashtype> & hashes )
+{
+  assert(0 < Ybits && Ybits < 31);
+  assert(0 < Xbits && Xbits < 31);
+  assert(inputLen*8 > Xbits);  // enough space to run the test
+
+  int const xMax = (1 << Xbits);
+  int const yMax = (1 << Ybits);
+
+  assert(Xbits + Ybits < 31);
+
+  assert(inputLen <= 256);
+  char key[inputLen];
+
+  printf("Testing %i coordinates (L%i) : \n", xMax * yMax, inputLen);
+
+  for(int x = 0; x < xMax; x++) {
+      memcpy(key, &x, inputLen);  // Note : only works with Little Endian
+      for (int y=0; y < yMax; y++) {
+          hashtype h;
+          hash(key, inputLen, y, &h);
+          hashes.push_back(h);
+      }
+  }
+}
+
+
+
+template< typename hashtype >
+bool PerlinNoise ( hashfunc<hashtype> hash, int inputLen,
+                   bool testColl, bool testDist, bool drawDiagram )
+{
+  //----------
+
+  std::vector<hashtype> hashes;
+
+  PerlinNoiseTest(12,12, inputLen, 1, hash,hashes);
+
+  //----------
+
+  bool result = true;
+
+  result &= TestHashList(hashes,drawDiagram,testColl,testDist);
+
+  printf("\n");
+
+  return result;
+}
+
+
+//-----------------------------------------------------------------------------
+// Keyset 'Combination' - all possible combinations of input blocks
 
 template< typename hashtype, class blocktype >
 void CombinationKeygenRecurse ( blocktype * key, int len, int maxlen,

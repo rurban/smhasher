@@ -499,8 +499,13 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
       */
 
       result &= TestHighbitsCollisions(hashes);
-      result &= CountHighbitsCollisions(hashes,   12);
-      result &= CountHighbitsCollisions(hashes,   8);
+
+      /* Following tests are too small : tables are necessarily saturated.
+       * It would be better to count the nb of collisions per Cell,
+       * and compared the distribution of values against a random source.
+       * But this is a different test */
+      //result &= CountHighbitsCollisions(hashes,   12);
+      //result &= CountHighbitsCollisions(hashes,   8);
     }
     if (testLowBits) {
       // reverse: bitwise flip the hashes. lowest bits first
@@ -522,8 +527,12 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
       */
 
       result &= TestLowbitsCollisions(revhashes);
-      result &= CountLowbitsCollisions(revhashes,   12);
-      result &= CountLowbitsCollisions(revhashes,   8);
+      /* Following tests are too small : tables are necessarily saturated.
+       * It would be better to count the nb of collisions per Cell,
+       * and compared the distribution of values against a random source.
+       * But this is a different test */
+      //result &= CountLowbitsCollisions(revhashes,   12);
+      //result &= CountLowbitsCollisions(revhashes,   8);
 
       //std::vector<hashtype>().swap(revhashes);
       //revhashes.clear();
