@@ -31,6 +31,7 @@ bool g_testTwoBytes    = false;
 bool g_testText        = false;
 bool g_testZeroes      = false;
 bool g_testSeed        = false;
+bool g_testPerlinNoise = false;
 bool g_testDiff        = false;
 bool g_testDiffDist    = false;
 bool g_testMomentChi2  = false;
@@ -59,6 +60,7 @@ TestOpts g_testopts[] =
   { g_testText,	        "Text" },
   { g_testZeroes,       "Zeroes" },
   { g_testSeed,	        "Seed" },
+  { g_testPerlinNoise,	"Perlin" },
   { g_testDiff,         "Diff" },
   { g_testDiffDist,     "DiffDist" },
   { g_testBIC, 	        "BIC" },
@@ -1135,6 +1137,28 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("\n");
     fflush(NULL);
   }
+
+  //-----------------------------------------------------------------------------
+  // Keyset 'PerlinNoise'
+
+  if(g_testPerlinNoise || g_testAll)
+  {
+    printf("[[[ Keyset 'Perlin Noise' Tests ]]]\n\n");
+
+    bool testCollision = true;
+    bool testDistribution = g_testExtra;
+    bool result = true;
+
+    result &= PerlinNoise<hashtype>( hash, 2, testCollision, testDistribution, g_drawDiagram );
+    result &= PerlinNoise<hashtype>( hash, 4, testCollision, testDistribution, g_drawDiagram );
+    result &= PerlinNoise<hashtype>( hash, 8, testCollision, testDistribution, g_drawDiagram );
+    result &= PerlinNoise<hashtype>( hash,16, testCollision, testDistribution, g_drawDiagram );
+
+    if(!result) printf("*********FAIL*********\n");
+    printf("\n");
+    fflush(NULL);
+  }
+
 
   //-----------------------------------------------------------------------------
   // Differential tests
