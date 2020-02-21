@@ -68,7 +68,7 @@ TestOpts g_testopts[] =
   //{ g_testLongNeighbors,"LongNeighbors" }
 };
 
-bool MomentChi2Test ( struct HashInfo *info );
+bool MomentChi2Test ( struct HashInfo *info, int inputSize );
 
 //-----------------------------------------------------------------------------
 // This is the list of all hashes that SMHasher can test.
@@ -1223,7 +1223,8 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("[[[ MomentChi2 Tests ]]]\n\n");
 
     bool result = true;
-    result &= MomentChi2Test(info);
+    result &= MomentChi2Test(info, 4);
+    result &= MomentChi2Test(info, 8);
 
     if(!result) printf("\n*********FAIL*********\n");
     printf("\n");
@@ -1300,41 +1301,49 @@ void VerifyHash ( const void * key, int len, uint32_t seed, void * out )
 }
 
 // sha1_32a: 23m with step 3
-bool MomentChi2Test ( struct HashInfo *info )
+bool MomentChi2Test ( struct HashInfo *info, int inputSize)
 {
-  pfHash hash = info->hash;
-  const int size = info->hashbits / 8;
+  assert(inputSize > 0);
+  printf("testing prng with %i-bit input \n", inputSize * 8);
+
+  pfHash const hash = info->hash;
   const int step = ((g_speed > 500 || info->hashbits > 128)
                     && !g_testExtra) ? 6 : 3;
   unsigned k = 0, s = 0;
   unsigned long l, h, x;
   const unsigned mx = 0xfffffff0;
+  assert(inputSize >= 4);
   long double sa=0, saa=0, sb=0, sbb=0,	n = mx/step;
-  hash(&k,sizeof(k),s,&l);
+  hash(&k, sizeof(k), s, &l);
+  char key[inputSize];
+
   printf("Running 1st unseeded MomentChi2 for the low 32bits/step %d ... ", step);
   fflush(NULL);
-  for(unsigned i=1; i<=mx; i+=step){
-    hash(&i,sizeof(i),s,&h);
+  for (unsigned i=1; i<=mx; i+=step) {
+    assert(sizeof(i) >= inputSize);
+    memcpy(key, &i, inputSize);
+    hash(key, inputSize, s, &h);
     x = popcount8(l^h); // check the lower 32bits only
     x = x*x*x*x*x;
     sa+=x; saa+=x*x; l=h;
   }
   sa/=n; saa=(saa/n-sa*sa)/n;
   printf("%Lf - %Lf\n", sa, saa);
+
   printf("Running 2nd   seeded MomentChi2 for the low 32bits/step %d ... ", step);
   fflush(NULL);
-  hash(&k,sizeof(k),s,&l);
-  for(unsigned i=1; i<=mx; i+=step){
-    hash(&k,sizeof(k),i,&h);
+  hash(&k, sizeof(k), s, &l);
+  for (unsigned i=1; i<=mx; i+=step) {
+    hash(key, inputSize, i, &h);
     x = popcount8(l^h);
     x = x*x*x*x*x;
     sb+=x; sbb+=x*x; l=h;
   }
   sb/=n; sbb=(sbb/n-sb*sb)/n;
-
   double chi2=(sa-sb)*(sa-sb)/(saa+sbb);
   printf("%Lf - %Lf\nKeySeedMomentChi2:\t%g\t", sb, sbb, chi2);
   fflush(NULL);
+
   if (chi2 > 3.84145882069413)
   {
     printf("FAIL!!!!\n");
