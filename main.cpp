@@ -206,7 +206,7 @@ HashInfo g_hashes[] =
   { BEBB4185_64,          64, 0xBEBB4185, "BEBB4185",    "BEBB4185 64", GOOD },
   { MurmurOAAT_test,      32, 0x5363BD98, "MurmurOAAT",  "Murmur one-at-a-time", POOR },
   { Crap8_test,           32, 0x743E97A1, "Crap8",       "Crap8", POOR },
-  { xxHash32_test,        32, 0xBA88B743, "xxHash32",    "xxHash, 32-bit for x64", POOR },
+  { xxHash32_test,        32, 0xBA88B743, "xxHash32",    "xxHash, 32-bit for x86", POOR },
   { MurmurHash2_test,     32, 0x27864C1E, "Murmur2",     "MurmurHash2 for x86, 32-bit", POOR },
   { MurmurHash2A_test,    32, 0x7FBD4396, "Murmur2A",    "MurmurHash2A for x86, 32-bit", POOR },
 #if __WORDSIZE >= 64
@@ -1147,8 +1147,8 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
     bool testCollision = true;
     bool testDistribution = g_testExtra;
-    bool result = true;
 
+    bool result = true;
     result &= PerlinNoise<hashtype>( hash, 2, testCollision, testDistribution, g_drawDiagram );
     result &= PerlinNoise<hashtype>( hash, 4, testCollision, testDistribution, g_drawDiagram );
     result &= PerlinNoise<hashtype>( hash, 8, testCollision, testDistribution, g_drawDiagram );
@@ -1304,58 +1304,71 @@ void VerifyHash ( const void * key, int len, uint32_t seed, void * out )
 bool MomentChi2Test ( struct HashInfo *info, int inputSize)
 {
   assert(inputSize > 0);
-  printf("testing prng with %i-bit input \n", inputSize * 8);
+  printf("testing prng, providing numbers as %i-bit inputs \n", inputSize * 8);
 
   pfHash const hash = info->hash;
   const int step = ((g_speed > 500 || info->hashbits > 128)
                     && !g_testExtra) ? 6 : 3;
   unsigned k = 0, s = 0;
-  unsigned long l, h, x;
+  uint64_t l, x;
   const unsigned mx = 0xfffffff0;
   assert(inputSize >= 4);
   long double sa=0, saa=0, sb=0, sbb=0,	n = mx/step;
   hash(&k, sizeof(k), s, &l);
   char key[inputSize];
+#define HASH_SIZE_MAX 64
+  int hbits = info->hashbits;
+  assert(hbits <= HASH_SIZE_MAX*8);
+  char hbuff[HASH_SIZE_MAX] = {0};
 
-  printf("Running 1st unseeded MomentChi2 for the low 32bits/step %d ... ", step);
+  printf("Generating random numbers from an increasing serie of step %d ... ", step);
   fflush(NULL);
   for (unsigned i=1; i<=mx; i+=step) {
     assert(sizeof(i) >= inputSize);
     memcpy(key, &i, inputSize);
-    hash(key, inputSize, s, &h);
-    x = popcount8(l^h); // check the lower 32bits only
+    hash(key, inputSize, s, hbuff);
+    uint64_t h; memcpy(&h, hbuff, 8);
+    x = popcount8(l^h);  // popcount8 presumed working on 64-bit => to be checked !
+                         // note : ideally, one should rather popcount the whole hash
     x = x*x*x*x*x;
     sa+=x; saa+=x*x; l=h;
   }
   sa/=n; saa=(saa/n-sa*sa)/n;
   printf("%Lf - %Lf\n", sa, saa);
 
-  printf("Running 2nd   seeded MomentChi2 for the low 32bits/step %d ... ", step);
-  fflush(NULL);
-  hash(&k, sizeof(k), s, &l);
-  for (unsigned i=1; i<=mx; i+=step) {
-    hash(key, inputSize, i, &h);
-    x = popcount8(l^h);
-    x = x*x*x*x*x;
-    sb+=x; sbb+=x*x; l=h;
+  if (hbits > 64) hbits = 64;   // limited due to popcount8
+  switch (hbits/8) {
+      case 8:
+          sb = 38918200.;
+          sbb = 410450.;
+          break;
+      case 4:
+          sb = 1391290.;
+          sbb = 1030.9;
+          break;
+      default:
+          printf("case not covered \n");
+          abort();
   }
-  sb/=n; sbb=(sbb/n-sb*sb)/n;
+  printf("Ideal values to approximate : %Lf - %Lf \n", sb, sbb);
+
+  // Note : ideally, we should collect the whole statistics,
+  //        i.e. nb of candidates per popcount value
+  //        and compare to an "ideal" distribution.
+  //        Currently, limited to using this proxy formula.
   double chi2=(sa-sb)*(sa-sb)/(saa+sbb);
-  printf("%Lf - %Lf\nKeySeedMomentChi2:\t%g\t", sb, sbb, chi2);
+  printf("MomentChi2:\t%g\t", chi2);
   fflush(NULL);
 
-  if (chi2 > 3.84145882069413)
-  {
-    printf("FAIL!!!!\n");
-    fflush(NULL);
-    return false;
-  }
-  else
-  {
-    printf("PASS\n");
-    fflush(NULL);
-    return true;
-  }
+  // note : previous threshold : 3.84145882069413
+  int const rank = (chi2 < 500.) + (chi2 < 50.) + (chi2 < 5.);
+  assert(0 <= rank && rank <= 3);
+
+  const char* rankstr[4] = { "FAIL !!!!", "pass", "Good !", "Excellent !!" };
+  printf(" %s \n", rankstr[rank]);
+  fflush(NULL);
+
+  return (rank > 0);
 }
 
 
