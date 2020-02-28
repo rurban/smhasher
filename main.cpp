@@ -1224,7 +1224,10 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
     bool result = true;
     result &= MomentChi2Test(info, 4);
-    result &= MomentChi2Test(info, 8);
+    if (g_testExtra) {
+        result &= MomentChi2Test(info, 8);
+        result &= MomentChi2Test(info, 16);
+    }
 
     if(!result) printf("\n*********FAIL*********\n");
     printf("\n");
@@ -1303,68 +1306,110 @@ void VerifyHash ( const void * key, int len, uint32_t seed, void * out )
 // sha1_32a: 23m with step 3
 bool MomentChi2Test ( struct HashInfo *info, int inputSize)
 {
-  assert(inputSize > 0);
-  printf("testing prng, providing numbers as %i-bit inputs \n", inputSize * 8);
-
   pfHash const hash = info->hash;
   const int step = ((g_speed > 500 || info->hashbits > 128)
                     && !g_testExtra) ? 6 : 3;
-  unsigned k = 0, s = 0;
-  uint64_t l, x;
+  unsigned s = 0;
   const unsigned mx = 0xfffffff0;
   assert(inputSize >= 4);
-  long double sa=0, saa=0, sb=0, sbb=0,	n = mx/step;
-  hash(&k, sizeof(k), s, &l);
-  char key[inputSize];
+  long double n = mx/step;
+  char key[inputSize]; memset(key, 0, sizeof(key));
 #define HASH_SIZE_MAX 64
   int hbits = info->hashbits;
   assert(hbits <= HASH_SIZE_MAX*8);
   char hbuff[HASH_SIZE_MAX] = {0};
 
-  printf("Generating random numbers from an increasing serie of step %d ... ", step);
+  assert(inputSize > 0);
+  printf("Analyze hashes produced from a serie of linearly increasing numbers "
+         "of %i-bit, using a step of %d ... \n", inputSize*8, step);
   fflush(NULL);
-  for (unsigned i=1; i<=mx; i+=step) {
-    assert(sizeof(i) >= inputSize);
-    memcpy(key, &i, inputSize);
-    hash(key, inputSize, s, hbuff);
-    uint64_t h; memcpy(&h, hbuff, 8);
-    x = popcount8(l^h);  // popcount8 presumed working on 64-bit => to be checked !
-                         // note : ideally, one should rather popcount the whole hash
-    x = x*x*x*x*x;
-    sa+=x; saa+=x*x; l=h;
-  }
-  sa/=n; saa=(saa/n-sa*sa)/n;
-  printf("%Lf - %Lf\n", sa, saa);
 
   if (hbits > 64) hbits = 64;   // limited due to popcount8
+  long double srefh, srefl;
   switch (hbits/8) {
       case 8:
-          sb = 38918200.;
-          sbb = 410450.;
+          srefh = 38918200.;
+          srefl = 410450.;
           break;
       case 4:
-          sb = 1391290.;
-          sbb = 1030.9;
+          srefh = 1391290.;
+          srefl = 1030.9;
           break;
       default:
-          printf("case not covered \n");
+          printf("hash size not covered \n");
           abort();
   }
-  printf("Ideal values to approximate : %Lf - %Lf \n", sb, sbb);
+  printf("Ideal values to approximate : %Lf - %Lf \n", srefh, srefl);
+
+  uint64_t previous = 0;
+  long double b1h = 0. , b1l = 0., db1h = 0., db1l = 0.;
+  long double b0h = 0. , b0l = 0., db0h = 0., db0l = 0.;
+  for (unsigned i=1; i<=mx; i+=step) {
+    assert(sizeof(i) <= inputSize);
+    memcpy(key, &i, sizeof(i));
+    hash(key, inputSize, s, hbuff);
+
+    uint64_t h; memcpy(&h, hbuff, 8);
+    // popcount8 assumed to work on 64-bit => to ensure !!
+    // note : ideally, one should rather popcount the whole hash
+    {   uint64_t const bits1 = popcount8(h);
+        uint64_t const bits0 = hbits - bits1;
+        //printf("bits1 : %u , bits0 : %u \n", (unsigned)bits1, (unsigned)bits0);
+        uint64_t const b1_exp5 = bits1 * bits1 * bits1 * bits1 * bits1;
+        uint64_t const b0_exp5 = bits0 * bits0 * bits0 * bits0 * bits0;
+        b1h+=b1_exp5; b1l+=b1_exp5*b1_exp5;
+        b0h+=b0_exp5; b0l+=b0_exp5*b0_exp5;
+    }
+    // derivative
+    {   uint64_t const bits1 = popcount8(previous^h);
+        uint64_t const bits0 = hbits - bits1;
+        uint64_t const b1_exp5 = bits1 * bits1 * bits1 * bits1 * bits1;
+        uint64_t const b0_exp5 = bits0 * bits0 * bits0 * bits0 * bits0;
+        db1h+=b1_exp5; db1l+=b1_exp5*b1_exp5;
+        db0h+=b0_exp5; db0l+=b0_exp5*b0_exp5;
+    }
+    previous=h;
+  }
+
+  b1h/=n; b1l=(b1l/n-b1h*b1h)/n;
+  db1h/=n; db1l=(db1l/n-db1h*db1h)/n;
+  b0h/=n; b0l=(b0l/n-b0h*b0h)/n;
+  db0h/=n; db0l=(db0l/n-db0h*db0h)/n;
+
+  printf("Popcount 1 stats : %Lf - %Lf\n", b1h, b1l);
+  printf("Popcount 0 stats : %Lf - %Lf\n", b0h, b0l);
+  printf("Derivative stats (transition from 2 consecutive values) : \n");
+  printf("Popcount 1 stats : %Lf - %Lf\n", db1h, db1l);
+  printf("Popcount 0 stats : %Lf - %Lf\n", db0h, db0l);
 
   // Note : ideally, we should collect the whole statistics,
   //        i.e. nb of candidates per popcount value
   //        and compare to an "ideal" distribution.
   //        Currently, limited to using this proxy formula.
-  double chi2=(sa-sb)*(sa-sb)/(saa+sbb);
-  printf("MomentChi2:\t%g\t", chi2);
+  double worsec2 = 0;
+  {   double chi2 = (b1h-srefh) * (b1h-srefh) / (b1l+srefl);
+      printf("MomentChi2 for bits 1 :  %8.6g \n", chi2);
+      if (chi2 > worsec2) worsec2 = chi2;
+  }
+  {   double chi2 = (b0h-srefh) * (b0h-srefh) / (b0l+srefl);
+      printf("MomentChi2 for bits 0 :  %8.6g \n", chi2);
+      if (chi2 > worsec2) worsec2 = chi2;
+  }
+  {   double chi2 = (db1h-srefh) * (db1h-srefh) / (db1l+srefl);
+      printf("MomentChi2 for deriv b1 :  %8.6g \n", chi2);
+      if (chi2 > worsec2) worsec2 = chi2;
+  }
+  {   double chi2 = (db0h-srefh) * (db0h-srefh) / (db0l+srefl);
+      printf("MomentChi2 for deriv b0 :  %8.6g \n", chi2);
+      if (chi2 > worsec2) worsec2 = chi2;
+  }
   fflush(NULL);
 
   // note : previous threshold : 3.84145882069413
-  int const rank = (chi2 < 500.) + (chi2 < 50.) + (chi2 < 5.);
+  int const rank = (worsec2 < 500.) + (worsec2 < 50.) + (worsec2 < 5.);
   assert(0 <= rank && rank <= 3);
 
-  const char* rankstr[4] = { "FAIL !!!!", "pass", "Good !", "Excellent !!" };
+  const char* rankstr[4] = { "FAIL !!!!", "pass", "Good !", "Great !!" };
   printf(" %s \n", rankstr[rank]);
   fflush(NULL);
 
