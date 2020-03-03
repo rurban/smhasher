@@ -12,7 +12,7 @@
 #include <time.h>
 
 //-----------------------------------------------------------------------------
-// Configuration. TODO - move these to command-line flags
+// Configuration.
 
 bool g_drawDiagram     = false;
 bool g_testAll         = true;
