@@ -244,8 +244,11 @@ HashInfo g_hashes[] =
   { metrohash128crc_1_test,128, 0x5E75144E, "metrohash128crc_1", "MetroHash128crc_1 for x64 (legacy)", GOOD },
   { metrohash128crc_2_test,128, 0x1ACF3E77, "metrohash128crc_2", "MetroHash128crc_2 for x64 (legacy)", GOOD },
 #endif
-  { CityHash64noSeed_test, 64, 0x63FC6063, "City64noSeed",    "Google CityHash64 without seed (default version, misses one final avalanche)", POOR },
-  { CityHash64_test,       64, 0x25A20825, "City64",          "Google CityHash64WithSeed (old)", POOR },
+  { CityHash64noSeed_test, 64, 0x63FC6063, "City64noSeed","Google CityHash64 without seed (default version, misses one final avalanche)", POOR },
+  { CityHash64_test,      64, 0x25A20825, "City64",       "Google CityHash64WithSeed (old)", POOR },
+#if defined(HAVE_AESNI)
+  { aesnihash_test,       64, 0x0,        "aesnihash",    "majek's unseeded aesnihash with aesenc, 64-bit for x64", POOR },
+#endif
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { falkhash_test_cxx,    64, 0x2F99B071, "falkhash",    "falkhash.asm with aesenc, 64-bit for x64", POOR },
 #endif

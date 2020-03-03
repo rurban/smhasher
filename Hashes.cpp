@@ -774,3 +774,34 @@ void tsip_test(const void *bytes, int len, uint32_t seed, void *out)
 
 #endif /* !MSVC */
 #endif /* HAVE_INT64 */
+
+#ifdef HAVE_AESNI
+/* https://gist.github.com/majek/96dd615ed6c8aa64f60aac14e3f6ab5a */
+uint64_t aesnihash(uint8_t *in, unsigned long src_sz)
+{
+	uint8_t tmp_buf[16] = {0};
+	__m128i hash = {0, 0};
+
+	while (src_sz >= 16) {
+	onemoretry:;
+		__m128i piece = _mm_loadu_si128((__m128i *)in);
+		in += 16;
+		src_sz -= 16;
+		piece = _mm_aesenc_si128(piece, piece);
+		hash = _mm_aesenc_si128(hash, piece);
+		hash = _mm_aesenc_si128(hash, piece);
+	}
+
+	if (src_sz > 0) {
+		unsigned long i;
+		for (i = 0; i < src_sz && i < 16; i++) {
+			tmp_buf[i] = in[i];
+		}
+		src_sz = 16;
+		in = &tmp_buf[0];
+		goto onemoretry;
+	}
+
+	return hash[0] + hash[1];
+}
+#endif

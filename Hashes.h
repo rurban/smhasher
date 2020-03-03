@@ -968,3 +968,13 @@ inline void blake3_64 ( const void * key, int len, unsigned seed, void * out )
 
 #include "beamsplitter.h"
 #include "discohash.h"
+
+#ifdef HAVE_AESNI
+/* https://gist.github.com/majek/96dd615ed6c8aa64f60aac14e3f6ab5a */
+uint64_t aesnihash(uint8_t *in, unsigned long src_sz);
+inline void aesnihash_test ( const void * key, int len, unsigned seed, void * out )
+{
+  uint64_t result = aesnihash ((uint8_t *)key, (unsigned long)len);
+  *(uint64_t *)out = result;
+}
+#endif
