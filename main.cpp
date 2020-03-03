@@ -246,7 +246,7 @@ HashInfo g_hashes[] =
 #endif
   { CityHash64noSeed_test, 64, 0x63FC6063, "City64noSeed","Google CityHash64 without seed (default version, misses one final avalanche)", POOR },
   { CityHash64_test,      64, 0x25A20825, "City64",       "Google CityHash64WithSeed (old)", POOR },
-#if defined(HAVE_AESNI)
+#if defined(HAVE_AESNI) && !defined(_MSC_VER)
   { aesnihash_test,       64, 0x0,        "aesnihash",    "majek's unseeded aesnihash with aesenc, 64-bit for x64", POOR },
 #endif
 #if defined(__SSE4_2__) && defined(__x86_64__)

@@ -775,7 +775,7 @@ void tsip_test(const void *bytes, int len, uint32_t seed, void *out)
 #endif /* !MSVC */
 #endif /* HAVE_INT64 */
 
-#ifdef HAVE_AESNI
+#if defined(HAVE_AESNI) && !defined(_MSC_VER)
 /* https://gist.github.com/majek/96dd615ed6c8aa64f60aac14e3f6ab5a */
 uint64_t aesnihash(uint8_t *in, unsigned long src_sz)
 {
