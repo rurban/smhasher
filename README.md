@@ -92,7 +92,7 @@ SMhasher
 | [cmetrohash64_1](doc/cmetrohash64_1)          |      9074.37 |    50.92 | 201.33 (18)| 652 | LongNeighbors, BIC, MomentChi2 |
 | [City64noSeed](doc/City64noSeed)              |      8873.07 |    38.70 | 171.57 (4) |1038 | Avalanche, Sparse, TwoBytes, MomentChi2, Seed |
 | [City64](doc/City64)                          |      9213.05 |    55.52 | 200.24 (2) |1120 | Sparse, TwoBytes           |
-| [aesnihash](doc/aesnihash)                    |      7697.83 |    52.15 | 450.51 (6) |     | fails most tests, machine-specific (x64 AES-NI) |
+| [aesnihash](doc/aesnihash)                    |      3147.17 |    64.09 | 207.25 (1) |     | fails most tests, machine-specific (x64 AES-NI) |
 | [falkhash](doc/falkhash)                      |     20374.98 |   169.84 | 328.42 (5) | 264 | LongNeighbors, machine-specific (x64 AES-NI) |
 | [t1ha1_64le](doc/t1ha1_64le)                  |      9541.33 |    39.33 | 239.04 (16)| 517 | Avalanche                  |
 | [t1ha1_64be](doc/t1ha1_64be)                  |      6848.76 |    41.08 | 230.22 (17)| 555 | Avalanche                  |
