@@ -776,32 +776,35 @@ void tsip_test(const void *bytes, int len, uint32_t seed, void *out)
 #endif /* HAVE_INT64 */
 
 #if defined(HAVE_AESNI) && !defined(_MSC_VER)
-/* https://gist.github.com/majek/96dd615ed6c8aa64f60aac14e3f6ab5a */
-uint64_t aesnihash(uint8_t *in, unsigned long src_sz)
-{
-	uint8_t tmp_buf[16] = {0};
-	__m128i hash = {0, 0};
+/* See https://news.ycombinator.com/item?id=22463979 */
+/* From https://gist.github.com/majek/96dd615ed6c8aa64f60aac14e3f6ab5a */
+uint64_t aesnihash(uint8_t *in, unsigned long src_sz) {
+  uint8_t tmp_buf[16] = {0};
+  __m128i rk0 = {0x736f6d6570736575ULL, 0x646f72616e646f6dULL};
+  __m128i rk1 = {0x1231236570743245ULL, 0x126f12321321456dULL};
+  __m128i hash = rk0;
 
-	while (src_sz >= 16) {
-	onemoretry:;
-		__m128i piece = _mm_loadu_si128((__m128i *)in);
-		in += 16;
-		src_sz -= 16;
-		piece = _mm_aesenc_si128(piece, piece);
-		hash = _mm_aesenc_si128(hash, piece);
-		hash = _mm_aesenc_si128(hash, piece);
-	}
+  while (src_sz >= 16) {
+  onemoretry:
+    __m128i piece = _mm_loadu_si128((__m128i *)in);
+    in += 16;
+    src_sz -= 16;
+    hash = _mm_aesenc_si128(_mm_xor_si128(hash, piece), rk0);
+    hash = _mm_aesenc_si128(hash, rk1);
+  }
 
-	if (src_sz > 0) {
-		unsigned long i;
-		for (i = 0; i < src_sz && i < 16; i++) {
-			tmp_buf[i] = in[i];
-		}
-		src_sz = 16;
-		in = &tmp_buf[0];
-		goto onemoretry;
-	}
+  if (src_sz > 0) {
+    unsigned long i;
+    for (i = 0; i < src_sz && i < 16; i++) {
+      tmp_buf[i] = in[i];
+    }
+    src_sz = 16;
+    in = &tmp_buf[0];
+    goto onemoretry;
+  }
 
-	return hash[0] + hash[1];
+  hash = _mm_aesenc_si128(hash, _mm_set_epi64x(src_sz, src_sz));
+
+  return hash[0] ^ hash[1];
 }
 #endif
