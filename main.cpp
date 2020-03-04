@@ -260,8 +260,8 @@ HashInfo g_hashes[] =
   { t1ha0_32be_test,      64, 0xDA6A4061, "t1ha0_32be",  "Fast Positive Hash (portable, aims 32-bit, big-endian)", POOR },
   { xxh3_test,            64, 0x39CD9E4A, "xxh3",        "xxHash v3, 64-bit", GOOD },
   { xxh3low_test,         32, 0x2EB15EAE, "xxh3low",     "xxHash v3, 64-bit, low 32-bits part", POOR },
-  { xxh128_test,         128, 0xEB08BA47, "xxh128",      "xxHash v3, 128-bit", POOR },
-  { xxh128low_test,       64, 0xFC6FDE96, "xxh128low",   "xxHash v3, 128-bit, low 64-bits part", POOR },
+  { xxh128_test,         128, 0xF1C5D2A6, "xxh128",      "xxHash v3, 128-bit", POOR },
+  { xxh128low_test,       64, 0x618C7A9F, "xxh128low",   "xxHash v3, 128-bit, low 64-bits part", POOR },
 
 #if __WORDSIZE >= 64
 # define TIFU_VERIF       0x644236D4
@@ -1489,49 +1489,51 @@ int main ( int argc, const char ** argv )
 #endif
   const char * hashToTest = defaulthash;
 
-  if(argc < 2) {
+  if (argc < 2) {
     printf("No test hash given on command line, testing %s.\n", hashToTest);
     printf("Usage: SMHasher [--list][--listnames][--tests] [--verbose][--extra]\n"
            "       [--test=Speed,...] hash\n");
   }
-  else {
-    int i = 1;
-    hashToTest = argv[i];
 
-    if (strncmp(hashToTest,"--", 2) == 0) {
-      if (strcmp(hashToTest,"--help") == 0) {
+  for (int argnb = 1; argnb < argc; argnb++) {
+    const char* const arg = argv[argnb];
+    if (strncmp(arg,"--", 2) == 0) {
+      // This is a command
+      if (strcmp(arg,"--help") == 0) {
         printf("Usage: SMHasher [--list][--listnames][--tests] [--verbose][--extra]\n"
                "       [--test=Speed,...] hash\n");
         exit(0);
       }
-      if (strcmp(hashToTest,"--list") == 0) {
+      if (strcmp(arg,"--list") == 0) {
         for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++) {
           printf("%-16s\t\"%s\" %s\n", g_hashes[i].name, g_hashes[i].desc, quality_str[g_hashes[i].quality]);
         }
         exit(0);
       }
-      if (strcmp(hashToTest,"--listnames") == 0) {
+      if (strcmp(arg,"--listnames") == 0) {
         for(size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++) {
           printf("%s\n", g_hashes[i].name);
         }
         exit(0);
       }
-      if (strcmp(hashToTest,"--tests") == 0) {
+      if (strcmp(arg,"--tests") == 0) {
         printf("Valid tests:\n");
         for(size_t i = 0; i < sizeof(g_testopts) / sizeof(TestOpts); i++) {
           printf("  %s\n", g_testopts[i].name);
         }
         exit(0);
       }
-      if (strcmp(hashToTest,"--verbose") == 0) {
+      if (strcmp(arg,"--verbose") == 0) {
         g_drawDiagram = true;
+        continue;
       }
-      if (strcmp(hashToTest,"--extra") == 0) {
+      if (strcmp(arg,"--extra") == 0) {
         g_testExtra = true;
+        continue;
       }
       /* default: --test=All. comma seperated list of options */
-      if (strncmp(hashToTest,"--test=", 6) == 0) {
-        char *opt = (char *)&hashToTest[7];
+      if (strncmp(arg,"--test=", 6) == 0) {
+        char *opt = (char *)&arg[7];
         char *rest = opt;
         char *p;
         bool found = false;
@@ -1543,7 +1545,7 @@ int main ( int argc, const char ** argv )
           } else {
             opt = rest;
           }
-          for(size_t i = 0; i < sizeof(g_testopts) / sizeof(TestOpts); i++) {
+          for (size_t i = 0; i < sizeof(g_testopts) / sizeof(TestOpts); i++) {
             if (strcmp(opt, g_testopts[i].name) == 0) {
               g_testopts[i].var = true; found = true; break;
             }
@@ -1554,17 +1556,20 @@ int main ( int argc, const char ** argv )
             for(size_t i = 1; i < sizeof(g_testopts) / sizeof(TestOpts); i++) {
               printf(",%s", g_testopts[i].name);
             }
-            printf("\n");
-            exit(0);
+            printf(" \n");
+            exit(1);
           }
         } while (p);
+        continue;
       }
-      i++;
-      if (argc > i)
-        hashToTest = argv[i];
-      else
-        hashToTest = defaulthash;
+      // invalid command
+      printf("Invalid command \n");
+      printf("Usage: SMHasher [--list][--listnames][--tests] [--verbose][--extra]\n"
+             "       [--test=Speed,...] hash\n");
+      exit(1);
     }
+    // Not a command ? => interprested as hash name
+    hashToTest = arg;
   }
 
   // Code runs on the 3rd CPU by default? only for speed tests

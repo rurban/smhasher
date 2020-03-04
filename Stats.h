@@ -34,9 +34,9 @@ inline uint32_t f3mix ( uint32_t k )
 static void printHash(const void* key, size_t len)
 {
     const unsigned char* const p = (const unsigned char*)key;
-    size_t s;
+    int s;
     printf("\n0x");
-    for (s=0; s<len; s++) printf("%02X", p[s]);
+    for (s=len-1; s>=0; s--) printf("%02X", p[s]);
     printf("  ");
 }
 
@@ -495,6 +495,7 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
     }
 
     printf("\n");
+    fflush(NULL);
 
     if (testHighBits) {
       result &= CountHighbitsCollisions(hashes, 224);

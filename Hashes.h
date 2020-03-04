@@ -290,7 +290,7 @@ inline void xxh3_test( const void * key, int len, uint32_t seed, void * out ) {
 inline void xxh3low_test( const void * key, int len, uint32_t seed, void * out ) {
   (void)seed;
   // objsize 12d0-15b8: 744 + 1f50-1f5c: 756
-  *(uint32_t*)out = (uint32_t) XXH3_64bits(key, (size_t) len);
+  *(uint32_t*)out = (uint32_t) XXH3_64bits_withSeed(key, (size_t) len, seed);
 }
 
 #ifdef HAVE_INT64
