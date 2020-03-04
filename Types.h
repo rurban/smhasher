@@ -161,6 +161,7 @@ struct HashCallback : public KeyCallback
 
     hashtype h;
     m_pfHash(key, len, 0, &h);
+
     m_hashes.back() = h;
   }
 
