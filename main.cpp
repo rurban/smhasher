@@ -258,10 +258,10 @@ HashInfo g_hashes[] =
   { t1ha1_64be_test,      64, 0x93F864DE, "t1ha1_64be",  "Fast Positive Hash (portable, aims 64-bit, big-engian)", POOR },
   { t1ha0_32le_test,      64, 0x7F7D7B29, "t1ha0_32le",  "Fast Positive Hash (portable, aims 32-bit, little-endian)", POOR },
   { t1ha0_32be_test,      64, 0xDA6A4061, "t1ha0_32be",  "Fast Positive Hash (portable, aims 32-bit, big-endian)", POOR },
-  { xxh3_test,            64, 0xFC1AA3E6, "xxh3",        "xxHash v3, 64-bit", POOR },
-  { xxh3low_test,         32, 0xE1D08396, "xxh3low",     "xxHash v3, 64-bit, low 32-bits part", POOR },
-  { xxh128_test,         128, 0xA971DCCE, "xxh128",      "xxHash v3, 128-bit", POOR },
-  { xxh128low_test,       64, 0x0EF0C6E0, "xxh128low",   "xxHash v3, 128-bit, low 64-bits part", POOR },
+  { xxh3_test,            64, 0x39CD9E4A, "xxh3",        "xxHash v3, 64-bit", GOOD },
+  { xxh3low_test,         32, 0x2EB15EAE, "xxh3low",     "xxHash v3, 64-bit, low 32-bits part", POOR },
+  { xxh128_test,         128, 0xEB08BA47, "xxh128",      "xxHash v3, 128-bit", POOR },
+  { xxh128low_test,       64, 0xFC6FDE96, "xxh128low",   "xxHash v3, 128-bit, low 64-bits part", POOR },
 
 #if __WORDSIZE >= 64
 # define TIFU_VERIF       0x644236D4
@@ -1482,8 +1482,8 @@ int main ( int argc, const char ** argv )
 {
 #ifdef DEBUG
   const char * defaulthash = "wysha";
-#elif (defined(__x86_64__) && __SSE4_2__) || defined(_M_X64) || defined(_X86_64_)
-  const char * defaulthash = "xxh3"; // because it fails some tests
+#elif defined(__x86_64__) || defined(_M_X64) || defined(_X86_64_)
+  const char * defaulthash = "xxh3";
 #else
   const char * defaulthash = "wyhash";
 #endif
@@ -1525,19 +1525,9 @@ int main ( int argc, const char ** argv )
       }
       if (strcmp(hashToTest,"--verbose") == 0) {
         g_drawDiagram = true;
-        i++;
-        if (argc > i)
-          hashToTest = argv[i];
-        else
-          hashToTest = defaulthash;
       }
       if (strcmp(hashToTest,"--extra") == 0) {
         g_testExtra = true;
-        i++;
-        if (argc > i)
-          hashToTest = argv[i];
-        else
-          hashToTest = defaulthash;
       }
       /* default: --test=All. comma seperated list of options */
       if (strncmp(hashToTest,"--test=", 6) == 0) {
