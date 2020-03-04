@@ -31,6 +31,15 @@ inline uint32_t f3mix ( uint32_t k )
   return k;
 }
 
+static void printHash(const void* key, size_t len)
+{
+    const unsigned char* const p = (const unsigned char*)key;
+    size_t s;
+    printf("\n0x");
+    for (s=0; s<len; s++) printf("%02X", p[s]);
+    printf("  ");
+}
+
 //-----------------------------------------------------------------------------
 // Sort the hash list, count the total number of collisions and return
 // the first N collisions for further processing
@@ -49,6 +58,7 @@ int FindCollisions ( std::vector<hashtype> & hashes,
     if(hashes[hnb] == hashes[hnb-1])
     {
       collcount++;
+      //printHash(&hashes[hnb], sizeof(hashtype));
 
       if((int)collisions.size() < maxCollisions)
       {
