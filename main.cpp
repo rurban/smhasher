@@ -35,6 +35,7 @@ bool g_testPerlinNoise = false;
 bool g_testDiff        = false;
 bool g_testDiffDist    = false;
 bool g_testMomentChi2  = false;
+bool g_testPrng        = false;
 bool g_testBIC         = false;
 //bool g_testLongNeighbors = false;
 
@@ -46,7 +47,7 @@ struct TestOpts {
 };
 TestOpts g_testopts[] =
 {
-  { g_testAll, 		"All" },
+  { g_testAll,          "All" },
   { g_testVerifyAll,    "VerifyAll" },
   { g_testSanity,       "Sanity" },
   { g_testSpeed,        "Speed" },
@@ -64,7 +65,8 @@ TestOpts g_testopts[] =
   { g_testDiff,         "Diff" },
   { g_testDiffDist,     "DiffDist" },
   { g_testBIC, 	        "BIC" },
-  { g_testMomentChi2,   "MomentChi2" }
+  { g_testMomentChi2,   "MomentChi2" },
+  { g_testPrng,         "Prng" },
   //{ g_testLongNeighbors,"LongNeighbors" }
 };
 
@@ -1194,7 +1196,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   // Differential-distribution tests
   // 2m40 with xxh3
 
-  if(g_testDiffDist || g_testAll)
+  if (g_testDiffDist || g_testAll)
   {
     printf("[[[ DiffDist 'Differential Distribution' Tests ]]]\n\n");
     fflush(NULL);
@@ -1220,7 +1222,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   //   7     35s
   //   13    20s
   //   16    12s
-  if(g_testMomentChi2 || g_testAll)
+  if (g_testMomentChi2 || g_testAll)
   {
     printf("[[[ MomentChi2 Tests ]]]\n\n");
 
@@ -1235,6 +1237,23 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("\n");
     fflush(NULL);
   }
+
+
+  if (g_testPrng || (g_testAll && g_testExtra))
+  {
+    printf("[[[ Prng Tests ]]]\n\n");
+
+    bool testCollision = true;
+    bool testDistribution = g_testExtra;
+
+    bool result = true;
+    result &= PrngTest<hashtype>( hash, testCollision, testDistribution, g_drawDiagram );
+
+    if(!result) printf("\n*********FAIL*********\n");
+    printf("\n");
+    fflush(NULL);
+  }
+
 
   //-----------------------------------------------------------------------------
   // LongNeighbors - collisions between long messages of low Hamming distance
