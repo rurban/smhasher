@@ -12,7 +12,7 @@
 #include <time.h>
 
 //-----------------------------------------------------------------------------
-// Configuration. TODO - move these to command-line flags
+// Configuration.
 
 bool g_drawDiagram     = false;
 bool g_testAll         = true;
@@ -166,6 +166,9 @@ HashInfo g_hashes[] =
 #if defined(HAVE_CLMUL) && !defined(_MSC_VER) && defined(__x86_64__)
   { crc32c_pclmul_test,   32, 0x00000000, "crc32_pclmul","-mpclmul crc32 in asm on HW", POOR },
 #endif
+#ifdef HAVE_INT64
+  { FastestHash_test,     64, 0xCEF65501, "FastestHash", "modified FastestHash from wyhash v5", POOR },
+#endif
 #if 0 && defined(__x86_64__) && (defined(__linux__) || defined(__APPLE__))
   // elf64 or macho64 only
   { fhtw_test,            64, 0x0,        "fhtw",        "fhtw asm", POOR },
@@ -245,8 +248,11 @@ HashInfo g_hashes[] =
   { metrohash128crc_1_test,128, 0x5E75144E, "metrohash128crc_1", "MetroHash128crc_1 for x64 (legacy)", GOOD },
   { metrohash128crc_2_test,128, 0x1ACF3E77, "metrohash128crc_2", "MetroHash128crc_2 for x64 (legacy)", GOOD },
 #endif
-  { CityHash64noSeed_test, 64, 0x63FC6063, "City64noSeed",    "Google CityHash64 without seed (default version, misses one final avalanche)", POOR },
-  { CityHash64_test,       64, 0x25A20825, "City64",          "Google CityHash64WithSeed (old)", POOR },
+  { CityHash64noSeed_test, 64, 0x63FC6063, "City64noSeed","Google CityHash64 without seed (default version, misses one final avalanche)", POOR },
+  { CityHash64_test,      64, 0x25A20825, "City64",       "Google CityHash64WithSeed (old)", POOR },
+#if defined(HAVE_AESNI) && !defined(_MSC_VER)
+  { aesnihash_test,       64, 0x0,        "aesnihash",    "majek's unseeded aesnihash with aesenc, 64-bit for x64", POOR },
+#endif
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { falkhash_test_cxx,    64, 0x2F99B071, "falkhash",    "falkhash.asm with aesenc, 64-bit for x64", POOR },
 #endif
@@ -370,17 +376,15 @@ HashInfo g_hashes[] =
 #  define MEOW_VERIF           0xA0D29861
 #  define MEOW32_VERIF         0x8872DE1A
 # endif
-  { MeowHash128_test,     128, MEOW_VERIF, "MeowHash",  "Meow hash (requires x64 AES-NI)", POOR },
-  { MeowHash32_test,       32, MEOW32_VERIF, "MeowHash32low",  "Meow hash lower 32bit (requires x64 AES-NI)", POOR },
+  { MeowHash128_test,     128, MEOW_VERIF,   "MeowHash",      "Meow hash (requires x64 AES-NI)", POOR },
+  { MeowHash32_test,       32, MEOW32_VERIF, "MeowHash32low", "Meow hash lower 32bit (requires x64 AES-NI)", POOR },
 #endif
 #ifdef HAVE_INT64
-# define WYHASH_VERIF     0x894B14D7
-# define WYHASH32L_VERIF  0xA2D41047
 # ifdef DEBUG
-  { wysha,                 32, 0xD09A85B3, "wysha",          "wyhash v4 test", GOOD },
+  { wysha,                 32, 0xD09A85B3, "wysha",          "wyhash v5 test", GOOD },
 # endif
-  { wyhash_test,           64, WYHASH_VERIF, "wyhash",          "wyhash v4 (64-bit, little-endian)", GOOD },
-  { wyhash32low,           32, WYHASH32L_VERIF,"wyhash32low",   "wyhash v4 - lower 32bit", GOOD }
+  { wyhash_test,           64, 0x41B79E18, "wyhash",         "wyhash v5 (64-bit, little-endian)", GOOD },
+  { wyhash32low,           32, 0xAE2B556B, "wyhash32low",    "wyhash v5 - lower 32bit", GOOD }
 #else
   { NULL }
 #endif
@@ -1163,7 +1167,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   //-----------------------------------------------------------------------------
   // Differential tests
   // 5m30 with xxh3
-  // less reps with slow hashes
+  // less reps with slow or very bad hashes
   // md5: 1h38m with 1000 reps!
 
   if(g_testDiff || g_testAll)
@@ -1175,8 +1179,8 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     bool dumpCollisions = g_drawDiagram; // from --verbose
     int reps = 1000;
     if ((g_speed > 500.0 || info->hashbits > 128 ||
-         hash == multiply_shift || hash == pair_multiply_shift
-         ) && !g_testExtra)
+         hash == multiply_shift || hash == pair_multiply_shift ||
+         hash == FastestHash_test) && !g_testExtra)
       reps = 100; // sha1: 7m, md5: 4m53
 
     result &= DiffTest< Blob<64>,  hashtype >(hash,5,reps,dumpCollisions);
