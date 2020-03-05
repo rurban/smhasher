@@ -1326,6 +1326,25 @@ bool MomentChi2Test ( struct HashInfo *info, int inputSize)
          "of %i-bit, using a step of %d ... \n", inputSize*8, step);
   fflush(NULL);
 
+  /* Notes on the ranking system.
+   * Ideally, this test should report and sum all popcount values
+   * and compare the resulting distribution to an ideal distribution.
+   *
+   * What happens here is quite simplified :
+   * the test gives "points" for each popcount, and sum them all.
+   * The metric (using N^5) is heavily influenced by the largest outliers.
+   * For example, a 64-bit hash should have a popcount close to 32.
+   * But a popcount==40 will tilt the metric upward
+   * more than popcount==24 will tilt the metric downward.
+   * In reality, both situations should be ranked similarly.
+   *
+   * To compensate, we measure both popcount1 and popcount0,
+   * and compare to some pre-calculated "optimal" sums for the hash size.
+   *
+   * Another limitation of this test is that it only popcounts the first 64-bit.
+   * For large hashes, bits beyond this limit are ignored.
+   */
+
   if (hbits > 64) hbits = 64;   // limited due to popcount8
   long double srefh, srefl;
   switch (hbits/8) {
@@ -1341,7 +1360,7 @@ bool MomentChi2Test ( struct HashInfo *info, int inputSize)
           printf("hash size not covered \n");
           abort();
   }
-  printf("Ideal values to approximate : %Lf - %Lf \n", srefh, srefl);
+  printf("Target values to approximate : %Lf - %Lf \n", srefh, srefl);
 
   uint64_t previous = 0;
   long double b1h = 0. , b1l = 0., db1h = 0., db1l = 0.;
@@ -1352,11 +1371,10 @@ bool MomentChi2Test ( struct HashInfo *info, int inputSize)
     hash(key, inputSize, s, hbuff);
 
     uint64_t h; memcpy(&h, hbuff, 8);
-    // popcount8 assumed to work on 64-bit => to ensure !!
+    // popcount8 assumed to work on 64-bit
     // note : ideally, one should rather popcount the whole hash
     {   uint64_t const bits1 = popcount8(h);
         uint64_t const bits0 = hbits - bits1;
-        //printf("bits1 : %u , bits0 : %u \n", (unsigned)bits1, (unsigned)bits0);
         uint64_t const b1_exp5 = bits1 * bits1 * bits1 * bits1 * bits1;
         uint64_t const b0_exp5 = bits0 * bits0 * bits0 * bits0 * bits0;
         b1h+=b1_exp5; b1l+=b1_exp5*b1_exp5;
@@ -1380,14 +1398,6 @@ bool MomentChi2Test ( struct HashInfo *info, int inputSize)
 
   printf("Popcount 1 stats : %Lf - %Lf\n", b1h, b1l);
   printf("Popcount 0 stats : %Lf - %Lf\n", b0h, b0l);
-  printf("Derivative stats (transition from 2 consecutive values) : \n");
-  printf("Popcount 1 stats : %Lf - %Lf\n", db1h, db1l);
-  printf("Popcount 0 stats : %Lf - %Lf\n", db0h, db0l);
-
-  // Note : ideally, we should collect the whole statistics,
-  //        i.e. nb of candidates per popcount value
-  //        and compare to an "ideal" distribution.
-  //        Currently, limited to using this proxy formula.
   double worsec2 = 0;
   {   double chi2 = (b1h-srefh) * (b1h-srefh) / (b1l+srefl);
       printf("MomentChi2 for bits 1 :  %8.6g \n", chi2);
@@ -1397,6 +1407,30 @@ bool MomentChi2Test ( struct HashInfo *info, int inputSize)
       printf("MomentChi2 for bits 0 :  %8.6g \n", chi2);
       if (chi2 > worsec2) worsec2 = chi2;
   }
+
+  /* Derivative :
+   * In this scenario, 2 consecutive hashes are xored,
+   * and the outcome of this xor operation is then popcount controlled.
+   * Obviously, the _order_ in which the hash values are generated becomes critical.
+   *
+   * This scenario comes from the prng world,
+   * where derivative of the generated suite of random numbers is analyzed
+   * to ensure the suite is truly "random".
+   *
+   * However, in almost all prng, the seed of next random number is the previous random number.
+   *
+   * This scenario is quite different: it introduces a fixed distance between 2 consecutive "seeds".
+   * This is especially detrimental to algorithms relying on linear operations, such as multiplications.
+   *
+   * This scenario is relevant if the hash is used as a prng and generates values from a linearly increasing counter as a seed.
+   * It is not relevant for scenarios employing the hash as a prng
+   * with the more classical method of using the previous random number as a seed for the next one.
+   * This scenario has no relevance for classical usages of hash algorithms,
+   * such as hash tables, bloom filters and such, were only the raw values are ever used.
+   */
+  printf("\nDerivative stats (transition from 2 consecutive values) : \n");
+  printf("Popcount 1 stats : %Lf - %Lf\n", db1h, db1l);
+  printf("Popcount 0 stats : %Lf - %Lf\n", db0h, db0l);
   {   double chi2 = (db1h-srefh) * (db1h-srefh) / (db1l+srefl);
       printf("MomentChi2 for deriv b1 :  %8.6g \n", chi2);
       if (chi2 > worsec2) worsec2 = chi2;
@@ -1405,14 +1439,13 @@ bool MomentChi2Test ( struct HashInfo *info, int inputSize)
       printf("MomentChi2 for deriv b0 :  %8.6g \n", chi2);
       if (chi2 > worsec2) worsec2 = chi2;
   }
-  fflush(NULL);
 
   // note : previous threshold : 3.84145882069413
   int const rank = (worsec2 < 500.) + (worsec2 < 50.) + (worsec2 < 5.);
   assert(0 <= rank && rank <= 3);
 
   const char* rankstr[4] = { "FAIL !!!!", "pass", "Good !", "Great !!" };
-  printf(" %s \n", rankstr[rank]);
+  printf("\n  %s \n\n", rankstr[rank]);
   fflush(NULL);
 
   return (rank > 0);
