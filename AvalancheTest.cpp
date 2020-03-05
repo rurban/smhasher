@@ -29,6 +29,7 @@ void PrintAvalancheDiagram ( int x, int y, int reps, double scale, int * bins )
     }
 
     printf("]\n");
+    fflush(NULL);
   }
 }
 
@@ -43,7 +44,7 @@ double maxBias ( std::vector<int> & counts, int reps )
     double c = double(counts[i]) / double(reps);
 
     double d = fabs(c * 2 - 1);
-      
+
     if(d > worst)
     {
       worst = d;
