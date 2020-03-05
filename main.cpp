@@ -259,9 +259,9 @@ HashInfo g_hashes[] =
   { t1ha0_32le_test,      64, 0x7F7D7B29, "t1ha0_32le",  "Fast Positive Hash (portable, aims 32-bit, little-endian)", POOR },
   { t1ha0_32be_test,      64, 0xDA6A4061, "t1ha0_32be",  "Fast Positive Hash (portable, aims 32-bit, big-endian)", POOR },
   { xxh3_test,            64, 0x39CD9E4A, "xxh3",        "xxHash v3, 64-bit", GOOD },
-  { xxh3low_test,         32, 0x2EB15EAE, "xxh3low",     "xxHash v3, 64-bit, low 32-bits part", POOR },
-  { xxh128_test,         128, 0xF1C5D2A6, "xxh128",      "xxHash v3, 128-bit", POOR },
-  { xxh128low_test,       64, 0x618C7A9F, "xxh128low",   "xxHash v3, 128-bit, low 64-bits part", POOR },
+  { xxh3low_test,         32, 0xFAE8467B, "xxh3low",     "xxHash v3, 64-bit, low 32-bits part", GOOD },
+  { xxh128_test,         128, 0xEB61B3A0, "xxh128",      "xxHash v3, 128-bit", GOOD },
+  { xxh128low_test,       64, 0x54D1CC70, "xxh128low",   "xxHash v3, 128-bit, low 64-bits part", GOOD },
 
 #if __WORDSIZE >= 64
 # define TIFU_VERIF       0x644236D4
@@ -1150,9 +1150,11 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
     bool result = true;
     result &= PerlinNoise<hashtype>( hash, 2, testCollision, testDistribution, g_drawDiagram );
-    result &= PerlinNoise<hashtype>( hash, 4, testCollision, testDistribution, g_drawDiagram );
-    result &= PerlinNoise<hashtype>( hash, 8, testCollision, testDistribution, g_drawDiagram );
-    result &= PerlinNoise<hashtype>( hash,16, testCollision, testDistribution, g_drawDiagram );
+    if (g_testExtra) {
+        result &= PerlinNoise<hashtype>( hash, 4, testCollision, testDistribution, g_drawDiagram );
+        result &= PerlinNoise<hashtype>( hash, 8, testCollision, testDistribution, g_drawDiagram );
+        result &= PerlinNoise<hashtype>( hash,16, testCollision, testDistribution, g_drawDiagram );
+    }
 
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
@@ -1264,7 +1266,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   // 4m with xxh3
   // 152m with farmhash128_c with reps=1000000, => 8m with 100000
 
-  if(g_testBIC || (info->hashbits > 64 && g_testExtra))
+  if(g_testBIC || (g_testAll && info->hashbits > 64 && g_testExtra))
   {
     printf("[[[ BIC 'Bit Independence Criteria' Tests ]]]\n\n");
     fflush(NULL);
