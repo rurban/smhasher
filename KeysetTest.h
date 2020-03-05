@@ -32,6 +32,55 @@ static void printKey(const void* key, size_t len)
 }
 
 //-----------------------------------------------------------------------------
+// Keyset 'Prng'
+
+
+template< typename hashtype >
+void Prn_gen (int nbRn, pfHash hash, std::vector<hashtype> & hashes )
+{
+  assert(nbRn < 0);
+
+  printf("Generating %i random numbers : \n", nbRn);
+
+  hashtype hcopy;
+  memset(&hcopy, 0, sizeof(hcopy));
+
+  // a generated random number becomes the input for the next one
+  for (int i=0; i< nbRn; i++) {
+      hashtype h;
+      hash(&hcopy, sizeof(hcopy), 0, &h);
+      hashes.push_back(h);
+      memcpy(&hcopy, &h, sizeof(h));
+  }
+}
+
+
+template< typename hashtype >
+bool PrngTest ( hashfunc<hashtype> hash,
+                bool testColl, bool testDist, bool drawDiagram )
+{
+
+  if (sizeof(hashtype) < 8) {
+      printf("The PRNG test is designed for hashes >= 64-bit \n");
+      return true;
+  }
+
+  //----------
+
+  std::vector<hashtype> hashes;
+  Prn_gen(32 << 20, hash, hashes);
+
+  //----------
+
+  bool result = true;
+
+  result &= TestHashList(hashes,drawDiagram,testColl,testDist);
+
+  return result;
+}
+
+
+//-----------------------------------------------------------------------------
 // Keyset 'Perlin Noise' - X,Y coordinates on input & seed
 
 
@@ -63,7 +112,6 @@ void PerlinNoiseTest (int Xbits, int Ybits,
       }
   }
 }
-
 
 
 template< typename hashtype >
