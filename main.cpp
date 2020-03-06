@@ -1330,11 +1330,12 @@ bool MomentChi2Test ( struct HashInfo *info, int inputSize)
   pfHash const hash = info->hash;
   const int step = ((g_speed > 500 || info->hashbits > 128)
                     && !g_testExtra) ? 6 : 3;
-  unsigned s = 0;
   const unsigned mx = 0xfffffff0;
   assert(inputSize >= 4);
-  long double n = mx/step;
-  char key[inputSize]; memset(key, 0, sizeof(key));
+  long double const n = mx/step;
+#define INPUT_SIZE_MAX 256
+  assert(inputSize <= INPUT_SIZE_MAX);
+  char key[INPUT_SIZE_MAX] = {0};
 #define HASH_SIZE_MAX 64
   int hbits = info->hashbits;
   assert(hbits <= HASH_SIZE_MAX*8);
@@ -1381,13 +1382,14 @@ bool MomentChi2Test ( struct HashInfo *info, int inputSize)
   }
   printf("Target values to approximate : %Lf - %Lf \n", srefh, srefl);
 
+  unsigned const seed = 0;
   uint64_t previous = 0;
   long double b1h = 0. , b1l = 0., db1h = 0., db1l = 0.;
   long double b0h = 0. , b0l = 0., db0h = 0., db0l = 0.;
   for (unsigned i=1; i<=mx; i+=step) {
     assert(sizeof(i) <= inputSize);
     memcpy(key, &i, sizeof(i));
-    hash(key, inputSize, s, hbuff);
+    hash(key, inputSize, seed, hbuff);
 
     uint64_t h; memcpy(&h, hbuff, 8);
     // popcount8 assumed to work on 64-bit
