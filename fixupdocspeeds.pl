@@ -40,8 +40,8 @@ sub fixup {
   my ($n,$speed,$hash,$fn) = @_;
   return unless $n;
   return if !defined($speed) && !defined($hash);
-  return if "doc/$n" eq $fn;
-  open(my $I, "<", "doc/$n") or die "open doc/$n $!";
+  return if "doc/$n.txt" eq $fn;
+  open(my $I, "<", "doc/$n.txt") or die "open doc/$n.txt $!";
   open(my $O, ">", "doc/$n.new") or die "open doc/$n.new $!";
   my $found;
   while (<$I>) {
@@ -66,5 +66,5 @@ sub fixup {
   }
   close $I;
   close $O;
-  mv ("doc/$n.new", "doc/$n") if $found;
+  mv ("doc/$n.new", "doc/$n.txt") if $found;
 }

@@ -13,7 +13,7 @@ delete $tests{LongNeighbors}; # invalid license
 if (@ARGV) {
   readf($_) for @ARGV;
 } else {
-  readf($_) for <doc/*>;
+  readf($_) for <doc/*.txt>;
 }
 
 sub readf {
@@ -58,6 +58,6 @@ sub check {
     for (@tests) {
       push @t, $_ unless $r->{$_};
     }
-    print join(',',@t)," $n >>doc/$n\n";
+    print join(',',@t)," $n >>doc/$n.txt\n";
   }
 }

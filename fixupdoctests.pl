@@ -56,8 +56,8 @@ sub fixup {
   my ($n,$r,$fn) = @_;
   return unless $n;
   return if !%$r;
-  return if "doc/$n" eq $fn;
-  open(my $I, "<", "doc/$n") or die "open doc/$n $!";
+  return if "doc/$n.txt" eq $fn;
+  open(my $I, "<", "doc/$n.txt") or die "open doc/$n.txt $!";
   open(my $O, ">", "doc/$n.new") or die "open doc/$n.new $!";
   my $found;
   my %r = %$r;
@@ -66,7 +66,7 @@ sub fixup {
     # search for $n in doc
     if (/^--- Testing /) {
       if ($found && %r) {
-        print STDERR "tests not in doc/$n:\n", join(" ",sort keys %r), "\n";
+        print STDERR "tests not in doc/$n.txt:\n", join(" ",sort keys %r), "\n";
       }
       $found = /^--- Testing $n /;
     }
@@ -97,9 +97,9 @@ sub fixup {
     }
   }
   if (%r) {
-    print STDERR "finally tests not found in doc/$n:\n", join(" ",sort keys %r), "\n";
+    print STDERR "finally tests not found in doc/$n.txt:\n", join(" ",sort keys %r), "\n";
   }
   close $I;
   close $O;
-  mv ("doc/$n.new", "doc/$n") if $found;
+  mv ("doc/$n.new", "doc/$n.txt") if $found;
 }
