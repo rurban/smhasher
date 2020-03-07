@@ -61,7 +61,7 @@ TestOpts g_testopts[] =
   { g_testText,	        "Text" },
   { g_testZeroes,       "Zeroes" },
   { g_testSeed,	        "Seed" },
-  { g_testPerlinNoise,	"Perlin" },
+  { g_testPerlinNoise,	"PerlinNoise" },
   { g_testDiff,         "Diff" },
   { g_testDiffDist,     "DiffDist" },
   { g_testBIC, 	        "BIC" },
@@ -1145,7 +1145,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
   if(g_testPerlinNoise || g_testAll)
   {
-    printf("[[[ Keyset 'Perlin Noise' Tests ]]]\n\n");
+    printf("[[[ Keyset 'PerlinNoise' Tests ]]]\n\n");
 
     bool testCollision = true;
     bool testDistribution = g_testExtra;
