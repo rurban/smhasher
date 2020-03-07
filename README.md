@@ -147,10 +147,10 @@ SMhasher
 | [Spooky32](doc/Spooky32)                      |      9570.40 |    70.27 | 250.23 (18)|2221 |                            |
 | [Spooky64](doc/Spooky64)                      |      9603.18 |    70.19 | 231.73 (17)|2221 |                            |
 | [Spooky128](doc/Spooky128)                    |      9865.67 |    70.84 | 185.64 (2) |2221 |                            |
-| [xxh3](doc/xxh3)                              |     16088.13 |    38.23 | 185.53 (3) | 744 | Moment Chi2 14974, BIC     |
-| [xxh3low](doc/xxh3low)                        |     15999.29 |    38.87 | 200.45 (2) | 756 | Moment Chi2 1.8e+9 !       |
-| [xxh128](doc/xxh128)                          |     11553.50 |    41.68 | 184.25 (2) |1012 | Moment Chi2 14974          |
-| [xxh128low](doc/xxh128low)                    |     11482.39 |    37.60 | 168.17 (4) |1012 | Moment Chi2 14974, BIC     |
+| [xxh3](doc/xxh3)                              |     16377.47 |    37.20 | 179.88 (1) | 744 | Moment Chi2 14974, BIC     |
+| [xxh3low](doc/xxh3low)                        |     16403.22 |    37.19 | 184.18 (2) | 756 | Moment Chi2 1.8e+9 !       |
+| [xxh128](doc/xxh128)                          |     15117.76 |    44.70 | 178.72 (1) |1012 | Moment Chi2 14974          |
+| [xxh128low](doc/xxh128low)                    |     15109.04 |    38.98 | 174.91 (3) |1012 | Moment Chi2 14974, BIC     |
 | [t1ha2_atonce](doc/t1ha2_atonce)              |      8192.03 |    48.48 | 230.46 (14)| 541 |                            |
 | [t1ha2_atonce128](doc/t1ha2_atonce128)        |      8382.53 |    64.15 | 199.63 (4) | 613 | LongNeighbors              |
 | [t1ha0_aes_noavx](doc/t1ha0_aes_noavx)        |     21782.86 |    48.17 | 238.14 (18)| 925 | LongNeighbors, machine-specific (x86 AES-NI) |
