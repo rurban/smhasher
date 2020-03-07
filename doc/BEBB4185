@@ -1,5 +1,69 @@
 --- Testing BEBB4185 "BEBB4185" GOOD
 
+[[[ Sanity Tests ]]]
+
+Verification value 0x66CAC5F2 ....... PASS
+Running sanity check 1     .......... PASS
+Running AppendedZeroesTest .......... PASS
+
+[[[ Speed Tests ]]]
+
+Bulk speed test - 262144-byte keys
+Alignment  7 -  0.920 bytes/cycle - 2633.44 MiB/sec @ 3 ghz
+Alignment  6 -  0.921 bytes/cycle - 2634.01 MiB/sec @ 3 ghz
+Alignment  5 -  0.922 bytes/cycle - 2637.00 MiB/sec @ 3 ghz
+Alignment  4 -  0.921 bytes/cycle - 2633.77 MiB/sec @ 3 ghz
+Alignment  3 -  0.921 bytes/cycle - 2635.94 MiB/sec @ 3 ghz
+Alignment  2 -  0.920 bytes/cycle - 2631.53 MiB/sec @ 3 ghz
+Alignment  1 -  0.924 bytes/cycle - 2643.85 MiB/sec @ 3 ghz
+Alignment  0 -  0.977 bytes/cycle - 2796.50 MiB/sec @ 3 ghz
+Average      -  0.928 bytes/cycle - 2655.75 MiB/sec @ 3 ghz
+
+Small key speed test -    1-byte keys -   171.23 cycles/hash
+Small key speed test -    2-byte keys -   200.13 cycles/hash
+Small key speed test -    3-byte keys -   210.85 cycles/hash
+Small key speed test -    4-byte keys -   243.80 cycles/hash
+Small key speed test -    5-byte keys -   281.88 cycles/hash
+Small key speed test -    6-byte keys -   283.97 cycles/hash
+Small key speed test -    7-byte keys -   316.55 cycles/hash
+Small key speed test -    8-byte keys -   151.83 cycles/hash
+Small key speed test -    9-byte keys -   165.42 cycles/hash
+Small key speed test -   10-byte keys -   220.99 cycles/hash
+Small key speed test -   11-byte keys -   219.37 cycles/hash
+Small key speed test -   12-byte keys -   238.85 cycles/hash
+Small key speed test -   13-byte keys -   269.42 cycles/hash
+Small key speed test -   14-byte keys -   331.58 cycles/hash
+Small key speed test -   15-byte keys -   318.54 cycles/hash
+Small key speed test -   16-byte keys -   170.49 cycles/hash
+Small key speed test -   17-byte keys -   196.61 cycles/hash
+Small key speed test -   18-byte keys -   211.11 cycles/hash
+Small key speed test -   19-byte keys -   232.27 cycles/hash
+Small key speed test -   20-byte keys -   254.69 cycles/hash
+Small key speed test -   21-byte keys -   282.92 cycles/hash
+Small key speed test -   22-byte keys -   304.12 cycles/hash
+Small key speed test -   23-byte keys -   327.17 cycles/hash
+Small key speed test -   24-byte keys -   169.86 cycles/hash
+Small key speed test -   25-byte keys -   200.53 cycles/hash
+Small key speed test -   26-byte keys -   208.09 cycles/hash
+Small key speed test -   27-byte keys -   217.14 cycles/hash
+Small key speed test -   28-byte keys -   245.59 cycles/hash
+Small key speed test -   29-byte keys -   261.60 cycles/hash
+Small key speed test -   30-byte keys -   276.58 cycles/hash
+Small key speed test -   31-byte keys -   302.70 cycles/hash
+Average                                    241.480 cycles/hash
+
+
+[[[ 'Hashmap' Speed Tests ]]]
+
+std::unordered_map
+Init std HashMapTest:     922.945 cycles/op (102401 inserts, 1% deletions)
+Running std HashMapTest:  430.637 cycles/op (38.9 stdv)
+
+greg7mdp/parallel-hashmap
+Init fast HashMapTest:    453.216 cycles/op (102401 inserts, 1% deletions)
+Running fast HashMapTest: 320.749 cycles/op (22.6 stdv)  ....... PASS
+
+
 [[[ Avalanche Tests ]]]
 
 Testing   24-bit keys ->  64-bit hashes, 300000 reps worst bias is 0.680667%
@@ -18,21 +82,6 @@ Testing  512-bit keys ->  64-bit hashes, 300000 reps worst bias is 0.842667%
 Testing 1024-bit keys ->  64-bit hashes, 300000 reps worst bias is 0.770000%
 
 
-Input vcode 0x00000001, Output vcode 0x00000001, Result vcode 0x00000001
-Verification value is 0x00000001 - Testing took 303.441830 seconds
---- Testing BEBB4185 "BEBB4185" GOOD
-
-[[[ Prng Tests ]]]
-
-[[[ BIC 'Bit Independence Criteria' Tests ]]]
-
-...........
-Max bias 0.008568 - ( 87 :   2, 55)
-
-
-Input vcode 0x00000001, Output vcode 0x00000001, Result vcode 0x00000001
-Verification value is 0x00000001 - Testing took 243.721435 seconds
---- Testing BEBB4185 "BEBB4185" GOOD
 
 [[[ Keyset 'Cyclic' Tests ]]]
 
@@ -838,37 +887,6 @@ Testing collisions (low  12-bit) - Expected    2097152.0, actual 2093056 (1.00x)
 Testing collisions (low   8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
 
 
-
-Input vcode 0x00000001, Output vcode 0x00000001, Result vcode 0x00000001
-Verification value is 0x00000001 - Testing took 46.296968 seconds
---- Testing BEBB4185 "BEBB4185" GOOD
-
-[[[ 'Hashmap' Speed Tests ]]]
-
-std::unordered_map
-Init std HashMapTest:     922.945 cycles/op (102401 inserts, 1% deletions)
-Running std HashMapTest:  430.637 cycles/op (38.9 stdv)
-
-greg7mdp/parallel-hashmap
-Init fast HashMapTest:    453.216 cycles/op (102401 inserts, 1% deletions)
-Running fast HashMapTest: 320.749 cycles/op (22.6 stdv)  ....... PASS
-
-
-Input vcode 0x00000001, Output vcode 0x00000001, Result vcode 0x00000001
-Verification value is 0x00000001 - Testing took 2.042774 seconds
---- Testing BEBB4185 "BEBB4185" GOOD
-
-[[[ MomentChi2 Tests ]]]
-
-Running 1st unseeded MomentChi2 for the low 32bits/step 3 ... 38918091.668886 - 410427.793371
-Running 2nd   seeded MomentChi2 for the low 32bits/step 3 ... 38918582.453467 - 410447.952100
-KeySeedMomentChi2:	0.29343	PASS
-
-
-Input vcode 0x00000001, Output vcode 0x00000001, Result vcode 0x00000001
-Verification value is 0x00000001 - Testing took 282.137303 seconds
---- Testing BEBB4185 "BEBB4185" GOOD
-
 [[[ Keyset 'Permutation' Tests ]]]
 
 Combination Lowbits Tests:
@@ -1081,22 +1099,6 @@ Testing collisions (low   8-bit) - Expected    8388606.0, actual 8388350 (1.00x)
 Testing distribution - Worst bias is the 20-bit window at bit 46 - 0.065%
 
 
-
-Input vcode 0x00000001, Output vcode 0x00000001, Result vcode 0x00000001
-Verification value is 0x00000001 - Testing took 225.959946 seconds
---- Testing BEBB4185 "BEBB4185" GOOD
-
-[[[ Sanity Tests ]]]
-
-Verification value 0xBEBB4185 ....... FAIL! (Expected 0x66CAC5F2)
-Running sanity check 1     .......... PASS
-Running AppendedZeroesTest .......... PASS
-
-
-Input vcode 0x00000001, Output vcode 0x00000001, Result vcode 0x00000001
-Verification value is 0x00000001 - Testing took 10.663442 seconds
---- Testing BEBB4185 "BEBB4185" GOOD
-
 [[[ Keyset 'Seed' Tests ]]]
 
 Keyset 'Seed' - 5000000 keys
@@ -1111,11 +1113,6 @@ Testing collisions (low  12-bit) - Expected    5000000.0, actual 4995904 (1.00x)
 Testing collisions (low   8-bit) - Expected    5000000.0, actual 4999744 (1.00x) (-256)
 Testing distribution - Worst bias is the 19-bit window at bit 34 - 0.038%
 
-
-
-Input vcode 0x00000001, Output vcode 0x00000001, Result vcode 0x00000001
-Verification value is 0x00000001 - Testing took 8.265672 seconds
---- Testing BEBB4185 "BEBB4185" GOOD
 
 [[[ Keyset 'Sparse' Tests ]]]
 
@@ -1288,61 +1285,6 @@ Testing collisions (low   8-bit) - Expected    2098177.0, actual 2097921 (1.00x)
 Testing distribution - Worst bias is the 18-bit window at bit 36 - 0.077%
 
 
-
-Input vcode 0x00000001, Output vcode 0x00000001, Result vcode 0x00000001
-Verification value is 0x00000001 - Testing took 187.672250 seconds
---- Testing BEBB4185 "BEBB4185" GOOD
-
-[[[ Speed Tests ]]]
-
-Bulk speed test - 262144-byte keys
-Alignment  7 -  0.920 bytes/cycle - 2633.44 MiB/sec @ 3 ghz
-Alignment  6 -  0.921 bytes/cycle - 2634.01 MiB/sec @ 3 ghz
-Alignment  5 -  0.922 bytes/cycle - 2637.00 MiB/sec @ 3 ghz
-Alignment  4 -  0.921 bytes/cycle - 2633.77 MiB/sec @ 3 ghz
-Alignment  3 -  0.921 bytes/cycle - 2635.94 MiB/sec @ 3 ghz
-Alignment  2 -  0.920 bytes/cycle - 2631.53 MiB/sec @ 3 ghz
-Alignment  1 -  0.924 bytes/cycle - 2643.85 MiB/sec @ 3 ghz
-Alignment  0 -  0.977 bytes/cycle - 2796.50 MiB/sec @ 3 ghz
-Average      -  0.928 bytes/cycle - 2655.75 MiB/sec @ 3 ghz
-
-Small key speed test -    1-byte keys -   171.23 cycles/hash
-Small key speed test -    2-byte keys -   200.13 cycles/hash
-Small key speed test -    3-byte keys -   210.85 cycles/hash
-Small key speed test -    4-byte keys -   243.80 cycles/hash
-Small key speed test -    5-byte keys -   281.88 cycles/hash
-Small key speed test -    6-byte keys -   283.97 cycles/hash
-Small key speed test -    7-byte keys -   316.55 cycles/hash
-Small key speed test -    8-byte keys -   151.83 cycles/hash
-Small key speed test -    9-byte keys -   165.42 cycles/hash
-Small key speed test -   10-byte keys -   220.99 cycles/hash
-Small key speed test -   11-byte keys -   219.37 cycles/hash
-Small key speed test -   12-byte keys -   238.85 cycles/hash
-Small key speed test -   13-byte keys -   269.42 cycles/hash
-Small key speed test -   14-byte keys -   331.58 cycles/hash
-Small key speed test -   15-byte keys -   318.54 cycles/hash
-Small key speed test -   16-byte keys -   170.49 cycles/hash
-Small key speed test -   17-byte keys -   196.61 cycles/hash
-Small key speed test -   18-byte keys -   211.11 cycles/hash
-Small key speed test -   19-byte keys -   232.27 cycles/hash
-Small key speed test -   20-byte keys -   254.69 cycles/hash
-Small key speed test -   21-byte keys -   282.92 cycles/hash
-Small key speed test -   22-byte keys -   304.12 cycles/hash
-Small key speed test -   23-byte keys -   327.17 cycles/hash
-Small key speed test -   24-byte keys -   169.86 cycles/hash
-Small key speed test -   25-byte keys -   200.53 cycles/hash
-Small key speed test -   26-byte keys -   208.09 cycles/hash
-Small key speed test -   27-byte keys -   217.14 cycles/hash
-Small key speed test -   28-byte keys -   245.59 cycles/hash
-Small key speed test -   29-byte keys -   261.60 cycles/hash
-Small key speed test -   30-byte keys -   276.58 cycles/hash
-Small key speed test -   31-byte keys -   302.70 cycles/hash
-Average                                    241.480 cycles/hash
-
-Input vcode 0x00000001, Output vcode 0x00000001, Result vcode 0x00000001
-Verification value is 0x00000001 - Testing took 65.907772 seconds
---- Testing BEBB4185 "BEBB4185" GOOD
-
 [[[ Keyset 'Text' Tests ]]]
 
 Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
@@ -1381,11 +1323,6 @@ Testing collisions (low  12-bit) - Expected   14776336.0, actual 14772240 (1.00x
 Testing collisions (low   8-bit) - Expected   14776336.0, actual 14776080 (1.00x) (-256)
 Testing distribution - Worst bias is the 20-bit window at bit 62 - 0.018%
 
-
-
-Input vcode 0x00000001, Output vcode 0x00000001, Result vcode 0x00000001
-Verification value is 0x00000001 - Testing took 76.821672 seconds
---- Testing BEBB4185 "BEBB4185" GOOD
 
 [[[ Keyset 'TwoBytes' Tests ]]]
 
@@ -1450,11 +1387,6 @@ Testing collisions (low   8-bit) - Expected   86536545.0, actual 86536289 (1.00x
 Testing distribution - Worst bias is the 19-bit window at bit 25 - 0.002%
 
 
-
-Input vcode 0x00000001, Output vcode 0x00000001, Result vcode 0x00000001
-Verification value is 0x00000001 - Testing took 265.386370 seconds
---- Testing BEBB4185 "BEBB4185" GOOD
-
 [[[ Keyset 'Window' Tests ]]]
 
 Keyset 'Window' -  32-bit key,  25-bit window - 32 tests, 33554432 keys per test
@@ -1493,10 +1425,6 @@ Window at  31 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0
 Window at  32 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
 
 
-Input vcode 0x00000001, Output vcode 0x00000001, Result vcode 0x00000001
-Verification value is 0x00000001 - Testing took 244.444264 seconds
---- Testing BEBB4185 "BEBB4185" GOOD
-
 [[[ Keyset 'Zeroes' Tests ]]]
 
 Keyset 'Zeroes' - 204800 keys
@@ -1511,6 +1439,18 @@ Testing collisions (low  12-bit) - Expected     204800.0, actual 200704 (0.98x)
 Testing collisions (low   8-bit) - Expected     204800.0, actual 204544 (1.00x) (-256)
 Testing distribution - Worst bias is the 15-bit window at bit 23 - 0.330%
 
+[[[ MomentChi2 Tests ]]]
+
+Running 1st unseeded MomentChi2 for the low 32bits/step 3 ... 38918091.668886 - 410427.793371
+Running 2nd   seeded MomentChi2 for the low 32bits/step 3 ... 38918582.453467 - 410447.952100
+KeySeedMomentChi2:	0.29343	PASS
+
+[[[ Prng Tests ]]]
+
+[[[ BIC 'Bit Independence Criteria' Tests ]]]
+
+...........
+Max bias 0.008568 - ( 87 :   2, 55)
 
 
 Input vcode 0x00000001, Output vcode 0x00000001, Result vcode 0x00000001
