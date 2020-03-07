@@ -952,16 +952,12 @@ Testing collisions (high 128-bit) - Expected          0.0, actual 4999999 (68056
 Testing collisions (high 64-bit) - Expected          0.0, actual 4999999 (3689348814741.91x) (4999999) !!!!!
 Testing collisions (high 32-bit) - Expected       5820.8, actual 4999999 (858.99x) (4994179) !!!!!
 Testing collisions (high 26-40 bits) - Worst is 40 bits: 4999999/22 (219902.33x) !!!!!
-Testing collisions (high 12-bit) - Expected    5000000.0, actual 4999999 (1.00x) (-1)
-Testing collisions (high  8-bit) - Expected    5000000.0, actual 4999999 (1.00x) (-1)
 Testing collisions (low  224-bit) - Expected          0.0, actual 4999999 (5391989333430127714935704665009683940622246062524664364662784.00x) (4999999) !!!!!
 Testing collisions (low  160-bit) - Expected          0.0, actual 4999999 (292300327466180570413595234786825442689024.00x) (4999999) !!!!!
 Testing collisions (low  128-bit) - Expected          0.0, actual 4999999 (68056473384187689612990998380544.00x) (4999999) !!!!!
 Testing collisions (low  64-bit) - Expected          0.0, actual 4999999 (3689348814741.91x) (4999999) !!!!!
 Testing collisions (low  32-bit) - Expected       5820.8, actual 4999999 (858.99x) (4994179) !!!!!
 Testing collisions (low  26-40 bits) - Worst is 40 bits: 4999999/22 (219902.33x) !!!!!
-Testing collisions (low  12-bit) - Expected    5000000.0, actual 4999999 (1.00x) (-1)
-Testing collisions (low   8-bit) - Expected    5000000.0, actual 4999999 (1.00x) (-1)
 Testing distribution - Worst bias is the 19-bit window at bit  0 - 100.000% !!!!!
 
 *********FAIL*********
@@ -2222,9 +2218,39 @@ Testing collisions (low   8-bit) - Expected    2097152.0, actual 2096896 (1.00x)
 
 [[[ MomentChi2 Tests ]]]
 
-Running 1st unseeded MomentChi2 for the low 32bits/step 6 ... 38917737.418090 - 820780.293026
-Running 2nd   seeded MomentChi2 for the low 32bits/step 6 ... 0.000000 - 0.000000
-KeySeedMomentChi2:	1.84531e+09	FAIL!!!!
+Analyze hashes produced from a serie of linearly increasing numbers of 32-bit, using a step of 6 ... 
+Target values to approximate : 38918200.000000 - 410450.000000 
+Popcount 1 stats : 38919664.563428 - 820968.061986
+Popcount 0 stats : 38918598.082662 - 820954.590291
+MomentChi2 for bits 1 :   1.74185 
+MomentChi2 for bits 0 :   0.12869 
 
-*********FAIL*********
+Derivative stats (transition from 2 consecutive values) : 
+Popcount 1 stats : 38917737.361316 - 820780.294091
+Popcount 0 stats : 38919439.603142 - 820934.589878
+MomentChi2 for deriv b1 :  0.173838 
+MomentChi2 for deriv b0 :   1.24788 
+
+  Great !! 
+
+
+[[[ Prng Tests ]]]
+
+Generating 33554432 random numbers : 
+Testing collisions (256-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 224-bit) - Expected          0.0, actual      0 (0.00x)
+Testing collisions (high 160-bit) - Expected          0.0, actual      0 (0.00x)
+Testing collisions (high 128-bit) - Expected          0.0, actual      0 (0.00x)
+Testing collisions (high 64-bit) - Expected          0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected     262144.0, actual 130125 (0.50x)
+Testing collisions (high 29-45 bits) - Worst is 45 bits: 22/31 (0.69x)
+Testing collisions (low  224-bit) - Expected          0.0, actual      0 (0.00x)
+Testing collisions (low  160-bit) - Expected          0.0, actual      0 (0.00x)
+Testing collisions (low  128-bit) - Expected          0.0, actual      0 (0.00x)
+Testing collisions (low  64-bit) - Expected          0.0, actual      0 (0.00x)
+Testing collisions (low  32-bit) - Expected     262144.0, actual 131118 (0.50x)
+Testing collisions (low  29-45 bits) - Worst is 43 bits: 69/127 (0.54x)
+
+
+[[[ BIC 'Bit Independence Criteria' Tests ]]]
 

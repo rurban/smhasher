@@ -707,12 +707,6 @@ Testing collisions (low   8-bit) - Expected    5471025.0, actual 5470769 (1.00x)
 Testing distribution - Worst bias is the 20-bit window at bit 53 - 0.049%
 
 
-[[[ 'MomentChi2' Tests ]]]
-
-Running 1st unseeded MomentChi2 for the low 32bits/step 3 ... 38918741.417190 - 410435.557317
-Running 2nd   seeded MomentChi2 for the low 32bits/step 3 ... 38919934.190237 - 410495.390273
-KeySeedMomentChi2:	1.73304	PASS
-
 [[[ Keyset 'Text' Tests ]]]
 
 Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
@@ -770,15 +764,11 @@ Testing distribution - Worst bias is the 15-bit window at bit 12 - 0.197%
 [[[ Keyset 'Seed' Tests ]]]
 
 Keyset 'Seed' - 5000000 keys
-Testing collisions ( 64-bit)     - Expected          0.0, actual      0 (0.00x)
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
 Testing collisions (high 32-bit) - Expected       5820.8, actual   2939 (0.50x)
 Testing collisions (high 26-40 bits) - Worst is 35 bits: 372/727 (0.51x)
-Testing collisions (high 12-bit) - Expected    5000000.0, actual 4995904 (1.00x) (-4096)
-Testing collisions (high  8-bit) - Expected    5000000.0, actual 4999744 (1.00x) (-256)
 Testing collisions (low  32-bit) - Expected       5820.8, actual   2930 (0.50x)
 Testing collisions (low  26-40 bits) - Worst is 38 bits: 49/90 (0.54x)
-Testing collisions (low  12-bit) - Expected    5000000.0, actual 4995904 (1.00x) (-4096)
-Testing collisions (low   8-bit) - Expected    5000000.0, actual 4999744 (1.00x) (-256)
 Testing distribution - Worst bias is the 19-bit window at bit  7 - 0.058%
 
 
@@ -1515,12 +1505,33 @@ Testing collisions (low  25-37 bits) - Worst is 35 bits: 77/127 (0.60x)
 Testing collisions (low  12-bit) - Expected    2097152.0, actual 2093056 (1.00x) (-4096)
 Testing collisions (low   8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
 
+[[[ MomentChi2 Tests ]]]
+
+Analyze hashes produced from a serie of linearly increasing numbers of 32-bit, using a step of 6 ... 
+Target values to approximate : 38918200.000000 - 410450.000000 
+Popcount 1 stats : 38917836.884201 - 820866.658367
+Popcount 0 stats : 38920667.936501 - 821124.434690
+MomentChi2 for bits 1 :  0.107083 
+MomentChi2 for bits 0 :   4.94547 
+
+Derivative stats (transition from 2 consecutive values) : 
+Popcount 1 stats : 38918789.898799 - 820900.518140
+Popcount 0 stats : 38919000.252688 - 820942.533921
+MomentChi2 for deriv b1 :  0.282601 
+MomentChi2 for deriv b0 :  0.520065 
+
+  Great !! 
 
 
-Input vcode 0x00000001, Output vcode 0x00000001, Result vcode 0x00000001
-Verification value is 0x00000001 - Testing took -1310.797563 seconds
--------------------------------------------------------------------------------
 [[[ Prng Tests ]]]
+
+Generating 33554432 random numbers : 
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected     262144.0, actual 130310 (0.50x)
+Testing collisions (high 29-45 bits) - Worst is 43 bits: 65/127 (0.51x)
+Testing collisions (low  32-bit) - Expected     262144.0, actual 130656 (0.50x)
+Testing collisions (low  29-45 bits) - Worst is 38 bits: 2064/4095 (0.50x)
+
 
 [[[ BIC 'Bit Independence Criteria' Tests ]]]
 
@@ -1528,3 +1539,6 @@ Verification value is 0x00000001 - Testing took -1310.797563 seconds
 Max bias 0.027120 - (115 :   3, 57)
 
 
+Input vcode 0x00000001, Output vcode 0x00000001, Result vcode 0x00000001
+Verification value is 0x00000001 - Testing took -1310.797563 seconds
+-------------------------------------------------------------------------------

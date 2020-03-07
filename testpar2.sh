@@ -9,6 +9,6 @@ fi
 test -n "$@" && r="if /$@/"
 build/SMHasher --list|perl -alne"print \$F[0] $r" | \
     parallel -j4 --bar \
-      'build/SMHasher --test=Sanity,Avalanche,Seed,PerlinNoise,Diff,BIC,MomentChi2,Prng {} 2>&1 >partests2/{}'
+      'build/SMHasher --test=Sanity,Avalanche,Seed,PerlinNoise,Diff,BIC,MomentChi2,Prng {} >partests2/{} 2>&1'
 
 ./fixupdoctests.pl partests2/*

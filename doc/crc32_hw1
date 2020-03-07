@@ -547,12 +547,6 @@ Testing distribution - Worst bias is the 20-bit window at bit  6 - 0.109%
 
 *********FAIL*********
 
-[[[ 'MomentChi2' Tests ]]]
-
-Running 1st unseeded MomentChi2 for the low 32bits/step 3 ... 907294.311635 - 373.591154
-Running 2nd   seeded MomentChi2 for the low 32bits/step 3 ... 907294.304327 - 373.591095
-KeySeedMomentChi2:	7.14637e-08	PASS
-
 [[[ Keyset 'Text' Tests ]]]
 
 Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
@@ -597,11 +591,7 @@ Testing distribution - Worst bias is the 15-bit window at bit  7 - 0.291%
 [[[ Keyset 'Seed' Tests ]]]
 
 Keyset 'Seed' - 5000000 keys
-Testing collisions ( 32-bit)     - Expected       5820.8, actual      0 (0.00x)
-Testing collisions (high 12-bit) - Expected    5000000.0, actual 4995904 (1.00x) (-4096)
-Testing collisions (high  8-bit) - Expected    5000000.0, actual 4999744 (1.00x) (-256)
-Testing collisions (low  12-bit) - Expected    5000000.0, actual 4995904 (1.00x) (-4096)
-Testing collisions (low   8-bit) - Expected    5000000.0, actual 4999744 (1.00x) (-256)
+Testing collisions ( 32-bit) - Expected 5820.8, actual      0 (0.00x)
 Testing distribution - Worst bias is the 17-bit window at bit 21 - 7.408% !!!!!
 
 *********FAIL*********
@@ -1081,11 +1071,30 @@ Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x)
 
 *********FAIL*********
 
+[[[ MomentChi2 Tests ]]]
 
-Input vcode 0x00000001, Output vcode 0x00000001, Result vcode 0x00000001
-Verification value is 0x00000001 - Testing took 1044.939414 seconds
--------------------------------------------------------------------------------
+Analyze hashes produced from a serie of linearly increasing numbers of 32-bit, using a step of 3 ... 
+Target values to approximate : 1391290.000000 - 1030.900000 
+Popcount 1 stats : 1391305.422813 - 1030.994043
+Popcount 0 stats : 1391312.585169 - 1030.991507
+MomentChi2 for bits 1 :  0.115361 
+MomentChi2 for bits 0 :  0.247389 
+
+Derivative stats (transition from 2 consecutive values) : 
+Popcount 1 stats : 907294.304327 - 373.591095
+Popcount 0 stats : 2092235.372697 - 1646.857689
+MomentChi2 for deriv b1 :  1.66788e+08 
+MomentChi2 for deriv b0 :  1.83484e+08 
+
+  FAIL !!!! 
+
+
+*********FAIL*********
+
 [[[ Prng Tests ]]]
+
+The PRNG test is designed for hashes >= 64-bit 
+
 
 [[[ BIC 'Bit Independence Criteria' Tests ]]]
 
@@ -1093,4 +1102,8 @@ Verification value is 0x00000001 - Testing took 1044.939414 seconds
 Max bias 3.000000 - (  0 :   0,  1)
 *********FAIL*********
 
+
+Input vcode 0x00000001, Output vcode 0x00000001, Result vcode 0x00000001
+Verification value is 0x00000001 - Testing took 1044.939414 seconds
+-------------------------------------------------------------------------------
 

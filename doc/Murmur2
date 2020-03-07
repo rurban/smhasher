@@ -545,12 +545,23 @@ Testing distribution - Worst bias is the 20-bit window at bit 29 - 0.003%
 
 *********FAIL*********
 
-[[[ 'MomentChi2' Tests ]]]
+[[[ MomentChi2 Tests ]]]
 
-Running 1st unseeded MomentChi2 for the low 32bits/step 3 ... 1391707.386487 - 1033.411390
-Running 2nd   seeded MomentChi2 for the low 32bits/step 3 ... 1392468.066599 - 1032.732118
-KeySeedMomentChi2:	280.055	FAIL!!!!
-*********FAIL*********
+Analyze hashes produced from a serie of linearly increasing numbers of 32-bit, using a step of 3 ... 
+Target values to approximate : 1391290.000000 - 1030.900000 
+Popcount 1 stats : 1391271.358153 - 1030.861725
+Popcount 0 stats : 1391329.661094 - 1031.054551
+MomentChi2 for bits 1 :  0.168554 
+MomentChi2 for bits 0 :   0.76287 
+
+Derivative stats (transition from 2 consecutive values) : 
+Popcount 1 stats : 1391707.378920 - 1033.411336
+Popcount 0 stats : 1391768.442936 - 1032.570193
+MomentChi2 for deriv b1 :    84.389 
+MomentChi2 for deriv b0 :   110.933 
+
+  pass 
+
 
 [[[ Keyset 'Text' Tests ]]]
 
@@ -596,11 +607,7 @@ Testing distribution - Worst bias is the 15-bit window at bit 27 - 0.261%
 [[[ Keyset 'Seed' Tests ]]]
 
 Keyset 'Seed' - 5000000 keys
-Testing collisions ( 32-bit)     - Expected       5820.8, actual      0 (0.00x)
-Testing collisions (high 12-bit) - Expected    5000000.0, actual 4995904 (1.00x) (-4096)
-Testing collisions (high  8-bit) - Expected    5000000.0, actual 4999744 (1.00x) (-256)
-Testing collisions (low  12-bit) - Expected    5000000.0, actual 4995904 (1.00x) (-4096)
-Testing collisions (low   8-bit) - Expected    5000000.0, actual 4999744 (1.00x) (-256)
+Testing collisions ( 32-bit) - Expected 5820.8, actual      0 (0.00x)
 Testing distribution - Worst bias is the 18-bit window at bit 14 - 0.020%
 
 
@@ -1084,6 +1091,9 @@ Input vcode 0x00000001, Output vcode 0x00000001, Result vcode 0x00000001
 Verification value is 0x00000001 - Testing took 1169.465185 seconds
 -------------------------------------------------------------------------------
 [[[ Prng Tests ]]]
+
+The PRNG test is designed for hashes >= 64-bit 
+
 
 [[[ BIC 'Bit Independence Criteria' Tests ]]]
 

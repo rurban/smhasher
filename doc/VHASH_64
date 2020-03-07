@@ -697,12 +697,8 @@ Keyset 'Seed' - 5000000 keys
 Testing collisions ( 64-bit) - Expected    0.0, actual 4999999 (3689348814741.91x) !!!!!
 Testing collisions (high 32-bit) - Expected       5820.8, actual 4999999 (858.99x) (4994179) !!!!!
 Testing collisions (high 26-40 bits) - Worst is 40 bits: 4999999/22 (219902.33x) !!!!!
-Testing collisions (high 12-bit) - Expected    5000000.0, actual 4999999 (1.00x) (-1)
-Testing collisions (high  8-bit) - Expected    5000000.0, actual 4999999 (1.00x) (-1)
 Testing collisions (low  32-bit) - Expected       5820.8, actual 4999999 (858.99x) (4994179) !!!!!
 Testing collisions (low  26-40 bits) - Worst is 40 bits: 4999999/22 (219902.33x) !!!!!
-Testing collisions (low  12-bit) - Expected    5000000.0, actual 4999999 (1.00x) (-1)
-Testing collisions (low   8-bit) - Expected    5000000.0, actual 4999999 (1.00x) (-1)
 Testing distribution - Worst bias is the 19-bit window at bit  0 - 100.000% !!!!!
 
 *********FAIL*********
@@ -1443,11 +1439,31 @@ Testing collisions (low   8-bit) - Expected    2097152.0, actual 2096896 (1.00x)
 
 [[[ MomentChi2 Tests ]]]
 
-Running 1st unseeded MomentChi2 for the low 32bits/step 3 ... 38918516.212552 - 410429.311161
-Running 2nd   seeded MomentChi2 for the low 32bits/step 3 ... 38920084.123401 - 410535.787110
-KeySeedMomentChi2:	2.99446	PASS
+Analyze hashes produced from a serie of linearly increasing numbers of 32-bit, using a step of 3 ... 
+Target values to approximate : 38918200.000000 - 410450.000000 
+Popcount 1 stats : 38919527.732102 - 410495.655854
+Popcount 0 stats : 38918601.257156 - 410467.644059
+MomentChi2 for bits 1 :   2.14737 
+MomentChi2 for bits 0 :  0.196131 
+
+Derivative stats (transition from 2 consecutive values) : 
+Popcount 1 stats : 38919161.332925 - 410497.103685
+Popcount 0 stats : 38918809.518244 - 410451.299886
+MomentChi2 for deriv b1 :   1.12573 
+MomentChi2 for deriv b0 :  0.452567 
+
+  Great !! 
+
 
 [[[ Prng Tests ]]]
+
+Generating 33554432 random numbers : 
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected     262144.0, actual 130049 (0.50x)
+Testing collisions (high 29-45 bits) - Worst is 41 bits: 279/511 (0.54x)
+Testing collisions (low  32-bit) - Expected     262144.0, actual 131527 (0.50x)
+Testing collisions (low  29-45 bits) - Worst is 45 bits: 19/31 (0.59x)
+
 
 [[[ BIC 'Bit Independence Criteria' Tests ]]]
 

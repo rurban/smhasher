@@ -569,10 +569,6 @@ Testing distribution - Worst bias is the 15-bit window at bit 14 - 0.164%
 
 Keyset 'Seed' - 5000000 keys
 Testing collisions ( 32-bit) - Expected 5820.8, actual   2852 (0.49x)
-Testing collisions (high 12-bit) - Expected    5000000.0, actual 4995904 (1.00x) (-4096)
-Testing collisions (high  8-bit) - Expected    5000000.0, actual 4999744 (1.00x) (-256)
-Testing collisions (low  12-bit) - Expected    5000000.0, actual 4995904 (1.00x) (-4096)
-Testing collisions (low   8-bit) - Expected    5000000.0, actual 4999744 (1.00x) (-256)
 Testing distribution - Worst bias is the 19-bit window at bit 13 - 0.031%
 
 
@@ -1050,11 +1046,26 @@ Testing collisions (low   8-bit) - Expected    2097152.0, actual 2096896 (1.00x)
 
 [[[ MomentChi2 Tests ]]]
 
-Running 1st unseeded MomentChi2 for the low 32bits/step 3 ... 1391293.448546 - 1030.920503
-Running 2nd   seeded MomentChi2 for the low 32bits/step 3 ... 1391293.197046 - 1030.894564
-KeySeedMomentChi2:	3.06779e-05	PASS
+Analyze hashes produced from a serie of linearly increasing numbers of 32-bit, using a step of 3 ... 
+Target values to approximate : 1391290.000000 - 1030.900000 
+Popcount 1 stats : 1391312.804594 - 1030.968834
+Popcount 0 stats : 1391306.581507 - 1031.026023
+MomentChi2 for bits 1 :  0.252222 
+MomentChi2 for bits 0 :  0.133344 
+
+Derivative stats (transition from 2 consecutive values) : 
+Popcount 1 stats : 1391293.442717 - 1030.920469
+Popcount 0 stats : 1391308.232102 - 1030.950035
+MomentChi2 for deriv b1 :  0.00574846 
+MomentChi2 for deriv b0 :  0.161219 
+
+  Great !! 
+
 
 [[[ Prng Tests ]]]
+
+The PRNG test is designed for hashes >= 64-bit 
+
 
 [[[ BIC 'Bit Independence Criteria' Tests ]]]
 

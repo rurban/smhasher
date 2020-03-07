@@ -515,8 +515,8 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
        * It would be better to count the nb of collisions per Cell,
        * and compared the distribution of values against a random source.
        * But this is a different test */
-      //result &= CountHighbitsCollisions(hashes,   12);
-      //result &= CountHighbitsCollisions(hashes,   8);
+      result &= CountHighbitsCollisions(hashes,   12);
+      result &= CountHighbitsCollisions(hashes,   8);
     }
     if (testLowBits) {
       // reverse: bitwise flip the hashes. lowest bits first
@@ -542,8 +542,10 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
        * It would be better to count the nb of collisions per Cell,
        * and compared the distribution of values against a random source.
        * But this is a different test */
-      //result &= CountLowbitsCollisions(revhashes,   12);
-      //result &= CountLowbitsCollisions(revhashes,   8);
+      /* rurban: No, these tests are for non-prime hash tables, using only
+         the lower 5-10 bits */
+      result &= CountLowbitsCollisions(revhashes,   12);
+      result &= CountLowbitsCollisions(revhashes,   8);
 
       //std::vector<hashtype>().swap(revhashes);
       //revhashes.clear();

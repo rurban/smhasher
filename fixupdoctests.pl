@@ -7,7 +7,7 @@ my $endtest = qr(^(?:---|\[\[\[ |Input vcode 0x));
 # build/SMHasher --list|perl -alne'print $F[0] | parallel -j4 --bar 'build/SMHasher --test=Sparse,Permutation,Cyclic,TwoBytes,DiffDist,Text,Zeroes,Seed {} >lowcoll/{}'
 my @orderedtests = qw(Sanity Speed HashMap Sparse Permutation Window Cyclic TwoBytes Text Zeroes Seed PerlinNoise Diff DiffDist MomentChi2 Prng LongNeighbors BIC );
 my @keysettests = qw(Sparse Permutation Window Cyclic TwoBytes Text Zeroes Seed PerlinNoise);
-my @othertests = qw(Sanity Avalanche Diff DiffDist LongNeighbors BIC );
+my @othertests = qw(Sanity Avalanche Diff DiffDist MomentChi2 Prng LongNeighbors BIC );
 my %tests = map {$_ => 1} @keysettests, @othertests;
 my $testrx = '(' . join('|',@othertests) . ')';
 $testrx = qr($testrx);

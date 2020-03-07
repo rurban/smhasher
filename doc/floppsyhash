@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
---- Testing floppsyhash_64 "slow hash designed for floating point hardware" GOOD
+--- Testing floppsyhash "slow hash designed for floating point hardware" GOOD
 
 [[[ Sanity Tests ]]]
 
@@ -696,15 +696,11 @@ Testing distribution - Worst bias is the 15-bit window at bit 35 - 0.292%
 
 Keyset 'Seed' - 5000000 keys
 Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
-Testing collisions (high 32-bit) - Expected       5820.8, actual   2883 (0.50x)
+Testing collisions (high 32-bit) - Expected       5820.8, actual   2888 (0.50x)
 Testing collisions (high 26-40 bits) - Worst is 40 bits: 15/22 (0.66x)
-Testing collisions (high 12-bit) - Expected    5000000.0, actual 4995904 (1.00x) (-4096)
-Testing collisions (high  8-bit) - Expected    5000000.0, actual 4999744 (1.00x) (-256)
-Testing collisions (low  32-bit) - Expected       5820.8, actual   2912 (0.50x)
+Testing collisions (low  32-bit) - Expected       5820.8, actual   2909 (0.50x)
 Testing collisions (low  26-40 bits) - Worst is 40 bits: 18/22 (0.79x)
-Testing collisions (low  12-bit) - Expected    5000000.0, actual 4995904 (1.00x) (-4096)
-Testing collisions (low   8-bit) - Expected    5000000.0, actual 4999744 (1.00x) (-256)
-Testing distribution - Worst bias is the 19-bit window at bit 21 - 0.037%
+Testing distribution - Worst bias is the 19-bit window at bit 14 - 0.036%
 
 
 [[[ Keyset 'PerlinNoise' Tests ]]]
@@ -1441,9 +1437,33 @@ Testing collisions (low   8-bit) - Expected    2097152.0, actual 2096896 (1.00x)
 
 [[[ MomentChi2 Tests ]]]
 
-Running 1st unseeded MomentChi2 for the low 32bits/step 3 ... 38918623.022353 - 410455.664337
-Running 2nd   seeded MomentChi2 for the low 32bits/step 3 ... 38919962.849289 - 410468.927529
-KeySeedMomentChi2:	2.18672	PASS
+Analyze hashes produced from a serie of linearly increasing numbers of 32-bit, using a step of 3 ... 
+Target values to approximate : 38918200.000000 - 410450.000000 
+Popcount 1 stats : 38918614.358415 - 410491.744975
+Popcount 0 stats : 38919777.134550 - 410488.120027
+MomentChi2 for bits 1 :  0.209141 
+MomentChi2 for bits 0 :   3.02989 
+
+Derivative stats (transition from 2 consecutive values) : 
+Popcount 1 stats : 38918655.069446 - 410458.937027
+Popcount 0 stats : 38919078.712347 - 410455.045454
+MomentChi2 for deriv b1 :  0.252267 
+MomentChi2 for deriv b0 :   0.94059 
+
+  Great !! 
+
+
+[[[ Prng Tests ]]]
+
+Generating 33554432 random numbers : 
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected     262144.0, actual 130689 (0.50x)
+Testing collisions (high 29-45 bits) - Worst is 37 bits: 4208/8191 (0.51x)
+Testing collisions (low  32-bit) - Expected     262144.0, actual 131202 (0.50x)
+Testing collisions (low  29-45 bits) - Worst is 36 bits: 8290/16383 (0.51x)
+
+
+[[[ BIC 'Bit Independence Criteria' Tests ]]]
 
 
 Input vcode 0x00000001, Output vcode 0x00000001, Result vcode 0x00000001
