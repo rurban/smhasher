@@ -91,8 +91,10 @@ static inline void make_secret(uint64_t seed, uint64_t secret[5]){
    for(size_t j=0; j<i; j++)
 #if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__clang__)
    if(__builtin_popcountll(secret[i]^secret[j])!=32) ok=0;
-#elif defined(_MSC_VER)
+#elif defined(_MSC_VER) && defined(_M_X64)
    if(_mm_popcnt_u64(secret[i]^secret[j])!=32) ok=0;
+#elif defined(_MSC_VER)
+   if(_mm_popcnt_u32(secret[i]^secret[j])!=32) ok=0;
 #endif
 //	if(!ok)	continue;
 //	for(size_t	j=2;	j<0x100000000ull;	j++)	if(secret[i]%j==0){	ok=0;	break;	}
