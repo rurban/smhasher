@@ -92,18 +92,16 @@ SMhasher
 | [cmetrohash64_1](doc/cmetrohash64_1)          |      9074.37 |    50.92 | 201.33 (18)| 652 | LongNeighbors, BIC, MomentChi2 |
 | [City64noSeed](doc/City64noSeed)              |      8873.07 |    38.70 | 171.57 (4) |1038 | Avalanche, Sparse, TwoBytes, MomentChi2, Seed |
 | [City64](doc/City64)                          |      9213.05 |    55.52 | 200.24 (2) |1120 | Sparse, TwoBytes           |
-| [aesnihash](doc/aesnihash)                    |      2963.39 |    71.24 | 217.73 (3) |     | fails most tests, machine-specific (x64 AES-NI) |
-| [falkhash](doc/falkhash)                      |     20374.98 |   169.84 | 328.42 (5) | 264 | LongNeighbors, machine-specific (x64 AES-NI) |
 | [t1ha1_64le](doc/t1ha1_64le)                  |      9541.33 |    39.33 | 239.04 (16)| 517 | Avalanche                  |
 | [t1ha1_64be](doc/t1ha1_64be)                  |      6848.76 |    41.08 | 230.22 (17)| 555 | Avalanche                  |
 | [t1ha0_32le](doc/t1ha0_32le)                  |      4913.74 |    55.00 | 233.39 (18)| 509 | Sparse, LongNeighbors      |
 | [t1ha0_32be](doc/t1ha0_32be)                  |      4241.68 |    55.12 | 236.50 (18)| 533 | Sparse, LongNeighbors      |
 | [t1ha2_stream](doc/t1ha2_stream)              |      8558.73 |    93.45 | 305.03 (16)|1665 | Sparse, Permutation, LongNeighbors |
 | [t1ha2_stream128](doc/t1ha2_stream128)        |      8846.52 |   117.19 | 270.95 (2) |1665 | Sparse, Permutation, LongNeighbors |
-| [xxh3](doc/xxh3)                              |     16088.13 |    38.23 | 185.53 (3) | 744 | Moment Chi2 14974, BIC     |
-| [xxh3low](doc/xxh3low)                        |     15999.29 |    38.87 | 200.45 (2) | 756 | Moment Chi2 1.8e+9 !       |
-| [xxh128](doc/xxh128)                          |     11553.50 |    41.68 | 184.25 (2) |1012 | Moment Chi2 14974          |
-| [xxh128low](doc/xxh128low)                    |     11482.39 |    37.60 | 168.17 (4) |1012 | Moment Chi2 14974, BIC     |
+| [aesnihash](doc/aesnihash)                    |      2963.39 |    71.24 | 217.73 (3) |     | fails most tests, machine-specific (x64 AES-NI) |
+| [falkhash](doc/falkhash)                      |     20374.98 |   169.84 | 328.42 (5) | 264 | LongNeighbors, machine-specific (x64 AES-NI) |
+| [MeowHash](doc/MeowHash)                      |     36695.65 |    58.09 | 233.81 (3) |1764 | Sparse low32, machine-specific (x64 AES-NI)  |
+| [MeowHash32low](doc/MeowHash32low)            |     17247.34 |    87.32 | 245.98 (3) |1764 | Sparse, machine-specific (x64 AES-NI)        |
 | --------------------------------------        |              |          |            |     |                            |
 | [tifuhash_64](doc/tifuhash_64)                |        35.60 |  1679.52 |1212.75 (15)| 276 |                            |
 | [floppsyhash_64](doc/floppsyhash_64)          |       191.95 |   450.93 | 821.11 (152)| 623 |                            |
@@ -149,13 +147,15 @@ SMhasher
 | [Spooky32](doc/Spooky32)                      |      9570.40 |    70.27 | 250.23 (18)|2221 |                            |
 | [Spooky64](doc/Spooky64)                      |      9603.18 |    70.19 | 231.73 (17)|2221 |                            |
 | [Spooky128](doc/Spooky128)                    |      9865.67 |    70.84 | 185.64 (2) |2221 |                            |
+| [xxh3](doc/xxh3)                              |     16088.13 |    38.23 | 185.53 (3) | 744 | Moment Chi2 14974, BIC     |
+| [xxh3low](doc/xxh3low)                        |     15999.29 |    38.87 | 200.45 (2) | 756 | Moment Chi2 1.8e+9 !       |
+| [xxh128](doc/xxh128)                          |     11553.50 |    41.68 | 184.25 (2) |1012 | Moment Chi2 14974          |
+| [xxh128low](doc/xxh128low)                    |     11482.39 |    37.60 | 168.17 (4) |1012 | Moment Chi2 14974, BIC     |
 | [t1ha2_atonce](doc/t1ha2_atonce)              |      8192.03 |    48.48 | 230.46 (14)| 541 |                            |
 | [t1ha2_atonce128](doc/t1ha2_atonce128)        |      8382.53 |    64.15 | 199.63 (4) | 613 | LongNeighbors              |
 | [t1ha0_aes_noavx](doc/t1ha0_aes_noavx)        |     21782.86 |    48.17 | 238.14 (18)| 925 | LongNeighbors, machine-specific (x86 AES-NI) |
 | [t1ha0_aes_avx1](doc/t1ha0_aes_avx1)          |     22714.85 |    48.12 | 226.52 (16)| 843 | LongNeighbors, machine-specific (x64 AVX)    |
 | [t1ha0_aes_avx2](doc/t1ha0_aes_avx2)          |     22345.33 |    44.38 | 556.47 (89)| 792 | LongNeighbors, machine-specific (x64 AVX2)   |
-| [MeowHash](doc/MeowHash)                      |     36695.65 |    58.09 | 233.81 (3) |1764 | Sparse low32, machine-specific (x64 AES-NI)  |
-| [MeowHash32low](doc/MeowHash32low)            |     17247.34 |    87.32 | 245.98 (3) |1764 | Sparse, machine-specific (x64 AES-NI)        |
 | [wyhash](doc/wyhash)                          |     12063.37 |    38.11 | 208.49 (3) | 938 |                            |
 | [wyhash32low](doc/wyhash32low)                |     12049.79 |    37.95 | 222.17 (4) | 922 |                            |
 

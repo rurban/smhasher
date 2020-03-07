@@ -260,6 +260,7 @@ HashInfo g_hashes[] =
   { t1ha1_64be_test,      64, 0x93F864DE, "t1ha1_64be",  "Fast Positive Hash (portable, aims 64-bit, big-engian)", POOR },
   { t1ha0_32le_test,      64, 0x7F7D7B29, "t1ha0_32le",  "Fast Positive Hash (portable, aims 32-bit, little-endian)", POOR },
   { t1ha0_32be_test,      64, 0xDA6A4061, "t1ha0_32be",  "Fast Positive Hash (portable, aims 32-bit, big-endian)", POOR },
+
   { xxh3_test,            64, 0x39CD9E4A, "xxh3",        "xxHash v3, 64-bit", GOOD },
   { xxh3low_test,         32, 0xFAE8467B, "xxh3low",     "xxHash v3, 64-bit, low 32-bits part", GOOD },
   { xxh128_test,         128, 0xEB61B3A0, "xxh128",      "xxHash v3, 128-bit", GOOD },
@@ -355,30 +356,17 @@ HashInfo g_hashes[] =
   { t1ha2_stream_test,           64, 0xDED9B580, "t1ha2_stream",    "Fast Positive Hash (portable, aims 64-bit, little-endian)", POOR },
   { t1ha2_atonce128_test,       128, 0xB44C43A1, "t1ha2_atonce128", "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
   { t1ha2_stream128_test,       128, 0xE929E756, "t1ha2_stream128", "Fast Positive Hash (portable, aims 64-bit, little-endian)", POOR },
-#if 1
-# if T1HA0_AESNI_AVAILABLE
+#if T1HA0_AESNI_AVAILABLE
 #  ifndef _MSC_VER
-  { t1ha0_ia32aes_noavx_test,    64, 0xF07C4DA5, "t1ha0_aes_noavx", "Fast Positive Hash (machine-specific, requires AES-NI)", GOOD },
+  { t1ha0_ia32aes_noavx_test,  64, 0xF07C4DA5, "t1ha0_aes_noavx", "Fast Positive Hash (machine-specific, requires AES-NI)", GOOD },
 #  endif
 #  if defined(__AVX__)
-  { t1ha0_ia32aes_avx1_test,     64, 0xF07C4DA5, "t1ha0_aes_avx1",  "Fast Positive Hash (machine-specific, requires AES-NI & AVX)", GOOD },
+  { t1ha0_ia32aes_avx1_test,   64, 0xF07C4DA5, "t1ha0_aes_avx1",  "Fast Positive Hash (machine-specific, requires AES-NI & AVX)", GOOD },
 #  endif /* __AVX__ */
 #  if defined(__AVX2__)
-  { t1ha0_ia32aes_avx2_test,     64, 0x8B38C599, "t1ha0_aes_avx2",  "Fast Positive Hash (machine-specific, requires AES-NI & AVX2)", GOOD },
+  { t1ha0_ia32aes_avx2_test,   64, 0x8B38C599, "t1ha0_aes_avx2",  "Fast Positive Hash (machine-specific, requires AES-NI & AVX2)", GOOD },
 #  endif /* __AVX2__ */
-# endif /* T1HA0_AESNI_AVAILABLE */
-#endif /* older t1ha */
-#if defined(HAVE_AESNI) && defined(__SIZEOF_INT128__)
-# if defined(HAVE_BIT32)
-#  define MEOW_VERIF           0x2736F5A8
-#  define MEOW32_VERIF         0x8872DE1A
-# else
-#  define MEOW_VERIF           0xA0D29861
-#  define MEOW32_VERIF         0x8872DE1A
-# endif
-  { MeowHash128_test,     128, MEOW_VERIF,   "MeowHash",      "Meow hash (requires x64 AES-NI)", POOR },
-  { MeowHash32_test,       32, MEOW32_VERIF, "MeowHash32low", "Meow hash lower 32bit (requires x64 AES-NI)", POOR },
-#endif
+#endif /* T1HA0_AESNI_AVAILABLE */
 #ifdef HAVE_INT64
 # ifdef DEBUG
   { wysha,                 32, 0xD09A85B3, "wysha",          "wyhash v5 test", GOOD },
