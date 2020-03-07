@@ -98,8 +98,9 @@ void PerlinNoiseTest (int Xbits, int Ybits,
 
   assert(Xbits + Ybits < 31);
 
-  assert(inputLen <= 256);
-  char key[inputLen];
+#define INPUT_LEN_MAX 256
+  assert(inputLen <= INPUT_LEN_MAX);
+  char key[INPUT_LEN_MAX] = {0};
 
   printf("Testing %i coordinates (L%i) : \n", xMax * yMax, inputLen);
 
@@ -122,7 +123,7 @@ bool PerlinNoise ( hashfunc<hashtype> hash, int inputLen,
 
   std::vector<hashtype> hashes;
 
-  PerlinNoiseTest(12,12, inputLen, 1, hash,hashes);
+  PerlinNoiseTest(12, 12, inputLen, 1, hash,hashes);
 
   //----------
 

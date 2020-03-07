@@ -36,7 +36,8 @@ static void printHash(const void* key, size_t len)
     const unsigned char* const p = (const unsigned char*)key;
     int s;
     printf("\n0x");
-    for (s=len-1; s>=0; s--) printf("%02X", p[s]);
+    assert(len < INT_MAX);
+    for (s=(int)len-1; s>=0; s--) printf("%02X", p[s]);
     printf("  ");
 }
 
@@ -456,10 +457,10 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
 {
   bool result = true;
 
-  if(testCollision)
+  if (testCollision)
   {
-    size_t count = hashes.size();
-    double expected = EstimateNbCollisions(count, sizeof(hashtype) * 8);
+    size_t const count = hashes.size();
+    double const expected = EstimateNbCollisions(count, sizeof(hashtype) * 8);
     printf("Testing collisions (%3i-bit) - Expected %6.1f, ",
            (int)sizeof(hashtype)*8, expected);
 
@@ -476,7 +477,7 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
     // of a scale factor, otherwise we fail erroneously if there are a small expected number
     // of collisions
 
-        if(double(collcount) / double(expected) > 2.0)
+        if ((collcount / expected) > 2.0)
         {
           printf(" !!!!!");
           result = false;
