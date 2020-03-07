@@ -44,10 +44,10 @@ SMhasher
 | [sha3-256](doc/sha3-256.txt)                  |       100.58 |  3877.18 |4159.79 (37)|     |               |
 | [sha3-256_64](doc/sha3-256_64.txt)            |       100.57 |  3909.00 |4174.63 (16)|     |               |
 | [hasshe2](doc/hasshe2.txt)                    |      2357.32 |    76.10 | 172.41 (3) | 445 | insecure, Permutation,TwoBytes,Zeroes,Seed  |
-| [crc32_hw](doc/crc32_hw.txt)                  |      6292.63 |    30.38 | 204.19 (18)| 653 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
-| [crc32_hw1](doc/crc32_hw1.txt)                |     23382.53 |    36.84 | 197.39 (20)| 671 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2) |
-| [crc64_hw](doc/crc64_hw.txt)                  |      8387.01 |    29.96 | 161.44 (13)| 652 | insecure, 100% bias, collisions, distrib, machine-specific (x64 SSE4.2) |
-| [crc32_pclmul](doc/crc32_pclmul.txt)          |   1932125.24 |     6.50 |   -        | 481 | insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2+PCLMUL) |
+| [crc32_hw](doc/crc32_hw.txt)                  |      6292.63 |    30.38 | 204.19 (18)| 653 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2) |
+| [crc32_hw1](doc/crc32_hw1.txt)                |     23382.53 |    36.84 | 197.39 (20)| 671 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2) |
+| [crc64_hw](doc/crc64_hw.txt)                  |      8387.01 |    29.96 | 161.44 (13)| 652 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x64 SSE4.2) |
+| [crc32_pclmul](doc/crc32_pclmul.txt)          |   1932125.24 |     6.50 |   -        | 481 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2+PCLMUL) |
 | [FastestHash](doc/FastestHash.txt)            |  14635755.30 |    16.04 | 357.77 (3) |     | insecure, zeros, fails all tests |
 | [fibonacci](doc/fibonacci.txt)                |      9462.17 |    33.52 | 774.87 (14)|1692 | zeros, fails all tests       |
 | [FNV1a](doc/FNV1a.txt)                        |       780.53 |    69.65 | 197.06 (20)| 204 | zeros, fails all tests       |
@@ -62,15 +62,15 @@ SMhasher
 | [sdbm](doc/sdbm.txt)                          |       785.84 |    67.02 | 209.44 (17)|  41 | fails all tests              |
 | [x17](doc/x17.txt)                            |       522.46 |    97.51 | 214.03 (18)|  79 | 99.98% bias, fails all tests |
 | [JenkinsOOAT](doc/JenkinsOOAT.txt)            |       446.57 |   142.43 | 245.34 (20)| 153 | 53.5% bias, fails all tests  |
-| [JenkinsOOAT_perl](doc/JenkinsOOAT_perl.txt)  |       445.69 |   118.69 | 222.62 (18)|  65 | 1.5-11.5% bias, 7.2x collisions, LongNeighbors |
-| [MicroOAAT](doc/MicroOAAT.txt)                |       950.84 |    62.23 | 233.94 (19)|  68 | 100% bias, distrib           |
+| [JenkinsOOAT_perl](doc/JenkinsOOAT_perl.txt)  |       445.69 |   118.69 | 222.62 (18)|  65 | 1.5-11.5% bias, 7.2x collisions, BIC, LongNeighbors |
+| [MicroOAAT](doc/MicroOAAT.txt)                |       950.84 |    62.23 | 233.94 (19)|  68 | 100% bias, distrib, BIC      |
 | [VHASH_32](doc/VHASH_32.txt)                  |      9502.36 |    86.97 | 273.67 (8) |1231 | sanity, Seed, MomentChi2     |
 | [VHASH_64](doc/VHASH_64.txt)                  |      9449.24 |    86.97 | 253.42 (9) |1231 | sanity, Seed, Sparse         |
 | [farsh32](doc/farsh32.txt)                    |     14053.09 |    74.29 | 245.33 (3) | 944 | insecure: AppendedZeroes, collisions+bias, MomentChi2, LongNeighbors |
 | [farsh64](doc/farsh64.txt)                    |      7216.29 |   130.30 | 302.44 (3) | 944 | insecure: AppendedZeroes, collisions+bias, MomentChi2, LongNeighbors |
-| [jodyhash32](doc/jodyhash32.txt)              |      1386.76 |    46.13 | 232.12 (21)| 102 | bias, collisions, distr, LongNeighbors |
-| [jodyhash64](doc/jodyhash64.txt)              |      2765.84 |    40.89 | 222.41 (20)| 118 | bias, collisions, distr, LongNeighbors |
-| [lookup3](doc/lookup3.txt)                    |      1702.13 |    48.25 | 243.90 (19)| 341 | 28% bias, collisions, 30% distr  |
+| [jodyhash32](doc/jodyhash32.txt)              |      1386.76 |    46.13 | 232.12 (21)| 102 | bias, collisions, distr, BIC LongNeighbors |
+| [jodyhash64](doc/jodyhash64.txt)              |      2765.84 |    40.89 | 222.41 (20)| 118 | bias, collisions, distr, BIC, LongNeighbors |
+| [lookup3](doc/lookup3.txt)                    |      1702.13 |    48.25 | 243.90 (19)| 341 | 28% bias, collisions, 30% distr, BIC  |
 | [superfast](doc/superfast.txt)                |      1899.70 |    54.19 | 240.49 (19)| 210 | 91% bias, 5273.01x collisions, 37% distr, BIC |
 | [MurmurOAAT](doc/MurmurOAAT.txt)              |       437.03 |   117.00 | 236.62 (19)|  47 | collisions, 99.998% distr., BIC, LongNeighbors |
 | [Crap8](doc/Crap8.txt)                        |      3060.17 |    35.25 | 242.59 (20)| 342 | 2.42% bias, collisions, 2% distrib |
@@ -81,14 +81,14 @@ SMhasher
 | [Murmur3A](doc/Murmur3A.txt)                  |      2347.90 |    51.38 | 237.58 (19)| 351 | Moment Chi2 69             |
 | [PMurHash32](doc/PMurHash32.txt)              |      2281.97 |    58.65 | 259.59 (20)|1862 | Moment Chi2 69             |
 | [Murmur3C](doc/Murmur3C.txt)                  |      3093.46 |    68.53 | 256.49 (19)| 859 | LongNeighbors, DiffDist    |
-| [PMPML_32](doc/PMPML_32.txt)                  |      6516.19 |    52.60 | 227.47 (8) |1084 | Avalanche >512, unseeded: Seed, MomentChi2 |
-| [PMPML_64](doc/PMPML_64.txt)                  |      8119.83 |    61.49 | 186.24 (4) |1305 | unseeded: Seed, MomentChi2           |
+| [PMPML_32](doc/PMPML_32.txt)                  |      6516.19 |    52.60 | 227.47 (8) |1084 | Avalanche >512, unseeded: Seed, BIC, MomentChi2 |
+| [PMPML_64](doc/PMPML_64.txt)                  |      8119.83 |    61.49 | 186.24 (4) |1305 | unseeded: Seed, MomentChi2, BIC        |
 | [xxHash32](doc/xxHash32.txt)                  |      5868.40 |    49.08 | 222.09 (21)| 738 | LongNeighbors, collisions with 4bit diff, MomentChi2 220 |
 | [metrohash64](doc/metrohash64.txt)            |      9490.26 |    49.84 | 150.49 (3) | 624 | LongNeighbors, BIC         |
 | [metrohash64_1](doc/metrohash64_1.txt)        |      9274.60 |    50.85 | 201.37 (19)| 624 | LongNeighbors, BIC, MomentChi2         |
 | [metrohash64crc_1](doc/metrohash64crc_1.txt)  |     13641.79 |    56.19 | 193.28 (19)| 632 | cyclic collisions 8 byte, BIC, MomentChi2, machine-specific (x64 SSE4.2) |
 | [metrohash64crc_2](doc/metrohash64crc_2.txt)  |     13550.77 |    56.17 | 204.84 (18)| 632 | cyclic collisions 8 byte, BIC, machine-specific (x64 SSE4.2) |
-| [cmetrohash64_1o](doc/cmetrohash64_1o.txt)    |      8851.32 |    50.59 | 193.19 (18)|3506 | LongNeighbors, MomentChi2  |
+| [cmetrohash64_1o](doc/cmetrohash64_1o.txt)    |      8851.32 |    50.59 | 193.19 (18)|3506 | LongNeighbors, BIC, MomentChi2  |
 | [cmetrohash64_1](doc/cmetrohash64_1.txt)      |      9074.37 |    50.92 | 201.33 (18)| 652 | LongNeighbors, BIC, MomentChi2 |
 | [City64noSeed](doc/City64noSeed.txt)          |      8873.07 |    38.70 | 171.57 (4) |1038 | Avalanche, Sparse, TwoBytes, MomentChi2, Seed |
 | [City64](doc/City64.txt)                      |      9213.05 |    55.52 | 200.24 (2) |1120 | Sparse, TwoBytes           |
@@ -147,10 +147,10 @@ SMhasher
 | [Spooky32](doc/Spooky32.txt)                  |      9570.40 |    70.27 | 250.23 (18)|2221 |                            |
 | [Spooky64](doc/Spooky64.txt)                  |      9603.18 |    70.19 | 231.73 (17)|2221 |                            |
 | [Spooky128](doc/Spooky128.txt)                |      9865.67 |    70.84 | 185.64 (2) |2221 |                            |
-| [xxh3](doc/xxh3.txt)                          |     16377.47 |    37.20 | 179.88 (1) | 744 | Moment Chi2 14974, BIC     |
-| [xxh3low](doc/xxh3low.txt)                    |     16403.22 |    37.19 | 184.18 (2) | 756 | Moment Chi2 1.8e+9 !       |
-| [xxh128](doc/xxh128.txt)                      |     15117.76 |    44.70 | 178.72 (1) |1012 | Moment Chi2 14974          |
-| [xxh128low](doc/xxh128low.txt)                |     15109.04 |    38.98 | 174.91 (3) |1012 | Moment Chi2 14974, BIC     |
+| [xxh3](doc/xxh3.txt)                          |     16377.47 |    37.20 | 179.88 (1) | 744 | BIC                        |
+| [xxh3low](doc/xxh3low.txt)                    |     16403.22 |    37.19 | 184.18 (2) | 756 |                            |
+| [xxh128](doc/xxh128.txt)                      |     15117.76 |    44.70 | 178.72 (1) |1012 |                            |
+| [xxh128low](doc/xxh128low.txt)                |     15109.04 |    38.98 | 174.91 (3) |1012 |                            |
 | [t1ha2_atonce](doc/t1ha2_atonce.txt)          |      8192.03 |    48.48 | 230.46 (14)| 541 |                            |
 | [t1ha2_atonce128](doc/t1ha2_atonce128.txt)    |      8382.53 |    64.15 | 199.63 (4) | 613 | LongNeighbors              |
 | [t1ha0_aes_noavx](doc/t1ha0_aes_noavx.txt)    |     21782.86 |    48.17 | 238.14 (18)| 925 | LongNeighbors, machine-specific (x86 AES-NI) |
@@ -169,7 +169,7 @@ See also the old [https://code.google.com/p/smhasher/w/list](https://code.google
 
 So the fastest hash functions on x86_64 without quality problems are:
 
-- xxh3
+- xxh3low
 - wyhash
 - t1ha2_atonce
 - FarmHash (_not portable, too machine specific: 64 vs 32bit, old gcc, ..._)
