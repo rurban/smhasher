@@ -1,6 +1,11 @@
 #!/bin/sh
 make -C build
-mkdir partests1
+if test -d partests1
+then
+    rm partests1/*
+else
+    mkdir partests1
+fi
 test -n "$@" && r="if /$@/"
 build/SMHasher --list|perl -alne"print \$F[0] $r" | \
     parallel -j4 --bar \
