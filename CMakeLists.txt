@@ -270,11 +270,13 @@ IF(SSE4_2_FOUND)
   set(SSE2_SRC        hasshe2.c)
   set(SSE4_SRC        crc32_hw.c)
   # 64bit only:
-  IF((CMAKE_SIZEOF_VOID_P EQUAL 8) AND (NOT MSVC))
+  IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
     #enable_language(ASM-NASM)
     #set(CMAKE_ASM_FLAGS "-f elf64") # or macho64/win64
-    set(X86_64ONLY_SRC farmhash-c.c farmhash-c-test.cc metrohash/metrohash64crc.cpp
-                       metrohash/metrohash128crc.cpp crc32_hw1.c clhash.c )
+    set(X86_64ONLY_SRC farmhash-c.c farmhash-c-test.cc)
+    if (NOT MSVC)
+      LIST(APPEND X86_64ONLY_SRC metrohash/metrohash64crc.cpp metrohash/metrohash128crc.cpp crc32_hw1.c clhash.c)
+    endif()
   ELSE()
     message(WARNING "32bit only: CMAKE_SIZEOF_VOID_P=${CMAKE_SIZEOF_VOID_P}")
   ENDIF()

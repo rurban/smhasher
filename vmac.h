@@ -47,12 +47,12 @@
  * ----------------------------------------------------------------------- */
 #define VMAC_USE_STDINT 1  /* Set to zero if system has no stdint.h        */
  
-#if VMAC_USE_STDINT && !_MSC_VER /* Try stdint.h if non-Microsoft          */
+#if VMAC_USE_STDINT && (!defined(_MSC_VER) || _MSC_VER >= 1600) /* Try stdint.h if non-ancient-Microsoft  */
 #ifdef  __cplusplus
 #define __STDC_CONSTANT_MACROS
 #endif
 #include <stdint.h>
-#elif (_MSC_VER)                  /* Microsoft C does not have stdint.h    */
+#elif defined(_MSC_VER) && (_MSC_VER < 1600) /* Microsoft C < 2010 does not have stdint.h    */
 typedef unsigned __int32 uint32_t;
 typedef unsigned __int64 uint64_t;
 #define UINT64_C(v) v ## UI64

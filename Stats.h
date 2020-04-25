@@ -6,6 +6,7 @@
 #include <vector>
 #include <map>
 #include <limits>
+#include <climits>
 #include <algorithm>   // for std::sort
 #include <string.h>    // for memset
 #include <stdio.h>     // for printf

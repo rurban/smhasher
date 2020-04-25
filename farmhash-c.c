@@ -81,7 +81,10 @@
 #define likely(x) (x)
 #endif
 
-#ifdef LITTLE_ENDIAN
+#if !defined(_MSC_VER) && (!defined(__BYTE_ORDER__) || !defined(__ORDER_LITTLE_ENDIAN__))
+#error "Unknown byte order"
+#endif
+#if defined(_MSC_VER) || (__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)
 #define uint32_t_in_expected_order(x) (x)
 #define uint64_t_in_expected_order(x) (x)
 #else
