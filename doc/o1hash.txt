@@ -1,0 +1,1495 @@
+-------------------------------------------------------------------------------
+--- Testing o1hash "o(1)hash unseeded, from wyhash" POOR
+
+[[[ Sanity Tests ]]]
+
+Verification value 0x85051E87 ....... PASS
+Running sanity check 1     . 0: 0x52 == 0x52  FAIL  !!!!!
+Running AppendedZeroesTest . FAIL !!!!!
+
+[[[ Speed Tests ]]]
+
+Bulk speed test - 262144-byte keys
+Alignment  7 - 3400.830 bytes/cycle - 9729853.48 MiB/sec @ 3 ghz
+Alignment  6 - 3403.368 bytes/cycle - 9737113.60 MiB/sec @ 3 ghz
+Alignment  5 - 3397.268 bytes/cycle - 9719662.43 MiB/sec @ 3 ghz
+Alignment  4 - 3394.803 bytes/cycle - 9712607.92 MiB/sec @ 3 ghz
+Alignment  3 - 2382.072 bytes/cycle - 6815162.60 MiB/sec @ 3 ghz
+Alignment  2 - 2007.386 bytes/cycle - 5743177.66 MiB/sec @ 3 ghz
+Alignment  1 - 1947.593 bytes/cycle - 5572106.98 MiB/sec @ 3 ghz
+Alignment  0 - 1943.474 bytes/cycle - 5560322.32 MiB/sec @ 3 ghz
+Average      - 2734.599 bytes/cycle - 7823750.87 MiB/sec @ 3 ghz
+
+Small key speed test -    1-byte keys -    20.52 cycles/hash
+Small key speed test -    2-byte keys -    20.52 cycles/hash
+Small key speed test -    3-byte keys -    20.00 cycles/hash
+Small key speed test -    4-byte keys -    18.14 cycles/hash
+Small key speed test -    5-byte keys -    28.00 cycles/hash
+Small key speed test -    6-byte keys -    28.00 cycles/hash
+Small key speed test -    7-byte keys -    28.00 cycles/hash
+Small key speed test -    8-byte keys -    27.00 cycles/hash
+Small key speed test -    9-byte keys -    27.00 cycles/hash
+Small key speed test -   10-byte keys -    27.00 cycles/hash
+Small key speed test -   11-byte keys -    27.00 cycles/hash
+Small key speed test -   12-byte keys -    18.00 cycles/hash
+Small key speed test -   13-byte keys -    18.00 cycles/hash
+Small key speed test -   14-byte keys -    18.00 cycles/hash
+Small key speed test -   15-byte keys -    18.00 cycles/hash
+Small key speed test -   16-byte keys -    18.00 cycles/hash
+Small key speed test -   17-byte keys -    18.00 cycles/hash
+Small key speed test -   18-byte keys -    18.00 cycles/hash
+Small key speed test -   19-byte keys -    18.00 cycles/hash
+Small key speed test -   20-byte keys -    18.00 cycles/hash
+Small key speed test -   21-byte keys -    18.00 cycles/hash
+Small key speed test -   22-byte keys -    18.00 cycles/hash
+Small key speed test -   23-byte keys -    18.00 cycles/hash
+Small key speed test -   24-byte keys -    18.00 cycles/hash
+Small key speed test -   25-byte keys -    18.00 cycles/hash
+Small key speed test -   26-byte keys -    18.00 cycles/hash
+Small key speed test -   27-byte keys -    18.00 cycles/hash
+Small key speed test -   28-byte keys -    18.00 cycles/hash
+Small key speed test -   29-byte keys -    18.00 cycles/hash
+Small key speed test -   30-byte keys -    18.00 cycles/hash
+Small key speed test -   31-byte keys -    18.00 cycles/hash
+Average                                    20.360 cycles/hash
+
+[[[ 'Hashmap' Speed Tests ]]]
+
+std::unordered_map
+Init std HashMapTest:     862.105 cycles/op (479826 inserts, 1% deletions)
+Running std HashMapTest:  670.349 cycles/op (4.7 stdv)
+
+greg7mdp/parallel-hashmap
+Init fast HashMapTest:    921.100 cycles/op (479826 inserts, 1% deletions)
+Running fast HashMapTest: 561.661 cycles/op (31.9 stdv)  ....... PASS
+
+[[[ Avalanche Tests ]]]
+
+Testing   24-bit keys ->  64-bit hashes, 300000 reps worst bias is 100.000000% !!!!!
+Testing   32-bit keys ->  64-bit hashes, 300000 reps worst bias is 100.000000% !!!!!
+Testing   40-bit keys ->  64-bit hashes, 300000 reps worst bias is 100.000000% !!!!!
+Testing   48-bit keys ->  64-bit hashes, 300000 reps worst bias is 100.000000% !!!!!
+Testing   56-bit keys ->  64-bit hashes, 300000 reps worst bias is 100.000000% !!!!!
+Testing   64-bit keys ->  64-bit hashes, 300000 reps worst bias is 100.000000% !!!!!
+Testing   72-bit keys ->  64-bit hashes, 300000 reps worst bias is 100.000000% !!!!!
+Testing   80-bit keys ->  64-bit hashes, 300000 reps worst bias is 100.000000% !!!!!
+Testing   96-bit keys ->  64-bit hashes, 300000 reps worst bias is 100.000000% !!!!!
+Testing  112-bit keys ->  64-bit hashes, 300000 reps worst bias is 100.000000% !!!!!
+Testing  128-bit keys ->  64-bit hashes, 300000 reps worst bias is 100.000000% !!!!!
+Testing  160-bit keys ->  64-bit hashes, 300000 reps worst bias is 100.000000% !!!!!
+Testing  512-bit keys ->  64-bit hashes, 300000 reps worst bias is 100.000000% !!!!!
+Testing 1024-bit keys ->  64-bit hashes, 300000 reps worst bias is 100.000000% !!!!!
+*********FAIL*********
+
+[[[ Keyset 'Sparse' Tests ]]]
+
+Keyset 'Sparse' - 16-bit keys with up to 9 bits set - 50643 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected          0.6, actual      0 (0.00x)
+Testing collisions (high 19-26 bits) - Worst is 20 bits: 116/2445 (0.05x)
+Testing collisions (high 12-bit) - Expected      50643.0, actual  46547 (0.92x)
+Testing collisions (high  8-bit) - Expected      50643.0, actual  50387 (0.99x) (-256)
+Testing collisions (low  32-bit) - Expected          0.6, actual      0 (0.00x)
+Testing collisions (low  19-26 bits) - Worst is 23 bits: 22819/305 (74.64x) !!!!!
+Testing collisions (low  12-bit) - Expected      50643.0, actual  50387 (0.99x) (-256)
+Testing collisions (low   8-bit) - Expected      50643.0, actual  50387 (0.99x) (-256)
+Testing distribution - Worst bias is the 13-bit window at bit  0 - 97.121% !!!!!
+
+Keyset 'Sparse' - 24-bit keys with up to 8 bits set - 1271626 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        376.5, actual      0 (0.00x)
+Testing collisions (high 24-36 bits) - Worst is 24 bits: 2641/96382 (0.03x)
+Testing collisions (high 12-bit) - Expected    1271626.0, actual 1267530 (1.00x) (-4096)
+Testing collisions (high  8-bit) - Expected    1271626.0, actual 1271370 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected        376.5, actual      0 (0.00x)
+Testing collisions (low  24-36 bits) - Worst is  0 bits:  0/ 1 (0.00x)
+Testing collisions (low  12-bit) - Expected    1271626.0, actual 1267829 (1.00x) (-3797)
+Testing collisions (low   8-bit) - Expected    1271626.0, actual 1271370 (1.00x) (-256)
+Testing distribution - Worst bias is the 17-bit window at bit  0 - 82.711% !!!!!
+
+Keyset 'Sparse' - 32-bit keys with up to 7 bits set - 4514873 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      3 (2714875.99x) !!!!!
+Testing collisions (high 32-bit) - Expected       4746.0, actual 1568412 (330.47x) (1563666) !!!!!
+Testing collisions (high 26-39 bits) - Worst is 39 bits: 217497/37 (5865.87x) !!!!!
+Testing collisions (high 12-bit) - Expected    4514873.0, actual 4512298 (1.00x) (-2575)
+Testing collisions (high  8-bit) - Expected    4514873.0, actual 4514641 (1.00x) (-232)
+Testing collisions (low  32-bit) - Expected       4746.0, actual 2941512 (619.78x) (2936766) !!!!!
+Testing collisions (low  26-39 bits) - Worst is 39 bits: 1134025/37 (30584.51x) !!!!!
+Testing collisions (low  12-bit) - Expected    4514873.0, actual 4514530 (1.00x) (-343)
+Testing collisions (low   8-bit) - Expected    4514873.0, actual 4514850 (1.00x) (-23)
+Testing distribution - Worst bias is the 19-bit window at bit 62 - 99.988% !!!!!
+
+Keyset 'Sparse' - 40-bit keys with up to 6 bits set - 4598479 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual    659 (574879492.53x) !!!!!
+Testing collisions (high 32-bit) - Expected       4923.4, actual 1711596 (347.64x) (1706673) !!!!!
+Testing collisions (high 26-39 bits) - Worst is 39 bits: 225309/38 (5857.60x) !!!!!
+Testing collisions (high 12-bit) - Expected    4598479.0, actual 4595128 (1.00x) (-3351)
+Testing collisions (high  8-bit) - Expected    4598479.0, actual 4598240 (1.00x) (-239)
+Testing collisions (low  32-bit) - Expected       4923.4, actual 2166530 (440.04x) (2161607) !!!!!
+Testing collisions (low  26-39 bits) - Worst is 39 bits: 731410/38 (19015.27x) !!!!!
+Testing collisions (low  12-bit) - Expected    4598479.0, actual 4594572 (1.00x) (-3907)
+Testing collisions (low   8-bit) - Expected    4598479.0, actual 4598223 (1.00x) (-256)
+Testing distribution - Worst bias is the 19-bit window at bit 53 - 99.985% !!!!!
+
+Keyset 'Sparse' - 48-bit keys with up to 6 bits set - 14196869 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual  23316 (2133971671.36x) !!!!!
+Testing collisions (high 32-bit) - Expected      46927.3, actual 8081090 (172.20x) (8034163) !!!!!
+Testing collisions (high 28-43 bits) - Worst is 43 bits: 1550318/22 (67658.99x) !!!!!
+Testing collisions (high 12-bit) - Expected   14196869.0, actual 14194332 (1.00x) (-2537)
+Testing collisions (high  8-bit) - Expected   14196869.0, actual 14196692 (1.00x) (-177)
+Testing collisions (low  32-bit) - Expected      46927.3, actual 7357835 (156.79x) (7310908) !!!!!
+Testing collisions (low  28-43 bits) - Worst is 43 bits: 1520451/22 (66355.53x) !!!!!
+Testing collisions (low  12-bit) - Expected   14196869.0, actual 14192808 (1.00x) (-4061)
+Testing collisions (low   8-bit) - Expected   14196869.0, actual 14196613 (1.00x) (-256)
+Testing distribution - Worst bias is the 20-bit window at bit 56 - 99.995% !!!!!
+
+Keyset 'Sparse' - 56-bit keys with up to 5 bits set - 4216423 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 137297 (142459864176.43x) !!!!!
+Testing collisions (high 32-bit) - Expected       4139.3, actual 2822116 (681.78x) (2817977) !!!!!
+Testing collisions (high 26-39 bits) - Worst is 39 bits: 1482541/32 (45844.61x) !!!!!
+Testing collisions (high 12-bit) - Expected    4216423.0, actual 4214610 (1.00x) (-1813)
+Testing collisions (high  8-bit) - Expected    4216423.0, actual 4216288 (1.00x) (-135)
+Testing collisions (low  32-bit) - Expected       4139.3, actual 2670169 (645.08x) (2666030) !!!!!
+Testing collisions (low  26-39 bits) - Worst is 39 bits: 1380271/32 (42682.12x) !!!!!
+Testing collisions (low  12-bit) - Expected    4216423.0, actual 4214380 (1.00x) (-2043)
+Testing collisions (low   8-bit) - Expected    4216423.0, actual 4216197 (1.00x) (-226)
+Testing distribution - Worst bias is the 19-bit window at bit 55 - 99.999% !!!!!
+
+Keyset 'Sparse' - 64-bit keys with up to 5 bits set - 8303633 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 1289277 (344929006548.59x) !!!!!
+Testing collisions (high 32-bit) - Expected      16053.7, actual 6883134 (428.76x) (6867081) !!!!!
+Testing collisions (high 27-41 bits) - Worst is 41 bits: 3858108/31 (123046.13x) !!!!!
+Testing collisions (high 12-bit) - Expected    8303633.0, actual 8302649 (1.00x) (-984)
+Testing collisions (high  8-bit) - Expected    8303633.0, actual 8303500 (1.00x) (-133)
+Testing collisions (low  32-bit) - Expected      16053.7, actual 6697554 (417.20x) (6681501) !!!!!
+Testing collisions (low  27-41 bits) - Worst is 41 bits: 3599029/31 (114783.36x) !!!!!
+Testing collisions (low  12-bit) - Expected    8303633.0, actual 8302191 (1.00x) (-1442)
+Testing collisions (low   8-bit) - Expected    8303633.0, actual 8303407 (1.00x) (-226)
+Testing distribution - Worst bias is the 20-bit window at bit 54 - 100.000% !!!!!
+
+Keyset 'Sparse' - 72-bit keys with up to 5 bits set - 15082603 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 8632416 (700002373646.32x) !!!!!
+Testing collisions (high 32-bit) - Expected      52965.5, actual 13852514 (261.54x) (13799549) !!!!!
+Testing collisions (high 28-43 bits) - Worst is 43 bits: 10527897/25 (407079.16x) !!!!!
+Testing collisions (high 12-bit) - Expected   15082603.0, actual 15081619 (1.00x) (-984)
+Testing collisions (high  8-bit) - Expected   15082603.0, actual 15082470 (1.00x) (-133)
+Testing collisions (low  32-bit) - Expected      52965.5, actual 13915814 (262.73x) (13862849) !!!!!
+Testing collisions (low  28-43 bits) - Worst is 43 bits: 10458089/25 (404379.91x) !!!!!
+Testing collisions (low  12-bit) - Expected   15082603.0, actual 15081161 (1.00x) (-1442)
+Testing collisions (low   8-bit) - Expected   15082603.0, actual 15082377 (1.00x) (-226)
+Testing distribution - Worst bias is the 20-bit window at bit 53 - 100.000% !!!!!
+
+Keyset 'Sparse' - 96-bit keys with up to 4 bits set - 3469497 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 3433929 (5262330573738.34x) !!!!!
+Testing collisions (high 32-bit) - Expected       2802.7, actual 3462369 (1235.38x) (3459567) !!!!!
+Testing collisions (high 26-39 bits) - Worst is 39 bits: 3457001/21 (157883.38x) !!!!!
+Testing collisions (high 12-bit) - Expected    3469497.0, actual 3469194 (1.00x) (-303)
+Testing collisions (high  8-bit) - Expected    3469497.0, actual 3469419 (1.00x) (-78)
+Testing collisions (low  32-bit) - Expected       2802.7, actual 3461648 (1235.12x) (3458846) !!!!!
+Testing collisions (low  26-39 bits) - Worst is 39 bits: 3456179/21 (157845.84x) !!!!!
+Testing collisions (low  12-bit) - Expected    3469497.0, actual 3469103 (1.00x) (-394)
+Testing collisions (low   8-bit) - Expected    3469497.0, actual 3469382 (1.00x) (-115)
+Testing distribution - Worst bias is the 19-bit window at bit 54 - 100.000% !!!!!
+
+Keyset 'Sparse' - 160-bit keys with up to 4 bits set - 26977161 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 26941593 (682889636637.63x) !!!!!
+Testing collisions (high 32-bit) - Expected     169446.5, actual 26970033 (159.17x) (26800587) !!!!!
+Testing collisions (high 29-45 bits) - Worst is 45 bits: 26959560/20 (1303377.24x) !!!!!
+Testing collisions (high 12-bit) - Expected   26977161.0, actual 26976858 (1.00x) (-303)
+Testing collisions (high  8-bit) - Expected   26977161.0, actual 26977083 (1.00x) (-78)
+Testing collisions (low  32-bit) - Expected     169446.5, actual 26969312 (159.16x) (26799866) !!!!!
+Testing collisions (low  29-45 bits) - Worst is 45 bits: 26958672/20 (1303334.31x) !!!!!
+Testing collisions (low  12-bit) - Expected   26977161.0, actual 26976767 (1.00x) (-394)
+Testing collisions (low   8-bit) - Expected   26977161.0, actual 26977046 (1.00x) (-115)
+Testing distribution - Worst bias is the 20-bit window at bit 54 - 100.000% !!!!!
+
+Keyset 'Sparse' - 256-bit keys with up to 3 bits set - 2796417 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 2794896 (6592978548137.46x) !!!!!
+Testing collisions (high 32-bit) - Expected       1820.7, actual 2795920 (1535.61x) (2794100) !!!!!
+Testing collisions (high 25-38 bits) - Worst is 38 bits: 2795728/28 (98272.28x) !!!!!
+Testing collisions (high 12-bit) - Expected    2796417.0, actual 2796350 (1.00x) (-67)
+Testing collisions (high  8-bit) - Expected    2796417.0, actual 2796388 (1.00x) (-29)
+Testing collisions (low  32-bit) - Expected       1820.7, actual 2795888 (1535.59x) (2794068) !!!!!
+Testing collisions (low  25-38 bits) - Worst is 38 bits: 2795696/28 (98271.16x) !!!!!
+Testing collisions (low  12-bit) - Expected    2796417.0, actual 2796338 (1.00x) (-79)
+Testing collisions (low   8-bit) - Expected    2796417.0, actual 2796380 (1.00x) (-37)
+Testing distribution - Worst bias is the 19-bit window at bit 54 - 100.000% !!!!!
+
+Keyset 'Sparse' - 512-bit keys with up to 3 bits set - 22370049 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 22368528 (824561924489.35x) !!!!!
+Testing collisions (high 32-bit) - Expected     116512.9, actual 22369552 (191.99x) (22253040) !!!!!
+Testing collisions (high 28-44 bits) - Worst is 44 bits: 22369168/28 (786386.03x) !!!!!
+Testing collisions (high 12-bit) - Expected   22370049.0, actual 22369982 (1.00x) (-67)
+Testing collisions (high  8-bit) - Expected   22370049.0, actual 22370020 (1.00x) (-29)
+Testing collisions (low  32-bit) - Expected     116512.9, actual 22369520 (191.99x) (22253008) !!!!!
+Testing collisions (low  28-44 bits) - Worst is 44 bits: 22369136/28 (786384.90x) !!!!!
+Testing collisions (low  12-bit) - Expected   22370049.0, actual 22369970 (1.00x) (-79)
+Testing collisions (low   8-bit) - Expected   22370049.0, actual 22370012 (1.00x) (-37)
+Testing distribution - Worst bias is the 20-bit window at bit 54 - 100.000% !!!!!
+
+Keyset 'Sparse' - 1024-bit keys with up to 2 bits set - 524801 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 524737 (35145759289367.98x) !!!!!
+Testing collisions (high 32-bit) - Expected         64.1, actual 524769 (8183.51x) (524705) !!!!!
+Testing collisions (high 23-33 bits) - Worst is 33 bits: 524768/32 (16366.99x) !!!!!
+Testing collisions (high 12-bit) - Expected     524801.0, actual 524789 (1.00x) (-12)
+Testing collisions (high  8-bit) - Expected     524801.0, actual 524793 (1.00x) (-8)
+Testing collisions (low  32-bit) - Expected         64.1, actual 524768 (8183.49x) (524704) !!!!!
+Testing collisions (low  23-33 bits) - Worst is 33 bits: 524767/32 (16366.96x) !!!!!
+Testing collisions (low  12-bit) - Expected     524801.0, actual 524788 (1.00x) (-13)
+Testing collisions (low   8-bit) - Expected     524801.0, actual 524792 (1.00x) (-9)
+Testing distribution - Worst bias is the 16-bit window at bit 55 - 99.998% !!!!!
+
+Keyset 'Sparse' - 2048-bit keys with up to 2 bits set - 2098177 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 2098113 (8791531977664.44x) !!!!!
+Testing collisions (high 32-bit) - Expected       1025.0, actual 2098145 (2046.97x) (2097120) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 2098140/32 (65502.86x) !!!!!
+Testing collisions (high 12-bit) - Expected    2098177.0, actual 2098165 (1.00x) (-12)
+Testing collisions (high  8-bit) - Expected    2098177.0, actual 2098169 (1.00x) (-8)
+Testing collisions (low  32-bit) - Expected       1025.0, actual 2098144 (2046.97x) (2097119) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 2098139/32 (65502.83x) !!!!!
+Testing collisions (low  12-bit) - Expected    2098177.0, actual 2098164 (1.00x) (-13)
+Testing collisions (low   8-bit) - Expected    2098177.0, actual 2098168 (1.00x) (-9)
+Testing distribution - Worst bias is the 18-bit window at bit 54 - 100.000% !!!!!
+
+*********FAIL*********
+
+[[[ Keyset 'Permutation' Tests ]]]
+
+Combination Lowbits Tests:
+Keyset 'Combination' - up to 7 blocks from a set of 8 - 2396744 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 2396637 (7696244669999.10x) !!!!!
+Testing collisions (high 32-bit) - Expected       1337.5, actual 2396743 (1792.00x) (2395406) !!!!!
+Testing collisions (high 25-38 bits) - Worst is 38 bits: 2396743/20 (114688.05x) !!!!!
+Testing collisions (high 12-bit) - Expected    2396744.0, actual 2396743 (1.00x) (-1)
+Testing collisions (high  8-bit) - Expected    2396744.0, actual 2396743 (1.00x) (-1)
+Testing collisions (low  32-bit) - Expected       1337.5, actual 2396637 (1791.92x) (2395300) !!!!!
+Testing collisions (low  25-38 bits) - Worst is 38 bits: 2396637/20 (114682.98x) !!!!!
+Testing collisions (low  12-bit) - Expected    2396744.0, actual 2396690 (1.00x) (-54)
+Testing collisions (low   8-bit) - Expected    2396744.0, actual 2396690 (1.00x) (-54)
+Testing distribution - Worst bias is the 18-bit window at bit 23 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination Highbits Tests
+Keyset 'Combination' - up to 7 blocks from a set of 8 - 2396744 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 2396693 (7696424501029.63x) !!!!!
+Testing collisions (high 32-bit) - Expected       1337.5, actual 2396693 (1791.96x) (2395356) !!!!!
+Testing collisions (high 25-38 bits) - Worst is 38 bits: 2396693/20 (114685.66x) !!!!!
+Testing collisions (high 12-bit) - Expected    2396744.0, actual 2396718 (1.00x) (-26)
+Testing collisions (high  8-bit) - Expected    2396744.0, actual 2396718 (1.00x) (-26)
+Testing collisions (low  32-bit) - Expected       1337.5, actual 2396743 (1792.00x) (2395406) !!!!!
+Testing collisions (low  25-38 bits) - Worst is 38 bits: 2396743/20 (114688.05x) !!!!!
+Testing collisions (low  12-bit) - Expected    2396744.0, actual 2396743 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2396744.0, actual 2396743 (1.00x) (-1)
+Testing distribution - Worst bias is the 18-bit window at bit  0 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination Hi-Lo Tests:
+Keyset 'Combination' - up to 6 blocks from a set of 15 - 12204240 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 12200212 (1511004147006.16x) !!!!!
+Testing collisions (high 32-bit) - Expected      34678.6, actual 12203853 (351.91x) (12169175) !!!!!
+Testing collisions (high 27-42 bits) - Worst is 42 bits: 12203622/33 (360352.15x) !!!!!
+Testing collisions (high 12-bit) - Expected   12204240.0, actual 12204214 (1.00x) (-26)
+Testing collisions (high  8-bit) - Expected   12204240.0, actual 12204214 (1.00x) (-26)
+Testing collisions (low  32-bit) - Expected      34678.6, actual 12203598 (351.91x) (12168920) !!!!!
+Testing collisions (low  27-42 bits) - Worst is 42 bits: 12203414/33 (360346.01x) !!!!!
+Testing collisions (low  12-bit) - Expected   12204240.0, actual 12204186 (1.00x) (-54)
+Testing collisions (low   8-bit) - Expected   12204240.0, actual 12204186 (1.00x) (-54)
+Testing distribution - Worst bias is the 20-bit window at bit 51 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination 0x8000000 Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 8388603 (2199023255551.81x) !!!!!
+Testing collisions (high 32-bit) - Expected      16384.0, actual 8388603 (512.00x) (8372220) !!!!!
+Testing collisions (high 27-41 bits) - Worst is 41 bits: 8388603/31 (262144.00x) !!!!!
+Testing collisions (high 12-bit) - Expected    8388606.0, actual 8388604 (1.00x) (-2)
+Testing collisions (high  8-bit) - Expected    8388606.0, actual 8388604 (1.00x) (-2)
+Testing collisions (low  32-bit) - Expected      16384.0, actual 8388605 (512.00x) (8372222) !!!!!
+Testing collisions (low  27-41 bits) - Worst is 41 bits: 8388605/31 (262144.06x) !!!!!
+Testing collisions (low  12-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing distribution - Worst bias is the 20-bit window at bit  0 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination 0x0000001 Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 8388601 (2199022731263.50x) !!!!!
+Testing collisions (high 32-bit) - Expected      16384.0, actual 8388605 (512.00x) (8372222) !!!!!
+Testing collisions (high 27-41 bits) - Worst is 41 bits: 8388605/31 (262144.06x) !!!!!
+Testing collisions (high 12-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (high  8-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (low  32-bit) - Expected      16384.0, actual 8388601 (512.00x) (8372218) !!!!!
+Testing collisions (low  27-41 bits) - Worst is 41 bits: 8388601/31 (262143.94x) !!!!!
+Testing collisions (low  12-bit) - Expected    8388606.0, actual 8388603 (1.00x) (-3)
+Testing collisions (low   8-bit) - Expected    8388606.0, actual 8388603 (1.00x) (-3)
+Testing distribution - Worst bias is the 20-bit window at bit 18 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination 0x800000000000000 Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 8388604 (2199023517695.97x) !!!!!
+Testing collisions (high 32-bit) - Expected      16384.0, actual 8388604 (512.00x) (8372221) !!!!!
+Testing collisions (high 27-41 bits) - Worst is 41 bits: 8388604/31 (262144.03x) !!!!!
+Testing collisions (high 12-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (high  8-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (low  32-bit) - Expected      16384.0, actual 8388605 (512.00x) (8372222) !!!!!
+Testing collisions (low  27-41 bits) - Worst is 41 bits: 8388605/31 (262144.06x) !!!!!
+Testing collisions (low  12-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing distribution - Worst bias is the 20-bit window at bit  0 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination 0x000000000000001 Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 8388604 (2199023517695.97x) !!!!!
+Testing collisions (high 32-bit) - Expected      16384.0, actual 8388605 (512.00x) (8372222) !!!!!
+Testing collisions (high 27-41 bits) - Worst is 41 bits: 8388605/31 (262144.06x) !!!!!
+Testing collisions (high 12-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (high  8-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (low  32-bit) - Expected      16384.0, actual 8388604 (512.00x) (8372221) !!!!!
+Testing collisions (low  27-41 bits) - Worst is 41 bits: 8388604/31 (262144.03x) !!!!!
+Testing collisions (low  12-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing distribution - Worst bias is the 20-bit window at bit 17 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination 16-bytes [0-1] Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 8388604 (2199023517695.97x) !!!!!
+Testing collisions (high 32-bit) - Expected      16384.0, actual 8388605 (512.00x) (8372222) !!!!!
+Testing collisions (high 27-41 bits) - Worst is 41 bits: 8388605/31 (262144.06x) !!!!!
+Testing collisions (high 12-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (high  8-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (low  32-bit) - Expected      16384.0, actual 8388604 (512.00x) (8372221) !!!!!
+Testing collisions (low  27-41 bits) - Worst is 41 bits: 8388604/31 (262144.03x) !!!!!
+Testing collisions (low  12-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing distribution - Worst bias is the 20-bit window at bit 17 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination 16-bytes [0-last] Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 8388604 (2199023517695.97x) !!!!!
+Testing collisions (high 32-bit) - Expected      16384.0, actual 8388604 (512.00x) (8372221) !!!!!
+Testing collisions (high 27-41 bits) - Worst is 41 bits: 8388604/31 (262144.03x) !!!!!
+Testing collisions (high 12-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (high  8-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (low  32-bit) - Expected      16384.0, actual 8388605 (512.00x) (8372222) !!!!!
+Testing collisions (low  27-41 bits) - Worst is 41 bits: 8388605/31 (262144.06x) !!!!!
+Testing collisions (low  12-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing distribution - Worst bias is the 20-bit window at bit  0 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination 32-bytes [0-1] Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 8388604 (2199023517695.97x) !!!!!
+Testing collisions (high 32-bit) - Expected      16384.0, actual 8388605 (512.00x) (8372222) !!!!!
+Testing collisions (high 27-41 bits) - Worst is 41 bits: 8388605/31 (262144.06x) !!!!!
+Testing collisions (high 12-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (high  8-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (low  32-bit) - Expected      16384.0, actual 8388604 (512.00x) (8372221) !!!!!
+Testing collisions (low  27-41 bits) - Worst is 41 bits: 8388604/31 (262144.03x) !!!!!
+Testing collisions (low  12-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing distribution - Worst bias is the 20-bit window at bit 17 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination 32-bytes [0-last] Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 8388604 (2199023517695.97x) !!!!!
+Testing collisions (high 32-bit) - Expected      16384.0, actual 8388604 (512.00x) (8372221) !!!!!
+Testing collisions (high 27-41 bits) - Worst is 41 bits: 8388604/31 (262144.03x) !!!!!
+Testing collisions (high 12-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (high  8-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (low  32-bit) - Expected      16384.0, actual 8388605 (512.00x) (8372222) !!!!!
+Testing collisions (low  27-41 bits) - Worst is 41 bits: 8388605/31 (262144.06x) !!!!!
+Testing collisions (low  12-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing distribution - Worst bias is the 20-bit window at bit  0 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination 64-bytes [0-1] Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 8388604 (2199023517695.97x) !!!!!
+Testing collisions (high 32-bit) - Expected      16384.0, actual 8388605 (512.00x) (8372222) !!!!!
+Testing collisions (high 27-41 bits) - Worst is 41 bits: 8388605/31 (262144.06x) !!!!!
+Testing collisions (high 12-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (high  8-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (low  32-bit) - Expected      16384.0, actual 8388604 (512.00x) (8372221) !!!!!
+Testing collisions (low  27-41 bits) - Worst is 41 bits: 8388604/31 (262144.03x) !!!!!
+Testing collisions (low  12-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing distribution - Worst bias is the 20-bit window at bit 17 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination 64-bytes [0-last] Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 8388604 (2199023517695.97x) !!!!!
+Testing collisions (high 32-bit) - Expected      16384.0, actual 8388604 (512.00x) (8372221) !!!!!
+Testing collisions (high 27-41 bits) - Worst is 41 bits: 8388604/31 (262144.03x) !!!!!
+Testing collisions (high 12-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (high  8-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (low  32-bit) - Expected      16384.0, actual 8388605 (512.00x) (8372222) !!!!!
+Testing collisions (low  27-41 bits) - Worst is 41 bits: 8388605/31 (262144.06x) !!!!!
+Testing collisions (low  12-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing distribution - Worst bias is the 20-bit window at bit  0 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination 128-bytes [0-1] Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 8388604 (2199023517695.97x) !!!!!
+Testing collisions (high 32-bit) - Expected      16384.0, actual 8388605 (512.00x) (8372222) !!!!!
+Testing collisions (high 27-41 bits) - Worst is 41 bits: 8388605/31 (262144.06x) !!!!!
+Testing collisions (high 12-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (high  8-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (low  32-bit) - Expected      16384.0, actual 8388604 (512.00x) (8372221) !!!!!
+Testing collisions (low  27-41 bits) - Worst is 41 bits: 8388604/31 (262144.03x) !!!!!
+Testing collisions (low  12-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing distribution - Worst bias is the 20-bit window at bit 17 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination 128-bytes [0-last] Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 8388604 (2199023517695.97x) !!!!!
+Testing collisions (high 32-bit) - Expected      16384.0, actual 8388604 (512.00x) (8372221) !!!!!
+Testing collisions (high 27-41 bits) - Worst is 41 bits: 8388604/31 (262144.03x) !!!!!
+Testing collisions (high 12-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (high  8-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (low  32-bit) - Expected      16384.0, actual 8388605 (512.00x) (8372222) !!!!!
+Testing collisions (low  27-41 bits) - Worst is 41 bits: 8388605/31 (262144.06x) !!!!!
+Testing collisions (low  12-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    8388606.0, actual 8388605 (1.00x) (-1)
+Testing distribution - Worst bias is the 20-bit window at bit  0 - 100.000% !!!!!
+
+*********FAIL*********
+
+[[[ Keyset 'Window' Tests ]]]
+
+Keyset 'Window' -  32-bit key,  25-bit window - 32 tests, 33554432 keys per test
+Window at   0 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at   1 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at   2 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at   3 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at   4 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at   5 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at   6 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at   7 - Testing collisions ( 64-bit) - Expected    0.0, actual      3 (49152.00x) !!!!!
+Window at   8 - Testing collisions ( 64-bit) - Expected    0.0, actual      3 (49152.00x) !!!!!
+Window at   9 - Testing collisions ( 64-bit) - Expected    0.0, actual      3 (49152.00x) !!!!!
+Window at  10 - Testing collisions ( 64-bit) - Expected    0.0, actual      3 (49152.00x) !!!!!
+Window at  11 - Testing collisions ( 64-bit) - Expected    0.0, actual      3 (49152.00x) !!!!!
+Window at  12 - Testing collisions ( 64-bit) - Expected    0.0, actual      3 (49152.00x) !!!!!
+Window at  13 - Testing collisions ( 64-bit) - Expected    0.0, actual      3 (49152.00x) !!!!!
+Window at  14 - Testing collisions ( 64-bit) - Expected    0.0, actual      3 (49152.00x) !!!!!
+Window at  15 - Testing collisions ( 64-bit) - Expected    0.0, actual      3 (49152.00x) !!!!!
+Window at  16 - Testing collisions ( 64-bit) - Expected    0.0, actual      3 (49152.00x) !!!!!
+Window at  17 - Testing collisions ( 64-bit) - Expected    0.0, actual      3 (49152.00x) !!!!!
+Window at  18 - Testing collisions ( 64-bit) - Expected    0.0, actual      3 (49152.00x) !!!!!
+Window at  19 - Testing collisions ( 64-bit) - Expected    0.0, actual      3 (49152.00x) !!!!!
+Window at  20 - Testing collisions ( 64-bit) - Expected    0.0, actual      3 (49152.00x) !!!!!
+Window at  21 - Testing collisions ( 64-bit) - Expected    0.0, actual      3 (49152.00x) !!!!!
+Window at  22 - Testing collisions ( 64-bit) - Expected    0.0, actual      3 (49152.00x) !!!!!
+Window at  23 - Testing collisions ( 64-bit) - Expected    0.0, actual      3 (49152.00x) !!!!!
+Window at  24 - Testing collisions ( 64-bit) - Expected    0.0, actual      3 (49152.00x) !!!!!
+Window at  25 - Testing collisions ( 64-bit) - Expected    0.0, actual      3 (49152.00x) !!!!!
+Window at  26 - Testing collisions ( 64-bit) - Expected    0.0, actual      3 (49152.00x) !!!!!
+Window at  27 - Testing collisions ( 64-bit) - Expected    0.0, actual      3 (49152.00x) !!!!!
+Window at  28 - Testing collisions ( 64-bit) - Expected    0.0, actual      2 (32768.00x) !!!!!
+Window at  29 - Testing collisions ( 64-bit) - Expected    0.0, actual      1 (16384.00x) !!!!!
+Window at  30 - Testing collisions ( 64-bit) - Expected    0.0, actual      1 (16384.00x) !!!!!
+Window at  31 - Testing collisions ( 64-bit) - Expected    0.0, actual      1 (16384.00x) !!!!!
+Window at  32 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+*********FAIL*********
+
+[[[ Keyset 'Cyclic' Tests ]]]
+
+Keyset 'Cyclic' - 8 cycles of 8 bytes - 1000000 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        232.8, actual    254 (1.09x) (22)
+Testing collisions (high 24-35 bits) - Worst is 34 bits: 82/58 (1.41x)
+Testing collisions (high 12-bit) - Expected    1000000.0, actual 995922 (1.00x) (-4078)
+Testing collisions (high  8-bit) - Expected    1000000.0, actual 999744 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected        232.8, actual    174 (0.75x)
+Testing collisions (low  24-35 bits) - Worst is 28 bits: 2795/3725 (0.75x)
+Testing collisions (low  12-bit) - Expected    1000000.0, actual 995904 (1.00x) (-4096)
+Testing collisions (low   8-bit) - Expected    1000000.0, actual 999744 (1.00x) (-256)
+Testing distribution - Worst bias is the 17-bit window at bit 55 - 66.614% !!!!!
+
+Keyset 'Cyclic' - 8 cycles of 9 bytes - 1000000 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        232.8, actual    245 (1.05x) (13)
+Testing collisions (high 24-35 bits) - Worst is 30 bits: 992/931 (1.07x)
+Testing collisions (high 12-bit) - Expected    1000000.0, actual 995921 (1.00x) (-4079)
+Testing collisions (high  8-bit) - Expected    1000000.0, actual 999744 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected        232.8, actual    196 (0.84x)
+Testing collisions (low  24-35 bits) - Worst is 33 bits: 104/116 (0.89x)
+Testing collisions (low  12-bit) - Expected    1000000.0, actual 995904 (1.00x) (-4096)
+Testing collisions (low   8-bit) - Expected    1000000.0, actual 999744 (1.00x) (-256)
+Testing distribution - Worst bias is the 17-bit window at bit 55 - 66.629% !!!!!
+
+Keyset 'Cyclic' - 8 cycles of 10 bytes - 1000000 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        232.8, actual    195 (0.84x)
+Testing collisions (high 24-35 bits) - Worst is 27 bits: 7324/7450 (0.98x)
+Testing collisions (high 12-bit) - Expected    1000000.0, actual 995916 (1.00x) (-4084)
+Testing collisions (high  8-bit) - Expected    1000000.0, actual 999744 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected        232.8, actual    173 (0.74x)
+Testing collisions (low  24-35 bits) - Worst is 35 bits: 28/29 (0.96x)
+Testing collisions (low  12-bit) - Expected    1000000.0, actual 995904 (1.00x) (-4096)
+Testing collisions (low   8-bit) - Expected    1000000.0, actual 999744 (1.00x) (-256)
+Testing distribution - Worst bias is the 17-bit window at bit 55 - 66.578% !!!!!
+
+Keyset 'Cyclic' - 8 cycles of 11 bytes - 1000000 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        232.8, actual    233 (1.00x) (1)
+Testing collisions (high 24-35 bits) - Worst is 35 bits: 34/29 (1.17x)
+Testing collisions (high 12-bit) - Expected    1000000.0, actual 995927 (1.00x) (-4073)
+Testing collisions (high  8-bit) - Expected    1000000.0, actual 999744 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected        232.8, actual    174 (0.75x)
+Testing collisions (low  24-35 bits) - Worst is 33 bits: 91/116 (0.78x)
+Testing collisions (low  12-bit) - Expected    1000000.0, actual 995904 (1.00x) (-4096)
+Testing collisions (low   8-bit) - Expected    1000000.0, actual 999744 (1.00x) (-256)
+Testing distribution - Worst bias is the 17-bit window at bit 55 - 66.658% !!!!!
+
+Keyset 'Cyclic' - 8 cycles of 12 bytes - 1000000 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        232.8, actual    214 (0.92x)
+Testing collisions (high 24-35 bits) - Worst is 34 bits: 58/58 (1.00x)
+Testing collisions (high 12-bit) - Expected    1000000.0, actual 995925 (1.00x) (-4075)
+Testing collisions (high  8-bit) - Expected    1000000.0, actual 999744 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected        232.8, actual    202 (0.87x)
+Testing collisions (low  24-35 bits) - Worst is 34 bits: 65/58 (1.12x)
+Testing collisions (low  12-bit) - Expected    1000000.0, actual 995904 (1.00x) (-4096)
+Testing collisions (low   8-bit) - Expected    1000000.0, actual 999744 (1.00x) (-256)
+Testing distribution - Worst bias is the 17-bit window at bit 55 - 66.579% !!!!!
+
+Keyset 'Cyclic' - 8 cycles of 16 bytes - 1000000 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        232.8, actual    213 (0.91x)
+Testing collisions (high 24-35 bits) - Worst is 29 bits: 1902/1862 (1.02x)
+Testing collisions (high 12-bit) - Expected    1000000.0, actual 995922 (1.00x) (-4078)
+Testing collisions (high  8-bit) - Expected    1000000.0, actual 999744 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected        232.8, actual    203 (0.87x)
+Testing collisions (low  24-35 bits) - Worst is 35 bits: 30/29 (1.03x)
+Testing collisions (low  12-bit) - Expected    1000000.0, actual 995904 (1.00x) (-4096)
+Testing collisions (low   8-bit) - Expected    1000000.0, actual 999744 (1.00x) (-256)
+Testing distribution - Worst bias is the 17-bit window at bit 55 - 66.559% !!!!!
+
+*********FAIL*********
+
+[[[ Keyset 'TwoBytes' Tests ]]]
+
+Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+Testing collisions ( 64-bit) - Expected    0.0, actual    512 (22180402167.71x) !!!!!
+Testing collisions (high 32-bit) - Expected         99.1, actual 147651 (1489.28x) (147552) !!!!!
+Testing collisions (high 23-34 bits) - Worst is 34 bits: 133531/24 (5387.43x) !!!!!
+Testing collisions (high 12-bit) - Expected     652545.0, actual 648449 (0.99x) (-4096)
+Testing collisions (high  8-bit) - Expected     652545.0, actual 652289 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected         99.1, actual 245435 (2475.58x) (245336) !!!!!
+Testing collisions (low  23-34 bits) - Worst is 34 bits: 204315/24 (8243.28x) !!!!!
+Testing collisions (low  12-bit) - Expected     652545.0, actual 648449 (0.99x) (-4096)
+Testing collisions (low   8-bit) - Expected     652545.0, actual 652289 (1.00x) (-256)
+Testing distribution - Worst bias is the 16-bit window at bit  0 - 99.983% !!!!!
+
+Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 1730738 (1066629847557.36x) !!!!!
+Testing collisions (high 32-bit) - Expected       6969.1, actual 3908857 (560.88x) (3901888) !!!!!
+Testing collisions (high 26-40 bits) - Worst is 40 bits: 2942710/27 (108096.09x) !!!!!
+Testing collisions (high 12-bit) - Expected    5471025.0, actual 5466929 (1.00x) (-4096)
+Testing collisions (high  8-bit) - Expected    5471025.0, actual 5470769 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected       6969.1, actual 3909784 (561.02x) (3902815) !!!!!
+Testing collisions (low  26-40 bits) - Worst is 40 bits: 2920942/27 (107296.47x) !!!!!
+Testing collisions (low  12-bit) - Expected    5471025.0, actual 5466929 (1.00x) (-4096)
+Testing collisions (low   8-bit) - Expected    5471025.0, actual 5470769 (1.00x) (-256)
+Testing distribution - Worst bias is the 20-bit window at bit 52 - 100.000% !!!!!
+
+Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 14466237 (769956084342.81x) !!!!!
+Testing collisions (high 32-bit) - Expected      80695.5, actual 16874690 (209.12x) (16793995) !!!!!
+Testing collisions (high 28-43 bits) - Worst is 43 bits: 15432102/39 (391656.70x) !!!!!
+Testing collisions (high 12-bit) - Expected   18616785.0, actual 18612689 (1.00x) (-4096)
+Testing collisions (high  8-bit) - Expected   18616785.0, actual 18616529 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected      80695.5, actual 16898223 (209.41x) (16817528) !!!!!
+Testing collisions (low  28-43 bits) - Worst is 43 bits: 15375699/39 (390225.22x) !!!!!
+Testing collisions (low  12-bit) - Expected   18616785.0, actual 18612689 (1.00x) (-4096)
+Testing collisions (low   8-bit) - Expected   18616785.0, actual 18616529 (1.00x) (-256)
+Testing distribution - Worst bias is the 20-bit window at bit 52 - 100.000% !!!!!
+
+Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 40100877 (377762707012.86x) !!!!!
+Testing collisions (high 32-bit) - Expected     455926.3, actual 42509330 (93.24x) (42053404) !!!!!
+Testing collisions (high 29-46 bits) - Worst is 46 bits: 40858337/27 (1468270.17x) !!!!!
+Testing collisions (high 12-bit) - Expected   44251425.0, actual 44247329 (1.00x) (-4096)
+Testing collisions (high  8-bit) - Expected   44251425.0, actual 44251169 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected     455926.3, actual 42532863 (93.29x) (42076937) !!!!!
+Testing collisions (low  29-46 bits) - Worst is 46 bits: 40774711/27 (1465265.02x) !!!!!
+Testing collisions (low  12-bit) - Expected   44251425.0, actual 44247329 (1.00x) (-4096)
+Testing collisions (low   8-bit) - Expected   44251425.0, actual 44251169 (1.00x) (-256)
+Testing distribution - Worst bias is the 20-bit window at bit 52 - 100.000% !!!!!
+
+Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 82385997 (202942976391.46x) !!!!!
+Testing collisions (high 32-bit) - Expected    1743569.4, actual 84794450 (48.63x) (83050881) !!!!!
+Testing collisions (high 30-48 bits) - Worst is 48 bits: 82984881/26 (3119174.48x) !!!!!
+Testing collisions (high 12-bit) - Expected   86536545.0, actual 86532449 (1.00x) (-4096)
+Testing collisions (high  8-bit) - Expected   86536545.0, actual 86536289 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected    1743569.4, actual 84817983 (48.65x) (83074414) !!!!!
+Testing collisions (low  30-48 bits) - Worst is 48 bits: 82879437/26 (3115211.13x) !!!!!
+Testing collisions (low  12-bit) - Expected   86536545.0, actual 86532449 (1.00x) (-4096)
+Testing collisions (low   8-bit) - Expected   86536545.0, actual 86536289 (1.00x) (-256)
+Testing distribution - Worst bias is the 20-bit window at bit 52 - 100.000% !!!!!
+
+*********FAIL*********
+
+[[[ Keyset 'Text' Tests ]]]
+
+Keyset 'Text' - keys of form "Foo[XXXX]Bar" - 14776336 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected      50836.3, actual  86787 (1.71x) (35951)
+Testing collisions (high 28-43 bits) - Worst is 42 bits: 91/49 (1.83x)
+Testing collisions (high 12-bit) - Expected   14776336.0, actual 14775024 (1.00x) (-1312)
+Testing collisions (high  8-bit) - Expected   14776336.0, actual 14776252 (1.00x) (-84)
+Testing collisions (low  32-bit) - Expected      50836.3, actual  35981 (0.71x)
+Testing collisions (low  28-43 bits) - Worst is 38 bits: 584/794 (0.74x)
+Testing collisions (low  12-bit) - Expected   14776336.0, actual 14772242 (1.00x) (-4094)
+Testing collisions (low   8-bit) - Expected   14776336.0, actual 14776080 (1.00x) (-256)
+Testing distribution - Worst bias is the 20-bit window at bit 54 - 99.049% !!!!!
+
+Keyset 'Text' - keys of form "FooBar[XXXX]" - 14776336 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected      50836.3, actual 108861 (2.14x) (58025) !!!!!
+Testing collisions (high 28-43 bits) - Worst is 38 bits: 1740/794 (2.19x) !!!!!
+Testing collisions (high 12-bit) - Expected   14776336.0, actual 14775248 (1.00x) (-1088)
+Testing collisions (high  8-bit) - Expected   14776336.0, actual 14776266 (1.00x) (-70)
+Testing collisions (low  32-bit) - Expected      50836.3, actual      0 (0.00x)
+Testing collisions (low  28-43 bits) - Worst is 30 bits: 8579808/203345 (42.19x) !!!!!
+Testing collisions (low  12-bit) - Expected   14776336.0, actual 14775840 (1.00x) (-496)
+Testing collisions (low   8-bit) - Expected   14776336.0, actual 14776274 (1.00x) (-62)
+Testing distribution - Worst bias is the 20-bit window at bit 53 - 99.497% !!!!!
+
+Keyset 'Text' - keys of form "[XXXX]FooBar" - 14776336 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected      50836.3, actual 7940602 (156.20x) (7889766) !!!!!
+Testing collisions (high 28-43 bits) - Worst is 32 bits: 7940602/50836 (156.20x) !!!!!
+Testing collisions (high 12-bit) - Expected   14776336.0, actual 14776148 (1.00x) (-188)
+Testing collisions (high  8-bit) - Expected   14776336.0, actual 14776307 (1.00x) (-29)
+Testing collisions (low  32-bit) - Expected      50836.3, actual  37566 (0.74x)
+Testing collisions (low  28-43 bits) - Worst is 40 bits: 154/198 (0.78x)
+Testing collisions (low  12-bit) - Expected   14776336.0, actual 14772242 (1.00x) (-4094)
+Testing collisions (low   8-bit) - Expected   14776336.0, actual 14776080 (1.00x) (-256)
+Testing distribution - Worst bias is the 20-bit window at bit 53 - 99.363% !!!!!
+
+*********FAIL*********
+
+[[[ Keyset 'Zeroes' Tests ]]]
+
+Keyset 'Zeroes' - 204800 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 204799 (90071992547409.92x) !!!!!
+Testing collisions (high 32-bit) - Expected          9.8, actual 204799 (20971.52x) (204790) !!!!!
+Testing collisions (high 21-30 bits) - Worst is 30 bits: 204799/39 (5242.88x) !!!!!
+Testing collisions (high 12-bit) - Expected     204800.0, actual 204799 (1.00x) (-1)
+Testing collisions (high  8-bit) - Expected     204800.0, actual 204799 (1.00x) (-1)
+Testing collisions (low  32-bit) - Expected          9.8, actual 204799 (20971.52x) (204790) !!!!!
+Testing collisions (low  21-30 bits) - Worst is 30 bits: 204799/39 (5242.88x) !!!!!
+Testing collisions (low  12-bit) - Expected     204800.0, actual 204799 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected     204800.0, actual 204799 (1.00x) (-1)
+Testing distribution - Worst bias is the 15-bit window at bit  0 - 99.997% !!!!!
+
+*********FAIL*********
+
+[[[ Keyset 'Seed' Tests ]]]
+
+Keyset 'Seed' - 5000000 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 4999999 (3689348814741.91x) !!!!!
+Testing collisions (high 32-bit) - Expected       5820.8, actual 4999999 (858.99x) (4994179) !!!!!
+Testing collisions (high 26-40 bits) - Worst is 40 bits: 4999999/22 (219902.33x) !!!!!
+Testing collisions (high 12-bit) - Expected    5000000.0, actual 4999999 (1.00x) (-1)
+Testing collisions (high  8-bit) - Expected    5000000.0, actual 4999999 (1.00x) (-1)
+Testing collisions (low  32-bit) - Expected       5820.8, actual 4999999 (858.99x) (4994179) !!!!!
+Testing collisions (low  26-40 bits) - Worst is 40 bits: 4999999/22 (219902.33x) !!!!!
+Testing collisions (low  12-bit) - Expected    5000000.0, actual 4999999 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    5000000.0, actual 4999999 (1.00x) (-1)
+Testing distribution - Worst bias is the 19-bit window at bit  0 - 100.000% !!!!!
+
+*********FAIL*********
+
+[[[ Keyset 'PerlinNoise' Tests ]]]
+
+Testing 16777216 coordinates (L2) : 
+Testing collisions ( 64-bit) - Expected    0.0, actual 16773120 (1099243257840.00x) !!!!!
+Testing collisions (high 32-bit) - Expected      65536.0, actual 16773120 (255.94x) (16707585) !!!!!
+Testing collisions (high 28-43 bits) - Worst is 43 bits: 16773120/31 (524160.03x) !!!!!
+Testing collisions (high 12-bit) - Expected   16777216.0, actual 16773715 (1.00x) (-3501)
+Testing collisions (high  8-bit) - Expected   16777216.0, actual 16776960 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected      65536.0, actual 16773120 (255.94x) (16707585) !!!!!
+Testing collisions (low  28-43 bits) - Worst is 43 bits: 16773120/31 (524160.03x) !!!!!
+Testing collisions (low  12-bit) - Expected   16777216.0, actual 16777200 (1.00x) (-16)
+Testing collisions (low   8-bit) - Expected   16777216.0, actual 16777200 (1.00x) (-16)
+
+*********FAIL*********
+
+[[[ Diff 'Differential' Tests ]]]
+
+Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 64 bit hashes.
+100 reps, 830363200 total tests, expecting 0.00 random collisions..........
+0 total collisions, of which 0 single collisions were ignored
+
+Testing 11017632 up-to-4-bit differentials in 128-bit keys -> 64 bit hashes.
+100 reps, 1101763200 total tests, expecting 0.00 random collisions..........
+5062036 total collisions, of which 0 single collisions were ignored !!!!!
+
+Testing 2796416 up-to-3-bit differentials in 256-bit keys -> 64 bit hashes.
+100 reps, 279641600 total tests, expecting 0.00 random collisions..........
+68539542 total collisions, of which 0 single collisions were ignored !!!!!
+
+*********FAIL*********
+
+[[[ DiffDist 'Differential Distribution' Tests ]]]
+
+Testing bit 0
+Testing collisions ( 64-bit) - Expected    0.0, actual    166 (696254796.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual 2097131 (2047.98x) (2096108) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 2096634/31 (65519.84x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low  32-bit) - Expected       1024.0, actual    503 (0.49x)
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 167/31 (5.22x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2093056 (1.00x) (-4096)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+
+Testing bit 1
+Testing collisions ( 64-bit) - Expected    0.0, actual    148 (620757288.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual 2097113 (2047.96x) (2096090) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 2096177/31 (65505.56x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low  32-bit) - Expected       1024.0, actual    997 (0.97x)
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 150/31 (4.69x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2095104 (1.00x) (-2048)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097024 (1.00x) (-128)
+
+Testing bit 2
+Testing collisions ( 64-bit) - Expected    0.0, actual    173 (725614938.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual 2097076 (2047.93x) (2096053) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 2095298/31 (65478.09x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097149 (1.00x) (-3)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097150 (1.00x) (-2)
+Testing collisions (low  32-bit) - Expected       1024.0, actual   2042 (1.99x) (1019)
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 174/31 (5.44x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2096128 (1.00x) (-1024)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097088 (1.00x) (-64)
+
+Testing bit 3
+Testing collisions ( 64-bit) - Expected    0.0, actual    179 (750780774.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual 2097006 (2047.86x) (2095983) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 2093744/31 (65429.53x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097148 (1.00x) (-4)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low  32-bit) - Expected       1024.0, actual   4244 (4.14x) (3221) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 204/31 (6.38x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2096640 (1.00x) (-512)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097120 (1.00x) (-32)
+
+Testing bit 4
+Testing collisions ( 64-bit) - Expected    0.0, actual    174 (729809244.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual 2096875 (2047.73x) (2095852) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 2090828/31 (65338.41x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097146 (1.00x) (-6)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097150 (1.00x) (-2)
+Testing collisions (low  32-bit) - Expected       1024.0, actual   8245 (8.05x) (7222) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 35 bits: 1070/127 (8.36x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097136 (1.00x) (-16)
+
+Testing bit 5
+Testing collisions ( 64-bit) - Expected    0.0, actual    165 (692060490.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual 2096632 (2047.49x) (2095609) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 2085507/31 (65172.12x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097145 (1.00x) (-7)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097149 (1.00x) (-3)
+Testing collisions (low  32-bit) - Expected       1024.0, actual  16529 (16.14x) (15506) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 36 bits: 1072/63 (16.75x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097024 (1.00x) (-128)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097144 (1.00x) (-8)
+
+Testing bit 6
+Testing collisions ( 64-bit) - Expected    0.0, actual    185 (775946610.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual 2096163 (2047.04x) (2095140) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 2076008/31 (64875.28x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097145 (1.00x) (-7)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097149 (1.00x) (-3)
+Testing collisions (low  32-bit) - Expected       1024.0, actual  32635 (31.87x) (31612) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 1037/31 (32.41x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097088 (1.00x) (-64)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097148 (1.00x) (-4)
+
+Testing bit 7
+Testing collisions ( 64-bit) - Expected    0.0, actual    172 (721420632.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual 2095328 (2046.22x) (2094305) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 2058950/31 (64342.22x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097143 (1.00x) (-9)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097147 (1.00x) (-5)
+Testing collisions (low  32-bit) - Expected       1024.0, actual  64287 (62.78x) (63264) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 2128/31 (66.50x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097120 (1.00x) (-32)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097150 (1.00x) (-2)
+
+Testing bit 8
+Testing collisions ( 64-bit) - Expected    0.0, actual    167 (700449102.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual 2093748 (2044.68x) (2092725) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 2028833/31 (63401.06x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097142 (1.00x) (-10)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097146 (1.00x) (-6)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 126128 (123.17x) (125105) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 34 bits: 32480/255 (126.88x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097136 (1.00x) (-16)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 9
+Testing collisions ( 64-bit) - Expected    0.0, actual    182 (763363692.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual 2090825 (2041.82x) (2089802) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 1976762/31 (61773.84x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097140 (1.00x) (-12)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097144 (1.00x) (-8)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 242214 (236.54x) (241191) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 8205/31 (256.41x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097144 (1.00x) (-8)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 10
+Testing collisions ( 64-bit) - Expected    0.0, actual    185 (775946610.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual 2085559 (2036.68x) (2084536) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 1889620/31 (59050.65x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097140 (1.00x) (-12)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097144 (1.00x) (-8)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 446296 (435.84x) (445273) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 16424/31 (513.25x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097148 (1.00x) (-4)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 11
+Testing collisions ( 64-bit) - Expected    0.0, actual    175 (734003550.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual 2075988 (2027.33x) (2074965) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 1747380/31 (54605.65x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097139 (1.00x) (-13)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097143 (1.00x) (-9)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 771603 (753.52x) (770580) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 32615/31 (1019.22x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097150 (1.00x) (-2)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 12
+Testing collisions ( 64-bit) - Expected    0.0, actual    147 (616562982.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual 2058948 (2010.69x) (2057925) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 1528894/31 (47777.96x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097137 (1.00x) (-15)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097141 (1.00x) (-11)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 1190578 (1162.67x) (1189555) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 64556/31 (2017.38x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 13
+Testing collisions ( 64-bit) - Expected    0.0, actual    176 (738197856.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual 2028921 (1981.37x) (2027898) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 1223735/31 (38241.74x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097137 (1.00x) (-15)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097141 (1.00x) (-11)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 1582547 (1545.46x) (1581524) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 125555/31 (3923.60x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 14
+Testing collisions ( 64-bit) - Expected    0.0, actual    161 (675283266.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual 1976942 (1930.61x) (1975919) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 863865/31 (26995.79x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097129 (1.00x) (-23)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097134 (1.00x) (-18)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 1835091 (1792.08x) (1834068) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 241349/31 (7542.16x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 15
+Testing collisions ( 64-bit) - Expected    0.0, actual    163 (683671878.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual 1889695 (1845.41x) (1888672) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 538085/31 (16815.16x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097127 (1.00x) (-25)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097131 (1.00x) (-21)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 1966080 (1920.00x) (1965057) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 447666/31 (13989.57x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 16
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual 1747303 (1706.35x) (1746280) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 304787/31 (9524.60x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097093 (1.00x) (-59)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097098 (1.00x) (-54)
+Testing collisions (low  32-bit) - Expected       1024.0, actual    460 (0.45x)
+Testing collisions (low  25-37 bits) - Worst is 27 bits: 16172/32767 (0.49x)
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2093056 (1.00x) (-4096)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+
+Testing bit 17
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual 1529077 (1493.24x) (1528054) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 162570/31 (5080.31x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097085 (1.00x) (-67)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097094 (1.00x) (-58)
+Testing collisions (low  32-bit) - Expected       1024.0, actual   1324 (1.29x) (301)
+Testing collisions (low  25-37 bits) - Worst is 34 bits: 349/255 (1.36x)
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2095104 (1.00x) (-2048)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097024 (1.00x) (-128)
+
+Testing bit 18
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual 1223187 (1194.52x) (1222164) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 84129/31 (2629.03x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097020 (1.00x) (-132)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097050 (1.00x) (-102)
+Testing collisions (low  32-bit) - Expected       1024.0, actual   2481 (2.42x) (1458) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 36 bits: 173/63 (2.70x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2096128 (1.00x) (-1024)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097088 (1.00x) (-64)
+
+Testing bit 19
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual 863379 (843.14x) (862356) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 42773/31 (1336.66x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2096892 (1.00x) (-260)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096985 (1.00x) (-167)
+Testing collisions (low  32-bit) - Expected       1024.0, actual   4653 (4.54x) (3630) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 33 bits: 2340/511 (4.57x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2096640 (1.00x) (-512)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097120 (1.00x) (-32)
+
+Testing bit 20
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual 538582 (525.96x) (537559) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 21427/31 (669.59x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2096666 (1.00x) (-486)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096940 (1.00x) (-212)
+Testing collisions (low  32-bit) - Expected       1024.0, actual   8692 (8.49x) (7669) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 298/31 (9.31x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097136 (1.00x) (-16)
+
+Testing bit 21
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual 304611 (297.47x) (303588) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 36 bits: 21518/63 (336.22x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2096243 (1.00x) (-909)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096900 (1.00x) (-252)
+Testing collisions (low  32-bit) - Expected       1024.0, actual  16987 (16.59x) (15964) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 567/31 (17.72x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097024 (1.00x) (-128)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097144 (1.00x) (-8)
+
+Testing bit 22
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual 163587 (159.75x) (162564) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 5466/31 (170.81x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2095497 (1.00x) (-1655)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected       1024.0, actual  33097 (32.32x) (32074) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 35 bits: 4148/127 (32.41x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097088 (1.00x) (-64)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097148 (1.00x) (-4)
+
+Testing bit 23
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual  84065 (82.09x) (83042) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 36 bits: 5364/63 (83.81x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2094563 (1.00x) (-2589)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected       1024.0, actual  65022 (63.50x) (63999) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 35 bits: 8217/127 (64.20x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097120 (1.00x) (-32)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097150 (1.00x) (-2)
+
+Testing bit 24
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual  42953 (41.95x) (41930) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 1403/31 (43.84x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2093585 (1.00x) (-3567)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 125922 (122.97x) (124899) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 35 bits: 16211/127 (126.65x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097136 (1.00x) (-16)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 25
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual  21518 (21.01x) (20495) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 678/31 (21.19x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2093131 (1.00x) (-4021)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 241974 (236.30x) (240951) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 36 bits: 16222/63 (253.47x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097144 (1.00x) (-8)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 26
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual  10713 (10.46x) (9690) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 36 bits: 710/63 (11.09x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2093058 (1.00x) (-4094)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 447067 (436.59x) (446044) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 16463/31 (514.47x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097148 (1.00x) (-4)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 27
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual   5434 (5.31x) (4411) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 177/31 (5.53x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2093056 (1.00x) (-4096)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 771628 (753.54x) (770605) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 32439/31 (1013.72x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097150 (1.00x) (-2)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 28
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual   2622 (2.56x) (1599) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 31 bits: 5295/2047 (2.59x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2093056 (1.00x) (-4096)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 1190055 (1162.16x) (1189032) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 64574/31 (2017.94x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 29
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual   1348 (1.32x) (325)
+Testing collisions (high 25-37 bits) - Worst is 34 bits: 361/255 (1.41x)
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2093056 (1.00x) (-4096)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 1582477 (1545.39x) (1581454) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 126394/31 (3949.81x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 30
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual    800 (0.78x)
+Testing collisions (high 25-37 bits) - Worst is 36 bits: 61/63 (0.95x)
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2093056 (1.00x) (-4096)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 1835084 (1792.08x) (1834061) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 241787/31 (7555.85x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 31
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual    798 (0.78x)
+Testing collisions (high 25-37 bits) - Worst is 36 bits: 53/63 (0.83x)
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2093059 (1.00x) (-4093)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 1966080 (1920.00x) (1965057) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 447510/31 (13984.69x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 32
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual 1747595 (1706.64x) (1746572) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 304532/31 (9516.63x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097139 (1.00x) (-13)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097143 (1.00x) (-9)
+Testing collisions (low  32-bit) - Expected       1024.0, actual    510 (0.50x)
+Testing collisions (low  25-37 bits) - Worst is 35 bits: 66/127 (0.52x)
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2093056 (1.00x) (-4096)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+
+Testing bit 33
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual 1528697 (1492.87x) (1527674) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 162430/31 (5075.94x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097139 (1.00x) (-13)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097143 (1.00x) (-9)
+Testing collisions (low  32-bit) - Expected       1024.0, actual   1185 (1.16x) (162)
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 46/31 (1.44x)
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2095104 (1.00x) (-2048)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097024 (1.00x) (-128)
+
+Testing bit 34
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual 1223313 (1194.64x) (1222290) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 84305/31 (2634.53x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097139 (1.00x) (-13)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097143 (1.00x) (-9)
+Testing collisions (low  32-bit) - Expected       1024.0, actual   2154 (2.10x) (1131) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 34 bits: 552/255 (2.16x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2096128 (1.00x) (-1024)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097088 (1.00x) (-64)
+
+Testing bit 35
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual 865162 (844.89x) (864139) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 43159/31 (1348.72x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097139 (1.00x) (-13)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097143 (1.00x) (-9)
+Testing collisions (low  32-bit) - Expected       1024.0, actual   4251 (4.15x) (3228) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 140/31 (4.38x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2096640 (1.00x) (-512)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097120 (1.00x) (-32)
+
+Testing bit 36
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual 537850 (525.24x) (536827) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 21590/31 (674.69x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097139 (1.00x) (-13)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097143 (1.00x) (-9)
+Testing collisions (low  32-bit) - Expected       1024.0, actual   8175 (7.98x) (7152) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 36 bits: 516/63 (8.06x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097136 (1.00x) (-16)
+
+Testing bit 37
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual 304490 (297.35x) (303467) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 36 bits: 21763/63 (340.05x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097128 (1.00x) (-24)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097143 (1.00x) (-9)
+Testing collisions (low  32-bit) - Expected       1024.0, actual  16735 (16.34x) (15712) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 36 bits: 1072/63 (16.75x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097024 (1.00x) (-128)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097144 (1.00x) (-8)
+
+Testing bit 38
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual 163004 (159.18x) (161981) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 36 bits: 10770/63 (168.28x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097108 (1.00x) (-44)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097143 (1.00x) (-9)
+Testing collisions (low  32-bit) - Expected       1024.0, actual  32664 (31.90x) (31641) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 1062/31 (33.19x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097088 (1.00x) (-64)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097148 (1.00x) (-4)
+
+Testing bit 39
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual  84187 (82.21x) (83164) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 36 bits: 5439/63 (84.98x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097072 (1.00x) (-80)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097143 (1.00x) (-9)
+Testing collisions (low  32-bit) - Expected       1024.0, actual  64333 (62.83x) (63310) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 33 bits: 32524/511 (63.52x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097120 (1.00x) (-32)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097150 (1.00x) (-2)
+
+Testing bit 40
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual  43235 (42.22x) (42212) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 33 bits: 21826/511 (42.63x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097008 (1.00x) (-144)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097143 (1.00x) (-9)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 125929 (122.98x) (124906) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 36 bits: 8280/63 (129.38x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097136 (1.00x) (-16)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 41
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual  21696 (21.19x) (20673) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 709/31 (22.16x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097136 (1.00x) (-16)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 241547 (235.89x) (240524) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 8294/31 (259.19x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097144 (1.00x) (-8)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 42
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual  10979 (10.72x) (9956) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 372/31 (11.63x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2096704 (1.00x) (-448)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097124 (1.00x) (-28)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 447183 (436.70x) (446160) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 16347/31 (510.84x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097148 (1.00x) (-4)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 43
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual   5894 (5.76x) (4871) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 35 bits: 764/127 (5.97x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2096383 (1.00x) (-769)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097103 (1.00x) (-49)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 771479 (753.40x) (770456) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 32183/31 (1005.72x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097150 (1.00x) (-2)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 44
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual   3162 (3.09x) (2139) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 107/31 (3.34x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2095872 (1.00x) (-1280)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097072 (1.00x) (-80)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 1190040 (1162.15x) (1189017) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 64072/31 (2002.25x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 45
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual   1735 (1.69x) (712)
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 56/31 (1.75x)
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2095104 (1.00x) (-2048)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097023 (1.00x) (-129)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 1582456 (1545.37x) (1581433) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 125650/31 (3926.56x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 46
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual   1060 (1.04x) (37)
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 38/31 (1.19x)
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2094075 (1.00x) (-3077)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096953 (1.00x) (-199)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 1835085 (1792.08x) (1834062) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 241566/31 (7548.94x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 47
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1024.0, actual    625 (0.61x)
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 21/31 (0.66x)
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2093058 (1.00x) (-4094)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 1966080 (1920.00x) (1965057) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 447088/31 (13971.51x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 48
+Testing collisions ( 64-bit) - Expected    0.0, actual    179 (750780774.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual 1747801 (1706.84x) (1746778) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 304131/31 (9504.10x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097113 (1.00x) (-39)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097119 (1.00x) (-33)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 2031616 (1984.00x) (2030593) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 771380/31 (24105.64x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 49
+Testing collisions ( 64-bit) - Expected    0.0, actual    170 (713032020.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual 1529490 (1493.64x) (1528467) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 162558/31 (5079.94x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097080 (1.00x) (-72)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097092 (1.00x) (-60)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 2064384 (2016.00x) (2063361) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 1190561/31 (37205.05x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 50
+Testing collisions ( 64-bit) - Expected    0.0, actual    174 (729809244.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual 1223081 (1194.42x) (1222058) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 84223/31 (2631.97x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2097017 (1.00x) (-135)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2097047 (1.00x) (-105)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 2080768 (2032.00x) (2079745) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 1582417/31 (49450.55x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 51
+Testing collisions ( 64-bit) - Expected    0.0, actual    192 (805306752.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual 864182 (843.93x) (863159) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 42935/31 (1341.72x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2096918 (1.00x) (-234)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096991 (1.00x) (-161)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 2088960 (2040.00x) (2087937) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 1835100/31 (57346.90x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 52
+Testing collisions ( 64-bit) - Expected    0.0, actual    183 (767557998.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual 538613 (525.99x) (537590) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 21686/31 (677.69x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2096633 (1.00x) (-519)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096928 (1.00x) (-224)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 2093056 (2044.00x) (2092033) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 1966080/31 (61440.03x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 53
+Testing collisions ( 64-bit) - Expected    0.0, actual    188 (788529528.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual 304911 (297.76x) (303888) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 10836/31 (338.63x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2096209 (1.00x) (-943)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096901 (1.00x) (-251)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 2095104 (2046.00x) (2094081) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 2031616/31 (63488.03x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 54
+Testing collisions ( 64-bit) - Expected    0.0, actual    179 (750780774.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual 162345 (158.54x) (161322) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 5379/31 (168.09x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2095503 (1.00x) (-1649)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 2096128 (2047.00x) (2095105) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 2064384/31 (64512.03x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 55
+Testing collisions ( 64-bit) - Expected    0.0, actual    163 (683671878.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual  84484 (82.50x) (83461) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 35 bits: 10901/127 (85.16x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2094576 (1.00x) (-2576)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 2096640 (2047.50x) (2095617) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 2080768/31 (65024.03x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 56
+Testing collisions ( 64-bit) - Expected    0.0, actual    184 (771752304.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual  42947 (41.94x) (41924) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 36 bits: 2793/63 (43.64x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2093607 (1.00x) (-3545)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 2096896 (2047.75x) (2095873) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 2088960/31 (65280.03x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 57
+Testing collisions ( 64-bit) - Expected    0.0, actual    167 (700449102.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual  21682 (21.17x) (20659) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 34 bits: 5510/255 (21.52x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2093121 (1.00x) (-4031)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 2097024 (2047.88x) (2096001) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 2093056/31 (65408.03x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 58
+Testing collisions ( 64-bit) - Expected    0.0, actual    184 (771752304.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual  10851 (10.60x) (9828) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 36 bits: 720/63 (11.25x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2093057 (1.00x) (-4095)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 2097088 (2047.94x) (2096065) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 2095104/31 (65472.03x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 59
+Testing collisions ( 64-bit) - Expected    0.0, actual    159 (666894654.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual   5319 (5.19x) (4296) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 35 bits: 688/127 (5.38x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2093056 (1.00x) (-4096)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 2097120 (2047.97x) (2096097) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 2096128/31 (65504.03x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 60
+Testing collisions ( 64-bit) - Expected    0.0, actual    169 (708837714.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual   2654 (2.59x) (1631) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 169/31 (5.28x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2093056 (1.00x) (-4096)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 2097136 (2047.99x) (2096113) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 2096640/31 (65520.03x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 61
+Testing collisions ( 64-bit) - Expected    0.0, actual    183 (767557998.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual   1328 (1.30x) (305)
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 183/31 (5.72x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2093056 (1.00x) (-4096)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 2097144 (2047.99x) (2096121) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 2096896/31 (65528.03x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 62
+Testing collisions ( 64-bit) - Expected    0.0, actual    180 (754975080.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual    747 (0.73x)
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 180/31 (5.63x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2093056 (1.00x) (-4096)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 2097148 (2048.00x) (2096125) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 2097024/31 (65532.03x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+Testing bit 63
+Testing collisions ( 64-bit) - Expected    0.0, actual    343 (1438646958.00x) !!!!!
+Testing collisions (high 32-bit) - Expected       1024.0, actual    698 (0.68x)
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 343/31 (10.72x) !!!!!
+Testing collisions (high 12-bit) - Expected    2097152.0, actual 2093060 (1.00x) (-4092)
+Testing collisions (high  8-bit) - Expected    2097152.0, actual 2096896 (1.00x) (-256)
+Testing collisions (low  32-bit) - Expected       1024.0, actual 2097150 (2048.00x) (2096127) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 2097088/31 (65534.03x) !!!!!
+Testing collisions (low  12-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+Testing collisions (low   8-bit) - Expected    2097152.0, actual 2097151 (1.00x) (-1)
+
+*********FAIL*********
+
+[[[ MomentChi2 Tests ]]]
+
+Analyze hashes produced from a serie of linearly increasing numbers of 32-bit, using a step of 3 ... 
+Target values to approximate : 38918200.000000 - 410450.000000 
+Popcount 1 stats : 25696656.804358 - 224190.447464
+Popcount 0 stats : 58399301.909793 - 882655.493642
+MomentChi2 for bits 1 :  2.75446e+08 
+MomentChi2 for bits 0 :  2.9349e+08 
+
+Derivative stats (transition from 2 consecutive values) : 
+Popcount 1 stats : 2593990.240777 - 4240.915223
+Popcount 0 stats : 213003985.459184 - 3585125.103244
+MomentChi2 for deriv b1 :  3.18176e+09 
+MomentChi2 for deriv b0 :  7.58486e+09 
+
+  FAIL !!!! 
+
+
+*********FAIL*********
+
+
+Input vcode 0x00000001, Output vcode 0x00000001, Result vcode 0x00000001
+Verification value is 0x00000001 - Testing took 1226.285035 seconds
+-------------------------------------------------------------------------------

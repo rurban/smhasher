@@ -48,7 +48,7 @@ SMhasher
 | [crc32_hw1](doc/crc32_hw1.txt)                |     23382.53 |    36.84 | 197.39 (20)| 671 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2) |
 | [crc64_hw](doc/crc64_hw.txt)                  |      8387.01 |    29.96 | 161.44 (13)| 652 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x64 SSE4.2) |
 | [crc32_pclmul](doc/crc32_pclmul.txt)          |   1932125.24 |     6.50 |   -        | 481 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2+PCLMUL) |
-| [FastestHash](doc/FastestHash.txt)            |  14635755.30 |    16.04 | 357.77 (3) |     | insecure, zeros, fails all tests |
+| [o1hash](doc/o1hash.txt)                      |  14635755.30 |    16.04 | 357.77 (3) |     | insecure, zeros, fails all tests |
 | [fibonacci](doc/fibonacci.txt)                |      9462.17 |    33.52 | 774.87 (14)|1692 | zeros, fails all tests       |
 | [FNV1a](doc/FNV1a.txt)                        |       780.53 |    69.65 | 197.06 (20)| 204 | zeros, fails all tests       |
 | [FNV1A_Totenschiff](doc/FNV1A_Totenschiff.txt)|      6235.86 |    36.56 | 214.61 (18)| 270 | zeros, fails all tests       |
@@ -156,8 +156,9 @@ SMhasher
 | [t1ha0_aes_noavx](doc/t1ha0_aes_noavx.txt)    |     21782.86 |    48.17 | 238.14 (18)| 925 | LongNeighbors, machine-specific (x86 AES-NI) |
 | [t1ha0_aes_avx1](doc/t1ha0_aes_avx1)          |     22714.85 |    48.12 | 226.52 (16)| 843 | LongNeighbors, machine-specific (x64 AVX.txt)|
 | [t1ha0_aes_avx2](doc/t1ha0_aes_avx2.txt)      |     22345.33 |    44.38 | 556.47 (89)| 792 | LongNeighbors, machine-specific (x64 AVX2)   |
-| [wyhash](doc/wyhash.txt)                      |     12063.37 |    38.11 | 208.49 (3) | 938 |                            |
+| [wyhash32](doc/wyhash32.txt)                  |              |          |            |     | 32-bit                     |
 | [wyhash32low](doc/wyhash32low.txt)            |     12049.79 |    37.95 | 222.17 (4) | 922 |                            |
+| [wyhash](doc/wyhash.txt)                      |     12063.37 |    38.11 | 208.49 (3) | 938 |                            |
 
 The [sortable table variant](http://rurban.github.io/smhasher/doc/table.html)
 

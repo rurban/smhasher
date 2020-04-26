@@ -471,6 +471,14 @@ void HighwayHash_init();
 // objsize 20-a12: 2546
 void HighwayHash64_test (const void * key, int len, uint32_t seed, void * out);
 
+#ifdef HAVE_BIT32
+// native 32bit
+#include "wyhash32.h"
+inline void wyhash32_test (const void * key, int len, uint32_t seed, void * out) {
+  *(uint32_t*)out = wyhash32(key, (uint64_t)len, (unsigned)seed);
+}
+#endif
+
 #ifdef HAVE_INT64
 //https://github.com/wangyi-fudan/wyhash
 #include "wyhash.h"
@@ -478,13 +486,16 @@ void HighwayHash64_test (const void * key, int len, uint32_t seed, void * out);
 inline void wyhash_test (const void * key, int len, uint32_t seed, void * out) {
   *(uint64_t*)out = wyhash(key, (uint64_t)len, (uint64_t)seed, _wyp);
 }
-// objsize 407630-4079ca: 922
+#ifndef HAVE_BIT32
 inline void wyhash32low (const void * key, int len, uint32_t seed, void * out) {
   *(uint32_t*)out = 0xFFFFFFFF & wyhash(key, (uint64_t)len, (uint64_t)seed, _wyp);
 }
-// fixed to be seeded a bit, and to avoid mult. blinding. Still too bad for Diff test
-inline void FastestHash_test (const void * key, int len, uint32_t seed, void * out) {
-  *(uint64_t*)out = FastestHash(key, (size_t)len, (uint64_t)seed);
+#endif
+
+#include "o1hash.h"
+// unseeded
+inline void o1hash_test (const void * key, int len, uint32_t seed, void * out) {
+  *(uint64_t*)out = o1hash(key, (uint64_t)len);
 }
 
 //https://github.com/vnmakarov/mir/blob/master/mir-hash.h

@@ -167,7 +167,7 @@ HashInfo g_hashes[] =
   { crc32c_pclmul_test,   32, 0x00000000, "crc32_pclmul","-mpclmul crc32 in asm on HW", POOR },
 #endif
 #ifdef HAVE_INT64
-  { FastestHash_test,     64, 0xCEF65501, "FastestHash", "modified FastestHash from wyhash v5", POOR },
+  { o1hash_test,          64, 0x85051E87, "o1hash",       "o(1)hash unseeded, from wyhash", POOR },
 #endif
 #if 0 && defined(__x86_64__) && (defined(__linux__) || defined(__APPLE__))
   // elf64 or macho64 only
@@ -367,14 +367,13 @@ HashInfo g_hashes[] =
   { t1ha0_ia32aes_avx2_test,   64, 0x8B38C599, "t1ha0_aes_avx2",  "Fast Positive Hash (machine-specific, requires AES-NI & AVX2)", GOOD },
 #  endif /* __AVX2__ */
 #endif /* T1HA0_AESNI_AVAILABLE */
-#ifdef HAVE_INT64
-# ifdef DEBUG
-  { wysha,                 32, 0xD09A85B3, "wysha",          "wyhash v5 test", GOOD },
-# endif
-  { wyhash_test,           64, 0x41B79E18, "wyhash",         "wyhash v5 (64-bit, little-endian)", GOOD },
-  { wyhash32low,           32, 0xAE2B556B, "wyhash32low",    "wyhash v5 - lower 32bit", GOOD }
+#ifdef HAVE_BIT32
+  { wyhash32_test,         32, 0x09DE8066, "wyhash32",       "wyhash (32-bit)", GOOD },
 #else
-  { NULL }
+  { wyhash32low,           32, 0xDCFB4E8F, "wyhash32low",    "wyhash lower 32bit", GOOD },
+#endif
+#ifdef HAVE_INT64
+  { wyhash_test,           64, 0x8323EB7E, "wyhash",         "wyhash (64-bit)", GOOD },
 #endif
 
 };
@@ -1168,7 +1167,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     int reps = 1000;
     if ((g_speed > 500.0 || info->hashbits > 128 ||
          hash == multiply_shift || hash == pair_multiply_shift ||
-         hash == FastestHash_test) && !g_testExtra)
+         hash == o1hash_test) && !g_testExtra)
       reps = 100; // sha1: 7m, md5: 4m53
 
     result &= DiffTest< Blob<64>,  hashtype >(hash,5,reps,dumpCollisions);
