@@ -15,7 +15,7 @@ $testrx = qr($testrx);
 if (@ARGV) {
   readf($_) for @ARGV;
 } else {
-  readf($_) for <partests/*>;
+  readf($_) for <partests/*.txt>;
 }
 
 sub readf {
