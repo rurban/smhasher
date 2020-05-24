@@ -45,7 +45,7 @@ void SetAffinity ( int cpu );
 #define timer_start() __rdtsc()
 #define timer_end()   __rdtsc()
 
-#define popcount8(x)  __popcnt(x)
+#define popcount8(x)  __popcnt64(x)
 
 //-----------------------------------------------------------------------------
 // Other compilers
