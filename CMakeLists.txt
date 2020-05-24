@@ -423,6 +423,20 @@ endif()
 #    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_FANOM_HASH")
 #ENDIF()
 
+set(HASHX_SRC
+  hashx/src/blake2.c
+  hashx/src/compiler.c
+  hashx/src/compiler_x86.c
+  hashx/src/context.c
+  hashx/src/hashx.c
+  hashx/src/program.c
+  hashx/src/program_exec.c
+  hashx/src/siphash.c
+  hashx/src/siphash_rng.c
+  hashx/src/virtual_memory.c)
+
+add_definitions(-DHASHX_BLOCK_MODE)
+
 if ((CMAKE_MAJOR_VERSION EQUAL 3 AND CMAKE_MINOR_VERSION GREATER_EQUAL 9)
     AND (CMAKE_BUILD_TYPE STREQUAL "Release"))
   cmake_policy(SET CMP0069 NEW)
@@ -499,6 +513,7 @@ add_library(SMHasherSupport STATIC
   ${BLAKE3_SRC}
   pengyhash.c
   ${UMASH_SRC}
+  ${HASHX_SRC}
 )
 
 add_executable(
@@ -515,6 +530,11 @@ if( ipo_supported )
 else()
   message(STATUS "IPO / LTO not supported: <${error}>")
 endif()
+
+include_directories(SMHasherSupport}
+  hashx/include/)
+include_directories(SMHasher}
+  hashx/include/)
 
 target_link_libraries(
   SMHasher

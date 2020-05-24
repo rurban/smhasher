@@ -390,13 +390,16 @@ HashInfo g_hashes[] =
   { xxh3low_test,         32, 0xFAE8467B, "xxh3low",     "xxHash v3, 64-bit, low 32-bits part", GOOD },
   { xxh128_test,         128, 0xEB61B3A0, "xxh128",      "xxHash v3, 128-bit", GOOD },
   { xxh128low_test,       64, 0x54D1CC70, "xxh128low",   "xxHash v3, 128-bit, low 64-bits part", GOOD },
+#if defined(__x86_64__)
+  { hashx_test,          256, 0x00000000, "HashX",       "Hash function for proof of work and client puzzles", GOOD },
+#endif
 #ifdef HAVE_BIT32
-  { wyhash32_test,         32, 0x09DE8066, "wyhash32",       "wyhash (32-bit)", GOOD },
+  { wyhash32_test,         32, 0x09DE8066, "wyhash32",   "wyhash (32-bit)", GOOD },
 #else
-  { wyhash32low,           32, 0xDCFB4E8F, "wyhash32low",    "wyhash lower 32bit", GOOD },
+  { wyhash32low,           32, 0xDCFB4E8F, "wyhash32low","wyhash lower 32bit", GOOD },
 #endif
 #ifdef HAVE_INT64
-  { wyhash_test,           64, 0x8323EB7E, "wyhash",         "wyhash (64-bit)", GOOD },
+  { wyhash_test,           64, 0x8323EB7E, "wyhash",     "wyhash (64-bit)", GOOD },
 #endif
 
 };

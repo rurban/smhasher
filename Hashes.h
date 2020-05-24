@@ -32,6 +32,8 @@
 
 #include "vmac.h"
 
+#include <hashx.h>
+
 //----------
 // These are _not_ hash functions (even though people tend to use crc32 as one...)
 
@@ -1069,8 +1071,18 @@ inline void pengyhash_test ( const void * key, int len, uint32_t seed, void * ou
 
 // requires modern builtins, like __builtin_uaddll_overflow
 #if defined(__SSE4_2__) && defined(__x86_64__) && !defined(_MSC_VER)
-
 // objsize: 4bcb90 - 4bd18a
 #include "umash.hpp"
-
 #endif
+
+inline void hashx_test(const void* key, int len, unsigned seed, void* out) {
+    static unsigned curr_seed = -1;
+    static hashx_ctx* hash_instance = hashx_alloc(HASHX_COMPILED);
+
+    if (curr_seed != seed) {
+        hashx_make(hash_instance, &seed, sizeof(seed));
+        curr_seed = seed;
+    }
+
+    hashx_exec(hash_instance, key, len, out);
+}
