@@ -299,6 +299,9 @@ HashInfo g_hashes[] =
   { seahash32low,         32, 0x712F0EE8, "seahash32low","seahash - lower 32bit", GOOD },
 #endif /* HAVE_INT64 */
 #endif /* !MSVC */
+#if defined(__x86_64__)
+  { hashx_test,          256, 0x06050F3E, "HashX",       "Jitted hash function for proof of work and client puzzles", GOOD },
+#endif
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { clhash_test,          64, 0x00000000, "clhash",      "carry-less mult. hash -DBITMIX (64-bit for x64, SSE4.2)", GOOD },
 #endif
@@ -390,9 +393,6 @@ HashInfo g_hashes[] =
   { xxh3low_test,         32, 0xFAE8467B, "xxh3low",     "xxHash v3, 64-bit, low 32-bits part", GOOD },
   { xxh128_test,         128, 0xEB61B3A0, "xxh128",      "xxHash v3, 128-bit", GOOD },
   { xxh128low_test,       64, 0x54D1CC70, "xxh128low",   "xxHash v3, 128-bit, low 64-bits part", GOOD },
-#if defined(__x86_64__)
-  { hashx_test,          256, 0x00000000, "HashX",       "Hash function for proof of work and client puzzles", GOOD },
-#endif
 #ifdef HAVE_BIT32
   { wyhash32_test,         32, 0x09DE8066, "wyhash32",   "wyhash (32-bit)", GOOD },
 #else
@@ -444,6 +444,8 @@ void Hash_init (HashInfo* info) {
 #endif
   else if(info->hash == chaskey_test)
     chaskey_init();
+  else if(info->hash == hashx_test)
+    hashx_seed_init(0);
 }
 
 // optional hash seed initializers.
@@ -465,10 +467,8 @@ void Hash_Seed_init (pfHash hash, size_t seed) {
           hash == umash ||
           hash == umash128)
     umash_seed_init(seed);
-  /*
   else if(hash == hashx_test)
-    hashx_seed_init(info, seed);
-  */
+    hashx_seed_init(seed);
 #endif
 }
 

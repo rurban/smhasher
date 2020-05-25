@@ -860,3 +860,19 @@ uint64_t aesnihash(uint8_t *in, unsigned long src_sz) {
   return hash[0] ^ hash[1];
 }
 #endif
+
+#if defined(__x86_64__)
+static const hashx_ctx* hashx_instance = hashx_alloc (HASHX_COMPILED);
+
+const hashx_ctx* hashx_get_instance() {
+  return hashx_instance;
+}
+
+void hashx_seed_init(unsigned seed) {
+    static unsigned curr_seed = -1;
+    if (curr_seed != seed) {
+      hashx_make ((hashx_ctx*)hashx_instance, &seed, sizeof(seed));
+        curr_seed = seed;
+    }
+}
+#endif

@@ -52,7 +52,7 @@ check_type_size (__int64 __INT64)
 check_type_size (int64_t INT64_T)
 check_type_size (__uint128_t __UINT128_T)
 
-# TODO: rather parse `$CC -march=native -dM -E - <<< ''` [gh #10]
+# TODO: rather parse `$CC -march=native -dM -E - <<< ''` [GH #10]
 if (NOT (CMAKE_CROSSCOMPILING))
  IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
    EXEC_PROGRAM(cat ARGS "/proc/cpuinfo" OUTPUT_VARIABLE CPUINFO)
