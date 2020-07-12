@@ -306,7 +306,6 @@ HashInfo g_hashes[] =
   { t1ha1_64be_test,      64, 0x93F864DE, "t1ha1_64be",  "Fast Positive Hash (portable, aims 64-bit, big-engian)", POOR },
   { t1ha0_32le_test,      64, 0x7F7D7B29, "t1ha0_32le",  "Fast Positive Hash (portable, aims 32-bit, little-endian)", POOR },
   { t1ha0_32be_test,      64, 0xDA6A4061, "t1ha0_32be",  "Fast Positive Hash (portable, aims 32-bit, big-endian)", POOR },
-
 #if __WORDSIZE >= 64
 # define TIFU_VERIF       0x644236D4
 #else
@@ -444,6 +443,8 @@ HashInfo g_hashes[] =
   { xxh3low_test,         32, 0xFAE8467B, "xxh3low",     "xxHash v3, 64-bit, low 32-bits part", GOOD },
   { xxh128_test,         128, 0xEB61B3A0, "xxh128",      "xxHash v3, 128-bit", GOOD },
   { xxh128low_test,       64, 0x54D1CC70, "xxh128low",   "xxHash v3, 128-bit, low 64-bits part", GOOD },
+  // aHash does not adhere to a fixed output
+  { ahash64_test,         64, 0x00000000, "ahash64",     "ahash 64bit", GOOD },
 #ifdef HAVE_BIT32
   { wyhash32_test,        32, 0x09DE8066, "wyhash32",       "wyhash (32-bit)", GOOD },
 #else

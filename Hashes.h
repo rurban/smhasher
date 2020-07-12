@@ -21,6 +21,7 @@
 #include "metrohash/metrohash128crc.h"
 #endif
 
+#include "ahash.h"
 #include "fasthash.h"
 #include "jody_hash32.h"
 #include "jody_hash64.h"
@@ -360,6 +361,10 @@ inline void fasthash32_test ( const void * key, int len, uint32_t seed, void * o
 inline void fasthash64_test ( const void * key, int len, uint32_t seed, void * out ) {
   *(uint64_t*)out = fasthash64(key, (size_t) len, (uint64_t)seed);
 }
+inline void ahash64_test ( const void * key, int len, uint32_t seed, void * out ) {
+  *(uint64_t*)out = ahash64(key, (size_t) len, (uint64_t)seed);
+}
+
 #endif
 
 // objsize 0-778: 1912

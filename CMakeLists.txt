@@ -642,6 +642,7 @@ else()
 endif()
 
 target_link_libraries(SMHasher SMHasherSupport ${HIGHWAY_LIB} ${BLAKE3_LIB}
+                      libahash_c.a
                       ${CMAKE_THREAD_LIBS_INIT})
 
 # add_executable( bittest bittest.cpp )
