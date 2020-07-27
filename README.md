@@ -161,6 +161,11 @@ SMhasher
 
 The [sortable table variant](http://rurban.github.io/smhasher/doc/table.html)
 
+smhasher is being sponsored by the following tool; please help to support us
+by taking a look and signing up to a free trial.
+<!--<a href="https://tracking.gitads.io/?repo=smhasher">
+    <img src="https://images.gitads.io/smhasher" alt="GitAds"/> </a>-->
+
 Summary
 -------
 
