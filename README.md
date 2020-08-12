@@ -156,7 +156,7 @@ SMhasher
 | [t1ha0_aes_noavx](doc/t1ha0_aes_noavx.txt)    |     21782.86 |    48.17 | 238.14 (18)| 925 | LongNeighbors, machine-specific (x86 AES-NI) |
 | [t1ha0_aes_avx1](doc/t1ha0_aes_avx1)          |     22714.85 |    48.12 | 226.52 (16)| 843 | LongNeighbors, machine-specific (x64 AVX.txt)|
 | [t1ha0_aes_avx2](doc/t1ha0_aes_avx2.txt)      |     22345.33 |    44.38 | 556.47 (89)| 792 | LongNeighbors, machine-specific (x64 AVX2)   |
-| [wyhash32](doc/wyhash32.txt)                  |              |          |            |     | 32-bit                     |
+| [wyhash32](doc/wyhash32.txt)                  |      2532.89 |    48.40 | 484.57 (1)|      | 32-bit                     |
 | [wyhash32low](doc/wyhash32low.txt)            |     12049.79 |    37.95 | 222.17 (4) | 922 |                            |
 | [wyhash](doc/wyhash.txt)                      |     12063.37 |    38.11 | 208.49 (3) | 938 |                            |
 
