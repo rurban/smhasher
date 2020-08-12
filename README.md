@@ -106,6 +106,9 @@ SMhasher
 | [tifuhash_64](doc/tifuhash_64.txt)            |        35.60 |  1679.52 |1212.75 (15)| 276 |                            |
 | [floppsyhash_64](doc/floppsyhash.txt)         |       191.95 |   450.93 | 821.11 (152)| 623 |                            |
 | [prvhash](doc/prvhash.txt)                    |       393.21 |   142.03 | 532.15 (125)| 157 |                            |
+| [prvhash42_32](doc/prvhash42_32.txt)          |       687.08 |    76.57 | 475.08 (131)| 157 |                            |
+| [prvhash42_64](doc/prvhash42_64.txt)          |       347.90 |   138.93 | 488.99 (5) | 157 |                            |
+| [prvhash42_128](doc/prvhash42_128.txt)        |       189.37 |   249.06 | 578.11 (19)| 157 |                            |
 | [chaskey](doc/chaskey.txt)                    |       735.85 |   168.05 | 336.07 (4) |1609 |                            |
 | [SipHash](doc/SipHash.txt)                    |       958.78 |   141.84 | 278.15 (3) |1071 |                            |
 | [HalfSipHash](doc/HalfSipHash.txt)            |       741.59 |   122.25 | 256.22 (20)| 700 | zeroes                     |
