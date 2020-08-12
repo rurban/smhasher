@@ -129,7 +129,7 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
       for(size_t j=0;j<i;j++)
 #if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__clang__)
         if(__builtin_popcountll(secret[j]^secret[i])!=32){ ok=0; break; }
-#elif defined(_MSC_VER)
+#elif defined(_MSC_VER) && defined(_M_X64)
         if(_mm_popcnt_u64(secret[j]^secret[i])!=32){ ok=0; break; }
 #endif
        if(!ok)continue;
