@@ -989,3 +989,11 @@ inline void aesnihash_test ( const void * key, int len, unsigned seed, void * ou
   *(uint64_t *)out = result;
 }
 #endif
+
+#include "prvhash42.h"
+inline void prvhash_test ( const void * key, int len, unsigned seed, void * out )
+{
+  uint8_t hash[8] = {0};
+  prvhash42 ((const uint8_t *)key, len, hash, 8, (uint64_t)seed, 0, 0);
+  memcpy (out, hash, 8);
+}
