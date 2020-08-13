@@ -2,7 +2,7 @@
  * @file prvhash42opt.h
  *
  * @brief The inclusion file for the "prvhash42" hash function, optimized for
- * 32- and 64-bit hash lengths.
+ * 32-bit hash length, without endianness-correction.
  *
  * @mainpage
  *
@@ -32,7 +32,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * @version 2.1
+ * @version 2.5
  */
 
 //$ nocpp
@@ -64,135 +64,27 @@ inline void prvhash42_32( const uint8_t* const Message, const int MessageLen,
 
 	for( k = 0; k < MessageLen; k++ )
 	{
-		const uint64_t m = Message[ k ];
-
-		Seed ^= m;
+		const uint64_t msg = Message[ k ];
 
 		Seed *= lcg;
 		const uint64_t ph = Hash;
 		Hash ^= Seed >> 32;
-		Seed ^= ph ^ m;
-
+		Seed ^= ph ^ msg;
 		lcg += Seed;
 	}
+
+	const uint64_t lmsg = ( MessageLen == 0 ? 0 : ~Message[ MessageLen - 1 ]);
+
+	Seed *= lcg;
+	const uint64_t ph = Hash;
+	Hash ^= Seed >> 32;
+	Seed ^= ph ^ lmsg;
+	lcg += Seed;
+
+	Seed *= lcg;
+	Hash ^= Seed >> 32;
 
 	*(uint32_t*) Hash0 = (uint32_t) Hash;
-}
-
-/**
- * Optimized PRVHASH hash function. Produces 64-bit hash of the specified
- * Message using default initial "Hash", "lcg" and "Seed" values.
- *
- * @param Message Message to produce hash from.
- * @param MessageLen Message length, in bytes.
- * @param[out] Hash The resulting hash, 64-bit, not endianness-corrected.
- * @param SeedXOR Optional value, to XOR the default seed with. To use the
- * default seed, set to 0.
- */
-
-inline void prvhash42_64( const uint8_t* const Message, const int MessageLen,
-	uint8_t* const Hash0, const uint64_t SeedXOR )
-{
-	uint64_t Hash = 0;
-	uint64_t lcg = 15267459991392010589ULL;
-	uint64_t Seed = 7928988912013905173ULL ^ SeedXOR;
-
-	int k;
-
-	for( k = 0; k < MessageLen; k++ )
-	{
-		const uint64_t m = Message[ k ];
-
-		// Entry.
-
-		Seed ^= m;
-
-		// Lower 32 bits of hash.
-
-		Seed *= lcg;
-		uint64_t ph = (uint32_t) Hash;
-		Hash ^= Seed >> 32;
-		Seed ^= ph ^ m;
-
-		// Upper 32 bits of hash.
-
-		Seed *= lcg;
-		ph = Hash >> 32;
-		Hash ^= Seed & 0xFFFFFFFF00000000ULL;
-		Seed ^= ph ^ m;
-
-		// Exit.
-
-		lcg += Seed;
-	}
-
-	*(uint64_t*) Hash0 = Hash;
-}
-
-/**
- * Optimized PRVHASH hash function. Produces 128-bit hash of the specified
- * Message using default initial "Hash", "lcg" and "Seed" values.
- *
- * @param Message Message to produce hash from.
- * @param MessageLen Message length, in bytes.
- * @param[out] Hash The resulting hash, 128-bit, not endianness-corrected.
- * @param SeedXOR Optional value, to XOR the default seed with. To use the
- * default seed, set to 0.
- */
-
-inline void prvhash42_128( const uint8_t* const Message, const int MessageLen,
-	uint8_t* const Hash0, const uint64_t SeedXOR )
-{
-	uint64_t Hash1 = 0;
-	uint64_t Hash2 = 0;
-	uint64_t lcg = 15267459991392010589ULL;
-	uint64_t Seed = 7928988912013905173ULL ^ SeedXOR;
-
-	int k;
-
-	for( k = 0; k < MessageLen; k++ )
-	{
-		const uint64_t m = Message[ k ];
-
-		// Entry.
-
-		Seed ^= m;
-
-		// Lower 32 bits of hash 1.
-
-		Seed *= lcg;
-		uint64_t ph = (uint32_t) Hash1;
-		Hash1 ^= Seed >> 32;
-		Seed ^= ph ^ m;
-
-		// Upper 32 bits of hash 1.
-
-		Seed *= lcg;
-		ph = Hash1 >> 32;
-		Hash1 ^= Seed & 0xFFFFFFFF00000000ULL;
-		Seed ^= ph ^ m;
-
-		// Lower 32 bits of hash 2.
-
-		Seed *= lcg;
-		ph = (uint32_t) Hash2;
-		Hash2 ^= Seed >> 32;
-		Seed ^= ph ^ m;
-
-		// Upper 32 bits of hash 2.
-
-		Seed *= lcg;
-		ph = Hash2 >> 32;
-		Hash2 ^= Seed & 0xFFFFFFFF00000000ULL;
-		Seed ^= ph ^ m;
-
-		// Exit.
-
-		lcg += Seed;
-	}
-
-	*(uint64_t*) Hash0 = Hash1;
-	*(uint64_t*) ( Hash0 + 8 ) = Hash2;
 }
 
 #endif // PRVHASH42OPT_INCLUDED
