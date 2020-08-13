@@ -230,6 +230,7 @@ HashInfo g_hashes[] =
 # endif
 #endif
   { fasthash64_test,      64, 0xA16231A7, "fasthash64",  "fast-hash 64bit", POOR },
+  { mx3hash64_test,       64, 0x4DB51E5B, "mx3hash64",   "mx3hash 64bit", GOOD },
   { CityHash32_test,      32, 0x5C28AD62, "City32",      "Google CityHash32WithSeed (old)", POOR },
 #ifdef HAVE_INT64
   { metrohash64_test,      64, 0x6FA828C9, "metrohash64",    "MetroHash64, 64-bit", POOR },

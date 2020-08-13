@@ -22,6 +22,7 @@
 #endif
 
 #include "fasthash.h"
+#include "mx3.h"
 #include "jody_hash32.h"
 #include "jody_hash64.h"
 
@@ -359,6 +360,10 @@ inline void fasthash64_test ( const void * key, int len, uint32_t seed, void * o
   *(uint64_t*)out = fasthash64(key, (size_t) len, (uint64_t)seed);
 }
 #endif
+
+inline void mx3hash64_test ( const void * key, int len, uint32_t seed, void * out ) {
+  *(uint64_t*)out = mx3::hash((const uint8_t*)(key), (size_t) len, (uint64_t)seed);
+}
 
 // objsize 0-778: 1912
 void mum_hash_test(const void * key, int len, uint32_t seed, void * out);
