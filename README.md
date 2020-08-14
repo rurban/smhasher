@@ -129,6 +129,7 @@ SMhasher
 | [mirhash32low](doc/mirhash32low.txt)          |      5452.48 |    42.31 | 190.92 (2) |1112 | LongNeighbors, machine-specific (32/64 differs) |
 | [mirhashstrict](doc/mirhashstrict.txt)        |      2217.70 |    65.39 | 175.38 (3) |1112 |                            |
 | [mirhashstrict32low](doc/mirhashstrict32low.txt)|    2217.87 |    64.72 | 188.44 (4) |1112 | MomentChi2 9               |
+| [mx3](doc/mx3.txt)                            |      6267.57 |    55.11 | 169.11 (1) | 734 |                            |
 | [City32](doc/City32.txt)                      |      3833.52 |    52.97 | 211.69 (4) |1319 |                            |
 | [City64low](doc/City64low.txt)                |      9209.88 |    63.55 | 274.62 (17)|1120|                             |
 | [City128](doc/City128.txt)                    |      9747.33 |    77.22 | 269.02 (14)|1841 |                            |
@@ -150,7 +151,6 @@ SMhasher
 | [Spooky32](doc/Spooky32.txt)                  |      9570.40 |    70.27 | 250.23 (18)|2221 |                            |
 | [Spooky64](doc/Spooky64.txt)                  |      9603.18 |    70.19 | 231.73 (17)|2221 |                            |
 | [Spooky128](doc/Spooky128.txt)                |      9865.67 |    70.84 | 185.64 (2) |2221 |                            |
-| [mx3](doc/mx3.txt)                            |      6267.57 |    55.11 | 169.11 (1) | 734 |                            |
 | [xxh3](doc/xxh3.txt)                          |     16377.47 |    37.20 | 179.88 (1) | 744 | BIC                        |
 | [xxh3low](doc/xxh3low.txt)                    |     16403.22 |    37.19 | 184.18 (2) | 756 |                            |
 | [xxh128](doc/xxh128.txt)                      |     15117.76 |    44.70 | 178.72 (1) |1012 |                            |
