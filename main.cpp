@@ -205,7 +205,12 @@ HashInfo g_hashes[] =
   { lookup3_test,         32, 0x3D83917A, "lookup3",     "Bob Jenkins' lookup3", POOR },
   { SuperFastHash_test,   32, 0xC4CB7C07, "superfast",   "Paul Hsieh's SuperFastHash", POOR },
   { beamsplitter_64,      64, 0x1BDF358B, "beamsplitter","A possibly universal hash made with a 10x64 s-box.", GOOD },
-  { BEBB4185_64,          64, 0xBEBB4185, "BEBB4185",    "BEBB4185 64", GOOD },
+#if defined(_MSC_VER) && defined(LTO)
+#  define BEBB4185_VERIF          0xB7013C8F
+#else
+#  define BEBB4185_VERIF          0xBEBB4185
+#endif
+  { BEBB4185_64,          64, BEBB4185_VERIF, "BEBB4185", "BEBB4185 64", GOOD },
   { MurmurOAAT_test,      32, 0x5363BD98, "MurmurOAAT",  "Murmur one-at-a-time", POOR },
   { Crap8_test,           32, 0x743E97A1, "Crap8",       "Crap8", POOR },
   { xxHash32_test,        32, 0xBA88B743, "xxHash32",    "xxHash, 32-bit for x86", POOR },
