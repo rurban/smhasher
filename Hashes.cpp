@@ -550,7 +550,7 @@ extern "C" {
 #endif
 #if defined(__SSE4_2__) && defined(__x86_64__)
   uint32_t	  crc32c_hw(const void *input, int len, uint32_t seed);
-  uint32_t	  crc32c(const void *input, int len, uint32_t seed);
+  uint32_t	  crc32c(const void *input, size_t len, uint32_t seed);
   uint64_t	  crc64c_hw(const void *input, int len, uint32_t seed);
 #endif
 }

@@ -398,6 +398,13 @@ endif()
 #    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_FANOM_HASH")
 #ENDIF()
 
+if ((CMAKE_MAJOR_VERSION EQUAL 3 AND CMAKE_MINOR_VERSION GREATER_EQUAL 9)
+    AND (CMAKE_BUILD_TYPE STREQUAL "Release"))
+  cmake_policy(SET CMP0069 NEW)
+  include(CheckIPOSupported)
+  check_ipo_supported(RESULT ipo_supported OUTPUT error)
+endif()
+
 add_library(
   SMHasherSupport
   AvalancheTest.cpp
@@ -471,7 +478,15 @@ add_library(
 add_executable(
   SMHasher
   main.cpp
-)
+  )
+
+if( ipo_supported )
+  message(STATUS "IPO / LTO enabled")
+  set_property(TARGET SMHasherSupport PROPERTY INTERPROCEDURAL_OPTIMIZATION True)
+  set_property(TARGET SMHasher PROPERTY INTERPROCEDURAL_OPTIMIZATION True)
+else()
+  message(STATUS "IPO / LTO not supported: <${error}>")
+endif()
 
 target_link_libraries(
   SMHasher
