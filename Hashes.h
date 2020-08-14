@@ -898,16 +898,18 @@ inline void sha2ni_256_64(const void *key, int len, uint32_t seed, void *out)
 }
 #endif
 
-#ifdef _MAIN_CPP
-#include "farsh.h"
-#else
-#ifdef __AVX2__
-#define FARSH_AVX2
-#elif defined HAVE_SSE42
-#define FARSH_SSE2
-#endif
-#include "farsh.c"
-#endif
+#ifdef HAVE_SSE2
+# if defined(_MAIN_CPP)
+#  include "farsh.h"
+# else
+#  ifdef __AVX2__
+#   define FARSH_AVX2
+#  elif defined HAVE_SSE42
+#   define FARSH_SSE2
+#  endif
+# endif
+# include "farsh.c"
+
 // objsize: 0-3b0: 944
 inline void farsh32_test ( const void * key, int len, unsigned seed, void * out )
 {
@@ -925,6 +927,7 @@ inline void farsh256_test ( const void * key, int len, unsigned seed, void * out
 {
   farsh_n(key,len,0,8,seed,out);
 }
+#endif
 
 extern "C" {
 #include "blake3/blake3_impl.h"

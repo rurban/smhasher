@@ -58,6 +58,7 @@ void SetAffinity ( int cpu );
 
 #include <stdlib.h>
 #include <stdint.h>
+#include <sys/time.h>
 
 #define	FORCE_INLINE inline __attribute__((always_inline))
 #define	NEVER_INLINE __attribute__((noinline))
@@ -100,15 +101,16 @@ __inline__ uint64_t rdtsc()
 #elif defined (__i386__) || defined (__x86_64__)
     return __builtin_ia32_rdtsc();
 #else
-#define NO_CYCLE_COUNTER
-    return 0;
+  struct timeval tv;
+  gettimeofday(&tv, nullptr);
+  return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
 #endif
 }
 
 // see https://www.intel.com/content/dam/www/public/us/en/documents/white-papers/ia-32-ia-64-benchmark-code-execution-paper.pdf 3.2.1 The Improved Benchmarking Method
 __inline__ uint64_t timer_start()
 {
-#if defined (__i386__) || defined (HAVE_BIT32)
+#if defined (__i386__) || (defined(__x86_64__) && defined (HAVE_BIT32))
   uint32_t cycles_high, cycles_low;
   __asm__ volatile
       ("cpuid\n\t"
@@ -125,16 +127,31 @@ __inline__ uint64_t timer_start()
        "mov %%edx, %0\n\t"
        "mov %%eax, %1\n\t": "=r" (cycles_high), "=r" (cycles_low)::
        "%rax", "%rbx", "%rcx", "%rdx");
-    return ((uint64_t)cycles_high << 32) | cycles_low;
+  return ((uint64_t)cycles_high << 32) | cycles_low;
+#elif defined(__ARM_ARCH) && (__ARM_ARCH >= 6)
+  // V6 is the earliest arch that has a standard cyclecount
+  uint32_t pmccntr;
+  uint32_t pmuseren;
+  uint32_t pmcntenset;
+  // Read the user mode perf monitor counter access permissions.
+  asm volatile("mrc p15, 0, %0, c9, c14, 0" : "=r"(pmuseren));
+  if (pmuseren & 1) {  // Allows reading perfmon counters for user mode code.
+    asm volatile("mrc p15, 0, %0, c9, c12, 1" : "=r"(pmcntenset));
+    if (pmcntenset & 0x80000000ul) {  // Is it counting?
+      asm volatile("mrc p15, 0, %0, c9, c13, 0" : "=r"(pmccntr));
+      // The counter is set up to count every 64th cycle
+      return static_cast<int64_t>(pmccntr) * 64;  // Should optimize to << 6
+    }
+  }
+  return rdtsc();
 #else
-#define NO_CYCLE_COUNTER
-    return 0;
+  return rdtsc();
 #endif
 }
 
 __inline__ uint64_t timer_end()
 {
-#if defined (__i386__) || defined (HAVE_BIT32)
+#if defined (__i386__) || (defined(__x86_64__) && defined (HAVE_BIT32))
   uint32_t cycles_high, cycles_low;
   __asm__ volatile
       ("rdtscp\n\t"
@@ -151,10 +168,9 @@ __inline__ uint64_t timer_end()
        "mov %%eax, %1\n\t"
        "cpuid\n\t": "=r" (cycles_high), "=r" (cycles_low)::
        "%rax", "%rbx", "%rcx", "%rdx");
-    return ((uint64_t)cycles_high << 32) | cycles_low;
+  return ((uint64_t)cycles_high << 32) | cycles_low;
 #else
-#define NO_CYCLE_COUNTER
-    return 0;
+  return rdtsc();
 #endif
 }
 
