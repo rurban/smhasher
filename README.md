@@ -150,6 +150,7 @@ SMhasher
 | [Spooky32](doc/Spooky32.txt)                  |      9570.40 |    70.27 | 250.23 (18)|2221 |                            |
 | [Spooky64](doc/Spooky64.txt)                  |      9603.18 |    70.19 | 231.73 (17)|2221 |                            |
 | [Spooky128](doc/Spooky128.txt)                |      9865.67 |    70.84 | 185.64 (2) |2221 |                            |
+| [mx3](doc/mx3.txt)                            |      6267.57 |    55.11 | 169.11 (1) | 734 |                            |
 | [xxh3](doc/xxh3.txt)                          |     16377.47 |    37.20 | 179.88 (1) | 744 | BIC                        |
 | [xxh3low](doc/xxh3low.txt)                    |     16403.22 |    37.19 | 184.18 (2) | 756 |                            |
 | [xxh128](doc/xxh128.txt)                      |     15117.76 |    44.70 | 178.72 (1) |1012 |                            |
@@ -180,6 +181,7 @@ So the fastest hash functions on x86_64 without quality problems are:
 
 - xxh3low
 - wyhash
+- mx3
 - t1ha2_atonce
 - FarmHash (_not portable, too machine specific: 64 vs 32bit, old gcc, ..._)
 - Spooky32

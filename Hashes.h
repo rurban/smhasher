@@ -1011,3 +1011,9 @@ inline void prvhash42_128test ( const void * key, int len, unsigned seed, void *
   prvhash42 ((const uint8_t *)key, len, hash, 16, (uint64_t)seed, 0, 0);
   memcpy (out, hash, 16);
 }
+
+// objsize: 408dd0 - 4090ae: 734
+#include "mx3/mx3.h"
+inline void mx3hash64_test ( const void * key, int len, uint32_t seed, void * out ) {
+  *(uint64_t*)out = mx3::hash((const uint8_t*)(key), (size_t) len, (uint64_t)seed);
+}
