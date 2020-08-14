@@ -44,6 +44,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG")
 include (CheckTypeSize)
 check_type_size (__int64 __INT64)
 check_type_size (int64_t INT64_T)
+check_type_size (__uint128_t __UINT128_T)
 
 # TODO: rather parse `$CC -march=native -dM -E - <<< ''` [gh #10]
 if (NOT (CMAKE_CROSSCOMPILING))
@@ -257,6 +258,10 @@ ELSE (AVX512_TRUE)
   message(WARNING "AVX512 not available")
 ENDIF (AVX512_TRUE)
 
+IF(HAVE___UINT128_T)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_INT128")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_INT128")
+ENDIF()
 IF(HAVE_INT64_T)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_INT64")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_INT64")

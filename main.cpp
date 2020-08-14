@@ -284,6 +284,10 @@ HashInfo g_hashes[] =
   { prvhash42_64test,     64, 0xFDFEDA1E, "prvhash42_64", "prvhash42 64bit", GOOD },
   { prvhash42_128test,   128, 0xFB4CE766, "prvhash42_128","prvhash42 128bit", GOOD },
 #endif
+#ifdef HAVE_INT128
+  { prvhash82_64test,     64, 0x07BBB680, "prvhash82_64", "prvhash82 64bit", GOOD },
+  { prvhash82_128test,   128, 0x2347E988, "prvhash82_128","prvhash82 128bit", POOR },
+#endif
   { siphash_test,         64, 0xC58D7F9C, "SipHash",     "SipHash 2-4 - SSSE3 optimized", GOOD },
   { halfsiphash_test,     32, 0xA7A05F72, "HalfSipHash", "HalfSipHash 2-4, 32bit", GOOD },
   { GoodOAAT_test,        32, 0x7B14EEE5, "GoodOAAT",    "Small non-multiplicative OAAT", GOOD },
