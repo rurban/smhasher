@@ -179,14 +179,14 @@ See also the old [https://code.google.com/p/smhasher/w/list](https://code.google
 
 So the fastest hash functions on x86_64 without quality problems are:
 
-- xxh3low
+- xxh3
 - wyhash
-- mx3
 - t1ha2_atonce
 - FarmHash (_not portable, too machine specific: 64 vs 32bit, old gcc, ..._)
 - Spooky32
-- fasthash32
+- mx3
 - MUM/mir (_different results on 32/64-bit archs_)
+- fasthash32
 
 Hash functions for symbol tables or hash tables typically use 32 bit
 hashes, for databases, file systems and file checksums typically 64 or
