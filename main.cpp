@@ -281,12 +281,12 @@ HashInfo g_hashes[] =
   { chaskey_test,         64, 0x81A90131, "chaskey",     "mouha.be/chaskey/ with added seed support", GOOD },
 #ifdef HAVE_INT64
   { prvhash42_32test,     32, 0x6588C6C3, "prvhash42_32", "prvhash42opt 32bit", GOOD },
-  { prvhash42_64test,     64, 0xFDFEDA1E, "prvhash42_64", "prvhash42 64bit", GOOD },
-  { prvhash42_128test,   128, 0xFB4CE766, "prvhash42_128","prvhash42 128bit", GOOD },
+  { prvhash42_64test,     64, 0x7D711EF9, "prvhash42_64", "prvhash42 64bit", GOOD },
+  { prvhash42_128test,   128, 0x7FB0981C, "prvhash42_128","prvhash42 128bit", GOOD },
 #endif
 #ifdef HAVE_INT128
-  { prvhash82_64test,     64, 0x07BBB680, "prvhash82_64", "prvhash82 64bit", GOOD },
-  { prvhash82_128test,   128, 0x2347E988, "prvhash82_128","prvhash82 128bit", POOR },
+  { prvhash82_64test,     64, 0xFF941E9D, "prvhash82_64", "prvhash82 64bit", GOOD },
+  { prvhash82_128test,   128, 0x37C8E47E, "prvhash82_128","prvhash82 128bit", GOOD },
 #endif
   { siphash_test,         64, 0xC58D7F9C, "SipHash",     "SipHash 2-4 - SSSE3 optimized", GOOD },
   { halfsiphash_test,     32, 0xA7A05F72, "HalfSipHash", "HalfSipHash 2-4, 32bit", GOOD },

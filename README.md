@@ -105,11 +105,11 @@ SMhasher
 | --------------------------------------        |              |          |            |     |                            |
 | [tifuhash_64](doc/tifuhash_64.txt)            |        35.60 |  1679.52 |1212.75 (15)| 276 |                            |
 | [floppsyhash_64](doc/floppsyhash.txt)         |       191.95 |   450.93 | 821.11 (152)| 623 |                            |
-| [prvhash42_32](doc/prvhash42_32.txt)          |       455.52 |   114.86 | 200.45 (4) | 157 |                            |
-| [prvhash42_64](doc/prvhash42_64.txt)          |       420.43 |   157.90 | 236.45 (2) | 157 |                            |
-| [prvhash42_128](doc/prvhash42_128.txt)        |       408.58 |   167.06 | 265.71 (6) | 157 |                            |
-| [prvhash82_64](doc/prvhash82_64.txt)          |       480.58 |   119.48 | 219.63 (2) | 157 | needs __uint128_t          |
-| [prvhash82_128](doc/prvhash82_128.txt)        |       419.85 |   151.18 | 237.18 (6) | 157 | TwoBytes, needs __uint128_t|
+| [prvhash42_32](doc/prvhash42_32.txt)          |       455.52 |   114.74 | 196.05 (1) | 157 |                            |
+| [prvhash42_64](doc/prvhash42_64.txt)          |       791.51 |   103.03 | 220.49 (1) | 157 |                            |
+| [prvhash42_128](doc/prvhash42_128.txt)        |       844.11 |   115.14 | 231.63 (4) | 157 |                            |
+| [prvhash82_64](doc/prvhash82_64.txt)          |       780.57 |    89.07 | 207.75 (1) | 157 | needs __uint128_t          |
+| [prvhash82_128](doc/prvhash82_128.txt)        |       745.98 |   124.30 | 245.09 (1) | 157 | TwoBytes, needs __uint128_t|
 | [chaskey](doc/chaskey.txt)                    |       735.85 |   168.05 | 336.07 (4) |1609 |                            |
 | [SipHash](doc/SipHash.txt)                    |       958.78 |   141.84 | 278.15 (3) |1071 |                            |
 | [HalfSipHash](doc/HalfSipHash.txt)            |       741.59 |   122.25 | 256.22 (20)| 700 | zeroes                     |

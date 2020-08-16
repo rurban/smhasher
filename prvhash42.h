@@ -31,7 +31,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * @version 2.5
+ * @version 2.8
  */
 
 //$ nocpp
@@ -90,15 +90,16 @@ inline void prvhash42( const uint8_t* const Message, const int MessageLen,
 		Seed = InitSeed;
 	}
 
-	const int hl4 = ( HashLen >> 2 );
-	const uint64_t lmsg = ( MessageLen == 0 ? 0 : ~Message[ MessageLen - 1 ]);
-	int c = MessageLen + hl4 + hl4 - MessageLen % hl4;
+	const int hl42 = ( HashLen >> 1 );
+	int c = MessageLen + hl42 + hl42 - MessageLen % hl42;
 	int hpos = 0;
 	int k;
 
-	for( k = 0; k < c; k++ )
+	for( k = 0; k < c; k += 2 )
 	{
-		const uint64_t msg = ( k < MessageLen ? Message[ k ] : lmsg );
+		const uint64_t msg =
+			( k < MessageLen ? (uint64_t) Message[ k ] : 0x100 ) |
+			( k < MessageLen - 1 ? (uint64_t) Message[ k + 1 ] << 8 : 0x10000 );
 
 		Seed *= lcg;
 		uint32_t* const hc = (uint32_t*) &Hash[ hpos ];

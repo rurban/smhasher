@@ -32,7 +32,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * @version 2.5
+ * @version 2.8
  */
 
 //$ nocpp
@@ -97,20 +97,19 @@ inline void prvhash82( const uint8_t* const Message, const int MessageLen,
 		Seed = InitSeed;
 	}
 
-	const int hl8 = ( HashLen >> 3 );
-	const uint64_t lmsg = ( MessageLen == 0 ? 0 : ~Message[ MessageLen - 1 ]);
-	const int ml2 = MessageLen + ( MessageLen & 1 ) +
-		( MessageLen < 4 && MessageLen > 0 ? 2 : 0 );
-
-	int c = ml2 + hl8 + hl8 - ml2 % hl8;
+	const int hl84 = ( HashLen >> 1 );
+	const int mlext = MessageLen + ( MessageLen < 4 ? 4 - MessageLen : 0 );
+	int c = mlext + hl84 + hl84 - mlext % hl84;
 	int hpos = 0;
 	int k;
 
-	for( k = 0; k < c; k += 2 )
+	for( k = 0; k < c; k += 4 )
 	{
-		const uint64_t msg = ( (uint64_t) ( k < MessageLen - 1 ?
-			Message[ k + 1 ] : lmsg ) << 8 ) |
-			( k < MessageLen ? (uint64_t) Message[ k ] : lmsg );
+		const uint64_t msg =
+			( k < MessageLen ? (uint64_t) Message[ k ] : 0x100 ) |
+			( k < MessageLen - 1 ? (uint64_t) Message[ k + 1 ] << 8 : 0x10000 ) |
+			( k < MessageLen - 2 ? (uint64_t) Message[ k + 2 ] << 16 : 0x1000000 ) |
+			( k < MessageLen - 3 ? (uint64_t) Message[ k + 3 ] << 24 : 0x100000000ULL );
 
 		Seed *= lcg;
 		uint64_t* const hc = (uint64_t*) &Hash[ hpos ];
