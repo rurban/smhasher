@@ -115,7 +115,8 @@ bool CountLowbitsCollisions ( std::vector<hashtype> & revhashes, int nbLBits)
   if (collcount/expected > 0.98 && collcount != (int)expected)
     printf(" (%i)", collcount - (int)expected);
 
-  if(double(collcount) / double(expected) > 2.0)
+  // allow expected 0.3 and actual 1
+  if ((double(collcount) / expected > 2.0) && (collcount > 1 || expected <= 0.2))
   {
     printf(" !!!!!\n");
     return false;
@@ -154,7 +155,8 @@ bool CountHighbitsCollisions ( std::vector<hashtype> & hashes, int nbHBits)
   if (collcount/expected > 0.98 && collcount != (int)expected)
     printf(" (%i)", collcount - (int)expected);
 
-  if(double(collcount) / double(expected) > 2.0)
+  // allow expected 0.3 and actual 1
+  if ((double(collcount) / expected > 2.0) && (collcount > 1 || expected <= 0.2))
   {
     printf(" !!!!!\n");
     return false;
