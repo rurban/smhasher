@@ -81,7 +81,7 @@ inline double ExpectedCollisions ( double balls, double bins )
 // TODO This is a bit too inacurate for many collisions (80-95%)
 static double EstimateNbCollisions(int nbH, int nbBits)
 {
-  double result = (double(nbH) * double(nbH-1)) / exp2((double)nbBits);
+  double result = (double(nbH) * double(nbH-1)) / (2.0 * exp2((double)nbBits));
   return result > nbH ? nbH : result;
   //return ExpectedCollisions((double)nbH, (double)nbBits);
 }
@@ -470,13 +470,13 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
     collcount = FindCollisions(hashes, collisions, 1000);
     printf("actual %6i (%.2fx)", (int)collcount, collcount / expected);
 
-    if(sizeof(hashtype) == sizeof(uint32_t))
+    if (sizeof(hashtype) == sizeof(uint32_t))
     {
-    // 2x expected collisions = fail
+      // 2x expected collisions = fail
 
-    // #TODO - collision failure cutoff needs to be expressed as a standard deviation instead
-    // of a scale factor, otherwise we fail erroneously if there are a small expected number
-    // of collisions
+      // #TODO - collision failure cutoff needs to be expressed as a standard deviation instead
+      // of a scale factor, otherwise we fail erroneously if there are a small expected number
+      // of collisions
 
         if ((collcount / expected) > 2.0)
         {
@@ -488,7 +488,7 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
     {
       // For all hashes larger than 32 bits, _any_ collisions are a failure.
 
-      if(collcount > 0)
+      if (collcount > 0)
       {
         printf(" !!!!!");
         result = false;
