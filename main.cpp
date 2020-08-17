@@ -206,13 +206,6 @@ HashInfo g_hashes[] =
 #endif
   { lookup3_test,         32, 0x3D83917A, "lookup3",     "Bob Jenkins' lookup3", POOR },
   { SuperFastHash_test,   32, 0xC4CB7C07, "superfast",   "Paul Hsieh's SuperFastHash", POOR },
-  { beamsplitter_64,      64, 0x1BDF358B, "beamsplitter","A possibly universal hash made with a 10x64 s-box.", GOOD },
-#if defined(_MSC_VER) && defined(LTO)
-#  define BEBB4185_VERIF          0xB7013C8F
-#else
-#  define BEBB4185_VERIF          0xBEBB4185
-#endif
-  { BEBB4185_64,          64, BEBB4185_VERIF, "BEBB4185", "BEBB4185 64", GOOD },
   { MurmurOAAT_test,      32, 0x5363BD98, "MurmurOAAT",  "Murmur one-at-a-time", POOR },
   { Crap8_test,           32, 0x743E97A1, "Crap8",       "Crap8", POOR },
   { xxHash32_test,        32, 0xBA88B743, "xxHash32",    "xxHash, 32-bit for x86", POOR },
@@ -290,6 +283,7 @@ HashInfo g_hashes[] =
 #endif
   { siphash_test,         64, 0xC58D7F9C, "SipHash",     "SipHash 2-4 - SSSE3 optimized", GOOD },
   { halfsiphash_test,     32, 0xA7A05F72, "HalfSipHash", "HalfSipHash 2-4, 32bit", GOOD },
+  { beamsplitter_64,      64, 0x1BDF358B, "beamsplitter","A possibly universal hash made with a 10x64 s-box.", GOOD },
   { GoodOAAT_test,        32, 0x7B14EEE5, "GoodOAAT",    "Small non-multiplicative OAAT", GOOD },
   // as in rust and swift:
   { siphash13_test,       64, 0x29C010BF, "SipHash13",   "SipHash 1-3 - SSSE3 optimized", GOOD },
@@ -300,6 +294,12 @@ HashInfo g_hashes[] =
   { seahash32low,         32, 0x712F0EE8, "seahash32low","seahash - lower 32bit", GOOD },
 #endif /* HAVE_INT64 */
 #endif /* !MSVC */
+#if defined(_MSC_VER) && defined(LTO)
+#  define BEBB4185_VERIF          0xB7013C8F
+#else
+#  define BEBB4185_VERIF          0xBEBB4185
+#endif
+  { BEBB4185_64,          64, BEBB4185_VERIF, "BEBB4185", "BEBB4185 64", GOOD },
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { clhash_test,          64, 0x00000000, "clhash",      "carry-less mult. hash -DBITMIX (64-bit for x64, SSE4.2)", GOOD },
 #endif
