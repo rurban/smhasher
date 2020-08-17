@@ -493,7 +493,7 @@ inline void wyhash32low (const void * key, int len, uint32_t seed, void * out) {
 #endif
 
 #include "o1hash.h"
-// unseeded
+// unseeded. objsize: 101
 inline void o1hash_test (const void * key, int len, uint32_t seed, void * out) {
   *(uint64_t*)out = o1hash(key, (uint64_t)len);
 }
