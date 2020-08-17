@@ -997,14 +997,13 @@ inline void aesnihash_test ( const void * key, int len, unsigned seed, void * ou
 #endif
 
 // https://github.com/avaneev/prvhash
-#include "prvhash42opt.h"
+#include "prvhash42.h"
 inline void prvhash42_32test ( const void * key, int len, unsigned seed, void * out )
 {
   uint8_t hash[4] = {0};
-  prvhash42_32 ((const uint8_t *)key, len, hash, (uint64_t)seed);
+  prvhash42 ((const uint8_t *)key, len, hash, 4, (uint64_t)seed, 0, 0);
   memcpy (out, hash, 4);
 }
-#include "prvhash42.h"
 inline void prvhash42_64test ( const void * key, int len, unsigned seed, void * out )
 {
   uint8_t hash[8] = {0};
@@ -1020,6 +1019,7 @@ inline void prvhash42_128test ( const void * key, int len, unsigned seed, void *
 
 #ifdef HAVE_INT128
 #include "prvhash82.h"
+// _32 fails sanity tests
 inline void prvhash82_64test ( const void * key, int len, unsigned seed, void * out )
 {
   uint8_t hash[8] = {0};

@@ -280,7 +280,7 @@ HashInfo g_hashes[] =
   { floppsyhash_64,       64, 0x0,        "floppsyhash", "slow hash designed for floating point hardware", GOOD },
   { chaskey_test,         64, 0x81A90131, "chaskey",     "mouha.be/chaskey/ with added seed support", GOOD },
 #ifdef HAVE_INT64
-  { prvhash42_32test,     32, 0x6588C6C3, "prvhash42_32", "prvhash42opt 32bit", GOOD },
+  { prvhash42_32test,     32, 0x1D00E0A4, "prvhash42_32", "prvhash42 32bit", GOOD },
   { prvhash42_64test,     64, 0x7D711EF9, "prvhash42_64", "prvhash42 64bit", GOOD },
   { prvhash42_128test,   128, 0x7FB0981C, "prvhash42_128","prvhash42 128bit", GOOD },
 #endif
