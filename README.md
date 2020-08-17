@@ -113,7 +113,7 @@ SMhasher
 | [chaskey](doc/chaskey.txt)                    |       735.85 |   168.05 | 336.07 (4) |1609 |                            |
 | [SipHash](doc/SipHash.txt)                    |       958.78 |   141.84 | 278.15 (3) |1071 |                            |
 | [HalfSipHash](doc/HalfSipHash.txt)            |       741.59 |   122.25 | 256.22 (20)| 700 | zeroes                     |
-| [beamsplitter](doc/beamsplitter.txt)          |       789.22 |   682.45 |1150.33 (26)|     | UB                         |
+| [beamsplitter](doc/beamsplitter.txt)          |       789.22 |   682.45 |1150.33 (26)|4203 | UB                         |
 | [GoodOAAT](doc/GoodOAAT.txt)                  |      1052.90 |    70.80 | 208.00 (3) | 237 |                            |
 | [SipHash13](doc/SipHash13.txt)                |      1762.44 |   104.61 | 304.84 (17)| 778 | 0.9% bias                  |
 | [TSip](doc/TSip.txt)                          |      3346.72 |    60.02 | 203.82 (5) | 519 | !msvc                      |
@@ -121,7 +121,7 @@ SMhasher
 | [seahash32low](doc/seahash32low.txt)          |      4524.65 |    65.60 | 253.50 (3) | 871 | !msvc                      |
 | [clhash](doc/clhash.txt)                      |      4405.28 |    85.35 | 288.20 (14)|1809 | machine-specific (x64 SSE4.2) |
 | [HighwayHash64](doc/HighwayHash64.txt)        |      6239.64 |    98.65 | 263.94 (4) |2546 |                            |
-| [BEBB4185](doc/BEBB4185.txt)                  |      2655.75 |   241.48 | 420.58 (7) |     | msvc-specific verification |
+| [BEBB4185](doc/BEBB4185.txt)                  |      2655.75 |   241.48 | 420.58 (7) |1294 | msvc-specific verification |
 | [Murmur3F](doc/Murmur3F.txt)                  |      5076.20 |    51.66 | 222.39 (18)| 699 | UB                         |
 | [fasthash32](doc/fasthash32.txt)              |      4658.24 |    50.50 | 181.96 (2) | 566 | UB                         |
 | [fasthash64](doc/fasthash64.txt)              |      4657.64 |    47.71 | 168.22 (3) | 509 | UB, Moment Chi2 5159 !     |
@@ -162,7 +162,7 @@ SMhasher
 | [t1ha0_aes_noavx](doc/t1ha0_aes_noavx.txt)    |     21782.86 |    48.17 | 238.14 (18)| 925 | LongNeighbors, machine-specific (x86 AES-NI) |
 | [t1ha0_aes_avx1](doc/t1ha0_aes_avx1)          |     22714.85 |    48.12 | 226.52 (16)| 843 | LongNeighbors, machine-specific (x64 AVX.txt)|
 | [t1ha0_aes_avx2](doc/t1ha0_aes_avx2.txt)      |     22345.33 |    44.38 | 556.47 (89)| 792 | LongNeighbors, machine-specific (x64 AVX2)   |
-| [wyhash32](doc/wyhash32.txt)                  |      2532.89 |    48.40 | 484.57 (1)|      | 32-bit                     |
+| [wyhash32](doc/wyhash32.txt)                  |      2532.89 |    48.40 | 484.57 (1) | 410 | 32-bit                     |
 | [wyhash32low](doc/wyhash32low.txt)            |     12049.79 |    37.95 | 222.17 (4) | 922 |                            |
 | [wyhash](doc/wyhash.txt)                      |     12063.37 |    38.11 | 208.49 (3) | 938 |                            |
 

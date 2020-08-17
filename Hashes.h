@@ -472,7 +472,7 @@ void HighwayHash_init();
 void HighwayHash64_test (const void * key, int len, uint32_t seed, void * out);
 
 #ifdef HAVE_BIT32
-// native 32bit
+// native 32bit. objsize: 0x80f6a30-0x80f6bca: 410
 #include "wyhash32.h"
 inline void wyhash32_test (const void * key, int len, uint32_t seed, void * out) {
   *(uint32_t*)out = wyhash32(key, (uint64_t)len, (unsigned)seed);
@@ -980,7 +980,10 @@ inline void blake3_64 ( const void * key, int len, unsigned seed, void * out )
 #include "PMP_Multilinear_test.h"
 #endif
 
+// objsize: 452520-45358b: 4203
 #include "beamsplitter.h"
+
+// objsize: 452010-45251e: 1294 (BEBB4185)
 #include "discohash.h"
 
 #ifdef HAVE_AESNI
