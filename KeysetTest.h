@@ -470,11 +470,13 @@ bool TextKeyTest ( hashfunc<hashtype> hash, const char * prefix, const char * co
   const int corecount = (int)strlen(coreset);
 
   const int keybytes = prefixlen + corelen + suffixlen;
-  const int keycount = (int)pow(double(corecount),double(corelen));
+  long keycount = (long)pow(double(corecount),double(corelen));
+  if (keycount > INT32_MAX / 8)
+    keycount = INT32_MAX / 8;
 
-  printf("Keyset 'Text' - keys of form \"%s[",prefix);
+  printf("Keyset 'Text' - keys of form \"%s",prefix);
   for(int i = 0; i < corelen; i++) printf("X");
-  printf("]%s\" - %d keys\n",suffix,keycount);
+  printf("%s\" - %ld keys\n",suffix,keycount);
 
   uint8_t * key = new uint8_t[keybytes+1];
 
@@ -488,7 +490,7 @@ bool TextKeyTest ( hashfunc<hashtype> hash, const char * prefix, const char * co
   std::vector<hashtype> hashes;
   hashes.resize(keycount);
 
-  for(int i = 0; i < keycount; i++)
+  for(int i = 0; i < (int)keycount; i++)
   {
     int t = i;
 

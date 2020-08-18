@@ -75,15 +75,23 @@ int FindCollisions ( std::vector<hashtype> & hashes,
 // TODO This only works for a low number of collisions
 inline double ExpectedCollisions ( double balls, double bins )
 {
-  return balls - bins + bins * pow(1 - 1/bins,balls);
+  return balls - (bins * (1 - pow((bins - 1)/bins, balls)));
 }
 
-// TODO This is a bit too inacurate for many collisions (80-95%)
 static double EstimateNbCollisions(int nbH, int nbBits)
 {
-  double result = (double(nbH) * double(nbH-1)) / (2.0 * exp2((double)nbBits));
-  return result > nbH ? nbH : result;
-  //return ExpectedCollisions((double)nbH, (double)nbBits);
+#if 0
+  return ExpectedCollisions((double)nbH, (double)nbBits);
+#else
+  double exp = exp2((double)nbBits); // 2 ^ bits
+  double result = (double(nbH) * double(nbH-1)) / (2.0 * exp);
+  if (result > (double)nbH)
+    result = (double)nbH;
+  // improved floating point accuracy
+  if (result <= exp)
+    return result;
+  return result - exp;
+#endif
 }
 
 template< typename hashtype >
@@ -111,7 +119,7 @@ bool CountLowbitsCollisions ( std::vector<hashtype> & revhashes, int nbLBits)
       collcount++;
   }
 
-  printf("actual %6i (%.2fx)", collcount, collcount / expected);
+  printf("actual %6i (%.2fx)", collcount, expected > 0.0 ? collcount / expected : (double)collcount);
   if (collcount/expected > 0.98 && collcount != (int)expected)
     printf(" (%i)", collcount - (int)expected);
 
@@ -151,7 +159,7 @@ bool CountHighbitsCollisions ( std::vector<hashtype> & hashes, int nbHBits)
       collcount++;
   }
 
-  printf("actual %6i (%.2fx)", collcount, collcount / expected);
+  printf("actual %6i (%.2fx)", collcount, expected > 0.0 ? collcount / expected : (double)collcount);
   if (collcount/expected > 0.98 && collcount != (int)expected)
     printf(" (%i)", collcount - (int)expected);
 
@@ -470,7 +478,7 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
     double collcount = 0;
     HashSet<hashtype> collisions;
     collcount = FindCollisions(hashes, collisions, 1000);
-    printf("actual %6i (%.2fx)", (int)collcount, collcount / expected);
+    printf("actual %6i (%.2fx)", (int)collcount, expected > 0.0 ? collcount / expected : collcount);
 
     if (sizeof(hashtype) == sizeof(uint32_t))
     {
