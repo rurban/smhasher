@@ -305,38 +305,20 @@ bool TestHighbitsCollisions ( std::vector<hashtype> & hashes)
 
 //-----------------------------------------------------------------------------
 
-template < class keytype, typename hashtype >
-int PrintCollisions ( hashfunc<hashtype> hash, std::vector<keytype> & keys )
+template < typename hashtype >
+int PrintCollisions ( HashSet<hashtype> & collisions )
 {
-  int collcount = 0;
-
-  typedef std::map<hashtype,keytype> htab;
-  htab tab;
-
-  for(size_t i = 1; i < keys.size(); i++)
+  printf("\nCollisions:\n");
+  for (typename HashSet<hashtype>::iterator it = collisions.begin();
+       it != collisions.end(); ++it)
   {
-    keytype & k1 = keys[i];
-
-    hashtype h = hash(&k1,sizeof(keytype),0);
-
-    typename htab::iterator it = tab.find(h);
-
-    if(it != tab.end())
-    {
-      keytype & k2 = (*it).second;
-
-      printf("A: ");
-      printbits(&k1,sizeof(keytype));
-      printf("B: ");
-      printbits(&k2,sizeof(keytype));
-    }
-    else
-    {
-      tab.insert( std::make_pair(h,k1) );
-    }
+    const hashtype &hash = *it;
+    printhex32(&hash, sizeof(hashtype));
+    printf("\n");
   }
+  printf("\n");
 
-  return collcount;
+  return 0;
 }
 
 //----------------------------------------------------------------------------
@@ -487,8 +469,7 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
       // #TODO - collision failure cutoff needs to be expressed as a standard deviation instead
       // of a scale factor, otherwise we fail erroneously if there are a small expected number
       // of collisions
-
-        if ((collcount / expected) > 2.0)
+      if ((collcount / expected) > 2.0)
         {
           printf(" !!!!!");
           result = false;
@@ -497,12 +478,11 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
     else
     {
       // For all hashes larger than 32 bits, _any_ collisions are a failure.
-
       if (collcount > 0)
       {
         printf(" !!!!!");
         result = false;
-        //if(drawDiagram) PrintCollisions(hashes, collisions);
+        if(drawDiagram) PrintCollisions(collisions);
       }
     }
 

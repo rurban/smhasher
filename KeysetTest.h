@@ -14,6 +14,8 @@
 #include <algorithm>  // for std::swap
 #include <assert.h>
 
+#undef MAX
+#define MAX(x,  y)   (((x) > (y)) ? (x) : (y))
 //-----------------------------------------------------------------------------
 // Sanity tests
 
@@ -71,10 +73,7 @@ bool PrngTest ( hashfunc<hashtype> hash,
   Prn_gen(32 << 20, hash, hashes);
 
   //----------
-
-  bool result = true;
-
-  result &= TestHashList(hashes,drawDiagram,testColl,testDist);
+  bool result = TestHashList(hashes,drawDiagram,testColl,testDist);
 
   return result;
 }
@@ -127,10 +126,7 @@ bool PerlinNoise ( hashfunc<hashtype> hash, int inputLen,
 
   //----------
 
-  bool result = true;
-
-  result &= TestHashList(hashes,drawDiagram,testColl,testDist);
-
+  bool result = TestHashList(hashes,drawDiagram,testColl,testDist);
   printf("\n");
 
   return result;
@@ -190,10 +186,7 @@ bool CombinationKeyTest ( hashfunc<hashtype> hash, int maxlen, blocktype* blocks
 
   //----------
 
-  bool result = true;
-
-  result &= TestHashList(hashes,drawDiagram,testColl,testDist);
-
+  bool result = TestHashList(hashes,drawDiagram,testColl,testDist);
   printf("\n");
 
   return result;
@@ -243,11 +236,7 @@ bool PermutationKeyTest ( hashfunc<hashtype> hash, uint32_t * blocks, int blockc
   printf("%d keys\n",(int)hashes.size());
 
   //----------
-
-  bool result = true;
-
-  result &= TestHashList<hashtype>(hashes,drawDiagram,testColl,testDist);
-
+  bool result = TestHashList<hashtype>(hashes,drawDiagram,testColl,testDist);
   printf("\n");
 
   return result;
@@ -323,10 +312,7 @@ bool SparseKeyTest ( hashfunc<hashtype> hash, const int setbits, bool inclusive,
 
   printf("%d keys\n",(int)hashes.size());
 
-  bool result = true;
-
-  result &= TestHashList<hashtype>(hashes,drawDiagram,testColl,testDist);
-
+  bool result = TestHashList<hashtype>(hashes,drawDiagram,testColl,testDist);
   printf("\n");
 
   return result;
@@ -424,9 +410,7 @@ bool CyclicKeyTest ( pfHash hash, int cycleLen, int cycleReps, const int keycoun
 
   //----------
 
-  bool result = true;
-
-  result &= TestHashList(hashes,drawDiagram);
+  bool result = TestHashList(hashes,drawDiagram);
   printf("\n");
 
   delete [] key;
@@ -449,9 +433,7 @@ bool TwoBytesTest2 ( pfHash hash, int maxlen, bool drawDiagram )
 
   TwoBytesKeygen(maxlen,c);
 
-  bool result = true;
-
-  result &= TestHashList(hashes,drawDiagram);
+  bool result = TestHashList(hashes,drawDiagram);
   printf("\n");
 
   return result;
@@ -503,15 +485,10 @@ bool TextKeyTest ( hashfunc<hashtype> hash, const char * prefix, const char * co
   }
 
   //----------
-
-  bool result = true;
-
-  result &= TestHashList(hashes,drawDiagram);
-
+  bool result = TestHashList(hashes,drawDiagram);
   printf("\n");
 
   delete [] key;
-
   return result;
 }
 
@@ -524,15 +501,14 @@ bool WordsKeyTest ( hashfunc<hashtype> hash, const char * coreset, const int cor
 {
   const int corecount = (int)strlen(coreset);
   const int keybytes = corelen;
-  long keycount = 14776336L; //(long)pow(double(corecount),double(corelen));
+  long keycount = 200000L;
   if (keycount > INT32_MAX / 8)
     keycount = INT32_MAX / 8;
 
   printf("Keyset 'Words' - %ld random keys of len %d from %s charset\n", keycount, corelen, name);
 
-  uint8_t * key = new uint8_t[keybytes+1];
-
-  key[keybytes] = 0;
+  uint8_t * key = new uint8_t[corelen+1];
+  key[corelen] = 0;
   //----------
 
   std::vector<hashtype> hashes;
@@ -546,19 +522,19 @@ bool WordsKeyTest ( hashfunc<hashtype> hash, const char * coreset, const int cor
       key[j] = coreset[r.rand_u32() % corecount];
     }
 
-    hash(key,keybytes,0,&hashes[i]);
+    hash(key,corelen,0,&hashes[i]);
+#if 0 && defined DEBUG
+    uint64_t h;
+    memcpy(&h, &hashes[i], MAX(sizeof(hashtype),8));
+    printf("%d %s %lx\n", i, (char*)key, h);
+#endif
   }
 
   //----------
-
-  bool result = true;
-
-  result &= TestHashList(hashes,drawDiagram);
-
+  bool result = TestHashList(hashes,drawDiagram);
   printf("\n");
 
   delete [] key;
-
   return result;
 }
 
@@ -588,10 +564,7 @@ bool ZeroKeyTest ( pfHash hash, bool drawDiagram )
     hash(nullblock,i,0,&hashes[i]);
   }
 
-  bool result = true;
-
-  result &= TestHashList(hashes,drawDiagram);
-
+  bool result = TestHashList(hashes,drawDiagram);
   printf("\n");
 
   delete [] nullblock;
@@ -621,10 +594,7 @@ bool SeedTest ( pfHash hash, int keycount, bool drawDiagram )
     hash(text,len,i,&hashes[i]);
   }
 
-  bool result = true;
-
-  result &= TestHashList(hashes,drawDiagram);
-
+  bool result = TestHashList(hashes,drawDiagram);
   printf("\n");
 
   return result;
