@@ -1102,10 +1102,17 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     bool result = true;
 
     const char * alnum = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const char * passwordchars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+                                 ".,!?:;-+=()<>/|\"'@#$%&*_^";
 
     result &= TextKeyTest( hash, "Foo",    alnum, 4, "Bar",    g_drawDiagram );
     result &= TextKeyTest( hash, "FooBar", alnum, 4, "",       g_drawDiagram );
     result &= TextKeyTest( hash, "",       alnum, 4, "FooBar", g_drawDiagram );
+
+    for(int len = 6; len <= 16; len++)
+    {
+      result &= TextKeyTest( hash, "", passwordchars, len, "",  g_drawDiagram );
+    }
 
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
