@@ -516,6 +516,53 @@ bool TextKeyTest ( hashfunc<hashtype> hash, const char * prefix, const char * co
 }
 
 //-----------------------------------------------------------------------------
+// Keyset 'Words' - pick n random chars from coreset (alnum or password chars)
+
+template < typename hashtype >
+bool WordsKeyTest ( hashfunc<hashtype> hash, const char * coreset, const int corelen, const char* name,
+                    bool drawDiagram )
+{
+  const int corecount = (int)strlen(coreset);
+  const int keybytes = corelen;
+  long keycount = 14776336L; //(long)pow(double(corecount),double(corelen));
+  if (keycount > INT32_MAX / 8)
+    keycount = INT32_MAX / 8;
+
+  printf("Keyset 'Words' - %ld random keys of len %d from %s charset\n", keycount, corelen, name);
+
+  uint8_t * key = new uint8_t[keybytes+1];
+
+  key[keybytes] = 0;
+  //----------
+
+  std::vector<hashtype> hashes;
+  hashes.resize(keycount);
+  Rand r(483723);
+
+  for(int i = 0; i < (int)keycount; i++)
+  {
+    for(int j = 0; j < corelen; j++)
+    {
+      key[j] = coreset[r.rand_u32() % corecount];
+    }
+
+    hash(key,keybytes,0,&hashes[i]);
+  }
+
+  //----------
+
+  bool result = true;
+
+  result &= TestHashList(hashes,drawDiagram);
+
+  printf("\n");
+
+  delete [] key;
+
+  return result;
+}
+
+//-----------------------------------------------------------------------------
 // Keyset 'Zeroes' - keys consisting of all zeroes, differing only in length
 
 // We reuse one block of empty bytes, otherwise the RAM cost is enormous.

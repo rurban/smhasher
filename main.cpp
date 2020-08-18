@@ -1109,9 +1109,13 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     result &= TextKeyTest( hash, "FooBar", alnum, 4, "",       g_drawDiagram );
     result &= TextKeyTest( hash, "",       alnum, 4, "FooBar", g_drawDiagram );
 
-    for(int len = 6; len <= 16; len++)
+    for(int len = 6; len <= 16; len += 2)
     {
-      result &= TextKeyTest( hash, "", passwordchars, len, "",  g_drawDiagram );
+      result &= WordsKeyTest( hash, alnum, len, "alnum", g_drawDiagram );
+    }
+    for(int len = 6; len <= 16; len += 2)
+    {
+      result &= WordsKeyTest( hash, passwordchars, len, "password", g_drawDiagram );
     }
 
     if(!result) printf("*********FAIL*********\n");
