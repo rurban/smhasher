@@ -13,6 +13,7 @@
 
 #include <algorithm>  // for std::swap
 #include <assert.h>
+#include <string>
 
 #undef MAX
 #define MAX(x,  y)   (((x) > (y)) ? (x) : (y))
@@ -502,18 +503,19 @@ bool WordsKeyTest ( hashfunc<hashtype> hash, const char * coreset, const int cor
   const int corecount = (int)strlen(coreset);
   const int keybytes = corelen;
   long keycount = 200000L;
-  if (keycount > INT32_MAX / 8)
-    keycount = INT32_MAX / 8;
+  //if (keycount > INT32_MAX / 8)
+  //  keycount = INT32_MAX / 8;
 
   printf("Keyset 'Words' - %ld random keys of len %d from %s charset\n", keycount, corelen, name);
 
-  uint8_t * key = new uint8_t[corelen+1];
+  char* key = new char[corelen+1];
   key[corelen] = 0;
   //----------
 
   std::vector<hashtype> hashes;
   hashes.resize(keycount);
   Rand r(483723);
+  HashSet<std::string> words; // need to be unique, otherwise we report collisions
 
   for(int i = 0; i < (int)keycount; i++)
   {
@@ -521,6 +523,12 @@ bool WordsKeyTest ( hashfunc<hashtype> hash, const char * coreset, const int cor
     {
       key[j] = coreset[r.rand_u32() % corecount];
     }
+    std::string key_str = key;
+    if (words.count(key_str) > 0) { // not unique
+      i--;
+      continue;
+    }
+    words.insert(key_str);
 
     hash(key,corelen,0,&hashes[i]);
 #if 0 && defined DEBUG
@@ -535,6 +543,37 @@ bool WordsKeyTest ( hashfunc<hashtype> hash, const char * coreset, const int cor
   printf("\n");
 
   delete [] key;
+  return result;
+}
+
+template < typename hashtype >
+bool WordsStringTest ( hashfunc<hashtype> hash, std::vector<std::string> & words,
+                       bool drawDiagram )
+{
+  long wordscount = words.size();
+  printf("Keyset 'Words' - %ld dict words\n", wordscount);
+
+  std::vector<hashtype> hashes;
+  hashes.resize(wordscount);
+  Rand r(483723);
+  HashSet<std::string> wordset; // need to be unique, otherwise we report collisions
+
+  for(int i = 0; i < (int)wordscount; i++)
+  {
+    if (wordset.count(words[i]) > 0) { // not unique
+      i--;
+      continue;
+    }
+    wordset.insert(words[i]);
+    const char *key = words[i].c_str();
+    int len = words[i].length();
+    hash(key, len, 0, &hashes[i]);
+  }
+
+  //----------
+  bool result = TestHashList(hashes,drawDiagram);
+  printf("\n");
+
   return result;
 }
 
@@ -601,3 +640,5 @@ bool SeedTest ( pfHash hash, int keycount, bool drawDiagram )
 }
 
 //-----------------------------------------------------------------------------
+
+void ReportCollisions ( pfHash hash );

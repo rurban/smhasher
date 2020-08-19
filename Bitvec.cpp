@@ -55,6 +55,16 @@ void printbits2 ( const uint8_t * k, int nbytes )
   printf("]");
 }
 
+void printhex ( const void * blob, int len )
+{
+  assert((len & 3) == 0);
+  uint8_t * d = (uint8_t*)blob;
+  for(int i = 0; i < len; i++)
+  {
+    printf("%02x",d[i]);
+  }
+}
+
 void printhex32 ( const void * blob, int len )
 {
   assert((len & 3) == 0);

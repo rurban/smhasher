@@ -1117,6 +1117,8 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     {
       result &= WordsKeyTest( hash, passwordchars, len, "password", g_drawDiagram );
     }
+    std::vector<std::string> words = HashMapInit(g_drawDiagram);
+    result &= WordsStringTest( hash, words, g_drawDiagram );
 
     if(!result) printf("*********FAIL*********\n");
     printf("\n");

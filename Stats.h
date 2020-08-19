@@ -35,10 +35,8 @@ inline uint32_t f3mix ( uint32_t k )
 static void printHash(const void* key, size_t len)
 {
     const unsigned char* const p = (const unsigned char*)key;
-    int s;
-    printf("\n0x");
     assert(len < INT_MAX);
-    for (s=(int)len-1; s>=0; s--) printf("%02X", p[s]);
+    for (int i=(int)len-1; i >= 0 ; i--) printf("%02x", p[i]);
     printf("  ");
 }
 
@@ -49,26 +47,59 @@ static void printHash(const void* key, size_t len)
 template< typename hashtype >
 int FindCollisions ( std::vector<hashtype> & hashes,
                      HashSet<hashtype> & collisions,
-                     int maxCollisions )
+                     int maxCollisions = 1000)
 {
   int collcount = 0;
-
-  std::sort(hashes.begin(),hashes.end());
-
-  for(size_t hnb = 1; hnb < hashes.size(); hnb++)
-  {
-    if(hashes[hnb] == hashes[hnb-1])
+#if 0
+  // sort indices instead
+  std::vector< std::pair<hashtype, size_t>> pairs;
+  pairs.resize (hashes.size());
+  for(size_t i = 0; i < hashes.size(); i++)
     {
-      collcount++;
-      //printHash(&hashes[hnb], sizeof(hashtype));
-
-      if((int)collisions.size() < maxCollisions)
-      {
-        collisions.insert(hashes[hnb]);
-      }
+      pairs[i] = std::make_pair(hashes[i], i);
     }
-  }
+  std::sort(pairs.begin(),pairs.end());
+  for(size_t hnb = 1; hnb < pairs.size(); hnb++)
+    {
+      hashtype h1 = pairs[hnb].first;
+      hashtype prev = pairs[hnb-1].first;
+      if(h1 == prev)
+        {
+          collcount++;
+          if((int)collisions.size() < maxCollisions)
+            {
+#ifdef DEBUG
+              printf ("\n%zu <=> %zu: ", pairs[hnb-1].second, pairs[hnb].second);
+              printHash(&h1, sizeof(hashtype));
+#endif
+              collisions.insert(h1);
+            }
+        }
+    }
+#else
+    std::sort(hashes.begin(),hashes.end());
 
+    for(size_t hnb = 1; hnb < hashes.size(); hnb++)
+      {
+        if(hashes[hnb] == hashes[hnb-1])
+          {
+            collcount++;
+            if((int)collisions.size() < maxCollisions)
+              {
+#ifdef DEBUG
+                printf ("\n%zu: ", hnb);
+                printHash(&hashes[hnb], sizeof(hashtype));
+#endif
+                collisions.insert(hashes[hnb]);
+              }
+          }
+      }
+#endif
+
+#ifdef DEBUG
+    if (collcount)
+      printf ("\n");
+#endif
   return collcount;
 }
 
@@ -313,11 +344,9 @@ int PrintCollisions ( HashSet<hashtype> & collisions )
        it != collisions.end(); ++it)
   {
     const hashtype &hash = *it;
-    printhex32(&hash, sizeof(hashtype));
+    printhex(&hash, sizeof(hashtype));
     printf("\n");
   }
-  printf("\n");
-
   return 0;
 }
 
@@ -446,7 +475,7 @@ hashtype bitreverse(hashtype n, size_t b = sizeof(hashtype) * 8)
 template < typename hashtype >
 bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
                     bool testCollision = true, bool testDist = true,
-                    bool testHighBits = true, bool testLowBits = true )
+                    bool testHighBits = true, bool testLowBits = true)
 {
   bool result = true;
 
@@ -462,9 +491,9 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
     collcount = FindCollisions(hashes, collisions, 1000);
     printf("actual %6i (%.2fx)", (int)collcount, expected > 0.0 ? collcount / expected : collcount);
 
-    if (sizeof(hashtype) == sizeof(uint32_t))
+    if (sizeof(hashtype) <= sizeof(uint32_t))
     {
-      // 2x expected collisions = fail
+      // fail with >= 2x expected collisions
 
       // #TODO - collision failure cutoff needs to be expressed as a standard deviation instead
       // of a scale factor, otherwise we fail erroneously if there are a small expected number
@@ -478,11 +507,20 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
     else
     {
       // For all hashes larger than 32 bits, _any_ collisions are a failure.
-      if (collcount > 0)
+      if (collcount > 0 && expected < 1.0)
       {
         printf(" !!!!!");
         result = false;
-        if(drawDiagram) PrintCollisions(collisions);
+        if(drawDiagram)
+          {
+            PrintCollisions(collisions);
+            //printf("Mapping collisions\n");
+            //CollisionMap<uint128_t,ByteVec> cmap;
+            //CollisionCallback<uint128_t> c2(hash,collisions,cmap);
+            ////TwoBytesKeygen(20,c2);
+            //printf("Dumping collisions\n");
+            //DumpCollisionMap(cmap);
+          }
       }
     }
 
@@ -564,11 +602,9 @@ bool TestKeyList ( hashfunc<hashtype> hash, std::vector<keytype> & keys,
   int keycount = (int)keys.size();
 
   std::vector<hashtype> hashes;
-
   hashes.resize(keycount);
 
   printf("Hashing");
-
   for(int i = 0; i < keycount; i++)
   {
     if(i % (keycount / 10) == 0) printf(".");
@@ -577,11 +613,9 @@ bool TestKeyList ( hashfunc<hashtype> hash, std::vector<keytype> & keys,
 
     hash(&k,sizeof(k),0,&hashes[i]);
   }
-
   printf("\n");
 
   bool result = TestHashList(hashes,drawDiagram,testColl,testDist);
-
   printf("\n");
 
   return result;
