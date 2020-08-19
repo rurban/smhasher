@@ -31,7 +31,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * @version 2.9
+ * @version 2.10
  */
 
 //$ nocpp
@@ -47,11 +47,12 @@
  * hash of the specified message. This function applies endianness correction
  * automatically (on little- and big-endian processors).
  *
- * @param Msg Message to produce hash from.
+ * @param Msg Message to produce hash from. The alignment is unimportant.
  * @param MsgLen Message length, in bytes.
  * @param[out] Hash The resulting hash. If both InitLCG and InitSeed are
  * non-zero, the hash will not be initially reset to 0, and it should be
- * pre-initialized with random bytes.
+ * pre-initialized with random bytes. On systems where this is relevant, this
+ * address should be aligned to 32 bits.
  * @param HashLen The required hash length, in bytes, should be >= 4, in
  * increments of 4.
  * @param SeedXOR Optional value, to XOR the default seed with. To use the
@@ -90,9 +91,6 @@ inline void prvhash42( const uint8_t* const Msg, const int MsgLen,
 		Seed = InitSeed;
 	}
 
-	int e = 1;
-	e = *(uint8_t*) &e;
-
 	const int mlext = MsgLen + ( MsgLen < 4 ? 4 - MsgLen : 0 );
 	int c = mlext + HashLen * 3 - mlext % HashLen;
 	int hpos = 0;
@@ -104,18 +102,17 @@ inline void prvhash42( const uint8_t* const Msg, const int MsgLen,
 
 		if( k < MsgLen - 3 )
 		{
-			msgw = ( e != 0 ? (uint64_t) *(uint32_t*) &Msg[ k ] :
-				(uint64_t) Msg[ k ] |
-				(uint64_t) Msg[ k + 1 ] << 8 |
-				(uint64_t) Msg[ k + 2 ] << 16 |
-				(uint64_t) Msg[ k + 3 ] << 24 );
+			msgw = (uint32_t) Msg[ k ] |
+				(uint32_t) Msg[ k + 1 ] << 8 |
+				(uint32_t) Msg[ k + 2 ] << 16 |
+				(uint32_t) Msg[ k + 3 ] << 24;
 		}
 		else
 		{
 			msgw = (uint64_t) ( k < MsgLen ? Msg[ k ] : 0x100 ) |
 				(uint64_t) ( k < MsgLen - 1 ? Msg[ k + 1 ] : 0x100 ) << 8 |
 				(uint64_t) ( k < MsgLen - 2 ? Msg[ k + 2 ] : 0x100 ) << 16 |
-				(uint64_t) ( k < MsgLen - 3 ? Msg[ k + 3 ] : 0x100 ) << 24;
+				0x100000000ULL;
 		}
 
 		Seed *= lcg;
@@ -134,7 +131,9 @@ inline void prvhash42( const uint8_t* const Msg, const int MsgLen,
 		}
 	}
 
-	if( e == 0 )
+	int e = 1;
+
+	if( *(uint8_t*) &e == 0 )
 	{
 		for( k = 0; k < HashLen; k += 4 )
 		{
