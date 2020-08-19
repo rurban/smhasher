@@ -116,7 +116,7 @@ HashInfo g_hashes[] =
 #  define SHA1_VERIF          0x6AF411D8
 #  define SHA1a_VERIF         0xB3122757
 #endif
-  { sha1_160,            160, SHA1_VERIF, "sha1-160",     "SHA1", GOOD},
+  { sha1_160,            160, SHA1_VERIF, "sha1-160",     "SHA1", POOR},
   { sha1_32a,             32, SHA1a_VERIF,"sha1_32a",     "SHA1, low 32 bits", POOR},
   { sha2_224,            224, 0x60424E90, "sha2-224",     "SHA2-224", GOOD },
   { sha2_224_64,          64, 0x7EF6BB61, "sha2-224_64",  "SHA2-224, low 64 bits", GOOD },

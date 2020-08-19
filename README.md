@@ -17,20 +17,20 @@ SMhasher
 | --------------------------                    |              |          |            |     |                                |
 | [crc32](doc/crc32.txt)                        |       392.05 |   130.08 | 199.87 (3) | 422 | insecure, 8590x collisions, distrib |
 | [md5_32a](doc/md5_32a.txt)                    |       351.96 |   670.99 | 863.30 (23)|4419 | 8590x collisions, distrib |
-| [sha1_32a](doc/sha1_32a.txt)                  |       353.03 |  1385.80 |1759.94 (5) |5126 | collisions, 36.6% distrib |
-| [md5-128](doc/md5-128.txt)                    |       317.78 |   730.30 | 830.69 (7) |4419 |               |
-| [sha1-160](doc/sha1-160.txt)                  |       364.95 |  1470.55 |1794.16 (13)|5126 |               |
-| [sha2-224](doc/sha2-224.txt)                  |       147.13 |  1354.81 |1589.92 (12)|     |               |
-| [sha2-224_64](doc/sha2-224_64.txt)            |       147.60 |  1360.10 |1620.93 (13)|     |               |
+| [sha1_32a](doc/sha1_32a.txt)                  |       353.03 |  1385.80 |1759.94 (5) |5126 | Cyclic low32, 36.6% distrib |
+| [md5-128](doc/md5-128.txt)                    |       317.78 |   730.30 | 830.69 (7) |4419 | Zeroes hi32        |
+| [sha1-160](doc/sha1-160.txt)                  |       364.95 |  1470.55 |1794.16 (13)|5126 | Comb/Cyclic low32  |
+| [sha2-224](doc/sha2-224.txt)                  |       147.13 |  1354.81 |1589.92 (12)|     | Comb low32    |
+| [sha2-224_64](doc/sha2-224_64.txt)            |       147.60 |  1360.10 |1620.93 (13)|     | Cyclic low32  |
 | [sha2-256](doc/sha2-256.txt)                  |       147.80 |  1374.90 |1606.06 (16)|     | Moment Chi2 4 |
 | [sha2-256_64](doc/sha2-256_64.txt)            |       148.01 |  1376.34 |1624.71 (16)|     | Moment Chi2 7 |
 | [sha1ni](doc/sha1ni.txt)                      |      2019.96 |   135.84 | 564.40 (6) | 989 | insecure,sanity, Permutation, Zeroes, machine-specific |
 | [sha1ni_32](doc/sha1ni_32.txt)                |      2019.94 |   136.82 | 589.46 (1) | 989 | machine-specific |
 | [sha2ni-256](doc/sha2ni-256.txt)              |      1906.77 |   145.47 | 603.08 (22)|4241 | insecure,sanity, Permutation, Zeroes, machine-specific |
-| [sha2ni-256_64](doc/sha2ni-256_64.txt)        |      1910.34 |   146.06 | 595.16 (6) |4241 | machine-specific |
+| [sha2ni-256_64](doc/sha2ni-256_64.txt)        |      1910.34 |   146.06 | 595.16 (6) |4241 | Zeroes, machine-specific |
 | [blake3_c](doc/blake3_c.txt)                  |      1233.40 |   360.68 | 524.40 (4) |     | Moment Chi2, no 32bit portability |
 | [rmd128](doc/rmd128.txt)                      |       332.78 |   672.35 | 903.43 (13)|     |               |
-| [rmd160](doc/rmd160.txt)                      |       202.16 |  1045.79 |1287.74 (16)|     |               |
+| [rmd160](doc/rmd160.txt)                      |       202.16 |  1045.79 |1287.74 (16)|     | Cyclic hi32   |
 | [rmd256](doc/rmd256.txt)                      |       356.57 |   638.30 | 815.39 (16)|     |               |
 | [blake2s-128](doc/blake2s-128.txt)            |       295.30 |   698.09 |1059.24 (51)|     |               |
 | [blake2s-160](doc/blake2s-160.txt)            |       215.01 |  1026.74 |1239.54 (11)|     |               |
@@ -86,8 +86,8 @@ SMhasher
 | [xxHash32](doc/xxHash32.txt)                  |      5868.40 |    49.08 | 222.09 (21)| 738 | LongNeighbors, collisions with 4bit diff, MomentChi2 220 |
 | [metrohash64](doc/metrohash64.txt)            |      9490.26 |    49.84 | 150.49 (3) | 624 | UB, LongNeighbors, BIC         |
 | [metrohash64_1](doc/metrohash64_1.txt)        |      9274.60 |    50.85 | 201.37 (19)| 624 | UB, LongNeighbors, BIC, MomentChi2         |
-| [metrohash64crc_1](doc/metrohash64crc_1.txt)  |     13641.79 |    56.19 | 193.28 (19)| 632 | UB, cyclic collisions 8 byte, BIC, MomentChi2, machine-specific (x64 SSE4.2) |
-| [metrohash64crc_2](doc/metrohash64crc_2.txt)  |     13550.77 |    56.17 | 204.84 (18)| 632 | UB, cyclic collisions 8 byte, BIC, machine-specific (x64 SSE4.2) |
+| [metrohash64crc_1](doc/metrohash64crc_1.txt)  |     13641.79 |    56.19 | 193.28 (19)| 632 | UB, Cyclic 8/8 byte, Zeroes, DiffDist, BIC, MomentChi2, machine-specific (x64 SSE4.2) |
+| [metrohash64crc_2](doc/metrohash64crc_2.txt)  |     13550.77 |    56.17 | 204.84 (18)| 632 | UB, Cyclic 8/8 byte, DiffDist, BIC, machine-specific (x64 SSE4.2) |
 | [cmetrohash64_1o](doc/cmetrohash64_1o.txt)    |      8851.32 |    50.59 | 193.19 (18)|3506 | UB, LongNeighbors, BIC, MomentChi2  |
 | [cmetrohash64_1](doc/cmetrohash64_1.txt)      |      9074.37 |    50.92 | 201.33 (18)| 652 | UB, LongNeighbors, BIC, MomentChi2 |
 | [City64noSeed](doc/City64noSeed.txt)          |      8873.07 |    38.70 | 171.57 (4) |1038 | Avalanche, Sparse, TwoBytes, MomentChi2, Seed |
@@ -103,11 +103,11 @@ SMhasher
 | [MeowHash](doc/MeowHash.txt)                  |     36695.65 |    58.09 | 233.81 (3) |1764 | Sparse low32, machine-specific (x64 AES-NI)  |
 | [MeowHash32low](doc/MeowHash32low.txt)        |     17247.34 |    87.32 | 245.98 (3) |1764 | Sparse, machine-specific (x64 AES-NI.txt)    |
 | --------------------------------------        |              |          |            |     |                            |
-| [tifuhash_64](doc/tifuhash_64.txt)            |        35.60 |  1679.52 |1212.75 (15)| 276 |                            |
-| [floppsyhash_64](doc/floppsyhash.txt)         |       191.95 |   450.93 | 821.11 (152)| 623 |                            |
+| [tifuhash_64](doc/tifuhash_64.txt)            |        35.60 |  1679.52 |1212.75 (15)| 276 | Cyclic low32               |
+| [floppsyhash_64](doc/floppsyhash.txt)         |       191.95 |   450.93 | 821.11 (152)| 623 |                           |
 | [prvhash42_32](doc/prvhash42_32.txt)          |       874.55 |    72.36 | 193.42 (1) | 157 |                            |
 | [prvhash42_64](doc/prvhash42_64.txt)          |       791.51 |   103.03 | 220.49 (1) | 157 |                            |
-| [prvhash42_128](doc/prvhash42_128.txt)        |       844.11 |   115.14 | 231.63 (4) | 157 |                            |
+| [prvhash42_128](doc/prvhash42_128.txt)        |       844.11 |   115.14 | 231.63 (4) | 157 | Combination low32          |
 | [prvhash82_64](doc/prvhash82_64.txt)          |       780.57 |    89.07 | 207.75 (1) | 157 | needs __uint128_t          |
 | [prvhash82_128](doc/prvhash82_128.txt)        |       745.98 |   124.30 | 245.09 (1) | 157 | TwoBytes, needs __uint128_t|
 | [chaskey](doc/chaskey.txt)                    |       735.85 |   168.05 | 336.07 (4) |1609 |                            |
@@ -117,8 +117,8 @@ SMhasher
 | [GoodOAAT](doc/GoodOAAT.txt)                  |      1052.90 |    70.80 | 208.00 (3) | 237 |                            |
 | [SipHash13](doc/SipHash13.txt)                |      1762.44 |   104.61 | 304.84 (17)| 778 | 0.9% bias                  |
 | [TSip](doc/TSip.txt)                          |      3346.72 |    60.02 | 203.82 (5) | 519 | !msvc                      |
-| [seahash](doc/seahash.txt)                    |      4529.38 |    65.58 | 240.34 (7) | 871 | !msvc                      |
-| [seahash32low](doc/seahash32low.txt)          |      4524.65 |    65.60 | 253.50 (3) | 871 | !msvc                      |
+| [seahash](doc/seahash.txt)                    |      4529.38 |    65.58 | 240.34 (7) | 871 | PerlinNoise, !msvc         |
+| [seahash32low](doc/seahash32low.txt)          |      4524.65 |    65.60 | 253.50 (3) | 871 | PerlinNoise 32, !msvc      |
 | [BEBB4185](doc/BEBB4185.txt)                  |      2655.75 |   241.48 | 420.58 (7) |1294 | msvc-specific verification |
 | [clhash](doc/clhash.txt)                      |      4405.28 |    85.35 | 288.20 (14)|1809 | machine-specific (x64 SSE4.2) |
 | [HighwayHash64](doc/HighwayHash64.txt)        |      6239.64 |    98.65 | 263.94 (4) |2546 |                            |
@@ -128,7 +128,7 @@ SMhasher
 | [MUM](doc/MUM.txt)                            |      6890.75 |    39.90 | 174.94 (3) |1912 | UB, machine-specific (32/64 differs) |
 | [MUMlow](doc/MUMlow.txt)                      |      6893.98 |    46.02 | 191.55 (3) |1912 | UB                         |
 | [mirhash](doc/mirhash.txt)                    |      5453.50 |    42.31 | 163.35 (2) |1112 | UB, LongNeighbors, machine-specific (32/64 differs) |
-| [mirhash32low](doc/mirhash32low.txt)          |      5452.48 |    42.31 | 190.92 (2) |1112 | UB, LongNeighbors, machine-specific (32/64 differs) |
+| [mirhash32low](doc/mirhash32low.txt)          |      5452.48 |    42.31 | 190.92 (2) |1112 | UB, Cyclic, LongNeighbors, machine-specific (32/64 differs) |
 | [mirhashstrict](doc/mirhashstrict.txt)        |      2217.70 |    65.39 | 175.38 (3) |1112 |                            |
 | [mirhashstrict32low](doc/mirhashstrict32low.txt)|    2217.87 |    64.72 | 188.44 (4) |1112 | MomentChi2 9               |
 | [mx3](doc/mx3.txt)                            |      6267.57 |    55.11 | 169.11 (1) | 734 | UB                         |
@@ -153,11 +153,11 @@ SMhasher
 | [Spooky32](doc/Spooky32.txt)                  |      9570.40 |    70.27 | 250.23 (18)|2221 | UB                         |
 | [Spooky64](doc/Spooky64.txt)                  |      9603.18 |    70.19 | 231.73 (17)|2221 | UB                         |
 | [Spooky128](doc/Spooky128.txt)                |      9865.67 |    70.84 | 185.64 (2) |2221 | UB                         |
-| [xxh3](doc/xxh3.txt)                          |     16377.47 |    37.20 | 179.88 (1) | 744 | BIC                        |
+| [xxh3](doc/xxh3.txt)                          |     16377.47 |    37.20 | 179.88 (1) | 744 | DiffDist bit 7 w. 36 bits, BIC |
 | [xxh3low](doc/xxh3low.txt)                    |     16403.22 |    37.19 | 184.18 (2) | 756 |                            |
 | [xxh128](doc/xxh128.txt)                      |     15117.76 |    44.70 | 178.72 (1) |1012 |                            |
 | [xxh128low](doc/xxh128low.txt)                |     15109.04 |    38.98 | 174.91 (3) |1012 |                            |
-| [t1ha2_atonce](doc/t1ha2_atonce.txt)          |      8192.03 |    48.48 | 230.46 (14)| 541 |                            |
+| [t1ha2_atonce](doc/t1ha2_atonce.txt)          |      8192.03 |    48.48 | 230.46 (14)| 541 | Zeroes low3                |
 | [t1ha2_atonce128](doc/t1ha2_atonce128.txt)    |      8382.53 |    64.15 | 199.63 (4) | 613 | LongNeighbors              |
 | [t1ha0_aes_noavx](doc/t1ha0_aes_noavx.txt)    |     21782.86 |    48.17 | 238.14 (18)| 925 | LongNeighbors, machine-specific (x86 AES-NI) |
 | [t1ha0_aes_avx1](doc/t1ha0_aes_avx1)          |     22714.85 |    48.12 | 226.52 (16)| 843 | LongNeighbors, machine-specific (x64 AVX.txt)|
