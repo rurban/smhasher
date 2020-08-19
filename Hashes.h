@@ -1017,23 +1017,6 @@ inline void prvhash42_128test ( const void * key, int len, unsigned seed, void *
   memcpy (out, hash, 16);
 }
 
-#ifdef HAVE_INT128
-#include "prvhash82.h"
-// _32 fails sanity tests
-inline void prvhash82_64test ( const void * key, int len, unsigned seed, void * out )
-{
-  uint8_t hash[8] = {0};
-  prvhash82 ((const uint8_t *)key, len, hash, 8, (uint64_t)seed, 0, 0);
-  memcpy (out, hash, 8);
-}
-inline void prvhash82_128test ( const void * key, int len, unsigned seed, void * out )
-{
-  uint8_t hash[16] = {0};
-  prvhash82 ((const uint8_t *)key, len, hash, 16, (uint64_t)seed, 0, 0);
-  memcpy (out, hash, 16);
-}
-#endif
-
 // objsize: 408dd0 - 4090ae: 734
 #include "mx3/mx3.h"
 inline void mx3hash64_test ( const void * key, int len, uint32_t seed, void * out ) {

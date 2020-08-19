@@ -105,11 +105,9 @@ SMhasher
 | --------------------------------------        |              |          |            |     |                            |
 | [tifuhash_64](doc/tifuhash_64.txt)            |        35.60 |  1679.52 |1212.75 (15)| 276 | Cyclic low32               |
 | [floppsyhash_64](doc/floppsyhash.txt)         |       191.95 |   450.93 | 821.11 (152)| 623 |                           |
-| [prvhash42_32](doc/prvhash42_32.txt)          |       874.55 |    72.36 | 193.42 (1) | 157 |                            |
-| [prvhash42_64](doc/prvhash42_64.txt)          |       791.51 |   103.03 | 220.49 (1) | 157 |                            |
-| [prvhash42_128](doc/prvhash42_128.txt)        |       844.11 |   115.14 | 231.63 (4) | 157 | Combination low32          |
-| [prvhash82_64](doc/prvhash82_64.txt)          |       780.57 |    89.07 | 207.75 (1) | 157 | needs __uint128_t          |
-| [prvhash82_128](doc/prvhash82_128.txt)        |       745.98 |   124.30 | 245.09 (1) | 157 | TwoBytes, needs __uint128_t|
+| [prvhash42_32](doc/prvhash42_32.txt)          |      1506.25 |    58.91 | 196.13 (2) | 157 | UB                         |
+| [prvhash42_64](doc/prvhash42_64.txt)          |      1475.61 |   103.34 | 237.71 (3) | 157 | UB                         |
+| [prvhash42_128](doc/prvhash42_128.txt)        |      1454.43 |   164.44 | 304.56 (2) | 157 | UB Combination low32       |
 | [chaskey](doc/chaskey.txt)                    |       735.85 |   168.05 | 336.07 (4) |1609 |                            |
 | [SipHash](doc/SipHash.txt)                    |       958.78 |   141.84 | 278.15 (3) |1071 |                            |
 | [HalfSipHash](doc/HalfSipHash.txt)            |       741.59 |   122.25 | 256.22 (20)| 700 | zeroes                     |
