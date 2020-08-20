@@ -569,7 +569,8 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       result = false;
     } else {
       std::vector<std::string> words = HashMapInit(g_drawDiagram);
-      result &= HashMapTest(hash,info->hashbits,words,trials,g_drawDiagram);
+      if (words.size())
+        result &= HashMapTest(hash,info->hashbits,words,trials,g_drawDiagram);
     }
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
@@ -1548,9 +1549,7 @@ static char* strndup(char const *s, size_t n)
 
 int main ( int argc, const char ** argv )
 {
-#ifdef DEBUG
-  const char * defaulthash = "wysha";
-#elif defined(__x86_64__) || defined(_M_X64) || defined(_X86_64_)
+#if defined(__x86_64__) || defined(_M_X64) || defined(_X86_64_)
   const char * defaulthash = "xxh3";
 #else
   const char * defaulthash = "wyhash";
