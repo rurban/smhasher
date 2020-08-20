@@ -419,8 +419,7 @@ if ((CMAKE_MAJOR_VERSION EQUAL 3 AND CMAKE_MINOR_VERSION GREATER_EQUAL 9)
   check_ipo_supported(RESULT ipo_supported OUTPUT error)
 endif()
 
-add_library(
-  SMHasherSupport
+add_library(SMHasherSupport STATIC
   AvalancheTest.cpp
   Bitslice.cpp
   Bitvec.cpp
