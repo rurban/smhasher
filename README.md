@@ -15,10 +15,10 @@ SMhasher
 | [multiply_shift](doc/multiply_shift.txt)      |      4909.57 |    45.28 | too slow   | 345 | fails all tests                |
 | [pair_multiply_shift](doc/pair_multiply_shift)|     13604.46 |    31.71 | too slow   | 609 | UB, fails all tests            |
 | --------------------------                    |              |          |            |     |                                |
-| [crc32](doc/crc32.txt)                        |       392.05 |   130.08 | 199.87 (3) | 422 | insecure, 8590x collisions, distrib |
+| [crc32](doc/crc32.txt)                        |       392.05 |   130.08 | 199.87 (3) | 422 | insecure, 8590x collisions, distrib, PerlinNoise |
 | [md5_32a](doc/md5_32a.txt)                    |       351.96 |   670.99 | 863.30 (23)|4419 | 8590x collisions, distrib |
 | [sha1_32a](doc/sha1_32a.txt)                  |       353.03 |  1385.80 |1759.94 (5) |5126 | Cyclic low32, 36.6% distrib |
-| [md5-128](doc/md5-128.txt)                    |       317.78 |   730.30 | 830.69 (7) |4419 | Zeroes hi32        |
+| [md5-128](doc/md5-128.txt)                    |       317.78 |   730.30 | 830.69 (7) |4419 |                    |
 | [sha1-160](doc/sha1-160.txt)                  |       364.95 |  1470.55 |1794.16 (13)|5126 | Comb/Cyclic low32  |
 | [sha2-224](doc/sha2-224.txt)                  |       147.13 |  1354.81 |1589.92 (12)|     | Comb low32    |
 | [sha2-224_64](doc/sha2-224_64.txt)            |       147.60 |  1360.10 |1620.93 (13)|     | Cyclic low32  |
@@ -28,7 +28,7 @@ SMhasher
 | [sha1ni_32](doc/sha1ni_32.txt)                |      2019.94 |   136.82 | 589.46 (1) | 989 | machine-specific |
 | [sha2ni-256](doc/sha2ni-256.txt)              |      1906.77 |   145.47 | 603.08 (22)|4241 | insecure,sanity, Permutation, Zeroes, machine-specific |
 | [sha2ni-256_64](doc/sha2ni-256_64.txt)        |      1910.34 |   146.06 | 595.16 (6) |4241 | Zeroes, machine-specific |
-| [blake3_c](doc/blake3_c.txt)                  |      1233.40 |   360.68 | 524.40 (4) |     | Moment Chi2, no 32bit portability |
+| [blake3_c](doc/blake3_c.txt)                  |      1233.40 |   360.68 | 524.40 (4) |     | Moment Chi2, Seed, PerlinNoise, no 32bit portability |
 | [rmd128](doc/rmd128.txt)                      |       332.78 |   672.35 | 903.43 (13)|     |               |
 | [rmd160](doc/rmd160.txt)                      |       202.16 |  1045.79 |1287.74 (16)|     | Cyclic hi32   |
 | [rmd256](doc/rmd256.txt)                      |       356.57 |   638.30 | 815.39 (16)|     |               |
@@ -80,13 +80,13 @@ SMhasher
 | [Murmur2C](doc/Murmur2C.txt)                  |      3817.99 |    47.67 | 207.53 (18)| 444 | UB, 91% bias, collisions, distr, BIC, LongNeighbors |
 | [Murmur3A](doc/Murmur3A.txt)                  |      2347.90 |    51.38 | 237.58 (19)| 351 | UB, Moment Chi2 69             |
 | [PMurHash32](doc/PMurHash32.txt)              |      2281.97 |    58.65 | 259.59 (20)|1862 | Moment Chi2 69             |
-| [Murmur3C](doc/Murmur3C.txt)                  |      3093.46 |    68.53 | 256.49 (19)| 859 | UB, LongNeighbors, DiffDist    |
-| [PMPML_32](doc/PMPML_32.txt)                  |      6516.19 |    52.60 | 227.47 (8) |1084 | Avalanche >512, unseeded: Seed, BIC, MomentChi2 |
+| [Murmur3C](doc/Murmur3C.txt)                  |      3093.46 |    68.53 | 256.49 (19)| 859 | UB, LongNeighbors, Text, DiffDist  |
+| [PMPML_32](doc/PMPML_32.txt)                  |      6516.19 |    52.60 | 227.47 (8) |1084 | Avalanche >512, unseeded: Seed, BIC, MomentChi2, PerlinNoise |
 | [PMPML_64](doc/PMPML_64.txt)                  |      8119.83 |    61.49 | 186.24 (4) |1305 | unseeded: Seed, MomentChi2, BIC        |
 | [xxHash32](doc/xxHash32.txt)                  |      5868.40 |    49.08 | 222.09 (21)| 738 | LongNeighbors, collisions with 4bit diff, MomentChi2 220 |
 | [metrohash64](doc/metrohash64.txt)            |      9490.26 |    49.84 | 150.49 (3) | 624 | UB, LongNeighbors, BIC         |
 | [metrohash64_1](doc/metrohash64_1.txt)        |      9274.60 |    50.85 | 201.37 (19)| 624 | UB, LongNeighbors, BIC, MomentChi2         |
-| [metrohash64crc_1](doc/metrohash64crc_1.txt)  |     13641.79 |    56.19 | 193.28 (19)| 632 | UB, Cyclic 8/8 byte, Zeroes, DiffDist, BIC, MomentChi2, machine-specific (x64 SSE4.2) |
+| [metrohash64crc_1](doc/metrohash64crc_1.txt)  |     13641.79 |    56.19 | 193.28 (19)| 632 | UB, Cyclic 8/8 byte, DiffDist, BIC, MomentChi2, machine-specific (x64 SSE4.2) |
 | [metrohash64crc_2](doc/metrohash64crc_2.txt)  |     13550.77 |    56.17 | 204.84 (18)| 632 | UB, Cyclic 8/8 byte, DiffDist, BIC, machine-specific (x64 SSE4.2) |
 | [cmetrohash64_1o](doc/cmetrohash64_1o.txt)    |      8851.32 |    50.59 | 193.19 (18)|3506 | UB, LongNeighbors, BIC, MomentChi2  |
 | [cmetrohash64_1](doc/cmetrohash64_1.txt)      |      9074.37 |    50.92 | 201.33 (18)| 652 | UB, LongNeighbors, BIC, MomentChi2 |
@@ -99,7 +99,7 @@ SMhasher
 | [t1ha2_stream](doc/t1ha2_stream.txt)          |      8558.73 |    93.45 | 305.03 (16)|1665 | Sparse, Permutation, LongNeighbors |
 | [t1ha2_stream128](doc/t1ha2_stream128.txt)    |      8846.52 |   117.19 | 270.95 (2) |1665 | Sparse, Permutation, LongNeighbors |
 | [aesnihash](doc/aesnihash.txt)                |      2963.39 |    71.24 | 217.73 (3) |     | fails most tests, machine-specific (x64 AES-NI) |
-| [falkhash](doc/falkhash.txt)                  |     20374.98 |   169.84 | 328.42 (5) | 264 | LongNeighbors, machine-specific (x64 AES-NI) |
+| [falkhash](doc/falkhash.txt)                  |     20374.98 |   169.84 | 328.42 (5) | 264 | Sparse, LongNeighbors, machine-specific (x64 AES-NI) |
 | [MeowHash](doc/MeowHash.txt)                  |     36695.65 |    58.09 | 233.81 (3) |1764 | Sparse low32, machine-specific (x64 AES-NI)  |
 | [MeowHash32low](doc/MeowHash32low.txt)        |     17247.34 |    87.32 | 245.98 (3) |1764 | Sparse, machine-specific (x64 AES-NI.txt)    |
 | --------------------------------------        |              |          |            |     |                            |
@@ -108,7 +108,7 @@ SMhasher
 | [prvhash42_32](doc/prvhash42_32.txt)          |      1540.52 |    62.70 | 220.76 (7) | 157 |                            |
 | [prvhash42_64](doc/prvhash42_64.txt)          |      1306.99 |   115.43 | 250.09 (4) | 157 |                            |
 | [prvhash42_128](doc/prvhash42_128.txt)        |      1337.99 |   172.77 | 304.38 (3) | 157 | Combination low32          |
-| [chaskey](doc/chaskey.txt)                    |       735.85 |   168.05 | 336.07 (4) |1609 |                            |
+| [chaskey](doc/chaskey.txt)                    |       735.85 |   168.05 | 336.07 (4) |1609 | PerlinNoise                |
 | [SipHash](doc/SipHash.txt)                    |       958.78 |   141.84 | 278.15 (3) |1071 |                            |
 | [HalfSipHash](doc/HalfSipHash.txt)            |       741.59 |   122.25 | 256.22 (20)| 700 | zeroes                     |
 | [beamsplitter](doc/beamsplitter.txt)          |       789.22 |   682.45 |1150.33 (26)|4203 | UB                         |
@@ -118,7 +118,7 @@ SMhasher
 | [seahash](doc/seahash.txt)                    |      4529.38 |    65.58 | 240.34 (7) | 871 | PerlinNoise, !msvc         |
 | [seahash32low](doc/seahash32low.txt)          |      4524.65 |    65.60 | 253.50 (3) | 871 | PerlinNoise 32, !msvc      |
 | [BEBB4185](doc/BEBB4185.txt)                  |      2655.75 |   241.48 | 420.58 (7) |1294 | msvc-specific verification |
-| [clhash](doc/clhash.txt)                      |      4405.28 |    85.35 | 288.20 (14)|1809 | machine-specific (x64 SSE4.2) |
+| [clhash](doc/clhash.txt)                      |      4405.28 |    85.35 | 288.20 (14)|1809 | PerlinNoise, machine-specific (x64 SSE4.2) |
 | [HighwayHash64](doc/HighwayHash64.txt)        |      6239.64 |    98.65 | 263.94 (4) |2546 |                            |
 | [Murmur3F](doc/Murmur3F.txt)                  |      5076.20 |    51.66 | 222.39 (18)| 699 | UB                         |
 | [fasthash32](doc/fasthash32.txt)              |      4658.24 |    50.50 | 181.96 (2) | 566 | UB                         |
