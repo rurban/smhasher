@@ -494,55 +494,56 @@ bool TextKeyTest ( hashfunc<hashtype> hash, const char * prefix, const char * co
 }
 
 //-----------------------------------------------------------------------------
-// Keyset 'Words' - pick n random chars from coreset (alnum or password chars)
+// Keyset 'Words' - pick random chars from coreset (alnum or password chars)
 
 template < typename hashtype >
-bool WordsKeyTest ( hashfunc<hashtype> hash, const char * coreset, const int corelen, const char* name,
-                    bool drawDiagram )
+bool WordsKeyTest ( hashfunc<hashtype> hash, const long keycount,
+                    const int minlen, const int maxlen,
+                    const char * coreset,
+                    const char* name, bool drawDiagram )
 {
   const int corecount = (int)strlen(coreset);
-  const int keybytes = corelen;
-  long keycount = 200000L;
-  //if (keycount > INT32_MAX / 8)
-  //  keycount = INT32_MAX / 8;
+  printf("Keyset 'Words' - %ld random keys of len %d-%d from %s charset\n", keycount, minlen, maxlen, name);
+  assert (minlen >= 0);
+  assert (maxlen > minlen);
 
-  printf("Keyset 'Words' - %ld random keys of len %d from %s charset\n", keycount, corelen, name);
-
-  char* key = new char[corelen+1];
-  key[corelen] = 0;
-  //----------
-
+  HashSet<std::string> words; // need to be unique, otherwise we report collisions
   std::vector<hashtype> hashes;
   hashes.resize(keycount);
   Rand r(483723);
-  HashSet<std::string> words; // need to be unique, otherwise we report collisions
 
-  for(int i = 0; i < (int)keycount; i++)
+  char* key = new char[maxlen+1];
+  std::string key_str;
+
+  for(long i = 0; i < keycount; i++)
   {
-    for(int j = 0; j < corelen; j++)
+    const int len = minlen + (r.rand_u32() % (maxlen - minlen));
+    key[len] = 0;
+    for(int j = 0; j < len; j++)
     {
       key[j] = coreset[r.rand_u32() % corecount];
     }
-    std::string key_str = key;
+    key_str = key;
     if (words.count(key_str) > 0) { // not unique
       i--;
       continue;
     }
     words.insert(key_str);
 
-    hash(key,corelen,0,&hashes[i]);
+    hash(key,len,0,&hashes[i]);
+
 #if 0 && defined DEBUG
     uint64_t h;
     memcpy(&h, &hashes[i], MAX(sizeof(hashtype),8));
     printf("%d %s %lx\n", i, (char*)key, h);
 #endif
   }
+  delete [] key;
 
   //----------
   bool result = TestHashList(hashes,drawDiagram);
   printf("\n");
 
-  delete [] key;
   return result;
 }
 

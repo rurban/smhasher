@@ -1106,14 +1106,9 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     result &= TextKeyTest( hash, "FooBar", alnum, 4, "",       g_drawDiagram );
     result &= TextKeyTest( hash, "",       alnum, 4, "FooBar", g_drawDiagram );
 
-    for(int len = 6; len <= 16; len += 2)
-    {
-      result &= WordsKeyTest( hash, alnum, len, "alnum", g_drawDiagram );
-    }
-    for(int len = 6; len <= 16; len += 2)
-    {
-      result &= WordsKeyTest( hash, passwordchars, len, "password", g_drawDiagram );
-    }
+    // maybe use random-len vector of strings here, from len 6-16
+    result &= WordsKeyTest( hash, 4000000L, 6, 16, alnum, "alnum", g_drawDiagram );
+    result &= WordsKeyTest( hash, 4000000L, 6, 16, passwordchars, "password", g_drawDiagram );
     std::vector<std::string> words = HashMapInit(g_drawDiagram);
     result &= WordsStringTest( hash, words, g_drawDiagram );
 
