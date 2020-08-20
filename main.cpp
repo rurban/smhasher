@@ -1593,6 +1593,22 @@ int main ( int argc, const char ** argv )
         g_testExtra = true;
         continue;
       }
+      if (strcmp(arg,"--EstimateNbCollisions") == 0) {
+        printf ("EstimateNbCollisions:\n");
+        const int keys[] = {86536545, 44251425, 33554432, 22370049, 16777216, 15082603, 14776336, 14196869,
+                            8303633, 5000000, 4514873, 3469497, 2796417, 2396744, 2096896, 1271626, 1000000,
+                            524801, 204800, 200000, 102774, 100000, 77163};
+        const int bits[] = {64, 37, 35, 32, 30, 27, 25, 12, 8};
+        for (int i = 0; i < sizeof(keys)/sizeof(keys[0]); i++) {
+          const int key = keys[i];
+          for (int j = 0; j < sizeof(bits)/sizeof(bits[0]); j++) {
+            const int bit = bits[j];
+            // 77163 - 32 => 0.5
+            printf ("%8d - %2d: %0.1f\n", key, bit, EstimateNbCollisions(key, bit));
+          }
+        }
+        exit(0);
+      }
       /* default: --test=All. comma seperated list of options */
       if (strncmp(arg,"--test=", 6) == 0) {
         char *opt = (char *)&arg[7];

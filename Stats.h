@@ -105,30 +105,58 @@ unsigned int FindCollisions ( std::vector<hashtype> & hashes,
   return collcount;
 }
 
+// Note: with 32bit 77163 keys will get a 50% probability of one collision.
+
+// Naive multiplication, no accuracy at all
+static double ExpectedNBCollisions_Slow ( const double nbH, const double nbBits )
+{
+  long balls = nbH;
+  long double bins = nbBits;
+  long double result = 1.0;
+  for (long i = 1; i < (long)nbH / 2; i++) {
+    // take a pair from the front and the end to minimize errors
+    result *= ((bins - i) / bins) * ((bins - (nbH - i)) / bins);
+  }
+  return (double)(nbH * result);
+}
+
 // TODO This only works for a low number of collisions
-inline double ExpectedCollisions ( double balls, double bins )
+static inline double ExpectedCollisions ( const double balls, const double bins )
 {
   return balls - (bins * (1 - pow((bins - 1)/bins, balls)));
 }
 
-// Too inaccurate: https://preshing.com/20110504/hash-collision-probabilities/
-static double EstimateNbCollisions_Taylor(double nbH, double nbBits)
+// Still too inaccurate: https://preshing.com/20110504/hash-collision-probabilities/
+static double EstimateNbCollisions_Taylor(const double nbH, const double nbBits)
 {
-  return nbH * (1.0 - exp((-nbBits * (nbBits -1)) / (2.0 * nbH)));
+  const long double k = nbH;
+  const long double b = nbBits;
+  return (double)(k * (1.0 - expl(-0.5 * k * (k - 1.0) / b)));
 }
 
-static double EstimateNbCollisions(int nbH, int nbBits)
+// demerphq: (double(count) * double(count-1)) / pow(2.0,double(sizeof(hashtype) * 8 + 1));
+// the very same as our calc. pow 2 vs exp2. Just the high cutoff is missing here.
+static double EstimateNbCollisions_Demerphq(const double nbH, const double nbBits)
+{
+  return (nbH * (nbH - 1)) / pow(2.0, nbBits + 1);
+}
+
+// The currently best calculation, highly prone to inaccuracies with low results (1.0 - 10.0)
+// TODO: return also the error.
+static double EstimateNbCollisions(const int nbH, const int nbBits)
 {
 #if 0
-  return EstimateNbCollisions_Taylor((double)nbH, (double)nbBits);
-  //return ExpectedCollisions((double)nbH, (double)nbBits);
+  //return ExpectedNBCollisions_Slow((const double)nbH, (const double)nbBits);
+  return EstimateNbCollisions_Demerphq((const double)nbH, (const double)nbBits);
+  //return EstimateNbCollisions_Taylor((const double)nbH, (const double)nbBits);
+  //return ExpectedCollisions((const double)nbH, (const double)nbBits);
 #else
   double exp = exp2((double)nbBits); // 2 ^ bits
   double result = (double(nbH) * double(nbH-1)) / (2.0 * exp);
   if (result > (double)nbH)
     result = (double)nbH;
   // improved floating point accuracy
-  if (result <= exp || nbBits >= 32)
+  if (result <= exp || nbBits > 32)
     return result;
   return result - exp;
 #endif
