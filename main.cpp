@@ -269,20 +269,26 @@ HashInfo g_hashes[] =
 #endif
   // and now the quality hash funcs, slowest first
   { tifuhash_64,          64, TIFU_VERIF, "tifuhash_64", "Tiny Floatingpoint Unique Hash with continued egyptian fractions", POOR },
+  { beamsplitter_64,      64, 0x1BDF358B, "beamsplitter","A possibly universal hash made with a 10x64 s-box.", GOOD },
   // different verif on gcc vs clang
   { floppsyhash_64,       64, 0x0,        "floppsyhash", "slow hash designed for floating point hardware", GOOD },
   { chaskey_test,         64, 0x81A90131, "chaskey",     "mouha.be/chaskey/ with added seed support", GOOD },
+  { siphash_test,         64, 0xC58D7F9C, "SipHash",     "SipHash 2-4 - SSSE3 optimized", GOOD },
+  { halfsiphash_test,     32, 0xA7A05F72, "HalfSipHash", "HalfSipHash 2-4, 32bit", GOOD },
+  { GoodOAAT_test,        32, 0x7B14EEE5, "GoodOAAT",    "Small non-multiplicative OAAT", GOOD },
 #ifdef HAVE_INT64
   { prvhash42_32test,     32, 0x45CC4691, "prvhash42_32", "prvhash42 32bit", GOOD },
   { prvhash42_64test,     64, 0x6F135869, "prvhash42_64", "prvhash42 64bit", GOOD },
   { prvhash42_128test,   128, 0xD87EB6ED, "prvhash42_128","prvhash42 128bit", GOOD },
 #endif
-  { siphash_test,         64, 0xC58D7F9C, "SipHash",     "SipHash 2-4 - SSSE3 optimized", GOOD },
-  { halfsiphash_test,     32, 0xA7A05F72, "HalfSipHash", "HalfSipHash 2-4, 32bit", GOOD },
-  { beamsplitter_64,      64, 0x1BDF358B, "beamsplitter","A possibly universal hash made with a 10x64 s-box.", GOOD },
-  { GoodOAAT_test,        32, 0x7B14EEE5, "GoodOAAT",    "Small non-multiplicative OAAT", GOOD },
   // as in rust and swift:
   { siphash13_test,       64, 0x29C010BF, "SipHash13",   "SipHash 1-3 - SSSE3 optimized", GOOD },
+#if defined(_MSC_VER) && defined(LTO)
+#  define BEBB4185_VERIF          0xB7013C8F
+#else
+#  define BEBB4185_VERIF          0xBEBB4185
+#endif
+  { BEBB4185_64,          64, BEBB4185_VERIF, "BEBB4185", "BEBB4185 64", GOOD },
 #ifndef _MSC_VER
   { tsip_test,            64, 0x8E48155B, "TSip",        "Damian Gryski's Tiny SipHash variant", GOOD },
 #ifdef HAVE_INT64
@@ -290,12 +296,6 @@ HashInfo g_hashes[] =
   { seahash32low,         32, 0x712F0EE8, "seahash32low","seahash - lower 32bit", GOOD },
 #endif /* HAVE_INT64 */
 #endif /* !MSVC */
-#if defined(_MSC_VER) && defined(LTO)
-#  define BEBB4185_VERIF          0xB7013C8F
-#else
-#  define BEBB4185_VERIF          0xBEBB4185
-#endif
-  { BEBB4185_64,          64, BEBB4185_VERIF, "BEBB4185", "BEBB4185 64", GOOD },
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { clhash_test,          64, 0x00000000, "clhash",      "carry-less mult. hash -DBITMIX (64-bit for x64, SSE4.2)", GOOD },
 #endif
@@ -545,7 +545,9 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
      { blake2b256_64,   1236.84 },
      { sha3_256,        3877.18 },
      { sha3_256_64,     3909.00 },
-     { tifuhash_64,     1679.52 }
+     { tifuhash_64,     1679.52 },
+     { floppsyhash_64,   450.93 },
+     { beamsplitter_64,  682.45 },
     };
     for (int i=0; i<sizeof(speeds)/sizeof(speeds[0]); i++) {
       if (speeds[i].h == hash)
