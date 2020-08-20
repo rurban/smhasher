@@ -277,9 +277,9 @@ HashInfo g_hashes[] =
   { halfsiphash_test,     32, 0xA7A05F72, "HalfSipHash", "HalfSipHash 2-4, 32bit", GOOD },
   { GoodOAAT_test,        32, 0x7B14EEE5, "GoodOAAT",    "Small non-multiplicative OAAT", GOOD },
 #ifdef HAVE_INT64
-  { prvhash42_32test,     32, 0x45CC4691, "prvhash42_32", "prvhash42 32bit", GOOD },
-  { prvhash42_64test,     64, 0x6F135869, "prvhash42_64", "prvhash42 64bit", GOOD },
-  { prvhash42_128test,   128, 0xD87EB6ED, "prvhash42_128","prvhash42 128bit", GOOD },
+  { prvhash42_32test,     32, 0x4DE40E4B, "prvhash42_32", "prvhash42 32bit", GOOD },
+  { prvhash42_64test,     64, 0x3A22A5C2, "prvhash42_64", "prvhash42 64bit", GOOD },
+  { prvhash42_128test,   128, 0x01D2C2DB, "prvhash42_128","prvhash42 128bit", GOOD },
 #endif
   // as in rust and swift:
   { siphash13_test,       64, 0x29C010BF, "SipHash13",   "SipHash 1-3 - SSSE3 optimized", GOOD },

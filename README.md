@@ -111,9 +111,10 @@ SMhasher
 | [HalfSipHash](doc/HalfSipHash.txt)            |       741.59 |   122.25 | 256.22 (20)| 700 | zeroes                     |
         |
 | [GoodOAAT](doc/GoodOAAT.txt)                  |      1052.90 |    70.80 | 208.00 (3) | 237 |                            |
-| [prvhash42_32](doc/prvhash42_32.txt)          |      1540.52 |    62.70 | 220.76 (7) | 157 |                            |
-| [prvhash42_64](doc/prvhash42_64.txt)          |      1306.99 |   115.43 | 250.09 (4) | 157 |                            |
-| [prvhash42_128](doc/prvhash42_128.txt)        |      1337.99 |   172.77 | 304.38 (3) | 157 | Combination low32  | [SipHash13](doc/SipHash13.txt)                |      1762.44 |   104.61 | 304.84 (17)| 778 | 0.9% bias                  |
+| [prvhash42_32](doc/prvhash42_32.txt)          |      1549.14 |    63.72 | 215.78 (5) | 157 |                            |
+| [prvhash42_64](doc/prvhash42_64.txt)          |      1315.64 |    98.11 | 254.29 (4) | 157 |                            |
+| [prvhash42_128](doc/prvhash42_128.txt)        |      1346.01 |   122.62 | 261.57 (4) | 157 | Combination low32          |
+| [SipHash13](doc/SipHash13.txt)                |      1762.44 |   104.61 | 304.84 (17)| 778 | 0.9% bias                  |
 | [BEBB4185](doc/BEBB4185.txt)                  |      2655.75 |   241.48 | 420.58 (7) |1294 | msvc-specific verification |
 | [TSip](doc/TSip.txt)                          |      3346.72 |    60.02 | 203.82 (5) | 519 | !msvc                      |
 | [seahash](doc/seahash.txt)                    |      4529.38 |    65.58 | 240.34 (7) | 871 | PerlinNoise, !msvc         |

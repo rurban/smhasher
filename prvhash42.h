@@ -31,7 +31,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * @version 2.10
+ * @version 2.11
  */
 
 //$ nocpp
@@ -47,7 +47,8 @@
  * hash of the specified message. This function applies endianness correction
  * automatically (on little- and big-endian processors).
  *
- * @param Msg Message to produce hash from. The alignment is unimportant.
+ * @param Msg Message to produce hash from. The alignment of message is
+ * unimportant.
  * @param MsgLen Message length, in bytes.
  * @param[out] Hash The resulting hash. If both InitLCG and InitSeed are
  * non-zero, the hash will not be initially reset to 0, and it should be
@@ -81,8 +82,8 @@ inline void prvhash42( const uint8_t* const Msg, const int MsgLen,
 
 	if( InitLCG == 0 && InitSeed == 0 )
 	{
-		lcg = 1899840123779380929ULL;
-		Seed = 3198392702252199417ULL ^ SeedXOR;
+		lcg = 15430973964284598734ULL;
+		Seed = 1691555508060032701ULL ^ SeedXOR;
 		memset( Hash, 0, HashLen );
 	}
 	else
@@ -91,8 +92,9 @@ inline void prvhash42( const uint8_t* const Msg, const int MsgLen,
 		Seed = InitSeed;
 	}
 
-	const int mlext = MsgLen + ( MsgLen < 4 ? 4 - MsgLen : 0 );
-	int c = mlext + HashLen * 3 - mlext % HashLen;
+	const uint8_t lb = ( MsgLen > 0 ? ~Msg[ MsgLen - 1 ] : 0xFF );
+	const int mlext = MsgLen + 4;
+	int c = mlext + HashLen + ( HashLen - mlext % HashLen );
 	int hpos = 0;
 	int k;
 
@@ -109,10 +111,10 @@ inline void prvhash42( const uint8_t* const Msg, const int MsgLen,
 		}
 		else
 		{
-			msgw = (uint64_t) ( k < MsgLen ? Msg[ k ] : 0x100 ) |
-				(uint64_t) ( k < MsgLen - 1 ? Msg[ k + 1 ] : 0x100 ) << 8 |
-				(uint64_t) ( k < MsgLen - 2 ? Msg[ k + 2 ] : 0x100 ) << 16 |
-				0x100000000ULL;
+			msgw = (uint32_t) ( k < MsgLen ? Msg[ k ] : lb ) |
+				(uint32_t) ( k < MsgLen - 1 ? Msg[ k + 1 ] : lb ) << 8 |
+				(uint32_t) ( k < MsgLen - 2 ? Msg[ k + 2 ] : lb ) << 16 |
+				(uint32_t) lb << 24;
 		}
 
 		Seed *= lcg;
