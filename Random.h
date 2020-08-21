@@ -71,18 +71,37 @@ struct Rand
 
   void rand_p ( void * blob, int bytes )
   {
-    uint32_t * blocks = reinterpret_cast<uint32_t*>(blob);
+    uint32_t * blocks;
+    int i;
+
+    // avoid ubsan, misaligned writes
+    if ((i = (uintptr_t)blob % 4)) {
+      uint8_t *pre = reinterpret_cast<uint8_t*>(blob);
+      uint32_t u = rand_u32();
+      switch (i) {
+      case 1:
+        *pre++ = u & 0xff; u >>= 8;
+      case 2:
+        *pre++ = u & 0xff; u >>= 8;
+      case 3:
+        *pre++ = u & 0xff;
+      default:
+        break;
+      }
+      blocks = reinterpret_cast<uint32_t*>(pre);
+    }
+    else
+      blocks = reinterpret_cast<uint32_t*>(blob);
 
     while(bytes >= 4)
     {
-      blocks[0] = rand_u32();
+      *blocks = rand_u32();
       blocks++;
       bytes -= 4;
     }
 
     uint8_t * tail = reinterpret_cast<uint8_t*>(blocks);
-
-    for(int i = 0; i < bytes; i++)
+    for (i = 0; i < bytes; i++)
     {
       tail[i] = (uint8_t)rand_u32();
     }
@@ -98,7 +117,26 @@ inline uint64_t rand_u64 ( void ) { return g_rand1.rand_u64(); }
 
 inline void rand_p ( void * blob, int bytes )
 {
-  uint32_t * blocks = (uint32_t*)blob;
+  uint32_t * blocks;
+  int i;
+  // avoid ubsan, misaligned writes
+  if ((i = (uintptr_t)blob % 4)) {
+    uint8_t *pre = reinterpret_cast<uint8_t*>(blob);
+    uint32_t u = rand_u32();
+    switch (i) {
+    case 1:
+      *pre++ = u & 0xff; u >>= 8;
+    case 2:
+      *pre++ = u & 0xff; u >>= 8;
+    case 3:
+      *pre++ = u & 0xff;
+    default:
+      break;
+    }
+    blocks = reinterpret_cast<uint32_t*>(pre);
+  }
+  else
+    blocks = reinterpret_cast<uint32_t*>(blob);
 
   while(bytes >= 4)
   {
@@ -107,8 +145,7 @@ inline void rand_p ( void * blob, int bytes )
   }
 
   uint8_t * tail = (uint8_t*)blocks;
-
-  for(int i = 0; i < bytes; i++)
+  for (i = 0; i < bytes; i++)
   {
     tail[i] = (uint8_t)rand_u32();
   }
