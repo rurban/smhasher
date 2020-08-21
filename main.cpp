@@ -359,6 +359,7 @@ HashInfo g_hashes[] =
   { SpookyHash32_test,    32, 0x3F798BBB, "Spooky32",    "Bob Jenkins' SpookyHash, 32-bit result", GOOD },
   { SpookyHash64_test,    64, 0xA7F955F1, "Spooky64",    "Bob Jenkins' SpookyHash, 64-bit result", GOOD },
   { SpookyHash128_test,  128, 0x8D263080, "Spooky128",   "Bob Jenkins' SpookyHash, 128-bit result", GOOD },
+  { pengyhash_test,       64, 0x326BD06B, "pengyhash",   "pengyhash", GOOD },
   { mx3hash64_test,       64, 0x4DB51E5B, "mx3",         "mx3 64bit", GOOD },
   { t1ha2_atonce_test,           64, 0x8F16C948, "t1ha2_atonce",    "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
   { t1ha2_stream_test,           64, 0xDED9B580, "t1ha2_stream",    "Fast Positive Hash (portable, aims 64-bit, little-endian)", POOR },
@@ -1648,7 +1649,7 @@ int main ( int argc, const char ** argv )
              "       [--test=Speed,...] hash\n");
       exit(1);
     }
-    // Not a command ? => interprested as hash name
+    // Not a command ? => interpreted as hash name
     hashToTest = arg;
   }
 

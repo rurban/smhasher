@@ -130,6 +130,7 @@ SMhasher
 | [mirhashstrict](doc/mirhashstrict.txt)        |      2217.70 |    65.39 | 175.38 (3) |1112 |                            |
 | [mirhashstrict32low](doc/mirhashstrict32low.txt)|    2217.87 |    64.72 | 188.44 (4) |1112 | MomentChi2 9               |
 | [mx3](doc/mx3.txt)                            |      6267.57 |    55.11 | 169.11 (1) | 734 | UB                         |
+| [pengyhash](doc/pengyhash.txt)                |      7838.56 |    93.35 | 253.15 (3) | 421 |                            |
 | [City32](doc/City32.txt)                      |      3833.52 |    52.97 | 211.69 (4) |1319 |                            |
 | [City64low](doc/City64low.txt)                |      9209.88 |    63.55 | 274.62 (17)|1120|                             |
 | [City128](doc/City128.txt)                    |      9747.33 |    77.22 | 269.02 (14)|1841 |                            |
@@ -184,6 +185,7 @@ So the fastest hash functions on x86_64 without quality problems are:
 - t1ha2_atonce
 - FarmHash (_not portable, too machine specific: 64 vs 32bit, old gcc, ..._)
 - Spooky32
+- pengyhash
 - mx3
 - MUM/mir (_different results on 32/64-bit archs_)
 - fasthash32
