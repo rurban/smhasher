@@ -104,16 +104,15 @@ SMhasher
 | [MeowHash32low](doc/MeowHash32low.txt)        |     17247.34 |    87.32 | 245.98 (3) |1764 | Sparse, machine-specific (x64 AES-NI.txt)    |
 | --------------------------------------        |              |          |            |     |                            |
 | [tifuhash_64](doc/tifuhash_64.txt)            |        35.60 |  1679.52 |1212.75 (15)| 276 | Cyclic low32               |
-| [beamsplitter](doc/beamsplitter.txt)          |       789.22 |   682.45 |1150.33 (26)|4203 | UB                 | [floppsyhash_64](doc/floppsyhash.txt)         |       191.95 |   450.93 | 821.11 (152)| 623 |                           |
-        |
+| [beamsplitter](doc/beamsplitter.txt)          |       789.22 |   682.45 |1150.33 (26)|4203 | UB                         |
+| [floppsyhash_64](doc/floppsyhash.txt)         |       191.95 |   450.93 | 821.11 (152)| 623 |                           |
 | [chaskey](doc/chaskey.txt)                    |       735.85 |   168.05 | 336.07 (4) |1609 | PerlinNoise                |
 | [SipHash](doc/SipHash.txt)                    |       958.78 |   141.84 | 278.15 (3) |1071 |                            |
 | [HalfSipHash](doc/HalfSipHash.txt)            |       741.59 |   122.25 | 256.22 (20)| 700 | zeroes                     |
-        |
 | [GoodOAAT](doc/GoodOAAT.txt)                  |      1052.90 |    70.80 | 208.00 (3) | 237 |                            |
 | [prvhash42_32](doc/prvhash42_32.txt)          |      1549.14 |    63.72 | 215.78 (5) | 157 |                            |
 | [prvhash42_64](doc/prvhash42_64.txt)          |      1315.64 |    98.11 | 254.29 (4) | 157 |                            |
-| [prvhash42_128](doc/prvhash42_128.txt)        |      1346.01 |   122.62 | 261.57 (4) | 157 | Combination low32          |
+| [prvhash42_128](doc/prvhash42_128.txt)        |      1346.01 |   122.62 | 261.57 (4) | 157 |                            |
 | [SipHash13](doc/SipHash13.txt)                |      1762.44 |   104.61 | 304.84 (17)| 778 | 0.9% bias                  |
 | [BEBB4185](doc/BEBB4185.txt)                  |      2655.75 |   241.48 | 420.58 (7) |1294 | msvc-specific verification |
 | [TSip](doc/TSip.txt)                          |      3346.72 |    60.02 | 203.82 (5) | 519 | !msvc                      |
