@@ -817,7 +817,6 @@ bool SeedTest ( pfHash hash, int keycount, bool drawDiagram )
   //----------
 
   std::vector<hashtype> hashes;
-
   hashes.resize(keycount);
 
   for(int i = 0; i < keycount; i++)
@@ -835,3 +834,62 @@ bool SeedTest ( pfHash hash, int keycount, bool drawDiagram )
 //-----------------------------------------------------------------------------
 
 void ReportCollisions ( pfHash hash );
+
+//-----------------------------------------------------------------------------
+// Keyset 'BitFreq' - Count bytes and check stddev
+
+template < typename hashtype >
+bool BitFreqTest ( pfHash hash, uint32_t seed, bool drawDiagram )
+{
+  bool result = true;
+
+  double counts[ 256 ] = { 0.0 };
+  const char * text = "The quick brown fox jumps over the lazy dog";
+  const int len = (int)strlen(text);
+  //----------
+
+  hashtype hashval;
+  hash(text,len,seed,&hashval);
+
+  memset (counts, 0, sizeof (counts));
+  for( int j = 0; j < sizeof(hashtype); j++ )
+  {
+    uint8_t b;
+    memcpy (&b, &hashval, 1);
+    counts[ b ]++;
+    hashval >>= 8;
+  }
+
+  double avg = 0.0;
+  for( int i = 0; i < 256; i++ )
+  {
+    avg += counts[ i ];
+  }
+  avg /= 256.0;
+
+  double devsq = 0.0;
+  for( int i = 0; i < 256; i++ )
+  {
+    const double d = counts[ i ] / avg - 1.0;
+    devsq += d * d;
+  }
+
+  devsq *= avg / 256.0;
+  double diff = fabs(devsq - 1.0);
+  if (diff > 0.4)
+  {
+    printf ("Bad seed %u: Expected stddev 1.0, actual %f",
+            (unsigned)seed, devsq);
+    if (diff > 1.0) {
+      printf ("  !!!!\n");
+      result = false;
+    }
+    else
+      printf ("\n");
+  }
+  else if (diff < 0.001)
+    printf ("Very good seed %u: stddev %f\n", (unsigned)seed, devsq);
+
+  //----------
+  return result;
+}
