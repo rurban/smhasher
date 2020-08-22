@@ -31,7 +31,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * @version 2.11
+ * @version 2.12
  */
 
 //$ nocpp
@@ -74,10 +74,11 @@ inline void prvhash42( const uint8_t* const Msg, const int MsgLen,
 {
 	uint64_t lcg; // Multiplier inspired by LCG. This is not a prime number.
 		// It is a random sequence of bits. This value can be regenerated at
-		// will, possibly using various statistical search methods. The best
-		// strategies: 1) Compose this number from 16-bit random values that
-		// have 6 to 10 random bits set; 2) Use a 64-bit random value that has
-		// 30-34 random bits set.
+		// will, possibly using various statistical search methods. Possible
+		// strategies: 1) Compose this number from 16-bit uniform random
+		// values that have 6 to 10 random bits set; 2) Use a 64-bit uniform
+		// random value that has 30-34 random bits set; 3) Use any 64-bit
+		// uniform random value.
 	uint64_t Seed; // Generated similarly to "lcg".
 
 	if( InitLCG == 0 && InitSeed == 0 )
@@ -119,10 +120,9 @@ inline void prvhash42( const uint8_t* const Msg, const int MsgLen,
 
 		Seed *= lcg;
 		uint32_t* const hc = (uint32_t*) &Hash[ hpos ];
-		const uint64_t ph = *hc;
-		const uint64_t ient = Seed >> 32;
-		*hc ^= (uint32_t) ient;
-		Seed ^= ph ^ ient ^ msgw;
+		const uint64_t ph = *hc ^ ( Seed >> 32 );
+		Seed ^= ph ^ msgw;
+		*hc = (uint32_t) ph;
 		lcg += Seed;
 
 		hpos += 4;
