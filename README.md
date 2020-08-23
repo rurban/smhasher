@@ -110,9 +110,12 @@ SMhasher
 | [SipHash](doc/SipHash.txt)                    |       958.78 |   141.84 | 278.15 (3) |1071 |                            |
 | [HalfSipHash](doc/HalfSipHash.txt)            |       741.59 |   122.25 | 256.22 (20)| 700 | zeroes                     |
 | [GoodOAAT](doc/GoodOAAT.txt)                  |      1052.90 |    70.80 | 208.00 (3) | 237 |                            |
-| [prvhash42_32](doc/prvhash42_32.txt)          |      1396.80 |    64.01 | 206.97 (4) | 507 |                            |
-| [prvhash42_64](doc/prvhash42_64.txt)          |      1401.30 |    97.27 | 244.86 (6) | 432 |                            |
-| [prvhash42_128](doc/prvhash42_128.txt)        |      1401.51 |   128.05 | 244.53 (4) | 442 |                            |
+| [prvhash42_32](doc/prvhash42_32.txt)          |      1396.74 |    64.18 | 207.99 (4) | 507 |                            |
+| [prvhash42_64](doc/prvhash42_64.txt)          |      1398.83 |    93.02 | 240.06 (2) | 432 |                            |
+| [prvhash42_128](doc/prvhash42_128.txt)        |      1402.56 |   123.75 | 251.45 (2) | 442 |                            |
+| [prvhash42s_32](doc/prvhash42s_32.txt)        |      6342.75 |   151.38 | 308.99 (4) |2574 |                            |
+| [prvhash42s_64](doc/prvhash42s_64.txt)        |      5296.35 |   182.18 | 349.43 (3) |2640 |                            |
+| [prvhash42s_128](doc/prvhash42s_128.txt)      |      5215.88 |   298.47 | 448.43 (2) |2653 |                            |
 | [SipHash13](doc/SipHash13.txt)                |      1762.44 |   104.61 | 304.84 (17)| 778 | 0.9% bias                  |
 | [BEBB4185](doc/BEBB4185.txt)                  |      2655.75 |   241.48 | 420.58 (7) |1294 | msvc-specific verification |
 | [TSip](doc/TSip.txt)                          |      3346.72 |    60.02 | 203.82 (5) | 519 | !msvc                      |

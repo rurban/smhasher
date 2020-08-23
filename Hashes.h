@@ -996,29 +996,60 @@ inline void aesnihash_test ( const void * key, int len, unsigned seed, void * ou
 }
 #endif
 
+#ifdef HAVE_INT64
 // https://github.com/avaneev/prvhash
 // objsize: 412860 - 412a5b: 507
 #include "prvhash42.h"
 inline void prvhash42_32test ( const void * key, int len, unsigned seed, void * out )
 {
   uint8_t hash[4] = {0};
-  prvhash42 ((const uint8_t *)key, len, hash, 4, (uint64_t)seed, 0, 0);
+  prvhash42 ((const uint8_t *)key, len, hash, 4, (uint64_t)seed, NULL);
   memcpy (out, hash, 4);
 }
 // objsize: 412a60 - 412c10: 432
 inline void prvhash42_64test ( const void * key, int len, unsigned seed, void * out )
 {
   uint8_t hash[8] = {0};
-  prvhash42 ((const uint8_t *)key, len, hash, 8, (uint64_t)seed, 0, 0);
+  prvhash42 ((const uint8_t *)key, len, hash, 8, (uint64_t)seed, NULL);
   memcpy (out, hash, 8);
 }
 // objsize: 412c10 - 412dca: 442
 inline void prvhash42_128test ( const void * key, int len, unsigned seed, void * out )
 {
   uint8_t hash[16] = {0};
-  prvhash42 ((const uint8_t *)key, len, hash, 16, (uint64_t)seed, 0, 0);
+  prvhash42 ((const uint8_t *)key, len, hash, 16, (uint64_t)seed, NULL);
   memcpy (out, hash, 16);
 }
+
+#include "prvhash42s.h"
+// objsize: 413820 - 41422e: 2574
+inline void prvhash42s_32test ( const void * key, int len, unsigned seed, void * out )
+{
+  PRVHASH42S_CTX ctx;
+  uint64_t SeedXOR[ 4 ] = { (uint64_t)seed, (uint64_t)seed, (uint64_t)seed, (uint64_t)seed };
+  prvhash42s_init( &ctx, (uint8_t* const)out, 4, SeedXOR, 0 );
+  prvhash42s_update( &ctx, (const uint8_t*)key, (size_t)len );
+  prvhash42s_final( &ctx );
+}
+// objsize: 412dd0 - 413820: 2640
+inline void prvhash42s_64test ( const void * key, int len, unsigned seed, void * out )
+{
+  PRVHASH42S_CTX ctx;
+  uint64_t SeedXOR[ 4 ] = { (uint64_t)seed, (uint64_t)seed, (uint64_t)seed, (uint64_t)seed };
+  prvhash42s_init( &ctx, (uint8_t* const)out, 8, SeedXOR, 0 );
+  prvhash42s_update( &ctx, (const uint8_t*)key, (size_t)len );
+  prvhash42s_final( &ctx );
+}
+// objsize: 414230 - 414c8d: 2653
+inline void prvhash42s_128test ( const void * key, int len, unsigned seed, void * out )
+{
+  PRVHASH42S_CTX ctx;
+  uint64_t SeedXOR[ 4 ] = { (uint64_t)seed, (uint64_t)seed, (uint64_t)seed, (uint64_t)seed };
+  prvhash42s_init( &ctx, (uint8_t* const)out, 16, SeedXOR, 0 );
+  prvhash42s_update( &ctx, (const uint8_t*)key, (size_t)len );
+  prvhash42s_final( &ctx );
+}
+#endif
 
 // objsize: 408dd0 - 4090ae: 734
 #include "mx3/mx3.h"

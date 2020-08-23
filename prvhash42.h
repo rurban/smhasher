@@ -31,7 +31,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * @version 2.12
+ * @version 2.14
  */
 
 //$ nocpp
@@ -41,56 +41,52 @@
 
 #include <stdint.h>
 #include <string.h>
+#include "prvhash42ec.h"
 
 /**
  * PRVHASH hash function (64-bit variables with 32-bit hash word). Produces
  * hash of the specified message. This function applies endianness correction
  * automatically (on little- and big-endian processors).
  *
- * @param Msg Message to produce hash from. The alignment of message is
- * unimportant.
- * @param MsgLen Message length, in bytes.
- * @param[out] Hash The resulting hash. If both InitLCG and InitSeed are
- * non-zero, the hash will not be initially reset to 0, and it should be
- * pre-initialized with random bytes. On systems where this is relevant, this
- * address should be aligned to 32 bits.
+ * @param Msg The message to produce hash from. The alignment of the message
+ * is unimportant.
+ * @param MsgLen Message's length, in bytes.
+ * @param[in,out] Hash The resulting hash. If InitVec is non-NULL, the hash
+ * will not be initially reset to 0, and it should be pre-initialized with
+ * uniformly random bytes (it will be automatically endianness-corrected). On
+ * systems where this is relevant, this address should be aligned to 32 bits.
  * @param HashLen The required hash length, in bytes, should be >= 4, in
  * increments of 4.
  * @param SeedXOR Optional value, to XOR the default seed with. To use the
- * default seed, set to 0. If both InitLCG and InitSeed are non-zero, this
- * SeedXOR is ignored and should be set to 0. Otherwise, the SeedXOR value
- * can have any bit length, and is used only as an additional entropy source.
- * @param InitLCG If both InitLCG and InitSeed are non-zero, both values
- * will be used as initial state of the hash function. Full 64-bit random
- * value should be supplied in this case. See the considerations below.
- * @param InitSeed If both InitLCG and InitSeed are non-zero, both values
- * will be used as initial state of the hash function. Full 64-bit random
- * value should be supplied in this case.
+ * default seed, set to 0. If InitVec is non-NULL, this SeedXOR is ignored and
+ * should be set to 0. Otherwise, the SeedXOR value can have any bit length,
+ * and is used only as an additional entropy source. It should be
+ * endianness-corrected.
+ * @param InitVec If non-NULL, an "initialization vector" for the internal
+ * "lcg" and "Seed" variables. Full 16-byte uniformly random value should be
+ * supplied in this case.
  */
 
 inline void prvhash42( const uint8_t* const Msg, const int MsgLen,
 	uint8_t* const Hash, const int HashLen, const uint64_t SeedXOR,
-	const uint64_t InitLCG, const uint64_t InitSeed )
+	const uint8_t InitVec[ 16 ])
 {
-	uint64_t lcg; // Multiplier inspired by LCG. This is not a prime number.
-		// It is a random sequence of bits. This value can be regenerated at
-		// will, possibly using various statistical search methods. Possible
-		// strategies: 1) Compose this number from 16-bit uniform random
-		// values that have 6 to 10 random bits set; 2) Use a 64-bit uniform
-		// random value that has 30-34 random bits set; 3) Use any 64-bit
-		// uniform random value.
-	uint64_t Seed; // Generated similarly to "lcg".
+	uint64_t lcg;
+	uint64_t Seed;
 
-	if( InitLCG == 0 && InitSeed == 0 )
+	if( InitVec == 0 )
 	{
+		memset( Hash, 0, HashLen );
+
 		lcg = 15430973964284598734ULL;
 		Seed = 1691555508060032701ULL ^ SeedXOR;
-		memset( Hash, 0, HashLen );
 	}
 	else
 	{
-		lcg = InitLCG;
-		Seed = InitSeed;
+		prvhash42_ec( Hash, HashLen );
+
+		lcg = prvhash42_u64ec( InitVec );
+		Seed = prvhash42_u64ec( InitVec + 8 );
 	}
 
 	const uint8_t lb = ( MsgLen > 0 ? ~Msg[ MsgLen - 1 ] : 0xFF );
@@ -133,20 +129,7 @@ inline void prvhash42( const uint8_t* const Msg, const int MsgLen,
 		}
 	}
 
-	int e = 1;
-
-	if( *(uint8_t*) &e == 0 )
-	{
-		for( k = 0; k < HashLen; k += 4 )
-		{
-			const uint8_t h0 = Hash[ k + 0 ];
-			const uint8_t h1 = Hash[ k + 1 ];
-			Hash[ k + 0 ] = Hash[ k + 3 ];
-			Hash[ k + 1 ] = Hash[ k + 2 ];
-			Hash[ k + 2 ] = h1;
-			Hash[ k + 3 ] = h0;
-		}
-	}
+	prvhash42_ec( Hash, HashLen );
 }
 
 #endif // PRVHASH42_INCLUDED
