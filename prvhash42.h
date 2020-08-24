@@ -31,7 +31,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * @version 2.14
+ * @version 2.15
  */
 
 //$ nocpp
@@ -39,7 +39,6 @@
 #ifndef PRVHASH42_INCLUDED
 #define PRVHASH42_INCLUDED
 
-#include <stdint.h>
 #include <string.h>
 #include "prvhash42ec.h"
 
@@ -89,9 +88,9 @@ inline void prvhash42( const uint8_t* const Msg, const int MsgLen,
 		Seed = prvhash42_u64ec( InitVec + 8 );
 	}
 
-	const uint8_t lb = ( MsgLen > 0 ? ~Msg[ MsgLen - 1 ] : 0xFF );
+	const uint8_t lb = (uint8_t) ( MsgLen > 0 ? ~Msg[ MsgLen - 1 ] : 0xFF );
 	const int mlext = MsgLen + 4;
-	int c = mlext + HashLen + ( HashLen - mlext % HashLen );
+	const int c = mlext + HashLen + ( HashLen - mlext % HashLen );
 	int hpos = 0;
 	int k;
 
@@ -101,10 +100,7 @@ inline void prvhash42( const uint8_t* const Msg, const int MsgLen,
 
 		if( k < MsgLen - 3 )
 		{
-			msgw = (uint32_t) Msg[ k ] |
-				(uint32_t) Msg[ k + 1 ] << 8 |
-				(uint32_t) Msg[ k + 2 ] << 16 |
-				(uint32_t) Msg[ k + 3 ] << 24;
+			msgw = prvhash42_u32ec( Msg + k );
 		}
 		else
 		{

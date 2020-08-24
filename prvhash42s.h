@@ -33,7 +33,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * @version 2.14
+ * @version 2.15
  */
 
 //$ nocpp
@@ -41,11 +41,10 @@
 #ifndef PRVHASH42S_INCLUDED
 #define PRVHASH42S_INCLUDED
 
-#include <stdint.h>
 #include <string.h>
 #include "prvhash42ec.h"
 
-#define PRVHASH42S_LEN 32 // Intermediate block length, in bytes.
+#define PRVHASH42S_LEN 32 // Intermediate block's length, in bytes.
 
 /**
  * The context structure of the "prvhash42s_X" functions.
@@ -142,7 +141,7 @@ inline void prvhash42s_init( PRVHASH42S_CTX* ctx, uint8_t* const Hash,
 	ctx -> Hash = Hash;
 	ctx -> HashLen = HashLen;
 	ctx -> HashPos = 0;
-	ctx -> fb = 0xFF;
+	ctx -> fb = (uint8_t) 0xFF;
 }
 
 /**
@@ -165,7 +164,7 @@ inline void prvhash42s_update( PRVHASH42S_CTX* ctx, const uint8_t* Msg,
 		return;
 	}
 
-	ctx -> fb = ~Msg[ MsgLen - 1 ];
+	ctx -> fb = (uint8_t) ~Msg[ MsgLen - 1 ];
 
 	uint64_t lcg1 = ctx -> lcg[ 0 ];
 	uint64_t lcg2 = ctx -> lcg[ 1 ];
@@ -204,44 +203,32 @@ inline void prvhash42s_update( PRVHASH42S_CTX* ctx, const uint8_t* Msg,
 			MsgLen -= PRVHASH42S_LEN;
 		}
 
-		msgw = (uint32_t) MsgBlock[ 0 ] | (uint32_t) MsgBlock[ 1 ] << 8 |
-			(uint32_t) MsgBlock[ 2 ] << 16 | (uint32_t) MsgBlock[ 3 ] << 24;
-
-		msgw2 = (uint32_t) MsgBlock[ 16 ] | (uint32_t) MsgBlock[ 17 ] << 8 |
-			(uint32_t) MsgBlock[ 18 ] << 16 | (uint32_t) MsgBlock[ 19 ] << 24;
+		msgw = prvhash42_u32ec( MsgBlock + 16 );
+		msgw2 = prvhash42_u32ec( MsgBlock + 0 );
 
 		Seed1 *= lcg1;
 		uint64_t ph = *hc ^ ( Seed1 >> 32 );
 		Seed1 ^= ph ^ msgw;
 		lcg1 += Seed1 + msgw2;
 
-		msgw = (uint32_t) MsgBlock[ 4 ] | (uint32_t) MsgBlock[ 5 ] << 8 |
-			(uint32_t) MsgBlock[ 6 ] << 16 | (uint32_t) MsgBlock[ 7 ] << 24;
-
-		msgw2 = (uint32_t) MsgBlock[ 20 ] | (uint32_t) MsgBlock[ 21 ] << 8 |
-			(uint32_t) MsgBlock[ 22 ] << 16 | (uint32_t) MsgBlock[ 23 ] << 24;
+		msgw = prvhash42_u32ec( MsgBlock + 24 );
+		msgw2 = prvhash42_u32ec( MsgBlock + 8 );
 
 		Seed2 *= lcg2;
 		ph ^= Seed2 >> 32;
 		Seed2 ^= ph ^ msgw;
 		lcg2 += Seed2 + msgw2;
 
-		msgw = (uint32_t) MsgBlock[ 8 ] | (uint32_t) MsgBlock[ 9 ] << 8 |
-			(uint32_t) MsgBlock[ 10 ] << 16 | (uint32_t) MsgBlock[ 11 ] << 24;
-
-		msgw2 = (uint32_t) MsgBlock[ 24 ] | (uint32_t) MsgBlock[ 25 ] << 8 |
-			(uint32_t) MsgBlock[ 26 ] << 16 | (uint32_t) MsgBlock[ 27 ] << 24;
+		msgw = prvhash42_u32ec( MsgBlock + 20 );
+		msgw2 = prvhash42_u32ec( MsgBlock + 4 );
 
 		Seed3 *= lcg3;
 		ph ^= Seed3 >> 32;
 		Seed3 ^= ph ^ msgw;
 		lcg3 += Seed3 + msgw2;
 
-		msgw = (uint32_t) MsgBlock[ 12 ] | (uint32_t) MsgBlock[ 13 ] << 8 |
-			(uint32_t) MsgBlock[ 14 ] << 16 | (uint32_t) MsgBlock[ 15 ] << 24;
-
-		msgw2 = (uint32_t) MsgBlock[ 28 ] | (uint32_t) MsgBlock[ 29 ] << 8 |
-			(uint32_t) MsgBlock[ 30 ] << 16 | (uint32_t) MsgBlock[ 31 ] << 24;
+		msgw = prvhash42_u32ec( MsgBlock + 28 );
+		msgw2 = prvhash42_u32ec( MsgBlock + 12 );
 
 		Seed4 *= lcg4;
 		ph ^= Seed4 >> 32;

@@ -32,7 +32,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * @version 2.14
+ * @version 2.15
  */
 
 //$ nocpp
@@ -42,48 +42,117 @@
 
 #include <stdint.h>
 
-/**
- * This function corrects (inverses) endianness of the specified hash value.
- *
- * @param[in,out] Hash The hash to correct endianness of.
- * @param HashLen The required hash length, in bytes, should be >= 4, in
- * increments of 4.
- */
+#if defined( _WIN32 ) || defined( __LITTLE_ENDIAN__ ) || ( defined( __BYTE_ORDER__ ) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__ )
+	#define PRVHASH42_LITTLE_ENDIAN 1
+#elif defined( __BIG_ENDIAN__ ) || ( defined( __BYTE_ORDER__ ) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__ )
+	#define PRVHASH42_LITTLE_ENDIAN 0
+#else
+	#error PRVHASH42: cannot obtain endianness
+#endif
 
-inline void prvhash42_ec( uint8_t* const Hash, const int HashLen )
-{
-	int e = 1;
-
-	if( *(uint8_t*) &e == 0 )
-	{
-		int k;
-
-		for( k = 0; k < HashLen; k += 4 )
-		{
-			const uint8_t h0 = Hash[ k + 0 ];
-			const uint8_t h1 = Hash[ k + 1 ];
-			Hash[ k + 0 ] = Hash[ k + 3 ];
-			Hash[ k + 1 ] = Hash[ k + 2 ];
-			Hash[ k + 2 ] = h1;
-			Hash[ k + 3 ] = h0;
-		}
-	}
-}
+#if PRVHASH42_LITTLE_ENDIAN
 
 /**
  * An auxiliary function that returns an unsigned 64-bit value created out of
  * individual bytes in a buffer. This function is used to preserve endianness
- * of supplied 64-bit unsigned "initialization vector" values.
+ * of supplied 64-bit unsigned values.
  *
- * @param Buf 8-byte buffer.
+ * @param p 8-byte buffer. Alignment is unimportant.
  */
 
-inline uint64_t prvhash42_u64ec( const uint8_t* const Buf )
+inline uint64_t prvhash42_u64ec( const uint8_t* const p )
 {
-	return( (uint64_t) Buf[ 0 ] | (uint64_t) Buf[ 1 ] << 8 |
-		(uint64_t) Buf[ 2 ] << 16 | (uint64_t) Buf[ 3 ] << 24 |
-		(uint64_t) Buf[ 4 ] << 32 | (uint64_t) Buf[ 5 ] << 40 |
-		(uint64_t) Buf[ 6 ] << 48 | (uint64_t) Buf[ 7 ] << 56 );
+	uint64_t v;
+	memcpy( &v, p, 8 );
+
+	return( v );
 }
+
+/**
+ * An auxiliary function that returns an unsigned 32-bit value created out of
+ * individual bytes in a buffer. This function is used to preserve endianness
+ * of supplied 32-bit unsigned values.
+ *
+ * @param p 4-byte buffer. Alignment is unimportant.
+ */
+
+inline uint32_t prvhash42_u32ec( const uint8_t* const p )
+{
+	uint32_t v;
+	memcpy( &v, p, 4 );
+
+	return( v );
+}
+
+#else // PRVHASH42_LITTLE_ENDIAN
+
+#if defined( __GNUC__ ) || defined( __INTEL_COMPILER ) || defined( __clang__ )
+
+inline uint64_t prvhash42_u64ec( const uint8_t* const p )
+{
+	uint64_t v;
+	memcpy( &v, p, 8 );
+
+	return( __builtin_bswap64( v ));
+}
+
+inline uint32_t prvhash42_u32ec( const uint8_t* const p )
+{
+	uint32_t v;
+	memcpy( &v, p, 4 );
+
+	return( __builtin_bswap32( v ));
+}
+
+#elif defined( _MSC_VER )
+
+inline uint64_t prvhash42_u64ec( const uint8_t* const p )
+{
+	uint64_t v;
+	memcpy( &v, p, 8 );
+
+	return( _byteswap_uint64( v ));
+}
+
+inline uint32_t prvhash42_u32ec( const uint8_t* const p )
+{
+	uint32_t v;
+	memcpy( &v, p, 4 );
+
+	return( _byteswap_ulong( v ));
+}
+
+#endif // defined( _MSC_VER )
+
+#endif // PRVHASH42_LITTLE_ENDIAN
+
+#if PRVHASH42_LITTLE_ENDIAN
+
+/**
+ * This function corrects (inverses) endianness of the specified hash value.
+ *
+ * @param[in,out] Hash The hash to correct endianness of. On systems where
+ * this is relevant, this address should be aligned to 32 bits.
+ * @param HashLen The required hash length, in bytes, should be >= 4, in
+ * increments of 4. 
+ */
+
+inline void prvhash42_ec( uint8_t* const, const int )
+{
+}
+
+#else // PRVHASH42_LITTLE_ENDIAN
+
+inline void prvhash42_ec( uint8_t* const Hash, const int HashLen )
+{
+	int k;
+
+	for( k = 0; k < HashLen; k += 4 )
+	{
+		*(uint32_t*) ( Hash + k ) = prvhash42_u32ec( Hash + k );
+	}
+}
+
+#endif // PRVHASH42_LITTLE_ENDIAN
 
 #endif // PRVHASH42EC_INCLUDED

@@ -280,9 +280,9 @@ HashInfo g_hashes[] =
   { prvhash42_32test,     32, 0x4DE40E4B, "prvhash42_32", "prvhash42 32bit", GOOD },
   { prvhash42_64test,     64, 0x3A22A5C2, "prvhash42_64", "prvhash42 64bit", GOOD },
   { prvhash42_128test,   128, 0x01D2C2DB, "prvhash42_128","prvhash42 128bit", GOOD },
-  { prvhash42s_32test,    32, 0xFB5A8CF4, "prvhash42s_32","prvhash42s 32bit", GOOD },
-  { prvhash42s_64test,    64, 0x4754CC74, "prvhash42s_64","prvhash42s 64bit", GOOD },
-  { prvhash42s_128test,  128, 0x1F5E41D2, "prvhash42s_128","prvhash42s 128bit", GOOD },
+  { prvhash42s_32test,    32, 0x29B2F8CE, "prvhash42s_32","prvhash42s 32bit", GOOD },
+  { prvhash42s_64test,    64, 0xAC32CE71, "prvhash42s_64","prvhash42s 64bit", GOOD },
+  { prvhash42s_128test,  128, 0x43867AE2, "prvhash42s_128","prvhash42s 128bit", GOOD },
 #endif
   // as in rust and swift:
   { siphash13_test,       64, 0x29C010BF, "SipHash13",   "SipHash 1-3 - SSSE3 optimized", GOOD },
