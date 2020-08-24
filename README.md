@@ -47,12 +47,12 @@ SMhasher
 | [crc32_hw](doc/crc32_hw.txt)                  |      6330.28 |    29.68 | 173.40 (5) | 653 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2) |
 | [crc32_hw1](doc/crc32_hw1.txt)                |     23028.02 |    35.36 | 179.06 (2) | 671 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2) |
 | [crc64_hw](doc/crc64_hw.txt)                  |      8439.94 |    29.25 | 140.24 (2) | 652 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x64 SSE4.2) |
-| [crc32_pclmul](doc/crc32_pclmul.txt)          |   1993401.62 |     8.01 | -| 481 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2+PCLMUL) |
+| [crc32_pclmul](doc/crc32_pclmul.txt)          |   1993401.62 |     8.01 |    -       | 481 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2+PCLMUL) |
 | [o1hash](doc/o1hash.txt)                      |  13646953.39 |    17.35 | 153.63 (1) | 101 | insecure, zeros, fails all tests |
 | [fibonacci](doc/fibonacci.txt)                |     11344.83 |    27.01 | 745.72 (2) |1692 | UB, zeros, fails all tests       |
 | [FNV1a](doc/FNV1a.txt)                        |       791.82 |    69.29 | 190.41 (2) | 204 | zeros, fails all tests       |
 | [FNV1A_Totenschiff](doc/FNV1A_Totenschiff.txt)|      6258.32 |    36.37 | 187.63 (4) | 270 | UB, zeros, fails all tests   |
-| [FNV1A_Pippip_Yurii](doc/FNV1A_Pippip_Yurii.txt)|      6258.64 |    36.87 | 184.57 (1) | 147 | UB, sanity, fails all tests  |
+| [FNV1A_Pippip_Yurii](doc/FNV1A_Pippip_Yurii.txt)|    6258.64 |    36.87 | 184.57 (1) | 147 | UB, sanity, fails all tests  |
 | [FNV1a_YT](doc/FNV1a_YT.txt)                  |      9627.47 |    27.99 | 188.26 (3) | 321 | UB, fails all tests          |
 | [FNV2](doc/FNV2.txt)                          |      6257.76 |    37.94 | 152.46 (1) | 278 | UB, fails all tests          |
 | [FNV64](doc/FNV64.txt)                        |       791.82 |    69.30 | 166.63 (2) |  79 | fails all tests              |
@@ -105,7 +105,7 @@ SMhasher
 | --------------------------------------        |              |          |            |     |                            |
 | [tifuhash_64](doc/tifuhash_64.txt)            |        35.60 |  1679.52 |1212.75 (15)| 276 | Cyclic low32               |
 | [beamsplitter](doc/beamsplitter.txt)          |       789.22 |   682.45 |1150.33 (26)|4203 | UB                         |
-| [floppsyhash](doc/floppsyhash.txt)            |        35.72 |  1868.92 | 1411.07 (7) | 623 |                           |
+| [floppsyhash](doc/floppsyhash.txt)            |        35.72 |  1868.92 |1411.07 (7) | 623 |                           |
 | [chaskey](doc/chaskey.txt)                    |       753.28 |   151.11 | 289.32 (3) |1609 | PerlinNoise                |
 | [SipHash](doc/SipHash.txt)                    |       980.83 |   133.39 | 236.15 (3) |1071 |                            |
 | [HalfSipHash](doc/HalfSipHash.txt)            |       755.69 |   114.06 | 232.89 (3) | 700 | zeroes                     |
@@ -131,7 +131,7 @@ SMhasher
 | [mirhash](doc/mirhash.txt)                    |      5412.29 |    42.77 | 162.87 (2) |1112 | UB, LongNeighbors, machine-specific (32/64 differs) |
 | [mirhash32low](doc/mirhash32low.txt)          |      5415.48 |    42.73 | 180.08 (1) |1112 | UB, Cyclic, LongNeighbors, machine-specific (32/64 differs) |
 | [mirhashstrict](doc/mirhashstrict.txt)        |      2217.39 |    64.91 | 178.74 (2) |1112 |                            |
-| [mirhashstrict32low](doc/mirhashstrict32low.txt)|      2219.08 |    64.91 | 198.50 (1) |1112 | MomentChi2 9               |
+| [mirhashstrict32low](doc/mirhashstrict32low.txt)|    2219.08 |    64.91 | 198.50 (1) |1112 | MomentChi2 9               |
 | [mx3](doc/mx3.txt)                            |      6152.73 |    55.32 | 178.00 (3) | 734 | UB                         |
 | [pengyhash](doc/pengyhash.txt)                |      7146.53 |    92.22 | 243.13 (4) | 421 |                            |
 | [City32](doc/City32.txt)                      |      3676.34 |    53.75 | 199.72 (2) |1319 |                            |
