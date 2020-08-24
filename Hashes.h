@@ -998,7 +998,7 @@ inline void aesnihash_test ( const void * key, int len, unsigned seed, void * ou
 
 #ifdef HAVE_INT64
 // https://github.com/avaneev/prvhash
-// objsize: 412860 - 412a5b: 507
+// objsize: 4129f0 - 412bcc: 476
 #include "prvhash42.h"
 inline void prvhash42_32test ( const void * key, int len, unsigned seed, void * out )
 {
@@ -1006,14 +1006,14 @@ inline void prvhash42_32test ( const void * key, int len, unsigned seed, void * 
   prvhash42 ((const uint8_t *)key, len, hash, 4, (uint64_t)seed, NULL);
   memcpy (out, hash, 4);
 }
-// objsize: 412a60 - 412c10: 432
+// objsize: 412850 - 4129ea: 960
 inline void prvhash42_64test ( const void * key, int len, unsigned seed, void * out )
 {
   uint8_t hash[8] = {0};
   prvhash42 ((const uint8_t *)key, len, hash, 8, (uint64_t)seed, NULL);
   memcpy (out, hash, 8);
 }
-// objsize: 412c10 - 412dca: 442
+// objsize: 412bd0 - 412d80: 432
 inline void prvhash42_128test ( const void * key, int len, unsigned seed, void * out )
 {
   uint8_t hash[16] = {0};
@@ -1022,7 +1022,7 @@ inline void prvhash42_128test ( const void * key, int len, unsigned seed, void *
 }
 
 #include "prvhash42s.h"
-// objsize: 413820 - 41422e: 2574
+// objsize: 4137e0 - 4141ee: 2574
 inline void prvhash42s_32test ( const void * key, int len, unsigned seed, void * out )
 {
   PRVHASH42S_CTX ctx;
@@ -1031,7 +1031,7 @@ inline void prvhash42s_32test ( const void * key, int len, unsigned seed, void *
   prvhash42s_update( &ctx, (const uint8_t*)key, (size_t)len );
   prvhash42s_final( &ctx );
 }
-// objsize: 412dd0 - 413820: 2640
+// objsize: 4141f0 - 414c3d: 2637
 inline void prvhash42s_64test ( const void * key, int len, unsigned seed, void * out )
 {
   PRVHASH42S_CTX ctx;
@@ -1040,7 +1040,7 @@ inline void prvhash42s_64test ( const void * key, int len, unsigned seed, void *
   prvhash42s_update( &ctx, (const uint8_t*)key, (size_t)len );
   prvhash42s_final( &ctx );
 }
-// objsize: 414230 - 414c8d: 2653
+// objsize: 414230 - 4137dd: 2653
 inline void prvhash42s_128test ( const void * key, int len, unsigned seed, void * out )
 {
   PRVHASH42S_CTX ctx;
