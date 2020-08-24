@@ -54,7 +54,7 @@ SMhasher
 | [FNV1A_Totenschiff](doc/FNV1A_Totenschiff.txt)|      6258.32 |    36.37 | 187.63 (4) | 270 | UB, zeros, fails all tests   |
 | [FNV1A_Pippip_Yurii](doc/FNV1A_Pippip_Yurii.txt)|    6258.64 |    36.87 | 184.57 (1) | 147 | UB, sanity, fails all tests  |
 | [FNV1a_YT](doc/FNV1a_YT.txt)                  |      9627.47 |    27.99 | 188.26 (3) | 321 | UB, fails all tests          |
-| [FNV2](doc/FNV2.txt)                          |      6257.76 |    37.94 | 152.46 (1) | 278 | UB, fails all tests          |
+| [FNV2](doc/FNV2.txt)                          |      6330.75 |    37.95 | 162.60 (3) | 278 | fails all tests              |
 | [FNV64](doc/FNV64.txt)                        |       791.82 |    69.30 | 166.63 (2) |  79 | fails all tests              |
 | [fletcher2](doc/fletcher2.txt)                |     11996.71 |    26.28 | 308.36 (2) | 248 | UB, fails all tests          |
 | [fletcher4](doc/fletcher4.txt)                |     11982.16 |    26.29 | 307.61 (2) | 371 | UB, fails all tests          |
@@ -338,10 +338,10 @@ Typical undefined behaviour (**UB**) problems:
   more.  On some old RISC hardware this will be a BUS error, you can
   even let Intel HW generate such a bus error by setting some CPU
   flag. But generally using misaligned accesses is fine.
-  
+
   These are: mx3, Spooky, mirhash (_but not strict_), MUM, fasthash,
   Murmur3*, Murmur2*, metrohash* (all but cmetro*), Crap8, discohash,
-  beamsplitter, lookup3, fletcher4, fletcher2, FNV2, all sanmayce
+  beamsplitter, lookup3, fletcher4, fletcher2, all sanmayce
   FNV1a\_ variants (FNV1a\_YT, FNV1A\_Pippip\_Yurii,
   FNV1A\_Totenschiff, ...), fibonacci.
 

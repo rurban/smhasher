@@ -128,14 +128,61 @@ fibonacci(const char *key, int len, uint32_t seed)
 size_t
 FNV2(const char *key, int len, size_t seed)
 {
-  size_t h = seed;
+  size_t h;
   size_t *dw = (size_t *)key; //word stepper
   const size_t *const endw = &((const size_t*)key)[len/sizeof(size_t)];
+  int i;
+
 #ifdef HAVE_BIT32
-  h ^= UINT32_C(2166136261);
+  h = seed ^ UINT32_C(2166136261);
 #else
-  h ^= UINT64_C(0xcbf29ce484222325);
+  h = seed ^ UINT64_C(0xcbf29ce484222325);
 #endif
+  // avoid ubsan, misaligned writes
+  if ((i = (uintptr_t)dw % sizeof (size_t))) {
+    uint8_t *dc = (uint8_t*)key;
+    switch (i) {
+    case 1:
+      h ^= *dc++;
+#ifdef HAVE_BIT32
+      h *= UINT32_C(16777619);
+#else
+      h *= UINT64_C(0x100000001b3);
+#endif
+    case 2:
+      h ^= *dc++;
+#ifdef HAVE_BIT32
+      h *= UINT32_C(16777619);
+#else
+      h *= UINT64_C(0x100000001b3);
+#endif
+    case 3:
+      h ^= *dc++;
+#ifdef HAVE_BIT32
+      h *= UINT32_C(16777619);
+#else
+      h *= UINT64_C(0x100000001b3);
+#endif
+#ifndef HAVE_BIT32
+    case 4:
+      h ^= *dc++;
+      h *= UINT64_C(0x100000001b3);
+    case 5:
+      h ^= *dc++;
+      h *= UINT64_C(0x100000001b3);
+    case 6:
+      h ^= *dc++;
+      h *= UINT64_C(0x100000001b3);
+    case 7:
+      h ^= *dc++;
+      h *= UINT64_C(0x100000001b3);
+#endif
+    default:
+      break;
+    }
+    dw = (size_t*)dc; //word stepper
+  }
+
   while (dw < endw) {
     h ^= *dw++;
 #ifdef HAVE_BIT32
