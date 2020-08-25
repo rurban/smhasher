@@ -167,6 +167,10 @@ SMhasher
 | [wyhash32](doc/wyhash32.txt)                  |      2532.89 |    48.40 | 484.57 (1) | 410 | 32-bit                     |
 | [wyhash32low](doc/wyhash32low.txt)            |     11920.73 |    32.92 | 183.61 (2) | 922 |                            |
 | [wyhash](doc/wyhash.txt)                      |     12195.62 |    32.91 | 178.14 (2) | 938 |                            |
+| [umash32](doc/umash32.txt)                    |     10936.31 |  4577.92 | 5073.33 (36)|1435 |                            |
+| [umash32_hi](doc/umash32_hi.txt)              |     11436.78 |  4587.79 | 5241.13 (186)|1435 |                            |
+| [umash64](doc/umash64.txt)                    |     12183.70 |  4766.37 | 178.14 (2)|1435 |                            |
+| [umash128](doc/umash128.txt)                  |      5574.96 |  4481.83 | 178.14 (2)|1435 |                            |
 
 The [sortable table variant](http://rurban.github.io/smhasher/doc/table.html)
 

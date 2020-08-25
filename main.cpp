@@ -364,6 +364,13 @@ HashInfo g_hashes[] =
   { SpookyHash128_test,  128, 0x8D263080, "Spooky128",   "Bob Jenkins' SpookyHash, 128-bit result", GOOD },
   { pengyhash_test,       64, 0x326BD06B, "pengyhash",   "pengyhash", GOOD },
   { mx3hash64_test,       64, 0x4DB51E5B, "mx3",         "mx3 64bit", GOOD },
+#if defined(__SSE4_2__) && defined(__x86_64__)
+  { umash32_test,         32, 0x03E16CA1, "umash32",     "umash 32", GOOD },
+  { umash32hi_test,       32, 0xE29D613C, "umash32_hi",  "umash 32 hi", GOOD },
+  { umash64_test,         64, 0xE06574A4, "umash64",     "umash 64", GOOD },
+  { umash128_test,       128, 0xDA4E82B6, "umash128",    "umash 128", GOOD },
+#endif
+  
   { t1ha2_atonce_test,           64, 0x8F16C948, "t1ha2_atonce",    "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
   { t1ha2_stream_test,           64, 0xDED9B580, "t1ha2_stream",    "Fast Positive Hash (portable, aims 64-bit, little-endian)", POOR },
   { t1ha2_atonce128_test,       128, 0xB44C43A1, "t1ha2_atonce128", "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },

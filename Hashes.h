@@ -1064,3 +1064,36 @@ extern "C" {
 inline void pengyhash_test ( const void * key, int len, uint32_t seed, void * out ) {
   *(uint64_t*)out = pengyhash (key, (size_t) len, seed);
 }
+
+// requires modern builtins, like __builtin_uaddll_overflow
+#if defined(__SSE4_2__) && defined(__x86_64__)
+#include "umash.h"
+// objsize: 
+inline void umash32_test ( const void * key, int len, uint32_t seed, void * out ) {
+  struct umash_params params;
+  umash_params_derive (&params, (uint64_t)seed, NULL);
+  *(uint32_t*)out = umash_full (&params, (uint64_t)seed, 0, key, (size_t)len);
+}
+inline void umash32hi_test ( const void * key, int len, uint32_t seed, void * out ) {
+  struct umash_params params;
+  union {
+    uint64_t d;
+    uint32_t s[2];
+  } ret;
+  umash_params_derive (&params, (uint64_t)seed, NULL);
+  ret.d = umash_full (&params, (uint64_t)seed, 0, key, (size_t)len);
+  memcpy (out, &ret.s[1], 4);
+}
+inline void umash64_test ( const void * key, int len, uint32_t seed, void * out ) {
+  struct umash_params params;
+  umash_params_derive (&params, (uint64_t)seed, key);
+  *(uint64_t*)out = umash_full (&params, (uint64_t)seed, 0, key, (size_t)len);
+}
+inline void umash128_test ( const void * key, int len, uint32_t seed, void * out ) {
+  struct umash_params params;
+  struct umash_fp fp;
+  umash_params_derive (&params, (uint64_t)seed, NULL);
+  fp = umash_fprint (&params, (uint64_t)seed, key, (size_t)len);
+  memcpy (out, &fp, 16);
+}
+#endif

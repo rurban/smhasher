@@ -486,7 +486,8 @@ add_library(SMHasherSupport STATIC
   vmac.cpp
   rijndael-alg-fst.c
   ${BLAKE3_SRC}
-  pengyhash
+  pengyhash.c
+  umash.c
 )
 
 add_executable(
