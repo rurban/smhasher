@@ -461,6 +461,7 @@ inline void t1ha0_ia32aes_avx2_test(const void * key, int len, uint32_t seed, vo
 #if defined(__SSE4_2__) && defined(__x86_64__)
 #include "clhash.h"
 void clhash_init();
+void clhash_seed_init(size_t seed);
 void clhash_test (const void * key, int len, uint32_t seed, void * out);
 #endif
 
@@ -538,23 +539,24 @@ inline void seahash32low (const void *key, int len, uint32_t seed, void *out) {
 // Cryptographic hashes
 
 #include "md5.h"
+
 inline void md5_128(const void *key, int len, uint32_t seed, void *out) {
-  md5_context ctx;
-  md5_starts( &ctx );
-  ctx.state[0] ^= seed;
-  md5_update( &ctx, (unsigned char *)key, len );
-  md5_finish( &ctx, (unsigned char *)out );
-  //memset( &ctx.buffer, 0, 64+64+64 ); // for buffer, ipad, opad
+  md5_context md5_ctx;
+  md5_starts( &md5_ctx );
+  md5_ctx.state[0] ^= seed;
+  md5_update( &md5_ctx, (unsigned char *)key, len );
+  md5_finish( &md5_ctx, (unsigned char *)out );
+  //memset( &md5_ctx.buffer, 0, 64+64+64 ); // for buffer, ipad, opad
 }
 
 inline void md5_32(const void *key, int len, uint32_t seed, void *out) {
   unsigned char hash[16];
-  md5_context ctx;
-  md5_starts( &ctx );
-  ctx.state[0] ^= seed;
-  md5_update( &ctx, (unsigned char *)key, len );
-  md5_finish( &ctx, hash );
-  //memset( &ctx.buffer, 0, 64+64+64 ); // for buffer, ipad, opad
+  md5_context md5_ctx;
+  md5_starts( &md5_ctx );
+  md5_ctx.state[0] ^= seed;
+  md5_update( &md5_ctx, (unsigned char *)key, len );
+  md5_finish( &md5_ctx, hash );
+  //memset( &md5_ctx.buffer, 0, 64+64+64 ); // for buffer, ipad, opad
   memcpy(out, hash, 4);
 }
 
@@ -1070,34 +1072,5 @@ inline void pengyhash_test ( const void * key, int len, uint32_t seed, void * ou
 
 // objsize: 4bcb90 - 4bd18a
 #include "umash.hpp"
-/*
-// objsize: 
-inline void umash32_test ( const void * key, int len, uint32_t seed, void * out ) {
-  struct umash_params params;
-  umash_params_derive (&params, (uint64_t)seed, NULL);
-  *(uint32_t*)out = umash_full (&params, (uint64_t)seed, 0, key, (size_t)len);
-}
-inline void umash32hi_test ( const void * key, int len, uint32_t seed, void * out ) {
-  struct umash_params params;
-  union {
-    uint64_t d;
-    uint32_t s[2];
-  } ret;
-  umash_params_derive (&params, (uint64_t)seed, NULL);
-  ret.d = umash_full (&params, (uint64_t)seed, 0, key, (size_t)len);
-  memcpy (out, &ret.s[1], 4);
-}
-inline void umash64_test ( const void * key, int len, uint32_t seed, void * out ) {
-  struct umash_params params;
-  umash_params_derive (&params, (uint64_t)seed, key);
-  *(uint64_t*)out = umash_full (&params, (uint64_t)seed, 0, key, (size_t)len);
-}
-inline void umash128_test ( const void * key, int len, uint32_t seed, void * out ) {
-  struct umash_params params;
-  struct umash_fp fp;
-  umash_params_derive (&params, (uint64_t)seed, NULL);
-  fp = umash_fprint (&params, (uint64_t)seed, key, (size_t)len);
-  memcpy (out, &fp, 16);
-}
-*/
+
 #endif

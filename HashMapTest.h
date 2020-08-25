@@ -6,4 +6,4 @@
 std::vector<std::string> HashMapInit(bool verbose);
 bool HashMapTest ( pfHash pfhash, 
                    const int hashbits, std::vector<std::string> words,
-                   const int trials, bool verbose );
+                   const uint32_t seed, const int trials, bool verbose );

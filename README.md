@@ -167,12 +167,12 @@ SMhasher
 | [wyhash32](doc/wyhash32.txt)                  |      2532.89 |    48.40 | 484.57 (1) | 410 | 32-bit                     |
 | [wyhash32low](doc/wyhash32low.txt)            |     11920.73 |    32.92 | 183.61 (2) | 922 |                            |
 | [wyhash](doc/wyhash.txt)                      |     12195.62 |    32.91 | 178.14 (2) | 938 |                            |
-| [umash32](doc/umash32.txt)                    |      4606.24 |    56.33 | 213.09 (4) |1435 |                            |
-| [umash32_hi](doc/umash32_hi.txt)              |      4706.97 |    56.76 | 212.70 (2) |1435 |                            |
-| [umash64](doc/umash64.txt)                    |      4467.34 |    58.23 | 219.23 (3) |1435 |                            |
-| [umash128](doc/umash128.txt)                  |      2356.89 |    78.35 | 230.68 (2) |1435 |                            |
+| [umash32](doc/umash32.txt)                    |      4606.24 |    56.33 | 213.09 (4) |1530 |                            |
+| [umash32_hi](doc/umash32_hi.txt)              |      4706.97 |    56.76 | 212.70 (2) |1530 |                            |
+| [umash64](doc/umash64.txt)                    |      4467.34 |    58.23 | 219.23 (3) |1530 |                            |
+| [umash128](doc/umash128.txt)                  |      2356.89 |    78.35 | 230.68 (2) |1530 |                            |
 
-The [sortable table variant](http://rurban.github.io/smhasher/doc/table.html)
+The **[sortable table variant](http://rurban.github.io/smhasher/doc/table.html)**
 
 smhasher is being sponsored by the following tool; please help to support us
 by taking a look and signing up to a free trial.

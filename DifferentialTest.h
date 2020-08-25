@@ -105,6 +105,7 @@ void DiffTestRecurse ( pfHash hash, keytype & k1, keytype & k2, hashtype & h1, h
 {
   const int bits = sizeof(keytype)*8;
 
+  Hash_Seed_init (hash, 0);
   for(int i = start; i < bits; i++)
   {
     flipbit(&k2,sizeof(k2),i);
@@ -151,6 +152,7 @@ bool DiffTest ( pfHash hash, int diffbits, int reps, bool dumpCollisions )
   printf("%d reps, %0.f total tests, expecting %2.2f random collisions",
          reps,testcount,expected);
 
+  Hash_Seed_init (hash, 0);
   for(int i = 0; i < reps; i++)
   {
     if(i % (reps/10) == 0) printf(".");
@@ -193,6 +195,7 @@ void DiffDistTest ( pfHash hash, const int diffbits, int trials, double & worst,
   std::vector<keytype>  keys(trials);
   std::vector<hashtype> A(trials),B(trials);
 
+  Hash_Seed_init (hash, 0);
   for(int i = 0; i < trials; i++)
   {
     rand_p(&keys[i],sizeof(keytype));
@@ -258,6 +261,7 @@ bool DiffDistTest2 ( pfHash hash, bool drawDiagram )
 
   bool result = true;
 
+  Hash_Seed_init (hash, 0);
   for(int keybit = 0; keybit < keybits; keybit++)
   {
     printf("Testing bit %d\n",keybit);

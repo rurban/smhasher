@@ -365,10 +365,10 @@ HashInfo g_hashes[] =
   { pengyhash_test,       64, 0x326BD06B, "pengyhash",   "pengyhash", GOOD },
   { mx3hash64_test,       64, 0x4DB51E5B, "mx3",         "mx3 64bit", GOOD },
 #if defined(__SSE4_2__) && defined(__x86_64__) && !defined(_MSC_VER)
-  { umash32,              32, 0x2F0C2CC6, "umash32",     "umash 32", GOOD },
-  { umash32_hi,           32, 0xD323A67D, "umash32_hi",  "umash 32 hi", GOOD },
-  { umash,                64, 0x7518A050, "umash64",     "umash 64", GOOD },
-  { umash128,            128, 0x1ED02AAA, "umash128",    "umash 128", GOOD },
+  { umash32,              32, 0x03E16CA1, "umash32",     "umash 32", GOOD },
+  { umash32_hi,           32, 0xE29D613C, "umash32_hi",  "umash 32 hi", GOOD },
+  { umash,                64, 0x4542288C, "umash64",     "umash 64", GOOD },
+  { umash128,            128, 0xDA4E82B6, "umash128",    "umash 128", GOOD },
 #endif
   
   { t1ha2_atonce_test,           64, 0x8F16C948, "t1ha2_atonce",    "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
@@ -416,11 +416,18 @@ HashInfo * findHash ( const char * name )
 void Hash_init (HashInfo* info) {
   if (info->hash == sha2_224_64)
     sha224_init(&ltc_state);
+  //else if (info->hash == md5_128 || info->hash == md5_32)
+  //  md5_init();
   else if (info->hash == rmd128)
     rmd128_init(&ltc_state);
 #if defined(__SSE4_2__) && defined(__x86_64__)
   else if(info->hash == clhash_test)
     clhash_init();
+  //else if(info->hash == umash32_test ||
+  //        info->hash == umash32hi_test ||
+  //        info->hash == umash64_test ||
+  //        info->hash == umash128_test)
+  //  umash_init();
 #endif
   else if (info->hash == VHASH_32 || info->hash == VHASH_64)
     VHASH_init();
@@ -436,6 +443,33 @@ void Hash_init (HashInfo* info) {
     chaskey_init();
 }
 
+// optional hash seed initializers.
+// esp. for Hashmaps, whenever the seed changes, for expensive seeding.
+void Seed_init (HashInfo* info, size_t seed) {
+  Hash_Seed_init (info->hash, seed);
+}
+
+void Hash_Seed_init (pfHash hash, size_t seed) {
+  //if (hash == md5_128 || hash == md5_32)
+  //  md5_seed_init(seed);
+  //if (hash == VHASH_32 || hash == VHASH_64)
+  //  VHASH_seed_init(seed);
+#if defined(__SSE4_2__) && defined(__x86_64__)
+  if (hash == clhash_test)
+    clhash_seed_init(seed);
+  else if (hash == umash32 ||
+          hash == umash32_hi ||
+          hash == umash ||
+          hash == umash128)
+    umash_seed_init(seed);
+  /*
+  else if(hash == hashx_test)
+    hashx_seed_init(info, seed);
+  */
+#endif
+}
+
+
 //-----------------------------------------------------------------------------
 // Self-test on startup - verify that all installed hashes work correctly.
 
@@ -445,8 +479,7 @@ void SelfTest(bool verbose) {
     HashInfo *info = &g_hashes[i];
     if (verbose)
       printf("%20s - ", info->name);
-    pass &= VerificationTest(info->hash, info->hashbits, info->verification,
-                             verbose);
+    pass &= VerificationTest(info, verbose);
   }
 
   if (!pass) {
@@ -455,8 +488,7 @@ void SelfTest(bool verbose) {
       for (size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++) {
         HashInfo *info = &g_hashes[i];
         printf("%20s - ", info->name);
-        pass &= VerificationTest(info->hash, info->hashbits, info->verification,
-                                 true);
+        pass &= VerificationTest(info, true);
       }
     }
     exit(1);
@@ -500,7 +532,8 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("[[[ Sanity Tests ]]]\n\n");
     fflush(NULL);
 
-    VerificationTest(hash,hashbits,info->verification,true);
+    VerificationTest(info,true);
+    Seed_init (info, 0);
     SanityTest(hash,hashbits);
     AppendedZeroesTest(hash,hashbits);
     printf("\n");
@@ -516,6 +549,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("[[[ Speed Tests ]]]\n\n");
     fflush(NULL);
 
+    Seed_init (info, info->verification);
     BulkSpeedTest(info->hash,info->verification);
     printf("\n");
     fflush(NULL);
@@ -582,8 +616,11 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       result = false;
     } else {
       std::vector<std::string> words = HashMapInit(g_drawDiagram);
-      if (words.size())
-        result &= HashMapTest(hash,info->hashbits,words,trials,g_drawDiagram);
+      if (words.size()) {
+        const uint32_t seed = rand_u32();
+        Seed_init (info, seed);
+        result &= HashMapTest(hash,info->hashbits,words,seed,trials,g_drawDiagram);
+      }
     }
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
@@ -604,6 +641,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     bool result = true;
     bool verbose = g_drawDiagram; //.......... progress dots
 
+    Seed_init (info, 0);
     result &= AvalancheTest< Blob< 24>, hashtype > (hash,300000,verbose);
     result &= AvalancheTest< Blob< 32>, hashtype > (hash,300000,verbose);
     result &= AvalancheTest< Blob< 40>, hashtype > (hash,300000,verbose);
@@ -661,6 +699,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
     bool result = true;
 
+    Seed_init (info, 0);
       result &= SparseKeyTest<  16,hashtype>(hash,9,true,true,true, g_drawDiagram);
       result &= SparseKeyTest<  24,hashtype>(hash,8,true,true,true, g_drawDiagram);
       result &= SparseKeyTest<  32,hashtype>(hash,7,true,true,true, g_drawDiagram);
@@ -738,6 +777,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
       uint32_t blocks[] = { 0, 1, 2, 3, 4, 5, 6, 7 };
 
+      Seed_init (info, 0);
       result &= CombinationKeyTest<hashtype>(hash,7,blocks,
                                              sizeof(blocks) / sizeof(uint32_t),
                                              true,true, g_drawDiagram);
@@ -1033,6 +1073,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     int windowbits = 20;
     const int keybits = (hashbits >= 64) ? 32 : hashbits*2+2;
 
+    Seed_init (info, 0);
     result &= WindowedKeyTest< Blob<keybits>, hashtype >
       ( hash, windowbits, testCollision, testDistribution, g_drawDiagram );
 
@@ -1057,6 +1098,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 #endif
     bool result = true;
 
+    Seed_init (info, 0);
     result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+0,8,reps, g_drawDiagram);
     result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+1,8,reps, g_drawDiagram);
     result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+2,8,reps, g_drawDiagram);
@@ -1092,6 +1134,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
         maxlen = 8;
     }
 
+    Seed_init (info, 0);
     for(int len = 4; len <= maxlen; len += 4)
     {
       result &= TwoBytesTest2<hashtype>(hash, len, g_drawDiagram);
@@ -1115,6 +1158,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     const char * passwordchars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
                                  ".,!?:;-+=()<>/|\"'@#$%&*_^";
 
+    Seed_init (info, 0);
     result &= TextKeyTest( hash, "Foo",    alnum, 4, "Bar",    g_drawDiagram );
     result &= TextKeyTest( hash, "FooBar", alnum, 4, "",       g_drawDiagram );
     result &= TextKeyTest( hash, "",       alnum, 4, "FooBar", g_drawDiagram );
@@ -1139,6 +1183,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
     bool result = true;
 
+    Seed_init (info, 0);
     result &= ZeroKeyTest<hashtype>( hash, g_drawDiagram );
 
     if(!result) printf("*********FAIL*********\n");
@@ -1173,6 +1218,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     bool testDistribution = g_testExtra;
 
     bool result = true;
+    Seed_init (info, 0);
     result &= PerlinNoise<hashtype>( hash, 2, testCollision, testDistribution, g_drawDiagram );
     if (g_testExtra) {
         result &= PerlinNoise<hashtype>( hash, 4, testCollision, testDistribution, g_drawDiagram );
@@ -1269,6 +1315,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     bool testDistribution = g_testExtra;
 
     bool result = true;
+    Seed_init (info, 0);
     result &= PrngTest<hashtype>( hash, testCollision, testDistribution, g_drawDiagram );
 
     if(!result) printf("\n*********FAIL*********\n");
@@ -1292,6 +1339,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
     bool result = true;
 
+    Seed_init (info, 0);
     result &= testLongNeighbors(info->hash, info->hashbits, g_drawDiagram);
 
     if(!result) printf("*********FAIL*********\n");
@@ -1312,6 +1360,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     fflush(NULL);
 
     bool result = true;
+    Seed_init (info, 0);
     if (info->hashbits > 64 || g_speed > 500.0) {
       result &= BicTest3<Blob<128>,hashtype>(hash,100000,g_drawDiagram);
     } else {
@@ -1407,6 +1456,7 @@ bool MomentChi2Test ( struct HashInfo *info, int inputSize)
   uint64_t previous = 0;
   long double b1h = 0. , b1l = 0., db1h = 0., db1l = 0.;
   long double b0h = 0. , b0l = 0., db0h = 0., db0l = 0.;
+  Hash_Seed_init (hash, seed);
   for (unsigned i=1; i<=mx; i+=step) {
     assert(sizeof(i) <= inputSize);
     memcpy(key, &i, sizeof(i));

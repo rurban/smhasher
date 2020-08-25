@@ -1,3 +1,4 @@
+#define _HASHES_CPP
 #include "Hashes.h"
 #include "Random.h"
 
@@ -745,7 +746,10 @@ void clhash_init()
   void* data = get_random_key_for_clhash(UINT64_C(0xb3816f6a2c68e530), 711);
   memcpy(clhash_random, data, RANDOM_BYTES_NEEDED_FOR_CLHASH);
 }
-
+void clhash_seed_init(size_t seed)
+{
+  memcpy(clhash_random, &seed, sizeof(seed));
+}
 #endif
 
 // just to prove how bad academic papers really are:

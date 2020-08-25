@@ -303,11 +303,10 @@ double TinySpeedTest ( pfHash hash, int hashsize, int keysize, uint32_t seed, bo
 
 double HashMapSpeedTest ( pfHash pfhash, const int hashbits,
                           std::vector<std::string> words,
-                          const int trials, bool verbose )
+                          const uint32_t seed, const int trials, bool verbose )
 {
   //using phmap::flat_node_hash_map;
   Rand r(82762);
-  const uint32_t seed = r.rand_u32();
   std_hashmap hashmap(words.size(), [=](const std::string &key)
                   {
                     // 256 needed for hasshe2, but only size_t used

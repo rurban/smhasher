@@ -20,7 +20,7 @@
 //-----------------------------------------------------------------------------
 // Sanity tests
 
-bool VerificationTest   ( pfHash hash, const int hashbits, uint32_t expected, bool verbose );
+bool VerificationTest   ( HashInfo *info, bool verbose );
 bool SanityTest         ( pfHash hash, const int hashbits );
 void AppendedZeroesTest ( pfHash hash, const int hashbits );
 
@@ -108,6 +108,7 @@ void PerlinNoiseTest (int Xbits, int Ybits,
       memcpy(key, &x, inputLen);  // Note : only works with Little Endian
       for (int y=0; y < yMax; y++) {
           hashtype h;
+          Hash_Seed_init (hash, y);
           hash(key, inputLen, y, &h);
           hashes.push_back(h);
       }
@@ -123,7 +124,7 @@ bool PerlinNoise ( hashfunc<hashtype> hash, int inputLen,
 
   std::vector<hashtype> hashes;
 
-  PerlinNoiseTest(12, 12, inputLen, 1, hash,hashes);
+  PerlinNoiseTest(12, 12, inputLen, 1, hash, hashes);
 
   //----------
 
@@ -631,6 +632,7 @@ bool SeedTest ( pfHash hash, int keycount, bool drawDiagram )
 
   for(int i = 0; i < keycount; i++)
   {
+    Hash_Seed_init (hash, i);
     hash(text,len,i,&hashes[i]);
   }
 
