@@ -488,6 +488,7 @@ add_library(SMHasherSupport STATIC
   ${BLAKE3_SRC}
   pengyhash.c
   umash.c
+  umash.hpp
 )
 
 add_executable(

@@ -1067,7 +1067,8 @@ inline void pengyhash_test ( const void * key, int len, uint32_t seed, void * ou
 
 // requires modern builtins, like __builtin_uaddll_overflow
 #if defined(__SSE4_2__) && defined(__x86_64__)
-#include "umash.h"
+#include "umash.hpp"
+/*
 // objsize: 
 inline void umash32_test ( const void * key, int len, uint32_t seed, void * out ) {
   struct umash_params params;
@@ -1096,4 +1097,5 @@ inline void umash128_test ( const void * key, int len, uint32_t seed, void * out
   fp = umash_fprint (&params, (uint64_t)seed, key, (size_t)len);
   memcpy (out, &fp, 16);
 }
+*/
 #endif
