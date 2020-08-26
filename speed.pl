@@ -1,7 +1,16 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -s
 use strict;
+use vars '$h';
 use File::Copy 'mv';
-my $ln = @ARGV ? shift : "log.speed";
+my $ln = @ARGV ? $ARGV[0] : "log.speed";
+
+my $html = "doc/table.html";
+if ($h) {
+  die "$h.html not found $!" unless -e "$h.html";
+  $html = "$h.html";
+  my $b = $h; $b =~ s{^doc/}{};
+  $ln = "log.speed-$b" unless @ARGV;
+}
 
 open(my $l, "<", $ln) or die "open $ln $!";
 my ($n,$bulk,$small,$hash);
@@ -50,15 +59,15 @@ sub fixupmd {
   close $I;
   close $O;
   if ($found) {
-    mv ("README.md.new", "README.md");
+    mv ("README.md.new", "README.md") unless $h;
     fixuphtml ($n,$bulk,$small,$hash);
   }
 }
 
 sub fixuphtml {
   my ($n,$bulk,$small,$hash) = @_;
-  open(my $I, "<", "doc/table.html") or die "open doc/table.html $!";
-  open(my $O, ">", "doc/table.html.new") or die "open doc/table.html.new $!";
+  open(my $I, "<", $html) or die "open $html $!";
+  open(my $O, ">", "$html.new") or die "open $html.new $!";
   my $found;
   while (<$I>) {
     # search for $n in doc/table.html FIXME
@@ -92,9 +101,9 @@ sub fixuphtml {
     print $O $_;
   }
   if (!$found) {
-    warn "$n not found in doc/table.html\n";
+    warn "$n not found in $html\n";
   }
   close $I;
   close $O;
-  mv ("doc/table.html.new", "doc/table.html") if $found;
+  mv ("$html.new", $html) if $found;
 }
