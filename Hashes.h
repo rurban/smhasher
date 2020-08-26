@@ -1066,7 +1066,9 @@ inline void pengyhash_test ( const void * key, int len, uint32_t seed, void * ou
 }
 
 // requires modern builtins, like __builtin_uaddll_overflow
-#if defined(__SSE4_2__) && defined(__x86_64__)
+#if defined(__SSE4_2__) && defined(__x86_64__) && !defined(_MSC_VER)
+
+// objsize: 4bcb90 - 4bd18a
 #include "umash.hpp"
 /*
 // objsize: 
