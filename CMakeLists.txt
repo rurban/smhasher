@@ -385,6 +385,11 @@ if(AVX512_FOUND)
   set_source_files_properties(blake3/blake3_avx512.c PROPERTIES COMPILE_FLAGS
     "-DBLAKE3_USE_SSE41 -DBLAKE3_USE_AVX2 -DBLAKE3_USE_AVX512")
 endif()
+if (SSE4_2_FOUND AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
+  set(UMASH_SRC
+    umash.c
+    umash.hpp)
+endif()
 
 if (NOT ( CMAKE_BUILD_TYPE STREQUAL "Debug"))
   # PMP breaks Debug build
@@ -487,8 +492,7 @@ add_library(SMHasherSupport STATIC
   rijndael-alg-fst.c
   ${BLAKE3_SRC}
   pengyhash.c
-  umash.c
-  umash.hpp
+  ${UMASH_SRC}
 )
 
 add_executable(
