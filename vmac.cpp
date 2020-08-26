@@ -1,6 +1,6 @@
 /* --------------------------------------------------------------------------
  * VMAC and VHASH Implementation by Ted Krovetz (tdk@acm.org) and Wei Dai.
- * This implementation is herby placed in the public domain.
+ * This implementation is hereby placed in the public domain.
  * The authors offers no warranty. Use at your own risk.
  * Please send bug reports to the authors.
  * Last modified: 17 APR 08, 1700 PDT
