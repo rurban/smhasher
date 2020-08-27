@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 2.8)
 cmake_policy(SET CMP0003 NEW)
+if (POLICY CMP0056) # Honor link flags in try_compile() source-file signature.
+  cmake_policy(SET CMP0056 NEW) # since 3.2
+endif()
+if (POLICY CMP0066) # honor per-config flags in try_compile() source-file signature.
+  cmake_policy(SET CMP0066 NEW) # since 3.7
+endif()
 
 project(SMHasher C CXX ASM)
 
