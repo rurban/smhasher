@@ -172,7 +172,10 @@ SMhasher
 | [umash64](doc/umash64.txt)                    |      4467.34 |    58.23 | 219.23 (3) |1530 |                            |
 | [umash128](doc/umash128.txt)                  |      2356.89 |    78.35 | 230.68 (2) |1530 |                            |
 
-The **[sortable table variant](http://rurban.github.io/smhasher/doc/table.html)**
+The **[sortable table variant with this Intel i5-2300 2.8GHz](https://rurban.github.io/smhasher/doc/table.html)** 
+and for a [AMD Ryzen 3 3200U 3.5GHz](https://rurban.github.io/smhasher/doc/ryzen3.html), 
+and [Mac Air i7-4650](https://rurban.github.io/smhasher/doc/air.html).
+
 
 smhasher is being sponsored by the following tool; please help to support us
 by taking a look and signing up to a free trial.
@@ -183,7 +186,7 @@ Summary
 -------
 
 I added some SSE assisted hashes and fast intel/arm CRC32-C, AES and SHA HW variants.
-See also the old [https://code.google.com/p/smhasher/w/list](https://code.google.com/p/smhasher/w/list) and the improved, but unmaintained fork [https://github.com/demerphq/smhasher](https://github.com/demerphq/smhasher).
+See also the old [https://github.com/aappleby/smhasher/wiki](https://github.com/aappleby/smhasher/wiki) and the improved, but unmaintained fork [https://github.com/demerphq/smhasher](https://github.com/demerphq/smhasher).
 
 So the fastest hash functions on x86_64 without quality problems are:
 
