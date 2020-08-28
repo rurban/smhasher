@@ -24,16 +24,15 @@ IF (CMAKE_MAJOR_VERSION GREATER 2)
   include (TestBigEndian)
   TEST_BIG_ENDIAN(IS_BIG_ENDIAN)
   if(IS_BIG_ENDIAN)
-    set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -DBIG_ENDIAN")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBIG_ENDIAN")
+    add_definitions(-DBIG_ENDIAN)
   endif()
 endif()
 
 if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE "Release" CACHE STRING
-       "Choose the type of build, options are: Debug Release
-  RelWithDebInfo MinSizeRel."
-  FORCE)
+  set(CMAKE_BUILD_TYPE
+      "Release"
+      CACHE STRING "Choose the type of build, options are: Debug Release
+  RelWithDebInfo MinSizeRel Asan." FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 set(CMAKE_C_FLAGS_DEBUG "-DDEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG "-DDEBUG")
@@ -231,7 +230,7 @@ IF (AES_TRUE)
   set(AES_FOUND true CACHE BOOL "AES-NI available")
 ELSE (AES_TRUE)
   set(AES_FOUND false CACHE BOOL "AES-NI not available")
-  message(WARNING "AES-NI not available")
+  message(STATUS "AES-NI not available")
 ENDIF (AES_TRUE)
 IF (CLMUL_TRUE)
   set(CLMUL_FOUND true CACHE BOOL "CLMUL available")
@@ -242,44 +241,81 @@ IF (SHA_TRUE)
   set(SHA_FOUND true CACHE BOOL "SHA-NI available")
 ELSE (SHA_TRUE)
   set(SHA_FOUND false CACHE BOOL "SHA-NI not available")
-  message(WARNING "SHA-NI not available")
+  message(STATUS "SHA-NI not available")
 ENDIF (SHA_TRUE)
 IF (AVX2_TRUE)
   set(AVX2_FOUND true CACHE BOOL "AVX2 available")
 ELSE (AVX2_TRUE)
   set(AVX2_FOUND false CACHE BOOL "AVX2 not available")
-  message(WARNING "AVX2 not available")
+  message(STATUS "AVX2 not available")
 ENDIF (AVX2_TRUE)
 IF (AVX512_TRUE)
   set(AVX512_FOUND true CACHE BOOL "AVX512 available")
 ELSE (AVX512_TRUE)
   set(AVX512_FOUND false CACHE BOOL "AVX512 not available")
-  message(WARNING "AVX512 not available")
+  message(STATUS "AVX512 not available")
 ENDIF (AVX512_TRUE)
 
 IF(HAVE___UINT128_T)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_INT128")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_INT128")
+  add_definitions(-DHAVE_INT128)
 ENDIF()
 IF(HAVE_INT64_T)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_INT64")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_INT64")
+  add_definitions(-DHAVE_INT64)
 ELSEIF(HAVE__INT64)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_INT64")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_INT64")
+  add_definitions(-DHAVE_INT64)
 ENDIF()
 IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_BIT32")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_BIT32")
+  add_definitions(-DHAVE_BIT32)
 ENDIF()
+
+# probe for HAVE_ALIGNED_ACCESS_REQUIRED
+if (NOT CMAKE_CROSSCOMPILING)
+  include(CheckCXXSourceRuns)
+  check_cxx_source_runs("
+#include <cstdint>
+#include <arpa/inet.h>
+uint32_t load(char* p, size_t offset)
+{
+  return *reinterpret_cast<uint32_t*>(p + offset);
+}
+bool good(uint32_t lhs, uint32_t small_endian)
+{
+  uint32_t rhs;
+  if (ntohl(0xdeadbeaf) == 0xdeadbeaf) {
+    return lhs == ntohl(small_endian);
+  } else {
+    return lhs == small_endian;
+  }
+}
+int main(int argc, char **argv)
+{
+  char a1[] = \"ABCDEFG\";
+  uint32_t a2[] = {0x44434241,
+                   0x45444342,
+                   0x46454443,
+                   0x47464544};
+  for (size_t i = 0; i < 4; i++) {
+    if (!good(load(a1, i), a2[i])) {
+      return 1;
+    }
+  }
+  return 0;
+}"
+    ALLOW_ALIGNED_ACCESS)
+  if(NOT ALLOW_ALIGNED_ACCESS)
+    add_definitions(-DHAVE_ALIGNED_ACCESS_REQUIRED)
+    message(STATUS "ALIGNED_ACCESS_REQUIRED")
+  endif()
+else()
+  message(STATUS "Assuming unaligned access is supported")
+endif()
 
 IF(AES_FOUND AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
   set(SSE4_OBJ        ${FALKHASH_OBJ})
 ENDIF()
 
 IF(SSE4_2_FOUND)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_SSE42")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_SSE42")
+  add_definitions(-DHAVE_SSE42)
   SET(CMAKE_THREAD_LIBS_INIT "-lpthread")
   set(SSE2_SRC        hasshe2.c)
   set(SSE4_SRC        crc32_hw.c)
@@ -292,7 +328,7 @@ IF(SSE4_2_FOUND)
       LIST(APPEND X86_64ONLY_SRC metrohash/metrohash64crc.cpp metrohash/metrohash128crc.cpp crc32_hw1.c clhash.c)
     endif()
   ELSE()
-    message(WARNING "32bit only: CMAKE_SIZEOF_VOID_P=${CMAKE_SIZEOF_VOID_P}")
+    message(STATUS "32bit only: CMAKE_SIZEOF_VOID_P=${CMAKE_SIZEOF_VOID_P}")
   ENDIF()
   set(SIPHASH_SRC     siphash_ssse3.c)
 ELSEIF(SSE2_FOUND)
@@ -303,8 +339,7 @@ ELSE()
 ENDIF(SSE4_2_FOUND)
 
 IF(AES_FOUND)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_AESNI")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_AESNI") 
+  add_definitions(-DHAVE_AESNI)
   set(T1HA_SRC
       t1ha/t1ha0.c t1ha/t1ha1.c t1ha/t1ha2.c
       t1ha/t1ha0_ia32aes_noavx.c t1ha/t1ha0_ia32aes_avx.c t1ha/t1ha0_ia32aes_avx2.c)
@@ -322,12 +357,10 @@ ELSE()
   set(T1HA_SRC t1ha/t1ha0.c t1ha/t1ha1.c t1ha/t1ha2.c)
 ENDIF()
 IF(CLMUL_FOUND)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_CLMUL")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_CLMUL")
+  add_definitions(-DHAVE_CLMUL)
 ENDIF()
 IF(SHA_FOUND)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_SHANI")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_SHANI")
+  add_definitions(-DHAVE_SHANI)
   # todo: arm, power
   set(SHA_SRC SHA-Intrinsics/sha1-x86.c SHA-Intrinsics/sha256-x86.c )
 ENDIF()
@@ -353,7 +386,7 @@ if (HIGHWAY)
   if (CMAKE_SIZEOF_VOID_P EQUAL 8)
     set(HIGHWAY_SRC HighwayHash.cpp)
     set(HIGHWAY_LIB highwayhash)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_HIGHWAYHASH")
+    add_definitions(-DHAVE_HIGHWAYHASH)
   endif()
 endif()
 
