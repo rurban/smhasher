@@ -1,4 +1,14 @@
 #!/bin/sh
+hname="`hostname`"
+if [ x$hname = xe495 ]; then
+    ./testspeed-ryzen3.sh $@
+    exit
+fi
+if [ x$hname = xairc ]; then
+    ./testspeed-air.sh $@
+    exit
+fi
+
 make -C build
 which performance && performance
 if [ -z "$@" ]; then
