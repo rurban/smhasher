@@ -196,7 +196,7 @@ if(CMAKE_COMPILER_IS_GNUCC
   set(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG")
   set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
   set(CMAKE_CXX_FLAGS_DEBUG
-      "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address,undefined"
+      "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address,undefined -DHAVE_ASAN -DHAVE_UBSAN"
   )
   set(CMAKE_LINKER_FLAGS_DEBUG
       "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address,undefined"
@@ -306,7 +306,19 @@ endif()
 
 # probe for HAVE_ALIGNED_ACCESS_REQUIRED
 if(NOT CMAKE_CROSSCOMPILING)
+  include(CMakePushCheckState)
   include(CheckCXXSourceRuns)
+  set(OLD_CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+  cmake_push_check_state()
+  if(CMAKE_COMPILER_IS_GNUCC
+      OR (CMAKE_C_COMPILER_ID STREQUAL AppleClang)
+      OR (CMAKE_C_COMPILER_ID STREQUAL Clang))
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_DEBUG} -fno-sanitize-recover=undefined")
+    else()
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-sanitize-recover=undefined")
+    endif()
+  endif()
   check_cxx_source_runs(
     "
 #include <cstdint>
@@ -339,12 +351,17 @@ int main(int argc, char **argv)
   return 0;
 }"
     ALLOW_ALIGNED_ACCESS)
+  cmake_pop_check_state()
+  set(CMAKE_CXX_FLAGS "${OLD_CMAKE_CXX_FLAGS}")
   if(NOT ALLOW_ALIGNED_ACCESS)
     add_definitions(-DHAVE_ALIGNED_ACCESS_REQUIRED)
-    message(STATUS "ALIGNED_ACCESS_REQUIRED")
+    message(STATUS "Set HAVE_ALIGNED_ACCESS_REQUIRED (ubsan or strict hardware, like arm, sparc)")
+  else()
+    message(STATUS "HAVE_ALIGNED_ACCESS_REQUIRED not required")
   endif()
 else()
-  message(STATUS "Assuming unaligned access is supported")
+  add_definitions(-DHAVE_ALIGNED_ACCESS_REQUIRED)
+  message(STATUS "Assuming aligned access is required, as on arm with -maligned-access or sparc")
 endif()
 
 if(AES_FOUND AND (CMAKE_SIZEOF_VOID_P EQUAL 8))

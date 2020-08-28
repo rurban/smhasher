@@ -74,6 +74,7 @@ struct Rand
     uint32_t * blocks;
     int i;
 
+#ifdef HAVE_ALIGNED_ACCESS_REQUIRED
     // avoid ubsan, misaligned writes
     if ((i = (uintptr_t)blob % 4)) {
       uint8_t *pre = reinterpret_cast<uint8_t*>(blob);
@@ -91,6 +92,7 @@ struct Rand
       blocks = reinterpret_cast<uint32_t*>(pre);
     }
     else
+#endif
       blocks = reinterpret_cast<uint32_t*>(blob);
 
     while(bytes >= 4)

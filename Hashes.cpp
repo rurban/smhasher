@@ -139,6 +139,8 @@ FNV2(const char *key, int len, size_t seed)
 #else
   h = seed ^ UINT64_C(0xcbf29ce484222325);
 #endif
+
+#ifdef HAVE_ALIGNED_ACCESS_REQUIRED
   // avoid ubsan, misaligned writes
   if ((i = (uintptr_t)dw % sizeof (size_t))) {
     uint8_t *dc = (uint8_t*)key;
@@ -183,6 +185,7 @@ FNV2(const char *key, int len, size_t seed)
     }
     dw = (size_t*)dc; //word stepper
   }
+#endif
 
   while (dw < endw) {
     h ^= *dw++;
