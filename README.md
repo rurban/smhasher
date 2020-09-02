@@ -173,15 +173,11 @@ SMhasher
 | [umash64](doc/umash64.txt)                    |      4467.34 |    58.23 | 219.23 (3) |1530 |                            |
 | [umash128](doc/umash128.txt)                  |      2356.89 |    78.35 | 230.68 (2) |1530 |                            |
 
-The **[sortable table variant with this Intel i5-2300 2.8GHz](https://rurban.github.io/smhasher/doc/table.html)** 
-and for a [AMD Ryzen 3 3200U 3.5GHz](https://rurban.github.io/smhasher/doc/ryzen3.html), 
-and [Mac Air i7-4650](https://rurban.github.io/smhasher/doc/air.html).
+The sortable table variants:
 
-
-smhasher is being sponsored by the following tool; please help to support us
-by taking a look and signing up to a free trial.
-<a href="https://tracking.gitads.io/?repo=smhasher">
-<img src="https://images.gitads.io/smhasher" alt="GitAds"/></a>
+* **[Default Intel i5-2300 2.8GHz](https://rurban.github.io/smhasher/doc/table.html)** 
+* [AMD Ryzen 3 3200U 3.5GHz](https://rurban.github.io/smhasher/doc/ryzen3.html)
+* [Mac Air i7-4650](https://rurban.github.io/smhasher/doc/air.html)
 
 Summary
 -------
