@@ -770,19 +770,37 @@ void clhash_seed_init(size_t seed)
 
       // The output is 64 bits, and we consider the input 64 bit as well,
       // so our intermediate values are 128.
-      __uint128_t h = (__uint128_t)seed ^ multiply_shift_r;
       // We mix in len_bytes in the basis, since smhasher considers two keys
       // of different length to be different, even if all the extra bits are 0.
       // This is needed for the AppendZero test.
-      h ^= (__uint128_t)len_bytes << 64;
+      __uint128_t h = (__uint128_t)(seed + len_bytes) * multiply_shift_r;
       for (int i = 0; i < len; i++)
          h += multiply_shift_random[i & MULTIPLY_SHIFT_RANDOM_WORDS-1] * (__uint128_t)buf64[i];
 
-      // Get the last bytes when things are unaligned
+      // Now get the last bytes when things are unaligned
+
+      // This method is slowest:  34.637 cycles/hash
+      /*if (len_bytes & 7) {
+         uint64_t last = 0;
+         memcpy(&last, buf+8*len, len_bytes-8*len);
+         h += multiply_shift_random[len & MULTIPLY_SHIFT_RANDOM_WORDS-1] * (__uint128_t)last;
+      }*/
+
+      // this naive approach is:  23.132 cycles/hash, avg
+      /*
       uint64_t last = 0;
       for (int i = 8*len; i < len_bytes; i++)
          last = (last << 8) | buf[i];
-      h += multiply_shift_random[len & MULTIPLY_SHIFT_RANDOM_WORDS-1] * (__uint128_t)last;
+      h += multiply_shift_random[len & multiply_shift_random_words-1] * (__uint128_t)last;
+      */
+
+      // Using a gate makes things slightly better: 21.895 cycles/hash
+      if (len_bytes & 7) {
+         uint64_t last = buf[8*len];
+         for (int i = 8*len+1; i < len_bytes; i++)
+            last = (last << 8) | buf[i];
+         h += multiply_shift_random[len & MULTIPLY_SHIFT_RANDOM_WORDS-1] * (__uint128_t)last;
+      }
 
       *(uint64_t*)out = h >> 64;
    }
@@ -814,8 +832,7 @@ void clhash_seed_init(size_t seed)
       const uint64_t* buf64 = reinterpret_cast<const uint64_t*>(key);
       int len = len_bytes/8;
 
-      __uint128_t h = (__uint128_t)seed ^ multiply_shift_r;
-      h ^= (__uint128_t)len_bytes << 64;
+      __uint128_t h = (__uint128_t)(seed + len_bytes) * multiply_shift_r;
       for (int i = 0; i < len/2; i++)
          h += (multiply_shift_random[2*i & MULTIPLY_SHIFT_RANDOM_WORDS-1] + buf64[2*i+1])
             * (multiply_shift_random[2*i+1 & MULTIPLY_SHIFT_RANDOM_WORDS-1] + buf64[2*i]);
@@ -825,10 +842,12 @@ void clhash_seed_init(size_t seed)
          h += multiply_shift_random[len-1 & MULTIPLY_SHIFT_RANDOM_WORDS-1] * buf64[len-1];
 
       // Get the last bytes when things are unaligned
-      uint64_t last = 0;
-      for (int i = 8*len; i < len_bytes; i++)
-         last = (last << 8) | buf[i];
-      h += multiply_shift_random[len & MULTIPLY_SHIFT_RANDOM_WORDS-1] * last;
+      if (len_bytes & 7) {
+         uint64_t last = buf[8*len];
+         for (int i = 8*len+1; i < len_bytes; i++)
+            last = (last << 8) | buf[i];
+         h += multiply_shift_random[len & MULTIPLY_SHIFT_RANDOM_WORDS-1] * (__uint128_t)last;
+      }
 
       *(uint64_t*)out = h >> 64;
    }
