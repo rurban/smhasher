@@ -780,10 +780,9 @@ void clhash_seed_init(size_t seed)
       // Now get the last bytes when things are unaligned
 
       // This method is slowest:  34.637 cycles/hash
-      /*
-      if (len_bytes & 7) {
-         uint64_t last;
-         std::copy(&last, buf+8*len, len_bytes-8*len);
+      /*if (len_bytes & 7) {
+         uint64_t last = 0;
+         memcpy(&last, buf+8*len, len_bytes-8*len);
          h += multiply_shift_random[len & MULTIPLY_SHIFT_RANDOM_WORDS-1] * (__uint128_t)last;
       }*/
 
