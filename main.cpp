@@ -577,9 +577,11 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     fflush(NULL);
   } else {
     // known slow hashes (> 500), cycle/hash
-    const struct { pfHash h; double cycles; } speeds[] =
-    {{ multiply_shift,    50.50 },
+    const struct { pfHash h; double cycles; } speeds[] = {
+#ifdef __SIZEOF_INT128__
+     { multiply_shift,    50.50 },
      { pair_multiply_shift,31.71},
+#endif
      { md5_32,           670.99 },
      { md5_128,          730.30 },
      { sha1_32a,        1385.80 },
@@ -620,7 +622,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("[[[ 'Hashmap' Speed Tests ]]]\n\n");
     fflush(NULL);
     int trials = 50;
-    if ((g_speed > 500 /*|| hash == multiply_shift || hash == pair_multiply_shift*/ )
+    if ((g_speed > 500)
          && !g_testExtra)
       trials = 5;
     bool result = true;
@@ -1259,7 +1261,6 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     bool dumpCollisions = g_drawDiagram; // from --verbose
     int reps = 1000;
     if ((g_speed > 500.0 || info->hashbits > 128 ||
-         hash == multiply_shift || hash == pair_multiply_shift ||
          hash == o1hash_test) && !g_testExtra)
       reps = 100; // sha1: 7m, md5: 4m53
 
