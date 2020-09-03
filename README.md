@@ -12,7 +12,7 @@ SMhasher
 | [BadHash](doc/BadHash.txt)                    |       524.81 |    95.70 | -|  47 | test FAIL                      |
 | [sumhash](doc/sumhash.txt)                    |      7168.98 |    31.10 | -| 363 | test FAIL                      |
 | [sumhash32](doc/sumhash32.txt)                |     23537.84 |    21.86 | -| 863 | UB, test FAIL                  |
-| [multiply_shift](doc/multiply_shift.txt)      |      3829.22 |    34.63 | 174.47 (3) | 345 | fails most tests                |
+| [multiply_shift](doc/multiply_shift.txt)      |      3892.73 |    34.63 | 174.88 (3) | 345 | fails most tests                |
 | [pair_multiply_shift](doc/pair_multiply_shift)|     13604.46 |    31.71 | too slow   | 609 | UB, fails most tests            |
 | --------------------------                    |              |          |            |     |                                |
 | [crc32](doc/crc32.txt)                        |       392.07 |   129.91 | 201.59 (2) | 422 | insecure, 8590x collisions, distrib, PerlinNoise |
