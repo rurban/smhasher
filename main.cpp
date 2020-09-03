@@ -93,19 +93,14 @@ HashInfo g_hashes[] =
 #ifdef HAVE_BIT32
  #define FIBONACCI_VERIF      0x09952480
  #define FNV2_VERIF           0x739801C5
- #define MULTSHIFT_VERIF      0x0
- #define PAIRMS_VERIF         0xE6ABA97D
 #else
  #define FIBONACCI_VERIF      0xFE3BD380
  #define FNV2_VERIF           0x1967C625
- #define MULTSHIFT_VERIF      0x0
- #define PAIRMS_VERIF         0xB6B5D710
 #endif
   // M. Dietzfelbinger, T. Hagerup, J. Katajainen, and M. Penttonen. A reliable randomized
   // algorithm for the closest-pair problem. J. Algorithms, 25:19–51, 1997.
-  // must be skipped for hashmaps, extremly bad! FIXME
-  { multiply_shift, __WORDSIZE,MULTSHIFT_VERIF, "multiply_shift", "Dietzfelbinger Multiply-shift on strings", POOR },
-  { pair_multiply_shift, __WORDSIZE, PAIRMS_VERIF, "pair_multiply_shift", "Pair-multiply-shift", POOR },
+  { multiply_shift,       64, 0x605FE82A, "multiply_shift", "Dietzfelbinger Multiply-shift on strings", GOOD },
+  { pair_multiply_shift,  64, 0xE2C7D023, "pair_multiply_shift", "Pair-multiply-shift", GOOD },
   { crc32,                32, 0x3719DB20, "crc32",       "CRC-32 soft", POOR },
   { md5_128,             128, 0xF263F96F, "md5-128",     "MD5", GOOD },
   { md5_32,               32, 0x634E5AEC, "md5_32a",     "MD5, low 32 bits", POOR },
@@ -425,6 +420,8 @@ void Hash_init (HashInfo* info) {
   //  md5_init();
   else if (info->hash == rmd128)
     rmd128_init(&ltc_state);
+  else if(info->hash == multiply_shift || info->hash == pair_multiply_shift)
+    multiply_shift_init();
 #if defined(__SSE4_2__) && defined(__x86_64__)
   else if(info->hash == clhash_test)
     clhash_init();
@@ -459,8 +456,10 @@ void Hash_Seed_init (pfHash hash, size_t seed) {
   //  md5_seed_init(seed);
   //if (hash == VHASH_32 || hash == VHASH_64)
   //  VHASH_seed_init(seed);
+  if(hash == multiply_shift || hash == pair_multiply_shift)
+    multiply_shift_seed_init(seed);
 #if defined(__SSE4_2__) && defined(__x86_64__)
-  if (hash == clhash_test)
+  else if (hash == clhash_test)
     clhash_seed_init(seed);
   else if (hash == umash32 ||
           hash == umash32_hi ||
