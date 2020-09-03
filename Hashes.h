@@ -465,10 +465,13 @@ void clhash_seed_init(size_t seed);
 void clhash_test (const void * key, int len, uint32_t seed, void * out);
 #endif
 
-void multiply_shift_init();
-void multiply_shift_seed_init(size_t seed);
-void multiply_shift (const void * key, int len, uint32_t seed, void * out);
-void pair_multiply_shift (const void *key, int len, uint32_t seed, void *out);
+
+#ifdef __SIZEOF_INT128__
+   void multiply_shift_init();
+   void multiply_shift_seed_init(size_t seed);
+   void multiply_shift (const void * key, int len, uint32_t seed, void * out);
+   void pair_multiply_shift (const void *key, int len, uint32_t seed, void *out);
+#endif
 
 void HighwayHash_init();
 // objsize 20-a12: 2546

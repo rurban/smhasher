@@ -97,10 +97,12 @@ HashInfo g_hashes[] =
  #define FIBONACCI_VERIF      0xFE3BD380
  #define FNV2_VERIF           0x1967C625
 #endif
+#ifdef __SIZEOF_INT128__
   // M. Dietzfelbinger, T. Hagerup, J. Katajainen, and M. Penttonen. A reliable randomized
   // algorithm for the closest-pair problem. J. Algorithms, 25:19–51, 1997.
-  { multiply_shift,       64, 0x605FE82A, "multiply_shift", "Dietzfelbinger Multiply-shift on strings", GOOD },
-  { pair_multiply_shift,  64, 0xE2C7D023, "pair_multiply_shift", "Pair-multiply-shift", GOOD },
+  { multiply_shift,       64, 0, "multiply_shift", "Dietzfelbinger Multiply-shift on strings", GOOD },
+  { pair_multiply_shift,  64, 0, "pair_multiply_shift", "Pair-multiply-shift", GOOD },
+#endif
   { crc32,                32, 0x3719DB20, "crc32",       "CRC-32 soft", POOR },
   { md5_128,             128, 0xF263F96F, "md5-128",     "MD5", GOOD },
   { md5_32,               32, 0x634E5AEC, "md5_32a",     "MD5, low 32 bits", POOR },
@@ -420,8 +422,10 @@ void Hash_init (HashInfo* info) {
   //  md5_init();
   else if (info->hash == rmd128)
     rmd128_init(&ltc_state);
+#ifdef __SIZEOF_INT128__
   else if(info->hash == multiply_shift || info->hash == pair_multiply_shift)
     multiply_shift_init();
+#endif
 #if defined(__SSE4_2__) && defined(__x86_64__)
   else if(info->hash == clhash_test)
     clhash_init();
@@ -456,8 +460,12 @@ void Hash_Seed_init (pfHash hash, size_t seed) {
   //  md5_seed_init(seed);
   //if (hash == VHASH_32 || hash == VHASH_64)
   //  VHASH_seed_init(seed);
-  if(hash == multiply_shift || hash == pair_multiply_shift)
+  if (true)
+     ;
+#ifdef __SIZEOF_INT128__
+  else if(hash == multiply_shift || hash == pair_multiply_shift)
     multiply_shift_seed_init(seed);
+#endif
 #if defined(__SSE4_2__) && defined(__x86_64__)
   else if (hash == clhash_test)
     clhash_seed_init(seed);

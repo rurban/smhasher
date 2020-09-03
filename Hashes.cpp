@@ -758,80 +758,81 @@ void clhash_seed_init(size_t seed)
 // Multiply shift from
 // Thorup "High Speed Hashing for Integers and Strings" 2018
 // https://arxiv.org/pdf/1504.06804.pdf
-// objsize: 0x1bc0-0x1d19: 345
 //
-const static int MULTIPLY_SHIFT_RANDOM_WORDS = 1<<15;
-static __uint128_t multiply_shift_random[MULTIPLY_SHIFT_RANDOM_WORDS];
-const static __uint128_t multiply_shift_r = ((__uint128_t)0x75f17d6b3588f843 << 64) | 0xb13dea7c9c324e51;
-void multiply_shift(const void * key, int len_bytes, uint32_t seed, void * out) {
-   const uint8_t* buf = (const uint8_t*) key;
-   const uint64_t* buf64 = reinterpret_cast<const uint64_t*>(key);
-   int len = len_bytes/8;
+#ifdef __SIZEOF_INT128__
+   const static int MULTIPLY_SHIFT_RANDOM_WORDS = 1<<15;
+   static __uint128_t multiply_shift_random[MULTIPLY_SHIFT_RANDOM_WORDS];
+   const static __uint128_t multiply_shift_r = ((__uint128_t)0x75f17d6b3588f843 << 64) | 0xb13dea7c9c324e51;
+   void multiply_shift(const void * key, int len_bytes, uint32_t seed, void * out) {
+      const uint8_t* buf = (const uint8_t*) key;
+      const uint64_t* buf64 = reinterpret_cast<const uint64_t*>(key);
+      int len = len_bytes/8;
 
-   // The output is 64 bits, and we consider the input 64 bit as well,
-   // so our intermediate values are 128.
-   __uint128_t h = (__uint128_t)seed ^ multiply_shift_r;
-   // We mix in len_bytes in the basis, since smhasher considers two keys
-   // of different length to be different, even if all the extra bits are 0.
-   // This is needed for the AppendZero test.
-   h ^= (__uint128_t)len_bytes << 64;
-   for (int i = 0; i < len; i++)
-      h += multiply_shift_random[i & MULTIPLY_SHIFT_RANDOM_WORDS-1] * (__uint128_t)buf64[i];
+      // The output is 64 bits, and we consider the input 64 bit as well,
+      // so our intermediate values are 128.
+      __uint128_t h = (__uint128_t)seed ^ multiply_shift_r;
+      // We mix in len_bytes in the basis, since smhasher considers two keys
+      // of different length to be different, even if all the extra bits are 0.
+      // This is needed for the AppendZero test.
+      h ^= (__uint128_t)len_bytes << 64;
+      for (int i = 0; i < len; i++)
+         h += multiply_shift_random[i & MULTIPLY_SHIFT_RANDOM_WORDS-1] * (__uint128_t)buf64[i];
 
-   // Get the last bytes when things are unaligned
-   uint64_t last = 0;
-   for (int i = 8*len; i < len_bytes; i++)
-      last = (last << 8) | buf[i];
-   h += multiply_shift_random[len & MULTIPLY_SHIFT_RANDOM_WORDS-1] * (__uint128_t)last;
+      // Get the last bytes when things are unaligned
+      uint64_t last = 0;
+      for (int i = 8*len; i < len_bytes; i++)
+         last = (last << 8) | buf[i];
+      h += multiply_shift_random[len & MULTIPLY_SHIFT_RANDOM_WORDS-1] * (__uint128_t)last;
 
-   *(uint64_t*)out = h >> 64;
-}
-void multiply_shift_seed_init_slow(size_t seed) {
-   srand(seed);
-   for (int i = 0; i < MULTIPLY_SHIFT_RANDOM_WORDS; i++) {
-      // We don't know how many bits we get from rand(),
-      // but it is at least 16, so we concattenate a couple.
-      for (int j = 0; j < 8; j++) {
-         multiply_shift_random[i] <<= 16;
-         multiply_shift_random[i] ^= rand();
-      }
-      // We don't need an odd multiply, when we add the seed in the beginning
-      //multiply_shift_random[i] |= 1;
+      *(uint64_t*)out = h >> 64;
    }
-}
-void multiply_shift_seed_init(size_t seed) {
-   // The seeds we get are not random values, but just something like 1, 2 or 3.
-   // So we xor it with a random number to get something slightly more reasonable.
-   multiply_shift_random[0] = (__uint128_t)seed ^ multiply_shift_r;
-}
-void multiply_shift_init() {
-   multiply_shift_seed_init_slow(0);
-}
+   void multiply_shift_seed_init_slow(size_t seed) {
+      srand(seed);
+      for (int i = 0; i < MULTIPLY_SHIFT_RANDOM_WORDS; i++) {
+         // We don't know how many bits we get from rand(),
+         // but it is at least 16, so we concattenate a couple.
+         for (int j = 0; j < 8; j++) {
+            multiply_shift_random[i] <<= 16;
+            multiply_shift_random[i] ^= rand();
+         }
+         // We don't need an odd multiply, when we add the seed in the beginning
+         //multiply_shift_random[i] |= 1;
+      }
+   }
+   void multiply_shift_seed_init(size_t seed) {
+      // The seeds we get are not random values, but just something like 1, 2 or 3.
+      // So we xor it with a random number to get something slightly more reasonable.
+      multiply_shift_random[0] = (__uint128_t)seed ^ multiply_shift_r;
+   }
+   void multiply_shift_init() {
+      multiply_shift_seed_init_slow(0);
+   }
 
-// Vector multiply-shift (3.4) from Thorup's notes.
-void pair_multiply_shift(const void * key, int len_bytes, uint32_t seed, void * out) {
-   const uint8_t* buf = (const uint8_t*) key;
-   const uint64_t* buf64 = reinterpret_cast<const uint64_t*>(key);
-   int len = len_bytes/8;
+   // Vector multiply-shift (3.4) from Thorup's notes.
+   void pair_multiply_shift(const void * key, int len_bytes, uint32_t seed, void * out) {
+      const uint8_t* buf = (const uint8_t*) key;
+      const uint64_t* buf64 = reinterpret_cast<const uint64_t*>(key);
+      int len = len_bytes/8;
 
-   __uint128_t h = (__uint128_t)seed ^ multiply_shift_r;
-   h ^= (__uint128_t)len_bytes << 64;
-   for (int i = 0; i < len/2; i++)
-      h += (multiply_shift_random[2*i & MULTIPLY_SHIFT_RANDOM_WORDS-1] + buf64[2*i+1])
-         * (multiply_shift_random[2*i+1 & MULTIPLY_SHIFT_RANDOM_WORDS-1] + buf64[2*i]);
+      __uint128_t h = (__uint128_t)seed ^ multiply_shift_r;
+      h ^= (__uint128_t)len_bytes << 64;
+      for (int i = 0; i < len/2; i++)
+         h += (multiply_shift_random[2*i & MULTIPLY_SHIFT_RANDOM_WORDS-1] + buf64[2*i+1])
+            * (multiply_shift_random[2*i+1 & MULTIPLY_SHIFT_RANDOM_WORDS-1] + buf64[2*i]);
 
-   // Make sure we have the last word, if the number of words is odd
-   if (len & 1)
-      h += multiply_shift_random[len-1 & MULTIPLY_SHIFT_RANDOM_WORDS-1] * buf64[len-1];
+      // Make sure we have the last word, if the number of words is odd
+      if (len & 1)
+         h += multiply_shift_random[len-1 & MULTIPLY_SHIFT_RANDOM_WORDS-1] * buf64[len-1];
 
-   // Get the last bytes when things are unaligned
-   uint64_t last = 0;
-   for (int i = 8*len; i < len_bytes; i++)
-      last = (last << 8) | buf[i];
-   h += multiply_shift_random[len & MULTIPLY_SHIFT_RANDOM_WORDS-1] * last;
+      // Get the last bytes when things are unaligned
+      uint64_t last = 0;
+      for (int i = 8*len; i < len_bytes; i++)
+         last = (last << 8) | buf[i];
+      h += multiply_shift_random[len & MULTIPLY_SHIFT_RANDOM_WORDS-1] * last;
 
-   *(uint64_t*)out = h >> 64;
-}
+      *(uint64_t*)out = h >> 64;
+   }
+#endif
 
 //TODO MSVC
 #ifdef HAVE_INT64
