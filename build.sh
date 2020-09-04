@@ -1,4 +1,5 @@
 #!/bin/sh
+test -e mx3/mx3.h || git submodule update --init
 rm -rf build
 mkdir build
 cd build
