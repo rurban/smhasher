@@ -134,7 +134,7 @@ SMhasher
 | [mirhashstrict](doc/mirhashstrict.txt)        |      2217.39 |    64.91 | 178.74 (2) |1112 |                            |
 | [mirhashstrict32low](doc/mirhashstrict32low.txt)|    2219.08 |    64.91 | 198.50 (1) |1112 | MomentChi2 9               |
 | [mx3](doc/mx3.txt)                            |      6152.73 |    55.32 | 178.00 (3) | 734 | UB                         |
-| [pengyhash](doc/pengyhash.txt)                |      7146.53 |    92.22 | 243.13 (4) | 421 |                            |
+| [pengyhash](doc/pengyhash.txt)                |      9077.86 |    83.36 | 232.68 (3) | 421 |                            |
 | [City32](doc/City32.txt)                      |      3676.34 |    53.75 | 199.72 (2) |1319 |                            |
 | [City64low](doc/City64low.txt)                |      9165.70 |    54.14 | 202.28 (2) |1120|                             |
 | [City128](doc/City128.txt)                    |      9675.32 |    88.87 | 235.59 (2) |1841 |                            |

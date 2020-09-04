@@ -364,7 +364,7 @@ HashInfo g_hashes[] =
   { SpookyHash32_test,    32, 0x3F798BBB, "Spooky32",    "Bob Jenkins' SpookyHash, 32-bit result", GOOD },
   { SpookyHash64_test,    64, 0xA7F955F1, "Spooky64",    "Bob Jenkins' SpookyHash, 64-bit result", GOOD },
   { SpookyHash128_test,  128, 0x8D263080, "Spooky128",   "Bob Jenkins' SpookyHash, 128-bit result", GOOD },
-  { pengyhash_test,       64, 0x326BD06B, "pengyhash",   "pengyhash", GOOD },
+  { pengyhash_test,       64, 0x1FC2217B, "pengyhash",   "pengyhash", GOOD },
   { mx3hash64_test,       64, 0x4DB51E5B, "mx3",         "mx3 64bit", GOOD },
 #if defined(__SSE4_2__) && defined(__x86_64__) && !defined(_MSC_VER)
   { umash32,              32, 0x2F0C2CC6, "umash32",     "umash 32", GOOD },
