@@ -471,6 +471,13 @@ void clhash_test (const void * key, int len, uint32_t seed, void * out);
    void multiply_shift_seed_init(size_t seed);
    void multiply_shift (const void * key, int len, uint32_t seed, void * out);
    void pair_multiply_shift (const void *key, int len, uint32_t seed, void *out);
+   void poly_mersenne_init();
+   void poly_mersenne_seed_init(size_t seed);
+   void poly_0_mersenne (const void* key, int len, uint32_t seed, void* out);
+   void poly_1_mersenne (const void* key, int len, uint32_t seed, void* out);
+   void poly_2_mersenne (const void* key, int len, uint32_t seed, void* out);
+   void poly_3_mersenne (const void* key, int len, uint32_t seed, void* out);
+   void poly_4_mersenne (const void* key, int len, uint32_t seed, void* out);
 #endif
 
 void HighwayHash_init();

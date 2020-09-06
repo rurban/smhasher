@@ -147,6 +147,7 @@ bool SanityTest ( pfHash hash, const int hashbits )
           // Flip it back, hash again -> we should get the original result.
 
           flipbit(key2,len,bit);
+
           hash(key2,len,0,hash2);
 
           if(memcmp(hash1,hash2,hashbytes) != 0)
