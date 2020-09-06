@@ -1,6 +1,5 @@
 SMhasher
 ========
-
 [![Linux Build status](https://travis-ci.org/rurban/smhasher.svg?branch=master)](https://travis-ci.org/rurban/smhasher/) [![Windows Build status](https://ci.appveyor.com/api/projects/status/tb6ckfcrhqi6pwn9/branch/master?svg=true)](https://ci.appveyor.com/project/rurban/smhasher) [![FreeBSD Build status](https://api.cirrus-ci.com/github/rurban/smhasher.svg?branch=master)](https://cirrus-ci.com/github/rurban/smhasher)
 
 | Hash function                                 |      MiB/sec |cycl./hash|cycl./map   | size| Quality problems               |
@@ -13,7 +12,7 @@ SMhasher
 | [sumhash](doc/sumhash.txt)                    |      7168.98 |    31.10 | -| 363 | test FAIL                      |
 | [sumhash32](doc/sumhash32.txt)                |     23537.84 |    21.86 | -| 863 | UB, test FAIL                  |
 | [multiply_shift](doc/multiply_shift.txt)      |      3892.73 |    34.63 | 174.88 (3) | 345 | fails most tests                |
-| [pair_multiply_shift](doc/pair_multiply_shift)|     13604.46 |    31.71 | too slow   | 609 | UB, fails most tests            |
+| [pair_multiply_shift](doc/pair_multiply_shift)|      3716.95 |    40.22 | 186.34     | 609 | fails most tests            |
 | --------------------------                    |              |          |            |     |                                |
 | [crc32](doc/crc32.txt)                        |       392.07 |   129.91 | 201.59 (2) | 422 | insecure, 8590x collisions, distrib, PerlinNoise |
 | [md5_32a](doc/md5_32a.txt)                    |       353.74 |   630.50 | 794.71 (14)|4419 | 8590x collisions, distrib |
