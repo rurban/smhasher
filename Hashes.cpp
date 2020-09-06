@@ -804,15 +804,20 @@ void clhash_seed_init(size_t seed)
 
       *(uint64_t*)out = h >> 64;
    }
+   static __uint128_t rand128() {
+      // We don't know how many bits we get from rand(),
+      // but it is at least 16, so we concattenate a couple.
+      __uint128_t r = rand();
+      for (int i = 0; i < 7; i++) {
+         r <<= 16;
+         r ^= rand();
+      }
+      return r;
+   }
    void multiply_shift_seed_init_slow(size_t seed) {
       srand(seed);
       for (int i = 0; i < MULTIPLY_SHIFT_RANDOM_WORDS; i++) {
-         // We don't know how many bits we get from rand(),
-         // but it is at least 16, so we concattenate a couple.
-         for (int j = 0; j < 8; j++) {
-            multiply_shift_random[i] <<= 16;
-            multiply_shift_random[i] ^= rand();
-         }
+         multiply_shift_random[i] = rand128();
          // We don't need an odd multiply, when we add the seed in the beginning
          //multiply_shift_random[i] |= 1;
       }
@@ -851,7 +856,94 @@ void clhash_seed_init(size_t seed)
 
       *(uint64_t*)out = h >> 64;
    }
+
+   #define MERSENNE_61_REDUCE(h) (h = (h & MERSENNE_61) + (h >> 61))
+   const static uint64_t MERSENNE_61 = (1ull << 61) - 1;
+   const static int POLY_MERSENNE_MAX_K = 4;
+   static __uint64_t poly_mersenne_random[POLY_MERSENNE_MAX_K+1];
+   static uint64_t poly_mersenne_a;
+   static uint64_t poly_mersenne_b;
+   static uint32_t poly_k_mersenne(const void * key, int len_bytes, uint32_t seed, const int k) {
+      const uint32_t* buf32 = reinterpret_cast<const uint32_t*>(key);
+      int len = len_bytes/4;
+
+      // We first combine hashes using a polynomial in `a`:
+      // hash = x1 + x2 * a + x3 * a^2 + ... (mod p)
+      // This hash has collision probability len/p, since the polynomial is
+      // degree and so can have at most len roots (values of a that make it zero).
+
+      // h has to be 128 bit, since we multiply 61 bit random values with 32 bit keys.
+      __uint128_t h = buf32[0];
+      for (int i = 1; i < len; i++) {
+         h = h * poly_mersenne_a + buf32[i];
+         // Partial modular reduction. Since each round adds 32 bits, and this
+         // subtracts (up to) 61 bits, we make sure to never overflow.
+         MERSENNE_61_REDUCE(h);
+      }
+
+      // Get the last character
+      if (len_bytes & 3) {
+         const uint8_t* buf = reinterpret_cast<const uint8_t*>(key);
+         uint32_t last = buf[4*len];
+         for (int i = 4*len+1; i < len_bytes; i++)
+            last = (last << 8) | buf[i];
+         h = h * poly_mersenne_a + last;
+         MERSENNE_61_REDUCE(h);
+      }
+
+      // We add the length as a character to distinguish hashes of different length.
+      h = h * poly_mersenne_a + (poly_mersenne_b ^ len_bytes ^ seed);
+      MERSENNE_61_REDUCE(h);
+
+      // Increase hash strength from low collision rate to K-independence.
+      // hash = a1 + a2 * h + a3 * h^2 + ... (mod p)
+      if (k != 0) {
+         uint64_t h0 = h;
+         h = poly_mersenne_random[0];
+         for (int i = 1; i <= k; i++) {
+            h = h * h0 + poly_mersenne_random[i];
+            MERSENNE_61_REDUCE(h);
+         }
+      }
+
+      // Complete the modular reduction
+      if (h >= MERSENNE_61)
+         h -= MERSENNE_61;
+
+      return h;
+   }
+   void poly_0_mersenne(const void * key, int len_bytes, uint32_t seed, void * out) {
+      *(uint32_t*)out = (uint32_t)poly_k_mersenne(key, len_bytes, seed, 0);
+   }
+   void poly_1_mersenne(const void * key, int len_bytes, uint32_t seed, void * out) {
+      *(uint32_t*)out = (uint32_t)poly_k_mersenne(key, len_bytes, seed, 1);
+   }
+   void poly_2_mersenne(const void * key, int len_bytes, uint32_t seed, void * out) {
+      *(uint32_t*)out = (uint32_t)poly_k_mersenne(key, len_bytes, seed, 2);
+   }
+   void poly_3_mersenne(const void * key, int len_bytes, uint32_t seed, void * out) {
+      *(uint32_t*)out = (uint32_t)poly_k_mersenne(key, len_bytes, seed, 3);
+   }
+   void poly_4_mersenne(const void * key, int len_bytes, uint32_t seed, void * out) {
+      *(uint32_t*)out = (uint32_t)poly_k_mersenne(key, len_bytes, seed, 4);
+   }
+   void poly_mersenne_seed_init(size_t seed) {
+      srand(seed);
+      printf("init a, seed=%d\n", seed);
+      poly_mersenne_a = (uint64_t)rand128() % MERSENNE_61;
+      poly_mersenne_b = (uint64_t)rand128() % MERSENNE_61;
+      for (int i = 0; i < POLY_MERSENNE_MAX_K+1; i++) {
+         // The random values should be at most 2^61, or the lazy
+         // modular reduction won't work.
+         poly_mersenne_random[i] = (uint64_t)rand128() % MERSENNE_61;
+      }
+   }
+   void poly_mersenne_init() {
+      poly_mersenne_seed_init(0);
+   }
+
 #endif
+
 
 //TODO MSVC
 #ifdef HAVE_INT64
