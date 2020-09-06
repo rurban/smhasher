@@ -11,9 +11,9 @@ SMhasher
 | [BadHash](doc/BadHash.txt)                    |       524.81 |    95.70 | -|  47 | test FAIL                      |
 | [sumhash](doc/sumhash.txt)                    |      7168.98 |    31.10 | -| 363 | test FAIL                      |
 | [sumhash32](doc/sumhash32.txt)                |     23537.84 |    21.86 | -| 863 | UB, test FAIL                  |
-| [multiply_shift](doc/multiply_shift.txt)      |      3892.73 |    34.63 | 174.88 (3) | 345 | fails most tests                |
-| [pair_multiply_shift](doc/pair_multiply_shift)|      3716.95 |    40.22 | 186.34     | 609 | fails most tests            |
-| --------------------------                    |              |          |            |     |                                |
+| [multiply_shift](doc/multiply_shift.txt)      |      3892.73 |    34.63 | 174.88 (3) | 345 | UB, fails most tests |
+| [pair_multiply_shift](doc/pair_multiply_shift)|      3716.95 |    40.22 | 186.34 (3) | 609 | UB, fails most tests |
+| --------------------------                    |              |          |            |     |                      |
 | [crc32](doc/crc32.txt)                        |       392.07 |   129.91 | 201.59 (2) | 422 | insecure, 8590x collisions, distrib, PerlinNoise |
 | [md5_32a](doc/md5_32a.txt)                    |       353.74 |   630.50 | 794.71 (14)|4419 | 8590x collisions, distrib |
 | [sha1_32a](doc/sha1_32a.txt)                  |       353.03 |  1385.80 |1759.94 (5) |5126 | Cyclic low32, 36.6% distrib |
@@ -346,11 +346,12 @@ Typical undefined behaviour (**UB**) problems:
   Murmur3*, Murmur2*, metrohash* (all but cmetro*), Crap8, discohash,
   beamsplitter, lookup3, fletcher4, fletcher2, all sanmayce
   FNV1a\_ variants (FNV1a\_YT, FNV1A\_Pippip\_Yurii,
-  FNV1A\_Totenschiff, ...), fibonacci.
+  FNV1A\_Totenschiff, ...), fibonacci, multiply\_shift, pair\_multiply\_shift.
 
   The usual mitigation is to check the buffer alignment either in the
   caller, provide a pre-processing loop for the misaligned prefix, or
   copy the whole buffer into a fresh aligned area.
+  Put that extra code inside `#ifdef HAVE_ALIGNED_ACCESS_REQUIRED`.
 
 * oob - Out of bounds
 
