@@ -153,6 +153,15 @@ HashInfo g_hashes[] =
 #ifdef __SSE2__
   { hasshe2_test,        256, 0xF5D39DFE, "hasshe2",     "SSE2 hasshe2, 256-bit", POOR },
 #endif
+#ifdef __SIZEOF_INT128__
+  // Thomas Dybdahl Ahle, Jakob Tejs Bæk Knudsen, and Mikkel Thorup2
+  // "The Power of Hashing with Mersenne Primes".
+  // Similar insecurity as with CRC, hashes cancel itself out.
+  { poly_1_mersenne,      32, 0,          "poly_1_mersenne", "Degree 1 Hashing mod 2^61-1", POOR },
+  { poly_2_mersenne,      32, 0,          "poly_2_mersenne", "Degree 2 Hashing mod 2^61-1", GOOD },
+  { poly_3_mersenne,      32, 0,          "poly_3_mersenne", "Degree 3 Hashing mod 2^61-1", GOOD },
+  { poly_4_mersenne,      32, 0,          "poly_4_mersenne", "Degree 4 Hashing mod 2^61-1", GOOD },
+#endif
 #if defined(__SSE4_2__) && defined(__x86_64__)
   /* Even 32 uses crc32q, quad only */
   { crc32c_hw_test,       32, 0x0C7346F0, "crc32_hw",    "SSE4.2 crc32 in HW", POOR },
@@ -301,14 +310,6 @@ HashInfo g_hashes[] =
   { seahash32low,         32, 0x712F0EE8, "seahash32low","seahash - lower 32bit", GOOD },
 #endif /* HAVE_INT64 */
 #endif /* !MSVC */
-#ifdef __SIZEOF_INT128__
-  // Thomas Dybdahl Ahle, Jakob Tejs Bæk Knudsen, and Mikkel Thorup2
-  // "The Power of Hashing with Mersenne Primes"
-  { poly_1_mersenne,      32, 0,          "poly_1_mersenne", "Degree 1 Hashing mod 2^61-1", POOR },
-  { poly_2_mersenne,      32, 0,          "poly_2_mersenne", "Degree 2 Hashing mod 2^61-1", GOOD },
-  { poly_3_mersenne,      32, 0,          "poly_3_mersenne", "Degree 3 Hashing mod 2^61-1", GOOD },
-  { poly_4_mersenne,      32, 0,          "poly_4_mersenne", "Degree 4 Hashing mod 2^61-1", GOOD },
-#endif
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { clhash_test,          64, 0x00000000, "clhash",      "carry-less mult. hash -DBITMIX (64-bit for x64, SSE4.2)", GOOD },
 #endif

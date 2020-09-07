@@ -42,7 +42,11 @@ SMhasher
 | [blake2b-256_64](doc/blake2b-256_64.txt)      |       356.97 |  1222.76 |1435.03 (9) |     |               |
 | [sha3-256](doc/sha3-256.txt)                  |       100.58 |  3877.18 |4159.79 (37)|     | PerlinNoise   |
 | [sha3-256_64](doc/sha3-256_64.txt)            |       100.57 |  3909.00 |4174.63 (16)|     | PerlinNoise   |
-| [hasshe2](doc/hasshe2.txt)                    |      2374.20 |    75.71 | 224.24 (3) | 445 | insecure, Permutation,TwoBytes,Zeroes,Seed  |
+| [hasshe2](doc/hasshe2.txt)                    |      2374.20 |    75.71 | 224.24 (3) | 445 | insecure, Permutation,TwoBytes,Zeroes,Seed|
+| [poly_1_mersenne](doc/poly_1_mersenne.txt)    |      1067.02 |    75.85 | 207.40 (5) | 479 | UB, insecure, fails most tests |
+| [poly_2_mersenne](doc/poly_2_mersenne.txt)    |      1067.18 |    84.71 | 215.98 (5) | 479 | UB, insecure               |
+| [poly_3_mersenne](doc/poly_3_mersenne.txt)    |      1067.02 |    95.71 | 222.36 (2) | 479 | UB, insecure               |
+| [poly_4_mersenne](doc/poly_4_mersenne.txt)    |      1067.11 |   103.72 | 243.97 (3) | 479 | UB, insecure               |
 | [crc32_hw](doc/crc32_hw.txt)                  |      6330.28 |    29.68 | 173.40 (5) | 653 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2) |
 | [crc32_hw1](doc/crc32_hw1.txt)                |     23028.02 |    35.36 | 179.06 (2) | 671 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2) |
 | [crc64_hw](doc/crc64_hw.txt)                  |      8439.94 |    29.25 | 140.24 (2) | 652 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x64 SSE4.2) |
@@ -121,10 +125,6 @@ SMhasher
 | [TSip](doc/TSip.txt)                          |      3228.59 |    58.31 | 201.86 (2) | 519 | !msvc                      |
 | [seahash](doc/seahash.txt)                    |      4830.94 |    64.23 | 203.77 (3) | 871 | PerlinNoise, !msvc         |
 | [seahash32low](doc/seahash32low.txt)          |      4828.56 |    64.23 | 224.75 (2) | 871 | PerlinNoise 32, !msvc      |
-| [poly_1_mersenne](doc/poly_1_mersenne.txt)    |      1067.02 |    75.85 | 207.40 (5) | 479 | UB, fails most tests       |
-| [poly_2_mersenne](doc/poly_2_mersenne.txt)    |      1067.18 |    84.71 | 215.98 (5) | 479 | UB                         |
-| [poly_3_mersenne](doc/poly_3_mersenne.txt)    |      1067.02 |    95.71 | 222.36 (2) | 479 | UB                         |
-| [poly_4_mersenne](doc/poly_4_mersenne.txt)    |      1067.11 |   103.72 | 243.97 (3) | 479 | UB                         |
 | [clhash](doc/clhash.txt)                      |      4012.36 |    83.37 | 241.30 (3) |1809 | PerlinNoise, machine-specific (x64 SSE4.2) |
 | [HighwayHash64](doc/HighwayHash64.txt)        |      6245.28 |    98.68 | 250.67 (4) |2546 |                            |
 | [Murmur3F](doc/Murmur3F.txt)                  |      5225.91 |    50.16 | 180.28 (3) | 699 | UB                         |
