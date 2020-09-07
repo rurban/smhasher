@@ -32,7 +32,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * @version 2.15
+ * @version 2.19
  */
 
 //$ nocpp
@@ -137,7 +137,7 @@ inline uint32_t prvhash42_u32ec( const uint8_t* const p )
  * increments of 4. 
  */
 
-inline void prvhash42_ec( uint8_t* const, const int )
+inline void prvhash42_ec( uint8_t* const Hash, const int HashLen )
 {
 }
 
