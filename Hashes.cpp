@@ -857,6 +857,7 @@ void clhash_seed_init(size_t seed)
       *(uint64_t*)out = h >> 64;
    }
 
+  //objsize: 450fb0-45118f: 479. low32 of 128bit
    #define MERSENNE_61_REDUCE(h) (h = (h & MERSENNE_61) + (h >> 61))
    const static uint64_t MERSENNE_61 = (1ull << 61) - 1;
    const static int POLY_MERSENNE_MAX_K = 4;

@@ -121,6 +121,10 @@ SMhasher
 | [TSip](doc/TSip.txt)                          |      3228.59 |    58.31 | 201.86 (2) | 519 | !msvc                      |
 | [seahash](doc/seahash.txt)                    |      4830.94 |    64.23 | 203.77 (3) | 871 | PerlinNoise, !msvc         |
 | [seahash32low](doc/seahash32low.txt)          |      4828.56 |    64.23 | 224.75 (2) | 871 | PerlinNoise 32, !msvc      |
+| [poly_1_mersenne](doc/poly_1_mersenne.txt)    |      1067.02 |    75.85 | 207.40 (5) | 479 | UB, fails most tests       |
+| [poly_2_mersenne](doc/poly_2_mersenne.txt)    |      1067.18 |    84.71 | 215.98 (5) | 479 | UB                         |
+| [poly_3_mersenne](doc/poly_3_mersenne.txt)    |      1067.02 |    95.71 | 222.36 (2) | 479 | UB                         |
+| [poly_4_mersenne](doc/poly_4_mersenne.txt)    |      1067.11 |   103.72 | 243.97 (3) | 479 | UB                         |
 | [clhash](doc/clhash.txt)                      |      4012.36 |    83.37 | 241.30 (3) |1809 | PerlinNoise, machine-specific (x64 SSE4.2) |
 | [HighwayHash64](doc/HighwayHash64.txt)        |      6245.28 |    98.68 | 250.67 (4) |2546 |                            |
 | [Murmur3F](doc/Murmur3F.txt)                  |      5225.91 |    50.16 | 180.28 (3) | 699 | UB                         |
@@ -346,7 +350,8 @@ Typical undefined behaviour (**UB**) problems:
   Murmur3*, Murmur2*, metrohash* (all but cmetro*), Crap8, discohash,
   beamsplitter, lookup3, fletcher4, fletcher2, all sanmayce
   FNV1a\_ variants (FNV1a\_YT, FNV1A\_Pippip\_Yurii,
-  FNV1A\_Totenschiff, ...), fibonacci, multiply\_shift, pair\_multiply\_shift.
+  FNV1A\_Totenschiff, ...), fibonacci, multiply\_shift, pair\_multiply\_shift,
+  poly_X_mersenne.
 
   The usual mitigation is to check the buffer alignment either in the
   caller, provide a pre-processing loop for the misaligned prefix, or
