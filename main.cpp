@@ -97,12 +97,20 @@ HashInfo g_hashes[] =
  #define FIBONACCI_VERIF      0xFE3BD380
  #define FNV2_VERIF           0x1967C625
 #endif
+
 #ifdef __SIZEOF_INT128__
   // M. Dietzfelbinger, T. Hagerup, J. Katajainen, and M. Penttonen. A reliable randomized
   // algorithm for the closest-pair problem. J. Algorithms, 25:19–51, 1997.
   { multiply_shift,       64, 0, "multiply_shift", "Dietzfelbinger Multiply-shift on strings", POOR },
   { pair_multiply_shift,  64, 0, "pair_multiply_shift", "Pair-multiply-shift", POOR },
+  // Thomas Dybdahl Ahle, Jakob Tejs Bæk Knudsen, and Mikkel Thorup2
+  // "The Power of Hashing with Mersenne Primes"
+  { poly_2_mersenne,      32, 0, "poly_2_mersenne", "Degree 2 Hashing mod 2^61-1", GOOD },
+  { poly_3_mersenne,      32, 0, "poly_3_mersenne", "Degree 3 Hashing mod 2^61-1", GOOD },
+  // Tabulation hashing
+  { tabulation_test,      64, 0, "tabulation", "64-bit Tabulation with Multiply-Shift Mixer", GOOD },
 #endif
+  { tabulation_32_test,   32, 0, "tabulation32", "32-bit Tabulation with Multiply-Shift Mixer", POOR },
   { crc32,                32, 0x3719DB20, "crc32",       "CRC-32 soft", POOR },
   { md5_128,             128, 0xF263F96F, "md5-128",     "MD5", GOOD },
   { md5_32,               32, 0x634E5AEC, "md5_32a",     "MD5, low 32 bits", POOR },
@@ -436,7 +444,11 @@ void Hash_init (HashInfo* info) {
     multiply_shift_init();
   else if(info->hash == poly_0_mersenne || info->hash == poly_1_mersenne || info->hash == poly_2_mersenne || info->hash == poly_3_mersenne || info->hash == poly_4_mersenne)
     poly_mersenne_init();
+  else if(info->hash == tabulation_test)
+    tabulation_init();
 #endif
+  else if(info->hash == tabulation_32_test)
+    tabulation_32_init();
 #if defined(__SSE4_2__) && defined(__x86_64__)
   else if(info->hash == clhash_test)
     clhash_init();
@@ -478,7 +490,11 @@ void Hash_Seed_init (pfHash hash, size_t seed) {
     multiply_shift_seed_init(seed);
   else if(hash == poly_0_mersenne || hash == poly_1_mersenne || hash == poly_2_mersenne || hash == poly_3_mersenne || hash == poly_4_mersenne)
     poly_mersenne_seed_init(seed);
+  else if(hash == tabulation_test)
+    tabulation_seed_init(seed);
 #endif
+  else if(hash == tabulation_32_test)
+    tabulation_32_seed_init(seed);
 #if defined(__SSE4_2__) && defined(__x86_64__)
   else if (hash == clhash_test)
     clhash_seed_init(seed);
