@@ -157,19 +157,21 @@ if(NOT (CMAKE_CROSSCOMPILING))
   endif()
 endif()
 
-if(CMAKE_COMPILER_IS_GNUCC)
+if (NOT (CMAKE_CROSSCOMPILING))
+ if(CMAKE_COMPILER_IS_GNUCC)
   if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     set(CMAKE_ASM_FLAGS "${CFLAGS} -m64")
   elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
     set(CMAKE_ASM_FLAGS "${CFLAGS} -m32")
   endif()
-elseif((CMAKE_C_COMPILER_ID STREQUAL AppleClang) OR (CMAKE_C_COMPILER_ID
+ elseif((CMAKE_C_COMPILER_ID STREQUAL AppleClang) OR (CMAKE_C_COMPILER_ID
                                                      STREQUAL Clang))
   if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     set(CMAKE_ASM_FLAGS "${CFLAGS} -arch x86_64")
   elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
     set(CMAKE_ASM_FLAGS "${CFLAGS} -arch i386")
   endif()
+ endif()
 endif()
 
 # AddressSanitize

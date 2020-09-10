@@ -100,8 +100,8 @@ inline uint64_t rotr64 ( uint64_t x, int8_t r )
 __inline__ uint64_t timeofday()
 {
   struct timeval tv;
-  gettimeofday(&tv, nullptr);
-  return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
+  gettimeofday(&tv, NULL);
+  return (int64_t)((tv.tv_sec) * 1000000 + tv.tv_usec);
 }
 
 __inline__ uint64_t rdtsc()

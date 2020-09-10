@@ -8,6 +8,10 @@ if [ x$hname = xairc ]; then
     ./testspeed-air.sh $@
     exit
 fi
+if [ x`uname -m` = xaarch64 ]; then
+    ./testspeed-phone.sh $@
+    exit
+fi
 
 make -C build
 which performance && performance
