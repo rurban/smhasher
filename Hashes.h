@@ -32,6 +32,8 @@
 
 #include "vmac.h"
 
+#include "tabulation.h"
+
 //----------
 // These are _not_ hash functions (even though people tend to use crc32 as one...)
 
@@ -479,6 +481,22 @@ void clhash_test (const void * key, int len, uint32_t seed, void * out);
    void poly_3_mersenne (const void* key, int len, uint32_t seed, void* out);
    void poly_4_mersenne (const void* key, int len, uint32_t seed, void* out);
 #endif
+
+#ifdef __SIZEOF_INT128__
+   inline void tabulation_init() {
+      tabulation_seed_init(0);
+   }
+   inline void tabulation_test (const void * key, int len, uint32_t seed, void * out) {
+      *(uint64_t*)out = tabulation_hash(key, len, seed);
+   }
+#endif
+
+inline void tabulation_32_init() {
+   tabulation_32_seed_init(0);
+}
+inline void tabulation_32_test (const void * key, int len, uint32_t seed, void * out) {
+   *(uint32_t*)out = tabulation_32_hash(key, len, seed);
+}
 
 void HighwayHash_init();
 // objsize 20-a12: 2546

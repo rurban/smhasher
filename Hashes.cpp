@@ -760,49 +760,33 @@ void clhash_seed_init(size_t seed)
 // https://arxiv.org/pdf/1504.06804.pdf
 //
 #ifdef __SIZEOF_INT128__
-   const static int MULTIPLY_SHIFT_RANDOM_WORDS = 1<<15;
+   const static int MULTIPLY_SHIFT_RANDOM_WORDS = 1<<8;
    static __uint128_t multiply_shift_random[MULTIPLY_SHIFT_RANDOM_WORDS];
    const static __uint128_t multiply_shift_r = ((__uint128_t)0x75f17d6b3588f843 << 64) | 0xb13dea7c9c324e51;
    void multiply_shift(const void * key, int len_bytes, uint32_t seed, void * out) {
       const uint8_t* buf = (const uint8_t*) key;
-      const uint64_t* buf64 = reinterpret_cast<const uint64_t*>(key);
-      int len = len_bytes/8;
+      const int len = len_bytes/8;
 
       // The output is 64 bits, and we consider the input 64 bit as well,
       // so our intermediate values are 128.
       // We mix in len_bytes in the basis, since smhasher considers two keys
       // of different length to be different, even if all the extra bits are 0.
       // This is needed for the AppendZero test.
-      __uint128_t h = (__uint128_t)(seed + len_bytes) * multiply_shift_r;
-      for (int i = 0; i < len; i++)
-         h += multiply_shift_random[i & MULTIPLY_SHIFT_RANDOM_WORDS-1] * (__uint128_t)buf64[i];
+      uint64_t h = (seed + len_bytes) * multiply_shift_r >> 64;
+      for (int i = 0; i < len; i++, buf += 8)
+         h += multiply_shift_random[i % MULTIPLY_SHIFT_RANDOM_WORDS] * take64(buf) >> 64;
 
-      // Now get the last bytes when things are unaligned
-
-      // This method is slowest:  34.637 cycles/hash
-      /*if (len_bytes & 7) {
+      // Now get the last bytes
+      int remaining_bytes = len_bytes & 7;
+      if (remaining_bytes) {
          uint64_t last = 0;
-         memcpy(&last, buf+8*len, len_bytes-8*len);
-         h += multiply_shift_random[len & MULTIPLY_SHIFT_RANDOM_WORDS-1] * (__uint128_t)last;
-      }*/
-
-      // this naive approach is:  23.132 cycles/hash, avg
-      /*
-      uint64_t last = 0;
-      for (int i = 8*len; i < len_bytes; i++)
-         last = (last << 8) | buf[i];
-      h += multiply_shift_random[len & multiply_shift_random_words-1] * (__uint128_t)last;
-      */
-
-      // Using a gate makes things slightly better: 21.895 cycles/hash
-      if (len_bytes & 7) {
-         uint64_t last = buf[8*len];
-         for (int i = 8*len+1; i < len_bytes; i++)
-            last = (last << 8) | buf[i];
-         h += multiply_shift_random[len & MULTIPLY_SHIFT_RANDOM_WORDS-1] * (__uint128_t)last;
+         if (remaining_bytes & 4) {last = take32(buf); buf += 4;}
+         if (remaining_bytes & 2) {last = (last << 16) | take16(buf); buf += 2;}
+         if (remaining_bytes & 1) {last = (last << 8) | take08(buf);}
+         h += multiply_shift_random[len % MULTIPLY_SHIFT_RANDOM_WORDS] * last >> 64;
       }
 
-      *(uint64_t*)out = h >> 64;
+      *(uint64_t*)out = h;
    }
    static __uint128_t rand128() {
       // We don't know how many bits we get from rand(),
@@ -834,67 +818,70 @@ void clhash_seed_init(size_t seed)
    // Vector multiply-shift (3.4) from Thorup's notes.
    void pair_multiply_shift(const void * key, int len_bytes, uint32_t seed, void * out) {
       const uint8_t* buf = (const uint8_t*) key;
-      const uint64_t* buf64 = reinterpret_cast<const uint64_t*>(key);
       int len = len_bytes/8;
 
-      __uint128_t h = (__uint128_t)(seed + len_bytes) * multiply_shift_r;
-      for (int i = 0; i < len/2; i++)
-         h += (multiply_shift_random[2*i & MULTIPLY_SHIFT_RANDOM_WORDS-1] + buf64[2*i+1])
-            * (multiply_shift_random[2*i+1 & MULTIPLY_SHIFT_RANDOM_WORDS-1] + buf64[2*i]);
+      uint64_t h = (__uint128_t)(seed + len_bytes) * multiply_shift_r >> 64;
+      for (int i = 0; i < len/2; i++, buf += 16)
+         h += (multiply_shift_random[2*i & MULTIPLY_SHIFT_RANDOM_WORDS-1] + take64(buf+8))
+            * (multiply_shift_random[2*i+1 & MULTIPLY_SHIFT_RANDOM_WORDS-1] + take64(buf)) >> 64;
 
       // Make sure we have the last word, if the number of words is odd
-      if (len & 1)
-         h += multiply_shift_random[len-1 & MULTIPLY_SHIFT_RANDOM_WORDS-1] * buf64[len-1];
-
-      // Get the last bytes when things are unaligned
-      if (len_bytes & 7) {
-         uint64_t last = buf[8*len];
-         for (int i = 8*len+1; i < len_bytes; i++)
-            last = (last << 8) | buf[i];
-         h += multiply_shift_random[len & MULTIPLY_SHIFT_RANDOM_WORDS-1] * (__uint128_t)last;
+      if (len & 1) {
+         h += multiply_shift_random[len-1 & MULTIPLY_SHIFT_RANDOM_WORDS-1] * take64(buf) >> 64;
+         buf += 8;
       }
 
-      *(uint64_t*)out = h >> 64;
+      // Get the last bytes when things are unaligned
+      int remaining_bytes = len_bytes & 7;
+      if (remaining_bytes) {
+         uint64_t last = 0;
+         if (remaining_bytes & 4) {last = take32(buf); buf += 4;}
+         if (remaining_bytes & 2) {last = (last << 16) | take16(buf); buf += 2;}
+         if (remaining_bytes & 1) {last = (last << 8) | take08(buf);}
+         h += multiply_shift_random[len & MULTIPLY_SHIFT_RANDOM_WORDS-1] * last >> 64;
+      }
+
+      *(uint64_t*)out = h;
    }
 
   //objsize: 450fb0-45118f: 479. low32 of 128bit
-   #define MERSENNE_61_REDUCE(h) (h = (h & MERSENNE_61) + (h >> 61))
    const static uint64_t MERSENNE_61 = (1ull << 61) - 1;
+   static uint64_t mult_combine61(uint64_t h, uint64_t x, uint64_t a) {
+      __uint128_t temp = (__uint128_t)h * x + a;
+      return ((uint64_t)temp & MERSENNE_61) + (uint64_t)(temp >> 61);
+   }
    const static int POLY_MERSENNE_MAX_K = 4;
-   static __uint64_t poly_mersenne_random[POLY_MERSENNE_MAX_K+1];
+   static uint64_t poly_mersenne_random[POLY_MERSENNE_MAX_K+1];
    static uint64_t poly_mersenne_a;
    static uint64_t poly_mersenne_b;
    static uint32_t poly_k_mersenne(const void * key, int len_bytes, uint32_t seed, const int k) {
-      const uint32_t* buf32 = reinterpret_cast<const uint32_t*>(key);
-      int len = len_bytes/4;
+      const uint8_t* buf = (const uint8_t*) key;
 
       // We first combine hashes using a polynomial in `a`:
       // hash = x1 + x2 * a + x3 * a^2 + ... (mod p)
       // This hash has collision probability len/p, since the polynomial is
       // degree and so can have at most len roots (values of a that make it zero).
+      const uint64_t a = poly_mersenne_a;
 
-      // h has to be 128 bit, since we multiply 61 bit random values with 32 bit keys.
-      __uint128_t h = buf32[0];
-      for (int i = 1; i < len; i++) {
-         h = h * poly_mersenne_a + buf32[i];
+      // We use the length as the first character.
+      // We also add the seed, which is not quite how it is intended, but polyhash
+      // really doesn't take a runtime seed. It is rather reseeded from seed_init.
+      uint64_t h = len_bytes ^ seed;
+
+      for (int i = 0; i < len_bytes/4; i++, buf += 4) {
          // Partial modular reduction. Since each round adds 32 bits, and this
          // subtracts (up to) 61 bits, we make sure to never overflow.
-         MERSENNE_61_REDUCE(h);
+         h = mult_combine61(h, a, take32(buf));
       }
 
       // Get the last character
-      if (len_bytes & 3) {
-         const uint8_t* buf = reinterpret_cast<const uint8_t*>(key);
-         uint32_t last = buf[4*len];
-         for (int i = 4*len+1; i < len_bytes; i++)
-            last = (last << 8) | buf[i];
-         h = h * poly_mersenne_a + last;
-         MERSENNE_61_REDUCE(h);
+      int remaining_bytes = len_bytes % 4;
+      if (remaining_bytes) {
+         uint32_t last = 0;
+         if (remaining_bytes & 2) {last = take16(buf); buf += 2;}
+         if (remaining_bytes & 1) {last = (last << 8) | take08(buf);}
+         h = mult_combine61(h, a, last);
       }
-
-      // We add the length as a character to distinguish hashes of different length.
-      h = h * poly_mersenne_a + (poly_mersenne_b ^ len_bytes ^ seed);
-      MERSENNE_61_REDUCE(h);
 
       // Increase hash strength from low collision rate to K-independence.
       // hash = a1 + a2 * h + a3 * h^2 + ... (mod p)
@@ -902,12 +889,11 @@ void clhash_seed_init(size_t seed)
          uint64_t h0 = h;
          h = poly_mersenne_random[0];
          for (int i = 1; i <= k; i++) {
-            h = h * h0 + poly_mersenne_random[i];
-            MERSENNE_61_REDUCE(h);
+            h = mult_combine61(h, h0, poly_mersenne_random[i]);
          }
       }
 
-      // Complete the modular reduction
+      // Finally complete the modular reduction
       if (h >= MERSENNE_61)
          h -= MERSENNE_61;
 
@@ -930,13 +916,13 @@ void clhash_seed_init(size_t seed)
    }
    void poly_mersenne_seed_init(size_t seed) {
       srand(seed);
-      printf("init a, seed=%d\n", seed);
-      poly_mersenne_a = (uint64_t)rand128() % MERSENNE_61;
-      poly_mersenne_b = (uint64_t)rand128() % MERSENNE_61;
+      // a has be at most 2^60, or the lazy modular reduction won't work.
+      poly_mersenne_a = rand128() % (MERSENNE_61/2);
+      poly_mersenne_b = rand128() % MERSENNE_61;
       for (int i = 0; i < POLY_MERSENNE_MAX_K+1; i++) {
-         // The random values should be at most 2^61, or the lazy
+         // The random values should be at most 2^61-2, or the lazy
          // modular reduction won't work.
-         poly_mersenne_random[i] = (uint64_t)rand128() % MERSENNE_61;
+         poly_mersenne_random[i] = rand128() % MERSENNE_61;
       }
    }
    void poly_mersenne_init() {
