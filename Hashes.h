@@ -484,7 +484,7 @@ void clhash_test (const void * key, int len, uint32_t seed, void * out);
 
 #ifdef __SIZEOF_INT128__
    inline void tabulation_init() {
-      tabulation_seed_init(0);
+      tabulation_seed_init(2);
    }
    inline void tabulation_test (const void * key, int len, uint32_t seed, void * out) {
       *(uint64_t*)out = tabulation_hash(key, len, seed);
