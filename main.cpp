@@ -103,14 +103,7 @@ HashInfo g_hashes[] =
   // algorithm for the closest-pair problem. J. Algorithms, 25:19–51, 1997.
   { multiply_shift,       64, 0, "multiply_shift", "Dietzfelbinger Multiply-shift on strings", POOR },
   { pair_multiply_shift,  64, 0, "pair_multiply_shift", "Pair-multiply-shift", POOR },
-  // Thomas Dybdahl Ahle, Jakob Tejs Bæk Knudsen, and Mikkel Thorup2
-  // "The Power of Hashing with Mersenne Primes"
-  { poly_2_mersenne,      32, 0, "poly_2_mersenne", "Degree 2 Hashing mod 2^61-1", GOOD },
-  { poly_3_mersenne,      32, 0, "poly_3_mersenne", "Degree 3 Hashing mod 2^61-1", GOOD },
-  // Tabulation hashing
-  { tabulation_test,      64, 0, "tabulation", "64-bit Tabulation with Multiply-Shift Mixer", GOOD },
 #endif
-  { tabulation_32_test,   32, 0, "tabulation32", "32-bit Tabulation with Multiply-Shift Mixer", POOR },
   { crc32,                32, 0x3719DB20, "crc32",       "CRC-32 soft", POOR },
   { md5_128,             128, 0xF263F96F, "md5-128",     "MD5", GOOD },
   { md5_32,               32, 0x634E5AEC, "md5_32a",     "MD5, low 32 bits", POOR },
@@ -165,11 +158,14 @@ HashInfo g_hashes[] =
   // Thomas Dybdahl Ahle, Jakob Tejs Bæk Knudsen, and Mikkel Thorup2
   // "The Power of Hashing with Mersenne Primes".
   // Similar insecurity as with CRC, hashes cancel itself out.
-  { poly_1_mersenne,      32, 0,          "poly_1_mersenne", "Degree 1 Hashing mod 2^61-1", POOR },
-  { poly_2_mersenne,      32, 0,          "poly_2_mersenne", "Degree 2 Hashing mod 2^61-1", GOOD },
-  { poly_3_mersenne,      32, 0,          "poly_3_mersenne", "Degree 3 Hashing mod 2^61-1", GOOD },
-  { poly_4_mersenne,      32, 0,          "poly_4_mersenne", "Degree 4 Hashing mod 2^61-1", GOOD },
+  { poly_1_mersenne,      32, 0, "poly_1_mersenne", "Degree 1 Hashing mod 2^61-1", POOR },
+  { poly_2_mersenne,      32, 0, "poly_2_mersenne", "Degree 2 Hashing mod 2^61-1", GOOD },
+  { poly_3_mersenne,      32, 0, "poly_3_mersenne", "Degree 3 Hashing mod 2^61-1", GOOD },
+  { poly_4_mersenne,      32, 0, "poly_4_mersenne", "Degree 4 Hashing mod 2^61-1", GOOD },
+  // Similar insecurity as with CRC, hashes cancel itself out.
+  { tabulation_test,      64, 0, "tabulation",      "64-bit Tabulation with Multiply-Shift Mixer", GOOD },
 #endif
+  { tabulation_32_test,   32, 0, "tabulation32",    "32-bit Tabulation with Multiply-Shift Mixer", POOR },
 #if defined(__SSE4_2__) && defined(__x86_64__)
   /* Even 32 uses crc32q, quad only */
   { crc32c_hw_test,       32, 0x0C7346F0, "crc32_hw",    "SSE4.2 crc32 in HW", POOR },

@@ -475,6 +475,7 @@ void clhash_test (const void * key, int len, uint32_t seed, void * out);
    void pair_multiply_shift (const void *key, int len, uint32_t seed, void *out);
    void poly_mersenne_init();
    void poly_mersenne_seed_init(size_t seed);
+   // insecure: hashes cancel itself out, as with CRC
    void poly_0_mersenne (const void* key, int len, uint32_t seed, void* out);
    void poly_1_mersenne (const void* key, int len, uint32_t seed, void* out);
    void poly_2_mersenne (const void* key, int len, uint32_t seed, void* out);
@@ -486,6 +487,8 @@ void clhash_test (const void * key, int len, uint32_t seed, void * out);
    inline void tabulation_init() {
       tabulation_seed_init(2);
    }
+   // insecure: hashes cancel itself out, as with poly_X and CRC
+   // objsize: 40b780 - 40b9aa: 554
    inline void tabulation_test (const void * key, int len, uint32_t seed, void * out) {
       *(uint64_t*)out = tabulation_hash(key, len, seed);
    }
@@ -494,6 +497,7 @@ void clhash_test (const void * key, int len, uint32_t seed, void * out);
 inline void tabulation_32_init() {
    tabulation_32_seed_init(0);
 }
+// objsize: 40b9b0 - 40bd00: 848
 inline void tabulation_32_test (const void * key, int len, uint32_t seed, void * out) {
    *(uint32_t*)out = tabulation_32_hash(key, len, seed);
 }
