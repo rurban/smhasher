@@ -448,7 +448,8 @@ if(CMAKE_SIZEOF_VOID_P EQUAL 4)
 endif()
 
 find_library(HIGHWAY highwayhash)
-if(HIGHWAY)
+if(HIGHWAY
+   AND (NOT(CMAKE_CROSSCOMPILING)))
   if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     set(HIGHWAY_SRC HighwayHash.cpp)
     set(HIGHWAY_LIB highwayhash)
