@@ -11,8 +11,8 @@ SMhasher
 | [BadHash](doc/BadHash.txt)                    |       524.81 |    95.70 | -|  47 | test FAIL                      |
 | [sumhash](doc/sumhash.txt)                    |      7168.98 |    31.10 | -| 363 | test FAIL                      |
 | [sumhash32](doc/sumhash32.txt)                |     23537.84 |    21.86 | -| 863 | UB, test FAIL                  |
-| [multiply_shift](doc/multiply_shift.txt)      |      3892.73 |    34.63 | 174.88 (3) | 345 | UB, fails most tests |
-| [pair_multiply_shift](doc/pair_multiply_shift)|      3716.95 |    40.22 | 186.34 (3) | 609 | UB, fails most tests |
+| [multiply_shift](doc/multiply_shift.txt)      |      3892.73 |    34.63 | 174.88 (3) | 345 | fails most tests |
+| [pair_multiply_shift](doc/pair_multiply_shift)|      3716.95 |    40.22 | 186.34 (3) | 609 | fails most tests |
 | --------------------------                    |              |          |            |     |                      |
 | [crc32](doc/crc32.txt)                        |       392.07 |   129.91 | 201.59 (2) | 422 | insecure, 8590x collisions, distrib, PerlinNoise |
 | [md5_32a](doc/md5_32a.txt)                    |       353.74 |   630.50 | 794.71 (14)|4419 | 8590x collisions, distrib |
@@ -43,10 +43,10 @@ SMhasher
 | [sha3-256](doc/sha3-256.txt)                  |       100.58 |  3877.18 |4159.79 (37)|     | PerlinNoise   |
 | [sha3-256_64](doc/sha3-256_64.txt)            |       100.57 |  3909.00 |4174.63 (16)|     | PerlinNoise   |
 | [hasshe2](doc/hasshe2.txt)                    |      2374.20 |    75.71 | 224.24 (3) | 445 | insecure, Permutation,TwoBytes,Zeroes,Seed|
-| [poly_1_mersenne](doc/poly_1_mersenne.txt)    |      1067.02 |    75.85 | 207.40 (5) | 479 | UB, insecure, fails most tests |
-| [poly_2_mersenne](doc/poly_2_mersenne.txt)    |      1067.18 |    84.71 | 215.98 (5) | 479 | UB, insecure               |
-| [poly_3_mersenne](doc/poly_3_mersenne.txt)    |      1067.02 |    95.71 | 222.36 (2) | 479 | UB, insecure               |
-| [poly_4_mersenne](doc/poly_4_mersenne.txt)    |      1067.11 |   103.72 | 243.97 (3) | 479 | UB, insecure               |
+| [poly_1_mersenne](doc/poly_1_mersenne.txt)    |      1067.02 |    75.85 | 207.40 (5) | 479 | insecure, fails most tests |
+| [poly_2_mersenne](doc/poly_2_mersenne.txt)    |      1067.18 |    84.71 | 215.98 (5) | 479 | insecure               |
+| [poly_3_mersenne](doc/poly_3_mersenne.txt)    |      1067.02 |    95.71 | 222.36 (2) | 479 | insecure               |
+| [poly_4_mersenne](doc/poly_4_mersenne.txt)    |      1067.11 |   103.72 | 243.97 (3) | 479 | insecure               |
 | [tabulation32](doc/tabulation32.txt)          |      4373.20 |    33.69 | 191.19 (4) | 848 | insecure, collisions       |
 | [tabulation](doc/tabulation.txt)              |      7588.69 |    45.07 | 176.09 (2) | 554 | insecure       |
 | [crc32_hw](doc/crc32_hw.txt)                  |      6330.28 |    29.68 | 173.40 (5) | 653 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2) |
@@ -352,8 +352,7 @@ Typical undefined behaviour (**UB**) problems:
   Murmur3*, Murmur2*, metrohash* (all but cmetro*), Crap8, discohash,
   beamsplitter, lookup3, fletcher4, fletcher2, all sanmayce
   FNV1a\_ variants (FNV1a\_YT, FNV1A\_Pippip\_Yurii,
-  FNV1A\_Totenschiff, ...), fibonacci, multiply\_shift, pair\_multiply\_shift,
-  poly_X_mersenne.
+  FNV1A\_Totenschiff, ...), fibonacci.
 
   The usual mitigation is to check the buffer alignment either in the
   caller, provide a pre-processing loop for the misaligned prefix, or
