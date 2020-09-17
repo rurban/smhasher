@@ -65,8 +65,15 @@ bool VerificationTest ( HashInfo* info, bool verbose )
       return false;
     }
   } else {
-    if (verbose)
-      printf("Verification value 0x%08X ....... PASS\n", verification);
+    if (!expected) {
+      if (verbose)
+        printf("Verification value 0x%08X ....... INSECURE (should not be 0)\n",
+               verification);
+      return true;
+    } else {
+      if (verbose)
+        printf("Verification value 0x%08X ....... PASS\n", verification);
+    }
     return true;
   }
 }

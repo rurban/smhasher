@@ -101,8 +101,8 @@ HashInfo g_hashes[] =
 #ifdef __SIZEOF_INT128__
   // M. Dietzfelbinger, T. Hagerup, J. Katajainen, and M. Penttonen. A reliable randomized
   // algorithm for the closest-pair problem. J. Algorithms, 25:19–51, 1997.
-  { multiply_shift,       64, 0, "multiply_shift", "Dietzfelbinger Multiply-shift on strings", POOR },
-  { pair_multiply_shift,  64, 0, "pair_multiply_shift", "Pair-multiply-shift", POOR },
+  { multiply_shift,       64, 0x47C21D89, "multiply_shift", "Dietzfelbinger Multiply-shift on strings", POOR },
+  { pair_multiply_shift,  64, 0x82558D31, "pair_multiply_shift", "Pair-multiply-shift", POOR },
 #endif
   { crc32,                32, 0x3719DB20, "crc32",       "CRC-32 soft", POOR },
   { md5_128,             128, 0xF263F96F, "md5-128",     "MD5", GOOD },
