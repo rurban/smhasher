@@ -47,7 +47,7 @@ static UniformRandomNumberGenerator_ rng;
 
 
 
-#if !defined __arm__
+#if !(defined __arm__ || defined __aarch64__)
 #if (defined _WIN64) || (defined __x86_64__)
 
 #include "PMP_Multilinear_64_out_32.h"

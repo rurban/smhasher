@@ -147,7 +147,7 @@ uint64_t fmix64_short ( uint64_t k )
 
 /////////////////     SSE / AVX SUPPORT     /////////////////
 
-#if !defined __arm__
+#if !(defined __arm__ || defined __aarch64__)
 #define PMPML_USE_SSE // makes sense for x86 processors only with SSE 
 
 #ifdef PMPML_USE_SSE

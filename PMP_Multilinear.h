@@ -41,7 +41,7 @@
 #define PMPML_CHUNK_OPTIMIZATION_TYPE 2 // 1 or 2 is recommended
 #define PMPML_MSC_32_WORKAROUND	// enables MSVC-specific code that appears to be more efficient than a regular one; comment out, if not desired
 #else // _MSC_VER
-#ifdef __arm__
+#if (defined __arm__ || defined __aarch64__)
 #define PMPML_CHUNK_OPTIMIZATION_TYPE 1 // 1 is recommended
 #else // __arm__
 #ifdef __INTEL_COMPILER
@@ -52,7 +52,7 @@
 #endif // __arm __
 #endif // _MSC_VER
 
-#ifdef __arm__
+#if defined __arm__ || defined __aarch64__
 //#define PMPML_STRICT_UNALIGNED_HANDLING
 #endif // __arm__
 
@@ -210,7 +210,7 @@ void mul32x32to64addto96(uint32_t& loWord, uint32_t& hiWord, uint32_t& hhWord, u
 inline
 void multiply32x32to64(uint32_t& rhi, uint32_t& rlo, uint32_t a, uint32_t b)
 {
-#ifdef __arm__
+#if defined __arm__ || defined __aarch64__
 
 __asm("UMULL %0, %1, %2, %3\n"
       : "+r" (rlo), "+r" (rhi)
@@ -228,7 +228,7 @@ __asm__(
 inline
 void add64(uint32_t& loWord, uint32_t& hiWord, uint32_t& hhWord, uint32_t& loAdd, uint32_t& hiAdd, uint32_t& hhAdd)
 {
-#ifdef __arm__
+#if defined __arm__ || defined __aarch64__
 __asm("ADDS %3, %3, %0\n"
       "ADCS %1, %4, %1\n"
       "ADC %2, %5, %2"
@@ -247,7 +247,7 @@ FORCE_INLINE
 void mul32x32to64addto96(uint32_t& loWord, uint32_t& hiWord, uint32_t& hhWord, uint32_t a, uint32_t b)
 {
 	uint32_t rhi;
-#ifdef __arm__
+#if defined __arm__ || defined __aarch64__
 	uint32_t rlo;
 
 __asm("UMULL %3, %4, %5, %6\n"
