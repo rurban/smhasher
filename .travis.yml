@@ -17,28 +17,7 @@ matrix:
             - gcc-multilib
     - name: aarch64
       arch: arm64
-      addons:
-        apt:
-          packages:
-            - gcc-aarch64-linux-gnu
-            - g++-aarch64-linux-gnu
-            - binutils-aarch64-linux-gnu
-      services: docker
-      install:
-        - |
-          if [ "$(uname -m)" = x86_64 ]; then
-            docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-          fi
-      script:
-        - cmake -DCMAKE_TOOLCHAIN_FILE=CMakeARM64Cross.txt .
-        - cmake --build .
-        - |
-          travis_retry docker build --rm -t smhasher \
-            --build-arg BASE_IMAGE=arm64v8/fedora \
-            -f Dockerfile .
-        - |
-          docker run --rm -t smhasher \
-            sh -c "./SMHasher --test=VerifyAll,Sanity,Speed,Seed"
+      env: XCC=gcc XCXX=g++
 
 script:
   - CC="$XCC" CXX="$XCXX" cmake .
