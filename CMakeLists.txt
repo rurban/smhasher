@@ -157,7 +157,9 @@ if(NOT (CMAKE_CROSSCOMPILING))
   endif()
 endif()
 
-if (NOT (CMAKE_CROSSCOMPILING))
+if (NOT (CMAKE_CROSSCOMPILING)
+    AND ((CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
+         OR (CMAKE_SYSTEM_PROCESSOR STREQUAL "i386")))
  if(CMAKE_COMPILER_IS_GNUCC)
   if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     set(CMAKE_ASM_FLAGS "${CFLAGS} -m64")
@@ -407,8 +409,9 @@ if(AES_FOUND)
     set_source_files_properties(t1ha/t1ha0_ia32aes_avx.c
                                 PROPERTIES COMPILE_FLAGS "/arch:avx")
     set_source_files_properties(t1ha/t1ha0_ia32aes_avx2.c
-                                PROPERTIES COMPILE_FLAGS "/arch:avx2")
-  else()
+      PROPERTIES COMPILE_FLAGS "/arch:avx2")
+  elseif((CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
+         OR (CMAKE_SYSTEM_PROCESSOR STREQUAL "i386"))
     set_source_files_properties(
       t1ha/t1ha0_ia32aes_noavx.c PROPERTIES COMPILE_FLAGS
                                             "-mno-avx2 -mno-avx -maes")
