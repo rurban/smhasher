@@ -808,7 +808,9 @@ inline void wysha(const void *key, int len, unsigned seed, void *out) {
   memcpy(out, s, 32);
 }
 
-#if defined(HAVE_AESNI) && defined(__SIZEOF_INT128__) /*&& !defined(HAVE_UBSAN)*/
+#if defined(HAVE_AESNI) && defined(__SIZEOF_INT128__) && \
+  (defined(__x86_64__) || defined(_M_AMD64) || defined(__i386__)  || defined(_M_IX86))
+#define HAVE_MEOW_HASH
 #include "meow_hash_x64_aesni.h"
 // objsize: 0x84b0-8b94 = 1764
 inline void MeowHash128_test(const void *key, int len, unsigned seed, void *out) {

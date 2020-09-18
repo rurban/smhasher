@@ -128,7 +128,9 @@
 #endif
 #include <intrin.h>
 #else
+#if defined(__x86_64__) || defined(_M_AMD64) || defined(__i386__)  || defined(_M_IX86)
 #include <x86intrin.h>
+#endif
 #endif
 
 #define meow_u8 char unsigned
