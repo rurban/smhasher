@@ -479,7 +479,7 @@ void Hash_Seed_init (pfHash hash, size_t seed) {
   //  md5_seed_init(seed);
   //if (hash == VHASH_32 || hash == VHASH_64)
   //  VHASH_seed_init(seed);
-  if (true)
+  if (false)
      ;
 #ifdef __SIZEOF_INT128__
   else if(hash == multiply_shift || hash == pair_multiply_shift)
