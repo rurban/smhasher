@@ -201,8 +201,15 @@ HashInfo g_hashes[] =
   { JenkinsOOAT_test,     32, 0x83E133DA, "JenkinsOOAT", "Bob Jenkins' OOAT as in perl 5.18", POOR },
   { JenkinsOOAT_perl_test,32, 0xEE05869B, "JenkinsOOAT_perl", "Bob Jenkins' OOAT as in old perl5", POOR },
   // FIXME: seed
-  { VHASH_32,             32, 0xF0077651, "VHASH_32",    "VHASH_32 by Ted Krovetz and Wei Dai", POOR },
-  { VHASH_64,             64, 0xF97D84FE, "VHASH_64",    "VHASH_64 by Ted Krovetz and Wei Dai", POOR },
+#ifdef __aarch64__
+  #define VHASH32_VERIF 0x0F02AEFD
+  #define VHASH64_VERIF 0xFAAEE597
+#else
+  #define VHASH32_VERIF 0xF0077651
+  #define VHASH64_VERIF 0xF97D84FE
+#endif
+  { VHASH_32,             32, VHASH32_VERIF, "VHASH_32",    "VHASH_32 by Ted Krovetz and Wei Dai", POOR },
+  { VHASH_64,             64, VHASH64_VERIF, "VHASH_64",    "VHASH_64 by Ted Krovetz and Wei Dai", POOR },
   { MicroOAAT_test,       32, 0x16F1BA97, "MicroOAAT",   "Small non-multiplicative OAAT (by funny-falcon)", POOR },
 #ifdef HAVE_SSE2
   { farsh32_test,         32, 0xBCDE332C, "farsh32",     "FARSH 32bit", POOR }, // insecure
@@ -215,7 +222,12 @@ HashInfo g_hashes[] =
   { jodyhash64_test,      64, 0x9F09E57F, "jodyhash64",  "jodyhash, 64-bit (v5)", POOR },
 #endif
   { lookup3_test,         32, 0x3D83917A, "lookup3",     "Bob Jenkins' lookup3", POOR },
-  { SuperFastHash_test,   32, 0xC4CB7C07, "superfast",   "Paul Hsieh's SuperFastHash", POOR },
+#ifdef __aarch64__
+  #define SFAST_VERIF 0xB2623D87
+#else
+  #define SFAST_VERIF 0xC4CB7C07
+#endif
+  { SuperFastHash_test,   32, SFAST_VERIF, "superfast",   "Paul Hsieh's SuperFastHash", POOR },
   { MurmurOAAT_test,      32, 0x5363BD98, "MurmurOAAT",  "Murmur one-at-a-time", POOR },
   { Crap8_test,           32, 0x743E97A1, "Crap8",       "Crap8", POOR },
   { xxHash32_test,        32, 0xBA88B743, "xxHash32",    "xxHash, 32-bit for x86", POOR },
@@ -324,7 +336,10 @@ HashInfo g_hashes[] =
   { MurmurHash3_x64_128, 128, 0x6384BA69, "Murmur3F",    "MurmurHash3 for x64, 128-bit", GOOD },
 #endif
   { fasthash32_test,      32, 0xE9481AFC, "fasthash32",  "fast-hash 32bit", GOOD },
-#if defined(__GNUC__) && UINT_MAX != ULONG_MAX
+#if defined __aarch64__
+ #define MUM_VERIF            0x280B2CC6
+ #define MUMLOW_VERIF         0xB13E0239
+#elif defined(__GNUC__) && UINT_MAX != ULONG_MAX
  #define MUM_VERIF            0x3EEAE2D4
  #define MUMLOW_VERIF         0x520263F5
 #else
