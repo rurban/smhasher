@@ -126,7 +126,7 @@ SMhasher
 | [prvhash42s_64](doc/prvhash42s_64.txt)        |      5756.11 |   183.34 | 377.27 (3) |2637 |                            |
 | [prvhash42s_128](doc/prvhash42s_128.txt)      |      5609.79 |   335.00 | 554.07 (4) |2653 |                            |
 | [SipHash13](doc/SipHash13.txt)                |      1888.99 |    93.94 | 207.27 (2) | 778 | 0.9% bias                  |
-| [BEBB4185](doc/BEBB4185.txt)                  |      2951.01 |   213.86 | 346.87 (4) |1294 | msvc-specific verification |
+| [BEBB4185](doc/BEBB4185.txt)                  |      2951.01 |   213.86 | 346.87 (4) |1294 | UB, msvc-specific          |
 | [TSip](doc/TSip.txt)                          |      3228.59 |    58.31 | 201.86 (2) | 519 | !msvc                      |
 | [seahash](doc/seahash.txt)                    |      4830.94 |    64.23 | 203.77 (3) | 871 | PerlinNoise, !msvc         |
 | [seahash32low](doc/seahash32low.txt)          |      4828.56 |    64.23 | 224.75 (2) | 871 | PerlinNoise 32, !msvc      |
