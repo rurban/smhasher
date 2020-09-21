@@ -29,7 +29,7 @@
  * 
  * -------------------------------------------------------------------------------*/
 
-// PMP_Multilinear.h: implementtation of a 32-bit version of PMP+-Multilinear hash family
+// PMP_Multilinear.h: implementation of a 32-bit version of PMP+-Multilinear hash family
 
 #if !defined __PMP_MULTILINEAR_HASHER_H__
 #define __PMP_MULTILINEAR_HASHER_H__
