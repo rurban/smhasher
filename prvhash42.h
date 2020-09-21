@@ -31,7 +31,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * @version 2.19
+ * @version 2.22
  */
 
 //$ nocpp
@@ -50,11 +50,13 @@
  * @param Msg The message to produce hash from. The alignment of the message
  * is unimportant.
  * @param MsgLen Message's length, in bytes.
- * @param[in,out] Hash The resulting hash. If InitVec is non-NULL, the hash
- * will not be initially reset to 0, and it should be pre-initialized with
- * uniformly-random bytes (there are no restrictions on which values to use
- * for initialization: even an all-zero value can be used). The provided hash
- * will be automatically endianness-corrected. On systems where this is
+ * @param[in,out] Hash The resulting hash. The length of this buffer should be
+ * equal to HashLen * 2 to supply a scratch pad for the function (for 32-bit
+ * hashes, this buffer can have HashLen length). If InitVec is non-NULL, the
+ * hash will not be initially reset to 0, and it should be pre-initialized
+ * with uniformly-random bytes (there are no restrictions on which values to
+ * use for initialization: even an all-zero value can be used). The provided
+ * hash will be automatically endianness-corrected. On systems where this is
  * relevant, this address should be aligned to 32 bits.
  * @param HashLen The required hash length, in bytes, should be >= 4, in
  * increments of 4.
@@ -72,63 +74,66 @@
  * set.
  */
 
-inline void prvhash42( const uint8_t* const Msg, const int MsgLen,
+inline void prvhash42( const uint8_t* Msg, const int MsgLen,
 	uint8_t* const Hash, const int HashLen, const uint64_t SeedXOR,
 	const uint8_t InitVec[ 16 ])
 {
+	const int hlm = ( HashLen == 4 ? HashLen : HashLen << 1 );
 	uint64_t lcg;
 	uint64_t Seed;
 
 	if( InitVec == 0 )
 	{
-		memset( Hash, 0, HashLen );
+		memset( Hash, 0, hlm );
 
-		lcg = 6308131542680191958ULL;
-		Seed = 8415268829946098982ULL ^ SeedXOR;
+		lcg = 16347860221670627854ULL;
+		Seed = 17878258369374729932ULL ^ SeedXOR;
 	}
 	else
 	{
-		prvhash42_ec( Hash, HashLen );
+		prvhash42_ec( Hash, hlm );
 
 		lcg = prvhash42_u64ec( InitVec );
 		Seed = prvhash42_u64ec( InitVec + 8 );
 	}
 
-	const uint8_t lb = (uint8_t) ( MsgLen > 0 ? ~Msg[ MsgLen - 1 ] : 0xFF );
-	const int mlext = MsgLen + (( 4 - ( MsgLen & 3 )) & 3 );
-	const int c = mlext + HashLen + ( HashLen - mlext % HashLen );
+	const uint8_t fb = (uint8_t) ( MsgLen > 0 ? ~Msg[ MsgLen - 1 ] : 0xFF );
+	const int mlext = MsgLen + (( 8 - ( MsgLen & 7 )) & 7 );
+	const int hl2 = HashLen << 1;
+	const int hlm2 = hlm << 1;
+	const uint8_t* const c = Msg + mlext + hl2 + ( hlm2 - mlext % hlm2 );
+	const uint8_t* const MsgEnd = Msg + MsgLen;
 	int hpos = 0;
-	int k;
 
-	for( k = 0; k < c; k += 4 )
+	while( Msg < c )
 	{
-		uint64_t msgw;
-
-		if( k < MsgLen - 3 )
-		{
-			msgw = prvhash42_u32ec( Msg + k );
-		}
-		else
-		{
-			msgw = (uint32_t) ( k < MsgLen ? Msg[ k ] : lb ) |
-				(uint32_t) ( k < MsgLen - 1 ? Msg[ k + 1 ] : lb ) << 8 |
-				(uint32_t) ( k < MsgLen - 2 ? Msg[ k + 2 ] : lb ) << 16 |
-				(uint32_t) lb << 24;
-		}
-
 		Seed *= lcg;
 		Seed = ~Seed;
 		uint32_t* const hc = (uint32_t*) &Hash[ hpos ];
+		const uint64_t hl = lcg >> 32 ^ prvhash42_lp32( Msg, MsgEnd, fb );
 		const uint64_t ph = *hc ^ ( Seed >> 32 );
-		Seed ^= ph ^ msgw;
-		*hc = (uint32_t) ph;
 		lcg += Seed;
+		Seed ^= ph ^ hl;
+		lcg += prvhash42_lp32( Msg + 4, MsgEnd, fb );
+		*hc = (uint32_t) ph;
 
 		hpos += 4;
 
-		if( hpos == HashLen )
+		if( hpos == hlm )
 		{
 			hpos = 0;
+		}
+
+		Msg += 8;
+	}
+
+	if( hlm > 4 )
+	{
+		int k;
+
+		for( k = 0; k < HashLen; k += 4 )
+		{
+			*(uint32_t*) ( Hash + k ) ^= *(uint32_t*) ( Hash + HashLen + k );
 		}
 	}
 

@@ -33,7 +33,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * @version 2.19
+ * @version 2.22a
  */
 
 //$ nocpp
@@ -58,6 +58,7 @@ typedef struct {
 	uint8_t* Hash; ///< Pointer to the hash buffer.
 	int HashLen; ///< Hash buffer length, in bytes, >= 4, in increments of 4.
 	int HashPos; ///< Hash buffer position.
+	int hlm; ///< Hash length multiplied by 2 or 1 (1 for 32-bit hashes).
 	uint8_t fb; ///< Final stream byte value, for hashing finalization.
 } PRVHASH42S_CTX;
 
@@ -67,8 +68,10 @@ typedef struct {
  * session.
  *
  * @param ctx Context structure.
- * @param[in,out] Hash The hash buffer. If InitVec is non-NULL, the hash will
- * not be initially reset to the default values, and it should be
+ * @param[in,out] Hash The hash buffer. The length of this buffer should be
+ * equal to HashLen * 2 to supply a scratch pad for the function (for 32-bit
+ * hashes, this buffer can have HashLen length). If InitVec is non-NULL, the
+ * hash will not be initially reset to the default values, and it should be
  * pre-initialized with uniformly-random bytes (there are no restrictions on
  * which values to use for initialization: even an all-zero value can be
  * used). The provided hash will be automatically endianness-corrected. On
@@ -94,34 +97,22 @@ inline void prvhash42s_init( PRVHASH42S_CTX* ctx, uint8_t* const Hash,
 	const int HashLen, const uint64_t SeedXOR[ 4 ],
 	const uint8_t InitVec[ 64 ])
 {
+        ctx -> hlm = HashLen;
+
+	int i;
+
 	if( InitVec == 0 )
 	{
-		const int IHLen = 64;
-		static const uint8_t InitHash[ IHLen ] = { 172, 167, 85, 251, 226, 96,
-			162, 255, 180, 46, 251, 62, 177, 20, 202, 167, 248, 183, 164, 209,
-			140, 203, 201, 43, 221, 106, 45, 82, 228, 49, 176, 55, 175, 162,
-			250, 129, 110, 93, 157, 252, 139, 190, 152, 216, 230, 204, 137,
-			175, 96, 192, 220, 12, 218, 73, 207, 216, 89, 187, 233, 62, 54,
-			120, 73, 173 };
+		memset( Hash, 0, ctx -> hlm );
 
-		if( HashLen <= IHLen )
-		{
-			memcpy( Hash, InitHash, HashLen );
-		}
-		else
-		{
-			memcpy( Hash, InitHash, IHLen );
-			memset( Hash + IHLen, 0, HashLen - IHLen );
-		}
-
-		ctx -> lcg[ 0 ] = 11556796507443277151ULL;
-		ctx -> Seed[ 0 ] = 10548428651729720817ULL;
-		ctx -> lcg[ 1 ] = 10704547264887375914ULL;
-		ctx -> Seed[ 1 ] = 13794555928830477562ULL;
-		ctx -> lcg[ 2 ] = 6709769659337316744ULL;
-		ctx -> Seed[ 2 ] = 5865555861213275199ULL;
-		ctx -> lcg[ 3 ] = 6866989938101941860ULL;
-		ctx -> Seed[ 3 ] = 18279480195748323821ULL;
+		ctx -> lcg[ 0 ] = 5094281193848473994ULL;
+		ctx -> Seed[ 0 ] = 10422451504945688786ULL;
+		ctx -> lcg[ 1 ] = 18418079607549277980ULL;
+		ctx -> Seed[ 1 ] = 6112660181958639245ULL;
+		ctx -> lcg[ 2 ] = 9775183536304958763ULL;
+		ctx -> Seed[ 2 ] = 12847999344382427112ULL;
+		ctx -> lcg[ 3 ] = 14921828135776612191ULL;
+		ctx -> Seed[ 3 ] = 17763997673696612504ULL;
 
 		if( SeedXOR != 0 )
 		{
@@ -133,7 +124,7 @@ inline void prvhash42s_init( PRVHASH42S_CTX* ctx, uint8_t* const Hash,
 	}
 	else
 	{
-		int i;
+		prvhash42_ec( Hash, ctx -> hlm );
 
 		for( i = 0; i < 4; i++ )
 		{
@@ -141,8 +132,6 @@ inline void prvhash42s_init( PRVHASH42S_CTX* ctx, uint8_t* const Hash,
 			ctx -> Seed[ i ] = prvhash42_u64ec( InitVec + i * 16 + 8 );
 		}
 	}
-
-	prvhash42_ec( Hash, HashLen );
 
 	ctx -> BlockFill = 0;
 	ctx -> Hash = Hash;
@@ -182,26 +171,19 @@ inline void prvhash42s_update( PRVHASH42S_CTX* ctx, const uint8_t* Msg,
 	uint64_t Seed3 = ctx -> Seed[ 2 ];
 	uint64_t Seed4 = ctx -> Seed[ 3 ];
 
-	const uint32_t* const HashEnd =
-		(uint32_t*) ( ctx -> Hash + ctx -> HashLen );
-
+	const uint32_t* const HashEnd = (uint32_t*) ( ctx -> Hash + ctx -> hlm );
 	uint32_t* hc = (uint32_t*) ( ctx -> Hash + ctx -> HashPos );
 	size_t BlockFill = ctx -> BlockFill;
 
 	while( BlockFill + MsgLen >= PRVHASH42S_LEN )
 	{
 		const uint8_t* MsgBlock = Msg;
-		uint64_t msgw;
-		uint64_t msgw2;
+		uint64_t msgw, msgw2, ph, hl;
 
 		Seed1 *= lcg1;
-		Seed1 = ~Seed1;
 		Seed2 *= lcg2;
-		Seed2 = ~Seed2;
 		Seed3 *= lcg3;
-		Seed3 = ~Seed3;
 		Seed4 *= lcg4;
-		Seed4 = ~Seed4;
 
 		if( BlockFill > 0 )
 		{
@@ -219,33 +201,48 @@ inline void prvhash42s_update( PRVHASH42S_CTX* ctx, const uint8_t* Msg,
 			MsgLen -= PRVHASH42S_LEN;
 		}
 
+		Seed1 = ~Seed1;
+		Seed2 = ~Seed2;
+		Seed3 = ~Seed3;
+		Seed4 = ~Seed4;
+
 		msgw = prvhash42_u32ec( MsgBlock + 12 );
 		msgw2 = prvhash42_u32ec( MsgBlock + 0 );
 
-		uint64_t ph = *hc ^ ( Seed1 >> 32 );
-		Seed1 ^= ph ^ msgw;
-		lcg1 += Seed1 + msgw2;
+		ph = *hc;
+
+		hl = lcg1 >> 32 ^ msgw;
+		lcg1 += Seed1;
+		lcg1 += msgw2;
+		ph ^= Seed1 >> 32;
+		Seed1 ^= ph ^ hl;
 
 		msgw = prvhash42_u32ec( MsgBlock + 8 );
 		msgw2 = prvhash42_u32ec( MsgBlock + 24 );
 
+		hl = lcg2 >> 32 ^ msgw;
+		lcg2 += Seed2;
+		lcg2 += msgw2;
 		ph ^= Seed2 >> 32;
-		Seed2 ^= ph ^ msgw;
-		lcg2 += Seed2 + msgw2;
+		Seed2 ^= ph ^ hl;
 
 		msgw = prvhash42_u32ec( MsgBlock + 20 );
 		msgw2 = prvhash42_u32ec( MsgBlock + 28 );
 
+		hl = lcg3 >> 32 ^ msgw;
+		lcg3 += Seed3;
+		lcg3 += msgw2;
 		ph ^= Seed3 >> 32;
-		Seed3 ^= ph ^ msgw;
-		lcg3 += Seed3 + msgw2;
+		Seed3 ^= ph ^ hl;
 
 		msgw = prvhash42_u32ec( MsgBlock + 4 );
 		msgw2 = prvhash42_u32ec( MsgBlock + 16 );
 
+		hl = lcg4 >> 32 ^ msgw;
+		lcg4 += Seed4;
+		lcg4 += msgw2;
 		ph ^= Seed4 >> 32;
-		Seed4 ^= ph ^ msgw;
-		lcg4 += Seed4 + msgw2;
+		Seed4 ^= ph ^ hl;
 
 		*hc = (uint32_t) ph;
 
@@ -290,13 +287,22 @@ inline void prvhash42s_final( PRVHASH42S_CTX* ctx )
 		prvhash42s_update( ctx, fbytes, PRVHASH42S_LEN - ctx -> BlockFill );
 	}
 
-	int c = ctx -> HashLen * 2 - ctx -> HashPos;
+	int c = ctx -> HashLen + ctx -> hlm - ctx -> HashPos;
 
 	while( c > 0 )
 	{
 		prvhash42s_update( ctx, fbytes, PRVHASH42S_LEN );
 		c -= 4;
 	}
+
+	/*if( ctx -> hlm > 4 )
+	{
+		for( c = 0; c < ctx -> HashLen; c += 4 )
+		{
+			*(uint32_t*) ( ctx -> Hash + c ) ^=
+				*(uint32_t*) ( ctx -> Hash + ctx -> HashLen + c );
+		}
+        }*/
 
 	prvhash42_ec( ctx -> Hash, ctx -> HashLen );
 }
@@ -309,8 +315,9 @@ inline void prvhash42s_final( PRVHASH42S_CTX* ctx )
  * @param Msg The message to produce hash from. The alignment of the message
  * is unimportant.
  * @param MsgLen Message's length, in bytes.
- * @param[out] Hash The hash buffer. On systems where this is relevant, this
- * address should be aligned to 32 bits.
+ * @param[out] Hash The hash buffer, length = HashLen. On systems where this
+ * is relevant, this address should be
+ * aligned to 32 bits.
  * @param HashLen The required hash length, in bytes, should be >= 4, in
  * increments of 4.
  */

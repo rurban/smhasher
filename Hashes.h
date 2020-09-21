@@ -1052,14 +1052,14 @@ inline void prvhash42_32test ( const void * key, int len, unsigned seed, void * 
 // objsize: 412850 - 4129ea: 960
 inline void prvhash42_64test ( const void * key, int len, unsigned seed, void * out )
 {
-  uint8_t hash[8] = {0};
+  uint8_t hash[16] = {0};
   prvhash42 ((const uint8_t *)key, len, hash, 8, (uint64_t)seed, NULL);
   memcpy (out, hash, 8);
 }
 // objsize: 412bd0 - 412d80: 432
 inline void prvhash42_128test ( const void * key, int len, unsigned seed, void * out )
 {
-  uint8_t hash[16] = {0};
+  uint8_t hash[32] = {0};
   prvhash42 ((const uint8_t *)key, len, hash, 16, (uint64_t)seed, NULL);
   memcpy (out, hash, 16);
 }
@@ -1083,6 +1083,7 @@ inline void prvhash42s_64test ( const void * key, int len, unsigned seed, void *
   prvhash42s_update( &ctx, (const uint8_t*)key, (size_t)len );
   prvhash42s_final( &ctx );
 }
+/* invalid since 2.22, cannot init hash with 256 bit */
 // objsize: 414230 - 4137dd: 2653
 inline void prvhash42s_128test ( const void * key, int len, unsigned seed, void * out )
 {

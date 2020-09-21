@@ -101,8 +101,8 @@ HashInfo g_hashes[] =
 #ifdef __SIZEOF_INT128__
   // M. Dietzfelbinger, T. Hagerup, J. Katajainen, and M. Penttonen. A reliable randomized
   // algorithm for the closest-pair problem. J. Algorithms, 25:19–51, 1997.
-  { multiply_shift,       64, 0x47C21D89, "multiply_shift", "Dietzfelbinger Multiply-shift on strings", POOR },
-  { pair_multiply_shift,  64, 0x82558D31, "pair_multiply_shift", "Pair-multiply-shift", POOR },
+  { multiply_shift,       64, 0xFCE355A6, "multiply_shift", "Dietzfelbinger Multiply-shift on strings", POOR },
+  { pair_multiply_shift,  64, 0xD4B20347, "pair_multiply_shift", "Pair-multiply-shift", POOR },
 #endif
   { crc32,                32, 0x3719DB20, "crc32",       "CRC-32 soft", POOR },
   { md5_128,             128, 0xF263F96F, "md5-128",     "MD5", GOOD },
@@ -304,12 +304,12 @@ HashInfo g_hashes[] =
   { halfsiphash_test,     32, 0xA7A05F72, "HalfSipHash", "HalfSipHash 2-4, 32bit", GOOD },
   { GoodOAAT_test,        32, 0x7B14EEE5, "GoodOAAT",    "Small non-multiplicative OAAT", GOOD },
 #ifdef HAVE_INT64
-  { prvhash42_32test,     32, 0x306E660B, "prvhash42_32", "prvhash42 32bit", GOOD },
-  { prvhash42_64test,     64, 0x828B1D67, "prvhash42_64", "prvhash42 64bit", GOOD },
-  { prvhash42_128test,   128, 0xCA2E25C1, "prvhash42_128","prvhash42 128bit", GOOD },
-  { prvhash42s_32test,    32, 0x0A19FAFC, "prvhash42s_32","prvhash42s 32bit", GOOD },
-  { prvhash42s_64test,    64, 0x4E1925F3, "prvhash42s_64","prvhash42s 64bit", GOOD },
-  { prvhash42s_128test,  128, 0xAD6FE7FE, "prvhash42s_128","prvhash42s 128bit", GOOD },
+  { prvhash42_32test,     32, 0x9542957F, "prvhash42_32", "prvhash42 32bit", GOOD },
+  { prvhash42_64test,     64, 0x10FE283E, "prvhash42_64", "prvhash42 64bit", GOOD },
+  { prvhash42_128test,   128, 0x83827B10, "prvhash42_128","prvhash42 128bit", GOOD },
+  { prvhash42s_32test,    32, 0x148D28F1, "prvhash42s_32","prvhash42s 32bit", GOOD },
+  { prvhash42s_64test,    64, 0xBB2DFACE, "prvhash42s_64","prvhash42s 64bit", GOOD },
+  { prvhash42s_128test,  128, 0x182BA067, "prvhash42s_128","prvhash42s 128bit", GOOD },
 #endif
   // as in rust and swift:
   { siphash13_test,       64, 0x29C010BF, "SipHash13",   "SipHash 1-3 - SSSE3 optimized", GOOD },
@@ -395,10 +395,10 @@ HashInfo g_hashes[] =
   { pengyhash_test,       64, 0x1FC2217B, "pengyhash",   "pengyhash", GOOD },
   { mx3hash64_test,       64, 0x4DB51E5B, "mx3",         "mx3 64bit", GOOD },
 #if defined(__SSE4_2__) && defined(__x86_64__) && !defined(_MSC_VER)
-  { umash32,              32, 0x2F0C2CC6, "umash32",     "umash 32", GOOD },
-  { umash32_hi,           32, 0xD323A67D, "umash32_hi",  "umash 32 hi", GOOD },
-  { umash,                64, 0x7518A050, "umash64",     "umash 64", GOOD },
-  { umash128,            128, 0x1ED02AAA, "umash128",    "umash 128", GOOD },
+  { umash32,              32, 0x03E16CA1, "umash32",     "umash 32", GOOD },
+  { umash32_hi,           32, 0xE29D613C, "umash32_hi",  "umash 32 hi", GOOD },
+  { umash,                64, 0x4542288C, "umash64",     "umash 64", GOOD },
+  { umash128,            128, 0xDA4E82B6, "umash128",    "umash 128", GOOD },
 #endif
   
   { t1ha2_atonce_test,           64, 0x8F16C948, "t1ha2_atonce",    "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
@@ -450,6 +450,8 @@ void Hash_init (HashInfo* info) {
   //  md5_init();
   else if (info->hash == rmd128)
     rmd128_init(&ltc_state);
+  else if(info->hash == tabulation_32_test)
+    tabulation_32_init();
 #ifdef __SIZEOF_INT128__
   else if(info->hash == multiply_shift || info->hash == pair_multiply_shift)
     multiply_shift_init();
@@ -458,8 +460,6 @@ void Hash_init (HashInfo* info) {
   else if(info->hash == tabulation_test)
     tabulation_init();
 #endif
-  else if(info->hash == tabulation_32_test)
-    tabulation_32_init();
 #if defined(__SSE4_2__) && defined(__x86_64__)
   else if(info->hash == clhash_test)
     clhash_init();
@@ -494,8 +494,8 @@ void Hash_Seed_init (pfHash hash, size_t seed) {
   //  md5_seed_init(seed);
   //if (hash == VHASH_32 || hash == VHASH_64)
   //  VHASH_seed_init(seed);
-  if (true)
-     ;
+  if(hash == tabulation_32_test)
+    tabulation_32_seed_init(seed);
 #ifdef __SIZEOF_INT128__
   else if(hash == multiply_shift || hash == pair_multiply_shift)
     multiply_shift_seed_init(seed);
@@ -504,8 +504,6 @@ void Hash_Seed_init (pfHash hash, size_t seed) {
   else if(hash == tabulation_test)
     tabulation_seed_init(seed);
 #endif
-  else if(hash == tabulation_32_test)
-    tabulation_32_seed_init(seed);
 #if defined(__SSE4_2__) && defined(__x86_64__)
   else if (hash == clhash_test)
     clhash_seed_init(seed);

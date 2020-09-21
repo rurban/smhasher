@@ -32,7 +32,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * @version 2.19
+ * @version 2.22
  */
 
 //$ nocpp
@@ -154,5 +154,33 @@ inline void prvhash42_ec( uint8_t* const Hash, const int HashLen )
 }
 
 #endif // PRVHASH42_LITTLE_ENDIAN
+
+/**
+ * Function loads 32-bit message word and pads it with "final byte" if read
+ * occurs beyond message end.
+ *
+ * @param Msg Message pointer, alignment is unimportant.
+ * @param MsgEnd Message's end pointer.
+ * @param fb Final byte used for padding.
+ */
+
+inline uint32_t prvhash42_lp32( const uint8_t* Msg,
+	const uint8_t* const MsgEnd, const uint8_t fb )
+{
+	if( Msg < MsgEnd - 3 )
+	{
+		return( prvhash42_u32ec( Msg ));
+	}
+
+	uint32_t r = (uint32_t) ( Msg < MsgEnd ? *Msg : fb ) |
+		(uint32_t) fb << 24;
+
+	Msg++;
+	r |= (uint32_t) ( Msg < MsgEnd ? *Msg : fb ) << 8;
+	Msg++;
+	r |= (uint32_t) ( Msg < MsgEnd ? *Msg : fb ) << 16;
+
+	return( r );
+}
 
 #endif // PRVHASH42EC_INCLUDED
