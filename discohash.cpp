@@ -84,7 +84,7 @@ uint64_t *ds = (uint64_t *)disco_buf;
     }
 
   //---------
-  // Hash round function 
+  // Hash round function (requires aligned m64)
 
     FORCE_INLINE void round( const uint64_t * m64, const uint8_t * m8, int len )
     {
@@ -124,6 +124,30 @@ uint64_t *ds = (uint64_t *)disco_buf;
       mix(2);
     }
 
+#ifdef HAVE_ALIGNED_ACCESS_REQUIRED
+    FORCE_INLINE void round8( const uint8_t * m8, int len )
+    {
+      int index = 0;
+      int sindex = 0;
+      uint8_t counter8 = 137;
+
+      mix(1);
+
+      sindex = index & (STATEM);
+      for( ; index < len; index++) {
+        ds8[sindex] += rot8(m8[index] + index + counter8 + 1, 23);
+        counter8 += ~m8[sindex] + 1;
+        mix(index % STATE64M);
+        if ( sindex >= STATEM ) {
+          sindex = -1;
+        }
+        sindex++;
+      }
+
+      mix(1);
+    }
+#endif
+
   //---------
   // main hash function 
 
@@ -155,31 +179,17 @@ uint64_t *ds = (uint64_t *)disco_buf;
 #ifdef HAVE_ALIGNED_ACCESS_REQUIRED
       // avoid ubsan, misaligned accesses
       if ((i = (uintptr_t)key64Arr % sizeof (size_t))) {
-        int index = 0;
-        int sindex = 0;
-        uint8_t counter8 = 137;
-
-        uintptr_t p = (uintptr_t)key64Arr;
-        p += 8 - i;
-        key64Arr = (uint64_t*)p;
-
-        sindex = index & (STATEM);
-        for( ; index < i; index++) {
-          ds8[sindex] += rot8(key8Arr[index] + index + counter8 + 1, 23);
-          counter8 += ~key8Arr[sindex] + 1;
-          mix(index % STATE64M);
-          if ( sindex >= STATEM ) {
-            sindex = -1;
-          }
-          sindex++;
+        round8 (key8Arr, i);
+        if (len >= i) {
+          uintptr_t p = (uintptr_t)key64Arr;
+          p += 8 - i;
+          key64Arr = (uint64_t*)p;
+          round( key64Arr, (uint8_t*)p, len-i );
         }
-        mix(0);
-        mix(1);
-        mix(2);
       }
-#endif
-
+#else
       round( key64Arr, key8Arr, len );
+#endif
       round( seed64Arr, seed8Arr, 16 );
       round( ds, ds8, STATE   );
 
