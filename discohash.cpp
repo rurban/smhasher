@@ -108,11 +108,11 @@ uint64_t *ds = (uint64_t *)disco_buf;
       mix(1);
 
       index <<= 3;
-      sindex = index&(STATEM);
+      sindex = index & (STATEM);
       for( ; index < len; index++) {
         ds8[sindex] += rot8(m8[index] + index + counter8 + 1, 23);
         counter8 += ~m8[sindex] + 1;
-        mix(index%STATE64M);
+        mix(index % STATE64M);
         if ( sindex >= STATEM ) {
           sindex = -1;
         }
@@ -130,12 +130,13 @@ uint64_t *ds = (uint64_t *)disco_buf;
     void BEBB4185_64 ( const void * key, int len, unsigned seed, void * out )
     {
       const uint8_t *key8Arr = (uint8_t *)key;
-      const uint64_t *key64Arr = (uint64_t *)key;
+      uint64_t *key64Arr = (uint64_t *)key;
 
       const uint8_t seedbuf[16] = {0};
       const uint8_t *seed8Arr = (uint8_t *)seedbuf;
       const uint64_t *seed64Arr = (uint64_t *)seedbuf;
       uint32_t *seed32Arr = (uint32_t *)seedbuf;
+      int i;
 
       // the cali number from the Matrix (1999)
       seed32Arr[0] = 0xc5550690;
@@ -150,6 +151,33 @@ uint64_t *ds = (uint64_t *)disco_buf;
       ds[1] = 0x0fedcba987654321;
       ds[2] = 0xaccadacca80081e5;
       ds[3] = 0xf00baaf00f00baaa;
+
+#ifdef HAVE_ALIGNED_ACCESS_REQUIRED
+      // avoid ubsan, misaligned accesses
+      if ((i = (uintptr_t)key64Arr % sizeof (size_t))) {
+        int index = 0;
+        int sindex = 0;
+        uint8_t counter8 = 137;
+
+        uintptr_t p = (uintptr_t)key64Arr;
+        p += 8 - i;
+        key64Arr = (uint64_t*)p;
+
+        sindex = index & (STATEM);
+        for( ; index < i; index++) {
+          ds8[sindex] += rot8(key8Arr[index] + index + counter8 + 1, 23);
+          counter8 += ~key8Arr[sindex] + 1;
+          mix(index % STATE64M);
+          if ( sindex >= STATEM ) {
+            sindex = -1;
+          }
+          sindex++;
+        }
+        mix(0);
+        mix(1);
+        mix(2);
+      }
+#endif
 
       round( key64Arr, key8Arr, len );
       round( seed64Arr, seed8Arr, 16 );
