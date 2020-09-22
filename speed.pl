@@ -3,6 +3,7 @@ use strict;
 use vars '$h';
 use File::Copy 'mv';
 my $ln = @ARGV ? $ARGV[0] : "log.speed";
+use constant MAX_HASH_STDDEV => 150;
 
 my $html = "doc/table.html";
 if ($h) {
@@ -13,7 +14,7 @@ if ($h) {
 }
 
 open(my $l, "<", $ln) or die "open $ln $!";
-my ($n,$bulk,$small,$hash);
+my ($n,$bulk,$small,$hash,@redo);
 while (<$l>) {
   if (/^--- Testing ([\w_-]+)[\s\n]/) {
     if ($n) {
@@ -27,11 +28,16 @@ while (<$l>) {
   } elsif (/^Running fast HashMapTest: +(\d\S+) cycles\/op \((\d.+) stdv\)/) {
     $hash = sprintf("%6.2f (%.0f)", $1, $2);
     $hash .= " " if $2 < 10.0;
-  } elsif (/^Running std HashMapTest: SKIP/) {
+    if ($2 > MAX_HASH_STDDEV) {
+      $hash = "-";
+      push @redo, $n;
+    }
+  } elsif (/^Running fast HashMapTest: SKIP/) {
     $hash = "too slow   ";
   }
 }
 fixupmd($n,$bulk,$small,$hash) if $n;
+warn "need to redo: ",join(" ",@redo),"\n" if @redo;
 
 sub fixupmd {
   my ($n,$bulk,$small,$hash) = @_;
@@ -92,6 +98,7 @@ sub fixuphtml {
       $_ = <$I>;
       if (defined $hash) {
         $hash =~ s/^\s+//;
+        $hash =~ s/\s+$//;
         s{<td align="right">(.+?)</td>}{<td align="right">$hash</td>};
       }
       print $O $_;

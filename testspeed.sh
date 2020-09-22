@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 hname="`hostname`"
 if [ x$hname = xe495 ]; then
     ./testspeed-ryzen3.sh $@
@@ -22,8 +22,13 @@ if [ -z "$@" ]; then
     ./speed.pl && \
         ./fixupdocspeeds.pl
 else
-     (for g in `build/SMHasher --listnames | egrep "$@"`; do \
-         build/SMHasher --test=Speed,Hashmap $g 2>&1; done) | tee "log.speed-$1"
+    for g in `./SMHasher --listnames`; do
+        for p in $@; do
+             if [[ $g =~ *$p* ]]; then
+                 ./SMHasher --test=Speed,Hashmap $g 2>&1
+             fi
+        done
+    done | tee "log.speed-$1"
     ./speed.pl "log.speed-$1" && \
         ./fixupdocspeeds.pl "log.speed-$1"
 fi

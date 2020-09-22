@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 make -C build
 which performance && performance
 if [ -z "$@" ]
@@ -8,7 +8,12 @@ then
          build/SMHasher --test=Speed,Hashmap $g 2>&1; done) | tee log.speed-air
     ./speed.pl -h=doc/air log.speed-air
 else
-     (for g in `build/SMHasher --listnames | egrep "$@"`; do \
-         build/SMHasher --test=Speed,Hashmap $g 2>&1; done) | tee "log.speed-air-$1"
+    for g in `./SMHasher --listnames`; do
+        for p in $@; do
+             if [[ $g =~ *$p* ]]; then
+                 ./SMHasher --test=Speed,Hashmap $g 2>&1
+             fi
+        done
+    done | tee "log.speed-air-$1"
     ./speed.pl -h=doc/air "log.speed-air-$1"
 fi

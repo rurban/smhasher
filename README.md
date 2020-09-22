@@ -291,8 +291,8 @@ scheme, such as Robin Hood or Cockoo hashing with collision counting.
 
 One more note regarding security: Nowadays even SHA1 can be solved in
 a solver, like Z3 (or faster ones) for practical hash table collision
-attacks (i.e. 14-20 bits). So all hash functions with less than 256
-bits tested here cannot be considered "secure" at all.
+attacks (i.e. 14-20 bits). All hash functions with less than 160 bits
+tested here cannot be considered "secure" at all.
 
 The '\0' vulnerability attack with binary keys is tested in the 2nd
 Sanity Zero test.

@@ -1,5 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 if [ "x`uname -m`" != "xaarch64" ]; then
+    set -x
     make -C build-aarch64
     scp build-aarch64/SMHasher phone:Software/smhasher/
     scp /usr/share/dict/words phone:Software/smhasher/dict.words
@@ -14,8 +15,13 @@ else
              ./SMHasher --test=Speed,Hashmap $g 2>&1; done) | tee log.speed-phone
         #./speed.pl -h=doc/phone log.speed-phone
     else
-        (for g in `./SMHasher --listnames | egrep "$@"`; do \
-             ./SMHasher --test=Speed,Hashmap $g 2>&1; done) | tee "log.speed-phone-$1"
+        for g in `./SMHasher --listnames`; do
+            for p in $@; do
+                if [[ $g =~ *$p* ]]; then
+                    ./SMHasher --test=Speed,Hashmap $g 2>&1
+                fi
+            done
+        done | tee "log.speed-phone-$1"
         #./speed.pl -h=doc/phone "log.speed-phone-$1"
     fi
 fi
