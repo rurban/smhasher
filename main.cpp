@@ -81,10 +81,10 @@ const char* quality_str[3] = { "SKIP", "POOR", "GOOD" };
 HashInfo g_hashes[] =
 {
   // first the bad hash funcs, failing tests:
-  { DoNothingHash,        32, 0x00000000, "donothing32", "Do-Nothing function (measure call overhead)", SKIP },
-  { DoNothingHash,        64, 0x00000000, "donothing64", "Do-Nothing function (measure call overhead)", SKIP },
-  { DoNothingHash,       128, 0x00000000, "donothing128", "Do-Nothing function (measure call overhead)", SKIP },
-  { NoopOAATReadHash,     64, 0x00000000, "NOP_OAAT_read64", "Noop function (measure call + OAAT reading overhead)", SKIP },
+  { DoNothingHash,        32, 0x0, "donothing32", "Do-Nothing function (measure call overhead)", SKIP },
+  { DoNothingHash,        64, 0x0, "donothing64", "Do-Nothing function (measure call overhead)", SKIP },
+  { DoNothingHash,       128, 0x0, "donothing128", "Do-Nothing function (measure call overhead)", SKIP },
+  { NoopOAATReadHash,     64, 0x0, "NOP_OAAT_read64", "Noop function (measure call + OAAT reading overhead)", SKIP },
   { BadHash,     	  32, 0xAB432E23, "BadHash", 	 "very simple XOR shift", SKIP },
   { sumhash,     	  32, 0x0000A9AC, "sumhash", 	 "sum all bytes", SKIP },
   { sumhash32,     	  32, 0x3D6DC280, "sumhash32",   "sum all 32bit words", SKIP },
@@ -136,8 +136,8 @@ HashInfo g_hashes[] =
 #endif
   { blake3c_test,        256, BLAKE3_VERIF, "blake3_c",   "BLAKE3 c",    GOOD },
 #if defined(HAVE_BLAKE3)
-  { blake3_test,         256, 0x00000000, "blake3",       "BLAKE3 Rust", GOOD },
-  { blake3_64,            64, 0x00000000, "blake3_64",    "BLAKE3 Rust, low 64 bits", GOOD },
+  { blake3_test,         256, 0x0, "blake3",       "BLAKE3 Rust", GOOD },
+  { blake3_64,            64, 0x0, "blake3_64",    "BLAKE3 Rust, low 64 bits", GOOD },
 #endif
   { blake2s128_test,     128, 0xC0EF86D1, "blake2s-128",  "blake2s-128", GOOD },
   { blake2s160_test,     160, 0xE56D3359, "blake2s-160",  "blake2s-160", GOOD },
@@ -157,16 +157,15 @@ HashInfo g_hashes[] =
 #ifdef __SIZEOF_INT128__
   // Thomas Dybdahl Ahle, Jakob Tejs Bæk Knudsen, and Mikkel Thorup2
   // "The Power of Hashing with Mersenne Primes".
-  // Similar insecurity as with CRC, hashes cancel itself out.
-  { poly_1_mersenne,      32, 0, "poly_1_mersenne", "Degree 1 Hashing mod 2^61-1", POOR },
-  { poly_2_mersenne,      32, 0, "poly_2_mersenne", "Degree 2 Hashing mod 2^61-1", GOOD },
-  { poly_3_mersenne,      32, 0, "poly_3_mersenne", "Degree 3 Hashing mod 2^61-1", GOOD },
-  { poly_4_mersenne,      32, 0, "poly_4_mersenne", "Degree 4 Hashing mod 2^61-1", GOOD },
-  // Similar insecurity as with CRC, hashes cancel itself out.
-  { tabulation_test,      64, 0, "tabulation",      "64-bit Tabulation with Multiply-Shift Mixer", GOOD },
+  { poly_1_mersenne,      32, 0x9E4BA93D, "poly_1_mersenne", "Degree 1 Hashing mod 2^61-1", POOR },
+  { poly_2_mersenne,      32, 0x5CB4CB25, "poly_2_mersenne", "Degree 2 Hashing mod 2^61-1", GOOD },
+  { poly_3_mersenne,      32, 0x3C87C852, "poly_3_mersenne", "Degree 3 Hashing mod 2^61-1", GOOD },
+  { poly_4_mersenne,      32, 0xFF88BAF6, "poly_4_mersenne", "Degree 4 Hashing mod 2^61-1", GOOD },
+  { tabulation_test,      64, 0xB49C607C, "tabulation",      "64-bit Tabulation with Multiply-Shift Mixer", GOOD },
 #endif
-  { tabulation_32_test,   32, 0, "tabulation32",    "32-bit Tabulation with Multiply-Shift Mixer", POOR },
+  { tabulation_32_test,   32, 0x335F64EA, "tabulation32",    "32-bit Tabulation with Multiply-Shift Mixer", POOR },
 #if defined(__SSE4_2__) && defined(__x86_64__)
+  // all CRC's are insecure by default due to its polynomial nature.
   /* Even 32 uses crc32q, quad only */
   { crc32c_hw_test,       32, 0x0C7346F0, "crc32_hw",    "SSE4.2 crc32 in HW", POOR },
   { crc32c_hw1_test,      32, 0x0C7346F0, "crc32_hw1",   "Faster Adler SSE4.2 crc32 in HW", POOR },
@@ -174,7 +173,7 @@ HashInfo g_hashes[] =
 #endif
   // 32bit crashes
 #if defined(HAVE_CLMUL) && !defined(_MSC_VER) && defined(__x86_64__)
-  { crc32c_pclmul_test,   32, 0x00000000, "crc32_pclmul","-mpclmul crc32 in asm on HW", POOR },
+  { crc32c_pclmul_test,   32, 0x0, "crc32_pclmul","-mpclmul crc32 in asm on HW", POOR },
 #endif
 #ifdef HAVE_INT64
   { o1hash_test,          64, 0x85051E87, "o1hash",       "o(1)hash unseeded, from wyhash", POOR },
@@ -327,10 +326,10 @@ HashInfo g_hashes[] =
 #endif /* HAVE_INT64 */
 #endif /* !MSVC */
 #if defined(__SSE4_2__) && defined(__x86_64__)
-  { clhash_test,          64, 0x00000000, "clhash",      "carry-less mult. hash -DBITMIX (64-bit for x64, SSE4.2)", GOOD },
+  { clhash_test,          64, 0x0, "clhash",      "carry-less mult. hash -DBITMIX (64-bit for x64, SSE4.2)", GOOD },
 #endif
 #ifdef HAVE_HIGHWAYHASH
-  { HighwayHash64_test,   64, 0x00000000,        "HighwayHash64", "Google HighwayHash (portable with dylib overhead)", GOOD },
+  { HighwayHash64_test,   64, 0x0,        "HighwayHash64", "Google HighwayHash (portable with dylib overhead)", GOOD },
 #endif
 #if __WORDSIZE >= 64
   { MurmurHash3_x64_128, 128, 0x6384BA69, "Murmur3F",    "MurmurHash3 for x64, 128-bit", GOOD },
