@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 if [ "x`uname -m`" != "xaarch64" ]; then
     set -x
     make -C build-aarch64
@@ -17,7 +17,7 @@ else
     else
         for g in `./SMHasher --listnames`; do
             for p in $@; do
-                if [[ $g =~ *$p* ]]; then
+                if [ $g == $p ]; then
                     ./SMHasher --test=Speed,Hashmap $g 2>&1
                 fi
             done
