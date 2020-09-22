@@ -22,9 +22,18 @@ std::vector<std::string> HashMapInit(bool verbose) {
   int lines = 0, sum = 0;
   std::ifstream wordfile(filename.c_str());
   if (!wordfile.is_open()) {
+#ifdef __aarch64__ /* should be __ANDROID_API__, but not yet */
+    filename = "dict.words";
+    std::ifstream wordfile1(filename.c_str());
+    if (wordfile1.is_open()) {
+      wordfile = move(wordfile1);
+      goto ok_file;
+    }
+#endif
     std::cout << "Unable to open words dict file " << filename << "\n";
     return words;
   }
+ ok_file:
   while (getline(wordfile, line)) {
     int len = line.length();
     lines++;

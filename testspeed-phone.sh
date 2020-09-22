@@ -2,6 +2,7 @@
 if [ "x`uname -m`" != "xaarch64" ]; then
     make -C build-aarch64
     scp build-aarch64/SMHasher phone:Software/smhasher/
+    scp /usr/share/dict/words phone:Software/smhasher/dict.words
     ssh phone "cd Software/smhasher && ./testspeed-phone.sh $@"
     scp phone:Software/smhasher/"log.speed-phone-$1" .
     ./speed.pl -h=doc/phone "log.speed-phone-$1"
