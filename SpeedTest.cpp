@@ -186,13 +186,13 @@ NEVER_INLINE int64_t timehash_small ( pfHash hash, const void * key, int len, in
   const int NUM_TRIALS = 200;
   volatile unsigned long long int begin, end;
   uint32_t hash_temp[16] = {};
-  uint32_t *buf = new uint32_t[(len + 3) / 4];
+  uint32_t *buf = new uint32_t[1 + (len + 3) / 4]();
   memcpy(buf,key,len);
 
   begin = timer_start();
 
   for(int i = 0; i < NUM_TRIALS; i++) {
-    hash(buf,len,seed,hash_temp);
+    hash(buf + (hash_temp[0] & 1),len,seed,hash_temp);
     // XXX Add dependency between invocations of hash-function to prevent parallel
     // evaluation of them. However this way the invocations still would not be
     // fully serialized. Another option is to use lfence instruction (load-from-memory
@@ -201,7 +201,6 @@ NEVER_INLINE int64_t timehash_small ( pfHash hash, const void * key, int len, in
     //   __asm volatile ("lfence");
     // It's hard to say which one is the most realistic and sensible approach.
     seed += hash_temp[0];
-    buf[0] ^= hash_temp[0];
   }
 
   end = timer_end();
