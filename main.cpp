@@ -163,6 +163,11 @@ HashInfo g_hashes[] =
   { poly_4_mersenne,      32, 0xFF88BAF6, "poly_4_mersenne", "Degree 4 Hashing mod 2^61-1", GOOD },
   { tabulation_test,      64, 0xB49C607C, "tabulation",      "64-bit Tabulation with Multiply-Shift Mixer", GOOD },
 #endif
+#ifdef _MSC_VER /* truncated long to 32 */
+#  define TABUL32_VERIF   0x3C3B7BDD
+#else
+#  define TABUL32_VERIF   0x335F64EA
+#endif
   { tabulation_32_test,   32, 0x335F64EA, "tabulation32",    "32-bit Tabulation with Multiply-Shift Mixer", POOR },
 #if defined(__SSE4_2__) && defined(__x86_64__)
   // all CRC's are insecure by default due to its polynomial nature.
