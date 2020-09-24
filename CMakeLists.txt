@@ -45,15 +45,21 @@ check_type_size(__int64 __INT64)
 check_type_size(int64_t INT64_T)
 check_type_size(__uint128_t __UINT128_T)
 
+message(STATUS "CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR}")
 if ((CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-    OR (CMAKE_SYSTEM_PROCESSOR STREQUAL "i386"))
-  set(PROCESSOR "Intel")
+    OR (CMAKE_SYSTEM_PROCESSOR STREQUAL "i386")
+    OR (CMAKE_SYSTEM_PROCESSOR STREQUAL "i586")
+    OR (CMAKE_SYSTEM_PROCESSOR STREQUAL "i686")
+    OR (CMAKE_SYSTEM_PROCESSOR STREQUAL "amd64") # freebsd
+    OR (CMAKE_SYSTEM_PROCESSOR STREQUAL "AMD64") # windows
+    OR (CMAKE_SYSTEM_PROCESSOR STREQUAL "x86"))
+  set(PROCESSOR_FAMILY "Intel")
 elseif ((CMAKE_SYSTEM_PROCESSOR STREQUAL "arm")
     OR (CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64"))
-  set(PROCESSOR "Arm")
+  set(PROCESSOR_FAMILY "Arm")
 endif()
 
-# TODO: rather parse `$CC -march=native -dM -E - <<< ''` [gh #10]
+# TODO: rather parse `$CC -march=native -dM -E - <<< ''` [GH #10]
 if(NOT (CMAKE_CROSSCOMPILING))
   if(CMAKE_SYSTEM_NAME MATCHES "Linux")
     exec_program(
@@ -165,7 +171,7 @@ if(NOT (CMAKE_CROSSCOMPILING))
   endif()
 endif()
 
-if(PROCESSOR STREQUAL "Intel")
+if(PROCESSOR_FAMILY STREQUAL "Intel")
  if(CMAKE_COMPILER_IS_GNUCC)
   if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     set(CMAKE_ASM_FLAGS "${CFLAGS} -m64")
@@ -403,7 +409,7 @@ else()
   set(SIPHASH_SRC siphash.c)
 endif(SSE4_2_FOUND)
 
-if(AES_FOUND AND (PROCESSOR STREQUAL "Intel"))
+if(AES_FOUND AND (PROCESSOR_FAMILY STREQUAL "Intel"))
   add_definitions(-DHAVE_AESNI)
   set(T1HA_SRC
       t1ha/t1ha0.c t1ha/t1ha1.c t1ha/t1ha2.c t1ha/t1ha0_ia32aes_noavx.c
@@ -416,8 +422,7 @@ if(AES_FOUND AND (PROCESSOR STREQUAL "Intel"))
                                 PROPERTIES COMPILE_FLAGS "/arch:avx")
     set_source_files_properties(t1ha/t1ha0_ia32aes_avx2.c
       PROPERTIES COMPILE_FLAGS "/arch:avx2")
-  elseif((CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-         OR (CMAKE_SYSTEM_PROCESSOR STREQUAL "i386"))
+  else()
     set_source_files_properties(
       t1ha/t1ha0_ia32aes_noavx.c PROPERTIES COMPILE_FLAGS
                                             "-mno-avx2 -mno-avx -maes")
