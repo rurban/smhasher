@@ -337,7 +337,9 @@ HashInfo g_hashes[] =
 #else
 #  define BEBB4185_VERIF          0xBEBB4185
 #endif
+#ifndef HAVE_ALIGNED_ACCESS_REQUIRED
   { BEBB4185_64,          64, BEBB4185_VERIF, "BEBB4185", "BEBB4185 64", GOOD },
+#endif
 #ifndef _MSC_VER
   { tsip_test,            64, 0x8E48155B, "TSip",        "Damian Gryski's Tiny SipHash variant", GOOD },
 #ifdef HAVE_INT64
