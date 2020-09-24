@@ -155,20 +155,35 @@ HashInfo g_hashes[] =
   { hasshe2_test,        256, 0xF5D39DFE, "hasshe2",     "SSE2 hasshe2, 256-bit", POOR },
 #endif
 #ifdef __SIZEOF_INT128__
-  // Thomas Dybdahl Ahle, Jakob Tejs Bæk Knudsen, and Mikkel Thorup2
-  // "The Power of Hashing with Mersenne Primes".
-  { poly_1_mersenne,      32, 0x9E4BA93D, "poly_1_mersenne", "Degree 1 Hashing mod 2^61-1", POOR },
-  { poly_2_mersenne,      32, 0x5CB4CB25, "poly_2_mersenne", "Degree 2 Hashing mod 2^61-1", GOOD },
-  { poly_3_mersenne,      32, 0x3C87C852, "poly_3_mersenne", "Degree 3 Hashing mod 2^61-1", GOOD },
-  { poly_4_mersenne,      32, 0xFF88BAF6, "poly_4_mersenne", "Degree 4 Hashing mod 2^61-1", GOOD },
-  { tabulation_test,      64, 0xB49C607C, "tabulation",      "64-bit Tabulation with Multiply-Shift Mixer", GOOD },
+#ifdef __FreeBSD__
+#  define POLY1_VERIF   0xFECCC371
+#  define POLY2_VERIF   0xA31DD921
+#  define POLY3_VERIF   0x26F7EDA0
+#  define POLY4_VERIF   0x8EE270BD
+#  define TABUL_VERIF   0x0534C36E
+#else
+#  define POLY1_VERIF   0x9E4BA93D
+#  define POLY2_VERIF   0x5CB4CB25
+#  define POLY3_VERIF   0x3C87C852
+#  define POLY4_VERIF   0xFF88BAF6
+#  define TABUL_VERIF   0xB49C607C
 #endif
-#ifdef _MSC_VER /* truncated long to 32 */
+  // Thomas Dybdahl Ahle, Jakob Tejs Bæk Knudsen, and Mikkel Thorup
+  // "The Power of Hashing with Mersenne Primes".
+  { poly_1_mersenne,      32, POLY1_VERIF, "poly_1_mersenne", "Degree 1 Hashing mod 2^61-1", POOR },
+  { poly_2_mersenne,      32, POLY2_VERIF, "poly_2_mersenne", "Degree 2 Hashing mod 2^61-1", GOOD },
+  { poly_3_mersenne,      32, POLY3_VERIF, "poly_3_mersenne", "Degree 3 Hashing mod 2^61-1", GOOD },
+  { poly_4_mersenne,      32, POLY4_VERIF, "poly_4_mersenne", "Degree 4 Hashing mod 2^61-1", GOOD },
+  { tabulation_test,      64, TABUL_VERIF, "tabulation",      "64-bit Tabulation with Multiply-Shift Mixer", GOOD },
+#endif
+#if defined(_MSC_VER) /* truncated long to 32 */
 #  define TABUL32_VERIF   0x3C3B7BDD
+#elif defined __FreeBSD__
+#  define TABUL32_VERIF   0x4D28A619
 #else
 #  define TABUL32_VERIF   0x335F64EA
 #endif
-  { tabulation_32_test,   32, 0x335F64EA, "tabulation32",    "32-bit Tabulation with Multiply-Shift Mixer", POOR },
+  { tabulation_32_test,   32, TABUL32_VERIF, "tabulation32",    "32-bit Tabulation with Multiply-Shift Mixer", POOR },
 #if defined(__SSE4_2__) && defined(__x86_64__)
   // all CRC's are insecure by default due to its polynomial nature.
   /* Even 32 uses crc32q, quad only */
