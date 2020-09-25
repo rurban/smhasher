@@ -184,6 +184,7 @@ SMhasher
 The sortable table variants:
 
 * **[Default Intel i5-2300 2.8GHz](https://rurban.github.io/smhasher/doc/table.html)** 
+* [Intel i5-2300 2.8GHz 32bit](https://rurban.github.io/smhasher/doc/i686.html)
 * [AMD Ryzen 3 3200U 3.5GHz](https://rurban.github.io/smhasher/doc/ryzen3.html)
 * [Mac Air i7-4650](https://rurban.github.io/smhasher/doc/air.html)
 * [Cortex-A53 2GHz (Sony XPeria L4)](https://rurban.github.io/smhasher/doc/phone.html)
