@@ -569,16 +569,17 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
       // low estimation values are too inaccurate
       if (expected >= 0.1 && expected <= 10.0)
         {
-          if (ratio > 4.0)
+          ratio = ceil(ratio);
+          if (ceil(ratio) > 4.0)
             {
               printf(" !!!!!\n");
               return false;
             }
-          else if (ratio > 2.0)
+          else if (ceil(ratio) > 2.0)
             printf(" !");
         }
       // allow expected 0.3 and actual 1
-      else if (ratio > 2.0 && collcount > 1)
+      else if (ceil(ratio) > 2.0 && collcount > 1)
         {
           printf(" !!!!!\n");
           return false;
