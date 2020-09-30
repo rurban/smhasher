@@ -33,7 +33,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * @version 2.22a
+ * @version 2.24
  */
 
 //$ nocpp
@@ -51,14 +51,13 @@
  */
 
 typedef struct {
-	uint64_t lcg[ 4 ]; ///< Current parallel "lcg" values.
 	uint64_t Seed[ 4 ]; ///< Current parallel "Seed" values.
+	uint64_t lcg[ 4 ]; ///< Current parallel "lcg" values.
 	uint8_t Block[ PRVHASH42S_LEN ]; ///< Intermediate input data block.
 	size_t BlockFill; ///< The number of bytes filled in the Block.
 	uint8_t* Hash; ///< Pointer to the hash buffer.
 	int HashLen; ///< Hash buffer length, in bytes, >= 4, in increments of 4.
 	int HashPos; ///< Hash buffer position.
-	int hlm; ///< Hash length multiplied by 2 or 1 (1 for 32-bit hashes).
 	uint8_t fb; ///< Final stream byte value, for hashing finalization.
 } PRVHASH42S_CTX;
 
@@ -69,14 +68,13 @@ typedef struct {
  *
  * @param ctx Context structure.
  * @param[in,out] Hash The hash buffer. The length of this buffer should be
- * equal to HashLen * 2 to supply a scratch pad for the function (for 32-bit
- * hashes, this buffer can have HashLen length). If InitVec is non-NULL, the
- * hash will not be initially reset to the default values, and it should be
- * pre-initialized with uniformly-random bytes (there are no restrictions on
- * which values to use for initialization: even an all-zero value can be
- * used). The provided hash will be automatically endianness-corrected. On
- * systems where this is relevant, this address should be aligned to 32 bits.
- * This pointer will be stored in the "ctx" structure.
+ * equal to HashLen. If InitVec is non-NULL, the hash will not be initially
+ * reset to the default values, and it should be pre-initialized with
+ * uniformly-random bytes (there are no restrictions on which values to use
+ * for initialization: even an all-zero value can be used). The provided hash
+ * will be automatically endianness-corrected. On systems where this is
+ * relevant, this address should be aligned to 32 bits. This pointer will be
+ * stored in the "ctx" structure.
  * @param HashLen The required hash length, in bytes, should be >= 4, in
  * increments of 4.
  * @param SeedXOR Optional values, to XOR the default seeds with. To use the
@@ -84,35 +82,32 @@ typedef struct {
  * and should be set to 0. Otherwise, the SeedXOR values can have any bit
  * length, up to four 64-bit values can be supplied, and are used only as an
  * additional entropy source. They should be endianness-corrected.
- * @param InitVec If non-NULL, an "initialization vector" for internal "lcg"
- * and "Seed" variables. Full 64-byte uniformly-random value should be
- * supplied in this case. Since it is imperative that the initialization
- * vector is non-zero, the best strategies to generate it are: 1) compose the
- * vector from 16-bit random values that have 4 to 12 random bits set; 2)
- * compose the vector from 64-bit random values that have 28-36 random bits
- * set.
+ * @param InitVec If non-NULL, an "initialization vector" for internal "Seed"
+ * and "lcg" variables. Full 64-byte uniformly-random value should be supplied
+ * in this case. Since it is imperative that the initialization vector is
+ * non-zero, the best strategies to generate it are: 1) compose the vector
+ * from 16-bit random values that have 4 to 12 random bits set; 2) compose the
+ * vector from 64-bit random values that have 28-36 random bits set.
  */
 
 inline void prvhash42s_init( PRVHASH42S_CTX* ctx, uint8_t* const Hash,
 	const int HashLen, const uint64_t SeedXOR[ 4 ],
 	const uint8_t InitVec[ 64 ])
 {
-        ctx -> hlm = HashLen;
-
 	int i;
 
 	if( InitVec == 0 )
 	{
-		memset( Hash, 0, ctx -> hlm );
+		memset( Hash, 0, HashLen );
 
-		ctx -> lcg[ 0 ] = 5094281193848473994ULL;
-		ctx -> Seed[ 0 ] = 10422451504945688786ULL;
-		ctx -> lcg[ 1 ] = 18418079607549277980ULL;
-		ctx -> Seed[ 1 ] = 6112660181958639245ULL;
-		ctx -> lcg[ 2 ] = 9775183536304958763ULL;
-		ctx -> Seed[ 2 ] = 12847999344382427112ULL;
-		ctx -> lcg[ 3 ] = 14921828135776612191ULL;
-		ctx -> Seed[ 3 ] = 17763997673696612504ULL;
+		ctx -> Seed[ 0 ] = 8555152737029954116ULL;
+		ctx -> lcg[ 0 ] = 5442746089214809054ULL;
+		ctx -> Seed[ 1 ] = 17108040019451657949ULL;
+		ctx -> lcg[ 1 ] = 6989305114985084359ULL;
+		ctx -> Seed[ 2 ] = 14192353418179594200ULL;
+		ctx -> lcg[ 2 ] = 2685819677787654746ULL;
+		ctx -> Seed[ 3 ] = 4470995064634549837ULL;
+		ctx -> lcg[ 3 ] = 13238009625957838544ULL;
 
 		if( SeedXOR != 0 )
 		{
@@ -124,12 +119,12 @@ inline void prvhash42s_init( PRVHASH42S_CTX* ctx, uint8_t* const Hash,
 	}
 	else
 	{
-		prvhash42_ec( Hash, ctx -> hlm );
+		prvhash42_ec( Hash, HashLen );
 
 		for( i = 0; i < 4; i++ )
 		{
-			ctx -> lcg[ i ] = prvhash42_u64ec( InitVec + i * 16 );
-			ctx -> Seed[ i ] = prvhash42_u64ec( InitVec + i * 16 + 8 );
+			ctx -> Seed[ i ] = prvhash42_u64ec( InitVec + i * 16 );
+			ctx -> lcg[ i ] = prvhash42_u64ec( InitVec + i * 16 + 8 );
 		}
 	}
 
@@ -137,7 +132,7 @@ inline void prvhash42s_init( PRVHASH42S_CTX* ctx, uint8_t* const Hash,
 	ctx -> Hash = Hash;
 	ctx -> HashLen = HashLen;
 	ctx -> HashPos = 0;
-	ctx -> fb = (uint8_t) 0xFF;
+	ctx -> fb = 0;
 }
 
 /**
@@ -162,87 +157,53 @@ inline void prvhash42s_update( PRVHASH42S_CTX* ctx, const uint8_t* Msg,
 
 	ctx -> fb = (uint8_t) ~Msg[ MsgLen - 1 ];
 
-	uint64_t lcg1 = ctx -> lcg[ 0 ];
-	uint64_t lcg2 = ctx -> lcg[ 1 ];
-	uint64_t lcg3 = ctx -> lcg[ 2 ];
-	uint64_t lcg4 = ctx -> lcg[ 3 ];
 	uint64_t Seed1 = ctx -> Seed[ 0 ];
 	uint64_t Seed2 = ctx -> Seed[ 1 ];
 	uint64_t Seed3 = ctx -> Seed[ 2 ];
 	uint64_t Seed4 = ctx -> Seed[ 3 ];
+	uint64_t lcg1 = ctx -> lcg[ 0 ];
+	uint64_t lcg2 = ctx -> lcg[ 1 ];
+	uint64_t lcg3 = ctx -> lcg[ 2 ];
+	uint64_t lcg4 = ctx -> lcg[ 3 ];
 
-	const uint32_t* const HashEnd = (uint32_t*) ( ctx -> Hash + ctx -> hlm );
+	const uint32_t* const HashEnd =
+		(uint32_t*) ( ctx -> Hash + ctx -> HashLen );
+
 	uint32_t* hc = (uint32_t*) ( ctx -> Hash + ctx -> HashPos );
 	size_t BlockFill = ctx -> BlockFill;
 
 	while( BlockFill + MsgLen >= PRVHASH42S_LEN )
 	{
-		const uint8_t* MsgBlock = Msg;
-		uint64_t msgw, msgw2, ph, hl;
+		uint64_t xr = ~lcg1;
+		Seed1 += lcg1;
+		Seed1 *= xr - lcg1;
+		lcg1 += ~Seed1;
+		xr = ~lcg2;
+		Seed2 += lcg2;
+		Seed2 *= xr - lcg2;
+		lcg2 += ~Seed2;
+		xr = ~lcg3;
+		Seed3 += lcg3;
+		Seed3 *= xr - lcg3;
+		lcg3 += ~Seed3;
+		xr = ~lcg4;
+		Seed4 += lcg4;
+		Seed4 *= xr - lcg4;
+		lcg4 += ~Seed4;
 
-		Seed1 *= lcg1;
-		Seed2 *= lcg2;
-		Seed3 *= lcg3;
-		Seed4 *= lcg4;
+		uint64_t ph = *hc;
 
-		if( BlockFill > 0 )
-		{
-			const size_t CopyLen = PRVHASH42S_LEN - ctx -> BlockFill;
-			MsgBlock = ctx -> Block;
-			memcpy( ctx -> Block + ctx -> BlockFill, Msg, CopyLen );
-
-			BlockFill = 0;
-			Msg += CopyLen;
-			MsgLen -= CopyLen;
-		}
-		else
-		{
-			Msg += PRVHASH42S_LEN;
-			MsgLen -= PRVHASH42S_LEN;
-		}
-
-		Seed1 = ~Seed1;
-		Seed2 = ~Seed2;
-		Seed3 = ~Seed3;
-		Seed4 = ~Seed4;
-
-		msgw = prvhash42_u32ec( MsgBlock + 12 );
-		msgw2 = prvhash42_u32ec( MsgBlock + 0 );
-
-		ph = *hc;
-
-		hl = lcg1 >> 32 ^ msgw;
-		lcg1 += Seed1;
-		lcg1 += msgw2;
 		ph ^= Seed1 >> 32;
-		Seed1 ^= ph ^ hl;
+		Seed1 ^= ph;
 
-		msgw = prvhash42_u32ec( MsgBlock + 8 );
-		msgw2 = prvhash42_u32ec( MsgBlock + 24 );
-
-		hl = lcg2 >> 32 ^ msgw;
-		lcg2 += Seed2;
-		lcg2 += msgw2;
 		ph ^= Seed2 >> 32;
-		Seed2 ^= ph ^ hl;
+		Seed2 ^= ph;
 
-		msgw = prvhash42_u32ec( MsgBlock + 20 );
-		msgw2 = prvhash42_u32ec( MsgBlock + 28 );
-
-		hl = lcg3 >> 32 ^ msgw;
-		lcg3 += Seed3;
-		lcg3 += msgw2;
 		ph ^= Seed3 >> 32;
-		Seed3 ^= ph ^ hl;
+		Seed3 ^= ph;
 
-		msgw = prvhash42_u32ec( MsgBlock + 4 );
-		msgw2 = prvhash42_u32ec( MsgBlock + 16 );
-
-		hl = lcg4 >> 32 ^ msgw;
-		lcg4 += Seed4;
-		lcg4 += msgw2;
 		ph ^= Seed4 >> 32;
-		Seed4 ^= ph ^ hl;
+		Seed4 ^= ph;
 
 		*hc = (uint32_t) ph;
 
@@ -252,16 +213,41 @@ inline void prvhash42s_update( PRVHASH42S_CTX* ctx, const uint8_t* Msg,
 		{
 			hc = (uint32_t*) ctx -> Hash;
 		}
+
+		if( BlockFill > 0 )
+		{
+			const size_t CopyLen = PRVHASH42S_LEN - BlockFill;
+			memcpy( ctx -> Block + BlockFill, Msg, CopyLen );
+
+			lcg1 ^= prvhash42_u64ec( ctx -> Block + 0 );
+			lcg2 ^= prvhash42_u64ec( ctx -> Block + 8 );
+			lcg3 ^= prvhash42_u64ec( ctx -> Block + 16 );
+			lcg4 ^= prvhash42_u64ec( ctx -> Block + 24 );
+
+			BlockFill = 0;
+			MsgLen -= CopyLen;
+			Msg += CopyLen;
+		}
+		else
+		{
+			lcg1 ^= prvhash42_u64ec( Msg + 0 );
+			lcg2 ^= prvhash42_u64ec( Msg + 8 );
+			lcg3 ^= prvhash42_u64ec( Msg + 16 );
+			lcg4 ^= prvhash42_u64ec( Msg + 24 );
+
+			MsgLen -= PRVHASH42S_LEN;
+			Msg += PRVHASH42S_LEN;
+		}
 	}
 
-	ctx -> lcg[ 0 ] = lcg1;
-	ctx -> lcg[ 1 ] = lcg2;
-	ctx -> lcg[ 2 ] = lcg3;
-	ctx -> lcg[ 3 ] = lcg4;
 	ctx -> Seed[ 0 ] = Seed1;
 	ctx -> Seed[ 1 ] = Seed2;
 	ctx -> Seed[ 2 ] = Seed3;
 	ctx -> Seed[ 3 ] = Seed4;
+	ctx -> lcg[ 0 ] = lcg1;
+	ctx -> lcg[ 1 ] = lcg2;
+	ctx -> lcg[ 2 ] = lcg3;
+	ctx -> lcg[ 3 ] = lcg4;
 	ctx -> HashPos = (int) ( (uint8_t*) hc - ctx -> Hash );
 
 	memcpy( ctx -> Block + BlockFill, Msg, MsgLen );
@@ -281,28 +267,20 @@ inline void prvhash42s_final( PRVHASH42S_CTX* ctx )
 {
 	uint8_t fbytes[ PRVHASH42S_LEN ];
 	memset( fbytes, ctx -> fb, PRVHASH42S_LEN );
+	int i;
 
 	if( ctx -> BlockFill > 0 )
 	{
 		prvhash42s_update( ctx, fbytes, PRVHASH42S_LEN - ctx -> BlockFill );
 	}
 
-	int c = ctx -> HashLen + ctx -> hlm - ctx -> HashPos;
+	int c = 8 + ctx -> HashLen;
 
 	while( c > 0 )
 	{
 		prvhash42s_update( ctx, fbytes, PRVHASH42S_LEN );
 		c -= 4;
 	}
-
-	/*if( ctx -> hlm > 4 )
-	{
-		for( c = 0; c < ctx -> HashLen; c += 4 )
-		{
-			*(uint32_t*) ( ctx -> Hash + c ) ^=
-				*(uint32_t*) ( ctx -> Hash + ctx -> HashLen + c );
-		}
-        }*/
 
 	prvhash42_ec( ctx -> Hash, ctx -> HashLen );
 }
@@ -316,8 +294,7 @@ inline void prvhash42s_final( PRVHASH42S_CTX* ctx )
  * is unimportant.
  * @param MsgLen Message's length, in bytes.
  * @param[out] Hash The hash buffer, length = HashLen. On systems where this
- * is relevant, this address should be
- * aligned to 32 bits.
+ * is relevant, this address should be aligned to 32 bits.
  * @param HashLen The required hash length, in bytes, should be >= 4, in
  * increments of 4.
  */

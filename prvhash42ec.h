@@ -32,7 +32,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * @version 2.22
+ * @version 2.24
  */
 
 //$ nocpp
@@ -172,15 +172,100 @@ inline uint32_t prvhash42_lp32( const uint8_t* Msg,
 		return( prvhash42_u32ec( Msg ));
 	}
 
-	uint32_t r = (uint32_t) ( Msg < MsgEnd ? *Msg : fb ) |
-		(uint32_t) fb << 24;
-
+	uint32_t r = ( Msg < MsgEnd ? *Msg : fb ) | (uint32_t) fb << 24;
 	Msg++;
 	r |= (uint32_t) ( Msg < MsgEnd ? *Msg : fb ) << 8;
 	Msg++;
 	r |= (uint32_t) ( Msg < MsgEnd ? *Msg : fb ) << 16;
 
 	return( r );
+}
+
+/**
+ * Function loads 32-bit message word and pads it with "final byte" if read
+ * occurs beyond message end. This variant of the function assumes that
+ * Msg < MsgEnd.
+ *
+ * @param Msg Message pointer, alignment is unimportant.
+ * @param MsgEnd Message's end pointer.
+ * @param fb Final byte used for padding.
+ */
+
+inline uint32_t prvhash42_lp32_1( const uint8_t* Msg,
+	const uint8_t* const MsgEnd, const uint8_t fb )
+{
+	if( Msg < MsgEnd - 3 )
+	{
+		return( prvhash42_u32ec( Msg ));
+	}
+
+	uint32_t r = *Msg | (uint32_t) fb << 24;
+	Msg++;
+	r |= (uint32_t) ( Msg < MsgEnd ? *Msg : fb ) << 8;
+	Msg++;
+	r |= (uint32_t) ( Msg < MsgEnd ? *Msg : fb ) << 16;
+
+	return( r );
+}
+
+/**
+ * This function runs a single random number generation round. Several calls
+ * to this function can be used to "condition" the initial state of the
+ * hash function.
+ *
+ * This function can be also used as an effective general-purpose random
+ * number generator. In this case, it is advisable to initially run this
+ * function 4 times before using its random output, to neutralize any possible
+ * oddities of "Seed"'s and "lcg"'s initial values.
+ *
+ * @param[in,out] Seed The current "Seed" value. Can be initialized to any
+ * value.
+ * @param[in,out] lcg The current "lcg" value. Can be initialized to any
+ * value.
+ * @return Current random value.
+ */
+
+inline uint32_t prvhash42_rnd( uint64_t& Seed, uint64_t& lcg )
+{
+	Seed += lcg;
+	Seed *= ~lcg - lcg;
+	lcg += ~Seed;
+	const uint64_t hl = Seed >> 32;
+	Seed ^= hl;
+
+	return( hl );
+}
+
+/**
+ * This function "conditions" 64-bit values contained in the InitVec buffer.
+ * In essence, this function runs several random number generation rounds thus
+ * tranforming any type of entropy contained in the InitVec into entropy
+ * suitable for the hash function's InitVec.
+ *
+ * @param[in,out] InitVec Entropy buffer.
+ * @param c The number of Seed-lcg pairs in the buffer.
+ */
+
+inline void prvhash42_cond( uint8_t InitVec[], const int c )
+{
+	int k;
+
+	for( k = 0; k < c * 16; k += 16 )
+	{
+		uint64_t Seed = prvhash42_u64ec( InitVec + k );
+		uint64_t lcg = prvhash42_u64ec( InitVec + k + 8 );
+		int i;
+
+		for( i = 0; i < 4; i++ )
+		{
+			prvhash42_rnd( Seed, lcg );
+		}
+
+		Seed = prvhash42_u64ec( (uint8_t*) &Seed );
+		lcg = prvhash42_u64ec( (uint8_t*) &lcg );
+		memcpy( InitVec + k, &Seed, 8 );
+		memcpy( InitVec + k + 8, &lcg, 8 );
+	}
 }
 
 #endif // PRVHASH42EC_INCLUDED

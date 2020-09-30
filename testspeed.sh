@@ -22,10 +22,10 @@ if [ -z "$@" ]; then
     ./speed.pl && \
         ./fixupdocspeeds.pl
 else
-    for g in `./SMHasher --listnames`; do
+    for g in `build/SMHasher --listnames`; do
         for p in $@; do
-             if [[ $g =~ *$p* ]]; then
-                 ./SMHasher --test=Speed,Hashmap $g 2>&1
+             if [[ $g =~ $p.* ]]; then
+                 build/SMHasher --test=Speed,Hashmap $g 2>&1
              fi
         done
     done | tee "log.speed-$1"

@@ -31,7 +31,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * @version 2.22
+ * @version 2.24
  */
 
 //$ nocpp
@@ -51,13 +51,12 @@
  * is unimportant.
  * @param MsgLen Message's length, in bytes.
  * @param[in,out] Hash The resulting hash. The length of this buffer should be
- * equal to HashLen * 2 to supply a scratch pad for the function (for 32-bit
- * hashes, this buffer can have HashLen length). If InitVec is non-NULL, the
- * hash will not be initially reset to 0, and it should be pre-initialized
- * with uniformly-random bytes (there are no restrictions on which values to
- * use for initialization: even an all-zero value can be used). The provided
- * hash will be automatically endianness-corrected. On systems where this is
- * relevant, this address should be aligned to 32 bits.
+ * equal to HashLen. If InitVec is non-NULL, the hash will not be initially
+ * reset to 0, and it should be pre-initialized with uniformly-random bytes
+ * (there are no restrictions on which values to use for initialization: even
+ * an all-zero value can be used). The provided hash will be automatically
+ * endianness-corrected. On systems where this is relevant, this address
+ * should be aligned to 32 bits.
  * @param HashLen The required hash length, in bytes, should be >= 4, in
  * increments of 4.
  * @param SeedXOR Optional value, to XOR the default seed with. To use the
@@ -65,76 +64,74 @@
  * should be set to 0. Otherwise, the SeedXOR value can have any bit length,
  * and is used only as an additional entropy source. It should be
  * endianness-corrected.
- * @param InitVec If non-NULL, an "initialization vector" for the internal
- * "lcg" and "Seed" variables. Full 16-byte uniformly-random value should be
- * supplied in this case. Since it is imperative that the initialization
- * vector is non-zero, the best strategies to generate it are: 1) compose the
- * vector from 16-bit random values that have 4 to 12 random bits set; 2)
- * compose the vector from 64-bit random values that have 28-36 random bits
- * set.
+ * @param InitVec If non-NULL, an "initialization vector" for internal "Seed"
+ * and "lcg" variables. Full 16-byte uniformly-random value should be supplied
+ * in this case. Since it is imperative that the initialization vector is
+ * non-zero, the best strategies to generate it are: 1) compose the vector
+ * from 16-bit random values that have 4 to 12 random bits set; 2) compose the
+ * vector from 64-bit random values that have 28-36 random bits set.
  */
 
 inline void prvhash42( const uint8_t* Msg, const int MsgLen,
 	uint8_t* const Hash, const int HashLen, const uint64_t SeedXOR,
 	const uint8_t InitVec[ 16 ])
 {
-	const int hlm = ( HashLen == 4 ? HashLen : HashLen << 1 );
-	uint64_t lcg;
 	uint64_t Seed;
+	uint64_t lcg;
 
 	if( InitVec == 0 )
 	{
-		memset( Hash, 0, hlm );
+		memset( Hash, 0, HashLen );
 
-		lcg = 16347860221670627854ULL;
-		Seed = 17878258369374729932ULL ^ SeedXOR;
+		Seed = 17716394156931278081ULL ^ SeedXOR;
+		lcg = 15946926174968676420ULL;
 	}
 	else
 	{
-		prvhash42_ec( Hash, hlm );
+		prvhash42_ec( Hash, HashLen );
 
-		lcg = prvhash42_u64ec( InitVec );
-		Seed = prvhash42_u64ec( InitVec + 8 );
+		Seed = prvhash42_u64ec( InitVec );
+		lcg = prvhash42_u64ec( InitVec + 8 );
 	}
 
-	const uint8_t fb = (uint8_t) ( MsgLen > 0 ? ~Msg[ MsgLen - 1 ] : 0xFF );
-	const int mlext = MsgLen + (( 8 - ( MsgLen & 7 )) & 7 );
-	const int hl2 = HashLen << 1;
-	const int hlm2 = hlm << 1;
-	const uint8_t* const c = Msg + mlext + hl2 + ( hlm2 - mlext % hlm2 );
+	const uint8_t fb = (uint8_t) ( MsgLen > 0 ? ~Msg[ MsgLen - 1 ] : 0 );
+	const uint64_t fbm = fb * 0x0101010101010101ULL;
 	const uint8_t* const MsgEnd = Msg + MsgLen;
+	const int hl2 = HashLen << 1;
+	const int ext = ( MsgLen > hl2 && ( MsgLen & 7 ) ? 8 : 16 );
+	const uint8_t* const c = MsgEnd + hl2 + ext;
+
 	int hpos = 0;
 
 	while( Msg < c )
 	{
-		Seed *= lcg;
-		Seed = ~Seed;
+		const uint64_t xr = ~lcg;
+		Seed += lcg;
+		Seed *= xr - lcg;
+		lcg += ~Seed;
 		uint32_t* const hc = (uint32_t*) &Hash[ hpos ];
-		const uint64_t hl = lcg >> 32 ^ prvhash42_lp32( Msg, MsgEnd, fb );
-		const uint64_t ph = *hc ^ ( Seed >> 32 );
-		lcg += Seed;
-		Seed ^= ph ^ hl;
-		lcg += prvhash42_lp32( Msg + 4, MsgEnd, fb );
+		const uint64_t ph = *hc ^ Seed >> 32;
+		Seed ^= ph;
 		*hc = (uint32_t) ph;
 
 		hpos += 4;
 
-		if( hpos == hlm )
+		if( hpos == HashLen )
 		{
 			hpos = 0;
 		}
 
-		Msg += 8;
-	}
-
-	if( hlm > 4 )
-	{
-		int k;
-
-		for( k = 0; k < HashLen; k += 4 )
+		if( Msg < MsgEnd )
 		{
-			*(uint32_t*) ( Hash + k ) ^= *(uint32_t*) ( Hash + HashLen + k );
+			lcg ^= prvhash42_lp32_1( Msg, MsgEnd, fb ) |
+				(uint64_t) prvhash42_lp32( Msg + 4, MsgEnd, fb ) << 32;
 		}
+		else
+		{
+			lcg ^= fbm;
+		}
+
+		Msg += 8;
 	}
 
 	prvhash42_ec( Hash, HashLen );

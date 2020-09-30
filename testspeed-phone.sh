@@ -15,12 +15,8 @@ else
              ./SMHasher --test=Speed,Hashmap $g 2>&1; done) | tee log.speed-phone
         #./speed.pl -h=doc/phone log.speed-phone
     else
-        for g in `./SMHasher --listnames`; do
-            for p in $@; do
-                if [ $g == $p ]; then
-                    ./SMHasher --test=Speed,Hashmap $g 2>&1
-                fi
-            done
+        for g in `./SMHasher --listnames | egrep "$@"`; do
+            ./SMHasher --test=Speed,Hashmap $g 2>&1
         done | tee "log.speed-phone-$1"
         #./speed.pl -h=doc/phone "log.speed-phone-$1"
     fi
