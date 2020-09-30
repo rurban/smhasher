@@ -229,6 +229,8 @@ if(CMAKE_COMPILER_IS_GNUCC
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -march=native")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
   endif()
+  set_source_files_properties(blake3/blake3.c
+                              PROPERTIES COMPILE_FLAGS "-std=c99")
 elseif(MSVC)
   # using Visual Studio C++, already the default with VS17
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /O3 /arch:SSE2")
