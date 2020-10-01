@@ -275,6 +275,7 @@ void BulkSpeedTest ( pfHash hash, uint32_t seed )
 
   printf("Bulk speed test - %d-byte keys\n",blocksize);
   double sumbpc = 0.0;
+  double freq = cpu_freq();
 
   volatile double warmup_cycles = SpeedTest(hash,seed,trials,blocksize,0);
 
@@ -284,12 +285,14 @@ void BulkSpeedTest ( pfHash hash, uint32_t seed )
 
     double bestbpc = double(blocksize)/cycles;
 
-    double bestbps = (bestbpc * 3000000000.0 / 1048576.0);
-    printf("Alignment %2d - %6.3f bytes/cycle - %7.2f MiB/sec @ 3 ghz\n",align,bestbpc,bestbps);
+    double bestbps = (bestbpc * freq * 1000000000.0 / 1048576.0);
+    printf("Alignment %2d - %6.3f bytes/cycle - %7.2f MiB/sec @ %0.2f GHz\n",align,bestbpc,bestbps,freq);
     sumbpc += bestbpc;
   }
   sumbpc = sumbpc / 8.0;
-  printf("Average      - %6.3f bytes/cycle - %7.2f MiB/sec @ 3 ghz\n",sumbpc,(sumbpc * 3000000000.0 / 1048576.0));
+    printf("Average      - %6.3f bytes/cycle - %7.2f MiB/sec @ %0.2f GHz\n",sumbpc,
+           (sumbpc * freq * 1000000000.0 / 1048576.0),
+           freq);
   fflush(NULL);
 }
 
