@@ -978,11 +978,18 @@ extern "C" {
   inline void blake3c_test ( const void * key, int len, unsigned seed, void * out )
   {
     blake3_hasher hasher;
+#if 1
     blake3_hasher_init (&hasher);
-    // mix-in seed. key0 is not enough to pass MomentChi2. but even mixing all does not help
-    //for (int i = 0; i < 8; i++)
-    //  hasher.key[i] ^= (uint32_t)seed;
+    // See GH #168
     hasher.key[0] ^= (uint32_t)seed;
+    hasher.chunk.cv[0] ^= (uint32_t)seed;
+#else
+    // same speed
+    uint32_t seed_key[8] = {0x6A09E667 ^ (uint32_t)seed, 0xBB67AE85, 0x3C6EF372,
+      0xA54FF53A, 0x510E527F, 0x9B05688C,
+      0x1F83D9AB, 0x5BE0CD19};    // Copied the default IV from blake3_impl.h
+    blake3_hasher_init_keyed(&hasher, (uint8_t*)seed_key); // Changed to the KEYED variant
+#endif
     blake3_hasher_update (&hasher, (uint8_t*)key, (size_t)len);
     blake3_hasher_finalize (&hasher, (uint8_t*)out, BLAKE3_OUT_LEN);
   }
