@@ -119,12 +119,12 @@ SMhasher
 | [SipHash](doc/SipHash.txt)                    |       980.88 |   127.77 | 246.19 (4) |1071 |                            |
 | [HalfSipHash](doc/HalfSipHash.txt)            |       755.78 |   114.47 | 243.72 (4) | 700 | zeroes                     |
 | [GoodOAAT](doc/GoodOAAT.txt)                  |      1052.00 |    71.62 | 192.19 (1) | 237 |                            |
-| [prvhash42_32](doc/prvhash42_32.txt)          |      2589.16 |    59.45 | 212.08 (4) | 476 |                            |
-| [prvhash42_64](doc/prvhash42_64.txt)          |      2391.78 |    88.55 | 243.02 (3) | 960 |                            |
-| [prvhash42_128](doc/prvhash42_128.txt)        |      2385.74 |   104.01 | 239.36 (3) | 432 |                            |
-| [prvhash42s_32](doc/prvhash42s_32.txt)        |      5148.30 |   181.18 | 368.42 (3) |2574 |                            |
-| [prvhash42s_64](doc/prvhash42s_64.txt)        |      4946.17 |   219.19 | 400.81 (4) |2637 |                            |
-| [prvhash42s_128](doc/prvhash42s_128.txt)      |      4933.61 |   294.17 | 485.11 (3) |2653 |                            |
+| [prvhash42_32](doc/prvhash42_32.txt)          |      2500.25 |    62.25 | 209.84 (2) | 476 |                            |
+| [prvhash42_64](doc/prvhash42_64.txt)          |      3733.79 |    65.75 | 525.20 (24)| 960 |                            |
+| [prvhash42_128](doc/prvhash42_128.txt)        |      3695.55 |    81.01 | 549.74 (137)| 432 |                            |
+| [prvhash42s_32](doc/prvhash42s_32.txt)        |      4323.94 |   236.86 | 410.96 (2) |2574 |                            |
+| [prvhash42s_64](doc/prvhash42s_64.txt)        |      4387.44 |   256.95 | 415.56 (1) |2637 |                            |
+| [prvhash42s_128](doc/prvhash42s_128.txt)      |      8740.74 |   242.10 | 763.60 (22)|2653 |                            |
 | [SipHash13](doc/SipHash13.txt)                |      1889.10 |    89.00 | 199.95 (4) | 778 | 0.9% bias                  |
 | [BEBB4185](doc/BEBB4185.txt)                  |      2951.62 |   222.03 | 343.63 (4) |1294 | UB, msvc-specific          |
 | [TSip](doc/TSip.txt)                          |      3228.14 |    57.96 | 211.71 (3) | 519 | !msvc                      |

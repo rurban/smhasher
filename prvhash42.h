@@ -1,15 +1,11 @@
 /**
- * @file prvhash42.h
+ * prvhash42.h version 2.30
  *
- * @brief The inclusion file for the "prvhash42" hash function.
- *
- * @mainpage
- *
- * @section intro_sec Introduction
+ * The inclusion file for the "prvhash42" hash function.
  *
  * Description is available at https://github.com/avaneev/prvhash
  *
- * @section license License
+ * License
  *
  * Copyright (c) 2020 Aleksey Vaneev
  *
@@ -30,16 +26,12 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
- * @version 2.24
  */
-
-//$ nocpp
 
 #ifndef PRVHASH42_INCLUDED
 #define PRVHASH42_INCLUDED
 
-#include <string.h>
+#include "prvhash42core.h"
 #include "prvhash42ec.h"
 
 /**
@@ -83,37 +75,52 @@ inline void prvhash42( const uint8_t* Msg, const int MsgLen,
 	{
 		memset( Hash, 0, HashLen );
 
-		Seed = 17716394156931278081ULL ^ SeedXOR;
-		lcg = 15946926174968676420ULL;
+		Seed = 12905183526369792234ULL ^ SeedXOR;
+		lcg = 6447574768757703757ULL;
 	}
 	else
 	{
-		prvhash42_ec( Hash, HashLen );
+		prvhash42_ec32( Hash, HashLen );
 
 		Seed = prvhash42_u64ec( InitVec );
 		lcg = prvhash42_u64ec( InitVec + 8 );
 	}
 
-	const uint8_t fb = (uint8_t) ( MsgLen > 0 ? ~Msg[ MsgLen - 1 ] : 0 );
-	const uint64_t fbm = fb * 0x0101010101010101ULL;
-	const uint8_t* const MsgEnd = Msg + MsgLen;
-	const int hl2 = HashLen << 1;
-	const int ext = ( MsgLen > hl2 && ( MsgLen & 7 ) ? 8 : 16 );
-	const uint8_t* const c = MsgEnd + hl2 + ext;
-
+	uint64_t fbm = 0;
 	int hpos = 0;
 
-	while( Msg < c )
+	if( MsgLen > 0 )
 	{
-		const uint64_t xr = ~lcg;
-		Seed += lcg;
-		Seed *= xr - lcg;
-		lcg += ~Seed;
-		uint32_t* const hc = (uint32_t*) &Hash[ hpos ];
-		const uint64_t ph = *hc ^ Seed >> 32;
-		Seed ^= ph;
-		*hc = (uint32_t) ph;
+		fbm -= ( ~Msg[ MsgLen - 1 ] >> 7 ) & 1;
 
+		const uint8_t fb = (uint8_t) fbm;
+		const uint8_t* const MsgEnd = Msg + MsgLen;
+
+		while( Msg < MsgEnd )
+		{
+			lcg ^= prvhash42_lp32_1( Msg, MsgEnd, fb ) |
+				(uint64_t) prvhash42_lp32( Msg + 4, MsgEnd, fb ) << 32;
+
+			prvhash42_core64( &Seed, &lcg, (uint32_t*) ( Hash + hpos ));
+			hpos += 4;
+
+			if( hpos == HashLen )
+			{
+				hpos = 0;
+			}
+
+			Msg += 8;
+		}
+	}
+
+	lcg ^= fbm;
+	prvhash42_core64( &Seed, &lcg, (uint32_t*) ( Hash + hpos ));
+
+	const int hle = (( MsgLen & 7 ) == 0 ? HashLen + 4 : HashLen );
+	int k;
+
+	for( k = 0; k < hle; k += 4 )
+	{
 		hpos += 4;
 
 		if( hpos == HashLen )
@@ -121,20 +128,12 @@ inline void prvhash42( const uint8_t* Msg, const int MsgLen,
 			hpos = 0;
 		}
 
-		if( Msg < MsgEnd )
-		{
-			lcg ^= prvhash42_lp32_1( Msg, MsgEnd, fb ) |
-				(uint64_t) prvhash42_lp32( Msg + 4, MsgEnd, fb ) << 32;
-		}
-		else
-		{
-			lcg ^= fbm;
-		}
-
-		Msg += 8;
+		lcg ^= fbm;
+		uint32_t* const hc = (uint32_t*) ( Hash + hpos );
+		*hc = prvhash42_core64( &Seed, &lcg, hc );
 	}
 
-	prvhash42_ec( Hash, HashLen );
+	prvhash42_ec32( Hash, HashLen );
 }
 
 #endif // PRVHASH42_INCLUDED
