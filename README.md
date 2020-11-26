@@ -174,8 +174,8 @@ SMhasher
 | [t1ha0_aes_avx1](doc/t1ha0_aes_avx1)          |     22714.85 |    48.12 | 226.52 (16)| 843 | LongNeighbors, machine-specific (x64 AVX.txt)|
 | [t1ha0_aes_avx2](doc/t1ha0_aes_avx2.txt)      |     22345.33 |    44.38 | 556.47 (89)| 792 | LongNeighbors, machine-specific (x64 AVX2)   |
 | [wyhash32](doc/wyhash32.txt)                  |      2532.89 |    48.40 | 484.57 (1) | 410 | 32-bit                     |
-| [wyhash32low](doc/wyhash32low.txt)            |     12194.76 |    26.83 | 182.34 (1) | 922 |                            |
-| [wyhash](doc/wyhash.txt)                      |     12167.18 |    26.77 | 177.67 (1) | 938 |                            |
+| [wyhash32low](doc/wyhash32low.txt)            |     14798.66 |    27.10 | 203.24 (1) | 922 |                            |
+| [wyhash](doc/wyhash.txt)                      |     14789.93 |    27.21 | 184.25 (1) | 938 |                            |
 | [umash32](doc/umash32.txt)                    |      4633.19 |    53.42 | 216.33 (3) |1530 |                            |
 | [umash32_hi](doc/umash32_hi.txt)              |      4662.92 |    54.22 | 214.20 (2) |1530 |                            |
 | [umash64](doc/umash64.txt)                    |      4662.09 |    53.42 | 188.09 (1) |1530 |                            |

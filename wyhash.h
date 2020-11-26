@@ -1,9 +1,12 @@
-//Author: Wang Yi <godspeed_china@yeah.net>
-#ifndef wyhash_final_version
-#define wyhash_final_version
+/* Copyright 2020 王一 Wang Yi <godspeed_china@yeah.net>
+   This is free and unencumbered software released into the public domain. http://unlicense.org/
+   See github.com/wangyi-fudan/wyhash/LICENSE
+ */
+#ifndef wyhash_final_version_2
+#define wyhash_final_version_2
 //defines that change behavior
 #ifndef WYHASH_CONDOM
-#define WYHASH_CONDOM 1 //0,1,2
+#define WYHASH_CONDOM 1 //0: read 8 bytes before and after boundaries, dangerous but fastest. 1: normal valid behavior 2: extra protection against entropy loss (probability=2^-63), aka. "blind multiplication"
 #endif
 #define WYHASH_32BIT_MUM 0	//faster on 32 bit system
 //includes
@@ -77,40 +80,37 @@ static inline uint64_t _wyr4(const uint8_t *p) { unsigned v; memcpy(&v, p, 4); r
 #endif
 static inline uint64_t _wyr3(const uint8_t *p, unsigned k) { return (((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];}
 //wyhash function
-static inline uint64_t _wyfinish16(const uint8_t *p, uint64_t len, uint64_t seed, const uint64_t *secret, uint64_t i){
-#if(WYHASH_CONDOM>0)
-  uint64_t a, b;
-  if(_likely_(i<=8)){
-    if(_likely_(i>=4)){ a=_wyr4(p); b=_wyr4(p+i-4); }
-    else if (_likely_(i)){ a=_wyr3(p,i); b=0; }
-    else a=b=0;
-  } 
-  else{ a=_wyr8(p); b=_wyr8(p+i-8); }
-  return _wymix(secret[1]^len,_wymix(a^secret[1], b^seed));
-#else
-  #define oneshot_shift ((i<8)*((8-i)<<3))
-  return _wymix(secret[1]^len,_wymix((_wyr8(p)<<oneshot_shift)^secret[1],(_wyr8(p+i-8)>>oneshot_shift)^seed));
-#endif
-}
-
-static inline uint64_t _wyfinish(const uint8_t *p, uint64_t len, uint64_t seed, const uint64_t *secret, uint64_t i){
-  if(_likely_(i<=16)) return _wyfinish16(p,len,seed,secret,i);
-  return _wyfinish(p+16,len,_wymix(_wyr8(p)^secret[1],_wyr8(p+8)^seed),secret,i-16);
-}
-
 static inline uint64_t wyhash(const void *key, uint64_t len, uint64_t seed, const uint64_t *secret){
-  const uint8_t *p=(const uint8_t *)key;
-  uint64_t i=len; seed^=*secret;
-  if(_unlikely_(i>64)){
-    uint64_t see1=seed;
-    do{
-      seed=_wymix(_wyr8(p)^secret[1],_wyr8(p+8)^seed)^_wymix(_wyr8(p+16)^secret[2],_wyr8(p+24)^seed);
-      see1=_wymix(_wyr8(p+32)^secret[3],_wyr8(p+40)^see1)^_wymix(_wyr8(p+48)^secret[4],_wyr8(p+56)^see1);
-      p+=64; i-=64;
-    }while(i>64);
-    seed^=see1;
+  const uint8_t *p=(const uint8_t *)key;  uint64_t a,b; seed^=*secret;
+  if(_likely_(len<=16)){
+#if(WYHASH_CONDOM>0)
+    if(_likely_(len<=8)){
+      if(_likely_(len>=4)){ a=_wyr4(p); b=_wyr4(p+len-4); }
+      else if (_likely_(len)){ a=_wyr3(p,len); b=0; }
+      else a=b=0;
+    } 
+    else{ a=_wyr8(p); b=_wyr8(p+len-8); }
+#else
+    uint64_t s=(len<8)*((8-len)<<3);
+    a=_wyr8(p)<<s;	b=_wyr8(p+len-8)>>s;
+#endif
   }
-  return _wyfinish(p,len,seed,secret,i);
+  else{
+    uint64_t i=len;
+    if(_unlikely_(i>48)){
+      uint64_t see1=seed, see2=seed;
+      do{
+        seed=_wymix(_wyr8(p)^secret[1],_wyr8(p+8)^seed);
+        see1=_wymix(_wyr8(p+16)^secret[2],_wyr8(p+24)^see1);
+        see2=_wymix(_wyr8(p+32)^secret[3],_wyr8(p+40)^see2);
+        p+=48; i-=48;
+      }while(i>48);
+      seed^=see1^see2;
+    }
+    while(_unlikely_(i>16)){	seed=_wymix(_wyr8(p)^secret[1],_wyr8(p+8)^seed);	i-=16; p+=16;	}
+    a=_wyr8(p+i-16); b=_wyr8(p+i-8);
+  }
+  return _wymix(secret[1]^len,_wymix(a^secret[1], b^seed));
 }
 //utility functions
 const uint64_t _wyp[5] = {0xa0761d6478bd642full, 0xe7037ed1a0b428dbull, 0x8ebc6af09c88c6e3ull, 0x589965cc75374cc3ull, 0x1d8e4e27c47d124full};
@@ -118,6 +118,7 @@ static inline uint64_t wyhash64(uint64_t A, uint64_t B){  A^=_wyp[0]; B^=_wyp[1]
 static inline uint64_t wyrand(uint64_t *seed){  *seed+=_wyp[0]; return _wymix(*seed,*seed^_wyp[1]);}
 static inline double wy2u01(uint64_t r){ const double _wynorm=1.0/(1ull<<52); return (r>>12)*_wynorm;}
 static inline double wy2gau(uint64_t r){ const double _wynorm=1.0/(1ull<<20); return ((r&0x1fffff)+((r>>21)&0x1fffff)+((r>>42)&0x1fffff))*_wynorm-3.0;}
+static inline uint64_t wy2u0k(uint64_t r, uint64_t k){ _wymum(&r,&k); return k; }
 static inline void make_secret(uint64_t seed, uint64_t *secret){
   uint8_t c[] = {15, 23, 27, 29, 30, 39, 43, 45, 46, 51, 53, 54, 57, 58, 60, 71, 75, 77, 78, 83, 85, 86, 89, 90, 92, 99, 101, 102, 105, 106, 108, 113, 114, 116, 120, 135, 139, 141, 142, 147, 149, 150, 153, 154, 156, 163, 165, 166, 169, 170, 172, 177, 178, 180, 184, 195, 197, 198, 201, 202, 204, 209, 210, 212, 216, 225, 226, 228, 232, 240 };
   for(size_t i=0;i<5;i++){

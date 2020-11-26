@@ -442,12 +442,12 @@ HashInfo g_hashes[] =
   { xxh128_test,         128, 0xEB61B3A0, "xxh128",      "xxHash v3, 128-bit", GOOD },
   { xxh128low_test,       64, 0x54D1CC70, "xxh128low",   "xxHash v3, 128-bit, low 64-bits part", GOOD },
 #ifdef HAVE_BIT32
-  { wyhash32_test,         32, 0x09DE8066, "wyhash32",       "wyhash (32-bit)", GOOD },
+  { wyhash32_test,        32, 0x09DE8066, "wyhash32",       "wyhash (32-bit)", GOOD },
 #else
-  { wyhash32low,           32, 0xDCFB4E8F, "wyhash32low",    "wyhash lower 32bit", GOOD },
+  { wyhash32low,          32, 0x9241B8A3, "wyhash32low",    "wyhash lower 32bit", GOOD },
 #endif
 #ifdef HAVE_INT64
-  { wyhash_test,           64, 0x8323EB7E, "wyhash",         "wyhash (64-bit)", GOOD },
+  { wyhash_test,          64, 0x7C62138D, "wyhash",         "wyhash (64-bit)", GOOD },
 #endif
 
 };
