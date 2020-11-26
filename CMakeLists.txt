@@ -82,8 +82,10 @@ if(NOT (CMAKE_CROSSCOMPILING))
     string(COMPARE EQUAL "sha_ni" "${SHA_THERE}" SHA_TRUE)
     string(REGEX REPLACE "^.* (avx2) .*$" "\\1" AVX2_THERE ${CPUINFO})
     string(COMPARE EQUAL "avx2" "${AVX2_THERE}" AVX2_TRUE)
-    string(REGEX REPLACE "^.* (avx512) .*$" "\\1" AVX512_THERE ${CPUINFO})
-    string(COMPARE EQUAL "avx512" "${AVX512_THERE}" AVX512_TRUE)
+    string(REGEX REPLACE "^.* (avx512f) .*$" "\\1" AVX512F_THERE ${CPUINFO})
+    string(COMPARE EQUAL "avx512f" "${AVX512F_THERE}" AVX512F_TRUE)
+    string(REGEX REPLACE "^.* (avx512vl) .*$" "\\1" AVX512VL_THERE ${CPUINFO})
+    string(COMPARE EQUAL "avx512vl" "${AVX512VL_THERE}" AVX512VL_TRUE)
   elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
     exec_program("/usr/sbin/sysctl -n machdep.cpu.features" OUTPUT_VARIABLE
                  CPUINFO)
@@ -299,16 +301,26 @@ else(AVX2_TRUE)
       CACHE BOOL "AVX2 not available")
   message(STATUS "AVX2 not available")
 endif(AVX2_TRUE)
-if(AVX512_TRUE)
-  set(AVX512_FOUND
+if(AVX512F_TRUE)
+  set(AVX512F_FOUND
       true
-      CACHE BOOL "AVX512 available")
-else(AVX512_TRUE)
-  set(AVX512_FOUND
+      CACHE BOOL "AVX512F available")
+else(AVX512F_TRUE)
+  set(AVX512F_FOUND
       false
-      CACHE BOOL "AVX512 not available")
-  message(STATUS "AVX512 not available")
-endif(AVX512_TRUE)
+      CACHE BOOL "AVX512F not available")
+  message(STATUS "AVX512F not available")
+endif(AVX512F_TRUE)
+if(AVX512VL_TRUE)
+  set(AVX512VL_FOUND
+      true
+      CACHE BOOL "AVX512VL available")
+else(AVX512VL_TRUE)
+  set(AVX512VL_FOUND
+      false
+      CACHE BOOL "AVX512VL not available")
+  message(STATUS "AVX512VL not available")
+endif(AVX512VL_TRUE)
 
 if(HAVE___UINT128_T)
   add_definitions(-DHAVE_INT128)
@@ -486,20 +498,20 @@ set(BLAKE3_SRC blake3/blake3.c blake3/blake3_dispatch.c
 if(SSE4_2_FOUND)
   set(BLAKE3_SRC ${BLAKE3_SRC} blake3/blake3_sse41.c)
   set_source_files_properties(blake3/blake3_sse41.c
-                              PROPERTIES COMPILE_FLAGS "-DBLAKE3_USE_SSE41")
+                              PROPERTIES COMPILE_FLAGS "-DBLAKE3_USE_SSE41 -msse4.2")
 endif()
 if(AVX2_FOUND)
   set(BLAKE3_SRC ${BLAKE3_SRC} blake3/blake3_avx2.c)
   set_source_files_properties(
     blake3/blake3_avx2.c PROPERTIES COMPILE_FLAGS
-                                    "-DBLAKE3_USE_SSE41 -DBLAKE3_USE_AVX2")
+                                    "-DBLAKE3_USE_SSE41 -DBLAKE3_USE_AVX2 -mavx2")
 endif()
-if(AVX512_FOUND)
+if(AVX512F_FOUND AND AVX512VL_FOUND)
   set(BLAKE3_SRC ${BLAKE3_SRC} blake3/blake3_avx512.c)
   set_source_files_properties(
     blake3/blake3_avx512.c
     PROPERTIES COMPILE_FLAGS
-               "-DBLAKE3_USE_SSE41 -DBLAKE3_USE_AVX2 -DBLAKE3_USE_AVX512")
+               "-DBLAKE3_USE_SSE41 -DBLAKE3_USE_AVX2 -DBLAKE3_USE_AVX512 -mavx512f -mavx512vl")
 endif()
 if(SSE4_2_FOUND
    AND (CMAKE_SIZEOF_VOID_P EQUAL 8)
