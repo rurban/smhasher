@@ -30,7 +30,7 @@ SMhasher
 | [sha1ni_32](doc/sha1ni_32.txt)                |      2019.94 |   136.82 | 589.46 (1) | 989 | machine-specific |
 | [sha2ni-256](doc/sha2ni-256.txt)              |      1906.77 |   145.47 | 603.08 (22)|4241 | insecure,sanity, Permutation, Zeroes, machine-specific |
 | [sha2ni-256_64](doc/sha2ni-256_64.txt)        |      1910.34 |   146.06 | 595.16 (6) |4241 | Zeroes, machine-specific |
-| [blake3_c](doc/blake3_c.txt)                  |      1277.90 |   342.21 | 983.97 (4) |     | no 32bit portability     |
+| [blake3_c](doc/blake3_c.txt)                  |      1285.91 |   340.01 | 552.63 (3) |     | no 32bit portability     |
 | [rmd128](doc/rmd128.txt)                      |       334.36 |   659.03 | 838.32 (9) |     |               |
 | [rmd160](doc/rmd160.txt)                      |       202.16 |  1045.79 |1287.74 (16)|     | Cyclic hi32   |
 | [rmd256](doc/rmd256.txt)                      |       362.49 |   617.02 | 815.44 (8) |     |               |
