@@ -467,6 +467,12 @@ void clhash_seed_init(size_t seed);
 void clhash_test (const void * key, int len, uint32_t seed, void * out);
 #endif
 
+void halftime_hash_style64_test(const void *key, int len, uint32_t seed, void *out);
+void halftime_hash_style128_test(const void *key, int len, uint32_t seed, void *out);
+void halftime_hash_style256_test(const void *key, int len, uint32_t seed, void *out);
+void halftime_hash_style512_test(const void *key, int len, uint32_t seed, void *out);
+void halftime_hash_init();
+void halftime_hash_seed_init(uint64_t seed);
 
 #ifdef __SIZEOF_INT128__
    void multiply_shift_init();

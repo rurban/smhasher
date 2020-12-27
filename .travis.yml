@@ -1,4 +1,5 @@
 ---
+dist: bionic
 language:
   - c++
 sudo: false
@@ -6,15 +7,25 @@ matrix:
   fast_finish: true
   include:
     - compiler: gcc
-      env: XCC=gcc XCXX=g++
-    - compiler: clang
-      env: XCC=clang XCXX=clang++
-    - env: XCC="gcc -m32" XCXX="g++ -m32"
+      env: XCC=gcc-8 XCXX=g++-8
       addons:
         apt:
           packages:
-            - g++-multilib
-            - gcc-multilib
+            - g++-8
+            - gcc-8
+    - compiler: clang
+      env: XCC=clang XCXX=clang++
+    - env: XCC="gcc-8 -m32" XCXX="g++-8 -m32"
+      addons:
+        apt:
+          packages:
+            - g++-8
+            - gcc-8
+            - g++-8-multilib
+            - gcc-8-multilib
+            - linux-libc-dev-amd64-cross
+            - linux-libc-dev-x32-cross
+            - linux-libc-dev-i386-cross
     - name: aarch64
       arch: arm64
       env: XCC=gcc XCXX=g++
