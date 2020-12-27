@@ -347,6 +347,10 @@ HashInfo g_hashes[] =
   { seahash32low,         32, 0x712F0EE8, "seahash32low","seahash - lower 32bit", GOOD },
 #endif /* HAVE_INT64 */
 #endif /* !MSVC */
+  { halftime_hash_style64_test,          64, 0x0, "halftime_hash_style64",      "NH tree hash variant", GOOD },
+  { halftime_hash_style128_test,         64, 0x0, "halftime_hash_style128",      "NH tree hash variant", GOOD },
+  { halftime_hash_style256_test,         64, 0x0, "halftime_hash_style256",      "NH tree hash variant", GOOD },
+  { halftime_hash_style512_test,         64, 0x0, "halftime_hash_style512",      "NH tree hash variant", GOOD },
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { clhash_test,          64, 0x0, "clhash",      "carry-less mult. hash -DBITMIX (64-bit for x64, SSE4.2)", GOOD },
 #endif
@@ -502,6 +506,11 @@ void Hash_init (HashInfo* info) {
 #endif
   else if(info->hash == chaskey_test)
     chaskey_init();
+  else if (info->hash == halftime_hash_style64_test ||
+           info->hash == halftime_hash_style128_test ||
+           info->hash == halftime_hash_style256_test ||
+           info->hash == halftime_hash_style512_test)
+    halftime_hash_init();
 }
 
 // optional hash seed initializers.
@@ -533,6 +542,9 @@ void Hash_Seed_init (pfHash hash, size_t seed) {
           hash == umash ||
           hash == umash128)
     umash_seed_init(seed);
+  else if (hash == halftime_hash_style64_test || hash == halftime_hash_style128_test ||
+           hash == halftime_hash_style256_test || hash == halftime_hash_style512_test)
+    halftime_hash_seed_init(seed);
   /*
   else if(hash == hashx_test)
     hashx_seed_init(info, seed);

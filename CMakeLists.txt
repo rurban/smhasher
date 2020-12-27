@@ -464,17 +464,22 @@ if(NOT MSVC)
   set_source_files_properties(
     SpeedTest.cpp PROPERTIES COMPILE_FLAGS "-std=c++0x -I${CMAKE_SOURCE_DIR}")
   set_source_files_properties(main.cpp PROPERTIES COMPILE_FLAGS "-std=c++0x")
+  if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+    set_source_files_properties(Hashes.cpp PROPERTIES COMPILE_FLAGS "-std=c++1y -I${CMAKE_SOURCE_DIR} -DWYHASH32")
+  else()
+    set_source_files_properties(Hashes.cpp PROPERTIES COMPILE_FLAGS "-std=c++1y -I${CMAKE_SOURCE_DIR}")
+  endif()
   set_source_files_properties(bittest.cpp PROPERTIES COMPILE_FLAGS "-std=c++0x")
   # https://github.com/dgryski/trifles/tree/master/tsip
   set(TSIP_SRC tsip.c)
 else()
   set_source_files_properties(SpeedTest.cpp PROPERTIES COMPILE_FLAGS
                                                        "-I${CMAKE_SOURCE_DIR}")
-endif()
-set_source_files_properties(Hashes.cpp PROPERTIES COMPILE_FLAGS
-                                                  "-I${CMAKE_SOURCE_DIR}")
-if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-  set_source_files_properties(Hashes.cpp PROPERTIES COMPILE_FLAGS "-DWYHASH32")
+  if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+    set_source_files_properties(Hashes.cpp PROPERTIES COMPILE_FLAGS "-I${CMAKE_SOURCE_DIR} -DWYHASH32")
+  else()
+    set_source_files_properties(Hashes.cpp PROPERTIES COMPILE_FLAGS "-I${CMAKE_SOURCE_DIR}")
+  endif()
 endif()
 
 find_library(HIGHWAY highwayhash)

@@ -755,6 +755,127 @@ void clhash_seed_init(size_t seed)
 }
 #endif
 
+#include "halftime-hash.hpp"
+
+alignas(64) static uint64_t
+    halftime_hash_random[8 * ((halftime_hash::kEntropyBytesNeeded / 64) + 1)];
+
+void halftime_hash_style64_test(const void *key, int len, uint32_t seed, void *out) {
+  *(uint64_t *)out =
+      halftime_hash::HalftimeHashStyle64(halftime_hash_random, (char *)key, (size_t)len);
+}
+
+void halftime_hash_style128_test(const void *key, int len, uint32_t seed, void *out) {
+  *(uint64_t *)out =
+      halftime_hash::HalftimeHashStyle128(halftime_hash_random, (char *)key, (size_t)len);
+}
+
+void halftime_hash_style256_test(const void *key, int len, uint32_t seed, void *out) {
+  *(uint64_t *)out =
+      halftime_hash::HalftimeHashStyle256(halftime_hash_random, (char *)key, (size_t)len);
+}
+
+void halftime_hash_style512_test(const void *key, int len, uint32_t seed, void *out) {
+  *(uint64_t *)out =
+      halftime_hash::HalftimeHashStyle512(halftime_hash_random, (char *)key, (size_t)len);
+}
+
+void halftime_hash_init() {
+  halftime_hash_seed_init(0xcc70c4c1798e4a6f);
+}
+
+// romu random number generator for seeding the HalftimeHash entropy
+
+// TODO: align and increase size of outut random array
+
+#if defined(__AVX512F__)
+
+#include <immintrin.h>
+
+void romuQuad32simd(const __m512i seeds[4], uint64_t *output, size_t count) {
+  __m512i wState = seeds[0], xState = seeds[1], yState = seeds[2],
+       zState = seeds[3];
+  const auto m = _mm512_set1_epi32(3323815723u);
+  for (size_t i = 0; i < count; i += 8) {
+    __m512i wp = wState, xp = xState, yp = yState, zp = zState;
+    wState = _mm512_mullo_epi32(m, zp);
+    xState = _mm512_add_epi32(zp, _mm512_rol_epi32(wp, 26));
+    yState = _mm512_sub_epi32(yp, xp);
+    zState = _mm512_add_epi32(yp, wp);
+    zState = _mm512_rol_epi32(zState, 9);
+    _mm512_store_epi64(&output[i], xp);
+  }
+}
+
+void halftime_hash_seed_init(uint64_t seed) {
+  __m512i seeds[4] = {
+      {
+          (long long)seed ^ (long long)0x9a9b4c4e44dd48d1,
+          (long long)seed ^ (long long)0xf8b0cd76a61945b1,
+          (long long)seed ^ (long long)0x86268b0ae8494ce2,
+          (long long)seed ^ (long long)0x7d31e5469df4484d,
+          (long long)seed ^ (long long)0x62cb7b3e5e334aab,
+          (long long)seed ^ (long long)0xc4c4065529834f39,
+          (long long)seed ^ (long long)0xcc7972121c52411f,
+          (long long)seed ^ (long long)0x7e08efb9ea5a434f,
+      },
+      {
+          (long long)seed ^ (long long)0xccbc1ec6f244430c,
+          (long long)seed ^ (long long)0xecf76d38f32b4296,
+          (long long)seed ^ (long long)0xdf061d7c86664fa2,
+          (long long)seed ^ (long long)0x08e0da9580d44252,
+          (long long)seed ^ (long long)0xd074f3685aeb4f71,
+          (long long)seed ^ (long long)0x3f83eb99126d4a74,
+          (long long)seed ^ (long long)0xb5d24f61b4f540fa,
+          (long long)seed ^ (long long)0x33f248aa4b3c4aaf,
+      },
+      {
+          (long long)seed ^ (long long)0xd292ecaddb1c4dc1,
+          (long long)seed ^ (long long)0x94489307a0d041ed,
+          (long long)seed ^ (long long)0x25a4752be4bd4b84,
+          (long long)seed ^ (long long)0xa1d4010ab16c4b96,
+          (long long)seed ^ (long long)0x87175e8421534efa,
+          (long long)seed ^ (long long)0x0df85252bb894d2b,
+          (long long)seed ^ (long long)0x1d43b52179374cb4,
+          (long long)seed ^ (long long)0x5586b8bf3d4f4ca7,
+      },
+      {
+          (long long)seed ^ (long long)0x7275e2473e0f4618,
+          (long long)seed ^ (long long)0x2340093a933a4191,
+          (long long)seed ^ (long long)0x849ec473349843ac,
+          (long long)seed ^ (long long)0x9b8873c068ac4e41,
+          (long long)seed ^ (long long)0x3b8a6084e4ec44a7,
+          (long long)seed ^ (long long)0x341dadfa6e524396,
+          (long long)seed ^ (long long)0xb735256ca12649e9,
+          (long long)seed ^ (long long)0x1bd21c39a0694d4f,
+      },
+  };
+  romuQuad32simd(seeds, halftime_hash_random,
+                 sizeof(halftime_hash_random) / sizeof(halftime_hash_random[0]));
+}
+
+#else
+
+void halftime_hash_seed_init(uint64_t seed)
+{
+#define ROTL(d,lrot) ((d<<(lrot)) | (d>>(8*sizeof(d)-(lrot))))
+  uint64_t wState = seed, xState= 0xecfc1357d65941ae, yState=0xbe1927f97b8c43f1,
+    zState=0xf4d4beb14ae042bb;
+  for (unsigned i = 0; i < sizeof(halftime_hash_random) / sizeof(halftime_hash_random[0]);
+       ++i) {
+    const uint64_t wp = wState, xp = xState, yp = yState, zp = zState;
+    wState = 15241094284759029579u * zp;  // a-mult
+    xState = zp + ROTL(wp, 52);           // b-rotl, c-add
+    yState = yp - xp;                     // d-sub
+    zState = yp + wp;                     // e-add
+    zState = ROTL(zState, 19);            // f-rotl
+    halftime_hash_random[i] = xp;
+  }
+#undef ROTL
+}
+#endif
+
+
 // Multiply shift from
 // Thorup "High Speed Hashing for Integers and Strings" 2018
 // https://arxiv.org/pdf/1504.06804.pdf
