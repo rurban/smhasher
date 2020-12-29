@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 make -C build32
 which performance && performance
 if [ -z "$@" ]; then

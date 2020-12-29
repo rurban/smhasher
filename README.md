@@ -180,6 +180,10 @@ SMhasher
 | [umash32_hi](doc/umash32_hi.txt)              |      4662.92 |    54.22 | 214.20 (2) |1530 |                            |
 | [umash64](doc/umash64.txt)                    |      4662.09 |    53.42 | 188.09 (1) |1530 |                            |
 | [umash128](doc/umash128.txt)                  |      2427.46 |    70.60 | 197.29 (2) |1530 |                            |
+| [halftime_hash64](doc/halftime_hash64.txt)    |      7213.83 |    97.54 | 552.19 (4) |2911 |                            |
+| [halftime_hash128](doc/halftime_hash128.txt)  |     20745.76 |    73.15 | 531.99 (2) |2462 |                            |
+| [halftime_hash256](doc/halftime_hash256.txt)  |     21465.57 |    77.00 | 530.79 (1) |2622 |                            |
+| [halftime_hash512](doc/halftime_hash512.txt)  |     21075.46 |    89.55 | 539.44 (0) |3550 |                            |
 
 The sortable table variants:
 
@@ -201,6 +205,7 @@ So the fastest hash functions on x86_64 without quality problems are:
 - wyhash
 - t1ha2_atonce
 - FarmHash (_not portable, too machine specific: 64 vs 32bit, old gcc, ..._)
+  halftime_hash128
 - Spooky32
 - pengyhash
 - mx3

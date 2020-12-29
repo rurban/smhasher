@@ -347,10 +347,6 @@ HashInfo g_hashes[] =
   { seahash32low,         32, 0x712F0EE8, "seahash32low","seahash - lower 32bit", GOOD },
 #endif /* HAVE_INT64 */
 #endif /* !MSVC */
-  { halftime_hash_style64_test,          64, 0x0, "halftime_hash_style64",      "NH tree hash variant", GOOD },
-  { halftime_hash_style128_test,         64, 0x0, "halftime_hash_style128",      "NH tree hash variant", GOOD },
-  { halftime_hash_style256_test,         64, 0x0, "halftime_hash_style256",      "NH tree hash variant", GOOD },
-  { halftime_hash_style512_test,         64, 0x0, "halftime_hash_style512",      "NH tree hash variant", GOOD },
 #if defined(__SSE4_2__) && defined(__x86_64__)
   { clhash_test,          64, 0x0, "clhash",      "carry-less mult. hash -DBITMIX (64-bit for x64, SSE4.2)", GOOD },
 #endif
@@ -425,6 +421,10 @@ HashInfo g_hashes[] =
   { umash,                64, 0x4542288C, "umash64",     "umash 64", GOOD },
   { umash128,            128, 0xDA4E82B6, "umash128",    "umash 128", GOOD },
 #endif
+  { halftime_hash_style64_test,  64, 0x0, "halftime_hash64",    "NH tree hash variant", GOOD },
+  { halftime_hash_style128_test, 64, 0x0, "halftime_hash128",   "NH tree hash variant", GOOD },
+  { halftime_hash_style256_test, 64, 0x0, "halftime_hash256",   "NH tree hash variant", GOOD },
+  { halftime_hash_style512_test, 64, 0x0, "halftime_hash512",   "NH tree hash variant", GOOD },
   
   { t1ha2_atonce_test,           64, 0x8F16C948, "t1ha2_atonce",    "Fast Positive Hash (portable, aims 64-bit, little-endian)", GOOD },
   { t1ha2_stream_test,           64, 0xDED9B580, "t1ha2_stream",    "Fast Positive Hash (portable, aims 64-bit, little-endian)", POOR },
@@ -1318,6 +1318,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   // 5m30 with xxh3
   // less reps with slow or very bad hashes
   // md5: 1h38m with 1000 reps!
+  // halftime* > 40m
 
   if(g_testDiff || g_testAll)
   {
@@ -1328,7 +1329,12 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     bool dumpCollisions = g_drawDiagram; // from --verbose
     int reps = 1000;
     if ((g_speed > 500.0 || info->hashbits > 128 ||
-         hash == o1hash_test) && !g_testExtra)
+         hash == o1hash_test ||
+         hash == halftime_hash_style64_test ||
+         hash == halftime_hash_style128_test ||
+         hash == halftime_hash_style256_test ||
+         hash == halftime_hash_style512_test
+         ) && !g_testExtra)
       reps = 100; // sha1: 7m, md5: 4m53
 
     result &= DiffTest< Blob<64>,  hashtype >(hash,5,reps,dumpCollisions);
