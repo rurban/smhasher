@@ -2,6 +2,10 @@
 #include <immintrin.h>
 #endif
 
+#if defined(__ARM_NEON) || defined(__ARM_NEON__)
+#include <arm_neon.h>
+#endif
+
 #include <cassert>
 #include <climits>
 #include <cstdint>
@@ -78,6 +82,44 @@ struct BlockWrapper256 {
 
 #endif
 
+#if defined(__ARM_NEON) || defined(__ARM_NEON__)
+
+using u128 = uint64x2_t;
+
+inline u128 LeftShift(u128 a, int i) { return vshlq_s64(a, vdupq_n_s64(i)); }
+inline u128 Plus(u128 a, u128 b) { return vaddq_s64(a, b); }
+inline u128 Minus(u128 a, u128 b) { return vsubq_s64(a, b); }
+inline u128 Plus32(u128 a, u128 b) { return vaddq_s32(a, b); }
+inline u128 RightShift32(u128 a) { return vshrq_n_u64(a, 32); }
+
+inline u128 Times(u128 a, u128 b) {
+  uint32x2_t a_lo = vmovn_u64(a);
+  uint32x2_t b_lo = vmovn_u64(b);
+  return vmull_u32(a_lo, b_lo);
+}
+
+inline u128 Xor(u128 a, u128 b) { return veorq_s32(a, b); }
+
+static inline u128 Negate(u128 a) {
+  const auto zero = vdupq_n_s64(0);
+  return Minus(zero, a);
+}
+
+inline uint64_t Sum(u128 a) { return vgetq_lane_s64(a, 0) + vgetq_lane_s64(a, 1); }
+
+struct BlockWrapper128 {
+  using Block = u128;
+
+  static u128 LoadBlock(const void* x) {
+    auto y = reinterpret_cast<const int32_t*>(x);
+    return vld1q_s32(y);
+  }
+
+  static u128 LoadOne(uint64_t entropy) { return vdupq_n_s64(entropy); }
+};
+
+#endif
+
 #if __SSE2__
 
 using u128 = __m128i;
@@ -144,6 +186,18 @@ struct BlockWrapperScalar {
   static uint64_t LoadOne(uint64_t entropy) { return entropy; }
 };
 
+template <typename T>
+T MultiplyAdd(T summand, T factor1, T factor2) {
+  return Plus(summand, Times(factor1, factor2));
+}
+
+#if defined(__ARM_NEON) || defined(__ARM_NEON__)
+template <>
+u128 MultiplyAdd(u128 summand, u128 factor1, u128 factor2) {
+  return vmlal_u32(summand, vmovn_u64(factor1), vmovn_u64(factor2));
+}
+#endif
+
 template <typename Block>
 inline void Encode3(Block raw_io[9 * 3]) {
   auto io = reinterpret_cast<Block(*)[3]>(raw_io);
@@ -186,9 +240,9 @@ inline void Encode3(Block raw_io[9 * 3]) {
 }
 
 template <typename Block>
-inline void Encode2(Block raw_io[7 * 2]) {
-  auto io = reinterpret_cast<Block(*)[2]>(raw_io);
-  for (int i = 0; i < 2; ++i) {
+inline void Encode2(Block raw_io[7 * 3]) {
+  auto io = reinterpret_cast<Block(*)[3]>(raw_io);
+  for (int i = 0; i < 3; ++i) {
     io[6][i] = io[0][i];
     for (int j = 1; j < 6; ++j) {
       io[6][i] = Xor(io[6][i], io[j][i]);
@@ -329,15 +383,23 @@ template <typename BlockWrapper, unsigned dimension, unsigned in_width,
 struct EhcBadger {
   using Block = typename BlockWrapper::Block;
 
-  static Block Mix(Block input, Block entropy) {
+  static Block Mix(Block accum, Block input, Block entropy) {
+    Block output = Plus32(entropy, input);
+    Block twin = RightShift32(output);
+    output = MultiplyAdd(accum, output, twin);
+    return output;
+  }
+
+  static Block MixOne(Block accum, Block input, uint64_t entropy) {
+    return Mix(accum, input, BlockWrapper::LoadOne(entropy));
+  }
+
+  static Block MixNone(Block input, uint64_t entropy_word) {
+    Block entropy = BlockWrapper::LoadOne(entropy_word);
     Block output = Plus32(entropy, input);
     Block twin = RightShift32(output);
     output = Times(output, twin);
     return output;
-  }
-
-  static Block MixOne(Block input, uint64_t entropy) {
-    return Mix(input, BlockWrapper::LoadOne(entropy));
   }
 
   static void EhcUpperLayer(const Block (&input)[fanout][out_width],
@@ -346,8 +408,7 @@ struct EhcBadger {
     for (unsigned i = 0; i < out_width; ++i) {
       output[i] = input[0][i];
       for (unsigned j = 1; j < fanout; ++j) {
-        output[i] =
-            Plus(output[i], MixOne(input[j][i], entropy[(fanout - 1) * i + j - 1]));
+        output[i] = MixOne(output[i], input[j][i], entropy[(fanout - 1) * i + j - 1]);
       }
     }
   }
@@ -445,12 +506,12 @@ struct EhcBadger {
                    const uint64_t entropy[encoded_dimension][in_width],
                    Block output[encoded_dimension]) {
     for (unsigned i = 0; i < encoded_dimension; ++i) {
-      output[i] = MixOne(input[i][0], entropy[i][0]);
+      output[i] = MixNone(input[i][0], entropy[i][0]);
       // TODO: should loading take care of this?
     }
     for (unsigned j = 1; j < in_width; ++j) {
       for (unsigned i = 0; i < encoded_dimension; ++i) {
-        output[i] = Plus(output[i], MixOne(input[i][j], entropy[i][j]));
+        output[i] = MixOne(output[i], input[i][j], entropy[i][j]);
         // TODO: this might be optional; it might not matter which way we iterate over
         // entropy
       }
@@ -508,7 +569,7 @@ struct EhcBadger {
 
     void Insert(const Block (&x)[out_width]) {
       for (unsigned i = 0; i < out_width; ++i) {
-        accum[i] = Plus(accum[i], Mix(x[i], BlockWrapper::LoadBlock(seeds)));
+        accum[i] = Mix(accum[i], x[i], BlockWrapper::LoadBlock(seeds));
         seeds += sizeof(Block) / sizeof(uint64_t);
       }
     }
@@ -516,8 +577,8 @@ struct EhcBadger {
     void Insert(Block x) {
       for (unsigned i = 0; i < out_width; ++i) {
         accum[i] =
-            Plus(accum[i], Mix(x, BlockWrapper::LoadBlock(
-                                      &seeds[i * sizeof(Block) / sizeof(uint64_t)])));
+            Mix(accum[i], x,
+                BlockWrapper::LoadBlock(&seeds[i * sizeof(Block) / sizeof(uint64_t)]));
       }
       // Toeplitz
       seeds += sizeof(Block) / sizeof(uint64_t);
@@ -833,7 +894,7 @@ inline constexpr size_t GetEntropyBytesNeeded(size_t n) {
   return (3 == out_width)
              ? EhcBadger<Wrapper, 7, 3, 9, out_width>::GetEntropyBytesNeeded(n)
          : (2 == out_width)
-             ? EhcBadger<Wrapper, 6, 2, 7, out_width>::GetEntropyBytesNeeded(
+             ? EhcBadger<Wrapper, 6, 3, 7, out_width>::GetEntropyBytesNeeded(
                    n)
          : (4 == out_width)
              ? EhcBadger<Wrapper, 7, 3, 10, out_width>::GetEntropyBytesNeeded(
@@ -928,6 +989,34 @@ inline void V4Sse2(const uint64_t* entropy, const char* char_input, size_t lengt
 
 #endif
 
+#if defined(__ARM_NEON) || defined(__ARM_NEON__)
+
+template <unsigned dimension, unsigned in_width, unsigned encoded_dimension,
+          unsigned out_width>
+inline void V2Neon(const uint64_t* entropy, const char* char_input, size_t length,
+                   uint64_t output[out_width]) {
+  return Hash<BlockWrapper128, dimension, in_width, encoded_dimension, out_width>(
+      entropy, char_input, length, output);
+}
+
+template <unsigned dimension, unsigned in_width, unsigned encoded_dimension,
+          unsigned out_width>
+inline void V3Neon(const uint64_t* entropy, const char* char_input, size_t length,
+                   uint64_t output[out_width]) {
+  return Hash<RepeatWrapper<BlockWrapper128, 2>, dimension, in_width, encoded_dimension,
+              out_width>(entropy, char_input, length, output);
+}
+
+template <unsigned dimension, unsigned in_width, unsigned encoded_dimension,
+          unsigned out_width>
+inline void V4Neon(const uint64_t* entropy, const char* char_input, size_t length,
+                   uint64_t output[out_width]) {
+  return Hash<RepeatWrapper<BlockWrapper128, 4>, dimension, in_width, encoded_dimension,
+              out_width>(entropy, char_input, length, output);
+}
+
+#endif
+
 template <unsigned dimension, unsigned in_width, unsigned encoded_dimension,
           unsigned out_width>
 inline void V4Scalar(const uint64_t* entropy, const char* char_input, size_t length,
@@ -985,7 +1074,7 @@ inline void V1(const uint64_t* entropy, const char* char_input, size_t length,
   SPECIALIZE(version, isa, 5, 5, 3, 9)  \
   SPECIALIZE(version, isa, 4, 7, 3, 10) \
   SPECIALIZE(version, isa, 3, 7, 3, 9)  \
-  SPECIALIZE(version, isa, 2, 6, 2, 7)
+  SPECIALIZE(version, isa, 2, 6, 3, 7)
 
 #if __AVX512F__
 
@@ -1006,6 +1095,13 @@ SPECIALIZE_4(1, Scalar)
 SPECIALIZE_4(4, Sse2)
 SPECIALIZE_4(3, Sse2)
 SPECIALIZE_4(2, Sse2)
+SPECIALIZE_4(1, Scalar)
+
+#elif defined(__ARM_NEON) || defined(__ARM_NEON__)
+
+SPECIALIZE_4(4, Neon)
+SPECIALIZE_4(3, Neon)
+SPECIALIZE_4(2, Neon)
 SPECIALIZE_4(1, Scalar)
 
 #else
