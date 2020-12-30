@@ -205,7 +205,7 @@ So the fastest hash functions on x86_64 without quality problems are:
 - wyhash
 - t1ha2_atonce
 - FarmHash (_not portable, too machine specific: 64 vs 32bit, old gcc, ..._)
-  halftime_hash128
+- halftime_hash128
 - Spooky32
 - pengyhash
 - mx3
