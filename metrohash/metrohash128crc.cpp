@@ -15,7 +15,11 @@
 // limitations under the License.
 
 
-#include <nmmintrin.h>
+#if defined(__aarch64__)
+       #include "sse2neon.h"
+#else
+       #include <nmmintrin.h>
+#endif
 #include <string.h>
 #include "metrohash.h"
 #include "platform.h"
