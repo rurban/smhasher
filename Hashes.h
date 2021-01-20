@@ -1059,57 +1059,42 @@ inline void aesnihash_test ( const void * key, int len, unsigned seed, void * ou
 
 #ifdef HAVE_INT64
 // https://github.com/avaneev/prvhash
-// objsize: 4129f0 - 412bcc: 476
-#include "prvhash42.h"
-inline void prvhash42_32test ( const void * key, int len, unsigned seed, void * out )
-{
-  uint8_t hash[4] = {0};
-  prvhash42 ((const uint8_t *)key, len, hash, 4, (uint64_t)seed, NULL);
-  memcpy (out, hash, 4);
-}
+#include "prvhash/prvhash64.h"
 // objsize: 412850 - 4129ea: 960
-inline void prvhash42_64test ( const void * key, int len, unsigned seed, void * out )
+inline void prvhash64_64test ( const void * key, int len, unsigned seed, void * out )
 {
   uint8_t hash[16] = {0};
-  prvhash42 ((const uint8_t *)key, len, hash, 8, (uint64_t)seed, NULL);
+  prvhash64 ((const uint8_t *)key, len, hash, 8, (uint64_t)seed, NULL);
   memcpy (out, hash, 8);
 }
 // objsize: 412bd0 - 412d80: 432
-inline void prvhash42_128test ( const void * key, int len, unsigned seed, void * out )
+inline void prvhash64_128test ( const void * key, int len, unsigned seed, void * out )
 {
   uint8_t hash[32] = {0};
-  prvhash42 ((const uint8_t *)key, len, hash, 16, (uint64_t)seed, NULL);
+  prvhash64 ((const uint8_t *)key, len, hash, 16, (uint64_t)seed, NULL);
   memcpy (out, hash, 16);
 }
 
-#include "prvhash42s.h"
-// objsize: 4137e0 - 4141ee: 2574
-inline void prvhash42s_32test ( const void * key, int len, unsigned seed, void * out )
-{
-  PRVHASH42S_CTX ctx;
-  uint64_t SeedXOR[ 4 ] = { (uint64_t)seed, (uint64_t)seed, (uint64_t)seed, (uint64_t)seed };
-  prvhash42s_init( &ctx, (uint8_t* const)out, 4, SeedXOR, 0 );
-  prvhash42s_update( &ctx, (const uint8_t*)key, (size_t)len );
-  prvhash42s_final( &ctx );
-}
+// the more secure variants
+#include "prvhash/prvhash64s.h"
+#define PRVHASH64S_PAR 4
 // objsize: 4141f0 - 414c3d: 2637
-inline void prvhash42s_64test ( const void * key, int len, unsigned seed, void * out )
+inline void prvhash64s_64test ( const void * key, int len, unsigned seed, void * out )
 {
-  PRVHASH42S_CTX ctx;
-  uint64_t SeedXOR[ 4 ] = { (uint64_t)seed, (uint64_t)seed, (uint64_t)seed, (uint64_t)seed };
-  prvhash42s_init( &ctx, (uint8_t* const)out, 8, SeedXOR, 0 );
-  prvhash42s_update( &ctx, (const uint8_t*)key, (size_t)len );
-  prvhash42s_final( &ctx );
+  PRVHASH64S_CTX ctx;
+  uint64_t SeedXOR[ PRVHASH64S_PAR ] = { (uint64_t)seed, (uint64_t)seed, (uint64_t)seed, (uint64_t)seed };
+  prvhash64s_init( &ctx, (uint8_t* const)out, 8, SeedXOR, 0 );
+  prvhash64s_update( &ctx, (const uint8_t*)key, (size_t)len );
+  prvhash64s_final( &ctx );
 }
-/* invalid since 2.22, cannot init hash with 256 bit */
 // objsize: 414230 - 4137dd: 2653
-inline void prvhash42s_128test ( const void * key, int len, unsigned seed, void * out )
+inline void prvhash64s_128test ( const void * key, int len, unsigned seed, void * out )
 {
-  PRVHASH42S_CTX ctx;
-  uint64_t SeedXOR[ 4 ] = { (uint64_t)seed, (uint64_t)seed, (uint64_t)seed, (uint64_t)seed };
-  prvhash42s_init( &ctx, (uint8_t* const)out, 16, SeedXOR, 0 );
-  prvhash42s_update( &ctx, (const uint8_t*)key, (size_t)len );
-  prvhash42s_final( &ctx );
+  PRVHASH64S_CTX ctx;
+  uint64_t SeedXOR[ PRVHASH64S_PAR ] = { (uint64_t)seed, (uint64_t)seed, (uint64_t)seed, (uint64_t)seed };
+  prvhash64s_init( &ctx, (uint8_t* const)out, 16, SeedXOR, 0 );
+  prvhash64s_update( &ctx, (const uint8_t*)key, (size_t)len );
+  prvhash64s_final( &ctx );
 }
 #endif
 

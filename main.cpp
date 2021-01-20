@@ -323,12 +323,10 @@ HashInfo g_hashes[] =
   { halfsiphash_test,     32, 0xA7A05F72, "HalfSipHash", "HalfSipHash 2-4, 32bit", GOOD },
   { GoodOAAT_test,        32, 0x7B14EEE5, "GoodOAAT",    "Small non-multiplicative OAAT", GOOD },
 #ifdef HAVE_INT64
-  { prvhash42_32test,     32, 0x79DE3F37, "prvhash42_32", "prvhash42 32bit", GOOD },
-  { prvhash42_64test,     64, 0x3F52A4BE, "prvhash42_64", "prvhash42 64bit", GOOD },
-  { prvhash42_128test,   128, 0xFDAE221F, "prvhash42_128","prvhash42 128bit", GOOD },
-  { prvhash42s_32test,    32, 0x27451626, "prvhash42s_32","prvhash42s 32bit", GOOD },
-  { prvhash42s_64test,    64, 0xC219235A, "prvhash42s_64","prvhash42s 64bit", GOOD },
-  { prvhash42s_128test,  128, 0x8F47E688, "prvhash42s_128","prvhash42s 128bit", GOOD },
+  { prvhash64_64test,     64, 0x7053A36D, "prvhash64_64", "prvhash64 64bit", GOOD },
+  { prvhash64_128test,   128, 0x712BA0C9, "prvhash64_128","prvhash64 128bit", GOOD },
+  { prvhash64s_64test,    64, 0x25A67726, "prvhash64s_64","prvhash64s 64bit", GOOD },
+  { prvhash64s_128test,  128, 0xB67B5F41, "prvhash64s_128","prvhash64s 128bit", GOOD },
 #endif
   // as in rust and swift:
   { siphash13_test,       64, 0x29C010BF, "SipHash13",   "SipHash 1-3 - SSSE3 optimized", GOOD },
