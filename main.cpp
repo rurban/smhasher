@@ -323,9 +323,10 @@ HashInfo g_hashes[] =
   { halfsiphash_test,     32, 0xA7A05F72, "HalfSipHash", "HalfSipHash 2-4, 32bit", GOOD },
   { GoodOAAT_test,        32, 0x7B14EEE5, "GoodOAAT",    "Small non-multiplicative OAAT", GOOD },
 #ifdef HAVE_INT64
-  { prvhash64_64test,     64, 0x7053A36D, "prvhash64_64", "prvhash64 64bit", GOOD },
-  { prvhash64_128test,   128, 0x712BA0C9, "prvhash64_128","prvhash64 128bit", GOOD },
-  { prvhash64s_64test,    64, 0x25A67726, "prvhash64s_64","prvhash64s 64bit", GOOD },
+  { prvhash64_64mtest,    64, 0x7053A36D, "prvhash64_64m", "prvhash64m 64bit", GOOD },
+  { prvhash64_64test,     64, 0x7053A36D, "prvhash64_64",  "prvhash64 64bit", GOOD },
+  { prvhash64_128test,   128, 0x712BA0C9, "prvhash64_128", "prvhash64 128bit", GOOD },
+  { prvhash64s_64test,    64, 0x25A67726, "prvhash64s_64", "prvhash64s 64bit", GOOD },
   { prvhash64s_128test,  128, 0xB67B5F41, "prvhash64s_128","prvhash64s 128bit", GOOD },
 #endif
   // as in rust and swift:

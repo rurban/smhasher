@@ -1060,6 +1060,10 @@ inline void aesnihash_test ( const void * key, int len, unsigned seed, void * ou
 #ifdef HAVE_INT64
 // https://github.com/avaneev/prvhash
 #include "prvhash/prvhash64.h"
+inline void prvhash64_64mtest ( const void * key, int len, unsigned seed, void * out )
+{
+  *(uint64_t*)out = prvhash64_64m ((const uint8_t *)key, len, (uint64_t)seed);
+}
 // objsize: 412850 - 4129ea: 960
 inline void prvhash64_64test ( const void * key, int len, unsigned seed, void * out )
 {
@@ -1081,6 +1085,7 @@ inline void prvhash64_128test ( const void * key, int len, unsigned seed, void *
 // objsize: 4141f0 - 414c3d: 2637
 inline void prvhash64s_64test ( const void * key, int len, unsigned seed, void * out )
 {
+  // if seedless: prvhash64s_oneshot(key, len, out, 8);
   PRVHASH64S_CTX ctx;
   uint64_t SeedXOR[ PRVHASH64S_PAR ] = { (uint64_t)seed, (uint64_t)seed, (uint64_t)seed, (uint64_t)seed };
   prvhash64s_init( &ctx, (uint8_t* const)out, 8, SeedXOR, 0 );
