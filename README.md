@@ -180,10 +180,10 @@ SMhasher
 | [umash32_hi](doc/umash32_hi.txt)              |      4662.92 |    54.22 | 214.20 (2) |1530 |                            |
 | [umash64](doc/umash64.txt)                    |      4662.09 |    53.42 | 188.09 (1) |1530 |                            |
 | [umash128](doc/umash128.txt)                  |      2427.46 |    70.60 | 197.29 (2) |1530 |                            |
-| [halftime_hash64](doc/halftime_hash64.txt)    |      4990.72 |   120.55 | 281.64 (3) |2911 |                            |
-| [halftime_hash128](doc/halftime_hash128.txt)  |     13478.23 |    97.79 | 252.14 (2) |2462 |                            |
-| [halftime_hash256](doc/halftime_hash256.txt)  |     11620.28 |    98.44 | 252.60 (2) |2622 |                            |
-| [halftime_hash512](doc/halftime_hash512.txt)  |      7681.62 |   125.81 | 274.01 (3) |3550 |                            |
+| [halftime_hash64](doc/halftime_hash64.txt)    |      4990.72 |   120.55 | 281.64 (3) |2911 | UB oob                     |
+| [halftime_hash128](doc/halftime_hash128.txt)  |     13478.23 |    97.79 | 252.14 (2) |2462 | UB oob                     |
+| [halftime_hash256](doc/halftime_hash256.txt)  |     11620.28 |    98.44 | 252.60 (2) |2622 | UB oob                     |
+| [halftime_hash512](doc/halftime_hash512.txt)  |      7681.62 |   125.81 | 274.01 (3) |3550 | UB oob                     |
 
 The sortable table variants:
 
