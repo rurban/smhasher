@@ -41,7 +41,7 @@ static void printKey(const void* key, size_t len)
 template< typename hashtype >
 void Prn_gen (int nbRn, pfHash hash, std::vector<hashtype> & hashes )
 {
-  assert(nbRn < 0);
+  assert(nbRn > 0);
 
   printf("Generating %i random numbers : \n", nbRn);
 

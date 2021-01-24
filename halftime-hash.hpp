@@ -917,8 +917,8 @@ template <void (*Hasher)(const uint64_t* entropy, const char* char_input, size_t
           int width>
 inline uint64_t TabulateAfter(const uint64_t* entropy, const char* char_input,
                               size_t length) {
-  const uint64_t(&table)[1 + width][256] =
-      *reinterpret_cast<const uint64_t(*)[1 + width][256]>(entropy);
+  const uint64_t(&table)[sizeof(uint64_t) * (1 + width)][256] =
+      *reinterpret_cast<const uint64_t(*)[sizeof(uint64_t) * (1 + width)][256]>(entropy);
   entropy += width * 256;
   uint64_t output[width];
   Hasher(entropy, char_input, length, output);
