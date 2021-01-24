@@ -432,6 +432,7 @@ bool TestDistribution ( std::vector<hashtype> & hashes, bool drawDiagram )
 
   while(double(hashes.size()) / double(1 << maxwidth) < 5.0)
   {
+    if (0 == maxwidth) break;
     maxwidth--;
   }
 
