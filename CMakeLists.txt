@@ -492,12 +492,26 @@ if(HIGHWAY
   endif()
 endif()
 
+# rust staticlib: https://github.com/tkaitchuck/aHash/ smhasher/ahash-cbindings/install.sh
+find_library(AHASH_C ahash_c
+             HINTS /usr/local/lib)
+if(AHASH_C
+   AND (NOT(CMAKE_CROSSCOMPILING)))
+  if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(AHASH_C_LIB ahash_c)
+    add_definitions(-DHAVE_AHASH_C)
+  endif()
+endif()
+
 if(SSE4_2_FOUND AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
   # Rust staticlib (PR #9) WIP
   find_library(BLAKE3 blake3)
-  # if (BLAKE3) set(BLAKE3_LIB ${BLAKE3}) set(CMAKE_CXX_FLAGS
-  # "${CMAKE_CXX_FLAGS} -DHAVE_BLAKE3") endif()
+  # if (BLAKE3)
+  #   set(BLAKE3_LIB ${BLAKE3})
+  #   add_definitions(-DHAVE_BLAKE3)
+  # endif()
 endif()
+
 set(BLAKE3_SRC blake3/blake3.c blake3/blake3_dispatch.c
                blake3/blake3_portable.c)
 if(SSE4_2_FOUND)
@@ -641,8 +655,8 @@ else()
   message(STATUS "IPO / LTO not supported: <${error}>")
 endif()
 
-target_link_libraries(SMHasher SMHasherSupport ${HIGHWAY_LIB} ${BLAKE3_LIB}
-                      libahash_c.a
+target_link_libraries(SMHasher SMHasherSupport
+                      ${HIGHWAY_LIB} ${BLAKE3_LIB} ${AHASH_C_LIB}
                       ${CMAKE_THREAD_LIBS_INIT})
 
 # add_executable( bittest bittest.cpp )

@@ -439,12 +439,14 @@ HashInfo g_hashes[] =
   { t1ha0_ia32aes_avx2_test,   64, 0x8B38C599, "t1ha0_aes_avx2",  "Fast Positive Hash (machine-specific, requires AES-NI & AVX2)", GOOD },
 #  endif /* __AVX2__ */
 #endif /* T1HA0_AESNI_AVAILABLE */
+#ifdef HAVE_AHASH_C
+  // aHash does not adhere to a fixed output
+  { ahash64_test,         64, 0x00000000, "ahash64",     "ahash 64bit", GOOD },
+#endif
   { xxh3_test,            64, 0x39CD9E4A, "xxh3",        "xxHash v3, 64-bit", GOOD },
   { xxh3low_test,         32, 0xFAE8467B, "xxh3low",     "xxHash v3, 64-bit, low 32-bits part", GOOD },
   { xxh128_test,         128, 0xEB61B3A0, "xxh128",      "xxHash v3, 128-bit", GOOD },
   { xxh128low_test,       64, 0x54D1CC70, "xxh128low",   "xxHash v3, 128-bit, low 64-bits part", GOOD },
-  // aHash does not adhere to a fixed output
-  { ahash64_test,         64, 0x00000000, "ahash64",     "ahash 64bit", GOOD },
 #ifdef HAVE_BIT32
   { wyhash32_test,        32, 0x09DE8066, "wyhash32",       "wyhash (32-bit)", GOOD },
 #else
