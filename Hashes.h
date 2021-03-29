@@ -287,6 +287,9 @@ inline void xxHash64_test( const void * key, int len, uint32_t seed, void * out 
 #include "xxh3.h"
 
 #ifdef HAVE_INT64
+static inline bool xxh3_bad_seeds(std::vector<uint64_t> &seeds) {
+  return false;
+}
 inline void xxh3_test( const void * key, int len, uint32_t seed, void * out ) {
   // objsize 12d0-15b8: 744
   *(uint64_t*)out = (uint64_t) XXH3_64bits_withSeed(key, (size_t) len, seed);
@@ -294,7 +297,6 @@ inline void xxh3_test( const void * key, int len, uint32_t seed, void * out ) {
 #endif
 
 inline void xxh3low_test( const void * key, int len, uint32_t seed, void * out ) {
-  (void)seed;
   // objsize 12d0-15b8: 744 + 1f50-1f5c: 756
   *(uint32_t*)out = (uint32_t) XXH3_64bits_withSeed(key, (size_t) len, seed);
 }
@@ -536,25 +538,18 @@ inline void wyhash32_test (const void * key, int len, uint32_t seed, void * out)
 #endif
 
 #ifdef HAVE_INT64
-//https://github.com/wangyi-fudan/wyhash
+// https://github.com/wangyi-fudan/wyhash
 #include "wyhash.h"
 static inline bool wyhash_bad_seeds(std::vector<uint64_t> &seeds)
 {
-  seeds = std::vector<uint64_t> { UINT64_C(0xa0761d6478bd642f), UINT64_C(0xe7037ed1a0b428db) };
-  return true;
+  return false;
 }
-static void wyhash_seed_init(size_t &seed)
-{
-  // reject bad seeds
-  const std::vector<uint64_t> bad_seeds = {
-    UINT64_C(0xa0761d6478bd642f), UINT64_C(0xe7037ed1a0b428db) };
-  while (std::find(bad_seeds.begin(), bad_seeds.end(), (uint64_t)seed) != bad_seeds.end())
-    seed++;
-}
+static void wyhash_seed_init(size_t &seed) {}
 static inline bool wyhash32_bad_seeds(std::vector<uint32_t> &seeds)
 {
   seeds = std::vector<uint32_t> {
-    UINT32_C(0x1bc1d52e), UINT32_C(0x1cbc261d), UINT32_C(0x33a0d1d9), UINT32_C(0x429dacdd)
+    UINT32_C(0x1bc1d52e), UINT32_C(0x1cbc261d), UINT32_C(0x33a0d1d9), UINT32_C(0x429dacdd),
+    UINT32_C(0xd637dbf3),
   };
   return true;
 }
@@ -562,7 +557,8 @@ static void wyhash32_seed_init(size_t &seed)
 {
   // reject bad seeds
   const std::vector<uint32_t> bad_seeds = {
-    UINT32_C(0x1bc1d52e), UINT32_C(0x1cbc261d), UINT32_C(0x33a0d1d9), UINT32_C(0x429dacdd)
+    UINT32_C(0x1bc1d52e), UINT32_C(0x1cbc261d), UINT32_C(0x33a0d1d9), UINT32_C(0x429dacdd),
+    UINT32_C(0xd637dbf3)
   };
   while (std::find(bad_seeds.begin(), bad_seeds.end(), (uint32_t)seed) != bad_seeds.end())
     seed++;
@@ -581,6 +577,7 @@ inline void wyhash32low (const void * key, int len, uint32_t seed, void * out) {
 
 #include "o1hash.h"
 // unseeded. objsize: 101
+// This is vulnerable to keys len>4 and key[len/2 -2]..[len/2 +2] being 0 (binary keys).
 inline void o1hash_test (const void * key, int len, uint32_t seed, void * out) {
   *(uint64_t*)out = o1hash(key, (uint64_t)len);
 }

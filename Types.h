@@ -56,6 +56,7 @@ struct HashInfo
   const char * name;
   const char * desc;
   enum HashQuality quality;
+  const std::vector<uint64_t> secrets;
 };
 
 struct ByteVec : public std::vector<uint8_t>

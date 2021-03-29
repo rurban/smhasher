@@ -287,7 +287,7 @@ static int FindMaxBits_TargetCollisionNb(int nbHashes, int minCollisions)
         double const nbColls = EstimateNbCollisions(nbHashes, nb);
         if (nbColls > minCollisions) return nb;
     }
-    assert(0);
+    //assert(0);
     return nb;
 }
 

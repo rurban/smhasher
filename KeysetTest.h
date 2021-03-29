@@ -14,6 +14,7 @@
 #include <algorithm>  // for std::swap
 #include <assert.h>
 #include <string>
+#include <alloca.h>
 
 #undef MAX
 #define MAX(x,  y)   (((x) > (y)) ? (x) : (y))
@@ -80,43 +81,91 @@ bool PrngTest ( hashfunc<hashtype> hash,
 }
 
 //-----------------------------------------------------------------------------
-// Find bad seeds, and test against the known bad hashes.
+// Find bad seeds, and test against the known secrets/bad seeds.
+
+// A more thourough test for a known secret. vary keys and key len
+template< typename hashtype >
+bool TestSecret ( const HashInfo* info, const uint64_t secret )
+{
+  bool result = true;
+  static hashtype zero;
+  pfHash hash = info->hash;
+  uint8_t key[128];
+  printf("0x%lx ", secret);
+  Hash_Seed_init (hash, secret);
+  for (int len : std::vector<int> {1,2,4,8,12,16,32,64,128}) {
+    std::vector<hashtype> hashes;
+    for (int c : std::vector<int> {0,32,'0',127,128,255}) {
+      hashtype h;
+      memset(&key, c, len);
+      hash(key, len, secret, &h);
+      if (h == 0 && c == 0) {
+        printf("Broken seed 0x%lx => 0 with key[%d] of all %d bytes confirmed => hash 0\n", secret, len, c);
+        result = false;
+      }
+      else
+        hashes.push_back(h);
+    }
+    if (!TestHashList(hashes, false, true, false, false, false, false)) {
+      printf(" Bad seed 0x%lx for len %d confirmed => hash ", secret, len);
+      for (auto x : hashes) printf ("%lx ", x);
+      printf ("\n");
+      TestHashList(hashes, false);
+      result = false;
+    }
+  }
+  return result;
+}
+
 
 template< typename hashtype >
-bool BadSeedsTest ( hashfunc<hashtype> hash, bool testAll )
+bool BadSeedsTest ( HashInfo* info, bool testAll )
 {
-
   bool result = true;
-  //if (sizeof(hashtype) > 8) {
-  //    printf("BadSeedsTest is designed for hashes <= 64-bit \n");
-  //    return false;
-  //}
-  const size_t max_seed = sizeof(hashtype) == 4 ? 0xffffffff : 0xffffffffffffffff;
-  // TODO: testAll: checking known or suspected bad seeds: hashname->bad_seeds
-  printf("Testing all 0x%lx seeds ...\n", max_seed);
+  const uint64_t max_seed = sizeof(hashtype) == 4 ? UINT64_C(0xffffffff) : UINT64_C(0xffffffffffffffff);
+  const std::vector<uint64_t> secrets = info->secrets;
+  printf("Testing %d internal secrets:\n", secrets.size());
+  for (auto secret : secrets) {
+    result &= TestSecret<hashtype>(info, secret);
+  }
+  if (!secrets.size())
+    result &= TestSecret<hashtype>(info, 0x0);
+  if (result)
+    printf("PASS\n");
+  if (!testAll)
+    return result;
 
-  for (size_t y=0; y < max_seed; y++) {
+  // many days with >= 64 bit hashes
+  printf("Testing all 0x%lx seeds ...\n", max_seed);
+  for (size_t y=0; (uint64_t)y < max_seed; y++) {
+    std::vector<hashtype> hashes;
     static hashtype zero;
-    hashtype h;
-    Hash_Seed_init (hash, y);
-    for (int x = 0; x < 256; x += 0x7f) {
-      std::vector<hashtype> hashes;
+    if ((y & 0x1ffffff) == 0x1ffffff)
+      printf("0x%lx ", y);
+    Hash_Seed_init (info->hash, y);
+    for (int x : std::vector<int> {0,32,127,255}) {
+      hashtype h;
       uint8_t key[16];
       memset(&key, x, sizeof(key));
-      hash(key, 16, y, &h);
-      if (h == 0) {
-        printf("Broken seed 0x%x => 0 with key[16] all of %d\n", y, x);
+      info->hash(key, 16, y, &h);
+      if (h == 0 && x == 0) {
+        printf("Broken seed 0x%lx => 0 with key[16] of all %d bytes\n", y, x);
         result = false;
       }
       else {
         hashes.push_back(h);
-        if (!TestHashList(hashes,false, true, false, false, false, false)) {
-          printf("Bad seed 0x%x => %d\n", y, x);
-          result = false;
-        }
       }
     }
+    if (!TestHashList(hashes,false, true, false, false, false, false)) {
+      printf("Bad seed 0x%lx\n", y);
+      TestHashList(hashes, false);
+      result = false;
+    }
   }
+  if (result)
+    printf("PASS\n");
+  else
+    printf("FAIL\nEnsure to add these bad seeds to the list of secrets in main.cpp\n");
   return result;
 }
 

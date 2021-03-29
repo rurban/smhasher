@@ -7,12 +7,12 @@ SMhasher
 
 | Hash function                                 |      MiB/sec |cycl./hash|cycl./map   | size| Quality problems               |
 |:----------------------------------------------|-------------:|---------:|-----------:|----:|--------------------------------|
-| [donothing32](doc/donothing32.txt)            |  15316474.36 |     6.00 | -|  13 | test NOP                       |
-| [donothing64](doc/donothing64.txt)            |  15330019.19 |     6.00 | -|  13 | test NOP                       |
-| [donothing128](doc/donothing128.txt)          |  15278983.09 |     6.00 | -|  13 | test NOP                       |
+| [donothing32](doc/donothing32.txt)            |  15316474.36 |     6.00 | -|  13 | bad seed 0, test NOP           |
+| [donothing64](doc/donothing64.txt)            |  15330019.19 |     6.00 | -|  13 | bad seed 0, test NOP           |
+| [donothing128](doc/donothing128.txt)          |  15278983.09 |     6.00 | -|  13 | bad seed 0, test NOP           |
 | [NOP_OAAT_read64](doc/NOP_OAAT_read64.txt)    |     28467.50 |    18.48 | -|  47 | test NOP                       |
-| [BadHash](doc/BadHash.txt)                    |       524.81 |    96.20 | -|  47 | test FAIL                      |
-| [sumhash](doc/sumhash.txt)                    |      7169.08 |    27.12 | -| 363 | test FAIL                      |
+| [BadHash](doc/BadHash.txt)                    |       524.81 |    96.20 | -|  47 | bad seed 0, test FAIL          |
+| [sumhash](doc/sumhash.txt)                    |      7169.08 |    27.12 | -| 363 | bad seed 0, test FAIL          |
 | [sumhash32](doc/sumhash32.txt)                |     22556.18 |    22.98 | -| 863 | UB, test FAIL                  |
 | [multiply_shift](doc/multiply_shift.txt)      |      5418.36 |    28.69 | 157.11 (3) | 345 | fails most tests |
 | [pair_multiply_shift](doc/pair_multiply_shift)|      3716.95 |    40.22 | 186.34 (3) | 609 | fails most tests |
@@ -55,22 +55,22 @@ SMhasher
 | [crc32_hw](doc/crc32_hw.txt)                  |      6330.42 |    35.55 | 170.16 (1) | 653 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2) |
 | [crc32_hw1](doc/crc32_hw1.txt)                |     23208.73 |    46.74 | 179.70 (2) | 671 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2) |
 | [crc64_hw](doc/crc64_hw.txt)                  |      8440.13 |    34.94 | 141.15 (2) | 652 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x64 SSE4.2) |
-| [crc32_pclmul](doc/crc32_pclmul.txt)          |   1972140.38 |     7.00 | -| 481 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2+PCLMUL) |
-| [o1hash](doc/o1hash.txt)                      |  12439661.09 |    16.77 | 166.13 (1) | 101 | insecure, zeros, fails all tests |
+| [crc32_pclmul](doc/crc32_pclmul.txt)          |   1972140.38 |     7.00 | -| 481 | insecure, bad seed 0, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2+PCLMUL) |
+| [o1hash](doc/o1hash.txt)                      |  12439661.09 |    16.77 | 166.13 (1) | 101 | insecure, bad seed, zeros, fails all tests |
 | [fibonacci](doc/fibonacci.txt)                |     11339.87 |    26.33 | 705.64 (2) |1692 | UB, zeros, fails all tests       |
-| [FNV1a](doc/FNV1a.txt)                        |       791.84 |    69.69 | 177.84 (2) | 204 | zeros, fails all tests       |
+| [FNV1a](doc/FNV1a.txt)                        |       791.84 |    69.69 | 177.84 (2) | 204 | bad seed, zeros, fails all tests       |
 | [FNV1A_Totenschiff](doc/FNV1A_Totenschiff.txt)|      6258.23 |    27.99 | 198.20 (1) | 270 | UB, zeros, fails all tests   |
 | [FNV1A_Pippip_Yurii](doc/FNV1A_Pippip_Yurii.txt)|      6258.46 |    28.19 | 184.41 (2) | 147 | UB, sanity, fails all tests  |
-| [FNV1a_YT](doc/FNV1a_YT.txt)                  |      9643.42 |    32.06 | 175.19 (2) | 321 | UB, fails all tests          |
+| [FNV1a_YT](doc/FNV1a_YT.txt)                  |      9643.42 |    32.06 | 175.19 (2) | 321 | bad seed, UB, fails all tests          |
 | [FNV2](doc/FNV2.txt)                          |      6258.84 |    33.25 | 142.89 (1) | 278 | fails all tests              |
 | [FNV64](doc/FNV64.txt)                        |       791.82 |    70.24 | 159.29 (1) |  79 | fails all tests              |
-| [fletcher2](doc/fletcher2.txt)                |     12011.15 |    25.29 | 298.60 (1) | 248 | UB, fails all tests          |
-| [fletcher4](doc/fletcher4.txt)                |     11928.55 |    25.27 | 293.49 (2) | 371 | UB, fails all tests          |
-| [bernstein](doc/bernstein.txt)                |       791.82 |    68.63 | 180.71 (2) |  41 | fails all tests              |
-| [sdbm](doc/sdbm.txt)                          |       791.84 |    67.69 | 177.06 (2) |  41 | fails all tests              |
+| [fletcher2](doc/fletcher2.txt)                |     12011.15 |    25.29 | 298.60 (1) | 248 | bad seed 0, UB, fails all tests          |
+| [fletcher4](doc/fletcher4.txt)                |     11928.55 |    25.27 | 293.49 (2) | 371 | bad seed 0, UB, fails all tests          |
+| [bernstein](doc/bernstein.txt)                |       791.82 |    68.63 | 180.71 (2) |  41 | bad seed 0, fails all tests              |
+| [sdbm](doc/sdbm.txt)                          |       791.84 |    67.69 | 177.06 (2) |  41 | bad seed 0, fails all tests              |
 | [x17](doc/x17.txt)                            |       527.90 |    98.78 | 184.09 (2) |  79 | 99.98% bias, fails all tests |
-| [JenkinsOOAT](doc/JenkinsOOAT.txt)            |       452.48 |   142.85 | 213.93 (2) | 153 | 53.5% bias, fails all tests  |
-| [JenkinsOOAT_perl](doc/JenkinsOOAT_perl.txt)  |       452.49 |   118.78 | 194.78 (1) |  65 | 1.5-11.5% bias, 7.2x collisions, BIC, LongNeighbors |
+| [JenkinsOOAT](doc/JenkinsOOAT.txt)            |       452.48 |   142.85 | 213.93 (2) | 153 | bad seed 0, 53.5% bias, fails all tests  |
+| [JenkinsOOAT_perl](doc/JenkinsOOAT_perl.txt)  |       452.49 |   118.78 | 194.78 (1) |  65 | bad seed 0, 1.5-11.5% bias, 7.2x collisions, BIC, LongNeighbors |
 | [MicroOAAT](doc/MicroOAAT.txt)                |       977.60 |    59.61 | 185.06 (2) |  68 | 100% bias, distrib, BIC      |
 | [VHASH_32](doc/VHASH_32.txt)                  |      9404.99 |    77.01 | 250.57 (2) |1231 | sanity, Seed, MomentChi2     |
 | [VHASH_64](doc/VHASH_64.txt)                  |      9392.39 |    74.72 | 227.92 (2) |1231 | sanity, Seed, Sparse         |
@@ -79,7 +79,7 @@ SMhasher
 | [jodyhash32](doc/jodyhash32.txt)              |      1428.37 |    44.36 | 185.85 (3) | 102 | bias, collisions, distr, BIC LongNeighbors |
 | [jodyhash64](doc/jodyhash64.txt)              |      2848.42 |    29.99 | 164.36 (1) | 118 | bias, collisions, distr, BIC, LongNeighbors |
 | [lookup3](doc/lookup3.txt)                    |      1658.31 |    48.84 | 194.15 (2) | 341 | UB, 28% bias, collisions, 30% distr, BIC  |
-| [superfast](doc/superfast.txt)                |      1956.25 |    53.61 | 180.10 (3) | 210 | UB, 91% bias, 5273.01x collisions, 37% distr, BIC |
+| [superfast](doc/superfast.txt)                |      1956.25 |    53.61 | 180.10 (3) | 210 | UB, bad seed 0, 91% bias, 5273.01x collisions, 37% distr, BIC |
 | [MurmurOAAT](doc/MurmurOAAT.txt)              |       452.49 |   113.07 | 197.83 (2) |  47 | collisions, 99.998% distr., BIC, LongNeighbors |
 | [Crap8](doc/Crap8.txt)                        |      3149.63 |    36.23 | 195.11 (1) | 342 | UB, 2.42% bias, collisions, 2% distrib |
 | [Murmur2](doc/Murmur2.txt)                    |      3146.91 |    41.87 | 187.89 (2) | 358 | UB, 1.7% bias, 81x coll, 1.7% distrib, BIC |
@@ -134,10 +134,10 @@ SMhasher
 | [Murmur3F](doc/Murmur3F.txt)                  |      5226.40 |    52.18 | 175.85 (1) | 699 | UB                         |
 | [fasthash32](doc/fasthash32.txt)              |      4737.61 |    45.32 | 181.86 (2) | 566 | UB                         |
 | [fasthash64](doc/fasthash64.txt)              |      4737.21 |    42.79 | 164.87 (2) | 509 | UB, Moment Chi2 5159 !     |
-| [MUM](doc/MUM.txt)                            |      7134.56 |    37.85 | 172.34 (1) |1912 | UB, machine-specific (32/64 differs) |
+| [MUM](doc/MUM.txt)                            |      7134.56 |    37.85 | 172.34 (1) |1912 | UB, bad seed 0, machine-specific (32/64 differs) |
 | [MUMlow](doc/MUMlow.txt)                      |      7225.18 |    37.85 | 197.92 (3) |1912 | UB                         |
-| [mirhash](doc/mirhash.txt)                    |      5413.73 |    39.68 | 154.47 (3) |1112 | UB, LongNeighbors, machine-specific (32/64 differs) |
-| [mirhash32low](doc/mirhash32low.txt)          |      5412.76 |    39.79 | 182.13 (3) |1112 | UB, Cyclic, LongNeighbors, machine-specific (32/64 differs) |
+| [mirhash](doc/mirhash.txt)                    |      5413.73 |    39.68 | 154.47 (3) |1112 | UB, bad seed 0, LongNeighbors, machine-specific (32/64 differs) |
+| [mirhash32low](doc/mirhash32low.txt)          |      5412.76 |    39.79 | 182.13 (3) |1112 | UB, bad seed 0, Cyclic, LongNeighbors, machine-specific (32/64 differs) |
 | [mirhashstrict](doc/mirhashstrict.txt)        |      2217.32 |    65.53 | 182.07 (2) |1112 |                            |
 | [mirhashstrict32low](doc/mirhashstrict32low.txt)|      2218.87 |    65.48 | 190.59 (4) |1112 | MomentChi2 9               |
 | [mx3](doc/mx3.txt)                            |      6146.02 |    52.48 | 173.09 (3) | 734 | UB                         |
@@ -173,9 +173,9 @@ SMhasher
 | [t1ha0_aes_noavx](doc/t1ha0_aes_noavx.txt)    |     22785.26 |    38.71 | 180.61 (3) | 925 | LongNeighbors, machine-specific (x86 AES-NI) |
 | [t1ha0_aes_avx1](doc/t1ha0_aes_avx1)          |     22714.85 |    48.12 | 226.52 (16)| 843 | LongNeighbors, machine-specific (x64 AVX.txt)|
 | [t1ha0_aes_avx2](doc/t1ha0_aes_avx2.txt)      |     22345.33 |    44.38 | 556.47 (89)| 792 | LongNeighbors, machine-specific (x64 AVX2)   |
-| [wyhash32](doc/wyhash32.txt)                  |      2532.89 |    48.40 | 484.57 (1) | 426 | 32-bit                     |
-| [wyhash32low](doc/wyhash32low.txt)            |     14798.66 |    27.10 | 203.24 (1) | 474 |                            |
-| [wyhash](doc/wyhash.txt)                      |     14789.93 |    27.21 | 184.25 (1) | 474 |                            |
+| [wyhash32](doc/wyhash32.txt)                  |      2532.89 |    48.40 | 484.57 (1) | 426 | 2 bad seeds, 32-bit           |
+| [wyhash32low](doc/wyhash32low.txt)            |     14798.66 |    27.10 | 203.24 (1) | 474 | 2 bad seeds                  |
+| [wyhash](doc/wyhash.txt)                      |     14789.93 |    27.21 | 184.25 (1) | 474 | bad seeds?                  |
 | [umash32](doc/umash32.txt)                    |      4633.19 |    53.42 | 216.33 (3) |1530 |                            |
 | [umash32_hi](doc/umash32_hi.txt)              |      4662.92 |    54.22 | 214.20 (2) |1530 |                            |
 | [umash64](doc/umash64.txt)                    |      4662.09 |    53.42 | 188.09 (1) |1530 |                            |
@@ -269,8 +269,8 @@ SECURITY
 
 The hash table attacks described in [SipHash](https://131002.net/siphash/)
 against City, Murmur or Perl JenkinsOAAT or at
-[Hash Function Lounge](http://www.larc.usp.br/~pbarreto/hflounge.html)
-are not included here.
+[Hash Function Lounge](http://web.archive.org/web/20040205045909/planeta.terra.com.br/informatica/paulobarreto/hflounge.html) are not included here. We list some known attacks at
+[GH #186](https://github.com/rurban/smhasher/issues/186).
 
 Such an attack avoidance cannot be the problem of the hash
 function, but only the hash table collision resolution scheme.  You can
@@ -307,13 +307,13 @@ Sanity Zero test.
 CRYPTO
 ------
 
-Our crypto hashes are hardened with added seed, mixed into the initial
-state, and the versions which require zero-padding are hardened by
-adding the len also, to prevent from collisions with AppendedZeroes
-for the padding. The libtomcrypt implementations already provide for
-that, but others might not. Without, such crypto hash functions are
-unsuitable for normal tasks, as it's trivial to create collisions by
-padding.
+Our crypto hashes are hardened with an added size_t seed, mixed into
+the initial state, and the versions which require zero-padding are
+hardened by adding the len also, to prevent from collisions with
+AppendedZeroes for the padding. The libtomcrypt implementations
+already provide for that, but others might not. Without, such crypto
+hash functions are unsuitable for normal tasks, as it's trivial to
+create collisions by padding or bad seeds.
 
 The official NIST hash function testsuite does not do such extensive
 statistical tests, to search for weak ranges in the bits. Also crypto
@@ -347,6 +347,23 @@ as valgrind, address-sanitizer and ubsan to detect obvious bugs.
 
 PROBLEMS
 --------
+
+* Bad Seeds
+
+Hash functions are typically initialized with a random seed. But some seed values
+lead to bad hash functions. In the regular case with random seeds the probablity of
+such bad seeds is very low, like 2^32 or 2^64, but when the attacker can control
+the seed it will lead to DDOS attacks.
+A practical application needs to know if such bad seeds exist and choose another
+one. See e.g. `wyhash_seed_init()` and `wyhash_bad_seeds()` in `Hashes.h`.
+Note that a bad seed is not really a problem, when you skip this seed during initialization.
+It can still be a GOOD or recommended hash function.
+But a bad seed of `0` leading to collisions is considered a bug, a bad hash function.
+
+We test for internal secrets, if they will be multiplied with 0. This
+is also called "blinding multiplication". `main.cpp` lists some
+secrets for each hash function, we test against. The function
+`<hash>_bad_seeds()` lists the confirmed bad seeds.
 
 Typical undefined behaviour (**UB**) problems:
 
