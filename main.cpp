@@ -517,8 +517,11 @@ void Hash_init (HashInfo* info) {
 
 // optional hash seed initializers.
 // esp. for Hashmaps, whenever the seed changes, for expensive seeding.
+// Also needed for hashed with a few bad seeds, to reject this seed and generate a new one.
+// (GH #99)
 void Seed_init (HashInfo* info, size_t seed) {
   Hash_Seed_init (info->hash, seed);
+  //bad_seed_init (info->hash, seed);
 }
 
 void Hash_Seed_init (pfHash hash, size_t seed) {

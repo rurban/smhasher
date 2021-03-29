@@ -44,6 +44,7 @@ static inline __m128i lazymod127(__m128i Alow, __m128i Ahigh) {
     // CHECKING THE PRECONDITION:
     // Important: we are assuming that the two highest bits of Ahigh
     // are zero. This could be checked by adding a line such as this one:
+    assert(_mm_extract_epi64(Ahigh,1) < (1ULL<<62));
     // if(_mm_extract_epi64(Ahigh,1) >= (1ULL<<62)){printf("bug\n");abort();}
     //                       (this assumes SSE4.1 support)
     ///////////////////////////////////////////////////
@@ -114,8 +115,11 @@ static uint64_t simple128to64hashwithlength( const __m128i value, const __m128i 
     return precompReduction64(total);
 }
 
-
+#ifdef DEBUG
+enum {CLHASH_DEBUG=1};
+#else
 enum {CLHASH_DEBUG=0};
+#endif
 
 // For use with CLHASH
 // we expect length to have value 128 or, at least, to be divisible by 4.
@@ -278,12 +282,21 @@ uint64_t clhash(const void* random, const char * stringbyte,
     const unsigned int  m = 128;// we process the data in chunks of 16 cache lines
     if(CLHASH_DEBUG) assert((m  & 3) == 0); //m should be divisible by 4
     const int m128neededperblock = m / 2;// that is how many 128-bit words of random bits we use per block
+    const __m128i zero128 = {0ULL,0ULL};
     const __m128i * rs64 = (__m128i *) random;
     __m128i polyvalue =  _mm_load_si128(rs64 + m128neededperblock); // to preserve alignment on cache lines for main loop, we pick random bits at the end
     polyvalue = _mm_and_si128(polyvalue,_mm_setr_epi32(0xFFFFFFFF,0xFFFFFFFF,0xFFFFFFFF,0x3fffffff));// setting two highest bits to zero
     // we should check that polyvalue is non-zero, though this is best done outside the function and highly unlikely
     const size_t length = lengthbyte / sizeof(uint64_t); // # of complete words
     const size_t lengthinc = (lengthbyte + sizeof(uint64_t) - 1) / sizeof(uint64_t); // # of words, including partial ones
+    if(CLHASH_DEBUG) {
+        // avoid bad seeds
+        if (memcmp(&polyvalue[0], &zero128, 8) == 0)
+            polyvalue[0]++;
+        if (memcmp(&polyvalue[1], &zero128, 8) == 0)
+            polyvalue[1]++;
+        assert(memcmp(&rs64[1], &zero128, 8));
+    }
 
     const uint64_t * string = (const uint64_t *)  stringbyte;
     if (m < lengthinc) { // long strings // modified from length to lengthinc to address issue #3 raised by Eik List
@@ -388,6 +401,7 @@ typedef struct xorshift128plus_key_s xorshift128plus_key_t;
 *
 */
 static inline void xorshift128plus_init(uint64_t key1, uint64_t key2, xorshift128plus_key_t *key) {
+    assert(key1 != 0 && key2 != 0);
     key->part1 = key1;
     key->part2 = key2;
 }
@@ -410,6 +424,11 @@ void * get_random_key_for_clhash(uint64_t seed1, uint64_t seed2) {
     void *answer;
     uint64_t *a64;
     xorshift128plus_key_t k;
+    // avoid bad seeds
+    if (seed1 == 0)
+        seed1 = 137;
+    if (seed2 == 0)
+        seed2 = 777;
     xorshift128plus_init(seed1, seed2, &k);
 
     if (posix_memalign((void**)&a64, sizeof(__m128i),
@@ -419,6 +438,7 @@ void * get_random_key_for_clhash(uint64_t seed1, uint64_t seed2) {
     for(i = 0; i < RANDOM_64BITWORDS_NEEDED_FOR_CLHASH; ++i) {
         a64[i] = xorshift128plus(&k);
     }
+    // avoid bad seeds here also
     while((a64[128]==0) && (a64[129]==1)) {
         a64[128] = xorshift128plus(&k);
         a64[129] = xorshift128plus(&k);

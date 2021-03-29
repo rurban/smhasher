@@ -34,7 +34,7 @@ enum {RANDOM_64BITWORDS_NEEDED_FOR_CLHASH=133,RANDOM_BYTES_NEEDED_FOR_CLHASH=133
  *  also be aligned on 16-byte boundaries so that (((uintptr_t) random & 15) == 0)
  *  for performance reasons. This is usually generated once and reused with many
  *  inputs.
- *
+ *  It should avoid 0 in its first 64 bits. (bad seed)
  *
  * stringbyte : the input data source, could be anything you want to has
  *

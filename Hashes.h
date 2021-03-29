@@ -2,6 +2,7 @@
 
 #include "Platform.h"
 #include "Types.h"
+#include <algorithm>
 
 #include "MurmurHash1.h"
 #include "MurmurHash2.h"
@@ -537,6 +538,36 @@ inline void wyhash32_test (const void * key, int len, uint32_t seed, void * out)
 #ifdef HAVE_INT64
 //https://github.com/wangyi-fudan/wyhash
 #include "wyhash.h"
+static inline bool wyhash_bad_seeds(std::vector<uint64_t> &seeds)
+{
+  seeds = std::vector<uint64_t> { UINT64_C(0xa0761d6478bd642f), UINT64_C(0xe7037ed1a0b428db) };
+  return true;
+}
+static void wyhash_seed_init(size_t &seed)
+{
+  // reject bad seeds
+  const std::vector<uint64_t> bad_seeds = {
+    UINT64_C(0xa0761d6478bd642f), UINT64_C(0xe7037ed1a0b428db) };
+  while (std::find(bad_seeds.begin(), bad_seeds.end(), (uint64_t)seed) != bad_seeds.end())
+    seed++;
+}
+static inline bool wyhash32_bad_seeds(std::vector<uint32_t> &seeds)
+{
+  seeds = std::vector<uint32_t> {
+    UINT32_C(0x1bc1d52e), UINT32_C(0x1cbc261d), UINT32_C(0x33a0d1d9), UINT32_C(0x429dacdd)
+  };
+  return true;
+}
+static void wyhash32_seed_init(size_t &seed)
+{
+  // reject bad seeds
+  const std::vector<uint32_t> bad_seeds = {
+    UINT32_C(0x1bc1d52e), UINT32_C(0x1cbc261d), UINT32_C(0x33a0d1d9), UINT32_C(0x429dacdd)
+  };
+  while (std::find(bad_seeds.begin(), bad_seeds.end(), (uint32_t)seed) != bad_seeds.end())
+    seed++;
+}
+
 // objsize 40dbe0-40ddba: 474
 inline void wyhash_test (const void * key, int len, uint32_t seed, void * out) {
   *(uint64_t*)out = wyhash(key, (uint64_t)len, (uint64_t)seed, _wyp);
