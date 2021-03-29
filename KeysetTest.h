@@ -79,6 +79,46 @@ bool PrngTest ( hashfunc<hashtype> hash,
   return result;
 }
 
+//-----------------------------------------------------------------------------
+// Find bad seeds, and test against the known bad hashes.
+
+template< typename hashtype >
+bool BadSeedsTest ( hashfunc<hashtype> hash, bool testAll )
+{
+
+  bool result = true;
+  //if (sizeof(hashtype) > 8) {
+  //    printf("BadSeedsTest is designed for hashes <= 64-bit \n");
+  //    return false;
+  //}
+  const size_t max_seed = sizeof(hashtype) == 4 ? 0xffffffff : 0xffffffffffffffff;
+  // TODO: testAll: checking known or suspected bad seeds: hashname->bad_seeds
+  printf("Testing all 0x%lx seeds ...\n", max_seed);
+
+  for (size_t y=0; y < max_seed; y++) {
+    static hashtype zero;
+    hashtype h;
+    Hash_Seed_init (hash, y);
+    for (int x = 0; x < 256; x += 0x7f) {
+      std::vector<hashtype> hashes;
+      uint8_t key[16];
+      memset(&key, x, sizeof(key));
+      hash(key, 16, y, &h);
+      if (h == 0) {
+        printf("Broken seed 0x%x => 0 with key[16] all of %d\n", y, x);
+        result = false;
+      }
+      else {
+        hashes.push_back(h);
+        if (!TestHashList(hashes,false, true, false, false, false, false)) {
+          printf("Bad seed 0x%x => %d\n", y, x);
+          result = false;
+        }
+      }
+    }
+  }
+  return result;
+}
 
 //-----------------------------------------------------------------------------
 // Keyset 'Perlin Noise' - X,Y coordinates on input & seed

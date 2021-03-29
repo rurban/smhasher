@@ -539,7 +539,8 @@ hashtype bitreverse(hashtype n, size_t b = sizeof(hashtype) * 8)
 template < typename hashtype >
 bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
                     bool testCollision = true, bool testDist = true,
-                    bool testHighBits = true, bool testLowBits = true)
+                    bool testHighBits = true, bool testLowBits = true,
+                    bool verbose = true)
 {
   bool result = true;
 
@@ -547,17 +548,20 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
   {
     size_t const count = hashes.size();
     double const expected = EstimateNbCollisions(count, sizeof(hashtype) * 8);
-    printf("Testing collisions (%3i-bit) - Expected %6.1f, ",
-           (int)sizeof(hashtype)*8, expected);
+    if (verbose)
+      printf("Testing collisions (%3i-bit) - Expected %6.1f, ",
+             (int)sizeof(hashtype)*8, expected);
     const int i_expected = (int)expected;
 
     int collcount = 0;
     HashSet<hashtype> collisions;
     collcount = FindCollisions(hashes, collisions, 1000, drawDiagram);
     double ratio = double(collcount) / expected;
-    printf("actual %6i (%.2fx)", (int)collcount, expected > 0.0 ? ratio : (double)collcount);
-    if (ratio > 0.98 && collcount != i_expected)
-      printf(" (%i)", collcount - i_expected);
+    if (verbose) {
+      printf("actual %6i (%.2fx)", (int)collcount, expected > 0.0 ? ratio : (double)collcount);
+      if (ratio > 0.98 && collcount != i_expected)
+        printf(" (%i)", collcount - i_expected);
+    }
 
     if (sizeof(hashtype) <= sizeof(uint32_t))
     {
@@ -606,7 +610,9 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
       }
     }
 
-    printf("\n");
+    if (verbose) {
+      printf("\n");
+    }
     fflush(NULL);
 
     if (testHighBits) {

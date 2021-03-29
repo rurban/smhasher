@@ -37,6 +37,7 @@ bool g_testDiffDist    = false;
 bool g_testMomentChi2  = false;
 bool g_testPrng        = false;
 bool g_testBIC         = false;
+bool g_testBadSeeds    = false;
 //bool g_testLongNeighbors = false;
 
 double g_speed = 0.0;
@@ -67,6 +68,7 @@ TestOpts g_testopts[] =
   { g_testBIC, 	        "BIC" },
   { g_testMomentChi2,   "MomentChi2" },
   { g_testPrng,         "Prng" },
+  { g_testBadSeeds,     "BadSeeds" },
   //{ g_testLongNeighbors,"LongNeighbors" }
 };
 
@@ -1397,7 +1399,6 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     fflush(NULL);
   }
 
-
   if (g_testPrng || g_testAll)
   {
     printf("[[[ Prng Tests ]]]\n\n");
@@ -1465,6 +1466,18 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     fflush(NULL);
   }
 
+  if (g_testBadSeeds)
+  {
+    printf("[[[ BadSeeds Tests ]]]\n\n");
+    // g_testExtra: test all seeds, or just some known bad seeds
+
+    Seed_init (info, 0);
+    bool result = BadSeedsTest<hashtype>( hash, g_testExtra );
+    if(!result) printf("\n*********FAIL*********\n");
+    printf("\n");
+    fflush(NULL);
+  }
+  
 }
 
 //-----------------------------------------------------------------------------
