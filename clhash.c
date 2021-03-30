@@ -289,6 +289,7 @@ uint64_t clhash(const void* random, const char * stringbyte,
     // we should check that polyvalue is non-zero, though this is best done outside the function and highly unlikely
     const size_t length = lengthbyte / sizeof(uint64_t); // # of complete words
     const size_t lengthinc = (lengthbyte + sizeof(uint64_t) - 1) / sizeof(uint64_t); // # of words, including partial ones
+#ifdef DEBUG
     if(CLHASH_DEBUG) {
         // avoid bad seeds
         if (memcmp(&polyvalue[0], &zero128, 8) == 0)
@@ -297,6 +298,7 @@ uint64_t clhash(const void* random, const char * stringbyte,
             polyvalue[1]++;
         assert(memcmp(&rs64[1], &zero128, 8));
     }
+#endif
 
     const uint64_t * string = (const uint64_t *)  stringbyte;
     if (m < lengthinc) { // long strings // modified from length to lengthinc to address issue #3 raised by Eik List
