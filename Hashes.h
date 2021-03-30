@@ -41,7 +41,17 @@
 //----------
 // These are _not_ hash functions (even though people tend to use crc32 as one...)
 
+static inline bool BadHash_bad_seeds(std::vector<uint32_t> &seeds)
+{
+  seeds = std::vector<uint32_t> { UINT32_C(0) };
+  return true;
+}
 void BadHash(const void *key, int len, uint32_t seed, void *out);
+static inline bool sumhash_bad_seeds(std::vector<uint32_t> &seeds)
+{
+  seeds = std::vector<uint32_t> { UINT32_C(0) };
+  return true;
+}
 void sumhash(const void *key, int len, uint32_t seed, void *out);
 void sumhash32(const void *key, int len, uint32_t seed, void *out);
 
@@ -58,6 +68,11 @@ void hasshe2_test(const void *key, int len, uint32_t seed, void *out);
 #if defined(__SSE4_2__) && defined(__x86_64__)
 void crc32c_hw_test(const void *key, int len, uint32_t seed, void *out);
 void crc32c_hw1_test(const void *key, int len, uint32_t seed, void *out);
+static inline bool crc64c_hw_bad_seeds(std::vector<uint64_t> &seeds)
+{
+  seeds = std::vector<uint64_t> { UINT64_C(0) };
+  return true;
+}
 void crc64c_hw_test(const void *key, int len, uint32_t seed, void *out);
 #endif
 #if defined(HAVE_CLMUL) && !defined(_MSC_VER)
@@ -66,6 +81,11 @@ void crc64c_hw_test(const void *key, int len, uint32_t seed, void *out);
  * and must be 16-byte aligned. */
 extern "C" uint32_t crc32_pclmul_le_16(unsigned char const *buffer, size_t len,
                                        uint32_t crc32);
+static inline bool crc32c_pclmul_bad_seeds(std::vector<uint32_t> &seeds)
+{
+  seeds = std::vector<uint32_t> { UINT32_C(0) };
+  return true;
+}
 inline void crc32c_pclmul_test(const void *key, int len, uint32_t seed, void *out)
 {
   if (!len) {
@@ -108,10 +128,20 @@ inline void FNV2_test(const void *key, int len, uint32_t seed, void *out) {
   *(size_t *)out = FNV2((const char *)key, len, (size_t)seed);
 }
 uint32_t FNV32a(const void *key, int len, uint32_t seed);
+static inline bool FNV32a_bad_seeds(std::vector<uint32_t> &seeds)
+{
+  seeds = std::vector<uint32_t> { UINT32_C(0x811c9dc5) };
+  return true;
+}
 inline void FNV32a_test(const void *key, int len, uint32_t seed, void *out) {
   *(uint32_t *)out = FNV32a((const char *)key, len, seed);
 }
 uint32_t FNV32a_YoshimitsuTRIAD(const char *key, int len, uint32_t seed);
+static inline bool FNV32a_YT_bad_seeds(std::vector<uint32_t> &seeds)
+{
+  seeds = std::vector<uint32_t> { UINT32_C(0x811c9dc5) };
+  return true;
+}
 inline void FNV32a_YT_test(const void *key, int len, uint32_t seed, void *out) {
   *(uint32_t *)out = FNV32a_YoshimitsuTRIAD((const char *)key, len, seed);
 }
@@ -130,6 +160,11 @@ uint64_t FNV64a(const char *key, int len, uint64_t seed);
 inline void FNV64a_test(const void *key, int len, uint32_t seed, void *out) {
   *(uint64_t *)out = FNV64a((const char *)key, len, (uint64_t)seed);
 }
+static inline bool fletcher_bad_seeds(std::vector<uint64_t> &seeds)
+{
+  seeds = std::vector<uint64_t> { UINT64_C(0) };
+  return true;
+}
 uint64_t fletcher2(const char *key, int len, uint64_t seed);
 inline void fletcher2_test(const void *key, int len, uint32_t seed, void *out) {
   *(uint64_t *) out = fletcher2((const char *)key, len, (uint64_t)seed);
@@ -139,10 +174,20 @@ inline void fletcher4_test(const void *key, int len, uint32_t seed, void *out) {
   *(uint64_t *) out = fletcher2((const char *)key, len, (uint64_t)seed);
 }
 uint32_t Bernstein(const char *key, int len, uint32_t seed);
+static inline bool Bernstein_bad_seeds(std::vector<uint32_t> &seeds)
+{
+  seeds = std::vector<uint32_t> { UINT32_C(0) };
+  return true;
+}
 inline void Bernstein_test(const void *key, int len, uint32_t seed, void *out) {
   *(uint32_t *) out = Bernstein((const char *)key, len, seed);
 }
 uint32_t sdbm(const char *key, int len, uint32_t hash);
+static inline bool sdbm_bad_seeds(std::vector<uint32_t> &seeds)
+{
+  seeds = std::vector<uint32_t> { UINT32_C(0) };
+  return true;
+}
 inline void sdbm_test(const void *key, int len, uint32_t seed, void *out) {
   *(uint32_t *) out = sdbm((const char *)key, len, seed);
 }
@@ -167,6 +212,11 @@ inline void MicroOAAT_test(const void *key, int len, uint32_t seed, void *out) {
   *(uint32_t *) out = MicroOAAT((const char *)key, len, seed);
 }
 uint32_t SuperFastHash (const char * data, int len, int32_t hash);
+static inline bool SuperFastHash_bad_seeds(std::vector<uint32_t> &seeds)
+{
+  seeds = std::vector<uint32_t> { UINT32_C(0) };
+  return true;
+}
 inline void SuperFastHash_test(const void *key, int len, uint32_t seed, void *out) {
   *(uint32_t*)out = SuperFastHash((const char*)key, len, seed);
 }
@@ -377,6 +427,11 @@ inline void ahash64_test ( const void * key, int len, uint32_t seed, void * out 
 
 // objsize 0-778: 1912
 void mum_hash_test(const void * key, int len, uint32_t seed, void * out);
+static inline bool mum_hash_bad_seeds(std::vector<uint64_t> &seeds)
+{
+  seeds = std::vector<uint64_t> { UINT64_C(0) };
+  return true;
+}
 
 inline void mum_low_test ( const void * key, int len, uint32_t seed, void * out ) {
   uint64_t result;
@@ -584,9 +639,19 @@ inline void o1hash_test (const void * key, int len, uint32_t seed, void * out) {
 
 //https://github.com/vnmakarov/mir/blob/master/mir-hash.h
 #include "mir-hash.h"
+static inline bool mirhash_bad_seeds(std::vector<uint64_t> &seeds)
+{
+  seeds = std::vector<uint64_t> { UINT64_C(0) };
+  return true;
+}
 inline void mirhash_test (const void * key, int len, uint32_t seed, void * out) {
   // objsize 2950-2da8: 1112
   *(uint64_t*)out = mir_hash(key, (uint64_t)len, (uint64_t)seed);
+}
+static inline bool mirhash32_bad_seeds(std::vector<uint32_t> &seeds)
+{
+  seeds = std::vector<uint32_t> { UINT32_C(0) };
+  return true;
 }
 inline void mirhash32low (const void * key, int len, uint32_t seed, void * out) {
   *(uint32_t*)out = 0xFFFFFFFF & mir_hash(key, (uint64_t)len, (uint64_t)seed);

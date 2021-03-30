@@ -362,7 +362,7 @@ But a bad seed of `0` leading to collisions is considered a bug, a bad hash func
 
 We test for internal secrets, if they will be multiplied with 0. This
 is also called "blinding multiplication". `main.cpp` lists some
-secrets for each hash function, we test against. The function
+secrets for each hash function we test against. The function
 `<hash>_bad_seeds()` lists the confirmed bad seeds.
 
 Special care needs to be taken for crc, most FNV1 variants, fletcher,
