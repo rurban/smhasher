@@ -14,7 +14,6 @@
 #include <algorithm>  // for std::swap
 #include <assert.h>
 #include <string>
-#include <alloca.h>
 
 #undef MAX
 #define MAX(x,  y)   (((x) > (y)) ? (x) : (y))
@@ -100,7 +99,8 @@ bool TestSecret ( const HashInfo* info, const uint64_t secret )
       memset(&key, c, len);
       hash(key, len, secret, &h);
       if (h == 0 && c == 0) {
-        printf("Broken seed 0x%lx => 0 with key[%d] of all %d bytes confirmed => hash 0\n", secret, len, c);
+        printf("Broken seed 0x%lx => 0 with key[%d] of all %d bytes confirmed => hash 0\n",
+               (unsigned long)secret, len, c);
         result = false;
       }
       else
@@ -108,7 +108,9 @@ bool TestSecret ( const HashInfo* info, const uint64_t secret )
     }
     if (!TestHashList(hashes, false, true, false, false, false, false)) {
       printf(" Bad seed 0x%lx for len %d confirmed => hash ", secret, len);
-      for (auto x : hashes) printf ("%lx ", x);
+#if !defined __clang__ && !defined _MSC_VER
+      for (hashtype x : hashes) printf ("%lx ", x);
+#endif
       printf ("\n");
       TestHashList(hashes, false);
       result = false;
@@ -129,7 +131,9 @@ bool BadSeedsTest ( HashInfo* info, bool testAll )
   const size_t max_seed = 0xffffffff;
   const std::vector<size_t> secrets = info->secrets;
 #endif
-  printf("Testing %d internal secrets:\n", secrets.size());
+#if !defined __arm__ && !defined __aarch64__
+  printf("Testing %lu internal secrets:\n", (unsigned long)secrets.size());
+#endif
   for (auto secret : secrets) {
     result &= TestSecret<hashtype>(info, secret);
   }
@@ -138,7 +142,7 @@ bool BadSeedsTest ( HashInfo* info, bool testAll )
   if (getenv("SEED")) {
     const char *s = getenv("SEED");
     size_t seed = strtol(s, NULL, 0);
-    printf("Testing SEED=0x%lx ", seed);
+    printf("Testing SEED=0x%lx ", (unsigned long)seed);
     //if (*s && s[1] && *s == '0' && s[1] == 'x')
     //  seed = strtol(&s[2], NULL, 16);
     if (seed)
@@ -163,7 +167,7 @@ bool BadSeedsTest ( HashInfo* info, bool testAll )
       memset(&key, x, sizeof(key));
       info->hash(key, 16, y, &h);
       if (h == 0 && x == 0) {
-        printf("Broken seed 0x%lx => 0 with key[16] of all %d bytes\n", y, x);
+        printf("Broken seed 0x%lx => 0 with key[16] of all %d bytes\n", (unsigned long)y, x);
         result = false;
       }
       else {
@@ -171,7 +175,7 @@ bool BadSeedsTest ( HashInfo* info, bool testAll )
       }
     }
     if (!TestHashList(hashes,false, true, false, false, false, false)) {
-      printf("Bad seed 0x%lx\n", y);
+      printf("Bad seed 0x%lx\n", (unsigned long)y);
       TestHashList(hashes, false);
       result = false;
     }
@@ -200,7 +204,7 @@ bool BadSeedsTest ( HashInfo* info, bool testAll )
         }
       }
       if (!TestHashList(hashes,false, true, false, false, false, false)) {
-        printf("Bad seed 0x%lx\n", z);
+        printf("Bad seed 0x%lx\n", (unsigned long)z);
         TestHashList(hashes, false);
         result = false;
       }
