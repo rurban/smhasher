@@ -1,8 +1,12 @@
 // Based on Thorup's "high speed hashing for integers and strings"
 // https://arxiv.org/pdf/1504.06804.pdf
+// rurban 2021-03-30: Added checks for bad seeds
 
 #ifndef tabulation_included
 #define tabulation_included
+
+#include <stdint.h>
+#include <assert.h>
 
 static inline uint8_t  take08(const uint8_t *p){ uint8_t  v; memcpy(&v, p, 1); return v; }
 static inline uint16_t take16(const uint8_t *p){ uint16_t v; memcpy(&v, p, 2); return v; }
@@ -22,6 +26,7 @@ static uint64_t multiply_shift_random_64[BLOCK_SIZE_32];
 static uint32_t multiply_shift_a_64;
 static uint64_t multiply_shift_b_64;
 static int32_t tabulation_32[32/CHAR_SIZE][1<<CHAR_SIZE];
+static int have_broken_rand = 0;
 
 static uint32_t combine31(uint32_t h, uint32_t x, uint32_t a) {
    uint64_t temp = (uint64_t)h * x + a;
@@ -67,7 +72,7 @@ static uint32_t tabulation_32_hash(const void * key, int len_bytes, uint32_t see
 
 static uint64_t tab_rand64() {
    // we don't know how many bits we get from rand(),
-   // but it is at least 16, so we concattenate a couple.
+   // but it is at least 16, so we concatenate a couple.
    uint64_t r = 0;
    for (int i = 0; i < 4; i++) {
       r <<= 16;
@@ -76,13 +81,27 @@ static uint64_t tab_rand64() {
    return r;
 }
 
-static void tabulation_32_seed_init(size_t seed) {
+static void tabulation_32_seed_init(size_t &seed) {
    srand(seed);
    // the lazy mersenne combination requires 30 bits values in the polynomial.
    multiply_shift_a_64 = tab_rand64() & ((1ull<<30)-1);
+   if (!multiply_shift_a_64) {
+      multiply_shift_a_64 = tab_rand64() & ((1ull<<30)-1);
+   }
+   if (!multiply_shift_a_64) {
+      have_broken_rand = 1;
+      multiply_shift_a_64 = 0xababababbeafcafeULL & ((1ull<<30)-1);
+   }
    multiply_shift_b_64 = tab_rand64();
-   for (int i = 0; i < BLOCK_SIZE_32; i++)
+   if (!multiply_shift_b_64) {
+      multiply_shift_b_64 = have_broken_rand ? 0xdeadbeef : tab_rand64();
+   }
+   for (int i = 0; i < BLOCK_SIZE_32; i++) {
       multiply_shift_random_64[i] = tab_rand64();
+      if (!multiply_shift_random_64[i]) {
+         multiply_shift_random_64[i] = have_broken_rand ? 0xdeadbeef : tab_rand64();
+      }
+   }
    for (int i = 0; i < 32/CHAR_SIZE; i++)
       for (int j = 0; j < 1<<CHAR_SIZE; j++)
          tabulation_32[i][j] = tab_rand64();
@@ -130,7 +149,7 @@ static uint64_t tabulation_hash(const void * key, int len_bytes, uint32_t seed) 
    const uint8_t* buf = (const uint8_t*) key;
 
    // the idea is to compute a fast "signature" of the string before doing
-   // tabulatioin hashing. this signature only has to be collision resistant,
+   // tabulation hashing. this signature only has to be collision resistant,
    // so we can use the variabe-length-hashing polynomial mod-mersenne scheme
    // from thorup.
    // because of the birthday paradox, the signature needs to be around twice
@@ -200,16 +219,32 @@ static __uint128_t tab_rand128() {
    return (__uint128_t)tab_rand64() << 64 | tab_rand64();
 }
 
-static void tabulation_seed_init(size_t seed) {
+static void tabulation_seed_init(size_t &seed) {
    srand(seed);
    // the lazy mersenne combination requires 60 bits values in the polynomial.
+   // rurban: added checks for bad seeds
    tab_multiply_shift_a = tab_rand128() & ((1ull<<60)-1);
    tab_multiply_shift_b = tab_rand128();
-   for (int i = 0; i < TAB_BLOCK_SIZE; i++)
+   if (!tab_multiply_shift_a) tab_multiply_shift_a = tab_rand128() & ((1ull<<60)-1);
+   if (!tab_multiply_shift_a) {
+      have_broken_rand = 1;
+      tab_multiply_shift_a = 0xababababbeafcafeULL & ((1ull<<60)-1);
+   }
+   if (!tab_multiply_shift_b) tab_multiply_shift_b = tab_rand128();
+   if (!tab_multiply_shift_b) {
+      have_broken_rand = 1;
+      tab_multiply_shift_b++;
+   }
+   for (int i = 0; i < TAB_BLOCK_SIZE; i++) {
       tab_multiply_shift_random[i] = tab_rand128();
+      if (!tab_multiply_shift_random[i])
+         tab_multiply_shift_random[i] = 0x12345678;
+   }
+   if (have_broken_rand)
+      assert(TAB_BLOCK_SIZE >= 64/CHAR_SIZE);
    for (int i = 0; i < 64/CHAR_SIZE; i++)
       for (int j = 0; j < 1<<CHAR_SIZE; j++)
-         tabulation[i][j] = tab_rand128();
+         tabulation[i][j] = have_broken_rand ? tab_multiply_shift_random[i] : tab_rand128();
 }
 
 #endif
