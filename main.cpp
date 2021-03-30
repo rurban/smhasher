@@ -481,10 +481,10 @@ HashInfo g_hashes[] =
     {0xbe4ba423396cfeb8, 0x396cfeb8, 0xbe4ba423, 0x6782737bea4239b9, 0xaf56bc3b0996523a }},
 #ifdef HAVE_BIT32
   { wyhash32_test,        32, 0x09DE8066, "wyhash32",       "wyhash (32-bit)", GOOD,
-    { 0x1bc1d52e, 0x1cbc261d, 0x33a0d1d9, 0x429dacdd, 0xd637dbf3 }},
+    { 0x1bc1d52e, 0x1cbc261d, 0x33a0d1d9, 0x429dacdd, 0xd637dbf3 } /* !! */ },
 #else
   { wyhash32low,          32, 0x9241B8A3, "wyhash32low",    "wyhash lower 32bit", GOOD,
-    { 0x1bc1d52e, 0x1cbc261d, 0x33a0d1d9, 0x429dacdd, 0xd637dbf3 }},
+    { 0x1bc1d52e, 0x1cbc261d, 0x33a0d1d9, 0x429dacdd, 0xd637dbf3 } /* !! */ },
 #endif
 #ifdef HAVE_INT64
   { wyhash_test,          64, 0x7C62138D, "wyhash",         "wyhash (64-bit)", GOOD,

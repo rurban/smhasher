@@ -365,6 +365,10 @@ is also called "blinding multiplication". `main.cpp` lists some
 secrets for each hash function, we test against. The function
 `<hash>_bad_seeds()` lists the confirmed bad seeds.
 
+Special care needs to be taken for crc, most FNV1 variants, fletcher,
+Jenkins, and with GOOD hashes all MUM variants, like mirhash, MUM,
+wyhash32.
+
 Typical undefined behaviour (**UB**) problems:
 
 * Misaligned
