@@ -531,7 +531,7 @@ inline void t1ha0_ia32aes_avx2_test(const void * key, int len, uint32_t seed, vo
 #if defined(__SSE4_2__) && defined(__x86_64__)
 #include "clhash.h"
 void clhash_init();
-void clhash_seed_init(size_t seed);
+void clhash_seed_init(size_t &seed);
 void clhash_test (const void * key, int len, uint32_t seed, void * out);
 #endif
 
@@ -544,15 +544,16 @@ void halftime_hash_style256_test(const void *key, int len, uint32_t seed, void *
 // 457a60 - 45883e: 3550 (without AVX512 on Ryzen3)
 void halftime_hash_style512_test(const void *key, int len, uint32_t seed, void *out);
 void halftime_hash_init();
-void halftime_hash_seed_init(uint64_t seed);
+void halftime_hash_seed_init(uint64_t &seed);
 
 #ifdef __SIZEOF_INT128__
    void multiply_shift_init();
-   void multiply_shift_seed_init(size_t seed);
+   void multiply_shift_seed_init(size_t &seed);
+   bool multiply_shift_bad_seeds(std::vector<uint64_t> &seeds);
    void multiply_shift (const void * key, int len, uint32_t seed, void * out);
    void pair_multiply_shift (const void *key, int len, uint32_t seed, void *out);
    void poly_mersenne_init();
-   void poly_mersenne_seed_init(size_t seed);
+   void poly_mersenne_seed_init(size_t &seed);
    // insecure: hashes cancel itself out, as with CRC
    void poly_0_mersenne (const void* key, int len, uint32_t seed, void* out);
    void poly_1_mersenne (const void* key, int len, uint32_t seed, void* out);
@@ -563,7 +564,8 @@ void halftime_hash_seed_init(uint64_t seed);
 
 #ifdef __SIZEOF_INT128__
    inline void tabulation_init() {
-      tabulation_seed_init(2);
+     size_t seed = 2;
+     tabulation_seed_init(seed);
    }
    // insecure: hashes cancel itself out, as with poly_X and CRC
    // objsize: 40b780 - 40b9aa: 554
@@ -573,7 +575,8 @@ void halftime_hash_seed_init(uint64_t seed);
 #endif
 
 inline void tabulation_32_init() {
-   tabulation_32_seed_init(0);
+  size_t seed = 0;
+   tabulation_32_seed_init(seed);
 }
 // objsize: 40b9b0 - 40bd00: 848
 inline void tabulation_32_test (const void * key, int len, uint32_t seed, void * out) {
@@ -599,7 +602,7 @@ static inline bool wyhash_bad_seeds(std::vector<uint64_t> &seeds)
 {
   return false;
 }
-static void wyhash_seed_init(size_t &seed) {}
+static void wyhash_seed_init(size_t &seed) { }
 static inline bool wyhash32_bad_seeds(std::vector<uint32_t> &seeds)
 {
   seeds = std::vector<uint32_t> {

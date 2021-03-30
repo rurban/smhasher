@@ -104,7 +104,7 @@ HashInfo g_hashes[] =
   // M. Dietzfelbinger, T. Hagerup, J. Katajainen, and M. Penttonen. A reliable randomized
   // algorithm for the closest-pair problem. J. Algorithms, 25:19–51, 1997.
   { multiply_shift,       64, 0xFCE355A6, "multiply_shift", "Dietzfelbinger Multiply-shift on strings", POOR,
-    { 0xb13dea7c9c324e51ULL, 0x75f17d6b3588f843ULL } },
+    { 0xfffffff0, 0x1fffffff0, 0xb13dea7c9c324e51ULL, 0x75f17d6b3588f843ULL } /* !! all & 0xfffffff0 (2^32 bad seeds) */ },
   { pair_multiply_shift,  64, 0xD4B20347, "pair_multiply_shift", "Pair-multiply-shift", POOR,
     { 0xb13dea7c9c324e51ULL, 0x75f17d6b3588f843ULL } },
 #endif

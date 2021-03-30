@@ -754,7 +754,7 @@ bool clhash_bad_seeds(std::vector<uint64_t> &seeds)
   seeds = std::vector<uint64_t> { UINT64_C(0) };
   return true;
 }
-void clhash_seed_init(size_t seed)
+void clhash_seed_init(size_t &seed)
 {
   // reject bad seeds
   const std::vector<uint64_t> bad_seeds = { UINT64_C(0) };
@@ -791,7 +791,8 @@ void halftime_hash_style512_test(const void *key, int len, uint32_t seed, void *
 }
 
 void halftime_hash_init() {
-  halftime_hash_seed_init(0xcc70c4c1798e4a6f);
+  uint64_t seed = 0xcc70c4c1798e4a6fULL;
+  halftime_hash_seed_init(seed);
 }
 
 // romu random number generator for seeding the HalftimeHash entropy
@@ -817,7 +818,7 @@ void romuQuad32simd(const __m512i seeds[4], uint64_t *output, size_t count) {
   }
 }
 
-void halftime_hash_seed_init(uint64_t seed) {
+void halftime_hash_seed_init(uint64_t &seed) {
   __m512i seeds[4] = {
       {
           (long long)seed ^ (long long)0x9a9b4c4e44dd48d1,
@@ -866,7 +867,7 @@ void halftime_hash_seed_init(uint64_t seed) {
 
 #else
 
-void halftime_hash_seed_init(uint64_t seed)
+void halftime_hash_seed_init(uint64_t &seed)
 {
 #define ROTL(d,lrot) ((d<<(lrot)) | (d>>(8*sizeof(d)-(lrot))))
   uint64_t wState = seed, xState= 0xecfc1357d65941ae, yState=0xbe1927f97b8c43f1,
@@ -1055,7 +1056,7 @@ void halftime_hash_seed_init(uint64_t seed)
    void poly_4_mersenne(const void * key, int len_bytes, uint32_t seed, void * out) {
       *(uint32_t*)out = (uint32_t)poly_k_mersenne(key, len_bytes, seed, 4);
    }
-   void poly_mersenne_seed_init(size_t seed) {
+   void poly_mersenne_seed_init(size_t &seed) {
       srand(seed);
       // a has be at most 2^60, or the lazy modular reduction won't work.
       poly_mersenne_a = rand128() % (MERSENNE_61/2);
@@ -1067,7 +1068,8 @@ void halftime_hash_seed_init(uint64_t seed)
       }
    }
    void poly_mersenne_init() {
-      poly_mersenne_seed_init(0);
+     size_t seed = 0;
+     poly_mersenne_seed_init(seed);
    }
 
 #endif

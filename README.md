@@ -7,14 +7,14 @@ SMhasher
 
 | Hash function                                 |      MiB/sec |cycl./hash|cycl./map   | size| Quality problems               |
 |:----------------------------------------------|-------------:|---------:|-----------:|----:|--------------------------------|
-| [donothing32](doc/donothing32.txt)            |  15316474.36 |     6.00 | -|  13 | bad seed 0, test NOP           |
-| [donothing64](doc/donothing64.txt)            |  15330019.19 |     6.00 | -|  13 | bad seed 0, test NOP           |
-| [donothing128](doc/donothing128.txt)          |  15278983.09 |     6.00 | -|  13 | bad seed 0, test NOP           |
-| [NOP_OAAT_read64](doc/NOP_OAAT_read64.txt)    |     28467.50 |    18.48 | -|  47 | test NOP                       |
-| [BadHash](doc/BadHash.txt)                    |       524.81 |    96.20 | -|  47 | bad seed 0, test FAIL          |
-| [sumhash](doc/sumhash.txt)                    |      7169.08 |    27.12 | -| 363 | bad seed 0, test FAIL          |
-| [sumhash32](doc/sumhash32.txt)                |     22556.18 |    22.98 | -| 863 | UB, test FAIL                  |
-| [multiply_shift](doc/multiply_shift.txt)      |      5418.36 |    28.69 | 157.11 (3) | 345 | fails most tests |
+| [donothing32](doc/donothing32.txt)            |  15316474.36 |     6.00 |     -      |  13 | bad seed 0, test NOP           |
+| [donothing64](doc/donothing64.txt)            |  15330019.19 |     6.00 |     -      |  13 | bad seed 0, test NOP           |
+| [donothing128](doc/donothing128.txt)          |  15278983.09 |     6.00 |     -      |  13 | bad seed 0, test NOP           |
+| [NOP_OAAT_read64](doc/NOP_OAAT_read64.txt)    |     28467.50 |    18.48 |     -      |  47 | test NOP                       |
+| [BadHash](doc/BadHash.txt)                    |       524.81 |    96.20 |     -      |  47 | bad seed 0, test FAIL          |
+| [sumhash](doc/sumhash.txt)                    |      7169.08 |    27.12 |     -      | 363 | bad seed 0, test FAIL          |
+| [sumhash32](doc/sumhash32.txt)                |     22556.18 |    22.98 |     -      | 863 | UB, test FAIL                  |
+| [multiply_shift](doc/multiply_shift.txt)      |      5418.36 |    28.69 | 157.11 (3) | 345 | bad seeds & 0xfffffff0, fails most tests |
 | [pair_multiply_shift](doc/pair_multiply_shift)|      3716.95 |    40.22 | 186.34 (3) | 609 | fails most tests |
 | --------------------------                    |              |          |            |     |                      |
 | [crc32](doc/crc32.txt)                        |       392.10 |   131.62 | 204.58 (4) | 422 | insecure, 8590x collisions, distrib, PerlinNoise |
@@ -55,8 +55,8 @@ SMhasher
 | [crc32_hw](doc/crc32_hw.txt)                  |      6330.42 |    35.55 | 170.16 (1) | 653 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2) |
 | [crc32_hw1](doc/crc32_hw1.txt)                |     23208.73 |    46.74 | 179.70 (2) | 671 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2) |
 | [crc64_hw](doc/crc64_hw.txt)                  |      8440.13 |    34.94 | 141.15 (2) | 652 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x64 SSE4.2) |
-| [crc32_pclmul](doc/crc32_pclmul.txt)          |   1972140.38 |     7.00 | -| 481 | insecure, bad seed 0, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2+PCLMUL) |
-| [o1hash](doc/o1hash.txt)                      |  12439661.09 |    16.77 | 166.13 (1) | 101 | insecure, bad seed, zeros, fails all tests |
+| [crc32_pclmul](doc/crc32_pclmul.txt)          |   1972140.38 |     7.00 |     -      | 481 | insecure, bad seed 0, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2+PCLMUL) |
+| [o1hash](doc/o1hash.txt)                      |  12439661.09 |    16.77 | 166.13 (1) | 101 | insecure, no seed, zeros, fails all tests |
 | [fibonacci](doc/fibonacci.txt)                |     11339.87 |    26.33 | 705.64 (2) |1692 | UB, zeros, fails all tests       |
 | [FNV1a](doc/FNV1a.txt)                        |       791.84 |    69.69 | 177.84 (2) | 204 | bad seed, zeros, fails all tests       |
 | [FNV1A_Totenschiff](doc/FNV1A_Totenschiff.txt)|      6258.23 |    27.99 | 198.20 (1) | 270 | UB, zeros, fails all tests   |
@@ -139,7 +139,7 @@ SMhasher
 | [mirhash](doc/mirhash.txt)                    |      5413.73 |    39.68 | 154.47 (3) |1112 | UB, bad seed 0, LongNeighbors, machine-specific (32/64 differs) |
 | [mirhash32low](doc/mirhash32low.txt)          |      5412.76 |    39.79 | 182.13 (3) |1112 | UB, bad seed 0, Cyclic, LongNeighbors, machine-specific (32/64 differs) |
 | [mirhashstrict](doc/mirhashstrict.txt)        |      2217.32 |    65.53 | 182.07 (2) |1112 |                            |
-| [mirhashstrict32low](doc/mirhashstrict32low.txt)|      2218.87 |    65.48 | 190.59 (4) |1112 | MomentChi2 9               |
+| [mirhashstrict32low](doc/mirhashstrict32low.txt)|    2218.87 |    65.48 | 190.59 (4) |1112 | MomentChi2 9               |
 | [mx3](doc/mx3.txt)                            |      6146.02 |    52.48 | 173.09 (3) | 734 | UB                         |
 | [pengyhash](doc/pengyhash.txt)                |      8744.48 |    85.31 | 222.45 (4) | 421 |                            |
 | [City32](doc/City32.txt)                      |      3675.04 |    57.73 | 212.04 (3) |1319 |                            |
@@ -349,25 +349,26 @@ PROBLEMS
 --------
 
 * Bad Seeds
-
-Hash functions are typically initialized with a random seed. But some seed values
-lead to bad hash functions. In the regular case with random seeds the probablity of
-such bad seeds is very low, like 2^32 or 2^64, but when the attacker can control
-the seed it will lead to DDOS attacks.
-A practical application needs to know if such bad seeds exist and choose another
-one. See e.g. `wyhash_seed_init()` and `wyhash_bad_seeds()` in `Hashes.h`.
-Note that a bad seed is not really a problem, when you skip this seed during initialization.
-It can still be a GOOD or recommended hash function.
-But a bad seed of `0` leading to collisions is considered a bug, a bad hash function.
-
-We test for internal secrets, if they will be multiplied with 0. This
-is also called "blinding multiplication". `main.cpp` lists some
-secrets for each hash function we test against. The function
-`<hash>_bad_seeds()` lists the confirmed bad seeds.
-
-Special care needs to be taken for crc, most FNV1 variants, fletcher,
-Jenkins, and with GOOD hashes all MUM variants, like mirhash, MUM,
-wyhash32.
+  
+  Hash functions are typically initialized with a random seed. Buet some seed values
+  may lead to bad hash functions. In the regular case with random seeds the probablity of
+  such bad seeds is very low, like 2^32 or 2^64, but when the attacker can control
+  the seed it will lead to DDOS attacks. With a known seed, even with crypto hashes
+  in most hashtables.
+  A practical application needs to know if such bad seeds exist and choose another
+  one. See e.g. `wyhash_seed_init()` and `wyhash_bad_seeds()` in `Hashes.h`.
+  Note that a bad seed is not really a problem when you skip this seed during initialization.
+  It can still be a GOOD or recommended hash function.
+  But a bad seed of `0` leading to collisions is considered a bug, a bad hash function.
+  
+  We test for internal secrets, if they will be multiplied with 0. This
+  is also called "blinding multiplication". `main.cpp` lists some
+  secrets for each hash function we test against. The function
+  `<hash>_bad_seeds()` lists the confirmed bad seeds.
+  
+  Special care needs to be taken for crc, most FNV1 variants, fletcher,
+  Jenkins. And with GOOD hashes all MUM variants, like mirhash, MUM,
+  wyhash32.
 
 Typical undefined behaviour (**UB**) problems:
 
