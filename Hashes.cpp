@@ -933,14 +933,24 @@ void halftime_hash_seed_init(uint64_t seed)
       srand(seed);
       for (int i = 0; i < MULTIPLY_SHIFT_RANDOM_WORDS; i++) {
          multiply_shift_random[i] = rand128();
+         if (!multiply_shift_random[i])
+           multiply_shift_random[i]++;
          // We don't need an odd multiply, when we add the seed in the beginning
          //multiply_shift_random[i] |= 1;
       }
    }
-   void multiply_shift_seed_init(size_t seed) {
-      // The seeds we get are not random values, but just something like 1, 2 or 3.
-      // So we xor it with a random number to get something slightly more reasonable.
-      multiply_shift_random[0] = (__uint128_t)seed ^ multiply_shift_r;
+   bool multiply_shift_bad_seeds(std::vector<uint64_t> &seeds) {
+     // all seeds & 0xfffffff0
+     seeds = std::vector<uint64_t> { UINT64_C(0xfffffff0), UINT64_C(0x1fffffff0) };
+     return true;
+   }
+   void multiply_shift_seed_init(size_t &seed) {
+     // The seeds we get are not random values, but just something like 1, 2 or 3.
+     // So we xor it with a random number to get something slightly more reasonable.
+     // But skip really bad seed patterns: 0x...fffffff0
+     if ((seed & 0xfffffff0ULL) == 0xfffffff0ULL)
+       seed++;
+     multiply_shift_random[0] = (__uint128_t)seed ^ multiply_shift_r;
    }
    void multiply_shift_init() {
       multiply_shift_seed_init_slow(0);
