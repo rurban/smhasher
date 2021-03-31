@@ -323,7 +323,7 @@ HashInfo g_hashes[] =
   { aesnihash_test,       64, 0x0,        "aesnihash",    "majek's unseeded aesnihash with aesenc, 64-bit for x64", POOR,
     {0x736f6d6570736575ULL, 0x646f72616e646f6dULL, 0x1231236570743245ULL, 0x126f12321321456dULL} },
 #endif
-#if defined(__SSE4_2__) && defined(__x86_64__)
+#if defined(__SSE4_2__) && defined(__x86_64__) && !defined(_WIN32)
   { falkhash_test_cxx,    64, 0x2F99B071, "falkhash",    "falkhash.asm with aesenc, 64-bit for x64", POOR, {} },
 #endif
 #ifdef HAVE_MEOW_HASH
@@ -1744,7 +1744,7 @@ void testHash ( const char * name )
 }
 //-----------------------------------------------------------------------------
 
-#ifdef _MSC_VER
+#ifdef _WIN32
 static char* strndup(char const *s, size_t n)
 {
   size_t const len = strnlen(s, n);

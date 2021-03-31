@@ -791,7 +791,12 @@ void halftime_hash_style512_test(const void *key, int len, uint32_t seed, void *
 }
 
 void halftime_hash_init() {
-  size_t seed = 0xcc70c4c1798e4a6fULL; // 64bit only
+  size_t seed =
+#ifdef HAVE_BIT32
+    0xcc70c4c1ULL;
+#else
+    0xcc70c4c1798e4a6fUL; // 64bit only
+#endif
   halftime_hash_seed_init(seed);
 }
 
@@ -921,14 +926,7 @@ void halftime_hash_seed_init(size_t &seed)
       *(uint64_t*)out = h;
    }
    static __uint128_t rand128() {
-      // We don't know how many bits we get from rand(),
-      // but it is at least 16, so we concattenate a couple.
-      __uint128_t r = rand();
-      for (int i = 0; i < 7; i++) {
-         r <<= 16;
-         r ^= rand();
-      }
-      return r;
+     return rand_u128();
    }
    void multiply_shift_seed_init_slow(size_t seed) {
       srand(seed);

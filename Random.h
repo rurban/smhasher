@@ -69,6 +69,14 @@ struct Rand
     return (a << 32) | b;
   }
 
+#ifdef __SIZEOF_INT128__
+  __uint128_t rand_u128 ( void ) 
+  {
+    __uint128_t a = rand_u64();
+    return (a << 64) | rand_u64();
+  }
+#endif
+
   void rand_p ( void * blob, int bytes )
   {
     uint32_t * blocks;
@@ -116,6 +124,9 @@ extern Rand g_rand1;
 
 inline uint32_t rand_u32 ( void ) { return g_rand1.rand_u32(); }
 inline uint64_t rand_u64 ( void ) { return g_rand1.rand_u64(); }
+#ifdef __SIZEOF_INT128__
+inline __uint128_t rand_u128 ( void ) { return g_rand1.rand_u128(); }
+#endif
 
 inline void rand_p ( void * blob, int bytes )
 {

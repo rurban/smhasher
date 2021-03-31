@@ -8,7 +8,7 @@ void testRDTSC ( void )
   printf("%ld",(long)temp);
 }
 
-#if defined(_MSC_VER)
+#if defined(_WIN32)
 
 #include <windows.h>
 
