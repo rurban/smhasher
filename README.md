@@ -350,12 +350,11 @@ PROBLEMS
 
 * Bad Seeds
   
-  Hash functions are typically initialized with a random seed. Buet some seed values
-  may lead to bad hash functions. In the regular case with random seeds the probablity of
-  such bad seeds is very low, like 2^32 or 2^64, but when the attacker can control
-  the seed it will lead to DDOS attacks. With a known seed, even with crypto hashes
-  in most hashtables.
-  A practical application needs to know if such bad seeds exist and choose another
+  Hash functions are typically initialized with a random seed. But
+  some seed values may lead to bad hash functions, regardless of the
+  key. In the regular case with random seeds the probablity of such
+  bad seeds is very low, like 2^32 or 2^64.
+  A practical application needs to know if bad seeds exist and choose another
   one. See e.g. `wyhash_seed_init()` and `wyhash_bad_seeds()` in `Hashes.h`.
   Note that a bad seed is not really a problem when you skip this seed during initialization.
   It can still be a GOOD or recommended hash function.
@@ -369,6 +368,9 @@ PROBLEMS
   Special care needs to be taken for crc, most FNV1 variants, fletcher,
   Jenkins. And with GOOD hashes all MUM variants, like mirhash, MUM,
   wyhash32.
+
+  Independently from this, when the attacker knows the seed it will lead
+  to DDOS attacks. Even with crypto hashes in power2 hashtables.
 
 Typical undefined behaviour (**UB**) problems:
 
