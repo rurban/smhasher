@@ -1,0 +1,103 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        CMAKE_ARGS:
+          - 
+          - -DCMAKE_BUILD_TYPE=Debug
+          - -DCMAKE_BUILD_TYPE=Asan
+          - -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+        submodules: recursive
+    #- uses: snickerbockers/submodules-init@v4
+    - run: cmake ${{ matrix.CMAKE_ARGS }} .
+    - run: make -j4 VERBOSE=1
+    - if: ${{ ! contains(matrix.CMAKE_ARGS, 'CMAKE_BUILD_TYPE') }}
+      run: make -j4 test ARGS=-V
+    - if: ${{ contains(matrix.CMAKE_ARGS, 'CMAKE_BUILD_TYPE') }}
+      run: ./SMHasher --test=Sanity,Speed,Cyclic,Zeroes,Seed
+  aarch64:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+        submodules: recursive
+    - run: sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+    - run: cmake -DCMAKE_TOOLCHAIN_FILE=CMakeARM64Cross.txt
+    - run: make -j4 VERBOSE=1
+  armv7:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+        submodules: recursive
+    - run: sudo apt-get install -y gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
+    - run: cmake -DCMAKE_TOOLCHAIN_FILE=CMakeARMCross.txt
+    - run: make -j4 VERBOSE=1
+  macOS:
+    name: macOS
+    runs-on: macOS-latest
+    steps:
+    #- name: init
+    #  run: brew install automake
+    - uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+        submodules: true
+    - run: CXXFLAGS='-std=c++17' cmake .
+    - run: make -j4 VERBOSE=1
+    - run: make -j4 test ARGS=-V
+  windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+        submodules: recursive
+    - uses: ilammy/msvc-dev-cmd@v1
+    - run: cmake . -DCMAKE_BUILD_TYPE=Release -A x64
+    - run: cmake --build . --config Release
+    - run: Release\SMHasher.exe --test=VerifyAll,Sanity,Speed,Cyclic,Zeroes,Seed
+  mingw:
+    name: mingw
+    runs-on: windows-latest
+    env:
+      MSYS2_DIR: msys64
+      MSYS2_ARCH: x86_64
+      MSYSTEM: MINGW64
+      ARCH: win64
+      PLATFORM: x64
+      #PATH: "C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%"
+    steps:
+      # see https://github.com/msys2/setup-msys2
+    - name: setup-msys2
+      uses: msys2/setup-msys2@v2
+      with:
+        path-type: minimal
+        update: true
+        install: >-
+          git
+          cmake
+          base-devel
+          mingw-w64-x86_64-toolchain
+    - run: reg add "HKLM\Software\Microsoft\Windows\Windows Error Reporting" /f /v DontShowUI /d 1
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+        submodules: recursive
+    - shell: msys2 {0}
+      run: cmake .
+    - shell: msys2 {0}
+      run: make -j4 VERBOSE=1
+    - shell: msys2 {0}
+      run: make -j4 test ARGS=-V

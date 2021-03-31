@@ -504,7 +504,6 @@ if(AHASH_C
 endif()
 
 if(SSE4_2_FOUND AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
-  # Rust staticlib (PR #9) WIP
   find_library(BLAKE3 blake3)
   # if (BLAKE3)
   #   set(BLAKE3_LIB ${BLAKE3})
