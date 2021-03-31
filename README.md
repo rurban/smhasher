@@ -137,7 +137,7 @@ SMhasher
 | [fasthash64](doc/fasthash64.txt)              |      4737.21 |    42.79 | 164.87 (2) | 509 | UB, Moment Chi2 5159 !     |
 | [MUM](doc/MUM.txt)                            |      7134.56 |    37.85 | 172.34 (1) |1912 | UB, bad seed 0, machine-specific (32/64 differs) |
 | [MUMlow](doc/MUMlow.txt)                      |      7225.18 |    37.85 | 197.92 (3) |1912 | UB                         |
-| [mirhash](doc/mirhash.txt)                    |      5413.73 |    39.68 | 154.47 (3) |1112 | UB, bad seed 0, LongNeighbors, machine-specific (32/64 differs) |
+| [mirhash](doc/mirhash.txt)                    |      5413.73 |    39.68 | 154.47 (3) |1112 | UB, bad seeds, LongNeighbors, machine-specific (32/64 differs) |
 | [mirhashstrict](doc/mirhashstrict.txt)        |      2217.32 |    65.53 | 182.07 (2) |1112 |                            |
 | [mirhashstrict32low](doc/mirhashstrict32low.txt)|    2218.87 |    65.48 | 190.59 (4) |1112 | 1 bad seed, MomentChi2 9   |
 | [mx3](doc/mx3.txt)                            |      6146.02 |    52.48 | 173.09 (3) | 734 | UB                         |

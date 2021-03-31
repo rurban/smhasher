@@ -406,10 +406,11 @@ HashInfo g_hashes[] =
 #endif
 #ifdef HAVE_INT64
   // improved MUM:
-  { mirhash_test,         64, MIR_VERIF,    "mirhash",            "mirhash", GOOD, {0x0} /* !! */ },
+  { mirhash_test,         64, MIR_VERIF,    "mirhash",            "mirhash", GOOD,
+    {0x0, 0x5e74c778, 0xa521f17b, 0xe0ab70e3} /* !! */ },
   { mirhash32low,         32, MIRLOW_VERIF, "mirhash32low",       "mirhash - lower 32bit", POOR,
     {0x0, 0x5e74c778, 0xa521f17b, 0xe0ab70e3 } /* !! */ },
-  { mirhashstrict_test,   64, 0x422A66FC,   "mirhashstrict",      "mirhashstrict (portable, 64-bit, little-endian)", GOOD, {0x7fcc747f}/*?*/ },
+  { mirhashstrict_test,   64, 0x422A66FC,   "mirhashstrict",      "mirhashstrict (portable, 64-bit, little-endian)", GOOD, {} /* tested ok */ },
   { mirhashstrict32low,   32, 0xD50D1F09,   "mirhashstrict32low", "mirhashstrict - lower 32bit", POOR,
     {0x7fcc747f} /* !! */ },
 #endif
