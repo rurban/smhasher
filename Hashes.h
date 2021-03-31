@@ -74,6 +74,8 @@ static inline bool crc64c_hw_bad_seeds(std::vector<uint64_t> &seeds)
   return true;
 }
 void crc64c_hw_test(const void *key, int len, uint32_t seed, void *out);
+void CityHashCrc64_test(const void *key, int len, uint32_t seed, void *out);
+void CityHashCrc128_test(const void *key, int len, uint32_t seed, void *out);
 #endif
 #if defined(HAVE_CLMUL) && !defined(_MSC_VER)
 /* Function from linux kernel 3.14. It computes the CRC over the given
@@ -115,8 +117,6 @@ inline void crc32c_pclmul_test(const void *key, int len, uint32_t seed, void *ou
   *(uint32_t *) out = crc32_pclmul_le_16((unsigned char const *)key, (size_t)len, seed);
 #endif
 }
-void CityHashCrc64_test(const void *key, int len, uint32_t seed, void *out);
-void CityHashCrc128_test(const void *key, int len, uint32_t seed, void *out);
 void falkhash_test_cxx(const void *key, int len, uint32_t seed, void *out);
 #endif
 size_t fibonacci(const char *key, int len, uint32_t seed);
