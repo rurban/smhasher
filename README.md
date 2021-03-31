@@ -89,6 +89,7 @@ SMhasher
 | [Murmur3A](doc/Murmur3A.txt)                  |      2413.88 |    53.36 | 182.37 (3) | 351 | UB, Moment Chi2 69             |
 | [PMurHash32](doc/PMurHash32.txt)              |      2344.78 |    58.48 | 196.43 (4) |1862 | Moment Chi2 69             |
 | [Murmur3C](doc/Murmur3C.txt)                  |      3197.63 |    67.90 | 198.00 (2) | 859 | UB, LongNeighbors, Text, DiffDist  |
+| [mirhash32low](doc/mirhash32low.txt)          |      5412.76 |    39.79 | 182.13 (3) |1112 | UB, 4 bad seeds!, Cyclic, LongNeighbors, machine-specific (32/64 differs) |
 | [PMPML_32](doc/PMPML_32.txt)                  |      6704.53 |    53.50 | 197.43 (4) |1084 | Avalanche >512, unseeded: Seed, BIC, MomentChi2, PerlinNoise |
 | [PMPML_64](doc/PMPML_64.txt)                  |      8161.19 |    53.20 | 179.16 (2) |1305 | unseeded: Seed, MomentChi2, BIC        |
 | [xxHash32](doc/xxHash32.txt)                  |      6040.87 |    51.77 | 177.91 (4) | 738 | LongNeighbors, collisions with 4bit diff, MomentChi2 220 |
@@ -137,7 +138,6 @@ SMhasher
 | [MUM](doc/MUM.txt)                            |      7134.56 |    37.85 | 172.34 (1) |1912 | UB, bad seed 0, machine-specific (32/64 differs) |
 | [MUMlow](doc/MUMlow.txt)                      |      7225.18 |    37.85 | 197.92 (3) |1912 | UB                         |
 | [mirhash](doc/mirhash.txt)                    |      5413.73 |    39.68 | 154.47 (3) |1112 | UB, bad seed 0, LongNeighbors, machine-specific (32/64 differs) |
-| [mirhash32low](doc/mirhash32low.txt)          |      5412.76 |    39.79 | 182.13 (3) |1112 | UB, bad seed 0, Cyclic, LongNeighbors, machine-specific (32/64 differs) |
 | [mirhashstrict](doc/mirhashstrict.txt)        |      2217.32 |    65.53 | 182.07 (2) |1112 |                            |
 | [mirhashstrict32low](doc/mirhashstrict32low.txt)|    2218.87 |    65.48 | 190.59 (4) |1112 | MomentChi2 9               |
 | [mx3](doc/mx3.txt)                            |      6146.02 |    52.48 | 173.09 (3) | 734 | UB                         |
