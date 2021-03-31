@@ -159,6 +159,7 @@ HashInfo g_hashes[] =
 #ifdef __SSE2__
   { hasshe2_test,        256, 0xF5D39DFE, "hasshe2",     "SSE2 hasshe2, 256-bit", POOR, {} },
 #endif
+// too fragile
 #ifdef __SIZEOF_INT128__
 #ifdef __FreeBSD__
 #  define POLY1_VERIF   0xFECCC371
@@ -166,25 +167,39 @@ HashInfo g_hashes[] =
 #  define POLY3_VERIF   0x26F7EDA0
 #  define POLY4_VERIF   0x8EE270BD
 #  define TABUL_VERIF   0x0534C36E
-#else
+#elif defined __apple_build_version__ && defined __clang__
+#  define POLY1_VERIF   0xE389931F
+#  define POLY2_VERIF   0x458D056D
+#  define POLY3_VERIF   0x208145CC
+#  define POLY4_VERIF   0xE798712E
+#  define TABUL_VERIF   0x91618263
+#elif defined DEBUG
 #  define POLY1_VERIF   0x9E4BA93D
 #  define POLY2_VERIF   0x5CB4CB25
 #  define POLY3_VERIF   0x3C87C852
 #  define POLY4_VERIF   0xFF88BAF6
 #  define TABUL_VERIF   0xB49C607C
+#else
+#  define POLY1_VERIF   0x64706572
+#  define POLY2_VERIF   0xE8906EDF
+#  define POLY3_VERIF   0xF2A7E178
+#  define POLY4_VERIF   0xD4E89421
+#  define TABUL_VERIF   0xB49C607C
 #endif
   // Thomas Dybdahl Ahle, Jakob Tejs Bæk Knudsen, and Mikkel Thorup
   // "The Power of Hashing with Mersenne Primes".
-  { poly_1_mersenne,      32, POLY1_VERIF, "poly_1_mersenne", "Degree 1 Hashing mod 2^61-1", POOR, {} },
-  { poly_2_mersenne,      32, POLY2_VERIF, "poly_2_mersenne", "Degree 2 Hashing mod 2^61-1", GOOD, {} },
-  { poly_3_mersenne,      32, POLY3_VERIF, "poly_3_mersenne", "Degree 3 Hashing mod 2^61-1", GOOD, {} },
-  { poly_4_mersenne,      32, POLY4_VERIF, "poly_4_mersenne", "Degree 4 Hashing mod 2^61-1", GOOD, {} },
+  { poly_1_mersenne,      32, 0, "poly_1_mersenne", "Degree 1 Hashing mod 2^61-1", POOR, {} },
+  { poly_2_mersenne,      32, 0, "poly_2_mersenne", "Degree 2 Hashing mod 2^61-1", GOOD, {} },
+  { poly_3_mersenne,      32, 0, "poly_3_mersenne", "Degree 3 Hashing mod 2^61-1", GOOD, {} },
+  { poly_4_mersenne,      32, 0, "poly_4_mersenne", "Degree 4 Hashing mod 2^61-1", GOOD, {} },
   { tabulation_test,      64, TABUL_VERIF, "tabulation",      "64-bit Tabulation with Multiply-Shift Mixer", GOOD, {} },
 #endif
 #if defined(_MSC_VER) /* truncated long to 32 */
 #  define TABUL32_VERIF   0x3C3B7BDD
 #elif defined __FreeBSD__
 #  define TABUL32_VERIF   0x4D28A619
+#elif defined __apple_build_version__ && defined __clang__
+#  define TABUL32_VERIF   0x2C8EDFFE
 #else
 #  define TABUL32_VERIF   0x335F64EA
 #endif
