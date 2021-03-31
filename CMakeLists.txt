@@ -60,7 +60,7 @@ elseif ((CMAKE_SYSTEM_PROCESSOR STREQUAL "arm")
 endif()
 
 # TODO: rather parse `$CC -march=native -dM -E - <<< ''` [GH #10]
-if(NOT (CMAKE_CROSSCOMPILING))
+if(NOT CMAKE_CROSSCOMPILING)
   if(CMAKE_SYSTEM_NAME MATCHES "Linux")
     exec_program(
       cat ARGS
@@ -171,7 +171,7 @@ if(NOT (CMAKE_CROSSCOMPILING))
       endif()
     endif()
   endif()
-endif()
+endif(NOT CMAKE_CROSSCOMPILING)
 
 if(PROCESSOR_FAMILY STREQUAL "Intel")
  if(CMAKE_COMPILER_IS_GNUCC)
@@ -227,7 +227,7 @@ if(CMAKE_COMPILER_IS_GNUCC
   # "${CMAKE_CXX_FLAGS} -maes") ENDIF (AES_TRUE) IF (SHA_TRUE) set(CMAKE_C_FLAGS
   # "${CMAKE_C_FLAGS} -msha") set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msha")
   # ENDIF (SHA_TRUE)
-  if(NOT (CMAKE_CROSSCOMPILING))
+  if(NOT CMAKE_CROSSCOMPILING)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -march=native")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
   endif()
@@ -322,6 +322,13 @@ else(AVX512VL_TRUE)
   message(STATUS "AVX512VL not available")
 endif(AVX512VL_TRUE)
 
+if(CMAKE_CROSSCOMPILING)
+  set(SSE2_FOUND false)
+  set(SSE4_2_FOUND false)
+  set(AES_FOUND false)
+  set(SHA_FOUND false)
+endif(CMAKE_CROSSCOMPILING)
+
 if(HAVE___UINT128_T)
   add_definitions(-DHAVE_INT128)
 endif()
@@ -392,7 +399,7 @@ int main(int argc, char **argv)
 else()
   add_definitions(-DHAVE_ALIGNED_ACCESS_REQUIRED)
   message(STATUS "Assuming aligned access is required, as on arm with -maligned-access or sparc")
-endif()
+endif(NOT CMAKE_CROSSCOMPILING)
 
 if(AES_FOUND AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
   set(SSE4_OBJ ${FALKHASH_OBJ})
@@ -447,15 +454,17 @@ if(AES_FOUND AND (PROCESSOR_FAMILY STREQUAL "Intel"))
   endif()
 else()
   set(T1HA_SRC t1ha/t1ha0.c t1ha/t1ha1.c t1ha/t1ha2.c)
-endif()
+endif(AES_FOUND AND (PROCESSOR_FAMILY STREQUAL "Intel"))
+
 if(CLMUL_FOUND)
   add_definitions(-DHAVE_CLMUL)
-endif()
+endif(CLMUL_FOUND)
 if(SHA_FOUND)
   add_definitions(-DHAVE_SHANI)
   # todo: arm, power
   set(SHA_SRC SHA-Intrinsics/sha1-x86.c SHA-Intrinsics/sha256-x86.c)
-endif()
+endif(SHA_FOUND)
+
 
 if(NOT MSVC)
   set(NOTMSVC_SRC seahash.c)
