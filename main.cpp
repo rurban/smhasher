@@ -409,8 +409,9 @@ HashInfo g_hashes[] =
   { mirhash_test,         64, MIR_VERIF,    "mirhash",            "mirhash", GOOD, {0x0} /* !! */ },
   { mirhash32low,         32, MIRLOW_VERIF, "mirhash32low",       "mirhash - lower 32bit", POOR,
     {0x0, 0x5e74c778, 0xa521f17b, 0xe0ab70e3 } /* !! */ },
-  { mirhashstrict_test,   64, 0x422A66FC,   "mirhashstrict",      "mirhashstrict (portable, 64-bit, little-endian)", GOOD, {} },
-  { mirhashstrict32low,   32, 0xD50D1F09,   "mirhashstrict32low", "mirhashstrict - lower 32bit", POOR, {} },
+  { mirhashstrict_test,   64, 0x422A66FC,   "mirhashstrict",      "mirhashstrict (portable, 64-bit, little-endian)", GOOD, {0x7fcc747f}/*?*/ },
+  { mirhashstrict32low,   32, 0xD50D1F09,   "mirhashstrict32low", "mirhashstrict - lower 32bit", POOR,
+    {0x7fcc747f} /* !! */ },
 #endif
   { CityHash64_low_test,  32, 0xCC5BC861, "City64low",   "Google CityHash64WithSeed (low 32-bits)", GOOD, {} },
 #if defined(__SSE4_2__) && defined(__x86_64__)
