@@ -544,7 +544,7 @@ void halftime_hash_style256_test(const void *key, int len, uint32_t seed, void *
 // 457a60 - 45883e: 3550 (without AVX512 on Ryzen3)
 void halftime_hash_style512_test(const void *key, int len, uint32_t seed, void *out);
 void halftime_hash_init();
-void halftime_hash_seed_init(uint64_t &seed);
+void halftime_hash_seed_init(size_t &seed);
 
 #ifdef __SIZEOF_INT128__
    void multiply_shift_init();

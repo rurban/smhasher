@@ -791,7 +791,7 @@ void halftime_hash_style512_test(const void *key, int len, uint32_t seed, void *
 }
 
 void halftime_hash_init() {
-  uint64_t seed = 0xcc70c4c1798e4a6fULL;
+  size_t seed = 0xcc70c4c1798e4a6fULL; // 64bit only
   halftime_hash_seed_init(seed);
 }
 
@@ -818,7 +818,7 @@ void romuQuad32simd(const __m512i seeds[4], uint64_t *output, size_t count) {
   }
 }
 
-void halftime_hash_seed_init(uint64_t &seed) {
+void halftime_hash_seed_init(size_t &seed) {
   __m512i seeds[4] = {
       {
           (long long)seed ^ (long long)0x9a9b4c4e44dd48d1,
@@ -867,7 +867,7 @@ void halftime_hash_seed_init(uint64_t &seed) {
 
 #else
 
-void halftime_hash_seed_init(uint64_t &seed)
+void halftime_hash_seed_init(size_t &seed)
 {
 #define ROTL(d,lrot) ((d<<(lrot)) | (d>>(8*sizeof(d)-(lrot))))
   uint64_t wState = seed, xState= 0xecfc1357d65941ae, yState=0xbe1927f97b8c43f1,
