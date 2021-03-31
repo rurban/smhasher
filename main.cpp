@@ -1815,12 +1815,15 @@ int main ( int argc, const char ** argv )
         char *rest = opt;
         char *p;
         bool found = false;
+        bool need_opt_free = false;
         g_testAll = false;
         do {
           if ((p = strchr(rest, ','))) {
             opt = strndup(rest, p-rest);
+            need_opt_free = true;
             rest = p+1;
           } else {
+            need_opt_free = false;
             opt = rest;
           }
           for (size_t i = 0; i < sizeof(g_testopts) / sizeof(TestOpts); i++) {
@@ -1835,8 +1838,12 @@ int main ( int argc, const char ** argv )
               printf(",%s", g_testopts[i].name);
             }
             printf(" \n");
+            if (need_opt_free)
+              free(opt);
             exit(1);
           }
+          if (need_opt_free)
+            free(opt);
         } while (p);
         continue;
       }
