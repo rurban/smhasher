@@ -16,7 +16,6 @@ jobs:
       with:
         fetch-depth: 1
         submodules: recursive
-    #- uses: snickerbockers/submodules-init@v4
     - run: cmake ${{ matrix.CMAKE_ARGS }} .
     - run: make -j4 VERBOSE=1
     - if: ${{ ! contains(matrix.CMAKE_ARGS, 'CMAKE_BUILD_TYPE') }}
@@ -96,7 +95,7 @@ jobs:
         submodules: recursive
     - shell: msys2 {0}
       run: cmake .
-    - shell: msys2 {0}
-      run: make -j4 VERBOSE=1
-    - shell: msys2 {0}
-      run: make -j4 test ARGS=-V
+    #- shell: msys2 {0}
+    #  run: make -j4 VERBOSE=1
+    #- shell: msys2 {0}
+    #  run: make -j4 test ARGS=-V
