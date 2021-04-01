@@ -103,14 +103,16 @@ bool TestSecret ( const HashInfo* info, const uint64_t secret ) {
       if (h == 0 && c == 0) {
         printf("Broken seed 0x%" PRIx64 " => 0 with key[%d] of all %d bytes confirmed => hash 0\n",
                secret, len, c);
+        hashes.push_back(h);
         result = false;
       }
       else
         hashes.push_back(h);
     }
     if (!TestHashList(hashes, false, true, false, false, false, false)) {
-      printf(" Bad seed 0x%" PRIx64 " for len %d confirmed => hash ", secret, len);
+      printf(" Bad seed 0x%" PRIx64 " for len %d confirmed ", secret, len);
 #if !defined __clang__ && !defined _MSC_VER
+      printf("=> hashes: ");
       for (hashtype x : hashes) printf ("%lx ", x);
 #endif
       printf ("\n");
@@ -121,33 +123,36 @@ bool TestSecret ( const HashInfo* info, const uint64_t secret ) {
   return result;
 }
 
-// Test the full 2^32 range [secret + 0, secret + 0xffffffff], the hi part
+// Test the full 2^32 range [hi + 0, hi + 0xffffffff], the hi part
 template< typename hashtype >
-bool TestSecret32 ( const HashInfo* info, const uint64_t secret ) {
+bool TestSecret32 ( const HashInfo* info, const uint64_t hi ) {
   bool result = true;
   pfHash hash = info->hash;
+  std::vector<hashtype> hashes;
+  hashes.resize(4);
   for (size_t y=0; y < 0xffffffff; y++) {
-    std::vector<hashtype> hashes;
     static hashtype zero;
-    uint64_t z = secret | y;
+    uint64_t seed = hi | y;
     if ((y & 0x1ffffff) == 0x1ffffff)
-      printf("0x%" PRIx64 " ", z);
-    Hash_Seed_init (hash, z);
+      printf("0x%" PRIx64 " ", seed);
+    hashes.clear();
+    Hash_Seed_init (hash, seed);
     for (int x : std::vector<int> {0,32,127,255}) {
       hashtype h;
       uint8_t key[16];
       memset(&key, x, sizeof(key));
-      hash(key, 16, z, &h);
+      hash(key, 16, seed, &h);
       if (h == 0 && x == 0) {
-        printf("Broken seed 0x%" PRIx64 " => 0 with key[16] of all %d bytes\n", z, x);
+        printf("Broken seed 0x%" PRIx64 " => 0 with key[16] of all %d bytes\n", seed, x);
+        hashes.push_back(h);
         result = false;
       }
       else {
         hashes.push_back(h);
       }
     }
-    if (!TestHashList(hashes,false, true, false, false, false, false)) {
-      printf("Bad seed 0x%" PRIx64 "\n", y);
+    if (!TestHashList(hashes, false, true, false, false, false, false)) {
+      printf("Bad seed 0x%" PRIx64 "\n", seed);
       TestHashList(hashes, false);
       result = false;
     }
@@ -183,10 +188,10 @@ bool BadSeedsTest ( HashInfo* info, bool testAll ) {
   if (getenv("SEED")) {
     const char *s = getenv("SEED");
     size_t seed = strtol(s, NULL, 0);
-    printf("Testing SEED=0x%" PRIx64 " ", seed);
+    printf("\nTesting SEED=0x%" PRIx64 " ", seed);
     //if (*s && s[1] && *s == '0' && s[1] == 'x')
     //  seed = strtol(&s[2], NULL, 16);
-    if (seed)
+    if (seed || secrets.size())
       result &= TestSecret<hashtype>(info, seed);
   }
   if (result)
@@ -196,15 +201,16 @@ bool BadSeedsTest ( HashInfo* info, bool testAll ) {
 
   // many days with >= 64 bit hashes
   printf("Testing the first 0xffffffff seeds ...\n");
-  result &= TestSecret32<hashtype>(info, UINT64_C(0x0));
+  //eesult &= TestSecret32<hashtype>(info, UINT64_C(0x0));
 #ifdef HAVE_INT64
   if (sizeof(hashtype) > 4) { // and the upper half 32bit range
     if (have_lower) {
       for (auto secret : secrets) {
         if (secret <= 0xffffffff) {
           uint32_t s32 = (uint32_t)(secret & 0xffffffff);
-          uint64_t s = secret << 32;
-          printf("Suspect the 0x%" PRIx32 "00000000 seeds ...\n", s32);
+          uint64_t s = secret;
+          s = s << 32;
+          printf("Suspect the 0x%" PRIx64 " seeds ...\n", s);
           result &= TestSecret32<hashtype>(info, s);
         }
       }

@@ -648,6 +648,7 @@ add_library(
   rijndael-alg-fst.c
   ${BLAKE3_SRC}
   pengyhash.c
+  # wyhash_condom.c
   ${UMASH_SRC})
 
 add_executable(SMHasher main.cpp)

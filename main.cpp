@@ -492,21 +492,23 @@ HashInfo g_hashes[] =
      0xaf56bc3b0996523a,     // bitflip2 ^ input[last 8]
     }},
   { xxh3low_test,         32, 0xFAE8467B, "xxh3low",     "xxHash v3, 64-bit, low 32-bits part", GOOD,
-    {0xbe4ba423396cfeb8, 0x396cfeb8, 0xbe4ba423, 0x6782737bea4239b9, 0xaf56bc3b0996523a }},
+    {0xbe4ba423396cfeb8, 0x396cfeb8, 0xbe4ba423, 0x6782737bea4239b9ULL, 0xaf56bc3b0996523aULL }},
   { xxh128_test,         128, 0xEB61B3A0, "xxh128",      "xxHash v3, 128-bit", GOOD,
-    {0xbe4ba423396cfeb8, 0x396cfeb8, 0xbe4ba423, 0x6782737bea4239b9, 0xaf56bc3b0996523a }},
+    {0xbe4ba423396cfeb8, 0x396cfeb8, 0xbe4ba423, 0x6782737bea4239b9ULL, 0xaf56bc3b0996523aULL }},
   { xxh128low_test,       64, 0x54D1CC70, "xxh128low",   "xxHash v3, 128-bit, low 64-bits part", GOOD,
-    {0xbe4ba423396cfeb8, 0x396cfeb8, 0xbe4ba423, 0x6782737bea4239b9, 0xaf56bc3b0996523a }},
+    {0xbe4ba423396cfeb8, 0x396cfeb8, 0xbe4ba423, 0x6782737bea4239b9ULL, 0xaf56bc3b0996523aULL }},
 #ifdef HAVE_BIT32
-  { wyhash32_test,        32, 0x09DE8066, "wyhash32",       "wyhash (32-bit)", GOOD,
-    { 0x1bc1d52e, 0x1cbc261d, 0x33a0d1d9, 0x429dacdd, 0xd637dbf3 } /* !! */ },
+  { wyhash32_test,        32, 0x09DE8066, "wyhash32",       "wyhash v3 (32-bit native)", GOOD,
+    { /*0x1bc1d52e, 0x1cbc261d, 0x33a0d1d9,*/ 0x429dacdd, 0xd637dbf3 } /* !! last 2 */ },
 #else
-  { wyhash32low,          32, 0x9241B8A3, "wyhash32low",    "wyhash lower 32bit", GOOD,
-    { 0x1bc1d52e, 0x1cbc261d, 0x33a0d1d9, 0x429dacdd, 0xd637dbf3 } /* !! */ },
+  { wyhash32low,          32, 0x9241B8A3, "wyhash32low",    "wyhash v3 lower 32bit", GOOD,
+    { 0x429dacdd, 0xd637dbf3 } /* !! */ },
 #endif
 #ifdef HAVE_INT64
-  { wyhash_test,          64, 0x7C62138D, "wyhash",         "wyhash (64-bit)", GOOD,
-    { 0xa0761d6478bd642fULL, 0xe7037ed1a0b428dbULL } },
+  { wyhash_test,          64, 0x7C62138D, "wyhash",         "wyhash v3 (64-bit)", GOOD,
+    // all seeds with those lower bits
+    { 0x14cc886e, 0x1bf4ed84, 0x14cc886e14cc886eULL} /* !! */ },
+  //{ wyhash_condom_test,   64, 0x7C62138D, "wyhash_condom",  "wyhash v3 condom 2 (64-bit)", GOOD, { } },
 #endif
 
 };
