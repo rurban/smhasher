@@ -501,11 +501,11 @@ HashInfo g_hashes[] =
   { wyhash32_test,        32, 0x09DE8066, "wyhash32",       "wyhash v3 (32-bit native)", GOOD,
     { /*0x1bc1d52e, 0x1cbc261d, 0x33a0d1d9,*/ 0x429dacdd, 0xd637dbf3 } /* !! last 2 */ },
 #else
-  { wyhash32low,          32, 0x9241B8A3, "wyhash32low",    "wyhash v3 lower 32bit", GOOD,
+  { wyhash32low,          32, 0x7DB3559D, "wyhash32low",    "wyhash v3 lower 32bit", GOOD,
     { 0x429dacdd, 0xd637dbf3 } /* !! */ },
 #endif
 #ifdef HAVE_INT64
-  { wyhash_test,          64, 0x7C62138D, "wyhash",         "wyhash v3 (64-bit)", GOOD,
+  { wyhash_test,          64, 0x67031D43, "wyhash",         "wyhash v3 (64-bit)", GOOD,
     // all seeds with those lower bits
     { 0x14cc886e, 0x1bf4ed84, 0x14cc886e14cc886eULL} /* !! */ },
   //{ wyhash_condom_test,   64, 0x7C62138D, "wyhash_condom",  "wyhash v3 condom 2 (64-bit)", GOOD, { } },

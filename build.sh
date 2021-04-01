@@ -8,7 +8,7 @@ cd build
 case `uname -s` in
 #Darwin)  CXX=clang++-mp-devel  CC=clang-mp-devel cmake .. ;;
 #Darwin)  CXX=g++-mp-6  CC=gcc-mp-6 cmake .. ;;
-Darwin)  cmake .. ;;
+Darwin)  CXXFLAGS='-std=c++14' cmake .. ;;
 FreeBSD) CXX=clang++ CC=clang cmake .. ;;
 Linux)   CXX=g++ CC=gcc cmake .. ;;
 *)       CXX=clang++-4.0  CC=clang-4.0 cmake ..   ;;
