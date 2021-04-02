@@ -43,6 +43,8 @@ SMhasher
 | [blake2b-224](doc/blake2b-224.txt)            |       356.59 |  1228.50 |1425.87 (16)|     |               |
 | [blake2b-256](doc/blake2b-256.txt)            |       355.97 |  1232.22 |1443.31 (19)|     | Sparse high 32-bit |
 | [blake2b-256_64](doc/blake2b-256_64.txt)      |       356.97 |  1222.76 |1435.03 (9) |     |               |
+| [asconhashv12](doc/asconhashv12.txt)          |       144.98 |   885.02 |1324.23 (38)|4341 |               |
+| [asconhashv12_64](doc/asconhashv12_64.txt)    |        86.73 |   684.02 | 606.93 (6) |6490 |               |
 | [sha3-256](doc/sha3-256.txt)                  |       100.58 |  3877.18 |4159.79 (37)|     | PerlinNoise   |
 | [sha3-256_64](doc/sha3-256_64.txt)            |       100.57 |  3909.00 |4174.63 (16)|     | PerlinNoise   |
 | [hasshe2](doc/hasshe2.txt)                    |      2372.52 |    68.64 | 216.74 (5) | 445 | Permutation,TwoBytes,Zeroes,Seed|

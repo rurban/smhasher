@@ -546,6 +546,11 @@ if(SSE4_2_FOUND
   set(UMASH_SRC umash.c umash.hpp)
 endif()
 
+set(ASCON_SRC asconhashv12/hash.c)
+set_source_files_properties(
+    ${ASCON_SRC}
+    PROPERTIES COMPILE_FLAGS "-Iasconhashv12 -DASCON_INLINE_MODE")
+
 if(NOT (CMAKE_BUILD_TYPE STREQUAL "Debug"))
   # PMP breaks Debug build
   if(NOT (CMAKE_BUILD_TYPE STREQUAL "asan"))
@@ -649,6 +654,7 @@ add_library(
   ${BLAKE3_SRC}
   pengyhash.c
   # wyhash_condom.c
+  ${ASCON_SRC}
   ${UMASH_SRC})
 
 add_executable(SMHasher main.cpp)

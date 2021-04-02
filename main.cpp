@@ -153,6 +153,10 @@ HashInfo g_hashes[] =
   { blake2b224_test,     224, 0x0D95F0AE, "blake2b-224",  "blake2b-224", GOOD, {} },
   { blake2b256_test,     256, 0xC0B0AD0C, "blake2b-256",  "blake2b-256", POOR, {} },
   { blake2b256_64,        64, 0x3C59D62D, "blake2b-256_64","blake2b-256, low 64 bits", GOOD, {} },
+  { asconhashv12_256,    256, 0xA969C160, "asconhashv12", "asconhashv12 256bit", GOOD,
+    { 0xee9398aadb67f03dULL } },
+  { asconhashv12_64,      64, 0xE7DEF300, "asconhashv12_64", "asconhashv12, low 64 bits", GOOD,
+    { 0xee9398aadb67f03dULL } },
   { sha3_256,            256, 0xB85F6DD9, "sha3-256",     "SHA3-256 (Keccak)", GOOD, {0x1UL} },
   { sha3_256_64,          64, 0x86EC71EF, "sha3-256_64",  "SHA3-256 (Keccak), low 64 bits", GOOD, {0x1UL} },
 
