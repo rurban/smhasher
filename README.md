@@ -369,7 +369,7 @@ PROBLEMS
   
   Special care needs to be taken for crc, most FNV1 variants, fletcher,
   Jenkins. And with GOOD hashes all MUM variants, like mirhash, MUM,
-  wyhash32.
+  wyhash.
 
   Independently from this, when the attacker knows the seed it will lead
   to DDOS attacks. Even with crypto hashes in power2 hashtables.
