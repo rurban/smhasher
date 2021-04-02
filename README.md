@@ -91,7 +91,7 @@ SMhasher
 | [Murmur3A](doc/Murmur3A.txt)                  |      2413.88 |    53.36 | 182.37 (3) | 351 | UB, Moment Chi2 69             |
 | [PMurHash32](doc/PMurHash32.txt)              |      2344.78 |    58.48 | 196.43 (4) |1862 | Moment Chi2 69             |
 | [Murmur3C](doc/Murmur3C.txt)                  |      3197.63 |    67.90 | 198.00 (2) | 859 | UB, LongNeighbors, Text, DiffDist  |
-| [mirhash32low](doc/mirhash32low.txt)          |      5412.76 |    39.79 | 182.13 (3) |1112 | UB, 4 bad seeds!, Cyclic, LongNeighbors, machine-specific (32/64 differs) |
+| [mirhash32low](doc/mirhash32low.txt)          |      5412.76 |    39.79 | 182.13 (3) |1112 | UB, 4 bad seeds, Cyclic, LongNeighbors, machine-specific (32/64 differs) |
 | [PMPML_32](doc/PMPML_32.txt)                  |      6704.53 |    53.50 | 197.43 (4) |1084 | Avalanche >512, unseeded: Seed, BIC, MomentChi2, PerlinNoise |
 | [PMPML_64](doc/PMPML_64.txt)                  |      8161.19 |    53.20 | 179.16 (2) |1305 | unseeded: Seed, MomentChi2, BIC        |
 | [xxHash32](doc/xxHash32.txt)                  |      6040.87 |    51.77 | 177.91 (4) | 738 | LongNeighbors, collisions with 4bit diff, MomentChi2 220 |
@@ -139,7 +139,7 @@ SMhasher
 | [fasthash64](doc/fasthash64.txt)              |      4737.21 |    42.79 | 164.87 (2) | 509 | UB, Moment Chi2 5159 !     |
 | [MUM](doc/MUM.txt)                            |      7134.56 |    37.85 | 172.34 (1) |1912 | UB, bad seed 0, machine-specific (32/64 differs) |
 | [MUMlow](doc/MUMlow.txt)                      |      7225.18 |    37.85 | 197.92 (3) |1912 | UB                         |
-| [mirhash](doc/mirhash.txt)                    |      5413.73 |    39.68 | 154.47 (3) |1112 | UB, bad seeds, LongNeighbors, machine-specific (32/64 differs) |
+| [mirhash](doc/mirhash.txt)                    |      5413.73 |    39.68 | 154.47 (3) |1112 | UB, 2^36 bad seeds, LongNeighbors, machine-specific (32/64 differs) |
 | [mirhashstrict](doc/mirhashstrict.txt)        |      2217.32 |    65.53 | 182.07 (2) |1112 |                            |
 | [mirhashstrict32low](doc/mirhashstrict32low.txt)|    2218.87 |    65.48 | 190.59 (4) |1112 | 1 bad seed, MomentChi2 9   |
 | [mx3](doc/mx3.txt)                            |      6146.02 |    52.48 | 173.09 (3) | 734 | UB                         |
@@ -177,7 +177,7 @@ SMhasher
 | [t1ha0_aes_avx2](doc/t1ha0_aes_avx2.txt)      |     22345.33 |    44.38 | 556.47 (89)| 792 | LongNeighbors, machine-specific (x64 AVX2)   |
 | [wyhash32](doc/wyhash32.txt)                  |      2532.89 |    48.40 | 484.57 (1) | 426 | 2 bad seeds, 32-bit           |
 | [wyhash32low](doc/wyhash32low.txt)            |     12911.09 |    29.59 | 205.43 (2) | 474 | 2 bad seeds                  |
-| [wyhash](doc/wyhash.txt)                      |     12879.00 |    30.35 | 196.77 (2) | 474 | bad seeds?                  |
+| [wyhash](doc/wyhash.txt)                      |     12879.00 |    30.35 | 196.77 (2) | 474 | 2^33 bad seeds               |
 | [umash32](doc/umash32.txt)                    |      4633.19 |    53.42 | 216.33 (3) |1530 |                            |
 | [umash32_hi](doc/umash32_hi.txt)              |      4662.92 |    54.22 | 214.20 (2) |1530 |                            |
 | [umash64](doc/umash64.txt)                    |      4662.09 |    53.42 | 188.09 (1) |1530 |                            |
