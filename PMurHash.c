@@ -128,6 +128,9 @@ on big endian machines, or a byte-by-byte read if the endianess is unknown.
   /* Since we're not doing word-reads we can skip the messing about with realignment */
   #define UNALIGNED_SAFE
 #endif
+#ifdef HAVE_ALIGNED_ACCESS_REQUIRED
+#undef UNALIGNED_SAFE
+#endif
 
 /* Find best way to ROTL32 */
 #if defined(_MSC_VER)
@@ -327,9 +330,15 @@ int main() {
   //file PMurHash.c line 201 function PMurHash32_Process
   //dereference failure: object bounds
   //!(POINTER_OFFSET(ptr) < 0) && OBJECT_SIZE(ptr) >= 1 + POINTER_OFFSET(ptr) || DYNAMIC_OBJECT(ptr)
-
+#ifdef CBMC
+  #include <assert.h>
+  uint32_t seed = nondet_uint();
+  long long key = nondet_longlong();
+  assert(PMurHash32(seed, &key, sizeof(key)) != 0);
+#else
   uint32_t seed = 308736;
   unsigned long long key = 0x80fffffffffffd67ULL;
   PMurHash32(seed, &key, sizeof(key));
+#endif
 }
 #endif

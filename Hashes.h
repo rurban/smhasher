@@ -307,6 +307,11 @@ inline void MurmurHash64A_test ( const void * key, int len, uint32_t seed, void 
 }
 #endif
 #ifdef HAVE_INT64
+// 2^32 bad seeds for Murmur2C
+static void MurmurHash64B_seed_init(size_t &seed) {
+  if ((seed & UINT64_C(0x00000010)) == UINT64_C(0x00000010))
+    seed++;
+}
 inline void MurmurHash64B_test ( const void * key, int len, uint32_t seed, void * out )
 {
   *(uint64_t*)out = MurmurHash64B(key,len,seed);

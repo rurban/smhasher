@@ -82,15 +82,15 @@ SMhasher
 | [jodyhash64](doc/jodyhash64.txt)              |      2848.42 |    29.99 | 164.36 (1) | 118 | bias, collisions, distr, BIC, LongNeighbors |
 | [lookup3](doc/lookup3.txt)                    |      1658.31 |    48.84 | 194.15 (2) | 341 | UB, 28% bias, collisions, 30% distr, BIC  |
 | [superfast](doc/superfast.txt)                |      1956.25 |    53.61 | 180.10 (3) | 210 | UB, bad seed 0, 91% bias, 5273.01x collisions, 37% distr, BIC |
-| [MurmurOAAT](doc/MurmurOAAT.txt)              |       452.49 |   113.07 | 197.83 (2) |  47 | collisions, 99.998% distr., BIC, LongNeighbors |
+| [MurmurOAAT](doc/MurmurOAAT.txt)              |       452.49 |   113.07 | 197.83 (2) |  47 | bad seed 0, collisions, 99.998% distr., BIC, LongNeighbors |
 | [Crap8](doc/Crap8.txt)                        |      3149.63 |    36.23 | 195.11 (1) | 342 | UB, 2.42% bias, collisions, 2% distrib |
 | [Murmur1](doc/Murmur1.txt)                    |      1804.67 |    51.51 | 188.41 (1) | 358 | UB, 1 bad seed, 511x collisions, Diff, BIC |
 | [Murmur2](doc/Murmur2.txt)                    |      3146.91 |    41.87 | 187.89 (2) | 358 | UB, 1 bad seed, 1.7% bias, 81x coll, 1.7% distrib, BIC |
-| [Murmur2A](doc/Murmur2A.txt)                  |      3146.79 |    46.87 | 191.96 (4) | 407 | UB, 12.7% bias, LongNeighbors          |
+| [Murmur2A](doc/Murmur2A.txt)                  |      3146.79 |    46.87 | 191.96 (4) | 407 | UB, 1 bad seed, 12.7% bias, LongNeighbors          |
 | [Murmur2B](doc/Murmur2B.txt)                  |      4882.95 |    39.72 | 149.43 (2) | 433 | UB, 1.8% bias, collisions, 3.4% distrib, BIC |
-| [Murmur2C](doc/Murmur2C.txt)                  |      4092.99 |    51.84 | 164.65 (2) | 444 | UB, 91% bias, collisions, distr, BIC, LongNeighbors |
-| [Murmur3A](doc/Murmur3A.txt)                  |      2413.88 |    53.36 | 182.37 (3) | 351 | UB, Moment Chi2 69             |
-| [PMurHash32](doc/PMurHash32.txt)              |      2344.78 |    58.48 | 196.43 (4) |1862 | Moment Chi2 69             |
+| [Murmur2C](doc/Murmur2C.txt)                  |      4092.99 |    51.84 | 164.65 (2) | 444 | UB, 2^32 bad seeds, 91% bias, collisions, distr, BIC, LongNeighbors |
+| [Murmur3A](doc/Murmur3A.txt)                  |      2413.88 |    53.36 | 182.37 (3) | 351 | UB, 1 bad seed, Moment Chi2 69     |
+| [PMurHash32](doc/PMurHash32.txt)              |      2344.78 |    58.48 | 196.43 (4) |1862 | 1 bad seed, Moment Chi2 69         |
 | [Murmur3C](doc/Murmur3C.txt)                  |      3197.63 |    67.90 | 198.00 (2) | 859 | UB, LongNeighbors, Text, DiffDist  |
 | [mirhash32low](doc/mirhash32low.txt)          |      5412.76 |    39.79 | 182.13 (3) |1112 | UB, 4 bad seeds, Cyclic, LongNeighbors, machine-specific (32/64 differs) |
 | [PMPML_32](doc/PMPML_32.txt)                  |      6704.53 |    53.50 | 197.43 (4) |1084 | Avalanche >512, unseeded: Seed, BIC, MomentChi2, PerlinNoise |

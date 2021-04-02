@@ -279,21 +279,27 @@ HashInfo g_hashes[] =
   #define SFAST_VERIF 0xC4CB7C07
 #endif
   { SuperFastHash_test,   32, SFAST_VERIF,"superfast",   "Paul Hsieh's SuperFastHash", POOR, {0x0} /* !! */},
-  { MurmurOAAT_test,      32, 0x5363BD98, "MurmurOAAT",  "Murmur one-at-a-time", POOR, {0x5bd1e995} },
+  { MurmurOAAT_test,      32, 0x5363BD98, "MurmurOAAT",  "Murmur one-at-a-time", POOR,
+    {0x0, 0x5bd1e995} /* !! the 1st */ },
   { Crap8_test,           32, 0x743E97A1, "Crap8",       "Crap8", POOR, {0x83d2e73b, 0x97e1cc59} },
   { xxHash32_test,        32, 0xBA88B743, "xxHash32",    "xxHash, 32-bit for x86", POOR, {} },
   { MurmurHash1_test,     32, 0x9EA7D056, "Murmur1",     "MurmurHash1", POOR, {0xc6a4a793} /* !! */ },
   { MurmurHash2_test,     32, 0x27864C1E, "Murmur2",     "MurmurHash2 for x86, 32-bit", POOR,
-    {0x10, 0x5bd1e995} /* !! the 1st */ },
-  { MurmurHash2A_test,    32, 0x7FBD4396, "Murmur2A",    "MurmurHash2A for x86, 32-bit", POOR, {0x5bd1e995} },
+    {0x10} /* !! */ },
+  { MurmurHash2A_test,    32, 0x7FBD4396, "Murmur2A",    "MurmurHash2A for x86, 32-bit", POOR,
+    {0x2fc301c9} /* !! */ },
 #if __WORDSIZE >= 64
-  { MurmurHash64A_test,   64, 0x1F0D3804, "Murmur2B",    "MurmurHash64A for x64, 64-bit", POOR, {0xc6a4a7935bd1e995ULL} },
+  { MurmurHash64A_test,   64, 0x1F0D3804, "Murmur2B",    "MurmurHash64A for x64, 64-bit", POOR,
+    {0xc6a4a7935bd1e995ULL} },
 #endif
 #ifdef HAVE_INT64
-  { MurmurHash64B_test,   64, 0xDD537C05, "Murmur2C",    "MurmurHash64B for x86, 64-bit", POOR, {0x5bd1e995} },
+  { MurmurHash64B_test,   64, 0xDD537C05, "Murmur2C",    "MurmurHash64B for x86, 64-bit", POOR,
+    {0x10, 0xffffffff00000010 } /* !! *00000010 */ },
 #endif
-  { MurmurHash3_x86_32,   32, 0xB0F57EE3, "Murmur3A",    "MurmurHash3 for x86, 32-bit", POOR, {0xcc9e2d51} },
-  { PMurHash32_test,      32, 0xB0F57EE3, "PMurHash32",  "Shane Day's portable-ized MurmurHash3 for x86, 32-bit", POOR, {} },
+  { MurmurHash3_x86_32,   32, 0xB0F57EE3, "Murmur3A",    "MurmurHash3 for x86, 32-bit", POOR,
+    {0xfca58b2d} /* !! */},
+  { PMurHash32_test,      32, 0xB0F57EE3, "PMurHash32",  "Shane Day's portable-ized MurmurHash3 for x86, 32-bit", POOR,
+    {0xfca58b2d} /* !! */ }, // 0x4b600, 0xcc9e2d51
   { MurmurHash3_x86_128, 128, 0xB3ECE62A, "Murmur3C",    "MurmurHash3 for x86, 128-bit", POOR, {0x239b961b} },
 #if !defined(DEBUG) && !defined(CROSSCOMPILING) && !defined(__aarch64__)
 # ifndef HAVE_ASAN
