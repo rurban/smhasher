@@ -201,7 +201,7 @@ bool BadSeedsTest ( HashInfo* info, bool testAll ) {
 
   // many days with >= 64 bit hashes
   printf("Testing the first 0xffffffff seeds ...\n");
-  //eesult &= TestSecret32<hashtype>(info, UINT64_C(0x0));
+  result &= TestSecret32<hashtype>(info, UINT64_C(0x0));
 #ifdef HAVE_INT64
   if (sizeof(hashtype) > 4) { // and the upper half 32bit range
     if (have_lower) {
