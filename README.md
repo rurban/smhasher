@@ -84,7 +84,8 @@ SMhasher
 | [superfast](doc/superfast.txt)                |      1956.25 |    53.61 | 180.10 (3) | 210 | UB, bad seed 0, 91% bias, 5273.01x collisions, 37% distr, BIC |
 | [MurmurOAAT](doc/MurmurOAAT.txt)              |       452.49 |   113.07 | 197.83 (2) |  47 | collisions, 99.998% distr., BIC, LongNeighbors |
 | [Crap8](doc/Crap8.txt)                        |      3149.63 |    36.23 | 195.11 (1) | 342 | UB, 2.42% bias, collisions, 2% distrib |
-| [Murmur2](doc/Murmur2.txt)                    |      3146.91 |    41.87 | 187.89 (2) | 358 | UB, 1.7% bias, 81x coll, 1.7% distrib, BIC |
+| [Murmur1](doc/Murmur1.txt)                    |      1804.67 |    51.51 | 188.41 (1) | 358 | UB, 1 bad seed, 511x collisions, Diff, BIC |
+| [Murmur2](doc/Murmur2.txt)                    |      3146.91 |    41.87 | 187.89 (2) | 358 | UB, 1 bad seed, 1.7% bias, 81x coll, 1.7% distrib, BIC |
 | [Murmur2A](doc/Murmur2A.txt)                  |      3146.79 |    46.87 | 191.96 (4) | 407 | UB, 12.7% bias, LongNeighbors          |
 | [Murmur2B](doc/Murmur2B.txt)                  |      4882.95 |    39.72 | 149.43 (2) | 433 | UB, 1.8% bias, collisions, 3.4% distrib, BIC |
 | [Murmur2C](doc/Murmur2C.txt)                  |      4092.99 |    51.84 | 164.65 (2) | 444 | UB, 91% bias, collisions, distr, BIC, LongNeighbors |
