@@ -16,7 +16,7 @@
 
 bool g_drawDiagram     = false;
 bool g_testAll         = true;
-bool g_testExtra       = false; // excessive torture tests: Sparse, Avalanche, DiffDist
+bool g_testExtra       = false; // excessive torture tests: Sparse, Avalanche, DiffDist, scan all seeds
 bool g_testVerifyAll   = false;
 
 bool g_testSanity      = false;
@@ -1523,10 +1523,10 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     fflush(NULL);
   }
 
-  if (g_testBadSeeds)
+  if (g_testBadSeeds || g_testAll)
   {
     printf("[[[ BadSeeds Tests ]]]\n\n");
-    // g_testExtra: test all seeds, or just some known bad seeds
+    // g_testExtra: test all seeds. if not just some known secrets/bad seeds
 
     Seed_init (info, 0);
     bool result = BadSeedsTest<hashtype>( info, g_testExtra );
