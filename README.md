@@ -122,11 +122,11 @@ SMhasher
 | [SipHash](doc/SipHash.txt)                    |       980.88 |   127.77 | 246.19 (4) |1071 |                            |
 | [HalfSipHash](doc/HalfSipHash.txt)            |       755.78 |   114.47 | 243.72 (4) | 700 | zeroes                     |
 | [GoodOAAT](doc/GoodOAAT.txt)                  |      1052.00 |    71.62 | 192.19 (1) | 237 |                            |
-| [prvhash64_64m](doc/prvhash64_64m.txt)        |      2389.33 |    50.77 | 169.56 (2) | 349 |                            |
-| [prvhash64_64](doc/prvhash64_64.txt)          |      2375.73 |    51.66 | 180.69 (2) | 384 |                            |
-| [prvhash64_128](doc/prvhash64_128.txt)        |      2375.98 |   102.57 | 235.64 (1) |718 |                           |
-| [prvhash64s_64](doc/prvhash64s_64.txt)        |      5231.52 |   169.22 | 306.66 (1) |2640 |                            |
-| [prvhash64s_128](doc/prvhash64s_128.txt)      |      4950.78 |   254.73 | 400.96 (1) |2799 |                            |
+| [prvhash64_64m](doc/prvhash64_64m.txt)        |      2386.19 |    51.18 | 186.87 (1) | 349 |                            |
+| [prvhash64_64](doc/prvhash64_64.txt)          |      2375.72 |    51.61 | 190.97 (2) | 384 |                            |
+| [prvhash64_128](doc/prvhash64_128.txt)        |      2383.57 |   103.44 | 246.45 (1) |718 |                           |
+| [prvhash64s_64](doc/prvhash64s_64.txt)        |      5481.48 |   170.05 | 325.39 (6) |2640 |                            |
+| [prvhash64s_128](doc/prvhash64s_128.txt)      |      5161.33 |   260.96 | 442.70 (22)|2799 |                            |
 | [SipHash13](doc/SipHash13.txt)                |      1889.10 |    89.00 | 199.95 (4) | 778 | 0.9% bias                  |
 | [BEBB4185](doc/BEBB4185.txt)                  |      2951.62 |   222.03 | 343.63 (4) |1294 | UB, msvc-specific          |
 | [TSip](doc/TSip.txt)                          |      3228.14 |    57.96 | 211.71 (3) | 519 | !msvc                      |
