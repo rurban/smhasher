@@ -110,7 +110,7 @@ HashInfo g_hashes[] =
 #endif
   { crc32,                32, 0x3719DB20, "crc32",       "CRC-32 soft", POOR, {} },
   { md5_128,             128, 0xF263F96F, "md5-128",     "MD5", GOOD, {} },
-  { md5_32,               32, 0x634E5AEC, "md5_32a",     "MD5, low 32 bits", POOR, {} },
+  { md5_32,               32, 0x634E5AEC, "md5_32a",     "MD5, low 32 bits", POOR, {0x265cab52} /* !! */},
 #ifdef _MSC_VER /* truncated long to 32 */
 #  define SHA1_VERIF          0xED2F35E4
 #  define SHA1a_VERIF         0x480A2B09

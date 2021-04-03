@@ -17,6 +17,10 @@ void SetAffinity ( int cpu );
  #endif
 #endif
 
+#ifndef NCPU
+#define NCPU 4
+#endif
+
 //-----------------------------------------------------------------------------
 // Microsoft Visual Studio
 

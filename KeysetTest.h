@@ -17,6 +17,14 @@
 
 #include <algorithm>  // for std::swap
 #include <string>
+#if NCPU // disable with -DNCPU=0
+#include <thread>
+#include <iostream>
+#include <chrono>
+//using std::cout;
+using std::endl;
+using std::hex;
+#endif
 
 #undef MAX
 #define MAX(x,  y)   (((x) > (y)) ? (x) : (y))
@@ -123,18 +131,22 @@ bool TestSecret ( const HashInfo* info, const uint64_t secret ) {
   return result;
 }
 
-// Test the full 2^32 range [hi + 0, hi + 0xffffffff], the hi part
+// Process part of a 2^32 range, split into NCPU threads
 template< typename hashtype >
-bool TestSecret32 ( const HashInfo* info, const uint64_t hi ) {
-  bool result = true;
+void TestSecretRangeThread ( const HashInfo* info, const uint64_t hi,
+                             const uint32_t start, const uint32_t len, bool &result )
+{
   pfHash hash = info->hash;
   std::vector<hashtype> hashes;
   hashes.resize(4);
-  for (size_t y=0; y < 0xffffffff; y++) {
+  result = true;
+  printf("at %lx ", hi | start);
+  size_t end = start + len;
+  for (size_t y=start; y < end; y++) {
     static hashtype zero;
     uint64_t seed = hi | y;
-    if ((y & 0x1ffffff) == 0x1ffffff)
-      printf("0x%" PRIx64 " ", seed);
+    if ((seed & UINT64_C(0x1ffffff)) == UINT64_C(0x1ffffff))
+      printf ("%" PRIx64 " ", seed);
     hashes.clear();
     Hash_Seed_init (hash, seed);
     for (int x : std::vector<int> {0,32,127,255}) {
@@ -152,12 +164,44 @@ bool TestSecret32 ( const HashInfo* info, const uint64_t hi ) {
       }
     }
     if (!TestHashList(hashes, false, true, false, false, false, false)) {
-      printf("Bad seed 0x%" PRIx64 "\n", seed);
+      printf("Bad seed 0x0x%" PRIx64 "\n", seed);
       TestHashList(hashes, false);
       result = false;
     }
   }
+  //printf("\n");
+  return;
+}
+
+// Test the full 2^32 range [hi + 0, hi + 0xffffffff], the hi part
+template< typename hashtype >
+bool TestSecret32 ( const HashInfo* info, const uint64_t hi ) {
+  bool result = true;
+#if NCPU
+  // split into NCPU threads
+  const uint64_t len = 0x100000000UL / NCPU;
+  const uint32_t len32 = (const uint32_t)(len & 0xffffffff);
+  static std::thread t[NCPU];
+  bool *results = (bool*)calloc (NCPU, sizeof(bool));
+  printf("%d threads starting...\n", NCPU);
+  for (int i=0; i < NCPU; i++) {
+    const uint32_t start = i * len;
+    t[i] = std::thread {TestSecretRangeThread<hashtype>, info, hi, start, len32, std::ref(results[i])};
+    // pin it? moves around a lot. but the result is fair
+  }
+  std::this_thread::sleep_for(std::chrono::seconds(30));
+  for (int i=0; i < NCPU; i++) {
+    t[i].join();
+  }
+  printf("All %d threads ended\n", NCPU);
+  for (int i=0; i < NCPU; i++) {
+    result &= results[i];
+  }
+  free(results);
+#else
+  TestSecretRangeThreads<hashtype>(info, hi, 0x0, 0xffffffff, result);
   printf("\n");
+#endif
   return result;
 }
 

@@ -405,9 +405,11 @@ if(AES_FOUND AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
   set(SSE4_OBJ ${FALKHASH_OBJ})
 endif()
 
+find_package( Threads )
+#set(CMAKE_THREAD_LIBS_INIT "-lpthread")
+
 if(SSE4_2_FOUND)
   add_definitions(-DHAVE_SSE42)
-  set(CMAKE_THREAD_LIBS_INIT "-lpthread")
   set(SSE2_SRC hasshe2.c)
   set(SSE4_SRC crc32_hw.c)
   # 64bit only:
