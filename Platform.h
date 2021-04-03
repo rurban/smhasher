@@ -3,6 +3,14 @@
 
 #pragma once
 
+#ifndef NCPU
+#define NCPU 4
+#endif
+
+#if NCPU > 1
+#include <thread>
+void SetThreadAffinity ( std::thread &t, int cpu );
+#endif
 void SetAffinity ( int cpu );
 
 #ifndef __x86_64__
@@ -15,10 +23,6 @@ void SetAffinity ( int cpu );
  #if (__WORDSIZE >= 64) || defined(HAVE_SSE42)
   #define HAVE_INT64
  #endif
-#endif
-
-#ifndef NCPU
-#define NCPU 4
 #endif
 
 //-----------------------------------------------------------------------------
@@ -66,6 +70,9 @@ void SetAffinity ( int cpu );
 #include <stdlib.h>
 #include <stdint.h>
 #include <sys/time.h>
+#if NCPU > 1
+#include <pthread.h>
+#endif
 
 #define	FORCE_INLINE inline __attribute__((always_inline))
 #define	NEVER_INLINE __attribute__((noinline))

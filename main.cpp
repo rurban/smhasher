@@ -793,6 +793,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   // 13m  for xxh3 with --extra
   // 3m24 for xxh3 with --extra on 1 thread
   // 6m41 for xxh3 with --extra on 4 threads over bins without lock
+  // 6m41 for xxh3 with --extra on 4 pinned threads
   // 3m   for farmhash128_c (was 7m with 512,1024)
 
   if(g_testAvalanche || g_testAll)

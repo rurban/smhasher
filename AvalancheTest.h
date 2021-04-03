@@ -8,14 +8,11 @@
 
 #pragma once
 
+#include "Platform.h"
 #include "Types.h"
 #include "Random.h"
 
 #include <vector>
-#if NCPU_not > 1 // 2x slower actually
-#include <thread>
-#include <chrono>
-#endif
 
 #include <stdio.h>
 #include <math.h>
@@ -100,7 +97,7 @@ bool AvalancheTest ( pfHash hash, const int reps, bool verbose )
   //printf("%d threads starting...\n", NCPU);
   for (int i=0; i < NCPU; i++) {
     t[i] = std::thread {calcBiasRange<keytype,hashtype>,hash,std::ref(bins),r,i,reps,verbose};
-    // pin them? they seem to move around a lot.
+    SetThreadAffinity (t[i], i); // no effect measured
   }
   for (int i=0; i < NCPU; i++) {
     t[i].join();
