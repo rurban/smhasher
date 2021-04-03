@@ -791,6 +791,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   // Avalanche tests
   // 1m30 for xxh3
   // 13m  for xxh3 with --extra
+  // 2m   for xxh3 with --extra on 4 threads over reps without lock
   // 3m   for farmhash128_c (was 7m with 512,1024)
 
   if(g_testAvalanche || g_testAll)

@@ -12,6 +12,11 @@
 #include "Random.h"
 
 #include <vector>
+#if NCPU > 1 // disable with -DNCPU=0 or 1
+#include <thread>
+#include <chrono>
+#endif
+
 #include <stdio.h>
 #include <math.h>
 
@@ -23,8 +28,10 @@ double maxBias ( std::vector<int> & counts, int reps );
 
 //-----------------------------------------------------------------------------
 
+// threaded: loop over reps or bins?
 template < typename keytype, typename hashtype >
-void calcBias ( pfHash hash, std::vector<int> & counts, int reps, Rand & r, bool verbose )
+void calcBiasRange ( const pfHash hash, std::vector<int> &counts, Rand &r,
+                     const int startbins, const int startreps, const int reps, const bool verbose )
 {
   const int keybytes = sizeof(keytype);
   const int hashbytes = sizeof(hashtype);
@@ -35,18 +42,16 @@ void calcBias ( pfHash hash, std::vector<int> & counts, int reps, Rand & r, bool
   keytype K;
   hashtype A,B;
 
-  for(int irep = 0; irep < reps; irep++)
+  for(int irep = startreps; irep < startreps + reps; irep++)
   {
     if(verbose) {
       if(irep % (reps/10) == 0) printf(".");
     }
 
     r.rand_p(&K,keybytes);
-
     hash(&K,keybytes,0,&A);
 
     int * cursor = &counts[0];
-
     for(int iBit = 0; iBit < keybits; iBit++)
     {
       flipbit(&K,keybytes,iBit);
@@ -57,7 +62,7 @@ void calcBias ( pfHash hash, std::vector<int> & counts, int reps, Rand & r, bool
       {
         int bitA = getbit(&A,hashbytes,iOut);
         int bitB = getbit(&B,hashbytes,iOut);
-
+        // lock?
         (*cursor++) += (bitA ^ bitB);
       }
     }
@@ -79,12 +84,28 @@ bool AvalancheTest ( pfHash hash, const int reps, bool verbose )
 
   printf("Testing %4d-bit keys -> %3d-bit hashes, %6d reps",
          keybits, hashbits, reps);
-
   //----------
-
   std::vector<int> bins(keybits*hashbits,0);
 
-  calcBias<keytype,hashtype>(hash,bins,reps,r,verbose);
+#if NCPU > 1
+  const int lenreps = reps / NCPU;
+  const int lenbins = keybits*hashbits / NCPU;
+  static std::thread t[NCPU];
+  //printf("%d threads starting...\n", NCPU);
+  for (int i=0; i < NCPU; i++) {
+    const int startreps = i * lenreps;
+    const int startbins = i * lenbins;
+    t[i] = std::thread {calcBiasRange<keytype,hashtype>,hash,std::ref(bins),std::ref(r),
+      startbins,startreps,lenreps,verbose};
+  }
+  std::this_thread::sleep_for(std::chrono::seconds(1));
+  for (int i=0; i < NCPU; i++) {
+    t[i].join();
+  }
+  //printf("All %d threads ended\n", NCPU);
+#else
+  calcBiasRange<keytype,hashtype>(hash,bins,r,0,0,reps,verbose);
+#endif
   
   //----------
 

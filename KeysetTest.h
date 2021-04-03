@@ -19,11 +19,7 @@
 #include <string>
 #if NCPU // disable with -DNCPU=0
 #include <thread>
-#include <iostream>
 #include <chrono>
-//using std::cout;
-using std::endl;
-using std::hex;
 #endif
 
 #undef MAX
