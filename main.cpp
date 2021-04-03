@@ -120,7 +120,8 @@ HashInfo g_hashes[] =
 #endif
   { sha1_160,            160, SHA1_VERIF, "sha1-160",     "SHA1", POOR},
   { sha1_32a,             32, SHA1a_VERIF,"sha1_32a",     "SHA1, low 32 bits", POOR},
-  { sha2_224,            224, 0x60424E90, "sha2-224",     "SHA2-224", GOOD, {0xc1059ed8} },
+  // totally broken seed mixin
+  { sha2_224,            224, 0x60424E90, "sha2-224",     "SHA2-224", GOOD, {0xc1059ed8} /* >100 bad seeds */ },
   { sha2_224_64,          64, 0x7EF6BB61, "sha2-224_64",  "SHA2-224, low 64 bits", GOOD, {0xc1059ed8} },
   { sha2_256,            256, 0xACFA0A78, "sha2-256",     "SHA2-256", POOR, {0x6a09e667} },
   { sha2_256_64,          64, 0xA6C2C1D4, "sha2-256_64",  "SHA2-256, low 64 bits", POOR, {0x6a09e667} },
