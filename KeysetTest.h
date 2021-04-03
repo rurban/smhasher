@@ -17,7 +17,7 @@
 
 #include <algorithm>  // for std::swap
 #include <string>
-#if NCPU // disable with -DNCPU=0
+#if NCPU > 1 // disable with -DNCPU=0 or 1
 #include <thread>
 #include <chrono>
 #endif
@@ -173,7 +173,7 @@ void TestSecretRangeThread ( const HashInfo* info, const uint64_t hi,
 template< typename hashtype >
 bool TestSecret32 ( const HashInfo* info, const uint64_t hi ) {
   bool result = true;
-#if NCPU
+#if NCPU > 1
   // split into NCPU threads
   const uint64_t len = 0x100000000UL / NCPU;
   const uint32_t len32 = (const uint32_t)(len & 0xffffffff);
@@ -195,7 +195,7 @@ bool TestSecret32 ( const HashInfo* info, const uint64_t hi ) {
   }
   free(results);
 #else
-  TestSecretRangeThreads<hashtype>(info, hi, 0x0, 0xffffffff, result);
+  TestSecretRangeThread<hashtype>(info, hi, 0x0, 0xffffffff, result);
   printf("\n");
 #endif
   return result;

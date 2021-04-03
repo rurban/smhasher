@@ -28,21 +28,28 @@ double maxBias ( std::vector<int> & counts, int reps );
 
 //-----------------------------------------------------------------------------
 
-// threaded: loop over reps or bins?
+// threaded: loop over bins
 template < typename keytype, typename hashtype >
-void calcBiasRange ( const pfHash hash, std::vector<int> &counts, Rand &r,
-                     const int startbins, const int startreps, const int reps, const bool verbose )
+void calcBiasRange ( const pfHash hash, std::vector<int> &bins, Rand r,
+                     const int i, const int reps, const bool verbose )
 {
   const int keybytes = sizeof(keytype);
   const int hashbytes = sizeof(hashtype);
 
   const int keybits = keybytes * 8;
   const int hashbits = hashbytes * 8;
-
+  const int len = keybits / NCPU;
+  // i 0-NCPU
+  const int keystart = i * len;
+#if NCPU > 1
+  const int keyend = keystart + len;
+#else
+  const int keyend = keybits;
+#endif
   keytype K;
   hashtype A,B;
 
-  for(int irep = startreps; irep < startreps + reps; irep++)
+  for(int irep = 0; irep < reps; irep++)
   {
     if(verbose) {
       if(irep % (reps/10) == 0) printf(".");
@@ -51,8 +58,9 @@ void calcBiasRange ( const pfHash hash, std::vector<int> &counts, Rand &r,
     r.rand_p(&K,keybytes);
     hash(&K,keybytes,0,&A);
 
-    int * cursor = &counts[0];
-    for(int iBit = 0; iBit < keybits; iBit++)
+    int * cursor = &bins[keystart * hashbits]; // 0 .. 1536
+
+    for(int iBit = keystart; iBit < keyend; iBit++)
     {
       flipbit(&K,keybytes,iBit);
       hash(&K,keybytes,0,&B);
@@ -62,7 +70,6 @@ void calcBiasRange ( const pfHash hash, std::vector<int> &counts, Rand &r,
       {
         int bitA = getbit(&A,hashbytes,iOut);
         int bitB = getbit(&B,hashbytes,iOut);
-        // lock?
         (*cursor++) += (bitA ^ bitB);
       }
     }
@@ -93,10 +100,7 @@ bool AvalancheTest ( pfHash hash, const int reps, bool verbose )
   static std::thread t[NCPU];
   //printf("%d threads starting...\n", NCPU);
   for (int i=0; i < NCPU; i++) {
-    const int startreps = i * lenreps;
-    const int startbins = i * lenbins;
-    t[i] = std::thread {calcBiasRange<keytype,hashtype>,hash,std::ref(bins),std::ref(r),
-      startbins,startreps,lenreps,verbose};
+    t[i] = std::thread {calcBiasRange<keytype,hashtype>,hash,std::ref(bins),r,i,reps,verbose};
   }
   std::this_thread::sleep_for(std::chrono::seconds(1));
   for (int i=0; i < NCPU; i++) {
@@ -104,7 +108,7 @@ bool AvalancheTest ( pfHash hash, const int reps, bool verbose )
   }
   //printf("All %d threads ended\n", NCPU);
 #else
-  calcBiasRange<keytype,hashtype>(hash,bins,r,0,0,reps,verbose);
+  calcBiasRange<keytype,hashtype>(hash,bins,r,0,reps,verbose);
 #endif
   
   //----------
