@@ -791,13 +791,19 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   // Avalanche tests
   // 1m30 for xxh3
   // 13m  for xxh3 with --extra
-  // 2m   for xxh3 with --extra on 4 threads over reps without lock
+  // 3m24 for xxh3 with --extra on 1 thread
+  // 6m41 for xxh3 with --extra on 4 threads over bins without lock
   // 3m   for farmhash128_c (was 7m with 512,1024)
 
   if(g_testAvalanche || g_testAll)
   {
     printf("[[[ Avalanche Tests ]]]\n\n");
     fflush(NULL);
+#if NCPU_not >= 4 // 2x slower
+    const bool extra = true;
+#else
+    const bool extra = g_testExtra;
+#endif
 
     bool result = true;
     bool verbose = g_drawDiagram; //.......... progress dots
@@ -817,7 +823,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     result &= AvalancheTest< Blob<128>, hashtype > (hash,300000,verbose);
     result &= AvalancheTest< Blob<160>, hashtype > (hash,300000,verbose);
 
-    if(g_testExtra) {
+    if(extra) {
       result &= AvalancheTest< Blob<192>, hashtype > (hash,300000,verbose);
       result &= AvalancheTest< Blob<224>, hashtype > (hash,300000,verbose);
       result &= AvalancheTest< Blob<256>, hashtype > (hash,300000,verbose);
@@ -826,18 +832,18 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       result &= AvalancheTest< Blob<384>, hashtype > (hash,300000,verbose);
       result &= AvalancheTest< Blob<448>, hashtype > (hash,300000,verbose);
     }
-    if (g_testExtra || info->hashbits <= 64) {
+    if (extra || info->hashbits <= 64) {
       result &= AvalancheTest< Blob<512>, hashtype > (hash,300000,verbose);
     }
-    if(g_testExtra) {
+    if(extra) {
       result &= AvalancheTest< Blob<640>, hashtype > (hash,300000,verbose);
       result &= AvalancheTest< Blob<768>, hashtype > (hash,300000,verbose);
       result &= AvalancheTest< Blob<896>, hashtype > (hash,300000,verbose);
     }
-    if (g_testExtra || info->hashbits <= 64) {
+    if (extra || info->hashbits <= 64) {
       result &= AvalancheTest< Blob<1024>,hashtype > (hash,300000,verbose);
     }
-    if(g_testExtra) {
+    if(extra) {
       result &= AvalancheTest< Blob<1280>,hashtype > (hash,300000,verbose);
       result &= AvalancheTest< Blob<1536>,hashtype > (hash,300000,verbose);
     }

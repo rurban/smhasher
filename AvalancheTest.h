@@ -12,7 +12,7 @@
 #include "Random.h"
 
 #include <vector>
-#if NCPU > 1 // disable with -DNCPU=0 or 1
+#if NCPU_not > 1 // 2x slower actually
 #include <thread>
 #include <chrono>
 #endif
@@ -21,7 +21,6 @@
 #include <math.h>
 
 // Avalanche fails if a bit is biased by more than 1%
-
 #define AVALANCHE_FAIL 0.01
 
 double maxBias ( std::vector<int> & counts, int reps );
@@ -41,7 +40,7 @@ void calcBiasRange ( const pfHash hash, std::vector<int> &bins, Rand r,
   const int len = keybits / NCPU;
   // i 0-NCPU
   const int keystart = i * len;
-#if NCPU > 1
+#if NCPU_not > 1
   const int keyend = keystart + len;
 #else
   const int keyend = keybits;
@@ -94,15 +93,15 @@ bool AvalancheTest ( pfHash hash, const int reps, bool verbose )
   //----------
   std::vector<int> bins(keybits*hashbits,0);
 
-#if NCPU > 1
+#if NCPU_not > 1
   const int lenreps = reps / NCPU;
   const int lenbins = keybits*hashbits / NCPU;
   static std::thread t[NCPU];
   //printf("%d threads starting...\n", NCPU);
   for (int i=0; i < NCPU; i++) {
     t[i] = std::thread {calcBiasRange<keytype,hashtype>,hash,std::ref(bins),r,i,reps,verbose};
+    // pin them? they seem to move around a lot.
   }
-  std::this_thread::sleep_for(std::chrono::seconds(1));
   for (int i=0; i < NCPU; i++) {
     t[i].join();
   }
