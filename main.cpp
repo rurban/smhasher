@@ -121,15 +121,15 @@ HashInfo g_hashes[] =
   { sha1_160,            160, SHA1_VERIF, "sha1-160",     "SHA1", POOR},
   { sha1_32a,             32, SHA1a_VERIF,"sha1_32a",     "SHA1, low 32 bits", POOR},
   // totally broken seed mixin
-  { sha2_224,            224, 0x60424E90, "sha2-224",     "SHA2-224", GOOD, {0xc1059ed8} /* >100 bad seeds */ },
-  { sha2_224_64,          64, 0x7EF6BB61, "sha2-224_64",  "SHA2-224, low 64 bits", GOOD, {0xc1059ed8} },
-  { sha2_256,            256, 0xACFA0A78, "sha2-256",     "SHA2-256", POOR, {0x6a09e667} },
-  { sha2_256_64,          64, 0xA6C2C1D4, "sha2-256_64",  "SHA2-256, low 64 bits", POOR, {0x6a09e667} },
+  { sha2_224,            224, 0x407AA518, "sha2-224",     "SHA2-224", GOOD, {0xc1059ed8} /* >100 bad seeds */ },
+  { sha2_224_64,          64, 0xF3E40ECA, "sha2-224_64",  "SHA2-224, low 64 bits", GOOD, {0xc1059ed8} },
+  { sha2_256,            256, 0xEBDA2FB1, "sha2-256",     "SHA2-256", POOR, {0x6a09e667} },
+  { sha2_256_64,          64, 0xC1C4FA72, "sha2-256_64",  "SHA2-256, low 64 bits", POOR, {0x6a09e667} },
 #if defined(HAVE_SHANI) && defined(__x86_64__)
-  { sha1ni,              160, 0x0B01A4A1, "sha1ni",       "SHA1_NI (amd64 HW SHA ext)", POOR, {0x67452301} },
+  { sha1ni,              160, 0x375755A4, "sha1ni",       "SHA1_NI (amd64 HW SHA ext)", POOR, {0x67452301} },
   { sha1ni_32,            32, 0xE70686CC, "sha1ni_32",    "hardened SHA1_NI (amd64 HW SHA ext), low 32 bits", GOOD,
     {0x67452301} },
-  { sha2ni_256,          256, 0xAA94D6CD, "sha2ni-256",   "SHA2_NI-256 (amd64 HW SHA ext)", POOR, {0x6a09e667} },
+  { sha2ni_256,          256, 0x4E3BB25E, "sha2ni-256",   "SHA2_NI-256 (amd64 HW SHA ext)", POOR, {0x6a09e667} },
   { sha2ni_256_64,        64, 0xF938E80E, "sha2ni-256_64","hardened SHA2_NI-256 (amd64 HW SHA ext), low 64 bits", POOR, {0x6a09e667} },
 #endif
   { rmd128,              128, 0xFF576977, "rmd128",       "RIPEMD-128", GOOD, {0x67452301} },
@@ -145,21 +145,25 @@ HashInfo g_hashes[] =
   { blake3_test,         256, 0x0, "blake3",       "BLAKE3 Rust", GOOD, {} },
   { blake3_64,            64, 0x0, "blake3_64",    "BLAKE3 Rust, low 64 bits", GOOD, {} },
 #endif
-  { blake2s128_test,     128, 0xC0EF86D1, "blake2s-128",  "blake2s-128", GOOD, {0x6a09e667} },
-  { blake2s160_test,     160, 0xE56D3359, "blake2s-160",  "blake2s-160", GOOD, {0x6a09e667} },
-  { blake2s224_test,     224, 0x1C56E1A2, "blake2s-224",  "blake2s-224", GOOD, {0x6a09e667} },
-  { blake2s256_test,     256, 0x846611DB, "blake2s-256",  "blake2s-256", GOOD, {0x6a09e667} },
-  { blake2s256_64,        64, 0x2521E50B, "blake2s-256_64","blake2s-256, low 64 bits", GOOD, {} },
-  { blake2b160_test,     160, 0xA5F72E2D, "blake2b-160",  "blake2b-160", GOOD, {} },
-  { blake2b224_test,     224, 0x0D95F0AE, "blake2b-224",  "blake2b-224", GOOD, {} },
-  { blake2b256_test,     256, 0xC0B0AD0C, "blake2b-256",  "blake2b-256", POOR, {} },
-  { blake2b256_64,        64, 0x3C59D62D, "blake2b-256_64","blake2b-256, low 64 bits", GOOD, {} },
+  { blake2s128_test,     128, 0xE8D8FCDF, "blake2s-128",  "blake2s-128", GOOD, {0x6a09e667} },
+  { blake2s160_test,     160, 0xD50FF144, "blake2s-160",  "blake2s-160", GOOD, {0x6a09e667} },
+  { blake2s224_test,     224, 0x19B36D2C, "blake2s-224",  "blake2s-224", GOOD, {0x6a09e667} },
+  { blake2s256_test,     256, 0x841D6354, "blake2s-256",  "blake2s-256", GOOD,
+    {0x31, 0x32, 0x15e, 0x432, 0x447, 0x8000001e, 0x80000021 } /* !! and >1000 more */ },
+  { blake2s256_64,        64, 0x53000BB2, "blake2s-256_64","blake2s-256, low 64 bits", GOOD,
+    {0xa, 0xe, 0x2d, 0x2f, 0x53, 0x40000003, 0x40000005, 0x40000006 } /* !! and >1000 more */ },
+  { blake2b160_test,     160, 0x28ADDA30, "blake2b-160",  "blake2b-160", GOOD,
+    {0x4a, 0x5a, 0x5e, 0x74, 0x7f, 0x81} /* !! and >1000 more */ },
+  { blake2b224_test,     224, 0x101A62A4, "blake2b-224",  "blake2b-224", GOOD,
+    {0x12, 0x2e, 0x32, 0x99a, 0xc80, 0xc98, 0xc9c} /* !! and >1000 more */ },
+  { blake2b256_test,     256, 0xC9D8D995, "blake2b-256",  "blake2b-256", POOR, {} },
+  { blake2b256_64,        64, 0xCF4F7EC3, "blake2b-256_64","blake2b-256, low 64 bits", GOOD, {} },
   { asconhashv12_256,    256, 0xA969C160, "asconhashv12", "asconhashv12 256bit", GOOD,
     { 0xee9398aadb67f03dULL } },
   { asconhashv12_64,      64, 0xE7DEF300, "asconhashv12_64", "asconhashv12, low 64 bits", GOOD,
     { 0xee9398aadb67f03dULL } },
-  { sha3_256,            256, 0xB85F6DD9, "sha3-256",     "SHA3-256 (Keccak)", GOOD, {0x1UL} },
-  { sha3_256_64,          64, 0x86EC71EF, "sha3-256_64",  "SHA3-256 (Keccak), low 64 bits", GOOD, {0x1UL} },
+  { sha3_256,            256, 0x21048CE3, "sha3-256",     "SHA3-256 (Keccak)", GOOD, {0x1UL} },
+  { sha3_256_64,          64, 0xE62E5CC0, "sha3-256_64",  "SHA3-256 (Keccak), low 64 bits", GOOD, {0x1UL} },
 
 #ifdef __SSE2__
   { hasshe2_test,        256, 0xF5D39DFE, "hasshe2",     "SSE2 hasshe2, 256-bit", POOR, {} },
@@ -194,8 +198,8 @@ HashInfo g_hashes[] =
   // Thomas Dybdahl Ahle, Jakob Tejs Bæk Knudsen, and Mikkel Thorup
   // "The Power of Hashing with Mersenne Primes".
   { poly_1_mersenne,      32, 0, "poly_1_mersenne", "Degree 1 Hashing mod 2^61-1", POOR, {} },
-  { poly_2_mersenne,      32, 0, "poly_2_mersenne", "Degree 2 Hashing mod 2^61-1", GOOD, {} },
-  { poly_3_mersenne,      32, 0, "poly_3_mersenne", "Degree 3 Hashing mod 2^61-1", GOOD, {} },
+  { poly_2_mersenne,      32, 0, "poly_2_mersenne", "Degree 2 Hashing mod 2^61-1", GOOD, {0x60e8512c} /* !! */},
+  { poly_3_mersenne,      32, 0, "poly_3_mersenne", "Degree 3 Hashing mod 2^61-1", GOOD, {0x3d25f745} /* !! */},
   { poly_4_mersenne,      32, 0, "poly_4_mersenne", "Degree 4 Hashing mod 2^61-1", GOOD, {} },
   { tabulation_test,      64, TABUL_VERIF, "tabulation",      "64-bit Tabulation with Multiply-Shift Mixer", GOOD, {} },
 #endif
@@ -451,7 +455,8 @@ HashInfo g_hashes[] =
  //{ FarmHash64noSeed_test,64, 0xA5B9146C,  "Farm64noSeed","Google FarmHash64 without seed (default, misses on final avalanche)", POOR, {} },
   { FarmHash128_test,    128, FARM128_VERIF,"FarmHash128", "Google FarmHash128WithSeed", GOOD, {} },
 #if defined(__SSE4_2__) && defined(__x86_64__)
-  { farmhash32_c_test,    32, 0/*0xA2E45238*/,   "farmhash32_c", "farmhash32_with_seed (C99)", GOOD, {} },
+  { farmhash32_c_test,    32, 0/*0xA2E45238*/,   "farmhash32_c", "farmhash32_with_seed (C99)", GOOD,
+    {0x2b091701} /* !! */},
   { farmhash64_c_test,    64, FARM64_VERIF, "farmhash64_c",  "farmhash64_with_seed (C99)", GOOD, {} },
   { farmhash128_c_test,  128, FARM128_VERIF,"farmhash128_c", "farmhash128_with_seed (C99)", GOOD, {} },
 #endif
@@ -460,7 +465,8 @@ HashInfo g_hashes[] =
 #if 0
   { xxhash256_test,       64, 0x024B7CF4, "xxhash256",   "xxhash256, 64-bit unportable", GOOD, {} },
 #endif
-  { SpookyHash32_test,    32, 0x3F798BBB, "Spooky32",    "Bob Jenkins' SpookyHash, 32-bit result", GOOD, {} },
+  { SpookyHash32_test,    32, 0x3F798BBB, "Spooky32",    "Bob Jenkins' SpookyHash, 32-bit result", GOOD,
+    {0x26bb3cda} /* !! */},
   { SpookyHash64_test,    64, 0xA7F955F1, "Spooky64",    "Bob Jenkins' SpookyHash, 64-bit result", GOOD, {} },
   { SpookyHash128_test,  128, 0x8D263080, "Spooky128",   "Bob Jenkins' SpookyHash, 128-bit result", GOOD, {} },
   { pengyhash_test,       64, 0x1FC2217B, "pengyhash",   "pengyhash", GOOD, {} },

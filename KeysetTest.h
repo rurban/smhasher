@@ -134,6 +134,7 @@ void TestSecretRangeThread ( const HashInfo* info, const uint64_t hi,
 {
   pfHash hash = info->hash;
   std::vector<hashtype> hashes;
+  int fails = 0;
   hashes.resize(4);
   result = true;
   printf("at %lx ", hi | start);
@@ -153,6 +154,7 @@ void TestSecretRangeThread ( const HashInfo* info, const uint64_t hi,
       if (h == 0 && x == 0) {
         printf("Broken seed 0x%" PRIx64 " => 0 with key[16] of all %d bytes\n", seed, x);
         hashes.push_back(h);
+        fails++;
         result = false;
       }
       else {
@@ -160,9 +162,15 @@ void TestSecretRangeThread ( const HashInfo* info, const uint64_t hi,
       }
     }
     if (!TestHashList(hashes, false, true, false, false, false, false)) {
-      printf("Bad seed 0x%" PRIx64 "\n", seed);
-      TestHashList(hashes, false);
+      fails++;
+      printf("Bad seed 0x0x%" PRIx64 "\n", seed);
+      if (fails < 32) // don't print too many lines
+        TestHashList(hashes, false);
       result = false;
+    }
+    if (fails > 300) {
+      fprintf(stderr, "Too many bad seeds, aborting\n");
+      exit(1);
     }
   }
   //printf("\n");

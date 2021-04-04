@@ -22,18 +22,18 @@ SMhasher
 | [sha1_32a](doc/sha1_32a.txt)                  |       353.03 |  1385.80 |1759.94 (5) |5126 | Cyclic low32, 36.6% distrib |
 | [md5-128](doc/md5-128.txt)                    |       353.76 |   638.29 | 803.39 (9) |4419 |                    |
 | [sha1-160](doc/sha1-160.txt)                  |       364.95 |  1470.55 |1794.16 (13)|5126 | Comb/Cyclic low32  |
-| [sha2-224](doc/sha2-224.txt)                  |       147.13 |  1354.81 |1589.92 (12)|     | Comb low32    |
-| [sha2-224_64](doc/sha2-224_64.txt)            |       147.60 |  1360.10 |1620.93 (13)|     | Cyclic low32  |
-| [sha2-256](doc/sha2-256.txt)                  |       147.80 |  1374.90 |1606.06 (16)|     | Moment Chi2 4 |
-| [sha2-256_64](doc/sha2-256_64.txt)            |       148.01 |  1376.34 |1624.71 (16)|     | Moment Chi2 7 |
+| [sha2-224](doc/sha2-224.txt)                  |       147.13 |  1354.81 |1589.92 (12)|     | Bad seeds, Comb low32    |
+| [sha2-224_64](doc/sha2-224_64.txt)            |       147.60 |  1360.10 |1620.93 (13)|     | Bad seeds, Cyclic low32  |
+| [sha2-256](doc/sha2-256.txt)                  |       147.80 |  1374.90 |1606.06 (16)|     | Bad seeds, Moment Chi2 4 |
+| [sha2-256_64](doc/sha2-256_64.txt)            |       148.01 |  1376.34 |1624.71 (16)|     | Bad seeds, Moment Chi2 7 |
 | [sha1ni](doc/sha1ni.txt)                      |      2019.96 |   135.84 | 564.40 (6) | 989 | insecure,sanity, Permutation, Zeroes, machine-specific |
 | [sha1ni_32](doc/sha1ni_32.txt)                |      2019.94 |   136.82 | 589.46 (1) | 989 | machine-specific |
 | [sha2ni-256](doc/sha2ni-256.txt)              |      1906.77 |   145.47 | 603.08 (22)|4241 | insecure,sanity, Permutation, Zeroes, machine-specific |
 | [sha2ni-256_64](doc/sha2ni-256_64.txt)        |      1910.34 |   146.06 | 595.16 (6) |4241 | Zeroes, machine-specific |
 | [blake3_c](doc/blake3_c.txt)                  |      1285.91 |   340.01 | 552.63 (3) |     | no 32bit portability     |
-| [rmd128](doc/rmd128.txt)                      |       334.36 |   659.03 | 838.32 (9) |     |               |
-| [rmd160](doc/rmd160.txt)                      |       202.16 |  1045.79 |1287.74 (16)|     | Cyclic hi32   |
-| [rmd256](doc/rmd256.txt)                      |       362.49 |   617.02 | 815.44 (8) |     |               |
+| [rmd128](doc/rmd128.txt)                      |       334.36 |   659.03 | 838.32 (9) |     | Bad seeds                |
+| [rmd160](doc/rmd160.txt)                      |       202.16 |  1045.79 |1287.74 (16)|     | Bad seeds, Cyclic hi32   |
+| [rmd256](doc/rmd256.txt)                      |       362.49 |   617.02 | 815.44 (8) |     | Bad seeds     |
 | [blake2s-128](doc/blake2s-128.txt)            |       295.30 |   698.09 |1059.24 (51)|     |               |
 | [blake2s-160](doc/blake2s-160.txt)            |       215.01 |  1026.74 |1239.54 (11)|     |               |
 | [blake2s-224](doc/blake2s-224.txt)            |       207.06 |  1063.86 |1236.50 (20)|     |               |
@@ -62,7 +62,7 @@ SMhasher
 | [fibonacci](doc/fibonacci.txt)                |     11339.87 |    26.33 | 705.64 (2) |1692 | UB, zeros, fails all tests       |
 | [FNV1a](doc/FNV1a.txt)                        |       791.84 |    69.69 | 177.84 (2) | 204 | bad seed, zeros, fails all tests       |
 | [FNV1A_Totenschiff](doc/FNV1A_Totenschiff.txt)|      6258.23 |    27.99 | 198.20 (1) | 270 | UB, zeros, fails all tests   |
-| [FNV1A_Pippip_Yurii](doc/FNV1A_Pippip_Yurii.txt)|      6258.46 |    28.19 | 184.41 (2) | 147 | UB, sanity, fails all tests  |
+| [FNV1A_Pippip_Yurii](doc/FNV1A_Pippip_Yurii.txt)|    6258.46 |    28.19 | 184.41 (2) | 147 | UB, sanity, fails all tests  |
 | [FNV1a_YT](doc/FNV1a_YT.txt)                  |      9643.42 |    32.06 | 175.19 (2) | 321 | bad seed, UB, fails all tests          |
 | [FNV2](doc/FNV2.txt)                          |      6258.84 |    33.25 | 142.89 (1) | 278 | fails all tests              |
 | [FNV64](doc/FNV64.txt)                        |       791.82 |    70.24 | 159.29 (1) |  79 | fails all tests              |

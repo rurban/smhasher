@@ -34,12 +34,13 @@ void calcBiasRange ( const pfHash hash, std::vector<int> &bins, Rand r,
 
   const int keybits = keybytes * 8;
   const int hashbits = hashbytes * 8;
-  const int len = keybits / NCPU;
   // i 0-NCPU
-  const int keystart = i * len;
 #if NCPU_not > 1
+  const int len = keybits / NCPU;
+  const int keystart = i * len;
   const int keyend = keystart + len;
 #else
+  const int keystart = 0;
   const int keyend = keybits;
 #endif
   keytype K;

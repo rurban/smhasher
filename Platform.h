@@ -3,8 +3,11 @@
 
 #pragma once
 
-#ifndef NCPU
-#define NCPU 4
+#if defined(__aarch64__) && defined(HAVE_INT64)
+// fixme: bad system call with threads (8 cpu octocore)
+# define NCPU 0
+#elif !defined NCPU
+# define NCPU 4
 #endif
 
 #if NCPU > 1
