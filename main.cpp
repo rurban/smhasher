@@ -7,6 +7,11 @@
 #include "DifferentialTest.h"
 #include "HashMapTest.h"
 
+#if NCPU > 1 // disable with -DNCPU=0 or 1
+#include <thread>
+#include <chrono>
+#endif
+
 #include <stdio.h>
 #include <stdint.h>
 #include <time.h>
@@ -1583,24 +1588,87 @@ void VerifyHash ( const void * key, int len, uint32_t seed, void * out )
   g_outputVCode = MurmurOAAT((const char *)out, g_hashUnderTest->hashbits/8, g_outputVCode);
 }
 
-// sha1_32a: 23m with step 3
-bool MomentChi2Test ( struct HashInfo *info, int inputSize)
+// Copy the results into NCPU ranges of 2^32
+void MomentChi2Thread ( const struct HashInfo *info, const int inputSize,
+                        const unsigned start, const unsigned end,
+                        std::array<long double, 8> &b)
 {
   pfHash const hash = info->hash;
-  const int step = ((g_speed > 500 || info->hashbits > 128)
-                    && !g_testExtra) ? 6 : 3;
-  const unsigned mx = 0xfffffff0;
-  assert(inputSize >= 4);
-  long double const n = mx/step;
+  uint32_t seed = 0;
+  long double const n = (end-(start+1)) / 2;
+  uint64_t previous = 0;
+  long double b0h = b[0], b0l = b[1], db0h = b[2], db0l = b[3];
+  long double b1h = b[4], b1l = b[5], db1h = b[6], db1l = b[7];
 #define INPUT_SIZE_MAX 256
   assert(inputSize <= INPUT_SIZE_MAX);
   char key[INPUT_SIZE_MAX] = {0};
 #define HASH_SIZE_MAX 64
-  int hbits = info->hashbits;
-  assert(hbits <= HASH_SIZE_MAX*8);
   char hbuff[HASH_SIZE_MAX] = {0};
+  int hbits = info->hashbits;  
+  if (hbits > 64) hbits = 64;   // limited due to popcount8
+  Bad_Seed_init(hash, seed);
+  assert(sizeof(unsigned) <= inputSize);
+  assert(start < end);
+  //assert(step > 0);
 
+  if (start > 2) {
+    uint64_t i = start - 2;
+    memcpy(key, &i, sizeof(i));
+    hash(key, inputSize, seed, hbuff);
+    memcpy(&previous, hbuff, 8);
+  }
+
+  for (uint64_t i=start; i<=end; i+=2) {
+    memcpy(key, &i, sizeof(i));
+    hash(key, inputSize, seed, hbuff);
+
+    uint64_t h; memcpy(&h, hbuff, 8);
+    // popcount8 assumed to work on 64-bit
+    // note : ideally, one should rather popcount the whole hash
+    {
+      uint64_t const bits1 = popcount8(h);
+      uint64_t const bits0 = hbits - bits1;
+      uint64_t const b1_exp5 = bits1 * bits1 * bits1 * bits1 * bits1;
+      uint64_t const b0_exp5 = bits0 * bits0 * bits0 * bits0 * bits0;
+      b1h += b1_exp5; b1l += b1_exp5 * b1_exp5;
+      b0h += b0_exp5; b0l += b0_exp5 * b0_exp5;
+    }
+    // derivative
+    {
+      uint64_t const bits1 = popcount8(previous^h);
+      uint64_t const bits0 = hbits - bits1;
+      uint64_t const b1_exp5 = bits1 * bits1 * bits1 * bits1 * bits1;
+      uint64_t const b0_exp5 = bits0 * bits0 * bits0 * bits0 * bits0;
+      db1h += b1_exp5; db1l += b1_exp5 * b1_exp5;
+      db0h += b0_exp5; db0l += b0_exp5 * b0_exp5;
+    }
+    previous = h;
+  }
+
+  b[0] = b0h;
+  b[1] = b0l;
+  b[2] = db0h;
+  b[3] = db0l;
+  b[4] = b1h;
+  b[5] = b1l;
+  b[6] = db1h;
+  b[7] = db1l;
+}
+
+// sha1_32a: 23m with step 3
+//           10m with step 2, 4 threads, ryzen3
+bool MomentChi2Test ( struct HashInfo *info, int inputSize)
+{
+  const pfHash hash = info->hash;
+  const int step = 2;
+  const unsigned mx = 0xffffffff;
+  assert(inputSize >= 4);
+  long double const n = 0x100000000UL / step;
+  int hbits = info->hashbits;
+  if (hbits > 64) hbits = 64;   // limited due to popcount8
+  assert(hbits <= HASH_SIZE_MAX*8);
   assert(inputSize > 0);
+
   printf("Analyze hashes produced from a serie of linearly increasing numbers "
          "of %i-bit, using a step of %d ... \n", inputSize*8, step);
   fflush(NULL);
@@ -1624,16 +1692,15 @@ bool MomentChi2Test ( struct HashInfo *info, int inputSize)
    * For large hashes, bits beyond this limit are ignored.
    */
 
-  if (hbits > 64) hbits = 64;   // limited due to popcount8
   long double srefh, srefl;
   switch (hbits/8) {
       case 8:
           srefh = 38918200.;
-          srefl = 410450.;
+          srefl = 273633.333333;
           break;
       case 4:
           srefh = 1391290.;
-          srefl = 1030.9;
+          srefl = 686.6666667;
           break;
       default:
           printf("hash size not covered \n");
@@ -1641,41 +1708,48 @@ bool MomentChi2Test ( struct HashInfo *info, int inputSize)
   }
   printf("Target values to approximate : %Lf - %Lf \n", srefh, srefl);
 
-  unsigned const seed = 0;
-  uint64_t previous = 0;
-  long double b1h = 0. , b1l = 0., db1h = 0., db1l = 0.;
-  long double b0h = 0. , b0l = 0., db0h = 0., db0l = 0.;
-  Hash_Seed_init (hash, seed);
-  for (unsigned i=1; i<=mx; i+=step) {
-    assert(sizeof(i) <= inputSize);
-    memcpy(key, &i, sizeof(i));
-    hash(key, inputSize, seed, hbuff);
-
-    uint64_t h; memcpy(&h, hbuff, 8);
-    // popcount8 assumed to work on 64-bit
-    // note : ideally, one should rather popcount the whole hash
-    {   uint64_t const bits1 = popcount8(h);
-        uint64_t const bits0 = hbits - bits1;
-        uint64_t const b1_exp5 = bits1 * bits1 * bits1 * bits1 * bits1;
-        uint64_t const b0_exp5 = bits0 * bits0 * bits0 * bits0 * bits0;
-        b1h+=b1_exp5; b1l+=b1_exp5*b1_exp5;
-        b0h+=b0_exp5; b0l+=b0_exp5*b0_exp5;
-    }
-    // derivative
-    {   uint64_t const bits1 = popcount8(previous^h);
-        uint64_t const bits0 = hbits - bits1;
-        uint64_t const b1_exp5 = bits1 * bits1 * bits1 * bits1 * bits1;
-        uint64_t const b0_exp5 = bits0 * bits0 * bits0 * bits0 * bits0;
-        db1h+=b1_exp5; db1l+=b1_exp5*b1_exp5;
-        db0h+=b0_exp5; db0l+=b0_exp5*b0_exp5;
-    }
-    previous=h;
+#if NCPU > 1
+  // split into NCPU threads
+  const uint64_t len = 0x100000000UL / NCPU;
+  std::array<long double, 8> b[NCPU];
+  static std::thread t[NCPU];
+  printf("%d threads starting... ", NCPU);
+  for (int i=0; i < NCPU; i++) {
+    const unsigned start = i * len;
+    b[i] = {0.,0.,0.,0.,0.,0.,0.,0.}; 
+    //printf("thread[%d]: %d, 0x%x - 0x%x\n", i, inputSize, start, start + len - 1);
+    t[i] = std::thread {MomentChi2Thread, info, inputSize, start, start + (len - 1), std::ref(b[i])};
+    // pin it? moves around a lot. but the result is fair
+  }
+  fflush(NULL);
+  std::this_thread::sleep_for(std::chrono::seconds(30));
+  for (int i=0; i < NCPU; i++) {
+    t[i].join();
+  }
+  printf(" done\n");
+  //printf("[%d]: %Lf, %Lf, %Lf, %Lf, %Lf, %Lf, %Lf, %Lf\n", 0,
+  //       b[0][0], b[0][1], b[0][2], b[0][3], b[0][4], b[0][5], b[0][6], b[0][7]);
+  for (int i=1; i < NCPU; i++) {
+    //printf("[%d]: %Lf, %Lf, %Lf, %Lf, %Lf, %Lf, %Lf, %Lf\n", i,
+    //       b[i][0], b[i][1], b[i][2], b[i][3], b[i][4], b[i][5], b[i][6], b[i][7]);
+    for (int j=0; j < 8; j++)
+      b[0][j] += b[i][j];
   }
 
-  b1h/=n; b1l=(b1l/n-b1h*b1h)/n;
-  db1h/=n; db1l=(db1l/n-db1h*db1h)/n;
-  b0h/=n; b0l=(b0l/n-b0h*b0h)/n;
-  db0h/=n; db0l=(db0l/n-db0h*db0h)/n;
+#else  
+
+  std::array<long double, 8> b[1] = {{0.,0.,0.,0.,0.,0.,0.,0.}};
+  MomentChi2Thread (info, inputSize, 0, 0xffffffff, b[0]);
+
+#endif
+ 
+  long double b0h = b[0][0], b0l = b[0][1], db0h = b[0][2], db0l = b[0][3];
+  long double b1h = b[0][4], b1l = b[0][5], db1h = b[0][6], db1l = b[0][7];
+  
+  b1h  /= n;  b1l = (b1l/n  - b1h*b1h) / n;
+  db1h /= n; db1l = (db1l/n - db1h*db1h) / n;
+  b0h  /= n;  b0l = (b0l/n  - b0h*b0h) / n;
+  db0h /= n; db0l = (db0l/n - db0h*db0h) / n;
 
   printf("Popcount 1 stats : %Lf - %Lf\n", b1h, b1l);
   printf("Popcount 0 stats : %Lf - %Lf\n", b0h, b0l);
