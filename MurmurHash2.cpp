@@ -73,7 +73,7 @@ uint32_t MurmurHash2 ( const void * key, int len, uint32_t seed )
   case 3: h ^= data[2] << 16;
   case 2: h ^= data[1] << 8;
   case 1: h ^= data[0];
-      h *= m;
+          h *= m;
   };
 
   // Do a few final mixes of the hash to ensure the last few

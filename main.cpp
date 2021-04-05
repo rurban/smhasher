@@ -516,17 +516,19 @@ HashInfo g_hashes[] =
   { ahash64_test,         64, 0x00000000, "ahash64",     "ahash 64bit", GOOD, {} },
 #endif
   { xxh3_test,            64, 0x39CD9E4A, "xxh3",        "xxHash v3, 64-bit", GOOD, // no known bad seeds
-    {0xbe4ba423396cfeb8,     // kSecret
+    {0x47ebda34,             // 32bit bad seed
+     /* 0xbe4ba423396cfeb8,  // kSecret
      0x396cfeb8, 0xbe4ba423, // kSecret
      0x6782737bea4239b9,     // bitflip1 ^ input
      0xaf56bc3b0996523a,     // bitflip2 ^ input[last 8]
+     */
     }},
   { xxh3low_test,         32, 0xFAE8467B, "xxh3low",     "xxHash v3, 64-bit, low 32-bits part", GOOD,
-    {0xbe4ba423396cfeb8, 0x396cfeb8, 0xbe4ba423, 0x6782737bea4239b9ULL, 0xaf56bc3b0996523aULL }},
+    {0x47ebda34} /* !! */},
   { xxh128_test,         128, 0xEB61B3A0, "xxh128",      "xxHash v3, 128-bit", GOOD,
-    {0xbe4ba423396cfeb8, 0x396cfeb8, 0xbe4ba423, 0x6782737bea4239b9ULL, 0xaf56bc3b0996523aULL }},
+    {0x47ebda34}},
   { xxh128low_test,       64, 0x54D1CC70, "xxh128low",   "xxHash v3, 128-bit, low 64-bits part", GOOD,
-    {0xbe4ba423396cfeb8, 0x396cfeb8, 0xbe4ba423, 0x6782737bea4239b9ULL, 0xaf56bc3b0996523aULL }},
+    {0x47ebda34}},
 #ifdef HAVE_BIT32
   { wyhash32_test,        32, 0x09DE8066, "wyhash32",       "wyhash v3 (32-bit native)", GOOD,
     { /*0x1bc1d52e, 0x1cbc261d, 0x33a0d1d9,*/ 0x429dacdd, 0xd637dbf3 } /* !! last 2 */ },
@@ -1781,6 +1783,7 @@ bool MomentChi2Test ( struct HashInfo *info, int inputSize)
   moments b[NCPU];
   static std::thread t[NCPU];
   printf("%d threads starting... ", NCPU);
+  fflush(NULL);
   for (int i=0; i < NCPU; i++) {
     const unsigned start = i * len;
     b[i][0] = 0.; b[i][1] = 0.; b[i][2] = 0.; b[i][3] = 0.;
