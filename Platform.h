@@ -13,6 +13,10 @@
 #if NCPU > 1
 #include <thread>
 void SetThreadAffinity ( std::thread &t, int cpu );
+# if __APPLE__
+#  include <mach/mach.h>
+#  include <mach/thread_act.h>
+# endif
 #endif
 void SetAffinity ( int cpu );
 

@@ -50,6 +50,10 @@ void SetThreadAffinity ( std::thread &t, int cpu )
   CPU_ZERO(&cpuset);
   CPU_SET(cpu, &cpuset);
   pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
+#elif defined(__APPLE__)
+  thread_affinity_policy_data_t policy = { cpu };
+  thread_policy_set(pthread_mach_thread_np(t.native_handle()), THREAD_AFFINITY_POLICY,
+                    (thread_policy_t)&policy, 1);
 #endif
 }
 #endif
