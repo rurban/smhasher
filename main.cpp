@@ -1653,10 +1653,12 @@ void VerifyHash ( const void * key, int len, uint32_t seed, void * out )
   g_outputVCode = MurmurOAAT((const char *)out, g_hashUnderTest->hashbits/8, g_outputVCode);
 }
 
+typedef long double moments[8];
+
 // Copy the results into NCPU ranges of 2^32
 void MomentChi2Thread ( const struct HashInfo *info, const int inputSize,
                         const unsigned start, const unsigned end,
-                        std::array<long double, 8> &b)
+                        moments &b)
 {
   pfHash const hash = info->hash;
   uint32_t seed = 0;
@@ -1721,14 +1723,14 @@ void MomentChi2Thread ( const struct HashInfo *info, const int inputSize,
 }
 
 // sha1_32a: 23m with step 3
-//           10m with step 2, 4 threads, ryzen3
+//           4m30 with step 2, 4 threads, ryzen3
 bool MomentChi2Test ( struct HashInfo *info, int inputSize)
 {
   const pfHash hash = info->hash;
   const int step = 2;
   const unsigned mx = 0xffffffff;
   assert(inputSize >= 4);
-  long double const n = 0x100000000UL / step;
+  long double const n = 0x100000000UL / 2;
   int hbits = info->hashbits;
   if (hbits > 64) hbits = 64;   // limited due to popcount8
   assert(hbits <= HASH_SIZE_MAX*8);
@@ -1776,12 +1778,13 @@ bool MomentChi2Test ( struct HashInfo *info, int inputSize)
 #if NCPU > 1
   // split into NCPU threads
   const uint64_t len = 0x100000000UL / NCPU;
-  std::array<long double, 8> b[NCPU];
+  moments b[NCPU];
   static std::thread t[NCPU];
   printf("%d threads starting... ", NCPU);
   for (int i=0; i < NCPU; i++) {
     const unsigned start = i * len;
-    b[i] = {0.,0.,0.,0.,0.,0.,0.,0.}; 
+    b[i][0] = 0.; b[i][1] = 0.; b[i][2] = 0.; b[i][3] = 0.;
+    b[i][4] = 0.; b[i][5] = 0.; b[i][6] = 0.; b[i][7] = 0.;
     //printf("thread[%d]: %d, 0x%x - 0x%x\n", i, inputSize, start, start + len - 1);
     t[i] = std::thread {MomentChi2Thread, info, inputSize, start, start + (len - 1), std::ref(b[i])};
     // pin it? moves around a lot. but the result is fair
@@ -1801,15 +1804,18 @@ bool MomentChi2Test ( struct HashInfo *info, int inputSize)
       b[0][j] += b[i][j];
   }
 
-#else  
-
-  std::array<long double, 8> b[1] = {{0.,0.,0.,0.,0.,0.,0.,0.}};
-  MomentChi2Thread (info, inputSize, 0, 0xffffffff, b[0]);
-
-#endif
- 
   long double b0h = b[0][0], b0l = b[0][1], db0h = b[0][2], db0l = b[0][3];
   long double b1h = b[0][4], b1l = b[0][5], db1h = b[0][6], db1l = b[0][7];
+
+#else  
+
+  moments b = {0.,0.,0.,0.,0.,0.,0.,0.};
+  MomentChi2Thread (info, inputSize, 0, 0xffffffff, b);
+
+  long double b0h = b[0], b0l = b[1], db0h = b[2], db0l = b[3];
+  long double b1h = b[4], b1l = b[5], db1h = b[6], db1l = b[7];
+
+#endif
   
   b1h  /= n;  b1l = (b1l/n  - b1h*b1h) / n;
   db1h /= n; db1l = (db1l/n - db1h*db1h) / n;
