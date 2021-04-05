@@ -308,8 +308,8 @@ inline void MurmurHash64A_test ( const void * key, int len, uint32_t seed, void 
 #endif
 #ifdef HAVE_INT64
 // 2^32 bad seeds for Murmur2C
-static void MurmurHash64B_seed_init(size_t &seed) {
-  if ((seed & UINT64_C(0x00000010)) == UINT64_C(0x00000010))
+static void MurmurHash64B_seed_init(uint32_t &seed) {
+  if ((seed & 0x10) == 0x10)
     seed++;
 }
 inline void MurmurHash64B_test ( const void * key, int len, uint32_t seed, void * out )
@@ -553,14 +553,14 @@ void halftime_hash_seed_init(size_t &seed);
 
 #ifdef __SIZEOF_INT128__
    void multiply_shift_init();
-   void multiply_shift_seed_init(size_t &seed);
+   void multiply_shift_seed_init(uint32_t &seed);
    bool multiply_shift_bad_seeds(std::vector<uint64_t> &seeds);
    void multiply_shift (const void * key, int len, uint32_t seed, void * out);
    void pair_multiply_shift (const void *key, int len, uint32_t seed, void *out);
    void poly_mersenne_init();
-   void poly_mersenne_seed_init(size_t &seed);
+   void poly_mersenne_seed_init(uint32_t &seed);
    // insecure: hashes cancel itself out, as with CRC
-   void poly_0_mersenne (const void* key, int len, uint32_t seed, void* out);
+   // void poly_0_mersenne (const void* key, int len, uint32_t seed, void* out);
    void poly_1_mersenne (const void* key, int len, uint32_t seed, void* out);
    void poly_2_mersenne (const void* key, int len, uint32_t seed, void* out);
    void poly_3_mersenne (const void* key, int len, uint32_t seed, void* out);
@@ -581,7 +581,7 @@ void halftime_hash_seed_init(size_t &seed);
 
 inline void tabulation_32_init() {
   size_t seed = 0;
-   tabulation_32_seed_init(seed);
+  tabulation_32_seed_init(seed);
 }
 // objsize: 40b9b0 - 40bd00: 848
 inline void tabulation_32_test (const void * key, int len, uint32_t seed, void * out) {
@@ -683,7 +683,7 @@ static inline bool mirhashstrict32low_bad_seeds(std::vector<uint32_t> &seeds)
 inline void mirhashstrict32low (const void * key, int len, uint32_t seed, void * out) {
   *(uint32_t*)out = 0xFFFFFFFF & mir_hash_strict(key, (uint64_t)len, (uint64_t)seed);
 }
-static void mirhash_seed_init(size_t &seed)
+static void mirhash_seed_init(uint32_t &seed)
 {
   // reject bad seeds
   std::vector<uint64_t> bad_seeds;
@@ -698,7 +698,7 @@ static void mirhash_seed_init(size_t &seed)
     }
   }
 }
-static void mirhash32_seed_init(size_t &seed)
+static void mirhash32_seed_init(uint32_t &seed)
 {
   // reject bad seeds
   std::vector<uint32_t> bad_seeds;

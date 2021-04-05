@@ -475,9 +475,9 @@ HashInfo g_hashes[] =
   { SpookyHash64_test,    64, 0xA7F955F1, "Spooky64",    "Bob Jenkins' SpookyHash, 64-bit result", GOOD, {} },
   { SpookyHash128_test,  128, 0x8D263080, "Spooky128",   "Bob Jenkins' SpookyHash, 128-bit result", GOOD, {} },
   { pengyhash_test,       64, 0x1FC2217B, "pengyhash",   "pengyhash", GOOD, {} },
-  { mx3hash64_test,       64, 0x4DB51E5B, "mx3",         "mx3 64bit", GOOD, {} },
+  { mx3hash64_test,       64, 0x4DB51E5B, "mx3",         "mx3 64bit", GOOD, {0x10} /* !! and all & 0x10 */},
 #if defined(__SSE4_2__) && defined(__x86_64__) && !defined(_MSC_VER)
-  { umash32,              32, 0x03E16CA1, "umash32",     "umash 32", GOOD, {} },
+  { umash32,              32, 0x03E16CA1, "umash32",     "umash 32", GOOD, {0x90e37057} /* !! */},
   { umash32_hi,           32, 0xE29D613C, "umash32_hi",  "umash 32 hi", GOOD, {} },
   { umash,                64, 0x4542288C, "umash64",     "umash 64", GOOD, {} },
   { umash128,            128, 0xDA4E82B6, "umash128",    "umash 128", GOOD, {} },
@@ -565,9 +565,13 @@ void Hash_init (HashInfo* info) {
   else if(info->hash == tabulation_32_test)
     tabulation_32_init();
 #ifdef __SIZEOF_INT128__
-  else if(info->hash == multiply_shift || info->hash == pair_multiply_shift)
+  else if(info->hash == multiply_shift ||
+          info->hash == pair_multiply_shift)
     multiply_shift_init();
-  else if(info->hash == poly_0_mersenne || info->hash == poly_1_mersenne || info->hash == poly_2_mersenne || info->hash == poly_3_mersenne || info->hash == poly_4_mersenne)
+  else if(info->hash == poly_1_mersenne ||
+          info->hash == poly_2_mersenne ||
+          info->hash == poly_3_mersenne ||
+          info->hash == poly_4_mersenne)
     poly_mersenne_init();
   else if(info->hash == tabulation_test)
     tabulation_init();
@@ -602,14 +606,71 @@ void Hash_init (HashInfo* info) {
 
 // optional hash seed initializers.
 // esp. for Hashmaps, whenever the seed changes, for expensive seeding.
-// Also needed for hashed with a few bad seeds, to reject this seed and generate a new one.
-// (GH #99)
 void Seed_init (HashInfo* info, size_t seed) {
   Hash_Seed_init (info->hash, seed);
-  //bad_seed_init (info->hash, seed);
+  //Bad_seed_init (info->hash, seed);
+}
+
+// Needed for hashed with a few bad seeds, to reject this seed and generate a new one.
+// (GH #99)
+void Bad_Seed_init (pfHash hash, uint32_t &seed) {
+  if(hash ==
+#ifdef HAVE_BIT32
+          wyhash32_test
+#else
+          wyhash32low
+#endif
+          )
+    wyhash32_seed_init(seed);
+  // zero-seed hashes:
+  else if (!seed && (hash == BadHash || hash == sumhash || hash == fletcher2_test ||
+                     hash == fletcher4_test || hash == Bernstein_test || hash == sdbm_test ||
+                     hash == JenkinsOOAT_test || hash == JenkinsOOAT_perl_test ||
+                     hash == SuperFastHash_test || hash == MurmurOAAT_test ||
+                     hash == o1hash_test))
+    seed++;
+  else if (hash == Crap8_test && (seed == 0x83d2e73b || seed == 0x97e1cc59))
+    seed++;
+  else if (hash == MurmurHash1_test && seed == 0xc6a4a793)
+    seed++;
+  else if (hash == MurmurHash2_test && seed == 0x10)
+    seed++;
+  else if (hash == MurmurHash2A_test && seed == 0x2fc301c9)
+    seed++;
+  else if((hash == MurmurHash3_x86_32 || hash == PMurHash32_test) && seed == 0xfca58b2d)
+    seed++;
+  else if (hash == MurmurHash3_x86_128 && seed == 0x239b961b)
+    seed++;
+#ifdef HAVE_INT64
+  else if(hash == wyhash_test) {
+    size_t seedl = seed;
+    wyhash_seed_init(seedl);
+    seed = seedl;
+  }
+  else if(hash == mirhash_test)
+    mirhash_seed_init(seed);
+  else if(hash == mirhash32low)
+    mirhash32_seed_init(seed);
+  else if(hash == mirhashstrict32low && seed == 0x7fcc747f)
+    seed++;
+  else if(hash == MurmurHash64B_test)
+    MurmurHash64B_seed_init(seed);
+#endif
+#ifdef __SIZEOF_INT128__
+  else if(hash == multiply_shift)
+    multiply_shift_seed_init(seed);
+  else if((hash == poly_2_mersenne && seed == 0x60e8512c) ||
+          (hash == poly_3_mersenne && seed == 0x3d25f745))
+    seed++;
+#endif
+#if defined(__SSE4_2__) && defined(__x86_64__)
+  else if (hash == clhash_test && seed == 0x0)
+    seed++;
+#endif
 }
 
 void Hash_Seed_init (pfHash hash, size_t seed) {
+  uint32_t seed32 = seed;
   //if (hash == md5_128 || hash == md5_32)
   //  md5_seed_init(seed);
   //if (hash == VHASH_32 || hash == VHASH_64)
@@ -618,9 +679,13 @@ void Hash_Seed_init (pfHash hash, size_t seed) {
     tabulation_32_seed_init(seed);
 #ifdef __SIZEOF_INT128__
   else if(hash == multiply_shift || hash == pair_multiply_shift)
-    multiply_shift_seed_init(seed);
-  else if(hash == poly_0_mersenne || hash == poly_1_mersenne || hash == poly_2_mersenne || hash == poly_3_mersenne || hash == poly_4_mersenne)
-    poly_mersenne_seed_init(seed);
+    multiply_shift_seed_init(seed32);
+  else if(/*hash == poly_0_mersenne || */
+          hash == poly_1_mersenne ||
+          hash == poly_2_mersenne ||
+          hash == poly_3_mersenne ||
+          hash == poly_4_mersenne)
+    poly_mersenne_seed_init(seed32);
   else if(hash == tabulation_test)
     tabulation_seed_init(seed);
 #endif

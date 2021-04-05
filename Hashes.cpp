@@ -928,7 +928,7 @@ void halftime_hash_seed_init(size_t &seed)
    static __uint128_t rand128() {
      return rand_u128();
    }
-   void multiply_shift_seed_init_slow(size_t seed) {
+   void multiply_shift_seed_init_slow(uint32_t seed) {
       srand(seed);
       for (int i = 0; i < MULTIPLY_SHIFT_RANDOM_WORDS; i++) {
          multiply_shift_random[i] = rand128();
@@ -943,7 +943,7 @@ void halftime_hash_seed_init(size_t &seed)
      seeds = std::vector<uint64_t> { UINT64_C(0xfffffff0), UINT64_C(0x1fffffff0) };
      return true;
    }
-   void multiply_shift_seed_init(size_t &seed) {
+   void multiply_shift_seed_init(uint32_t &seed) {
      // The seeds we get are not random values, but just something like 1, 2 or 3.
      // So we xor it with a random number to get something slightly more reasonable.
      // But skip really bad seed patterns: 0x...fffffff0
@@ -1054,7 +1054,7 @@ void halftime_hash_seed_init(size_t &seed)
    void poly_4_mersenne(const void * key, int len_bytes, uint32_t seed, void * out) {
       *(uint32_t*)out = (uint32_t)poly_k_mersenne(key, len_bytes, seed, 4);
    }
-   void poly_mersenne_seed_init(size_t &seed) {
+   void poly_mersenne_seed_init(uint32_t &seed) {
       srand(seed);
       // a has be at most 2^60, or the lazy modular reduction won't work.
       poly_mersenne_a = rand128() % (MERSENNE_61/2);
@@ -1066,7 +1066,7 @@ void halftime_hash_seed_init(size_t &seed)
       }
    }
    void poly_mersenne_init() {
-     size_t seed = 0;
+     uint32_t seed = 0;
      poly_mersenne_seed_init(seed);
    }
 
