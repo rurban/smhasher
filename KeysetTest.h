@@ -173,6 +173,7 @@ void TestSecretRangeThread ( const HashInfo* info, const uint64_t hi,
       exit(1);
     }
   }
+  fflush(NULL);
   //printf("\n");
   return;
 }
@@ -271,6 +272,7 @@ bool BadSeedsTest ( HashInfo* info, bool testAll ) {
     printf("PASS\n");
   else
     printf("FAIL\nEnsure to add these bad seeds to the list of secrets in main.cpp\n");
+  fflush(NULL);
   return result;
 }
 
@@ -334,8 +336,8 @@ bool PerlinNoise ( hashfunc<hashtype> hash, int inputLen,
 
 template< typename hashtype, class blocktype >
 void CombinationKeygenRecurse ( blocktype * key, int len, int maxlen,
-                  blocktype * blocks, int blockcount,
-                  pfHash hash, std::vector<hashtype> & hashes )
+                                blocktype * blocks, int blockcount,
+                                pfHash hash, std::vector<hashtype> & hashes )
 {
   if(len == maxlen) return;  // end recursion
 
@@ -343,17 +345,11 @@ void CombinationKeygenRecurse ( blocktype * key, int len, int maxlen,
   {
     key[len] = blocks[i];
 
-    //if(len == maxlen-1)
-    {
-      hashtype h;
-      hash(key, (len+1) * sizeof(blocktype), 0, &h);
-      hashes.push_back(h);
-    }
+    hashtype h;
+    hash(key, (len+1) * sizeof(blocktype), 0, &h);
+    hashes.push_back(h);
 
-    //else
-    {
-      CombinationKeygenRecurse(key,len+1,maxlen,blocks,blockcount,hash,hashes);
-    }
+    CombinationKeygenRecurse(key,len+1,maxlen,blocks,blockcount,hash,hashes);
   }
 }
 

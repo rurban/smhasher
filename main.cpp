@@ -948,7 +948,6 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       fflush(NULL);
 
       bool result = true;
-
       uint32_t blocks[] = { 0, 1, 2, 3, 4, 5, 6, 7 };
 
       Seed_init (info, 0);
@@ -1103,7 +1102,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
       bool result = true;
 
-      size_t const nbElts = 2;
+      const size_t nbElts = 2;
       block16 blocks[nbElts];
       memset(blocks, 0, sizeof(blocks));
       blocks[0].c[sizeof(blocks[0].c)-1] = 0x80;   // presumes little endian

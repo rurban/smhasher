@@ -249,11 +249,13 @@ void TwoBytesKeygen ( int maxlen, KeyCallback & c )
 
   int keycount = 0;
 
-  for(int i = 2; i <= maxlen; i++) keycount += (int)chooseK(i,2);
+  for(int i = 2; i <= maxlen; i++)
+    keycount += (int)chooseK(i,2);
 
   keycount *= 255*255;
 
-  for(int i = 2; i <= maxlen; i++) keycount += i*255;
+  for(int i = 2; i <= maxlen; i++)
+    keycount += i*255;
 
   printf("Keyset 'TwoBytes' - up-to-%d-byte keys, %d total keys\n", maxlen, keycount);
 
@@ -263,44 +265,42 @@ void TwoBytesKeygen ( int maxlen, KeyCallback & c )
   // Add all keys with one non-zero byte
 
   uint8_t key[256];
-
   memset(key,0,256);
 
   for(int keylen = 2; keylen <= maxlen; keylen++)
-  for(int byteA = 0; byteA < keylen; byteA++)
-  {
-    for(int valA = 1; valA <= 255; valA++)
-    {
-      key[byteA] = (uint8_t)valA;
+    for(int byteA = 0; byteA < keylen; byteA++)
+      {
+        for(int valA = 1; valA <= 255; valA++)
+          {
+            key[byteA] = (uint8_t)valA;
+            c(key,keylen);
+          }
 
-      c(key,keylen);
-    }
-
-    key[byteA] = 0;
-  }
+        key[byteA] = 0;
+      }
 
   //----------
   // Add all keys with two non-zero bytes
 
   for(int keylen = 2; keylen <= maxlen; keylen++)
-  for(int byteA = 0; byteA < keylen-1; byteA++)
-  for(int byteB = byteA+1; byteB < keylen; byteB++)
-  {
-    for(int valA = 1; valA <= 255; valA++)
-    {
-      key[byteA] = (uint8_t)valA;
+    for(int byteA = 0; byteA < keylen-1; byteA++)
+      for(int byteB = byteA+1; byteB < keylen; byteB++)
+        {
+          for(int valA = 1; valA <= 255; valA++)
+            {
+              key[byteA] = (uint8_t)valA;
 
-      for(int valB = 1; valB <= 255; valB++)
-      {
-        key[byteB] = (uint8_t)valB;
-        c(key,keylen);
-      }
+              for(int valB = 1; valB <= 255; valB++)
+                {
+                  key[byteB] = (uint8_t)valB;
+                  c(key,keylen);
+                }
 
-      key[byteB] = 0;
-    }
+              key[byteB] = 0;
+            }
 
-    key[byteA] = 0;
-  }
+          key[byteA] = 0;
+        }
 }
 
 //-----------------------------------------------------------------------------
