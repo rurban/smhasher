@@ -61,7 +61,7 @@ bool isprime ( uint32_t x )
   return true;
 }
 
-// unused
+// unused. useful to create a 32bit hash mixer
 void GenerateMixingConstants ( void )
 {
   Rand r(8350147);
