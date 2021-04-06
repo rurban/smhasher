@@ -1659,12 +1659,12 @@ typedef long double moments[8];
 
 // Copy the results into NCPU ranges of 2^32
 void MomentChi2Thread ( const struct HashInfo *info, const int inputSize,
-                        const unsigned start, const unsigned end,
+                        const unsigned start, const unsigned end, const unsigned step,
                         moments &b)
 {
   pfHash const hash = info->hash;
   uint32_t seed = 0;
-  long double const n = (end-(start+1)) / 2;
+  long double const n = (end-(start+1)) / step;
   uint64_t previous = 0;
   long double b0h = b[0], b0l = b[1], db0h = b[2], db0l = b[3];
   long double b1h = b[4], b1l = b[5], db1h = b[6], db1l = b[7];
@@ -1680,14 +1680,14 @@ void MomentChi2Thread ( const struct HashInfo *info, const int inputSize,
   assert(start < end);
   //assert(step > 0);
 
-  if (start > 2) {
-    uint64_t i = start - 2;
+  if (start > step) {
+    uint64_t i = start - step;
     memcpy(key, &i, sizeof(i));
     hash(key, inputSize, seed, hbuff);
     memcpy(&previous, hbuff, 8);
   }
 
-  for (uint64_t i=start; i<=end; i+=2) {
+  for (uint64_t i=start; i<=end; i+=step) {
     memcpy(key, &i, sizeof(i));
     hash(key, inputSize, seed, hbuff);
 
@@ -1729,10 +1729,11 @@ void MomentChi2Thread ( const struct HashInfo *info, const int inputSize,
 bool MomentChi2Test ( struct HashInfo *info, int inputSize)
 {
   const pfHash hash = info->hash;
-  const int step = 2;
+  const int step = ((g_speed > 500 || info->hashbits > 128)
+                    && !g_testExtra) ? 6 : 2;
   const unsigned mx = 0xffffffff;
   assert(inputSize >= 4);
-  long double const n = 0x100000000UL / 2;
+  long double const n = 0x100000000UL / step;
   int hbits = info->hashbits;
   if (hbits > 64) hbits = 64;   // limited due to popcount8
   assert(hbits <= HASH_SIZE_MAX*8);
@@ -1765,11 +1766,21 @@ bool MomentChi2Test ( struct HashInfo *info, int inputSize)
   switch (hbits/8) {
       case 8:
           srefh = 38918200.;
-          srefl = 273633.333333;
+          if (step == 2)
+            srefl = 273633.333333;
+          else if (step == 6)
+            srefl = 820900.0;
+          else
+            abort();
           break;
       case 4:
           srefh = 1391290.;
-          srefl = 686.6666667;
+          if (step == 2)
+            srefl = 686.6666667;
+          else if (step == 6)
+            srefl = 2060.0;
+          else
+            abort();
           break;
       default:
           printf("hash size not covered \n");
@@ -1789,7 +1800,7 @@ bool MomentChi2Test ( struct HashInfo *info, int inputSize)
     b[i][0] = 0.; b[i][1] = 0.; b[i][2] = 0.; b[i][3] = 0.;
     b[i][4] = 0.; b[i][5] = 0.; b[i][6] = 0.; b[i][7] = 0.;
     //printf("thread[%d]: %d, 0x%x - 0x%x\n", i, inputSize, start, start + len - 1);
-    t[i] = std::thread {MomentChi2Thread, info, inputSize, start, start + (len - 1), std::ref(b[i])};
+    t[i] = std::thread {MomentChi2Thread, info, inputSize, start, start + (len - 1), step, std::ref(b[i])};
     // pin it? moves around a lot. but the result is fair
   }
   fflush(NULL);
@@ -1813,7 +1824,7 @@ bool MomentChi2Test ( struct HashInfo *info, int inputSize)
 #else  
 
   moments b = {0.,0.,0.,0.,0.,0.,0.,0.};
-  MomentChi2Thread (info, inputSize, 0, 0xffffffff, b);
+  MomentChi2Thread (info, inputSize, 0, 0xffffffff, step, b);
 
   long double b0h = b[0], b0l = b[1], db0h = b[2], db0l = b[3];
   long double b1h = b[4], b1l = b[5], db1h = b[6], db1l = b[7];
