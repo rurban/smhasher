@@ -1305,7 +1305,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   // 7m for FNV64 with windowbits=27 / 32bit keys
   // 5m35 for hasshe2 with windowbits=25 / 32bit keys
 
-  if(g_testWindow || g_testAll)
+  if((g_testWindow || g_testAll) && !need_minlen64_align16(hash))
   {
     printf("[[[ Keyset 'Window' Tests ]]]\n\n");
 
@@ -1320,7 +1320,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
     Seed_init (info, 0);
     result &= WindowedKeyTest< Blob<keybits>, hashtype >
-      ( hash, windowbits, testCollision, testDistribution, g_drawDiagram );
+        ( hash, windowbits, testCollision, testDistribution, g_drawDiagram );
 
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
@@ -1332,7 +1332,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   // 5s for crc32_hw
   // 18s for farmhash128_c
 
-  if(g_testCyclic || g_testAll)
+  if ((g_testCyclic || g_testAll) && !need_minlen64_align16(hash))
   {
     printf("[[[ Keyset 'Cyclic' Tests ]]]\n\n");
     fflush(NULL);

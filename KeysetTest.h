@@ -10,6 +10,7 @@
 #include "Types.h"
 #include "Stats.h"
 #include "Random.h"   // for rand_p
+#include "Hashes.h"
 
 #include <stdint.h>
 #include <inttypes.h>
@@ -148,7 +149,7 @@ void TestSecretRangeThread ( const HashInfo* info, const uint64_t hi,
     Hash_Seed_init (hash, seed);
     for (int x : std::vector<int> {0,32,127,255}) {
       hashtype h;
-      uint8_t key[16];
+      uint8_t key[64]; // for crc32_pclmul, otherwie we would need only 16 byte
       memset(&key, x, sizeof(key));
       hash(key, 16, seed, &h);
       if (h == 0 && x == 0) {
@@ -652,7 +653,7 @@ bool TextKeyTest ( hashfunc<hashtype> hash, const char * prefix, const char * co
   for(int i = 0; i < corelen; i++) printf("X");
   printf("%s\" - %ld keys\n",suffix,keycount);
 
-  uint8_t * key = new uint8_t[keybytes+1];
+  uint8_t * key = new uint8_t[std::min(keybytes+1, 64)];
 
   key[keybytes] = 0;
 
@@ -703,7 +704,7 @@ bool WordsKeyTest ( hashfunc<hashtype> hash, const long keycount,
   hashes.resize(keycount);
   Rand r(483723);
 
-  char* key = new char[maxlen+1];
+  char* key = new char[std::min(maxlen+1, 64)];
   std::string key_str;
 
   for(long i = 0; i < keycount; i++)
@@ -756,9 +757,11 @@ bool WordsStringTest ( hashfunc<hashtype> hash, std::vector<std::string> & words
       i--;
       continue;
     }
+    if (need_minlen64_align16(hash) && words[i].capacity() < 64)
+      words[i].resize(64);
     wordset.insert(words[i]);
+    const int len = words[i].length();
     const char *key = words[i].c_str();
-    int len = words[i].length();
     hash(key, len, 0, &hashes[i]);
   }
 
@@ -811,7 +814,7 @@ bool SeedTest ( pfHash hash, int keycount, bool drawDiagram )
 {
   printf("Keyset 'Seed' - %d keys\n",keycount);
 
-  const char * text = "The quick brown fox jumps over the lazy dog";
+  const char text[64] = "The quick brown fox jumps over the lazy dog";
   const int len = (int)strlen(text);
 
   //----------

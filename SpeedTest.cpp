@@ -1,6 +1,7 @@
 #include "SpeedTest.h"
 #include "Random.h"
 #include "vmac.h"
+#include "Hashes.h"
 
 #include <stdio.h>   // for printf
 #include <memory.h>  // for memset
@@ -185,8 +186,14 @@ NEVER_INLINE int64_t timehash_small ( pfHash hash, const void * key, int len, in
 {
   const int NUM_TRIALS = 200;
   volatile unsigned long long int begin, end;
-  uint32_t hash_temp[16] = {};
-  uint32_t *buf = new uint32_t[1 + (len + 3) / 4]();
+  uint32_t hash_temp[16] = {0};
+  uint32_t *buf;
+  if (!need_minlen64_align16(hash)) {
+    buf = new uint32_t[1 + (len + 3) / 4]();
+  } else {
+    assert(len < 64);
+    buf = new uint32_t[64/4]();
+  }
   memcpy(buf,key,len);
 
   begin = timer_start();
@@ -328,7 +335,14 @@ double HashMapSpeedTest ( pfHash pfhash, const int hashbits,
   printf("Init std HashMapTest:     ");
   fflush(NULL);
   times.reserve(trials);
-  { // hash inserts and 1% deletes
+  if (need_minlen64_align16(pfhash)) {
+    for (it = words.begin(); it != words.end(); it++) {
+      // requires min len 64, and 16byte key alignment
+      (*it).resize(64);
+    }
+  }
+  {
+    // hash inserts plus 1% deletes
     volatile int64_t begin, end;
     int i = 0;
     begin = timer_start();

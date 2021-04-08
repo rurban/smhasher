@@ -77,48 +77,29 @@ void crc64c_hw_test(const void *key, int len, uint32_t seed, void *out);
 void CityHashCrc64_test(const void *key, int len, uint32_t seed, void *out);
 void CityHashCrc128_test(const void *key, int len, uint32_t seed, void *out);
 #endif
+
 #if defined(HAVE_CLMUL) && !defined(_MSC_VER)
 /* Function from linux kernel 3.14. It computes the CRC over the given
  * buffer with initial CRC value <crc32>. The buffer is <len> byte in length,
- * and must be 16-byte aligned. */
+ * and must be 16-byte aligned, and larger than 63. */
 extern "C" uint32_t crc32_pclmul_le_16(unsigned char const *buffer, size_t len,
                                        uint32_t crc32);
+void crc32c_pclmul_test(const void *key, int len, uint32_t seed, void *out);
 static inline bool crc32c_pclmul_bad_seeds(std::vector<uint32_t> &seeds)
 {
   seeds = std::vector<uint32_t> { UINT32_C(0) };
   return true;
 }
-inline void crc32c_pclmul_test(const void *key, int len, uint32_t seed, void *out)
-{
-  if (!len) {
-    *(uint32_t *) out = 0;
-    return;
-  }
-  // objsize: 0x1e1 = 481
-#ifdef NDEBUG
-  if (((uintptr_t)key & 15) != 0) {
-#if 0 // slower
-    if (len < 1024) {
-      unsigned char input[1024];
-      memcpy((void*)input, key, len);
-      *(uint32_t *) out = crc32_pclmul_le_16(input, (size_t)len, seed);
-    }
-    else
-#endif
-    {
-      unsigned char const *input = (unsigned char const *)malloc(len);
-      memcpy((void*)input, key, len);
-      *(uint32_t *) out = crc32_pclmul_le_16(input, (size_t)len, seed);
-      free ((void*)input);
-    }
-  }
-#else
-  assert(((uintptr_t)key & 15) == 0); // input must be 16byte aligned
-  *(uint32_t *) out = crc32_pclmul_le_16((unsigned char const *)key, (size_t)len, seed);
-#endif
+static inline bool need_minlen64_align16(pfHash hash) {
+  return hash == crc32c_pclmul_test;
 }
 void falkhash_test_cxx(const void *key, int len, uint32_t seed, void *out);
+#else
+static inline bool need_minlen64_align16(pfHash hash) {
+  return false;
+}
 #endif
+
 size_t fibonacci(const char *key, int len, uint32_t seed);
 inline void fibonacci_test(const void *key, int len, uint32_t seed, void *out) {
   *(size_t *)out = fibonacci((const char *)key, len, seed);

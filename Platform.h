@@ -39,6 +39,7 @@ void SetAffinity ( int cpu );
 
 #define FORCE_INLINE	__forceinline
 #define	NEVER_INLINE  __declspec(noinline)
+#define ALIGNED(n)    __declspec(align(n))
 
 #include <stdlib.h>
 #include <math.h>   // Has to be included before intrin.h or VC complains about 'ceil'
@@ -83,6 +84,7 @@ void SetAffinity ( int cpu );
 
 #define	FORCE_INLINE inline __attribute__((always_inline))
 #define	NEVER_INLINE __attribute__((noinline))
+#define ALIGNED(n)   __attribute__ ((aligned(n)))
 
 #ifdef HAVE_BIT32
 #define popcount8(x) __builtin_popcountll(x)

@@ -1128,3 +1128,35 @@ uint64_t aesnihash(uint8_t *in, unsigned long src_sz) {
   return hash[0] ^ hash[1];
 }
 #endif
+
+#if defined(HAVE_CLMUL) && !defined(_MSC_VER)
+void crc32c_pclmul_test(const void *key, int len, uint32_t seed, void *out)
+{
+  if (!len) {
+    *(uint32_t *) out = 0;
+    return;
+  }
+  // objsize: 0x1e1 = 481
+  if (((uintptr_t)key & 15) != 0) {
+    if (len < 1024) {
+      alignas(16) unsigned char stack[1024];
+      memcpy(stack, key, len);
+      *(uint32_t *) out = crc32_pclmul_le_16(stack, (size_t)len, seed);
+    }
+    else {
+#ifdef _MSC_VER // TODO need to verify
+      alignas(16) unsigned char const *input = (unsigned char const *)_aligned_malloc(len, 16);
+#else // TODO C11, else use posix_memalign
+      alignas(16) unsigned char const *input = (unsigned char const *)aligned_alloc(16, len);
+#endif
+      memcpy((void*)input, key, len);
+      *(uint32_t *) out = crc32_pclmul_le_16(input, (size_t)len, seed);
+      free ((void*)input);
+    }
+  }
+  else {
+    assert(((uintptr_t)key & 15) == 0); // input must be 16byte aligned
+    *(uint32_t *) out = crc32_pclmul_le_16((unsigned char const *)key, (size_t)len, seed);
+  }
+}
+#endif

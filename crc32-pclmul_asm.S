@@ -115,7 +115,7 @@ name:
 /**
  *      Calculate crc32
  *      BUF - buffer (16 bytes aligned)
- *      LEN - sizeof buffer (16 bytes aligned), LEN should be grater than 63
+ *      LEN - sizeof buffer (16 bytes aligned), LEN should be greater than 63
  *      CRC - initial crc32
  *      return %eax crc32
  *      uint crc32_pclmul_le_16(unsigned char const *buffer,
