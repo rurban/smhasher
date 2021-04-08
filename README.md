@@ -57,7 +57,7 @@ SMhasher
 | [crc32_hw](doc/crc32_hw.txt)                  |      6330.42 |    35.55 | 170.16 (1) | 653 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2) |
 | [crc32_hw1](doc/crc32_hw1.txt)                |     23208.73 |    46.74 | 179.70 (2) | 671 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2) |
 | [crc64_hw](doc/crc64_hw.txt)                  |      8440.13 |    34.94 | 141.15 (2) | 652 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x64 SSE4.2) |
-| [crc32_pclmul](doc/crc32_pclmul.txt)          |   1972140.38 |     7.00 |     -      | 481 | insecure, bad seed 0, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2+PCLMUL) |
+| [crc32_pclmul](doc/crc32_pclmul.txt)          |           -  |     -    |     -      |     | NYI, machine-specific (x86 SSE4.2+PCLMUL) |
 | [o1hash](doc/o1hash.txt)                      |  12439661.09 |    16.77 | 166.13 (1) | 101 | insecure, no seed, zeros, fails all tests |
 | [fibonacci](doc/fibonacci.txt)                |     11339.87 |    26.33 | 705.64 (2) |1692 | UB, zeros, fails all tests       |
 | [FNV1a](doc/FNV1a.txt)                        |       791.84 |    69.69 | 177.84 (2) | 204 | bad seed, zeros, fails all tests       |
