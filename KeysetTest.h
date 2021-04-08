@@ -164,7 +164,7 @@ void TestSecretRangeThread ( const HashInfo* info, const uint64_t hi,
     }
     if (!TestHashList(hashes, false, true, false, false, false, false)) {
       fails++;
-      printf("Bad seed 0x0x%" PRIx64 "\n", seed);
+      printf("Bad seed 0x%" PRIx64 "\n", seed);
       if (fails < 32) // don't print too many lines
         TestHashList(hashes, false);
       result = false;
