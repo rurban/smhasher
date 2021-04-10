@@ -841,7 +841,39 @@ const uint64_t T_2[1024] = {
 };
 **/
 
-#if defined(_MSC_VER) && (_MSC_VER < 1600)
+/* This hash function suffers from bad quality when using a bad seed. Here are some
+   of them listed, but only a few of all upper 2^32 ranges.
+/* many uncomputable more! I don't see the bit-pattern yet, need to invert it eventually. */
+const uint64_t some_bad_seeds[] = {
+  // first lowest 2^32 range
+  0x6fd03e4,  0x8749054,  0xb17422d,  0xbf1aff7,  0x1927cb4f, 0x2228a261,
+  0x28436920, 0x28d31e38, 0x2e9c3316, 0x310cb62c, 0x3431e80b, 0x348c37b8,
+  0x36d5b3ee, 0x39896fb5, 0x3a155bd3, 0x3bfdbc41, 0x3d07ff95, 0x43fcb9df,
+  0x48201e9d, 0x4de9e8b4, 0x5352a40e, 0x54a3aed2, 0x55f928c3, 0x58c4ae94,
+  0x5f8b8dc6, 0x5fd0ddbf, 0x65e4b06f, 0x6c446186, 0x73bc5462, 0x77e96502,
+  0x7b59d0e1, 0x817843c0, 0x832c6e76, 0x8339436d, 0x83d3836b, 0x87fa8286,
+  0x8cb6c554, 0x9473e0b5, 0x94e9937b, 0x959db0f6, 0x9d97be34, 0xa027b813,
+  0xa3ec6b18, 0xa74fd5fe, 0xaa4ff8cf, 0xaa82a095, 0xada4c9ff, 0xae750d45,
+  0xb2cf1b7e, 0xb822336b, 0xb934a433, 0xb93b1e20, 0xba6ea5dd,
+  // missing all other upper 32bit ranges here...
+  // last upper 2^32 range
+  0xffffffff027ea452, 0xffffffff04506df8, 0xffffffff059491b4, 0xffffffff0ae153aa,
+  0xffffffff0c581e21, 0xffffffff178ed4db, 0xffffffff1b4554e0, 0xffffffff20ed031e,
+  0xffffffff25243d7c, 0xffffffff25d3f9f9, 0xffffffff29e0c974, 0xffffffff2c72bf5b,
+  0xffffffff2d6e7317, 0xffffffff2dc6e4b1, 0xffffffff2e4661be, 0xffffffff39191879,
+  0xffffffff3f6a8c22, 0xffffffff4273e668, 0xffffffff42957d46, 0xffffffff49224386,
+  0xffffffff4a37ba60, 0xffffffff4d204406, 0xffffffff52b1ae6e, 0xffffffff56daedb8,
+  0xffffffff5788c151, 0xffffffff58c416bf, 0xffffffff58ca0121, 0xffffffff5d72b12e,
+  0xffffffff5edacdac, 0xffffffff5fd907f3, 0xffffffff657a7d41, 0xffffffff678e0581,
+  0xffffffff6d32feb6, 0xffffffff6e2a4160, 0xffffffff6f19f221, 0xffffffff77f2b247,
+  0xffffffff793f66b7, 0xffffffff79db63ec, 0xffffffff7ab26022, 0xffffffff7d87a1be,
+  0xffffffff7e7de397, 0xffffffff83e3ca0b, 0xffffffff84c532bf, 0xffffffff88327c1f,
+  0xffffffff890ffd43, 0xffffffff8de7b7b1, 0xffffffff92dad0f1, 0xffffffff930db83a,
+  0xffffffff9a357352, 0xffffffff9fa14291, 0xffffffffa5a1fd23, 0xffffffffa71641e2,
+  0xffffffffade1bca8, 0xffffffffae57efb3, 0xffffffffb4a0ceb2, 0xffffffffb5d7aeb8,
+  0xffffffffba6d105f, 0xffffffffba8b3d4b, 0xffffffffbd287832 };
+
+#  if defined(_MSC_VER) && (_MSC_VER < 1600)
 
 typedef unsigned char uint8_t;
 typedef unsigned int uint32_t;
