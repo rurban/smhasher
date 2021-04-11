@@ -253,11 +253,11 @@ else(SSE2_TRUE)
   message(WARNING "SSE2 not available")
 endif(SSE2_TRUE)
 if(SSE42_TRUE)
-  set(SSE4_2_FOUND
+  set(SSE42_FOUND
       true
       CACHE BOOL "SSE4.2 available")
 else(SSE42_TRUE)
-  set(SSE4_2_FOUND
+  set(SSE42_FOUND
       false
       CACHE BOOL "SSE4.2 not available")
   message(WARNING "SSE4.2 not available")
@@ -324,11 +324,27 @@ endif(AVX512VL_TRUE)
 
 if(CMAKE_CROSSCOMPILING)
   set(SSE2_FOUND false)
-  set(SSE4_2_FOUND false)
+  set(SSE42_FOUND false)
   set(AES_FOUND false)
   set(SHA_FOUND false)
+  set(CLMUL_FOUND false)
 endif(CMAKE_CROSSCOMPILING)
 
+if(SSE2_FOUND)
+  add_definitions(-DHAVE_SSE2)
+endif()
+if(SSE42_FOUND)
+  add_definitions(-DHAVE_SSE42)
+endif()
+if(AES_FOUND)
+  add_definitions(-DHAVE_AESNI)
+endif()
+if(SHA_FOUND)
+  add_definitions(-DHAVE_SHANI)
+endif()
+if(CLMUL_FOUND)
+  add_definitions(-DHAVE_CLMUL)
+endif(CLMUL_FOUND)
 if(HAVE___UINT128_T)
   add_definitions(-DHAVE_INT128)
 endif()
@@ -408,8 +424,7 @@ endif()
 find_package( Threads )
 #set(CMAKE_THREAD_LIBS_INIT "-lpthread")
 
-if(SSE4_2_FOUND)
-  add_definitions(-DHAVE_SSE42)
+if(SSE42_FOUND)
   set(SSE2_SRC hasshe2.c)
   set(SSE4_SRC crc32_hw.c)
   # 64bit only:
@@ -458,11 +473,7 @@ else()
   set(T1HA_SRC t1ha/t1ha0.c t1ha/t1ha1.c t1ha/t1ha2.c)
 endif(AES_FOUND AND (PROCESSOR_FAMILY STREQUAL "Intel"))
 
-if(CLMUL_FOUND)
-  add_definitions(-DHAVE_CLMUL)
-endif(CLMUL_FOUND)
 if(SHA_FOUND)
-  add_definitions(-DHAVE_SHANI)
   # todo: arm, power
   set(SHA_SRC SHA-Intrinsics/sha1-x86.c SHA-Intrinsics/sha256-x86.c)
 endif(SHA_FOUND)
@@ -542,7 +553,7 @@ if(AVX512F_FOUND AND AVX512VL_FOUND)
     PROPERTIES COMPILE_FLAGS
                "-DBLAKE3_USE_SSE41 -DBLAKE3_USE_AVX2 -DBLAKE3_USE_AVX512 -mavx512f -mavx512vl")
 endif()
-if(SSE4_2_FOUND
+if(SSE42_FOUND
    AND (CMAKE_SIZEOF_VOID_P EQUAL 8)
    AND (NOT MSVC))
   set(UMASH_SRC umash.c umash.hpp)

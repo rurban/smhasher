@@ -735,7 +735,7 @@ falkhash_test_cxx(const void *input, int len, uint32_t seed, void *out)
 }
 #endif
 
-#if defined(__SSE4_2__) && defined(__x86_64__)
+#if defined(HAVE_SSE42) && defined(__x86_64__)
 
 #include "clhash.h"
 static char clhash_random[RANDOM_BYTES_NEEDED_FOR_CLHASH];
@@ -1094,15 +1094,17 @@ void tsip_test(const void *bytes, int len, uint32_t seed, void *out)
 #endif /* !MSVC */
 #endif /* HAVE_INT64 */
 
-// arm also has AESNI, check for sse2
-#if defined(HAVE_SSE2) && defined(HAVE_AESNI) && !defined(_MSC_VER)
+// arm also has AESNI, check for sse
+#if defined(HAVE_SSE42) && defined(HAVE_AESNI) && !defined(_MSC_VER)
 /* See https://news.ycombinator.com/item?id=22463979 */
-/* From https://gist.github.com/majek/96dd615ed6c8aa64f60aac14e3f6ab5a */
-uint64_t aesnihash(uint8_t *in, unsigned long src_sz) {
+/* From https://gist.github.com/majek/96dd615ed6c8aa64f60aac14e3f6ab5a, but added a seed */
+uint64_t aesnihash(uint8_t *in, unsigned long src_sz, uint32_t seed) {
   uint8_t tmp_buf[16] = {0};
   __m128i rk0 = {0x736f6d6570736575ULL, 0x646f72616e646f6dULL};
   __m128i rk1 = {0x1231236570743245ULL, 0x126f12321321456dULL};
   __m128i hash = rk0;
+  uint64_t seed64 = (uint64_t)seed;
+  hash[0] ^= seed64;
 
   while (src_sz >= 16) {
   onemoretry:

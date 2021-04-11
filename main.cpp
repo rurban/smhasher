@@ -342,11 +342,11 @@ HashInfo g_hashes[] =
 #endif
   { CityHash64noSeed_test, 64, 0x63FC6063, "City64noSeed","Google CityHash64 without seed (default version, misses one final avalanche)", POOR, {} },
   { CityHash64_test,      64, 0x25A20825, "City64",       "Google CityHash64WithSeed (old)", POOR, {} },
-#if defined(HAVE_SSE2) && defined(HAVE_AESNI) && !defined(_MSC_VER)
-  { aesnihash_test,       64, 0x0,        "aesnihash",    "majek's unseeded aesnihash with aesenc, 64-bit for x64", POOR,
-    {0x736f6d6570736575ULL, 0x646f72616e646f6dULL, 0x1231236570743245ULL, 0x126f12321321456dULL} },
+#if defined(HAVE_SSE42) && defined(HAVE_AESNI) && !defined(_MSC_VER)
+  { aesnihash_test,       64, 0x0,        "aesnihash",    "majek's aesnihash with seed, aesenc, 64-bit for x64", POOR,
+    {0x70736575} },
 #endif
-#if defined(__SSE4_2__) && defined(__x86_64__) && !defined(_WIN32)
+#if defined(HAVE_SSE42) && defined(__x86_64__) && !defined(_WIN32)
   { falkhash_test_cxx,    64, 0x2F99B071, "falkhash",    "falkhash.asm with aesenc, 64-bit for x64", POOR, {} },
 #endif
 #ifdef HAVE_MEOW_HASH

@@ -112,7 +112,7 @@ SMhasher
 | [t1ha0_32be](doc/t1ha0_32be.txt)              |      4585.59 |    55.98 | 183.45 (2) | 533 | Sparse, LongNeighbors      |
 | [t1ha2_stream](doc/t1ha2_stream.txt)          |      9068.55 |    74.56 | 219.85 (6) |1665 | Sparse, Permutation, LongNeighbors |
 | [t1ha2_stream128](doc/t1ha2_stream128.txt)    |      9065.50 |    93.19 | 236.50 (3) |1665 | Sparse, Permutation, LongNeighbors |
-| [aesnihash](doc/aesnihash.txt)                |      2963.39 |    71.24 | 217.73 (3) |     | fails most tests, machine-specific (x64 AES-NI) |
+| [aesnihash](doc/aesnihash.txt)                |      2963.39 |    71.24 | 217.73 (3) |1209 | fails many tests, machine-specific (x64 AES-NI) |
 | [falkhash](doc/falkhash.txt)                  |     20202.42 |   173.63 | 321.52 (2) | 264 | Sparse, LongNeighbors, machine-specific (x64 AES-NI) |
 | [MeowHash](doc/MeowHash.txt)                  |     17371.91 |    85.48 | 247.96 (2) |1764 | Sparse, machine-specific (x64 AES-NI)  |
 | [MeowHash64low](doc/MeowHash64low.txt)        |     17378.06 |    85.48 | 237.60 (2) |1764 | Sparse, machine-specific (x64 AES-NI)    |
