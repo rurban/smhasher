@@ -432,10 +432,10 @@ if(SSE42_FOUND)
   if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     # enable_language(ASM-NASM) set(CMAKE_ASM_FLAGS "-f elf64") # or
     # macho64/win64
-    set(X86_64ONLY_SRC farmhash-c.c farmhash-c-test.cc)
+    set(X86_64ONLY_SRC farmhash-c.c farmhash-c-test.cc clhash.c)
     if(NOT MSVC)
       list(APPEND X86_64ONLY_SRC metrohash/metrohash64crc.cpp
-           metrohash/metrohash128crc.cpp crc32_hw1.c clhash.c)
+           metrohash/metrohash128crc.cpp crc32_hw1.c)
     endif()
   else()
     message(STATUS "32bit only: CMAKE_SIZEOF_VOID_P=${CMAKE_SIZEOF_VOID_P}")
