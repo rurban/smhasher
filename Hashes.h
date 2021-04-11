@@ -1084,34 +1084,10 @@ inline void sha2ni_256_64(const void *key, int len, uint32_t seed, void *out)
 #endif
 
 #ifdef HAVE_SSE2
-# if defined(_MAIN_CPP)
-#  include "farsh.h"
-# else
-#  ifdef __AVX2__
-#   define FARSH_AVX2
-#  elif defined HAVE_SSE42
-#   define FARSH_SSE2
-#  endif
-# endif
-# include "farsh.c"
-
-// objsize: 0-3b0: 944
-inline void farsh32_test ( const void * key, int len, unsigned seed, void * out )
-{
-  farsh_n(key,len,0,1,seed,out);
-}
-inline void farsh64_test ( const void * key, int len, unsigned seed, void * out )
-{
-  farsh_n(key,len,0,2,seed,out);
-}
-inline void farsh128_test ( const void * key, int len, unsigned seed, void * out )
-{
-  farsh_n(key,len,0,4,seed,out);
-}
-inline void farsh256_test ( const void * key, int len, unsigned seed, void * out )
-{
-  farsh_n(key,len,0,8,seed,out);
-}
+void farsh32_test ( const void * key, int len, unsigned seed, void * out );
+void farsh64_test ( const void * key, int len, unsigned seed, void * out );
+void farsh128_test ( const void * key, int len, unsigned seed, void * out );
+void farsh256_test ( const void * key, int len, unsigned seed, void * out );
 #endif
 
 extern "C" {
@@ -1178,7 +1154,7 @@ inline void blake3_64 ( const void * key, int len, unsigned seed, void * out )
 // objsize: 452010-45251e: 1294 (BEBB4185)
 #include "discohash.h"
 
-#if defined(HAVE_SSE42) && defined(HAVE_AESNI) && !defined(_MSC_VER)
+#if defined(HAVE_SSE2) && defined(HAVE_AESNI) && !defined(_MSC_VER)
 /* https://gist.github.com/majek/96dd615ed6c8aa64f60aac14e3f6ab5a plus seed */
 /* objsize: 41f530-41f6cb: 1209 */
 uint64_t aesnihash(uint8_t *in, unsigned long src_sz, uint32_t seed);

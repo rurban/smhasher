@@ -328,6 +328,7 @@ if(CMAKE_CROSSCOMPILING)
   set(AES_FOUND false)
   set(SHA_FOUND false)
   set(CLMUL_FOUND false)
+  set(CRC_PCLMUL_SRC "")
 endif(CMAKE_CROSSCOMPILING)
 
 if(SSE2_FOUND)
@@ -445,10 +446,9 @@ elseif(SSE2_FOUND)
   set(SIPHASH_SRC siphash_sse2.c)
 else()
   set(SIPHASH_SRC siphash.c)
-endif(SSE4_2_FOUND)
+endif(SSE42_FOUND)
 
 if(AES_FOUND AND (PROCESSOR_FAMILY STREQUAL "Intel"))
-  add_definitions(-DHAVE_AESNI)
   set(T1HA_SRC
       t1ha/t1ha0.c t1ha/t1ha1.c t1ha/t1ha2.c t1ha/t1ha0_ia32aes_noavx.c
       t1ha/t1ha0_ia32aes_avx.c t1ha/t1ha0_ia32aes_avx2.c)
@@ -525,7 +525,7 @@ if(AHASH_C
   endif()
 endif()
 
-if(SSE4_2_FOUND AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
+if(SSE42_FOUND AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
   find_library(BLAKE3 blake3)
   # if (BLAKE3)
   #   set(BLAKE3_LIB ${BLAKE3})
@@ -535,7 +535,7 @@ endif()
 
 set(BLAKE3_SRC blake3/blake3.c blake3/blake3_dispatch.c
                blake3/blake3_portable.c)
-if(SSE4_2_FOUND)
+if(SSE42_FOUND)
   set(BLAKE3_SRC ${BLAKE3_SRC} blake3/blake3_sse41.c)
   set_source_files_properties(blake3/blake3_sse41.c
                               PROPERTIES COMPILE_FLAGS "-DBLAKE3_USE_SSE41 -msse4.2")

@@ -270,13 +270,13 @@ HashInfo g_hashes[] =
 #endif
   { VHASH_32,             32, VHASH32_VERIF, "VHASH_32",    "VHASH_32 by Ted Krovetz and Wei Dai", POOR, {} },
   { VHASH_64,             64, VHASH64_VERIF, "VHASH_64",    "VHASH_64 by Ted Krovetz and Wei Dai", POOR, {} },
-  { MicroOAAT_test,       32, 0x16F1BA97, "MicroOAAT",   "Small non-multiplicative OAAT (by funny-falcon)", POOR,
+  { MicroOAAT_test,       32, 0x16F1BA97,    "MicroOAAT",   "Small non-multiplicative OAAT (by funny-falcon)", POOR,
     {0x3b00} },
 #ifdef HAVE_SSE2
   { farsh32_test,         32, 0xBCDE332C, "farsh32",     "FARSH 32bit", POOR, {} }, // insecure
   { farsh64_test,         64, 0xDE2FDAEE, "farsh64",     "FARSH 64bit", POOR, {} }, // insecure
-  { farsh128_test,     128, 0x82B6CBEC, "farsh128",    "FARSH 128bit", POOR, {} },
-  { farsh256_test,     256, 0xFEBEA0BC, "farsh256",    "FARSH 256bit", POOR, {} },
+  { farsh128_test,       128, 0x82B6CBEC, "farsh128",    "FARSH 128bit", POOR, {} },
+  { farsh256_test,       256, 0xFEBEA0BC, "farsh256",    "FARSH 256bit", POOR, {} },
 #endif
   { jodyhash32_test,      32, 0xFB47D60D, "jodyhash32",  "jodyhash, 32-bit (v5)", POOR, {} },
 #ifdef HAVE_INT64
@@ -342,11 +342,11 @@ HashInfo g_hashes[] =
 #endif
   { CityHash64noSeed_test, 64, 0x63FC6063, "City64noSeed","Google CityHash64 without seed (default version, misses one final avalanche)", POOR, {} },
   { CityHash64_test,      64, 0x25A20825, "City64",       "Google CityHash64WithSeed (old)", POOR, {} },
-#if defined(HAVE_SSE42) && defined(HAVE_AESNI) && !defined(_MSC_VER)
-  { aesnihash_test,       64, 0x0,        "aesnihash",    "majek's aesnihash with seed, aesenc, 64-bit for x64", POOR,
+#if defined(HAVE_SSE2) && defined(HAVE_AESNI) && !defined(_MSC_VER)
+  { aesnihash_test,       64, 0xA68E0D42, "aesnihash",    "majek's seeded aesnihash with aesenc, 64-bit for x64", POOR,
     {0x70736575} },
 #endif
-#if defined(HAVE_SSE42) && defined(__x86_64__) && !defined(_WIN32)
+#if defined(HAVE_SSE2) && defined(__x86_64__) && !defined(_WIN32)
   { falkhash_test_cxx,    64, 0x2F99B071, "falkhash",    "falkhash.asm with aesenc, 64-bit for x64", POOR, {} },
 #endif
 #ifdef HAVE_MEOW_HASH
@@ -566,7 +566,7 @@ HashInfo g_hashes[] =
   { seahash32low,         32, 0x712F0EE8, "seahash32low","seahash - lower 32bit", GOOD, {} },
 #endif /* HAVE_INT64 */
 #endif /* !MSVC */
-#if defined(__SSE4_2__) && defined(__x86_64__)
+#if defined(HAVE_SSE42) && defined(__x86_64__)
   { clhash_test,          64, 0x0, "clhash",      "carry-less mult. hash -DBITMIX (64-bit for x64, SSE4.2)", GOOD,
     {0xb3816f6a2c68e530, 711} },
 #endif
