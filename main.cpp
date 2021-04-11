@@ -708,7 +708,7 @@ HashInfo g_hashes[] =
     { 0x14cc886e, 0x1bf4ed84, 0x14cc886e14cc886eULL} /* !! 2^33 bad seeds, but easy to check */ },
   //{ wyhash_condom_test,   64, 0x7C62138D, "wyhash_condom",  "wyhash v3 condom 2 (64-bit)", GOOD, { } },
 #endif
-
+  { nmhash32_test,        32, 0x0DC5C2DC, "nmhash32",         "nmhash32", GOOD, {}},
 };
 
 HashInfo * findHash ( const char * name )

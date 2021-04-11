@@ -1238,3 +1238,5 @@ extern "C" {
   // objsize: c300 - dc5a: 6490
   void asconhashv12_256 ( const void * key, int len, uint32_t seed, void * out );
 }
+
+void nmhash32_test ( const void * key, int len, uint32_t seed, void * out );

@@ -1175,8 +1175,10 @@ void crc32c_pclmul_test(const void *key, int len, uint32_t seed, void *out)
     else {
 #ifdef _MSC_VER // TODO need to verify
       alignas(16) unsigned char const *input = (unsigned char const *)_aligned_malloc(len, 16);
-#else // TODO C11, else use posix_memalign
+#elif __STDC_VERSION__ > 201200L // macports gcc-mp-6 has 201112 but no aligned_alloc
       alignas(16) unsigned char const *input = (unsigned char const *)aligned_alloc(16, len);
+#else
+      alignas(16) unsigned char const *input = (unsigned char const *)posix_memalign((void**)&key, 16, len);
 #endif
       memcpy((void*)input, key, len);
       *(uint32_t *) out = crc32_pclmul_le_16(input, (size_t)len, seed);
@@ -1184,8 +1186,16 @@ void crc32c_pclmul_test(const void *key, int len, uint32_t seed, void *out)
     }
   }
   else {
-    assert(((uintptr_t)key & 15) == 0); // input must be 16byte aligned
+    assert(((uintptr_t)key & 15) == 0); // input is 16byte aligned already
     *(uint32_t *) out = crc32_pclmul_le_16((unsigned char const *)key, (size_t)len, seed);
   }
 }
 #endif
+
+// objsize: 4202f0-420c7d: 2445
+extern "C" {
+  #include "hash-garage/nmhash.h"
+}
+void nmhash32_test ( const void * key, int len, uint32_t seed, void * out ) {
+  *(uint32_t*)out = NMHASH32 (key, (const size_t) len, seed);
+}

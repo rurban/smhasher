@@ -187,6 +187,7 @@ SMhasher
 | [halftime_hash128](doc/halftime_hash128.txt)  |     13478.23 |    97.79 | 252.14 (2) |2462 |                            |
 | [halftime_hash256](doc/halftime_hash256.txt)  |     11620.28 |    98.44 | 252.60 (2) |2622 |                            |
 | [halftime_hash512](doc/halftime_hash512.txt)  |      7681.62 |   125.81 | 274.01 (3) |3550 |                            |
+| [nmhash32](doc/nmhash32.txt)                  |      7003.30 |    68.93 | 216.59 (2) |2445 |                            |
 
 The sortable table variants:
 
@@ -212,8 +213,9 @@ So the fastest hash functions on x86_64 without quality problems are:
 - halftime_hash128
 - Spooky32
 - pengyhash
+- nmhash32
 - mx3
-- MUM/mir (_different results on 32/64-bit archs_)
+- MUM/mir (_different results on 32/64-bit archs, lots of bad seeds to filter out_)
 - fasthash32
 
 Hash functions for symbol tables or hash tables typically use 32 bit

@@ -843,7 +843,7 @@ const uint64_t T_2[1024] = {
 
 /* This hash function suffers from bad quality when using a bad seed. Here are some
    of them listed, but only a few of all upper 2^32 ranges. The probablity seems to be
-   below 0.00001% though.
+   below 0.00001% though. */
 /* Many uncomputable more! I don't see the bit-pattern yet, need to invert it eventually. */
 const uint64_t some_bad_seeds[] = {
   // first lowest 2^32 range

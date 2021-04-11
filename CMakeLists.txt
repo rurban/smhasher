@@ -494,15 +494,16 @@ if(NOT MSVC)
   set_source_files_properties(bittest.cpp PROPERTIES COMPILE_FLAGS "-std=c++0x")
   # https://github.com/dgryski/trifles/tree/master/tsip
   set(TSIP_SRC tsip.c)
-else()
+else(NOT MSVC)
+  # nmhash32 "/std:c++latest"
   set_source_files_properties(SpeedTest.cpp PROPERTIES COMPILE_FLAGS
                                                        "-I${CMAKE_SOURCE_DIR}")
   if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-    set_source_files_properties(Hashes.cpp PROPERTIES COMPILE_FLAGS "-I${CMAKE_SOURCE_DIR} -DWYHASH32 -flax-vector-conversions")
+    set_source_files_properties(Hashes.cpp PROPERTIES COMPILE_FLAGS "/std:c++latest -I${CMAKE_SOURCE_DIR} -DWYHASH32 -flax-vector-conversions")
   else()
-    set_source_files_properties(Hashes.cpp PROPERTIES COMPILE_FLAGS "-I${CMAKE_SOURCE_DIR} -flax-vector-conversions")
-  endif()
-endif()
+    set_source_files_properties(Hashes.cpp PROPERTIES COMPILE_FLAGS "/std:c++latest -I${CMAKE_SOURCE_DIR} -flax-vector-conversions")
+  endif(CMAKE_SIZEOF_VOID_P EQUAL 4)
+endif(NOT MSVC)
 
 find_library(HIGHWAY highwayhash)
 if(HIGHWAY
