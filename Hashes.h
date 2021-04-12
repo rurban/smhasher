@@ -64,7 +64,7 @@ void crc32(const void *key, int len, uint32_t seed, void *out);
 //----------
 // General purpose hashes
 
-#if defined(HAVE_SSE2) && !defined(_MSC_VER)
+#if defined(HAVE_SSE2)
 void hasshe2_test(const void *key, int len, uint32_t seed, void *out);
 #endif
 #if defined(HAVE_SSE42)

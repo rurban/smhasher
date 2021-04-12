@@ -431,7 +431,7 @@ endif()
 find_package( Threads )
 #set(CMAKE_THREAD_LIBS_INIT "-lpthread")
 
-if(SSE2_FOUND AND NOT MSVC)
+if(SSE2_FOUND)
   set(SSE2_SRC hasshe2.c)
 endif()
 if(SSE42_FOUND)

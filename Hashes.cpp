@@ -606,7 +606,7 @@ extern "C" {
 #endif
 }
 
-#if defined(HAVE_SSE2) && !defined(_MSC_VER)
+#if defined(HAVE_SSE2)
 void
 hasshe2_test(const void *input, int len, uint32_t seed, void *out)
 {

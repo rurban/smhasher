@@ -170,7 +170,7 @@ HashInfo g_hashes[] =
     { 0xee9398aadb67f03dULL } },
   { sha3_256,            256, 0x21048CE3, "sha3-256",     "SHA3-256 (Keccak)", GOOD, {0x1UL} },
   { sha3_256_64,          64, 0xE62E5CC0, "sha3-256_64",  "SHA3-256 (Keccak), low 64 bits", GOOD, {0x1UL} },
-#if defined(HAVE_SSE2) && !defined(_MSC_VER)
+#if defined(HAVE_SSE2)
   { hasshe2_test,        256, 0xF5D39DFE, "hasshe2",     "SSE2 hasshe2, 256-bit", POOR, {} },
 #endif
 // too fragile

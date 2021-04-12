@@ -8,10 +8,21 @@
 #if defined(__aarch64__)
 #include "sse2neon.h"
 #else
+#include <emmintrin.h>
 #include <xmmintrin.h>
 #endif
 
-static uint32_t coeffs[12] __attribute__((aligned(16))) = {
+#if _MSC_VER
+#define ALIGN(n)      __declspec(align(n))
+#elif __GNUC__
+#define ALIGN(n)      __attribute__ ((aligned(n))) 
+#else
+#define ALIGN(n)
+#warning ALIGN may not be properly defined
+#endif
+
+ALIGN(16)
+static uint32_t coeffs[12] = {
   /* Four carefully selected coefficients and interleaving zeros. */
   2561893793UL, 0, 1388747947UL, 0,
   3077216833UL, 0, 3427609723UL, 0,
@@ -57,7 +68,7 @@ static uint32_t coeffs[12] __attribute__((aligned(16))) = {
      changed all bits in the internal state with a probability               \
      between 45% to 55%. */
 
-void hasshe2(const void *input_buf, int n_bytes, uint32_t seed, void *output_state)
+void hasshe2(const char *input_buf, int n_bytes, uint32_t seed, void *output_state)
 {
   __m128i coeffs_1, coeffs_2, rnd_data, input, state_1, state_2;
 
@@ -90,5 +101,5 @@ void hasshe2(const void *input_buf, int n_bytes, uint32_t seed, void *output_sta
   COMBINE_AND_MIX(coeffs_1, coeffs_2, state_1, state_2, input);
 
   _mm_storeu_si128((void *) output_state, state_1);
-  _mm_storeu_si128((void *) (output_state + 16), state_2);
+  _mm_storeu_si128((void *) ((char*)output_state + 16), state_2);
 }
