@@ -235,8 +235,8 @@ if(CMAKE_COMPILER_IS_GNUCC
                               PROPERTIES COMPILE_FLAGS "-std=c99")
 elseif(MSVC)
   # using Visual Studio C++, already the default with VS17
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /O3 /arch:SSE2")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /O3 /arch:SSE2")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /arch:SSE2")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")
 else()
   message(WARNING "Unknown ${CMAKE_CXX_COMPILER_ID} compiler")
   # TODO: BSD and ARM8 crc detection TODO: 32bit filter
@@ -481,10 +481,8 @@ endif(SHA_FOUND)
 
 if(NOT MSVC)
   set(NOTMSVC_SRC seahash.c)
-  set_source_files_properties(HashMapTest.cpp PROPERTIES COMPILE_FLAGS
-                                                         "-std=c++11")
-  set_source_files_properties(
-    SpeedTest.cpp PROPERTIES COMPILE_FLAGS "-std=c++0x -I${CMAKE_SOURCE_DIR}")
+  set_source_files_properties(HashMapTest.cpp PROPERTIES COMPILE_FLAGS "-std=c++11")
+  set_source_files_properties(SpeedTest.cpp PROPERTIES COMPILE_FLAGS "-std=c++0x -I${CMAKE_SOURCE_DIR}")
   set_source_files_properties(main.cpp PROPERTIES COMPILE_FLAGS "-std=c++0x")
   if(CMAKE_SIZEOF_VOID_P EQUAL 4)
     set_source_files_properties(Hashes.cpp PROPERTIES COMPILE_FLAGS "-std=c++1y -I${CMAKE_SOURCE_DIR} -DWYHASH32 -flax-vector-conversions")
@@ -492,16 +490,16 @@ if(NOT MSVC)
     set_source_files_properties(Hashes.cpp PROPERTIES COMPILE_FLAGS "-std=c++1y -I${CMAKE_SOURCE_DIR} -flax-vector-conversions")
   endif()
   set_source_files_properties(bittest.cpp PROPERTIES COMPILE_FLAGS "-std=c++0x")
+  set_source_files_properties(Hashes.cpp PROPERTIES COMPILE_FLAGS "-std=c++1y -I${CMAKE_SOURCE_DIR} -flax-vector-conversions")
   # https://github.com/dgryski/trifles/tree/master/tsip
   set(TSIP_SRC tsip.c)
 else(NOT MSVC)
-  # nmhash32 "/std:c++latest"
-  set_source_files_properties(SpeedTest.cpp PROPERTIES COMPILE_FLAGS
-                                                       "-I${CMAKE_SOURCE_DIR}")
+  set_source_files_properties(SpeedTest.cpp PROPERTIES COMPILE_FLAGS "-I${CMAKE_SOURCE_DIR}")
+  # nmhash32 wants "/std:c++latest"
   if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-    set_source_files_properties(Hashes.cpp PROPERTIES COMPILE_FLAGS "/std:c++latest -I${CMAKE_SOURCE_DIR} -DWYHASH32 -flax-vector-conversions")
+    set_source_files_properties(Hashes.cpp PROPERTIES COMPILE_FLAGS "/std:c++latest -I${CMAKE_SOURCE_DIR} -DWYHASH32")
   else()
-    set_source_files_properties(Hashes.cpp PROPERTIES COMPILE_FLAGS "/std:c++latest -I${CMAKE_SOURCE_DIR} -flax-vector-conversions")
+    set_source_files_properties(Hashes.cpp PROPERTIES COMPILE_FLAGS "/std:c++latest -I${CMAKE_SOURCE_DIR}")
   endif(CMAKE_SIZEOF_VOID_P EQUAL 4)
 endif(NOT MSVC)
 

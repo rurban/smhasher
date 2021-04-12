@@ -1193,9 +1193,7 @@ void crc32c_pclmul_test(const void *key, int len, uint32_t seed, void *out)
 #endif
 
 // objsize: 4202f0-420c7d: 2445
-extern "C" {
-  #include "hash-garage/nmhash.h"
-}
+#include "hash-garage/nmhash.h"
 void nmhash32_test ( const void * key, int len, uint32_t seed, void * out ) {
   *(uint32_t*)out = NMHASH32 (key, (const size_t) len, seed);
 }
