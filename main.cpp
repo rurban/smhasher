@@ -586,7 +586,7 @@ HashInfo g_hashes[] =
  #define MUM_VERIF            0xA973C6C0
  #define MUMLOW_VERIF         0x7F898826
 #endif
-  { mum_hash_test,        64, MUM_VERIF,  "MUM",         "github.com/vnmakarov/mum-hash", GOOD,
+  { mum_hash_test,        64, MUM_VERIF,  "MUM",         "github.com/vnmakarov/mum-hash", POOR,
     {0x0} /* !! and many more. too many */ },
   { mum_low_test,         32, MUMLOW_VERIF,"MUMlow",     "github.com/vnmakarov/mum-hash", GOOD,
     {0x11fb062a, 0x3ca9411b, 0x3edd9a7d, 0x41f18860, 0x691457ba} /* !! */ },

@@ -138,8 +138,8 @@ SMhasher
 | [Murmur3F](doc/Murmur3F.txt)                  |      5226.40 |    52.18 | 175.85 (1) | 699 | UB                         |
 | [fasthash32](doc/fasthash32.txt)              |      4737.61 |    45.32 | 181.86 (2) | 566 | UB, insecure                         |
 | [fasthash64](doc/fasthash64.txt)              |      4737.21 |    42.79 | 164.87 (2) | 509 | UB, insecure, Moment Chi2 5159 !     |
-| [MUM](doc/MUM.txt)                            |      7134.56 |    37.85 | 172.34 (1) |1912 | UB, bad seed 0, machine-specific (32/64 differs) |
-| [MUMlow](doc/MUMlow.txt)                      |      7225.18 |    37.85 | 197.92 (3) |1912 | UB                         |
+| [MUM](doc/MUM.txt)                            |      7134.56 |    37.85 | 172.34 (1) |1912 | UB, too many bad seeds, machine-specific (32/64 differs) |
+| [MUMlow](doc/MUMlow.txt)                      |      7225.18 |    37.85 | 197.92 (3) |1912 | UB, 5 bad seeds                      |
 | [mirhash](doc/mirhash.txt)                    |      5413.73 |    39.68 | 154.47 (3) |1112 | UB, 2^36 bad seeds, LongNeighbors, machine-specific (32/64 differs) |
 | [mirhashstrict](doc/mirhashstrict.txt)        |      2217.32 |    65.53 | 182.07 (2) |1112 |                            |
 | [mirhashstrict32low](doc/mirhashstrict32low.txt)|    2218.87 |    65.48 | 190.59 (4) |1112 | 1 bad seed, MomentChi2 9   |
