@@ -170,8 +170,7 @@ HashInfo g_hashes[] =
     { 0xee9398aadb67f03dULL } },
   { sha3_256,            256, 0x21048CE3, "sha3-256",     "SHA3-256 (Keccak)", GOOD, {0x1UL} },
   { sha3_256_64,          64, 0xE62E5CC0, "sha3-256_64",  "SHA3-256 (Keccak), low 64 bits", GOOD, {0x1UL} },
-
-#ifdef __SSE2__
+#if defined(HAVE_SSE2) && !defined(_MSC_VER)
   { hasshe2_test,        256, 0xF5D39DFE, "hasshe2",     "SSE2 hasshe2, 256-bit", POOR, {} },
 #endif
 // too fragile
@@ -219,12 +218,21 @@ HashInfo g_hashes[] =
 #  define TABUL32_VERIF   0x335F64EA
 #endif
   { tabulation_32_test,   32, TABUL32_VERIF, "tabulation32",    "32-bit Tabulation with Multiply-Shift Mixer", POOR, {} },
-#if defined(__SSE4_2__) && defined(__x86_64__)
+#ifdef HAVE_SSE42
   // all CRC's are insecure by default due to its polynomial nature.
   /* Even 32 uses crc32q, quad only */
-  { crc32c_hw_test,       32, 0x0C7346F0, "crc32_hw",    "SSE4.2 crc32 in HW", POOR, {0x111c2232} /* !! */},
-  { crc32c_hw1_test,      32, 0x0C7346F0, "crc32_hw1",   "Faster Adler SSE4.2 crc32 in HW", POOR, {0x111c2232} /* !! */},
-  { crc64c_hw_test,       64, 0xE7C3FD0E, "crc64_hw",    "SSE4.2 crc64 in HW", POOR, {0x0} /* !! */ },
+#  if defined(_MSC_VER) /* truncated long to 32? */
+#   define CRC32_VERIF   0xC2B84071
+#   define CRC64_VERIF   0x6BBC19D6
+#  else  
+#   define CRC32_VERIF   0x0C7346F0
+#   define CRC64_VERIF   0xE7C3FD0E
+#endif
+  { crc32c_hw_test,       32, CRC32_VERIF, "crc32_hw",    "SSE4.2 crc32 in HW", POOR, {0x111c2232} /* !! */},
+#if defined(__SSE4_2__) && (defined(__i686__) || defined(_M_IX86) || defined(__x86_64__))
+  { crc32c_hw1_test,      32, 0x0C7346F0,  "crc32_hw1",   "Faster Adler SSE4.2 crc32 on Intel HW", POOR, {0x111c2232} /* !! */},
+#endif
+  { crc64c_hw_test,       64, CRC64_VERIF, "crc64_hw",    "SSE4.2 crc64 in HW", POOR, {0x0} /* !! */ },
 #endif
   // 32bit crashes
 #if defined(HAVE_CLMUL) && !defined(_MSC_VER) && defined(__x86_64__)
@@ -331,7 +339,7 @@ HashInfo g_hashes[] =
   { metrohash128_1_test,  128, 0x20E8A1D7, "metrohash128_1", "MetroHash128_1, 128-bit (legacy)", GOOD, {} },
   { metrohash128_2_test,  128, 0x5437C684, "metrohash128_2", "MetroHash128_2, 128-bit (legacy)", GOOD, {} },
 #endif
-#if defined(__SSE4_2__) && defined(__x86_64__)
+#if defined(HAVE_SSE42) && (defined(__x86_64__) ||  defined(__aarch64__)) && !defined(_MSC_VER)
   { metrohash64crc_1_test, 64, 0x29C68A50, "metrohash64crc_1", "MetroHash64crc_1 for x64 (legacy)", POOR, {} },
   { metrohash64crc_2_test, 64, 0x2C00BD9F, "metrohash64crc_2", "MetroHash64crc_2 for x64 (legacy)", POOR, {} },
   { cmetrohash64_1_optshort_test,64, 0xEE88F7D2, "cmetrohash64_1o", "cmetrohash64_1 (shorter key optimized), 64-bit for x64", POOR, {} },
@@ -642,7 +650,7 @@ HashInfo g_hashes[] =
   { SpookyHash128_test,  128, 0x8D263080, "Spooky128",   "Bob Jenkins' SpookyHash, 128-bit result", GOOD, {} },
   { pengyhash_test,       64, 0x1FC2217B, "pengyhash",   "pengyhash", GOOD, {} },
   { mx3hash64_test,       64, 0x4DB51E5B, "mx3",         "mx3 64bit", GOOD, {0x10} /* !! and all & 0x10 */},
-#if defined(__SSE4_2__) && defined(__x86_64__) && !defined(_MSC_VER)
+#if defined(HAVE_SSE42) &&  (defined(__x86_64__) ||  defined(__aarch64__)) && !defined(_MSC_VER)
   { umash32,              32, 0x03E16CA1, "umash32",     "umash 32", GOOD, {0x90e37057} /* !! */},
   { umash32_hi,           32, 0xE29D613C, "umash32_hi",  "umash 32 hi", GOOD, {} },
   { umash,                64, 0x4542288C, "umash64",     "umash 64", GOOD, {} },
@@ -744,7 +752,7 @@ void Hash_init (HashInfo* info) {
   else if(info->hash == tabulation_test)
     tabulation_init();
 #endif
-#if defined(__SSE4_2__) && defined(__x86_64__)
+#if defined(HAVE_SSE42) && defined(__x86_64__)
   else if(info->hash == clhash_test)
     clhash_init();
   //else if(info->hash == umash32_test ||
@@ -857,14 +865,16 @@ void Hash_Seed_init (pfHash hash, size_t seed) {
   else if(hash == tabulation_test)
     tabulation_seed_init(seed);
 #endif
-#if defined(__SSE4_2__) && defined(__x86_64__)
+#if defined(HAVE_SSE42) && defined(__x86_64__)
   else if (hash == clhash_test)
     clhash_seed_init(seed);
+# ifndef _MSC_VER  
   else if (hash == umash32 ||
           hash == umash32_hi ||
           hash == umash ||
           hash == umash128)
     umash_seed_init(seed);
+# endif
   else if (hash == halftime_hash_style64_test || hash == halftime_hash_style128_test ||
            hash == halftime_hash_style256_test || hash == halftime_hash_style512_test)
     halftime_hash_seed_init(seed);

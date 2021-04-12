@@ -6,7 +6,11 @@
 #include <memory.h>   /* for memcpy() */
 
 #if __GNUC__
-#include <x86intrin.h>
+#if defined(__aarch64__)
+       #include "sse2neon.h"
+#else
+       #include <x86intrin.h>
+#endif
 #define ALIGN(n)      __attribute__ ((aligned(n)))
 #elif _MSC_VER
 #include <intrin.h>

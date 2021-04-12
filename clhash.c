@@ -4,6 +4,8 @@
 #include <string.h>
 #ifdef _MSC_VER
 #include <intrin.h>
+#elif defined(__aarch64__)
+#include "sse2neon.h"
 #else
 #include <x86intrin.h>
 #endif

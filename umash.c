@@ -1,7 +1,11 @@
 #include "umash.h"
 
+#if defined(__aarch64__)
+#include "sse2neon.h"
+#else
 /* The PH block reduction code is x86-only for now. */
 #include <immintrin.h>
+#endif
 #include <string.h>
 
 /*

@@ -596,17 +596,17 @@ Crap8(const uint8_t * key, uint32_t len, uint32_t seed)
 }
 
 extern "C" {
-#ifdef __SSE2__
+#ifdef HAVE_SSE2
   void		  hasshe2 (const void *input, int len, uint32_t seed, void *out);
 #endif
-#if defined(__SSE4_2__) && defined(__x86_64__)
+#ifdef HAVE_SSE42
   uint32_t	  crc32c_hw(const void *input, int len, uint32_t seed);
   uint32_t	  crc32c(const void *input, size_t len, uint32_t seed);
   uint64_t	  crc64c_hw(const void *input, int len, uint32_t seed);
 #endif
 }
 
-#ifdef __SSE2__
+#if defined(HAVE_SSE2) && !defined(_MSC_VER)
 void
 hasshe2_test(const void *input, int len, uint32_t seed, void *out)
 {
@@ -623,7 +623,8 @@ hasshe2_test(const void *input, int len, uint32_t seed, void *out)
 }
 #endif
 
-#if defined(__SSE4_2__) && (defined(__i686__) || defined(_M_IX86) || defined(__x86_64__))
+#ifdef HAVE_SSE42
+//#if defined(__SSE4_2__) && (defined(__i686__) || defined(_M_IX86) || defined(__x86_64__))
 /* Compute CRC-32C using the Intel hardware instruction.
    TODO: arm8
  */
@@ -637,7 +638,8 @@ crc32c_hw_test(const void *input, int len, uint32_t seed, void *out)
   // objsize: 0-28d: 653
   *(uint32_t *) out = crc32c_hw(input, len, seed);
 }
-/* Faster Adler SSE4.2 crc32 in HW */
+#if defined(__SSE4_2__) && (defined(__i686__) || defined(_M_IX86) || defined(__x86_64__))
+/* Faster Adler SSE4.2 crc32 on Intel HW only. FIXME aarch64 */
 void
 crc32c_hw1_test(const void *input, int len, uint32_t seed, void *out)
 {
@@ -648,7 +650,9 @@ crc32c_hw1_test(const void *input, int len, uint32_t seed, void *out)
   // objsize: 0-29f: 671
   *(uint32_t *) out = crc32c(input, len, seed);
 }
-#if defined(__SSE4_2__) && defined(__x86_64__)
+#endif
+#ifdef HAVE_SSE42
+//#if defined(__SSE4_2__) && defined(__x86_64__)
 /* Compute CRC-64C using the Intel hardware instruction. */
 void
 crc64c_hw_test(const void *input, int len, uint32_t seed, void *out)
@@ -674,8 +678,6 @@ fhtw_test(const void *input, int len, uint32_t seed, void *out)
   *(uint32_t *) out = fhtw_hash(input, len);
 }
 #endif
-
-#include "siphash.h"
 
 /* https://github.com/floodyberry/siphash */
 void

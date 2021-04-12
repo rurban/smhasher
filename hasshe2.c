@@ -5,8 +5,11 @@
 #include <stdint.h>
 #include <assert.h>
 
-#ifdef __SSE2__
+#if defined(__aarch64__)
+#include "sse2neon.h"
+#else
 #include <xmmintrin.h>
+#endif
 
 static uint32_t coeffs[12] __attribute__((aligned(16))) = {
   /* Four carefully selected coefficients and interleaving zeros. */
@@ -89,5 +92,3 @@ void hasshe2(const void *input_buf, int n_bytes, uint32_t seed, void *output_sta
   _mm_storeu_si128((void *) output_state, state_1);
   _mm_storeu_si128((void *) (output_state + 16), state_2);
 }
-
-#endif

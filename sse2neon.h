@@ -70,7 +70,9 @@
 #if defined(__GNUC__) || defined(__clang__)
 #pragma push_macro("FORCE_INLINE")
 #pragma push_macro("ALIGN_STRUCT")
+#ifndef FORCE_INLINE
 #define FORCE_INLINE static inline __attribute__((always_inline))
+#endif
 #define ALIGN_STRUCT(x) __attribute__((aligned(x)))
 #ifndef likely
 #define likely(x) __builtin_expect(!!(x), 1)

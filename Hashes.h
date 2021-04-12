@@ -17,7 +17,7 @@
 #include "cmetrohash.h"
 #include "opt_cmetrohash.h"
 
-#if defined(__SSE4_2__) && defined(__x86_64__)
+#if defined(HAVE_SSE42) && (defined(__x86_64__) ||  defined(__aarch64__))
 #include "metrohash/metrohash64crc.h"
 #include "metrohash/metrohash128crc.h"
 #endif
@@ -33,6 +33,8 @@
 #include "tifuhash.h"
 // objsize: 5f0-85f = 623
 #include "floppsyhash.h"
+
+#include "siphash.h"
 
 #include "vmac.h"
 
@@ -62,12 +64,14 @@ void crc32(const void *key, int len, uint32_t seed, void *out);
 //----------
 // General purpose hashes
 
-#ifdef __SSE2__
+#if defined(HAVE_SSE2) && !defined(_MSC_VER)
 void hasshe2_test(const void *key, int len, uint32_t seed, void *out);
 #endif
-#if defined(__SSE4_2__) && defined(__x86_64__)
+#if defined(HAVE_SSE42)
 void crc32c_hw_test(const void *key, int len, uint32_t seed, void *out);
+#if defined(__SSE4_2__) && (defined(__i686__) || defined(_M_IX86) || defined(__x86_64__))
 void crc32c_hw1_test(const void *key, int len, uint32_t seed, void *out);
+#endif
 static inline bool crc64c_hw_bad_seeds(std::vector<uint64_t> &seeds)
 {
   seeds = std::vector<uint64_t> { UINT64_C(0) };
@@ -367,7 +371,7 @@ inline void metrohash128_2_test ( const void * key, int len, uint32_t seed, void
   metrohash128_2((const uint8_t *)key, (uint64_t)len, seed, (uint8_t *)out);
 }
 #endif
-#if defined(__SSE4_2__) && defined(__x86_64__)
+#if defined(HAVE_SSE42) && (defined(__x86_64__) ||  defined(__aarch64__)) && !defined(_MSC_VER)
 inline void metrohash64crc_1_test ( const void * key, int len, uint32_t seed, void * out ) {
   metrohash64crc_1((const uint8_t *)key, (uint64_t)len, seed, (uint8_t *)out);
 }
@@ -1226,8 +1230,8 @@ inline void pengyhash_test ( const void * key, int len, uint32_t seed, void * ou
   *(uint64_t*)out = pengyhash (key, (size_t) len, seed);
 }
 
-// requires modern builtins, like __builtin_uaddll_overflow
-#if defined(__SSE4_2__) && defined(__x86_64__) && !defined(_MSC_VER)
+// requires modern builtins, like __builtin_uaddll_overflow, and 64bit
+#if defined(HAVE_SSE42) &&  (defined(__x86_64__) ||  defined(__aarch64__)) && !defined(_MSC_VER)
 // objsize: 4bcb90 - 4bd18a
 #include "umash.hpp"
 #endif

@@ -54,10 +54,10 @@ SMhasher
 | [poly_4_mersenne](doc/poly_4_mersenne.txt)    |      1323.57 |    82.67 | 200.36 (4) | 479 |                  |
 | [tabulation32](doc/tabulation32.txt)          |      4317.34 |    35.45 | 197.20 (2) | 848 | collisions       |
 | [tabulation](doc/tabulation.txt)              |      7621.75 |    42.19 | 179.93 (2) | 554 |                  |
-| [crc32_hw](doc/crc32_hw.txt)                  |      6330.42 |    35.55 | 170.16 (1) | 653 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2) |
-| [crc32_hw1](doc/crc32_hw1.txt)                |     23208.73 |    46.74 | 179.70 (2) | 671 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2) |
-| [crc64_hw](doc/crc64_hw.txt)                  |      8440.13 |    34.94 | 141.15 (2) | 652 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x64 SSE4.2) |
-| [crc32_pclmul](doc/crc32_pclmul.txt)          |           -  |     -    |     -      |     | NYI, machine-specific (x86 SSE4.2+PCLMUL) |
+| [crc32_hw](doc/crc32_hw.txt)                  |      6330.42 |    35.55 | 170.16 (1) | 653 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (SSE4.2/NEON) |
+| [crc32_hw1](doc/crc32_hw1.txt)                |     23208.73 |    46.74 | 179.70 (2) | 671 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2)  |
+| [crc64_hw](doc/crc64_hw.txt)                  |      8440.13 |    34.94 | 141.15 (2) | 652 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (SSE4.2/NEON) |
+| [crc32_pclmul](doc/crc32_pclmul.txt)          |           -  |     -    |     -      |     | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2+PCLMUL) |
 | [o1hash](doc/o1hash.txt)                      |  12439661.09 |    16.77 | 166.13 (1) | 101 | insecure, no seed, zeros, fails all tests |
 | [fibonacci](doc/fibonacci.txt)                |     11339.87 |    26.33 | 705.64 (2) |1692 | UB, zeros, fails all tests       |
 | [FNV1a](doc/FNV1a.txt)                        |       791.84 |    69.69 | 177.84 (2) | 204 | bad seed, zeros, fails all tests       |
@@ -100,8 +100,8 @@ SMhasher
 | [xxHash32](doc/xxHash32.txt)                  |      6040.87 |    51.77 | 177.91 (4) | 738 | LongNeighbors, collisions with 4bit diff, MomentChi2 220 |
 | [metrohash64](doc/metrohash64.txt)            |      9664.61 |    44.59 | 150.74 (2) | 624 | UB, LongNeighbors, BIC         |
 | [metrohash64_1](doc/metrohash64_1.txt)        |      9664.57 |    45.37 | 152.31 (2) | 624 | UB, LongNeighbors, BIC, MomentChi2         |
-| [metrohash64crc_1](doc/metrohash64crc_1.txt)  |     14000.50 |    49.08 | 150.54 (2) | 632 | UB, Cyclic 8/8 byte, DiffDist, BIC, MomentChi2, machine-specific (x64 SSE4.2) |
-| [metrohash64crc_2](doc/metrohash64crc_2.txt)  |     14034.84 |    48.94 | 162.54 (2) | 632 | UB, Cyclic 8/8 byte, DiffDist, BIC, machine-specific (x64 SSE4.2) |
+| [metrohash64crc_1](doc/metrohash64crc_1.txt)  |     14000.50 |    49.08 | 150.54 (2) | 632 | UB, Cyclic 8/8 byte, DiffDist, BIC, MomentChi2, machine-specific (SSE4.2/NEON) |
+| [metrohash64crc_2](doc/metrohash64crc_2.txt)  |     14034.84 |    48.94 | 162.54 (2) | 632 | UB, Cyclic 8/8 byte, DiffDist, BIC, machine-specific (SSE4.2/NEON) |
 | [cmetrohash64_1o](doc/cmetrohash64_1o.txt)    |      9658.31 |    42.84 | 163.45 (1) |3506 | UB, LongNeighbors, BIC, MomentChi2  |
 | [cmetrohash64_1](doc/cmetrohash64_1.txt)      |      9683.33 |    45.20 | 161.01 (2) | 652 | UB, LongNeighbors, BIC, MomentChi2 |
 | [City64noSeed](doc/City64noSeed.txt)          |      9090.42 |    32.23 | 171.53 (3) |1038 | Avalanche, Sparse, TwoBytes, MomentChi2, Seed |
@@ -160,8 +160,8 @@ SMhasher
 | [metrohash128](doc/metrohash128.txt)          |      9569.16 |    58.68 | 167.53 (2) | 773 | UB, LongNeighbors          |
 | [metrohash128_1](doc/metrohash128_1.txt)      |      9558.17 |    59.04 | 175.94 (2) | 773 | UB, LongNeighbors          |
 | [metrohash128_2](doc/metrohash128_2.txt)      |      9584.94 |    59.10 | 167.43 (2) | 773 | UB, LongNeighbors          |
-| [metrohash128crc_1](doc/metrohash128crc_1.txt)|     13948.67 |    65.20 | 168.08 (2) | 723 | UB, machine-specific (x64 SSE4.2) |
-| [metrohash128crc_2](doc/metrohash128crc_2.txt)|     13920.19 |    65.12 | 176.70 (1) | 723 | UB, machine-specific (x64 SSE4.2) |
+| [metrohash128crc_1](doc/metrohash128crc_1.txt)|     13948.67 |    65.20 | 168.08 (2) | 723 | UB, machine-specific (SSE4.2/NEON) |
+| [metrohash128crc_2](doc/metrohash128crc_2.txt)|     13920.19 |    65.12 | 176.70 (1) | 723 | UB, machine-specific (SSE4.2/NEON) |
 | [xxHash64](doc/xxHash64.txt)                  |      8936.63 |    51.31 | 174.34 (3) |1999 |                            |
 | [Spooky32](doc/Spooky32.txt)                  |      9747.13 |    62.24 | 196.96 (4) |2221 | UB                         |
 | [Spooky64](doc/Spooky64.txt)                  |      9747.47 |    62.20 | 191.71 (2) |2221 | UB                         |
