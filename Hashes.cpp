@@ -600,9 +600,11 @@ extern "C" {
   void		  hasshe2 (const void *input, int len, uint32_t seed, void *out);
 #endif
 #ifdef HAVE_SSE42
+# ifndef HAVE_BROKEN_MSVC_CRC32C_HW
   uint32_t	  crc32c_hw(const void *input, int len, uint32_t seed);
-  uint32_t	  crc32c(const void *input, size_t len, uint32_t seed);
   uint64_t	  crc64c_hw(const void *input, int len, uint32_t seed);
+# endif
+  uint32_t	  crc32c(const void *input, size_t len, uint32_t seed);
 #endif
 }
 
@@ -624,6 +626,7 @@ hasshe2_test(const void *input, int len, uint32_t seed, void *out)
 #endif
 
 #ifdef HAVE_SSE42
+# ifndef HAVE_BROKEN_MSVC_CRC32C_HW
 //#if defined(__SSE4_2__) && (defined(__i686__) || defined(_M_IX86) || defined(__x86_64__))
 /* Compute CRC-32C using the Intel hardware instruction.
    TODO: arm8
@@ -638,21 +641,6 @@ crc32c_hw_test(const void *input, int len, uint32_t seed, void *out)
   // objsize: 0-28d: 653
   *(uint32_t *) out = crc32c_hw(input, len, seed);
 }
-#if defined(__SSE4_2__) && (defined(__i686__) || defined(_M_IX86) || defined(__x86_64__))
-/* Faster Adler SSE4.2 crc32 on Intel HW only. FIXME aarch64 */
-void
-crc32c_hw1_test(const void *input, int len, uint32_t seed, void *out)
-{
-  if (!len) {
-    *(uint32_t *) out = 0;
-    return;
-  }
-  // objsize: 0-29f: 671
-  *(uint32_t *) out = crc32c(input, len, seed);
-}
-#endif
-#ifdef HAVE_SSE42
-//#if defined(__SSE4_2__) && defined(__x86_64__)
 /* Compute CRC-64C using the Intel hardware instruction. */
 void
 crc64c_hw_test(const void *input, int len, uint32_t seed, void *out)
@@ -664,7 +652,21 @@ crc64c_hw_test(const void *input, int len, uint32_t seed, void *out)
   // objsize: 0x290-0x51c: 652
   *(uint64_t *) out = crc64c_hw(input, len, seed);
 }
-#endif
+# endif
+
+# if defined(__SSE4_2__) && (defined(__i686__) || defined(_M_IX86) || defined(__x86_64__))
+/* Faster Adler SSE4.2 crc32 on Intel HW only. FIXME aarch64 */
+void
+crc32c_hw1_test(const void *input, int len, uint32_t seed, void *out)
+{
+  if (!len) {
+    *(uint32_t *) out = 0;
+    return;
+  }
+  // objsize: 0-29f: 671
+  *(uint32_t *) out = crc32c(input, len, seed);
+}
+# endif
 #endif
 
 #if 0 && defined(__x86_64__) && (defined(__linux__) || defined(__APPLE__))

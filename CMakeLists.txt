@@ -435,7 +435,12 @@ if(SSE2_FOUND)
   set(SSE2_SRC hasshe2.c)
 endif()
 if(SSE42_FOUND)
-  set(SSE4_SRC crc32_hw.c)
+  # MSVC CL 14.16.27023 32bit crashes, 14.28.29910 works fine.
+  if (MSVC AND (CMAKE_SIZEOF_VOID_P EQUAL 4) AND (MSVC_VERSION LESS 1928))
+    add_definitions(-DHAVE_BROKEN_MSVC_CRC32C_HW)
+  else()
+    set(SSE4_SRC "crc32_hw.c")
+  endif()
   # 64bit only:
   if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     # enable_language(ASM-NASM) set(CMAKE_ASM_FLAGS "-f elf64") # or
