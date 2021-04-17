@@ -21,10 +21,24 @@
 // limitations under the License.
 // ---------------------------------------------------------------------------
 
+#ifdef _MSC_VER
+    #pragma warning(push)  
+    #pragma warning(disable : 4514) // unreferenced inline function has been removed
+    #pragma warning(disable : 4710) // function not inlined
+    #pragma warning(disable : 4711) // selected for automatic inline expansion
+#endif
+
 #include <cstdint>
 #include <functional>
 #include <tuple>
 #include "phmap_bits.h"
+
+// ---------------------------------------------------------------
+// Absl forward declaration requires global scope.
+// ---------------------------------------------------------------
+#if defined(PHMAP_USE_ABSL_HASH) && !defined(phmap_fwd_decl_h_guard_) && !defined(ABSL_HASH_HASH_H_)
+    namespace absl { template <class T> struct Hash; };
+#endif
 
 namespace phmap
 {
@@ -116,7 +130,7 @@ private:
     typedef std::true_type yes;
     typedef std::false_type no;
 
-    template<typename U> static auto test(int) -> decltype(hash_value(std::declval<U&>()) == 1, yes());
+    template<typename U> static auto test(int) -> decltype(hash_value(std::declval<const U&>()) == 1, yes());
 
     template<typename> static no test(...);
 
@@ -125,9 +139,8 @@ public:
 };
 
 #if defined(PHMAP_USE_ABSL_HASH) && !defined(phmap_fwd_decl_h_guard_)
-    namespace absl { template <class T> struct Hash; };
-    template <class T> using Hash = absl::Hash<T>;
-#else
+    template <class T> using Hash = ::absl::Hash<T>;
+#elif !defined(PHMAP_USE_ABSL_HASH)
 // ---------------------------------------------------------------
 //               phmap::Hash
 // ---------------------------------------------------------------
@@ -356,5 +369,8 @@ private:
 
 }  // namespace phmap
 
+#ifdef _MSC_VER
+     #pragma warning(pop)  
+#endif
 
 #endif // phmap_utils_h_guard_

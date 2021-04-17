@@ -40,14 +40,14 @@ struct IsTriviallyCopyable<std::pair<T1, T2>> {
 };
 }
 
-namespace container_internal {
+namespace priv {
 
 // ------------------------------------------------------------------------
 // dump/load for raw_hash_set
 // ------------------------------------------------------------------------
 template <class Policy, class Hash, class Eq, class Alloc>
 template<typename OutputArchive>
-bool raw_hash_set<Policy, Hash, Eq, Alloc>::dump(OutputArchive& ar) {
+bool raw_hash_set<Policy, Hash, Eq, Alloc>::dump(OutputArchive& ar) const {
     static_assert(type_traits_internal::IsTriviallyCopyable<value_type>::value,
                     "value_type should be trivially copyable");
 
@@ -117,7 +117,7 @@ template <size_t N,
           class Mtx_,
           class Policy, class Hash, class Eq, class Alloc>
 template<typename OutputArchive>
-bool parallel_hash_set<N, RefSet, Mtx_, Policy, Hash, Eq, Alloc>::dump(OutputArchive& ar) {
+bool parallel_hash_set<N, RefSet, Mtx_, Policy, Hash, Eq, Alloc>::dump(OutputArchive& ar) const {
     static_assert(type_traits_internal::IsTriviallyCopyable<value_type>::value,
                     "value_type should be trivially copyable");
 
@@ -166,7 +166,7 @@ bool parallel_hash_set<N, RefSet, Mtx_, Policy, Hash, Eq, Alloc>::load(InputArch
     }
     return true;
 }
-} // namespace container_internal
+} // namespace priv
 
 
 
