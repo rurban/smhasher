@@ -497,6 +497,9 @@ if(SHA_FOUND)
   set(SHA_SRC SHA-Intrinsics/sha1-x86.c SHA-Intrinsics/sha256-x86.c)
 endif(SHA_FOUND)
 
+if(SSE42_FOUND AND (PROCESSOR_FAMILY STREQUAL "Intel") AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
+  set(SSE4_OBJ ${SSE4_OBJ} pearson_hash/pearson.c)
+endif()
 
 if(NOT MSVC)
   set(NOTMSVC_SRC seahash.c)
@@ -681,7 +684,6 @@ add_library(
   rijndael-alg-fst.c
   ${BLAKE3_SRC}
   pengyhash.c
-  pearson_hash/pearson.c
   pearson_hash/pearsonb.c
   # wyhash_condom.c
   ${ASCON_SRC}

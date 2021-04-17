@@ -76,6 +76,12 @@ SMhasher
 | [MicroOAAT](doc/MicroOAAT.txt)                |       977.60 |    59.61 | 185.06 (2) |  68 | 100% bias, distrib, BIC      |
 | [beamsplitter](doc/beamsplitter.txt)          |       789.22 |   682.45 |1150.33 (26)|4203 | UB, too many bad seeds       |
 | [BEBB4185](doc/BEBB4185.txt)                  |      2951.62 |   222.03 | 343.63 (4) |1294 | UB, too many bad seeds, msvc-specific |
+| [pearsonhash64](doc/pearsonhash64.txt)        |       287.95 |   174.11 | 196.50 (1) |     | Avalanche, Seed, SSSE3 only. broken MSVC     |
+| [pearsonhash128](doc/pearsonhash128.txt)      |       287.95 |   171.72 | 194.61 (1) |     | Avalanche, Seed, SSSE3 only. broken MSVC     |
+| [pearsonhash256](doc/pearsonhash256.txt)      |       264.51 |   184.87 | 218.79 (0) |     | Avalanche, Seed, SSSE3 only. broken MSVC     |
+| [pearsonbhash64](doc/pearsonbhash64.txt)      |      1486.34 |   104.32 | 185.03 (2) |     | Seed, Perlin     |
+| [pearsonbhash128](doc/pearsonbhash128.txt)    |      1347.03 |   121.75 | 214.84 (2) |     | Seed, Perlin     |
+| [pearsonbhash256](doc/pearsonbhash256.txt)    |       998.65 |   161.85 | 528.97 (12)|     | Seed, Perlin     |
 | [VHASH_32](doc/VHASH_32.txt)                  |      9404.99 |    77.01 | 250.57 (2) |1231 | sanity, Seed, MomentChi2     |
 | [VHASH_64](doc/VHASH_64.txt)                  |      9392.39 |    74.72 | 227.92 (2) |1231 | sanity, Seed, Sparse         |
 | [farsh32](doc/farsh32.txt)                    |     14053.09 |    74.29 | 245.33 (3) | 944 | insecure: AppendedZeroes, collisions+bias, MomentChi2, LongNeighbors |
