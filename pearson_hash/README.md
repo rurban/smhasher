@@ -1,6 +1,6 @@
 # Pearson Block Hashing
 
-The relatively low speed seen with regular [Pearson Hashing](https://github.com/Logan007/pearson) on modern CPUs might originate from the fact that it only processes one byte of input at a time. So, this is an attempt to read and digest multiple bytes, a block of bytes, in order to speed things up. Still relying on the underlying Pearson Hasing scheme, I tenderly call it **Pearson B. Hashing**.
+The relatively low speed seen with regular [Pearson Hashing](https://github.com/Logan007/pearson) on modern CPUs might originate from the fact that it only processes one byte of input at a time. So, this is an attempt to read and digest multiple bytes, a block of bytes, in order to speed things up. Still relying on the underlying Pearson Hashing scheme, I tenderly call it **Pearson B. Hashing**.
 
 :information_source: **RECAP**
 
