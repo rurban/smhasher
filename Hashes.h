@@ -1252,3 +1252,39 @@ extern "C" {
 }
 
 void nmhash32_test ( const void * key, int len, uint32_t seed, void * out );
+
+#ifdef HAVE_INT64
+// objsize: ???
+extern "C" {
+#include "pearson_hash/pearsonb.h"
+#if defined(HAVE_SSE2)
+#include "pearson_hash/pearson.h"
+
+inline void pearson64_test ( const void * key, int len, uint32_t seed, void * out ) {
+  *(uint64_t*)out = pearson_hash_64 ((const uint8_t*)key, (size_t) len, seed);
+}
+
+inline void pearson128_test ( const void * key, int len, uint32_t seed, void * out ) {
+  pearson_hash_128 ((uint8_t*)out, (const uint8_t*)key, (size_t) len);
+}
+
+inline void pearson256_test ( const void * key, int len, uint32_t seed, void * out ) {
+  pearson_hash_256 ((uint8_t*)out, (const uint8_t*)key, (size_t) len);
+}
+#endif
+
+inline void pearsonb64_test ( const void * key, int len, uint32_t seed, void * out ) {
+  *(uint64_t*)out = pearsonb_hash_64 ((const uint8_t*)key, (size_t) len);
+}
+
+inline void pearsonb128_test ( const void * key, int len, uint32_t seed, void * out ) {
+  pearsonb_hash_128 ((uint8_t*)out, (const uint8_t*)key, (size_t) len);
+}
+
+inline void pearsonb256_test ( const void * key, int len, uint32_t seed, void * out ) {
+  pearsonb_hash_256 ((uint8_t*)out, (const uint8_t*)key, (size_t) len);
+}
+}
+#endif
+
+

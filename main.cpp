@@ -719,6 +719,16 @@ HashInfo g_hashes[] =
   //{ wyhash_condom_test,   64, 0x7C62138D, "wyhash_condom",  "wyhash v3 condom 2 (64-bit)", GOOD, { } },
 #endif
   { nmhash32_test,        32, 0x0DC5C2DC, "nmhash32",         "nmhash32", GOOD, {}},
+#ifdef HAVE_INT64
+#if defined(HAVE_SSE2)
+  { pearson64_test,       64, 0x12E4C8CD, "pearsonhash64",    "Pearson hash, 64-bit", GOOD, {}},
+  { pearson128_test,     128, 0x6CCBB7B3, "pearsonhash128",   "Pearson hash, 128-bit, low 64-bits part", GOOD, {}},
+  { pearson256_test,     256, 0x7F8BEB21, "pearsonhash256",   "Pearson hash, 256-bit, low 64-bits part", GOOD, {}},
+#endif
+  { pearsonb64_test,       64, 0x715717DE, "pearsonbhash64",    "Pearson block hash, 64-bit", GOOD, {}},
+  { pearsonb128_test,     128, 0x824DA7ED, "pearsonbhash128",   "Pearson block hash, 128-bit, low 64-bits part", GOOD, {}},
+  { pearsonb256_test,     256, 0xE42B44CE, "pearsonbhash256",   "Pearson block hash, 256-bit, low 64-bits part", GOOD, {}},
+#endif
 };
 
 HashInfo * findHash ( const char * name )

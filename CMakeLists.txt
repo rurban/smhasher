@@ -681,6 +681,8 @@ add_library(
   rijndael-alg-fst.c
   ${BLAKE3_SRC}
   pengyhash.c
+  pearson_hash/pearson.c
+  pearson_hash/pearsonb.c
   # wyhash_condom.c
   ${ASCON_SRC}
   ${UMASH_SRC})
