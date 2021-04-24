@@ -730,6 +730,7 @@ HashInfo g_hashes[] =
   //{ wyhash_condom_test,   64, 0x7C62138D, "wyhash_condom",  "wyhash v3 condom 2 (64-bit)", GOOD, { } },
 #endif
   { nmhash32_test,        32, 0x0DC5C2DC, "nmhash32",         "nmhash32", GOOD, {}},
+  { nmhash32x_test,       32, 0x3F6AF4B5, "nmhash32x",        "nmhash32x", GOOD, {}},
 };
 
 HashInfo * findHash ( const char * name )

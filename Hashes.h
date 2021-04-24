@@ -1252,6 +1252,7 @@ extern "C" {
 }
 
 void nmhash32_test ( const void * key, int len, uint32_t seed, void * out );
+void nmhash32x_test ( const void * key, int len, uint32_t seed, void * out );
 
 #ifdef HAVE_INT64
 // objsize: ???
