@@ -729,20 +729,8 @@ HashInfo g_hashes[] =
     { 0x14cc886e, 0x1bf4ed84, 0x14cc886e14cc886eULL} /* !! 2^33 bad seeds, but easy to check */ },
   //{ wyhash_condom_test,   64, 0x7C62138D, "wyhash_condom",  "wyhash v3 condom 2 (64-bit)", GOOD, { } },
 #endif
-  { nmhash32_test,        32, 0x0DC5C2DC, "nmhash32",         "nmhash32", GOOD, {}},
-  // machine-specific. different with macOS, Windows, arm or clang++
-#if defined __linux && defined __GNUC__ && !defined __cplusplus
-#  define NMHASH32X_VERIF     0x3F6AF4B5
-#elif defined __linux && defined __clang__ // even different from 10.0.0 to 10.0.1
-#  define NMHASH32X_VERIF     0x0
-#elif defined __aarch64__ || defined __arm__ || defined __MINGW32__ // g++
-#  define NMHASH32X_VERIF     0x234B8446
-#elif defined __clang__ && (defined __APPLE__ || defined __FreeBSD__)
-#  define NMHASH32X_VERIF     0x209A14B4
-#else
-#  define NMHASH32X_VERIF     0x0
-#endif
-  { nmhash32x_test,       32, NMHASH32X_VERIF, "nmhash32x",        "nmhash32x", GOOD, {}},
+  { nmhash32_test,        32, 0x0DC5C2DC, "nmhash32",       "nmhash32", GOOD, {}},
+  { nmhash32x_test,       32, 0x3F6AF4B5, "nmhash32x",      "nmhash32x", GOOD, {}},
 };
 
 HashInfo * findHash ( const char * name )
