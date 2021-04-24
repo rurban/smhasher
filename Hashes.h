@@ -1252,6 +1252,7 @@ extern "C" {
 }
 
 void nmhash32_test ( const void * key, int len, uint32_t seed, void * out );
+// unportable. different with macOS, Windows, arm or clang++
 void nmhash32x_test ( const void * key, int len, uint32_t seed, void * out );
 
 #ifdef HAVE_INT64

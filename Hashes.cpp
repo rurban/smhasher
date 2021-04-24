@@ -1202,6 +1202,7 @@ void nmhash32_test ( const void * key, int len, uint32_t seed, void * out ) {
   *(uint32_t*)out = NMHASH32 (key, (const size_t) len, seed);
 }
 // objsize: 466100-4666d6: 1494
+// machine-specific results
 void nmhash32x_test ( const void * key, int len, uint32_t seed, void * out ) {
   *(uint32_t*)out = NMHASH32X (key, (const size_t) len, seed);
 }
