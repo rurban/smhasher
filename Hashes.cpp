@@ -1182,7 +1182,8 @@ void crc32c_pclmul_test(const void *key, int len, uint32_t seed, void *out)
 #elif __STDC_VERSION__ > 201200L // macports gcc-mp-6 has 201112 but no aligned_alloc
       alignas(16) unsigned char const *input = (unsigned char const *)aligned_alloc(16, len);
 #else
-      alignas(16) unsigned char const *input = (unsigned char const *)posix_memalign((void**)&key, 16, len);
+      alignas(16) unsigned char const *input = NULL;
+      posix_memalign((void**)&input, 16, len);
 #endif
       memcpy((void*)input, key, len);
       *(uint32_t *) out = crc32_pclmul_le_16(input, (size_t)len, seed);
