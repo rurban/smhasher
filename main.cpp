@@ -809,16 +809,8 @@ void Seed_init (HashInfo* info, size_t seed) {
 // Needed for hashed with a few bad seeds, to reject this seed and generate a new one.
 // (GH #99)
 void Bad_Seed_init (pfHash hash, uint32_t &seed) {
-  if(hash ==
-#ifdef HAVE_BIT32
-          wyhash32_test
-#else
-          wyhash32low
-#endif
-          )
-    wyhash32_seed_init(seed);
   // zero-seed hashes:
-  else if (!seed && (hash == BadHash || hash == sumhash || hash == fletcher2_test ||
+  if (!seed && (hash == BadHash || hash == sumhash || hash == fletcher2_test ||
                      hash == fletcher4_test || hash == Bernstein_test || hash == sdbm_test ||
                      hash == JenkinsOOAT_test || hash == JenkinsOOAT_perl_test ||
                      hash == SuperFastHash_test || hash == MurmurOAAT_test ||
@@ -837,11 +829,11 @@ void Bad_Seed_init (pfHash hash, uint32_t &seed) {
   else if (hash == MurmurHash3_x86_128 && seed == 0x239b961b)
     seed++;
 #ifdef HAVE_INT64
-  else if(hash == wyhash_test) {
-    size_t seedl = seed;
-    wyhash_seed_init(seedl);
-    seed = seedl;
-  }
+  //else if(hash == wyhash_test) {
+  //  size_t seedl = seed;
+  //  wyhash_seed_init(seedl);
+  //  seed = seedl;
+  //}
   else if(hash == mirhash_test)
     mirhash_seed_init(seed);
   else if(hash == mirhash32low)
