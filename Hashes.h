@@ -1259,13 +1259,13 @@ void nmhash32x_test ( const void * key, int len, uint32_t seed, void * out );
 extern "C" {
 #include "pearson_hash/pearsonb.h"
 inline void pearsonb64_test ( const void * key, int len, uint32_t seed, void * out ) {
-  *(uint64_t*)out = pearsonb_hash_64 ((const uint8_t*)key, (size_t) len);
+  *(uint64_t*)out = pearsonb_hash_64 ((const uint8_t*)key, (size_t) len, (uint64_t) seed);
 }
 inline void pearsonb128_test ( const void * key, int len, uint32_t seed, void * out ) {
-  pearsonb_hash_128 ((uint8_t*)out, (const uint8_t*)key, (size_t) len);
+  pearsonb_hash_128 ((uint8_t*)out, (const uint8_t*)key, (size_t) len, (uint64_t) seed);
 }
 inline void pearsonb256_test ( const void * key, int len, uint32_t seed, void * out ) {
-  pearsonb_hash_256 ((uint8_t*)out, (const uint8_t*)key, (size_t) len);
+  pearsonb_hash_256 ((uint8_t*)out, (const uint8_t*)key, (size_t) len, (uint64_t) seed);
 }
 
 #if defined(HAVE_SSE42) && defined(__x86_64__)
