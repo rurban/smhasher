@@ -47,15 +47,18 @@
     permute64(hash##part)
 
 
-void pearsonb_hash_256 (uint8_t *out, const uint8_t *in, size_t len) {
+void pearsonb_hash_256 (uint8_t *out, const uint8_t *in, size_t len, uint64_t seed) {
 
     uint64_t *current;
     current = (uint64_t*)in;
     uint64_t org_len = len;
-    uint64_t hash1 = 0;
-    uint64_t hash2 = 0;
-    uint64_t hash3 = 0;
-    uint64_t hash4 = 0;
+    uint64_t hash1 = seed;
+
+    permute64(hash1);
+
+    uint64_t hash2 = hash1;
+    uint64_t hash3 = hash1;
+    uint64_t hash4 = hash1;
 
     while (len > 7) {
         // digest words little endian first
@@ -109,13 +112,16 @@ void pearsonb_hash_256 (uint8_t *out, const uint8_t *in, size_t len) {
 }
 
 
-void pearsonb_hash_128 (uint8_t *out, const uint8_t *in, size_t len) {
+void pearsonb_hash_128 (uint8_t *out, const uint8_t *in, size_t len, uint64_t seed) {
 
     uint64_t *current;
     current = (uint64_t*)in;
     uint64_t org_len = len;
-    uint64_t hash1 = 0;
-    uint64_t hash2 = 0;
+    uint64_t hash1 = seed;
+
+    permute64(hash1);
+
+    uint64_t hash2 = hash1;
 
     while (len > 7) {
         // digest words little endian first
@@ -155,12 +161,14 @@ void pearsonb_hash_128 (uint8_t *out, const uint8_t *in, size_t len) {
 }
 
 
-uint64_t pearsonb_hash_64 (const uint8_t *in, size_t len) {
+uint64_t pearsonb_hash_64 (const uint8_t *in, size_t len, uint64_t seed) {
 
     uint64_t *current;
     current = (uint64_t*)in;
     uint64_t org_len = len;
-    uint64_t hash1 = 0;
+    uint64_t hash1 = seed;
+
+    permute64(hash1);
 
     while(len > 7) {
         // digest words little endian first
@@ -189,15 +197,15 @@ uint64_t pearsonb_hash_64 (const uint8_t *in, size_t len) {
 }
 
 
-uint32_t pearsonb_hash_32 (const uint8_t *in, size_t len) {
+uint32_t pearsonb_hash_32 (const uint8_t *in, size_t len, uint64_t seed) {
 
-    return pearsonb_hash_64(in, len);
+    return pearsonb_hash_64(in, len, seed);
 }
 
 
-uint16_t pearsonb_hash_16 (const uint8_t *in, size_t len) {
+uint16_t pearsonb_hash_16 (const uint8_t *in, size_t len, uint64_t seed) {
 
-    return pearsonb_hash_64(in, len);
+    return pearsonb_hash_64(in, len, seed);
 }
 
 
