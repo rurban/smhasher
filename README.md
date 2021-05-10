@@ -79,9 +79,6 @@ SMhasher
 | [pearsonhash64](doc/pearsonhash64.txt)        |       287.95 |   174.11 | 196.50 (1) |     | Avalanche, Seed, SSSE3 only. broken MSVC     |
 | [pearsonhash128](doc/pearsonhash128.txt)      |       287.95 |   171.72 | 194.61 (1) |     | Avalanche, Seed, SSSE3 only. broken MSVC     |
 | [pearsonhash256](doc/pearsonhash256.txt)      |       264.51 |   184.87 | 218.79 (0) |     | Avalanche, Seed, SSSE3 only. broken MSVC     |
-| [pearsonbhash64](doc/pearsonbhash64.txt)      |      1486.34 |   104.32 | 185.03 (2) |     | Seed, Perlin     |
-| [pearsonbhash128](doc/pearsonbhash128.txt)    |      1347.03 |   121.75 | 214.84 (2) |     | Seed, Perlin     |
-| [pearsonbhash256](doc/pearsonbhash256.txt)    |       998.65 |   161.85 | 528.97 (12)|     | Seed, Perlin     |
 | [VHASH_32](doc/VHASH_32.txt)                  |      9404.99 |    77.01 | 250.57 (2) |1231 | sanity, Seed, MomentChi2     |
 | [VHASH_64](doc/VHASH_64.txt)                  |      9392.39 |    74.72 | 227.92 (2) |1231 | sanity, Seed, Sparse         |
 | [farsh32](doc/farsh32.txt)                    |     14053.09 |    74.29 | 245.33 (3) | 944 | insecure: AppendedZeroes, collisions+bias, MomentChi2, LongNeighbors |
@@ -132,6 +129,9 @@ SMhasher
 | [SipHash](doc/SipHash.txt)                    |       980.88 |   127.77 | 246.19 (4) |1071 |                            |
 | [HalfSipHash](doc/HalfSipHash.txt)            |       755.78 |   114.47 | 243.72 (4) | 700 | zeroes                     |
 | [GoodOAAT](doc/GoodOAAT.txt)                  |      1052.00 |    71.62 | 192.19 (1) | 237 |                            |
+| [pearsonbhash64](doc/pearsonbhash64.txt)      |      1486.34 |   104.32 | 185.03 (2) | 683 |                            |
+| [pearsonbhash128](doc/pearsonbhash128.txt)    |      1347.03 |   121.75 | 214.84 (2) |1134 |                            |
+| [pearsonbhash256](doc/pearsonbhash256.txt)    |       998.90 |   167.05 | 261.29 (3) | 844 |                            |
 | [prvhash64_64m](doc/prvhash64_64m.txt)        |      2386.19 |    51.18 | 186.87 (1) | 349 |                            |
 | [prvhash64_64](doc/prvhash64_64.txt)          |      2375.72 |    51.61 | 190.97 (2) | 384 |                            |
 | [prvhash64_128](doc/prvhash64_128.txt)        |      2383.57 |   103.44 | 246.45 (1) | 718  |                           |
