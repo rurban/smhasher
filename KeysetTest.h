@@ -301,9 +301,9 @@ void PerlinNoiseTest (int Xbits, int Ybits,
 
   printf("Testing %i coordinates (L%i) : \n", xMax * yMax, inputLen);
 
-  for(int x = 0; x < xMax; x++) {
+  for(uint64_t x = 0; x < xMax; x++) {
       memcpy(key, &x, inputLen);  // Note : only works with Little Endian
-      for (int y=0; y < yMax; y++) {
+      for (size_t y=0; y < yMax; y++) {
           hashtype h;
           Hash_Seed_init (hash, y);
           hash(key, inputLen, y, &h);

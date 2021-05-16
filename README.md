@@ -124,7 +124,7 @@ SMhasher
 | [MeowHash32low](doc/MeowHash32low.txt)        |     17374.64 |    85.48 | 258.53 (2) |1764 | Sparse, machine-specific (x64 AES-NI)    |
 | --------------------------------------        |              |          |            |     |                            |
 | [tifuhash_64](doc/tifuhash_64.txt)            |        35.60 |  1679.52 |1212.75 (15)| 276 | Cyclic low32               |
-| [floppsyhash](doc/floppsyhash.txt)            |        35.72 |  1868.92 |1411.07 (7) | 623 |                           |
+| [floppsyhash](doc/floppsyhash.txt)            |        35.72 |  1868.92 |1411.07 (7) | 623 |                            |
 | [chaskey](doc/chaskey.txt)                    |       753.23 |   153.42 | 288.26 (2) |1609 | PerlinNoise                |
 | [SipHash](doc/SipHash.txt)                    |       980.88 |   127.77 | 246.19 (4) |1071 |                            |
 | [HalfSipHash](doc/HalfSipHash.txt)            |       755.78 |   114.47 | 243.72 (4) | 700 | zeroes                     |
