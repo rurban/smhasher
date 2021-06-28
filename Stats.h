@@ -115,7 +115,7 @@ static double ExpectedNBCollisions_Slow ( const double nbH, const double nbBits 
   long balls = nbH;
   long double bins = nbBits;
   long double result = 1.0;
-  for (long i = 1; i < (long)nbH / 2; i++) {
+  for (long i = 1; i < balls / 2; i++) {
     // take a pair from the front and the end to minimize errors
     result *= ((bins - i) / bins) * ((bins - (nbH - i)) / bins);
   }

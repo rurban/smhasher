@@ -876,7 +876,6 @@ inline void blake2s256_64(const void * key, int len, uint32_t seed, void * out)
 inline void sha2_224(const void *key, int len, uint32_t seed, void *out)
 {
   // objsize
-  unsigned char buf[28];
   sha224_init(&ltc_state);
   ltc_state.sha256.state[0] ^= seed;
   ltc_state.sha256.state[0] += len; // hardened against padding
@@ -952,7 +951,6 @@ inline void sha3_256_64(const void *key, int len, uint32_t seed, void *out)
 inline void sha3_256(const void *key, int len, uint32_t seed, void *out)
 {
   // objsize
-  unsigned char buf[32];
   sha3_256_init(&ltc_state);
   ltc_state.sha3.s[0] ^= seed;
   sha3_process(&ltc_state, (unsigned char *)key, len);
