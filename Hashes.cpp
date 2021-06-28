@@ -132,7 +132,6 @@ FNV2(const char *key, int len, size_t seed)
   size_t h;
   size_t *dw = (size_t *)key; //word stepper
   const size_t *const endw = &((const size_t*)key)[len/sizeof(size_t)];
-  int i;
 
 #ifdef HAVE_BIT32
   h = seed ^ UINT32_C(2166136261);
@@ -142,7 +141,8 @@ FNV2(const char *key, int len, size_t seed)
 
 #ifdef HAVE_ALIGNED_ACCESS_REQUIRED
   // avoid ubsan, misaligned writes
-  if ((i = (uintptr_t)dw % sizeof (size_t))) {
+  int i = (uintptr_t)dw % sizeof (size_t);
+  if (i) {
     uint8_t *dc = (uint8_t*)key;
     switch (i) {
     case 1:

@@ -216,10 +216,8 @@ bool BadSeedsTest ( HashInfo* info, bool testAll ) {
   bool result = true;
   bool have_lower = false;
 #ifdef HAVE_INT64
-  const uint64_t max_seed = sizeof(hashtype) == 4 ? UINT64_C(0xffffffff) : UINT64_C(0xffffffffffffffff);
   const std::vector<uint64_t> secrets = info->secrets;
 #else
-  const size_t max_seed = 0xffffffff;
   const std::vector<size_t> secrets = info->secrets;
 #endif
 #if !defined __arm__ && !defined __aarch64__
@@ -257,7 +255,6 @@ bool BadSeedsTest ( HashInfo* info, bool testAll ) {
     if (have_lower) {
       for (auto secret : secrets) {
         if (secret <= 0xffffffff) {
-          uint32_t s32 = (uint32_t)(secret & 0xffffffff);
           uint64_t s = secret;
           s = s << 32;
           printf("Suspect the 0x%" PRIx64 " seeds ...\n", s);
