@@ -103,9 +103,14 @@ bool ProcessDifferentials ( std::vector<keytype> & diffs, int reps, bool dumpCol
 template < typename keytype, typename hashtype >
 void DiffTestRecurse ( pfHash hash, keytype & k1, keytype & k2, hashtype & h1, hashtype & h2, int start, int bitsleft, std::vector<keytype> & diffs )
 {
-  const int bits = sizeof(keytype)*8;
+  static bool seed_initialized = false;
+  if (! seed_initialized) {
+    Hash_Seed_init(hash, 0);
+    seed_initialized = true;
+  }
 
-  Hash_Seed_init (hash, 0);
+  const int bits = sizeof(keytype) * 8;
+
   for(int i = start; i < bits; i++)
   {
     flipbit(&k2,sizeof(k2),i);
@@ -133,6 +138,12 @@ void DiffTestRecurse ( pfHash hash, keytype & k1, keytype & k2, hashtype & h1, h
 template < typename keytype, typename hashtype >
 bool DiffTest ( pfHash hash, int diffbits, int reps, bool dumpCollisions )
 {
+  static bool seed_initialized = false;
+  if (! seed_initialized) {
+    Hash_Seed_init(hash, 0);
+    seed_initialized = true;
+  }
+
   const int keybits = sizeof(keytype) * 8;
   const int hashbits = sizeof(hashtype) * 8;
 
@@ -152,7 +163,6 @@ bool DiffTest ( pfHash hash, int diffbits, int reps, bool dumpCollisions )
   printf("%d reps, %0.f total tests, expecting %2.2f random collisions",
          reps,testcount,expected);
 
-  Hash_Seed_init (hash, 0);
   for(int i = 0; i < reps; i++)
   {
     if(i % (reps/10) == 0) printf(".");
@@ -192,10 +202,15 @@ bool DiffTest ( pfHash hash, int diffbits, int reps, bool dumpCollisions )
 template < typename keytype, typename hashtype >
 void DiffDistTest ( pfHash hash, const int diffbits, int trials, double & worst, double & avg )
 {
+  static bool seed_initialized = false;
+  if (! seed_initialized) {
+    Hash_Seed_init(hash, 0);
+    seed_initialized = true;
+  }
+
   std::vector<keytype>  keys(trials);
   std::vector<hashtype> A(trials),B(trials);
 
-  Hash_Seed_init (hash, 0);
   for(int i = 0; i < trials; i++)
   {
     rand_p(&keys[i],sizeof(keytype));
@@ -250,6 +265,12 @@ void DiffDistTest ( pfHash hash, const int diffbits, int trials, double & worst,
 template < typename keytype, typename hashtype >
 bool DiffDistTest2 ( pfHash hash, bool drawDiagram )
 {
+  static bool seed_initialized = false;
+  if (! seed_initialized) {
+    Hash_Seed_init(hash, 0);
+    seed_initialized = true;
+  }
+
   Rand r(857374);
 
   int keybits = sizeof(keytype) * 8;
@@ -261,7 +282,6 @@ bool DiffDistTest2 ( pfHash hash, bool drawDiagram )
 
   bool result = true;
 
-  Hash_Seed_init (hash, 0);
   for(int keybit = 0; keybit < keybits; keybit++)
   {
     printf("Testing bit %d\n",keybit);
