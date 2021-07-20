@@ -308,7 +308,7 @@ with all hash functions.  Using Murmur is usually slower than a simple
 Mult, even in the worst case.  Provable secure is only uniform
 hashing, i.e. 2-5 independent Mult or Tabulation, or using a
 guaranteed logarithmic collision scheme (a tree) or a linear collision
-scheme, such as Robin Hood or Cockoo hashing with collision counting.
+scheme, such as Robin Hood or Cuckoo hashing with collision counting.
 
 One more note regarding security: Nowadays even SHA1 can be solved in
 a solver, like Z3 (or faster ones) for practical hash table collision
