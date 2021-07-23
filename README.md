@@ -119,9 +119,9 @@ SMhasher
 | [t1ha2_stream128](doc/t1ha2_stream128.txt)    |      9065.50 |    93.19 | 236.50 (3) |1665 | Sparse, Permutation, LongNeighbors |
 | [aesnihash](doc/aesnihash.txt)                |      2963.39 |    71.24 | 217.73 (3) |1209 | fails many tests, machine-specific (x64 AES-NI) |
 | [falkhash](doc/falkhash.txt)                  |     20202.42 |   173.63 | 321.52 (2) | 264 | Sparse, LongNeighbors, machine-specific (x64 AES-NI) |
-| [MeowHash](doc/MeowHash.txt)                  |     17371.91 |    85.48 | 247.96 (2) |1764 | Sparse, machine-specific (x64 AES-NI)  |
-| [MeowHash64low](doc/MeowHash64low.txt)        |     17378.06 |    85.48 | 237.60 (2) |1764 | Sparse, machine-specific (x64 AES-NI)    |
-| [MeowHash32low](doc/MeowHash32low.txt)        |     17374.64 |    85.48 | 258.53 (2) |1764 | Sparse, machine-specific (x64 AES-NI)    |
+| [MeowHash](doc/MeowHash.txt)                  |     17371.91 |    85.48 | 247.96 (2) |1764 | Sparse, invertible, machine-specific (x64 AES-NI)  |
+| [MeowHash64low](doc/MeowHash64low.txt)        |     17378.06 |    85.48 | 237.60 (2) |1764 | Sparse, invertible, machine-specific (x64 AES-NI)    |
+| [MeowHash32low](doc/MeowHash32low.txt)        |     17374.64 |    85.48 | 258.53 (2) |1764 | Sparse, invertible, machine-specific (x64 AES-NI)    |
 | --------------------------------------        |              |          |            |     |                            |
 | [tifuhash_64](doc/tifuhash_64.txt)            |        35.60 |  1679.52 |1212.75 (15)| 276 | Cyclic low32               |
 | [floppsyhash](doc/floppsyhash.txt)            |        35.72 |  1868.92 |1411.07 (7) | 623 |                            |
