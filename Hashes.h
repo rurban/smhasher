@@ -204,7 +204,7 @@ uint32_t MicroOAAT(const char *key, int len, uint32_t hash);
 inline void MicroOAAT_test(const void *key, int len, uint32_t seed, void *out) {
   *(uint32_t *) out = MicroOAAT((const char *)key, len, seed);
 }
-uint32_t SuperFastHash (const char * data, int len, int32_t hash);
+uint32_t SuperFastHash (const char * data, int len, uint32_t hash);
 static inline bool SuperFastHash_bad_seeds(std::vector<uint32_t> &seeds)
 {
   seeds = std::vector<uint32_t> { UINT32_C(0) };
