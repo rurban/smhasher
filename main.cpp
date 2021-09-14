@@ -115,8 +115,9 @@ HashInfo g_hashes[] =
     { 0xb13dea7c9c324e51ULL, 0x75f17d6b3588f843ULL } },
 #endif
   { crc32,                32, 0x3719DB20, "crc32",       "CRC-32 soft", POOR, {} },
-  { md5_128,             128, 0xF263F96F, "md5-128",     "MD5", GOOD, {} },
-  { md5_32,               32, 0x634E5AEC, "md5_32a",     "MD5, low 32 bits", POOR, {0x265cab52} /* !! */},
+  { md5_128,             128, 0xF263F96F, "md5-128",     "MD5", POOR, {} },
+  { md5_64,               64, 0x12F0BA8E, "md5-64",      "MD5, bits 32-95", POOR, {} },
+  { md5_32,               32, 0xF3DFF19F, "md5-32",      "MD5, bits 32-63", POOR, {} },
 #ifdef _MSC_VER /* truncated long to 32 */
 #  define SHA1_VERIF          0xED2F35E4
 #  define SHA1a_VERIF         0x480A2B09
@@ -1009,6 +1010,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     // known slow hashes (> 500), cycle/hash
     const struct { pfHash h; double cycles; } speeds[] = {
      { md5_32,           670.99 },
+     { md5_64,           670.99 },
      { md5_128,          730.30 },
      { sha1_32a,        1385.80 },
      { sha1_160,        1470.55 },

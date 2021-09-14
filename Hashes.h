@@ -756,7 +756,24 @@ inline void md5_32(const void *key, int len, uint32_t seed, void *out) {
   md5_update( &md5_ctx, (unsigned char *)key, len );
   md5_finish( &md5_ctx, hash );
   //memset( &md5_ctx.buffer, 0, 64+64+64 ); // for buffer, ipad, opad
-  memcpy(out, hash, 4);
+
+  // The "B" state was modified last in the hash round, so return the
+  // second word of output.
+  memcpy(out, hash + 4, 4);
+}
+
+inline void md5_64(const void *key, int len, uint32_t seed, void *out) {
+  unsigned char hash[16];
+  md5_context md5_ctx;
+  md5_starts( &md5_ctx );
+  md5_ctx.state[0] ^= seed;
+  md5_update( &md5_ctx, (unsigned char *)key, len );
+  md5_finish( &md5_ctx, hash );
+  //memset( &md5_ctx.buffer, 0, 64+64+64 ); // for buffer, ipad, opad
+
+  // The "B" and "C" states were modified last in the hash rounds, so
+  // return the second and third word of output.
+  memcpy(out, hash + 4, 8);
 }
 
 #include "sha1.h"
