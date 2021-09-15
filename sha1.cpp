@@ -74,7 +74,7 @@ void SHA1_Transform(uint32_t state[5], const uint8_t buffer[64]) {
    * And the result is written through.  I threw a "const" in, hoping
    * this will cause a diagnostic.
    */
-  CHAR64LONG16 *block = (const CHAR64LONG16 *)buffer;
+  const CHAR64LONG16 *block = (const CHAR64LONG16 *)buffer;
 #endif
   /* Copy context->state[] to working vars */
   a = state[0];
@@ -210,9 +210,9 @@ void SHA1_Update(SHA1_CTX *context, const uint8_t *data, const size_t len) {
   memcpy(&context->buffer[j], &data[i], len - i);
 }
 
-/* Add padding and return the message digest. */
+/* Add padding and return len bytes of the message digest. */
 
-void SHA1_Final(SHA1_CTX *context, uint8_t digest[SHA1_DIGEST_SIZE]) {
+void SHA1_Final(SHA1_CTX *context, unsigned len, uint8_t digest[SHA1_DIGEST_SIZE]) {
   unsigned i;
   uint8_t finalcount[8];
   uint8_t c;
@@ -229,7 +229,10 @@ void SHA1_Final(SHA1_CTX *context, uint8_t digest[SHA1_DIGEST_SIZE]) {
     SHA1_Update(context, &c, 1);
   }
   SHA1_Update(context, finalcount, 8); /* Should cause a SHA1_Transform() */
-  for (i = 0; i < 20; i++) {
+  if (len > 20) {
+      len = 20;
+  }
+  for (i = 0; i < len; i++) {
     digest[i] = (uint8_t)(context->state[i >> 2] >> ((3 - (i & 3)) * 8));
   }
   /* Wipe variables */

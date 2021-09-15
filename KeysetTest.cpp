@@ -94,7 +94,7 @@ bool SanityTest ( pfHash hash, const int hashbits )
 {
   printf("Running sanity check 1     ");
 
-  Rand r(883741);
+  Rand r(883743);
 
   bool result = true;
 
