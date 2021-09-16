@@ -651,12 +651,26 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
 
       result &= TestHighbitsCollisions(hashes);
 
-      /* Following tests are too small : tables are necessarily saturated.
-       * It would be better to count the nb of collisions per Cell,
-       * and compared the distribution of values against a random source.
-       * But this is a different test */
-      result &= CountHighbitsCollisions(hashes,   12);
-      result &= CountHighbitsCollisions(hashes,   8);
+      /*
+       * cyan: The 12- and -8-bit tests are too small : tables are necessarily saturated.
+       * It would be better to count the nb of collisions per Cell, and
+       * compared the distribution of values against a random source.
+       * But that would be a different test.
+       *
+       * rurban: No, these tests are for non-prime hash tables, using only
+       *     the lower 5-10 bits
+       *
+       * fwojcik: Count{High,Low}bitsCollisions() do not currently seem
+       * to reflect rurban's comment, as they count the sum of
+       * collisions across _all_ buckets. So if there are many more
+       * hashes than 2**nbBits, and the hash is even _slightly_ not
+       * broken, then every n-bit truncated hash value will appear at
+       * least once, in which case the "actual" value reported would
+       * always be (hashes.size() - 2**nbBits). Checking the results in
+       * doc/ confirms this. cyan's comment is correct.
+       */
+      //result &= CountHighbitsCollisions(hashes,   12);
+      //result &= CountHighbitsCollisions(hashes,   8);
     }
     if (testLowBits) {
       // reverse: bitwise flip the hashes. lowest bits first
@@ -678,14 +692,9 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
       */
 
       result &= TestLowbitsCollisions(revhashes);
-      /* Following tests are too small : tables are necessarily saturated.
-       * It would be better to count the nb of collisions per Cell,
-       * and compared the distribution of values against a random source.
-       * But this is a different test */
-      /* rurban: No, these tests are for non-prime hash tables, using only
-         the lower 5-10 bits */
-      result &= CountLowbitsCollisions(revhashes,   12);
-      result &= CountLowbitsCollisions(revhashes,   8);
+
+      //result &= CountLowbitsCollisions(revhashes,   12);
+      //result &= CountLowbitsCollisions(revhashes,   8);
 
       //std::vector<hashtype>().swap(revhashes);
       //revhashes.clear();
