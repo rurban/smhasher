@@ -157,25 +157,87 @@ static double EstimateNbCollisions_R(const double nbH, const double nbBits)
 }
 */
 
-// The currently best calculation, highly prone to inaccuracies with low results (1.0 - 10.0)
+// The previous best calculation, highly prone to inaccuracies with low results (1.0 - 10.0)
 // TODO: return also the error.
-static double EstimateNbCollisions(const int nbH, const int nbBits)
+static double EstimateNbCollisions_previmpl(const double nbH, const double nbBits)
 {
-#if 0
-  //return ExpectedNBCollisions_Slow((const double)nbH, (const double)nbBits);
-  return EstimateNbCollisions_Demerphq((const double)nbH, (const double)nbBits);
-  //return EstimateNbCollisions_Taylor((const double)nbH, (const double)nbBits);
-  //return ExpectedCollisions((const double)nbH, (const double)nbBits);
-#else
-  double exp = exp2((double)nbBits); // 2 ^ bits
-  double result = (double(nbH) * double(nbH-1)) / (2.0 * exp);
-  if (result > (double)nbH)
-    result = (double)nbH;
+  double exp = exp2(nbBits); // 2 ^ bits
+  double result = (nbH * (nbH-1)) / (2.0 * exp);
+  if (result > nbH)
+    result = nbH;
   // improved floating point accuracy
   if (result <= exp || nbBits > 32)
     return result;
   return result - exp;
-#endif
+}
+
+static double EstimateNbCollisions_fwojcik(const double nbH, const int nbBits)
+{
+    // If the probability that there are 1 or more collisions (p(C >=
+    // 1)) is not much higher than the probability of exactly 1
+    // collision (p(C == 1)), then the classically-good approximation
+    // of the probability of any collisions is also a good estimate
+    // for the expected number of collisions.
+    //
+    // If there are 2**n buckets and 2**(n-r) hashes, then the ratio
+    // of p(C >= 1)/p(C == 1) is about 1/(1-2**(n-2r-1)). This uses
+    // the new estimator if that ratio is > 1 + 2**-8. That cutoff
+    // minimizes the error around the values we care about.
+    if (nbBits - 2.0*log2(nbH) >= 8 - 1) {
+        return nbH * (nbH - 1) * exp2(-nbBits-1);
+    }
+
+    // The probability that any given hash bucket is empty after nbH
+    // insertions is:
+    //    pE     = ((2**nbBits - 1)/(2**nbBits))**nbH
+    // so we compute:
+    //    ln(pE) = nbH * ln((2**nbBits - 1)/(2**nbBits))
+    //           = nbH * ln(1 - 1/2**(nbBits))
+    //           = nbH * ln(1 - 2**(-nbBits))
+    //           = nbH * ln(1 + -(2**(-nbBits)))
+    // This means the probability that any given hash bucket is
+    // occupied after nbH insertions is:
+    //     pF = 1 - pE
+    //     pF = 1 - exp(ln(pE)
+    //     pF = -(exp(ln(pE) - 1)
+    //     pF = -expm1(ln(pE))
+    // And the expected number of collisions is:
+    //     C = m - n + n * pE
+    //     C = m - n * (1 - pE)
+    //     C = n * (m/n - 1 + pE)
+    //     C = n * (m/n - (1 - pE))
+    //     C = n * (m/n - pF)
+    //     C = n * (m/n - (-expm1(ln(pE))))
+    //     C = n * (m/n + expm1(ln(pE)))
+    // Since the format of floats/doubles is k*2**n, multiplying by
+    // exp2(x) doesn't lose any precision, and this formulation keeps
+    // m/n and pF at the same general orders of magnitude, so it tends
+    // to have very good precision. At low hash occupancy, pF is too
+    // close to m/n for this formula to work well.
+    double logpE = (double)nbH  * log1p(-exp2(-nbBits));
+    double result = exp2(nbBits) * (exp2(-nbBits) * (double)nbH + expm1(logpE));
+
+    return result;
+}
+
+static double EstimateNbCollisions(const unsigned long nbH, const int nbBits)
+{
+  return EstimateNbCollisions_fwojcik((const double)nbH, (const double)nbBits);
+}
+
+#define COLLISION_ESTIMATORS 3
+static double EstimateNbCollisionsCand(const unsigned long nbH, const int nbBits, const int estimator )
+{
+    switch(estimator) {
+    case 0: return EstimateNbCollisions_fwojcik((const double)nbH, (const double)nbBits);
+    case 1: return EstimateNbCollisions_previmpl((const double)nbH, (const double)nbBits);
+    case 2: return EstimateNbCollisions_Demerphq((const double)nbH, (const double)nbBits);
+    //case 3: return EstimateNbCollisions_Taylor((const double)nbH, (const double)nbBits);
+    //case 4: return ExpectedCollisions((const double)nbH, (const double)nbBits);
+    //case 5: return ExpectedNBCollisions_Slow((const double)nbH, (const double)nbBits);
+    default: { printf("Invalid estimator requested\n"); exit(1); }
+    }
+    return NAN;
 }
 
 template< typename hashtype >
