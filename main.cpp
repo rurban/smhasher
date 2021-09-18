@@ -1084,7 +1084,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 #endif
 
     bool result = true;
-    bool verbose = g_drawDiagram; //.......... progress dots
+    bool verbose = true; //.......... progress dots
 
     Seed_init (info, 0);
     result &= AvalancheTest< Blob< 24>, hashtype > (hash,300000,verbose);
