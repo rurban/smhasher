@@ -337,7 +337,7 @@ bool TestLowbitsCollisions ( std::vector<hashtype> & revhashes)
   size_t const nbH = revhashes.size();
   int const minBits = FindMinBits_TargetCollisionShare(nbH, 0.01);
   int const maxBits = FindMaxBits_TargetCollisionNb(nbH, 20);
-  if (maxBits <= 0 || maxBits >= origBits) return true;
+  if (maxBits <= 0 || maxBits >= origBits || minBits > maxBits) return true;
 
   printf("Testing collisions (low  %2i-%2i bits) - ", minBits, maxBits);
   double maxCollDev = 0.0;
@@ -378,7 +378,7 @@ bool TestHighbitsCollisions ( std::vector<hashtype> & hashes)
   size_t const nbH = hashes.size();
   int const minBits = FindMinBits_TargetCollisionShare(nbH, 0.01);
   int const maxBits = FindMaxBits_TargetCollisionNb(nbH, 20);
-  if (maxBits >= origBits) return true;
+  if (maxBits <= 0 || maxBits >= origBits || minBits > maxBits) return true;
 
   printf("Testing collisions (high %2i-%2i bits) - ", minBits, maxBits);
   double maxCollDev = 0.0;
