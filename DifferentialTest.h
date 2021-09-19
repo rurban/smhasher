@@ -299,7 +299,7 @@ bool DiffDistTest2 ( pfHash hash, bool drawDiagram )
       hashes[i] = h1 ^ h2;
     }
 
-    result &= TestHashList<hashtype>(hashes,true,true,drawDiagram);
+    result &= TestHashList<hashtype>(hashes,drawDiagram,true,true);
     printf("\n");
   }
 
