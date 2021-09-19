@@ -2153,6 +2153,11 @@ static char* strndup(char const *s, size_t n)
 }
 #endif
 
+void usage( void )
+{
+    printf("Usage: SMHasher [--list][--listnames][--tests] [--verbose][--extra]\n"
+           "       [--test=Speed,...] hash\n");
+}
 
 int main ( int argc, const char ** argv )
 {
@@ -2168,8 +2173,7 @@ int main ( int argc, const char ** argv )
 
   if (argc < 2) {
     printf("No test hash given on command line, testing %s.\n", hashToTest);
-    printf("Usage: SMHasher [--list][--listnames][--tests] [--verbose][--extra]\n"
-           "       [--test=Speed,...] hash\n");
+    usage();
   }
 
   for (int argnb = 1; argnb < argc; argnb++) {
@@ -2177,8 +2181,7 @@ int main ( int argc, const char ** argv )
     if (strncmp(arg,"--", 2) == 0) {
       // This is a command
       if (strcmp(arg,"--help") == 0) {
-        printf("Usage: SMHasher [--list][--listnames][--tests] [--verbose][--extra]\n"
-               "       [--test=Speed,...] hash\n");
+        usage();
         exit(0);
       }
       if (strcmp(arg,"--list") == 0) {
@@ -2264,8 +2267,7 @@ int main ( int argc, const char ** argv )
       }
       // invalid command
       printf("Invalid command \n");
-      printf("Usage: SMHasher [--list][--listnames][--tests] [--verbose][--extra]\n"
-             "       [--test=Speed,...] hash\n");
+      usage();
       exit(1);
     }
     // Not a command ? => interpreted as hash name
