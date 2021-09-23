@@ -97,8 +97,11 @@ bool TestSecret ( const HashInfo* info, const uint64_t secret ) {
   static hashtype zero;
   pfHash hash = info->hash;
   uint8_t key[128];
+  // Currently *only* seeds going through Hash_Seed_init() can be
+  // wider than 32 bits!!
+  if (!Hash_Seed_init (hash, secret) && (secret > UINT64_C(0xffffffff)))
+      return true;
   printf("0x%" PRIx64 " ", secret);
-  Hash_Seed_init (hash, secret);
   for (int len : std::vector<int> {1,2,4,8,12,16,32,64,128}) {
     std::vector<hashtype> hashes;
     for (int c : std::vector<int> {0,32,'0',127,128,255}) {
@@ -251,14 +254,18 @@ bool BadSeedsTest ( HashInfo* info, bool testAll ) {
   printf("Testing the first 0xffffffff seeds ...\n");
   result &= TestSecret32<hashtype>(info, UINT64_C(0x0));
 #ifdef HAVE_INT64
-  if (sizeof(hashtype) > 4) { // and the upper half 32bit range
-    if (have_lower) {
-      for (auto secret : secrets) {
-        if (secret <= 0xffffffff) {
-          uint64_t s = secret;
-          s = s << 32;
-          printf("Suspect the 0x%" PRIx64 " seeds ...\n", s);
-          result &= TestSecret32<hashtype>(info, s);
+  // Currently *only* seeds going through Hash_Seed_init() can be
+  // wider than 32 bits!!
+  if (Hash_Seed_init(info->hash, 0)) {
+    if (sizeof(hashtype) > 4) { // and the upper half 32bit range
+      if (have_lower) {
+        for (auto secret : secrets) {
+          if (secret <= 0xffffffff) {
+            uint64_t s = secret;
+            s = s << 32;
+            printf("Suspect the 0x%" PRIx64 " seeds ...\n", s);
+            result &= TestSecret32<hashtype>(info, s);
+          }
         }
       }
     }
@@ -881,6 +888,7 @@ template < typename hashtype >
 bool SeedTest ( pfHash hash, int keycount, bool drawDiagram )
 {
   printf("Keyset 'Seed' - %d keys\n",keycount);
+  assert(keycount < (1<<31));
 
   const char text[64] = "The quick brown fox jumps over the lazy dog";
   const int len = (int)strlen(text);
