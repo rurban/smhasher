@@ -2,7 +2,7 @@
 
 #include "Platform.h"
 #include "Random.h"
-void Seed_init (HashInfo* info, size_t seed);
+bool Seed_init (HashInfo* info, size_t seed);
 
 #include <map>
 #include <set>

@@ -12,8 +12,8 @@
 #include <stdio.h>     // for printf
 #include <assert.h>
 
-void Seed_init (HashInfo *info, size_t seed);
-void Hash_Seed_init (pfHash hash, size_t seed);
+bool Seed_init (HashInfo *info, size_t seed);
+bool Hash_Seed_init (pfHash hash, size_t seed);
 double calcScore ( const int * bins, const int bincount, const int ballcount );
 
 void plot ( double n );
