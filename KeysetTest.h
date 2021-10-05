@@ -139,7 +139,7 @@ void TestSecretRangeThread ( const HashInfo* info, const uint64_t hi,
   hashes.resize(4);
   result = true;
   printf("at %lx ", hi | start);
-  size_t end = start + len;
+  size_t end = (size_t)start + (size_t)len;
   for (size_t y=start; y < end; y++) {
     static hashtype zero;
     uint64_t seed = hi | y;
