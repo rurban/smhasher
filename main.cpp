@@ -1875,6 +1875,7 @@ void MomentChi2Thread ( const struct HashInfo *info, const int inputSize,
   int hbits = info->hashbits;  
   if (hbits > 64) hbits = 64;   // limited due to popcount8
   Bad_Seed_init(hash, seed);
+  Hash_Seed_init(hash, seed);
   assert(sizeof(unsigned) <= inputSize);
   assert(start < end);
   //assert(step > 0);
