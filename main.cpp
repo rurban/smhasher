@@ -1879,12 +1879,10 @@ void MomentChi2Thread ( const struct HashInfo *info, const int inputSize,
   assert(start < end);
   //assert(step > 0);
 
-  if (start > step) {
-    uint64_t i = start - step;
-    memcpy(key, &i, sizeof(i));
-    hash(key, inputSize, seed, hbuff);
-    memcpy(&previous, hbuff, 8);
-  }
+  uint64_t i = start - step;
+  memcpy(key, &i, sizeof(i));
+  hash(key, inputSize, seed, hbuff);
+  memcpy(&previous, hbuff, 8);
 
   for (uint64_t i=start; i<=end; i+=step) {
     memcpy(key, &i, sizeof(i));
@@ -1998,12 +1996,12 @@ bool MomentChi2Test ( struct HashInfo *info, int inputSize)
     const unsigned start = i * len;
     b[i][0] = 0.; b[i][1] = 0.; b[i][2] = 0.; b[i][3] = 0.;
     b[i][4] = 0.; b[i][5] = 0.; b[i][6] = 0.; b[i][7] = 0.;
-    //printf("thread[%d]: %d, 0x%x - 0x%x\n", i, inputSize, start, start + len - 1);
+    //printf("thread[%d]: %d, 0x%x - 0x%x %d\n", i, inputSize, start, start + len - 1, step);
     t[i] = std::thread {MomentChi2Thread, info, inputSize, start, start + (len - 1), step, std::ref(b[i])};
     // pin it? moves around a lot. but the result is fair
   }
   fflush(NULL);
-  std::this_thread::sleep_for(std::chrono::seconds(30));
+  std::this_thread::sleep_for(std::chrono::seconds(5));
   for (int i=0; i < NCPU; i++) {
     t[i].join();
   }
