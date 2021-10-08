@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 cmake_policy(SET CMP0003 NEW)
 if(POLICY CMP0056) # Honor link flags in try_compile() source-file signature.
   cmake_policy(SET CMP0056 NEW) # since 3.2
