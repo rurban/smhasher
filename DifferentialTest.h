@@ -45,10 +45,10 @@ bool ProcessDifferentials ( std::vector<keytype> & diffs, int reps, bool dumpCol
         {
           result = false;
 
-          double pct = 100 * (double(count) / double(reps));
-
           if(dumpCollisions)
           {
+            double pct = 100 * (double(count) / double(reps));
+
             printbits((unsigned char*)&kp,sizeof(kp));
             printf(" - %4.2f%%\n", pct );
           }
@@ -65,10 +65,10 @@ bool ProcessDifferentials ( std::vector<keytype> & diffs, int reps, bool dumpCol
 
     if(count > 1)
     {
-      double pct = 100 * (double(count) / double(reps));
-
       if(dumpCollisions)
       {
+        double pct = 100 * (double(count) / double(reps));
+
         printbits((unsigned char*)&kp,sizeof(kp));
         printf(" - %4.2f%%\n", pct );
       }
