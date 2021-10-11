@@ -641,6 +641,8 @@ add_library(
   SpeedTest.cpp
   Spooky.cpp
   SpookyTest.cpp
+  SpookyV2.cpp
+  SpookyTestV2.cpp
   Stats.cpp
   SuperFastHash.cpp
   Types.cpp

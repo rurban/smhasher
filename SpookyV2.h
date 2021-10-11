@@ -1,14 +1,15 @@
 //
-// SpookyHash V1: a 128-bit noncryptographic hash function
+// SpookyHash: a 128-bit noncryptographic hash function
 // By Bob Jenkins, public domain
 //   Oct 31 2010: alpha, framework + SpookyHash::Mix appears right
 //   Oct 31 2011: alpha again, Mix only good to 2^^69 but rest appears right
 //   Dec 31 2011: beta, improved Mix, tested it for 2-bit deltas
 //   Feb  2 2012: production, same bits as beta
 //   Feb  5 2012: adjusted definitions of uint* to be more portable
-//   Oct 2021: renamed to SpookyHashV1 (use V2 instead)
+//   Mar 30 2012: 3 bytes/cycle, not 4.  Alpha was 4 but wasn't thorough enough.
+//   August 5 2012: SpookyV2 (different results)
 // 
-// Up to 4 bytes/cycle for long messages.  Reasonably fast for short messages.
+// Up to 3 bytes/cycle for long messages.  Reasonably fast for short messages.
 // All 1 or 2 bit deltas achieve avalanche within 1% bias per output bit.
 //
 // This was developed for and tested on 64-bit x86-compatible processors.
@@ -18,17 +19,13 @@
 // compute different results on them than on little-endian machines.
 //
 // Google's CityHash has similar specs to SpookyHash, and CityHash is faster
-// on some platforms.  MD4 and MD5 also have similar specs, but they are orders
+// on new Intel boxes.  MD4 and MD5 also have similar specs, but they are orders
 // of magnitude slower.  CRCs are two or more times slower, but unlike 
 // SpookyHash, they have nice math for combining the CRCs of pieces to form 
 // the CRCs of wholes.  There are also cryptographic hashes, but those are even 
 // slower than MD5.
 //
-// rurban: Note that this old version has UB and a known bad seed of 0x26bb3cda.
-// Rather use the better V2 instead.
-//
 
-#include "Platform.h"
 #include <stddef.h>
 
 #ifdef _MSC_VER
@@ -47,7 +44,7 @@
 #endif
 
 
-class SpookyHashV1
+class SpookyHash
 {
 public:
     //
@@ -175,24 +172,28 @@ public:
         uint64 &h8, uint64 &h9, uint64 &h10,uint64 &h11)
     {
         h11+= h1;    h2 ^= h11;   h1 = Rot64(h1,44);
-	h0 += h2;    h3 ^= h0;    h2 = Rot64(h2,15);
-	h1 += h3;    h4 ^= h1;    h3 = Rot64(h3,34);
-	h2 += h4;    h5 ^= h2;    h4 = Rot64(h4,21);
-	h3 += h5;    h6 ^= h3;    h5 = Rot64(h5,38);
-	h4 += h6;    h7 ^= h4;    h6 = Rot64(h6,33);
-	h5 += h7;    h8 ^= h5;    h7 = Rot64(h7,10);
-	h6 += h8;    h9 ^= h6;    h8 = Rot64(h8,13);
-	h7 += h9;    h10^= h7;    h9 = Rot64(h9,38);
-	h8 += h10;   h11^= h8;    h10= Rot64(h10,53);
-	h9 += h11;   h0 ^= h9;    h11= Rot64(h11,42);
-	h10+= h0;    h1 ^= h10;   h0 = Rot64(h0,54);
+        h0 += h2;    h3 ^= h0;    h2 = Rot64(h2,15);
+        h1 += h3;    h4 ^= h1;    h3 = Rot64(h3,34);
+        h2 += h4;    h5 ^= h2;    h4 = Rot64(h4,21);
+        h3 += h5;    h6 ^= h3;    h5 = Rot64(h5,38);
+        h4 += h6;    h7 ^= h4;    h6 = Rot64(h6,33);
+        h5 += h7;    h8 ^= h5;    h7 = Rot64(h7,10);
+        h6 += h8;    h9 ^= h6;    h8 = Rot64(h8,13);
+        h7 += h9;    h10^= h7;    h9 = Rot64(h9,38);
+        h8 += h10;   h11^= h8;    h10= Rot64(h10,53);
+        h9 += h11;   h0 ^= h9;    h11= Rot64(h11,42);
+        h10+= h0;    h1 ^= h10;   h0 = Rot64(h0,54);
     }
 
     static INLINE void End(
+        const uint64 *data, 
         uint64 &h0, uint64 &h1, uint64 &h2, uint64 &h3,
         uint64 &h4, uint64 &h5, uint64 &h6, uint64 &h7, 
         uint64 &h8, uint64 &h9, uint64 &h10,uint64 &h11)
     {
+        h0 += data[0];   h1 += data[1];   h2 += data[2];   h3 += data[3];
+        h4 += data[4];   h5 += data[5];   h6 += data[6];   h7 += data[7];
+        h8 += data[8];   h9 += data[9];   h10 += data[10]; h11 += data[11];
         EndPartial(h0,h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11);
         EndPartial(h0,h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11);
         EndPartial(h0,h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11);
@@ -265,10 +266,10 @@ private:
     // held to the same quality bar.
     // 
     static void Short(
-        const void *message,
-        size_t length,
-        uint64 *hash1,
-        uint64 *hash2);
+        const void *message,  // message (array of bytes, not necessarily aligned)
+        size_t length,        // length of message (in bytes)
+        uint64 *hash1,        // in/out: in the seed, out the hash value
+        uint64 *hash2);       // in/out: in the seed, out the hash value
 
     // number of uint64's in internal state
     static const size_t sc_numVars = 12;
@@ -286,7 +287,7 @@ private:
     //  * is a not-very-regular mix of 1's and 0's
     //  * does not need any other special mathematical properties
     //
-    static const uint64 sc_const = 0xdeadbeefdeadbeefULL;
+    static const uint64 sc_const = 0xdeadbeefdeadbeefLL;
 
     uint64 m_data[2*sc_numVars];   // unhashed data, for partial messages
     uint64 m_state[sc_numVars];  // internal state of the hash

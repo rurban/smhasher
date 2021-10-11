@@ -174,6 +174,9 @@ SMhasher
 | [Spooky32](doc/Spooky32.txt)                  |      9747.13 |    62.24 | 196.96 (4) |2221 | UB                         |
 | [Spooky64](doc/Spooky64.txt)                  |      9747.47 |    62.20 | 191.71 (2) |2221 | UB                         |
 | [Spooky128](doc/Spooky128.txt)                |      9751.14 |    63.84 | 192.47 (2) |2221 | UB                         |
+| [SpookyV2_32](doc/SpookyV2_32.txt)            |      9529.38 |    64.36 | 194.47 (1) |2069 |                            |
+| [SpookyV2_64](doc/SpookyV2_64.txt)            |      9505.69 |    64.44 | 192.19 (1) |2069 |                            |
+| [SpookyV2_128](doc/SpookyV2_128.txt)          |      9524.31 |    65.81 | 187.24 (1) |2069 |                            |
 | [ahash64](doc/ahash64.txt)                    |      9862.62 |    27.32 | 181.68 (1) | 412 | rust                       |
 | [xxh3](doc/xxh3.txt)                          |     16538.52 |    32.81 | 184.86 (2) | 744 | DiffDist bit 7 w. 36 bits, BIC |
 | [xxh3low](doc/xxh3low.txt)                    |     16462.36 |    32.77 | 199.79 (2) | 756 |                            |

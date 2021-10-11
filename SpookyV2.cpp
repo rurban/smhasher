@@ -4,10 +4,13 @@
 //   Oct 31 2010: published framework, disclaimer ShortHash isn't right
 //   Nov 7 2010: disabled ShortHash
 //   Oct 31 2011: replace End, ShortMix, ShortEnd, enable ShortHash again
-//   Oct 2021: renamed to SpookyHashV1 (use V2 instead)
+//   April 10 2012: buffer overflow on platforms without unaligned reads
+//   July 12 2012: was passing out variables in final to in/out in short
+//   July 30 2012: I reintroduced the buffer overflow
+//   August 5 2012: SpookyV2: d = should be d += in short hash, and remove extra mix from long hash
 
 #include <memory.h>
-#include "Spooky.h"
+#include "SpookyV2.h"
 
 #define ALLOW_UNALIGNED_READS 1
 
@@ -15,13 +18,13 @@
 // short hash ... it could be used on any message, 
 // but it's used by Spooky just for short messages.
 //
-void SpookyHashV1::Short(
+void SpookyHash::Short(
     const void *message,
     size_t length,
     uint64 *hash1,
     uint64 *hash2)
 {
-    uint64 buf[sc_numVars];
+    uint64 buf[2*sc_numVars];
     union 
     { 
         const uint8 *p8; 
@@ -70,7 +73,7 @@ void SpookyHashV1::Short(
     }
     
     // Handle the last 0..15 bytes, and its length
-    d = ((uint64)length) << 56;
+    d += ((uint64)length) << 56;
     switch (remainder)
     {
     case 15:
@@ -121,7 +124,7 @@ void SpookyHashV1::Short(
 
 
 // do the whole hash in one call
-void SpookyHashV1::Hash128(
+void SpookyHash::Hash128(
     const void *message, 
     size_t length, 
     uint64 *hash1, 
@@ -175,10 +178,9 @@ void SpookyHashV1::Hash128(
     memcpy(buf, end, remainder);
     memset(((uint8 *)buf)+remainder, 0, sc_blockSize-remainder);
     ((uint8 *)buf)[sc_blockSize-1] = remainder;
-    Mix(buf, h0,h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11);
     
     // do some final mixing 
-    End(h0,h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11);
+    End(buf, h0,h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11);
     *hash1 = h0;
     *hash2 = h1;
 }
@@ -186,7 +188,7 @@ void SpookyHashV1::Hash128(
 
 
 // init spooky state
-void SpookyHashV1::Init(uint64 seed1, uint64 seed2)
+void SpookyHash::Init(uint64 seed1, uint64 seed2)
 {
     m_length = 0;
     m_remainder = 0;
@@ -196,7 +198,7 @@ void SpookyHashV1::Init(uint64 seed1, uint64 seed2)
 
 
 // add a message fragment to the state
-void SpookyHashV1::Update(const void *message, size_t length)
+void SpookyHash::Update(const void *message, size_t length)
 {
     uint64 h0,h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11;
     size_t newLength = length + m_remainder;
@@ -300,11 +302,13 @@ void SpookyHashV1::Update(const void *message, size_t length)
 
 
 // report the hash for the concatenation of all message fragments so far
-void SpookyHashV1::Final(uint64 *hash1, uint64 *hash2)
+void SpookyHash::Final(uint64 *hash1, uint64 *hash2)
 {
     // init the variables
     if (m_length < sc_bufSize)
     {
+        *hash1 = m_state[0];
+        *hash2 = m_state[1];
         Short( m_data, m_length, hash1, hash2);
         return;
     }
@@ -329,18 +333,17 @@ void SpookyHashV1::Final(uint64 *hash1, uint64 *hash2)
     {
         // m_data can contain two blocks; handle any whole first block
         Mix(data, h0,h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11);
-	data += sc_numVars;
-	remainder -= sc_blockSize;
+        data += sc_numVars;
+        remainder -= sc_blockSize;
     }
 
     // mix in the last partial block, and the length mod sc_blockSize
     memset(&((uint8 *)data)[remainder], 0, (sc_blockSize-remainder));
 
     ((uint8 *)data)[sc_blockSize-1] = remainder;
-    Mix(data, h0,h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11);
     
     // do some final mixing
-    End(h0,h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11);
+    End(data, h0,h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11);
 
     *hash1 = h0;
     *hash2 = h1;
