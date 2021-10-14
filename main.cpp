@@ -1053,7 +1053,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       trials = 5;
     bool result = true;
     if (info->quality == SKIP) {
-      result = false;
+      printf("Skipping Hashmap test; it is designed for true hashes\n");
     } else {
       std::vector<std::string> words = HashMapInit(g_drawDiagram);
       if (words.size()) {

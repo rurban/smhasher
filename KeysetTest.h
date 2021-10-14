@@ -72,7 +72,7 @@ bool PrngTest ( hashfunc<hashtype> hash,
 {
 
   if (sizeof(hashtype) < 8) {
-      printf("The PRNG test is designed for hashes >= 64-bit \n");
+      printf("Skipping PRNG test; it is designed for hashes >= 64-bits\n");
       return true;
   }
 
