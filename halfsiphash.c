@@ -1,14 +1,6 @@
 #include "siphash.h"
 #include "siphash_impl.h"
 
-#ifndef U8TO64
-#define U8TO64
-static uint64_t INLINE
-U8TO64_LE(const unsigned char *p) {
-	return *(const uint64_t *)p;
-}
-#endif
-
 #define TRACE
 #define cROUNDS 2
 #define dROUNDS 4
