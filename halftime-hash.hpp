@@ -187,7 +187,7 @@ struct BlockWrapperScalar {
 };
 
 template <typename T>
-T MultiplyAdd(T summand, T factor1, T factor2) {
+T MultiplyAdd(const T & summand, const T & factor1, const T & factor2) {
   return Plus(summand, Times(factor1, factor2));
 }
 
@@ -383,18 +383,18 @@ template <typename BlockWrapper, unsigned dimension, unsigned in_width,
 struct EhcBadger {
   using Block = typename BlockWrapper::Block;
 
-  static Block Mix(Block accum, Block input, Block entropy) {
+  static Block Mix(const Block & accum, const Block & input, const Block & entropy) {
     Block output = Plus32(entropy, input);
     Block twin = RightShift32(output);
     output = MultiplyAdd(accum, output, twin);
     return output;
   }
 
-  static Block MixOne(Block accum, Block input, uint64_t entropy) {
+  static Block MixOne(const Block & accum, const Block & input, uint64_t entropy) {
     return Mix(accum, input, BlockWrapper::LoadOne(entropy));
   }
 
-  static Block MixNone(Block input, uint64_t entropy_word) {
+  static Block MixNone(const Block & input, uint64_t entropy_word) {
     Block entropy = BlockWrapper::LoadOne(entropy_word);
     Block output = Plus32(entropy, input);
     Block twin = RightShift32(output);
@@ -421,55 +421,55 @@ struct EhcBadger {
     if (out_width == 5) return Encode5<Block>(&io[0][0]);
   }
 
-  static Block SimpleTimes(std::integral_constant<int, -1>, Block x) { return Negate(x); }
-  static Block SimpleTimes(std::integral_constant<int, 1>, Block x) { return x; }
-  static Block SimpleTimes(std::integral_constant<int, 2>, Block x) {
+  static Block SimpleTimes(std::integral_constant<int, -1>, const Block & x) { return Negate(x); }
+  static Block SimpleTimes(std::integral_constant<int, 1>, const Block & x) { return x; }
+  static Block SimpleTimes(std::integral_constant<int, 2>, const Block & x) {
     return LeftShift(x, 1);
   }
-  static Block SimpleTimes(std::integral_constant<int, 3>, Block x) {
+  static Block SimpleTimes(std::integral_constant<int, 3>, const Block & x) {
     return Plus(x, LeftShift(x, 1));
   }
-  static Block SimpleTimes(std::integral_constant<int, 4>, Block x) {
+  static Block SimpleTimes(std::integral_constant<int, 4>, const Block & x) {
     return LeftShift(x, 2);
   }
-  static Block SimpleTimes(std::integral_constant<int, 5>, Block x) {
+  static Block SimpleTimes(std::integral_constant<int, 5>, const Block & x) {
     return Plus(x, LeftShift(x, 2));
   }
-  static Block SimpleTimes(std::integral_constant<int, 7>, Block x) {
+  static Block SimpleTimes(std::integral_constant<int, 7>, const Block & x) {
     return Minus(LeftShift(x, 3), x);
   }
-  static Block SimpleTimes(std::integral_constant<int, 8>, Block x) {
+  static Block SimpleTimes(std::integral_constant<int, 8>, const Block & x) {
     return LeftShift(x, 3);
   }
-  static Block SimpleTimes(std::integral_constant<int, 9>, Block x) {
+  static Block SimpleTimes(std::integral_constant<int, 9>, const Block & x) {
     return Plus(x, LeftShift(x, 3));
   }
 
   template <int a>
-  static Block SimplerTimes(Block x) {
+  static Block SimplerTimes(const Block & x) {
     return SimpleTimes(std::integral_constant<int, a>{}, x);
   }
 
   template <int a, int b>
-  static void Dot2(Block sinks[2], Block x) {
+  static void Dot2(Block sinks[2], const Block & x) {
     sinks[0] = Plus(sinks[0], SimplerTimes<a>(x));
     sinks[1] = Plus(sinks[1], SimplerTimes<b>(x));
   }
 
   template <int a, int b, int c>
-  static void Dot3(Block sinks[3], Block x) {
+  static void Dot3(Block sinks[3], const Block & x) {
     Dot2<a, b>(sinks, x);
     sinks[2] = Plus(sinks[2], SimplerTimes<c>(x));
   }
 
   template <int a, int b, int c, int d>
-  static void Dot4(Block sinks[4], Block x) {
+  static void Dot4(Block sinks[4], const Block & x) {
     Dot3<a, b, c>(sinks, x);
     sinks[3] = Plus(sinks[3], SimplerTimes<d>(x));
   }
 
   template <int a, int b, int c, int d, int e>
-  static void Dot5(Block sinks[5], Block x) {
+  static void Dot5(Block sinks[5], const Block & x) {
     Dot4<a, b, c, d>(sinks, x);
     sinks[4] = Plus(sinks[4], SimplerTimes<e>(x));
   }
@@ -574,7 +574,7 @@ struct EhcBadger {
       }
     }
 
-    void Insert(Block x) {
+    void Insert(const Block & x) {
       for (unsigned i = 0; i < out_width; ++i) {
         accum[i] =
             Mix(accum[i], x,
@@ -789,7 +789,7 @@ struct RepeatWrapper {
   using Block = Repeat<InnerBlock, count>;
 
   static Block LoadOne(uint64_t entropy) {
-    Block result;
+    alignas(16) Block result;
     for (unsigned i = 0; i < count; ++i) {
       result.it[i] = InnerBlockWrapper::LoadOne(entropy);
     }
@@ -798,7 +798,7 @@ struct RepeatWrapper {
 
   static Block LoadBlock(const void* x) {
     auto y = reinterpret_cast<const char*>(x);
-    Block result;
+    alignas(16) Block result;
     for (unsigned i = 0; i < count; ++i) {
       result.it[i] = InnerBlockWrapper::LoadBlock(y + i * sizeof(InnerBlock));
     }
@@ -807,7 +807,7 @@ struct RepeatWrapper {
 };
 
 template <typename Block, unsigned count>
-inline Repeat<Block, count> Xor(Repeat<Block, count> a, Repeat<Block, count> b) {
+inline Repeat<Block, count> Xor(const Repeat<Block, count> & a, const Repeat<Block, count> & b) {
   Repeat<Block, count> result;
   for (unsigned i = 0; i < count; ++i) {
     result.it[i] = Xor(a.it[i], b.it[i]);
@@ -816,7 +816,7 @@ inline Repeat<Block, count> Xor(Repeat<Block, count> a, Repeat<Block, count> b) 
 }
 
 template <typename Block, unsigned count>
-inline Repeat<Block, count> Plus32(Repeat<Block, count> a, Repeat<Block, count> b) {
+inline Repeat<Block, count> Plus32(const Repeat<Block, count> & a, const Repeat<Block, count> & b) {
   Repeat<Block, count> result;
   for (unsigned i = 0; i < count; ++i) {
     result.it[i] = Plus32(a.it[i], b.it[i]);
@@ -825,7 +825,7 @@ inline Repeat<Block, count> Plus32(Repeat<Block, count> a, Repeat<Block, count> 
 }
 
 template <typename Block, unsigned count>
-inline Repeat<Block, count> Plus(Repeat<Block, count> a, Repeat<Block, count> b) {
+inline Repeat<Block, count> Plus(const Repeat<Block, count> & a, const Repeat<Block, count> & b) {
   Repeat<Block, count> result;
   for (unsigned i = 0; i < count; ++i) {
     result.it[i] = Plus(a.it[i], b.it[i]);
@@ -834,7 +834,7 @@ inline Repeat<Block, count> Plus(Repeat<Block, count> a, Repeat<Block, count> b)
 }
 
 template <typename Block, unsigned count>
-inline Repeat<Block, count> Minus(Repeat<Block, count> a, Repeat<Block, count> b) {
+inline Repeat<Block, count> Minus(const Repeat<Block, count> & a, const Repeat<Block, count> & b) {
   Repeat<Block, count> result;
   for (unsigned i = 0; i < count; ++i) {
     result.it[i] = Minus(a.it[i], b.it[i]);
@@ -843,7 +843,7 @@ inline Repeat<Block, count> Minus(Repeat<Block, count> a, Repeat<Block, count> b
 }
 
 template <typename Block, unsigned count>
-inline Repeat<Block, count> LeftShift(Repeat<Block, count> a, int s) {
+inline Repeat<Block, count> LeftShift(const Repeat<Block, count> & a, int s) {
   Repeat<Block, count> result;
   for (unsigned i = 0; i < count; ++i) {
     result.it[i] = LeftShift(a.it[i], s);
@@ -852,7 +852,7 @@ inline Repeat<Block, count> LeftShift(Repeat<Block, count> a, int s) {
 }
 
 template <typename Block, unsigned count>
-inline Repeat<Block, count> RightShift32(Repeat<Block, count> a) {
+inline Repeat<Block, count> RightShift32(const Repeat<Block, count> & a) {
   Repeat<Block, count> result;
   for (unsigned i = 0; i < count; ++i) {
     result.it[i] = RightShift32(a.it[i]);
@@ -861,7 +861,7 @@ inline Repeat<Block, count> RightShift32(Repeat<Block, count> a) {
 }
 
 template <typename Block, unsigned count>
-inline Repeat<Block, count> Times(Repeat<Block, count> a, Repeat<Block, count> b) {
+inline Repeat<Block, count> Times(const Repeat<Block, count> & a, const Repeat<Block, count> & b) {
   Repeat<Block, count> result;
   for (unsigned i = 0; i < count; ++i) {
     result.it[i] = Times(a.it[i], b.it[i]);
@@ -870,7 +870,7 @@ inline Repeat<Block, count> Times(Repeat<Block, count> a, Repeat<Block, count> b
 }
 
 template <typename Block, unsigned count>
-inline uint64_t Sum(Repeat<Block, count> a) {
+inline uint64_t Sum(const Repeat<Block, count> & a) {
   uint64_t result = 0;
   for (unsigned i = 0; i < count; ++i) {
     result += Sum(a.it[i]);
@@ -879,7 +879,7 @@ inline uint64_t Sum(Repeat<Block, count> a) {
 }
 
 template <typename Block, unsigned count>
-inline Repeat<Block, count> Negate(Repeat<Block, count> a) {
+inline Repeat<Block, count> Negate(const Repeat<Block, count> & a) {
   Repeat<Block, count> b;
   for (unsigned i = 0; i < count; ++i) {
     b.it[i] = Negate(a.it[i]);
