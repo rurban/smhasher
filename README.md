@@ -198,8 +198,8 @@ SMhasher
 | [halftime_hash128](doc/halftime_hash128.txt)  |     13478.23 |    97.79 | 252.14 (2) |2462 |                            |
 | [halftime_hash256](doc/halftime_hash256.txt)  |     11620.28 |    98.44 | 252.60 (2) |2622 |                            |
 | [halftime_hash512](doc/halftime_hash512.txt)  |      7681.62 |   125.81 | 274.01 (3) |3550 |                            |
-| [nmhash32](doc/nmhash32.txt)                  |     17511.41 |    62.26 | 507.64 (51)|2445 |                            |
-| [nmhash32x](doc/nmhash32x.txt)                |     17802.08 |    43.10 | 447.96 (16)|1494 |                            |
+| [nmhash32](doc/nmhash32.txt)                  |      7850.01 |    56.74 | 207.59 (1) |2445 |                            |
+| [nmhash32x](doc/nmhash32x.txt)                |      7850.92 |    46.94 | 193.94 (1) |1494 |                            |
 
 The sortable table variants:
 
