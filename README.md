@@ -132,11 +132,11 @@ SMhasher
 | [pearsonbhash64](doc/pearsonbhash64.txt)      |      1486.34 |   104.32 | 185.03 (2) | 683 |                            |
 | [pearsonbhash128](doc/pearsonbhash128.txt)    |      1347.03 |   121.75 | 214.84 (2) |1134 |                            |
 | [pearsonbhash256](doc/pearsonbhash256.txt)    |       998.90 |   167.05 | 261.29 (3) | 844 |                            |
-| [prvhash64_64m](doc/prvhash64_64m.txt)        |      2386.19 |    51.18 | 186.87 (1) | 349 |                            |
-| [prvhash64_64](doc/prvhash64_64.txt)          |      2375.72 |    51.61 | 190.97 (2) | 384 |                            |
-| [prvhash64_128](doc/prvhash64_128.txt)        |      2383.57 |   103.44 | 246.45 (1) | 718  |                           |
-| [prvhash64s_64](doc/prvhash64s_64.txt)        |      5481.48 |   170.05 | 325.39 (6) |2640 |                            |
-| [prvhash64s_128](doc/prvhash64s_128.txt)      |      5161.33 |   260.96 | 442.70 (22)|2799 |                            |
+| [prvhash64_64m](doc/prvhash64_64m.txt)        |      2308.85 |    53.03 | 241.00 (5) | 349 |                            |
+| [prvhash64_64](doc/prvhash64_64.txt)          |      2302.42 |    53.31 | 253.73 (5) | 384 |                            |
+| [prvhash64_128](doc/prvhash64_128.txt)        |      2296.75 |   106.79 | 323.24 (5) | 718  |                           |
+| [prvhash64s_64](doc/prvhash64s_64.txt)        |      2455.28 |   369.19 | 624.65 (18)|2640 |                            |
+| [prvhash64s_128](doc/prvhash64s_128.txt)      |      2462.49 |   471.74 | 697.91 (19)|2799 |                            |
 | [SipHash13](doc/SipHash13.txt)                |      1889.10 |    89.00 | 199.95 (4) | 778 | 0.9% bias                  |
 | [TSip](doc/TSip.txt)                          |      3228.14 |    57.96 | 211.71 (3) | 519 | !msvc                      |
 | [seahash](doc/seahash.txt)                    |      4796.97 |    58.55 | 201.58 (2) | 871 | PerlinNoise, !msvc         |
