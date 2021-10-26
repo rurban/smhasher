@@ -65,6 +65,8 @@ bool ProcessDifferentials ( std::vector<keytype> & diffs, int reps, bool dumpCol
 
     if(count > 1)
     {
+      result = false;
+
       if(dumpCollisions)
       {
         double pct = 100 * (double(count) / double(reps));
