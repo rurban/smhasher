@@ -603,6 +603,12 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
           printf(" !!!!!\n");
           return false;
         }
+      // don't allow expected 0.0+epsilon and actual 1
+      else if (expected < 0.001 && collcount == 1)
+        {
+          printf(" !!!!!\n");
+          return false;
+        }
     }
     else
     {
