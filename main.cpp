@@ -453,9 +453,9 @@ HashInfo g_hashes[] =
 #endif
   { lookup3_test,         32, 0x3D83917A, "lookup3",     "Bob Jenkins' lookup3", POOR, {0x21524101} /* !! */},
 #ifdef __aarch64__
-  #define SFAST_VERIF 0xB2623D87
+  #define SFAST_VERIF 0x6306A6FE
 #else
-  #define SFAST_VERIF 0xC4CB7C07
+  #define SFAST_VERIF 0x0C80403A
 #endif
   { SuperFastHash_test,   32, SFAST_VERIF,"superfast",   "Paul Hsieh's SuperFastHash", POOR, {0x0} /* !! */},
   { MurmurOAAT_test,      32, 0x5363BD98, "MurmurOAAT",  "Murmur one-at-a-time", POOR,
