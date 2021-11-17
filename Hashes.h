@@ -1285,6 +1285,45 @@ inline void pearson256_test ( const void * key, int len, uint32_t seed, void * o
   pearson_hash_256 ((uint8_t*)out, (const uint8_t*)key, (size_t) len);
 }
 #endif
+
+// not implemented
+#ifndef HAVE_ALIGNED_ACCESS_REQUIRED
+  
+#undef ROTR32
+#undef ROTR64
+#include "khash.h"
+//objsize: 418eb0-4191d8: 808
+inline void khash32_test ( const void *key, int len, uint32_t seed, void *out) {
+  uint32_t hash = ~seed;
+  uint32_t *dw = (uint32_t*)key;
+  const uint32_t *const endw = &((const uint32_t*)key)[len/4];
+  while (dw < endw) {
+    hash ^= khash32_fn (*dw++, seed, UINT32_C(0xf3bcc908));
+  }
+  if (len & 3) {
+    // the unsafe variant with overflow. see FNV2 for a safe byte-stepper.
+    hash ^= khash32_fn (*dw, seed, UINT32_C(0xf3bcc908));
+  }
+  *(uint32_t*)out = hash;
+}
+//objsize: 4191e0-419441: 609
+inline void khash64_test ( const void *key, int len, uint32_t seed, void *out) {
+  uint64_t* dw = (uint64_t*)key;
+  const uint64_t *const endw = &((const uint64_t*)key)[len/8];
+  const uint64_t seed64 = (uint64_t)seed | UINT64_C(0x6a09e66700000000);
+  uint64_t hash = ~seed64;
+  while (dw < endw) {
+    hash ^= khash64_fn (*dw++, seed64);
+  }
+  if (len & 7) {
+    // unsafe variant with overflow
+    hash ^= khash32_fn (*dw, seed, UINT32_C(0xf3bcc908));
+  }
+  *(uint64_t*)out = hash;
+}
+
+#endif // HAVE_ALIGNED_ACCESS_REQUIRED
+  
 }
 #endif
 
