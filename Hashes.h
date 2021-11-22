@@ -1227,6 +1227,13 @@ inline void prvhash64s_128test ( const void * key, int len, unsigned seed, void 
 }
 #endif
 
+#include "komihash/komihash.h"
+// objsize: 188d0 - 18ba8: 728
+inline void komihash_test ( const void * key, int len, unsigned seed, void * out )
+{
+  *(uint64_t*)out = komihash ((const uint8_t *)key, len, (uint64_t)seed);
+}
+
 // objsize: 408dd0 - 4090ae: 734
 #include "mx3/mx3.h"
 inline void mx3hash64_test ( const void * key, int len, uint32_t seed, void * out ) {

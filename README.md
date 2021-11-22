@@ -202,6 +202,7 @@ SMhasher
 | [halftime_hash512](doc/halftime_hash512.txt)  |      7681.62 |   125.81 | 274.01 (3) |3550 |                            |
 | [nmhash32](doc/nmhash32.txt)                  |      7850.01 |    56.74 | 207.59 (1) |2445 |                            |
 | [nmhash32x](doc/nmhash32x.txt)                |      7850.92 |    46.94 | 193.94 (1) |1494 |                            |
+| [komihash](doc/komihash.txt)                  |      9756.63 |    43.54 | 180.99 (1) | 728 |                            |
 
 The sortable table variants:
 
@@ -223,6 +224,7 @@ So the fastest hash functions on x86_64 without quality problems are:
 - wyhash
 - ahash64
 - t1ha2_atonce
+- komihash
 - FarmHash (_not portable, too machine specific: 64 vs 32bit, old gcc, ..._)
 - halftime_hash128
 - Spooky32
@@ -313,7 +315,8 @@ with all hash functions.  Using Murmur is usually slower than a simple
 Mult, even in the worst case.  Provable secure is only uniform
 hashing, i.e. 2-5 independent Mult or Tabulation, or using a
 guaranteed logarithmic collision scheme (a tree) or a linear collision
-scheme, such as Robin Hood or Cuckoo hashing with collision counting.
+scheme, such as swisstable/folly-F14, Robin Hood or Cuckoo hashing
+with collision counting.
 
 One more note regarding security: Nowadays even SHA1 can be solved in
 a solver, like Z3 (or faster ones) for practical hash table collision

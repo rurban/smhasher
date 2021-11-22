@@ -577,6 +577,7 @@ HashInfo g_hashes[] =
   { prvhash64s_64test,    64, 0,          "prvhash64s_64", "prvhash64s 64bit", GOOD, {} }, // seed changes
   { prvhash64s_128test,  128, 0,          "prvhash64s_128","prvhash64s 128bit", GOOD, {} }, // seed compiler-specific
 #endif
+  { komihash_test,        64, 0x7D4E9C0B, "komihash",      "komihash", GOOD, {} },
   // as in rust and swift:
   { siphash13_test,       64, 0x29C010BF, "SipHash13",   "SipHash 1-3 - SSSE3 optimized", GOOD, {} },
 #ifndef _MSC_VER
