@@ -1,9 +1,9 @@
 SMhasher
 ========
+
 [![SMHasher support vis xs:code](doc/SMhasher-banner.png)](https://xscode.com/rurban/smhasher)
 
 [![Linux Build status](https://travis-ci.org/rurban/smhasher.svg?branch=master)](https://travis-ci.org/rurban/smhasher/) [![Windows Build status](https://ci.appveyor.com/api/projects/status/tb6ckfcrhqi6pwn9/branch/master?svg=true)](https://ci.appveyor.com/project/rurban/smhasher) [![FreeBSD Build status](https://api.cirrus-ci.com/github/rurban/smhasher.svg?branch=master)](https://cirrus-ci.com/github/rurban/smhasher)
-
 
 | Hash function                                 |      MiB/sec |cycl./hash|cycl./map   | size| Quality problems               |
 |:----------------------------------------------|-------------:|---------:|-----------:|----:|--------------------------------|
@@ -206,7 +206,7 @@ SMhasher
 
 The sortable table variants:
 
-* **[Default Intel i5-2300 2.8GHz](https://rurban.github.io/smhasher/doc/table.html)** 
+* **[Default Intel i5-2300 2.8GHz](https://rurban.github.io/smhasher/doc/table.html)**
 * [Intel i5-2300 2.8GHz 32bit](https://rurban.github.io/smhasher/doc/i686.html)
 * [AMD Ryzen 3 3200U 3.5GHz](https://rurban.github.io/smhasher/doc/ryzen3.html)
 * [Mac Air i7-4650](https://rurban.github.io/smhasher/doc/air.html)
@@ -220,19 +220,19 @@ See also the old [https://github.com/aappleby/smhasher/wiki](https://github.com/
 
 So the fastest hash functions on x86_64 without quality problems are:
 
-- xxh3low
-- wyhash
-- ahash64
-- t1ha2_atonce
-- komihash
-- FarmHash (_not portable, too machine specific: 64 vs 32bit, old gcc, ..._)
-- halftime_hash128
-- Spooky32
-- pengyhash
-- nmhash32
-- mx3
-- MUM/mir (_different results on 32/64-bit archs, lots of bad seeds to filter out_)
-- fasthash32
+* xxh3low
+* wyhash
+* ahash64
+* t1ha2_atonce
+* komihash
+* FarmHash (_not portable, too machine specific: 64 vs 32bit, old gcc, ..._)
+* halftime_hash128
+* Spooky32
+* pengyhash
+* nmhash32
+* mx3
+* MUM/mir (_different results on 32/64-bit archs, lots of bad seeds to filter out_)
+* fasthash32
 
 Hash functions for symbol tables or hash tables typically use 32 bit
 hashes, for databases, file systems and file checksums typically 64 or
@@ -243,7 +243,7 @@ See [github.com/rurban/perl-hash-stats](https://github.com/rurban/perl-hash-stat
 
 When used in a hash table the instruction cache will usually beat the
 CPU and throughput measured here. In my tests the smallest `FNV1A`
-beats the fastest `crc32_hw1` with [Perl 5 hash tables](https://github.com/rurban/perl-hash-stats). 
+beats the fastest `crc32_hw1` with [Perl 5 hash tables](https://github.com/rurban/perl-hash-stats).
 Even if those worse hash functions will lead to more collisions, the
 overall speed advantage and inline-ability beats the slightly worse quality.
 See e.g. [A Seven-Dimensional Analysis of Hashing Methods and its Implications on Query Processing](https://infosys.cs.uni-saarland.de/publications/p249-richter.pdf)
@@ -280,10 +280,11 @@ The less the better.
 Other
 -----
 
-* http://nohatcoder.dk/2019-05-19-1.html gives a new, useful hash level classification 1-5.
-* [http://www.strchr.com/hash_functions](http://www.strchr.com/hash_functions) lists other benchmarks and quality of most simple and fast hash functions.
-* [http://bench.cr.yp.to/primitives-hash.html](http://bench.cr.yp.to/primitives-hash.html) lists the benchmarks of all currently tested secure hashes.
-* http://valerieaurora.org/hash.html Lifetimes of cryptographic hash functions
+* <https://github.com/martinus/better-faster-stronger-mixer>
+* <http://nohatcoder.dk/2019-05-19-1.html> gives a new, useful hash level classification 1-5.
+* <http://www.strchr.com/hash_functions> lists other benchmarks and quality of most simple and fast hash functions.
+* <http://bench.cr.yp.to/primitives-hash.html> lists the benchmarks of all currently tested secure hashes.
+* <http://valerieaurora.org/hash.html> Lifetimes of cryptographic hash functions
 
 SECURITY
 --------
@@ -353,14 +354,14 @@ were based on the CAVP tests for SHA-2. In addition to this, the “Extremely Lo
 Message Test,” not present in the CAVP for SHA-2, required the
 submitters to generate the hash value corresponding to a message with
 a length of 1 GiB. “NIST - Cryptographic Algorithm Validation Program (CAVP),”
-June 2017. Available: http://csrc.nist.gov/groups/STM/cavp
+June 2017. Available: <http://csrc.nist.gov/groups/STM/cavp>
 (No testing source code provided, just high-level descriptions)
 
 Two other independent third party testsuites found an extensive number
 of bugs and weaknesses in the SHA3 candidates.
 "Finding Bugs in Cryptographic Hash Function Implementations",
 Nicky Mouha, Mohammad S Raunak, D. Richard Kuhn, and Raghu Kacker, 2017.
-https://eprint.iacr.org/2017/891.pdf
+<https://eprint.iacr.org/2017/891.pdf>
 
 Maybe independent researchers should come together to do a better
 public SHA-4 round, based on better and more testing methods, open
@@ -371,7 +372,7 @@ PROBLEMS
 --------
 
 * Bad Seeds
-  
+
   Hash functions are typically initialized with a random seed. But
   some seed values may lead to bad hash functions, regardless of the
   key. In the regular case with random seeds the probablity of such
@@ -381,12 +382,12 @@ PROBLEMS
   Note that a bad seed is not really a problem when you skip this seed during initialization.
   It can still be a GOOD or recommended hash function.
   But a bad seed of `0` leading to collisions is considered a bug, a bad hash function.
-  
+
   We test for internal secrets, if they will be multiplied with 0. This
   is also called "blinding multiplication". `main.cpp` lists some
   secrets for each hash function we test against. The function
   `<hash>_bad_seeds()` lists the confirmed bad seeds.
-  
+
   Special care needs to be taken for crc, most FNV1 variants, fletcher,
   Jenkins. And with GOOD hashes all MUM variants, like mirhash, MUM,
   wyhash.
@@ -437,4 +438,5 @@ Typical undefined behaviour (**UB**) problems:
 
 SUPPORT
 -------
-You can get professional support here: https://xscode.com/rurban/smhasher
+
+You can get professional support here: <https://xscode.com/rurban/smhasher>
