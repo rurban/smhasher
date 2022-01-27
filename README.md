@@ -280,10 +280,14 @@ The less the better.
 Other
 -----
 
-* <https://github.com/martinus/better-faster-stronger-mixer>
-* <http://nohatcoder.dk/2019-05-19-1.html> gives a new, useful hash level classification 1-5.
-* <http://www.strchr.com/hash_functions> lists other benchmarks and quality of most simple and fast hash functions.
-* <http://bench.cr.yp.to/primitives-hash.html> lists the benchmarks of all currently tested secure hashes.
+* <https://github.com/martinus/better-faster-stronger-mixer> Mixers. And in his
+  blog the best C++ hashmap benchmarks.
+* <http://nohatcoder.dk/2019-05-19-1.html> gives a new, useful hash level
+  classification 1-5.
+* <http://www.strchr.com/hash_functions> lists other benchmarks and quality of
+  most simple and fast hash functions.
+* <http://bench.cr.yp.to/primitives-hash.html> lists the benchmarks of all
+  currently tested secure hashes.
 * <http://valerieaurora.org/hash.html> Lifetimes of cryptographic hash functions
 
 SECURITY
