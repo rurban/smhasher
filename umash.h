@@ -8,22 +8,24 @@
  * # UMASH: a non-cryptographic hash function with collision bounds
  *
  * SPDX-License-Identifier: MIT
- * Copyright 2020 Backtrace I/O, Inc.
+ * Copyright 2020-2022 Backtrace I/O, Inc.
+ * Copyright 2022 Paul Khuong
  *
  * UMASH is a fast (9-22 ns latency for inputs of 1-64 bytes and 22
  * GB/s peak throughput, on a 2.5 GHz Intel 8175M) 64-bit hash
  * function with mathematically proven collision bounds: it is
- * [ceil(l / 2048) * 2^{-56}]-almost-universal for inputs of l or
+ * [ceil(s / 4096) * 2^{-55}]-almost-universal for inputs of s or
  * fewer bytes.
  *
- * When that's not enough, UMASH can also generate two independent
- * 64-bit hashes in a single traversal.  The resulting fingerprint
- * squares the collision probability to less than
- * ceil(l / 2048)^2 * 2^{-112}; the probability that two distinct
- * inputs receive the same fingerprint is less than 2^{-70} as long
- * as they are shorter than 7.5 GB each.  This expectation is taken
- * over the randomly generated `umash_params`; if an attacker can
- * infer the contents of these parameters, the bounds do not apply.
+ * When that's not enough, UMASH can also generate a pair of 64-bit
+ * hashes in a single traversal.  The resulting fingerprint reduces
+ * the collision probability to less than [ceil(s / 2^{26})^2 * 2^{-83}];
+ * the probability that two distinct inputs receive the same
+ * fingerprint is less 2^{-83} for inputs up to 64 MB, and less than
+ * 2^{-70} as long as the inputs are shorter than 5 GB each.  This
+ * expectation is taken over the randomly generated `umash_params`.
+ * If an attacker can infer the contents of these parameters, the
+ * bounds do not apply.
  *
  * ## Initialisation
  *
@@ -55,7 +57,7 @@
  *   bound.
  *
  * - `umash_fprint` computes both `UMASH` functions described by a
- *   `struct umash_params`.  `umash_fp::hash[0]` corresnponds to
+ *   `struct umash_params`.  `umash_fp::hash[0]` corresponds to
  *   calling `umash_full` with the same arguments and `which = 0`;
  *   `umash_fp::hash[1]` corresponds to `which = 1`.
  *
@@ -92,7 +94,7 @@
 extern "C" {
 #endif
 
-enum { UMASH_PH_PARAM_COUNT = 32, UMASH_PH_TOEPLITZ_SHIFT = 4 };
+enum { UMASH_OH_PARAM_COUNT = 32, UMASH_OH_TWISTING_COUNT = 2 };
 
 /**
  * A single UMASH params struct stores the parameters for a pair of
@@ -105,10 +107,10 @@ struct umash_params {
 	 */
 	uint64_t poly[2][2];
 	/*
-	 * The second PH function starts reading parameters from the
-	 * 4th element.
+	 * The second (twisted) OH function uses an additional
+	 * 128-bit constant stored in the last two elements.
 	 */
-	uint64_t ph[UMASH_PH_PARAM_COUNT + UMASH_PH_TOEPLITZ_SHIFT];
+	uint64_t oh[UMASH_OH_PARAM_COUNT + UMASH_OH_TWISTING_COUNT];
 };
 
 /**
@@ -131,7 +133,7 @@ struct umash_fp {
 struct umash_sink {
 	/*
 	 * We incrementally maintain two states when fingerprinting.
-	 * When hashing, only the first `poly_state` and `ph_acc`
+	 * When hashing, only the first `poly_state` and `oh_acc`
 	 * entries are active.
 	 */
 	struct {
@@ -142,29 +144,42 @@ struct umash_sink {
 	/*
 	 * We write new bytes to the second half, and keep the previous
 	 * 16 byte chunk in the first half.
+	 *
+	 * We may temporarily have a full 16-byte buffer in the second half:
+	 * we must know if the first 16 byte chunk is the first of many, or
+	 * the whole input.
 	 */
 	char buf[2 * 16];
 
-	/* The next 64 bytes are accessed in the `PH` inner loop. */
+	/* The next 64 bytes are accessed in the `OH` inner loop. */
 
-	/* key->ph, shifted when evaluating only the second UMASH function. */
-	const uint64_t *ph;
+	/* key->oh. */
+	const uint64_t *oh;
 
-	/* ph_iter tracks where we are in the inner loop, times 2. */
-	uint32_t ph_iter;
+	/* oh_iter tracks where we are in the inner loop, times 2. */
+	uint32_t oh_iter;
 	uint8_t bufsz; /* Write pointer in `buf + 16`. */
-	uint8_t block_size; /* Current PH block size, excluding `bufsz`. */
+	uint8_t block_size; /* Current OH block size, excluding `bufsz`. */
 	bool large_umash; /* True once we definitely have >= 16 bytes. */
 	/*
-	 * If true, we're computing a fingerprint.  Otherwise, we only
-	 * want to update the first PH/poly state.
+	 * 0 if we're computing the first umash, 1 for the second, and
+	 * 2 for a fingerprint.
+	 *
+	 * In practice, we treat 1 and 2 the same (always compute a
+	 * full fingerprint), and return only the second half if we
+	 * only want that half.
 	 */
-	bool fingerprinting;
+	uint8_t hash_wanted;
 
-	/* Accumulators for the current PH value. */
-	struct umash_ph {
+	/* Accumulators for the current OH value. */
+	struct umash_oh {
 		uint64_t bits[2];
-	} ph_acc[2];
+	} oh_acc;
+	struct umash_twisted_oh {
+		uint64_t lrc[2];
+		uint64_t prev[2];
+		struct umash_oh acc;
+	} oh_twisted;
 
 	uint64_t seed;
 };
@@ -202,9 +217,8 @@ bool umash_params_prepare(struct umash_params *params);
 
 /**
  * Deterministically derives a `umash_params` struct from `bits` and
- * `extension`.  These values do not have to be particularly well
- * distributed, and can be generated sequentially; in fact, it is safe
- * to always let `extension` be 0.
+ * `key`.  The `bits` values do not have to be particularly well
+ * distributed, and can be generated sequentially.
  *
  * @param key a pointer to exactly 32 secret bytes.  NULL will be
  *   replaced with "Do not use UMASH VS adversaries.", the default
