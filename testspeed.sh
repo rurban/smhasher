@@ -1,6 +1,6 @@
 #!/bin/bash
 hname="`hostname`"
-if [ x$hname = xe495 ]; then
+if [ x$hname = xe495 -o x$hname = xlorikeet ]; then
     ./testspeed-ryzen3.sh $@
     exit
 fi

@@ -188,6 +188,13 @@ uint32_t x17(const char *key, int len, uint32_t h);
 inline void x17_test(const void *key, int len, uint32_t seed, void *out) {
   *(uint32_t *) out = x17((const char *)key, len, seed);
 }
+uint32_t libiberty_hash(unsigned char *key, int len, uint32_t seed);
+inline void libiberty_test(const void *key, int len, uint32_t seed, void *out) {
+  *(uint32_t *) out = libiberty_hash((unsigned char *)key, len, seed);
+}
+inline void gcc_test(const void *key, int len, uint32_t seed, void *out) {
+  *(uint32_t *) out = len + libiberty_hash((unsigned char *)key, len, seed);
+}
 uint32_t JenkinsOOAT(const char *key, int len, uint32_t hash);
 inline void JenkinsOOAT_test(const void *key, int len, uint32_t seed, void *out) {
   *(uint32_t *) out = JenkinsOOAT((const char *)key, len, seed);

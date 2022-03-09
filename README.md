@@ -73,6 +73,8 @@ SMhasher
 | [bernstein](doc/bernstein.txt)                |       791.82 |    68.63 | 180.71 (2) |  41 | bad seed 0, fails all tests              |
 | [sdbm](doc/sdbm.txt)                          |       791.84 |    67.69 | 177.06 (2) |  41 | bad seed 0, fails all tests              |
 | [x17](doc/x17.txt)                            |       527.90 |    98.78 | 184.09 (2) |  79 | 99.98% bias, fails all tests |
+| [libiberty](doc/libiberty.txt)                |       556.16 |    87.56 | 273.09 (15)|  37 | insecure, 100% bias, fails all tests, bad seed |
+| [gcc](doc/gcc.txt)                            |       619.25 |    85.10 | 245.78 (17)|  39 | insecure, 100% bias, fails all tests, bad seed |
 | [JenkinsOOAT](doc/JenkinsOOAT.txt)            |       452.48 |   142.85 | 213.93 (2) | 153 | bad seed 0, 53.5% bias, fails all tests  |
 | [JenkinsOOAT_perl](doc/JenkinsOOAT_perl.txt)  |       452.49 |   118.78 | 194.78 (1) |  65 | bad seed 0, 1.5-11.5% bias, 7.2x collisions, BIC, LongNeighbors |
 | [MicroOAAT](doc/MicroOAAT.txt)                |       977.60 |    59.61 | 185.06 (2) |  68 | 100% bias, distrib, BIC      |

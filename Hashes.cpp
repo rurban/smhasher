@@ -507,6 +507,22 @@ uint32_t JenkinsOOAT_perl(const char *key, int len, uint32_t hash)
   return hash;
 }
 
+// as used in gcc/libiberty htab_hash_string(), just without seed.
+// also in gcc libcpp, just with len added.
+// objsize: 0xf5c0-0xf5e5: 37
+uint32_t libiberty_hash(unsigned char *str, int len, uint32_t seed)
+{
+  const unsigned char *const end = (const unsigned char *)str + len;
+  uint32_t r = seed;
+  unsigned char c;
+
+  while (str < end) {
+    c = *str++;
+    r = r * 67 + (c - 113);
+  }
+  return r;
+}
+
 //------------------------------------------------
 // One of a smallest non-multiplicative One-At-a-Time function
 // that passes whole SMHasher.
