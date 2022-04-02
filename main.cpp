@@ -227,14 +227,14 @@ HashInfo g_hashes[] =
 #  else  
 #   define CRC32_VERIF   0x0C7346F0
 #   define CRC64_VERIF   0xE7C3FD0E
-#endif
-#ifndef HAVE_BROKEN_MSVC_CRC32C_HW
+#  endif
+# ifndef HAVE_BROKEN_MSVC_CRC32C_HW
   { crc32c_hw_test,       32, CRC32_VERIF, "crc32_hw",    "SSE4.2 crc32 in HW", POOR, {0x111c2232} /* !! */},
   { crc64c_hw_test,       64, CRC64_VERIF, "crc64_hw",    "SSE4.2 crc64 in HW", POOR, {0x0} /* !! */ },
-#endif
-#if defined(__SSE4_2__) && (defined(__i686__) || defined(_M_IX86) || defined(__x86_64__))
+# endif
+# if defined(__SSE4_2__) && (defined(__i686__) || defined(__x86_64__)) && !defined(_MSC_VER)
   { crc32c_hw1_test,      32, 0x0C7346F0,  "crc32_hw1",   "Faster Adler SSE4.2 crc32 on Intel HW", POOR, {0x111c2232} /* !! */},
-#endif
+# endif
 #endif
   // 32bit crashes
 #if defined(HAVE_CLMUL) && !defined(_MSC_VER) && defined(__x86_64__)
@@ -517,7 +517,7 @@ HashInfo g_hashes[] =
   { aesnihash_test,       64, 0xA68E0D42, "aesnihash",    "majek's seeded aesnihash with aesenc, 64-bit for x64", POOR,
     {0x70736575} },
 #endif
-#if defined(HAVE_SSE2) && defined(__x86_64__) && !defined(_WIN32)
+#if defined(HAVE_SSE2) && defined(__x86_64__) && !defined(_WIN32) && !defined(_MSC_VER)
   { falkhash_test_cxx,    64, 0x2F99B071, "falkhash",    "falkhash.asm with aesenc, 64-bit for x64", POOR, {} },
 #endif
 #ifdef HAVE_MEOW_HASH

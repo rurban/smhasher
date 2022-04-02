@@ -67,6 +67,11 @@ void SetAffinity ( int cpu );
 #define popcount8(x)  __popcnt64(x)
 #endif
 
+// strange windows quirks
+#if defined(HAVE_SSE42) && !defined(__SSE4_2__)
+#define __SSE4_2__
+#endif
+
 //-----------------------------------------------------------------------------
 // Other compilers
 

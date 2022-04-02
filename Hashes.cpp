@@ -615,12 +615,14 @@ extern "C" {
 #ifdef HAVE_SSE2
   void		  hasshe2 (const void *input, int len, uint32_t seed, void *out);
 #endif
-#ifdef HAVE_SSE42
+#if defined(HAVE_SSE42)
 # ifndef HAVE_BROKEN_MSVC_CRC32C_HW
   uint32_t	  crc32c_hw(const void *input, int len, uint32_t seed);
   uint64_t	  crc64c_hw(const void *input, int len, uint32_t seed);
 # endif
+#if !defined(_MSC_VER)
   uint32_t	  crc32c(const void *input, size_t len, uint32_t seed);
+# endif
 #endif
 }
 
@@ -670,7 +672,7 @@ crc64c_hw_test(const void *input, int len, uint32_t seed, void *out)
 }
 # endif
 
-# if defined(__SSE4_2__) && (defined(__i686__) || defined(_M_IX86) || defined(__x86_64__))
+# if defined(__SSE4_2__) && (defined(__i686__) || defined(__x86_64__)) && !defined(_MSC_VER)
 /* Faster Adler SSE4.2 crc32 on Intel HW only. FIXME aarch64 */
 void
 crc32c_hw1_test(const void *input, int len, uint32_t seed, void *out)
@@ -737,7 +739,7 @@ halfsiphash_test(const void *input, int len, uint32_t seed, void *out)
 }
 
 /* https://github.com/gamozolabs/falkhash */
-#if defined(__SSE4_2__) && defined(__x86_64__)
+#if defined(__SSE4_2__) && defined(__x86_64__) && !defined(_WIN32)
 extern "C" {
   uint64_t falkhash_test(uint8_t *data, uint64_t len, uint32_t seed, void *out);
 }

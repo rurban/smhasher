@@ -19,7 +19,7 @@ void CityHash64noSeed_test ( const void * key, int len, uint32_t seed, void * ou
   *(uint64*)out = CityHash64((const char *)key,len); (void)seed;
 }
 
-#if defined(__SSE4_2__) && defined(__x86_64__)
+#if defined(HAVE_SSE42) && defined(__x86_64__)
 void CityHash128_test ( const void * key, int len, uint32_t seed, void * out )
 {
   uint128 s(0,0);

@@ -78,7 +78,7 @@ void hasshe2_test(const void *key, int len, uint32_t seed, void *out);
 void crc32c_hw_test(const void *key, int len, uint32_t seed, void *out);
 void crc64c_hw_test(const void *key, int len, uint32_t seed, void *out);
 # endif
-# if defined(__SSE4_2__) && (defined(__i686__) || defined(_M_IX86) || defined(__x86_64__))
+# if defined(__SSE4_2__) && (defined(__i686__) || defined(__x86_64__)) && !defined(_MSC_VER)
 void crc32c_hw1_test(const void *key, int len, uint32_t seed, void *out);
 # endif
 static inline bool crc64c_bad_seeds(std::vector<uint64_t> &seeds)
