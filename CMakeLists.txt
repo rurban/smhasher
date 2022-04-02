@@ -613,7 +613,6 @@ if((CMAKE_MAJOR_VERSION EQUAL 3 AND CMAKE_MINOR_VERSION GREATER_EQUAL 9)
   check_ipo_supported(RESULT ipo_supported OUTPUT error)
 endif()
 
-SET(libtargets)
 add_library(
   SMHasherSupport STATIC
   AvalancheTest.cpp
@@ -692,10 +691,6 @@ add_library(
   ${ASCON_SRC}
   ${UMASH_SRC})
 
-SET(libtargets ${libtargets} SMHasherSupport)
-SET(exectargets)
-
-
 add_executable(SMHasher main.cpp)
 
 if(ipo_supported)
@@ -734,11 +729,10 @@ add_custom_target(
   DEPENDS ${SRCS}
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
-
-INSTALL(DIRECTORY ${PROJECT_SOURCE_DIR}/ DESTINATION include FILES_MATCHING PATTERN "*.h")
-
-INSTALL(TARGETS ${libtargets}
+INSTALL(DIRECTORY ${PROJECT_SOURCE_DIR}/
+  DESTINATION include
+  FILES_MATCHING PATTERN "*.h")
+INSTALL(TARGETS SMHasherSupport
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib)
-
-INSTALL(TARGETS ${exectargets} RUNTIME DESTINATION bin)
+INSTALL(TARGETS SMHasher RUNTIME DESTINATION bin)
