@@ -121,6 +121,10 @@
 
 #elif defined(__WINDOWS__)
 
+#   ifdef __MINGW32__
+#     include <stdlib.h>
+#   endif
+
 #   if BYTE_ORDER == LITTLE_ENDIAN
 
 #       define htobe16(x) _byteswap_ushort(x)
