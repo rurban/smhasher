@@ -21,7 +21,7 @@ void SetAffinity ( int cpu )
 #if NCPU > 1
 void SetThreadAffinity ( std::thread &t, int cpu )
 {
-  SetThreadIdealProcessor(t.native_handle(), (DWORD)cpu);
+    SetThreadIdealProcessor((HANDLE)t.native_handle(), (DWORD)cpu);
 }
 #endif
 
