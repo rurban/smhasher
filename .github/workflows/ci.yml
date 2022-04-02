@@ -29,7 +29,9 @@ jobs:
       with:
         fetch-depth: 1
         submodules: recursive
-    - run: sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+    - run: sudo gem install apt-spy2 && sudo apt-spy2 fix
+    - run: sudo apt-get update -y
+    - run: sudo apt-get install -o Acquire::Retries=5 -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
     - run: cmake -DCMAKE_TOOLCHAIN_FILE=CMakeARM64Cross.txt
     - run: make -j4 VERBOSE=1
   armv7:
@@ -39,7 +41,9 @@ jobs:
       with:
         fetch-depth: 1
         submodules: recursive
-    - run: sudo apt-get install -y gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
+    - run: sudo gem install apt-spy2 && sudo apt-spy2 fix
+    - run: sudo apt-get update -y
+    - run: sudo apt-get install -o Acquire::Retries=5 -y gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
     - run: cmake -DCMAKE_TOOLCHAIN_FILE=CMakeARMCross.txt
     - run: make -j4 VERBOSE=1
   macOS:
