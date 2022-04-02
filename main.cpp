@@ -632,7 +632,7 @@ HashInfo g_hashes[] =
     {0x7fcc747f} /* !! */ },
 #endif
   { CityHash64_low_test,  32, 0xCC5BC861, "City64low",   "Google CityHash64WithSeed (low 32-bits)", GOOD, {} },
-#if defined(__SSE4_2__) && defined(__x86_64__)
+#if defined(HAVE_SSE42) && defined(__x86_64__)
   { CityHash128_test,    128, 0x6531F54E, "City128",     "Google CityHash128WithSeed (old)", GOOD, {} },
   { CityHashCrc128_test, 128, 0xD4389C97, "CityCrc128",  "Google CityHashCrc128WithSeed SSE4.2 (old)", GOOD, {} },
 #endif
@@ -858,7 +858,7 @@ void Bad_Seed_init (pfHash hash, uint32_t &seed) {
           (hash == poly_3_mersenne && seed == 0x3d25f745))
     seed++;
 #endif
-#if defined(__SSE4_2__) && defined(__x86_64__)
+#if defined(HAVE_SSE42) && defined(__x86_64__)
   else if (hash == clhash_test && seed == 0x0)
     seed++;
 #endif
