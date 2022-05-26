@@ -1668,6 +1668,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
         result &= PerlinNoise<hashtype>( hash, 4, testCollision, testDistribution, g_drawDiagram );
         result &= PerlinNoise<hashtype>( hash, 8, testCollision, testDistribution, g_drawDiagram );
     }
+    result &= PerlinNoiseAV<hashtype>( hash, testCollision, testDistribution, g_drawDiagram );
 
     if(!result) printf("*********FAIL*********\n");
     printf("\n");
