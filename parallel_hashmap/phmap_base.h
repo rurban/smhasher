@@ -329,7 +329,7 @@ template <typename T>
 using underlying_type_t = typename std::underlying_type<T>::type;
 
 template< class F, class... ArgTypes>
-#if PHMAP_HAVE_CC17
+#if PHMAP_HAVE_CC17 && defined(__cpp_lib_result_of_sfinae)
     using invoke_result_t = typename std::invoke_result_t<F, ArgTypes...>;
 #else
     using invoke_result_t = typename std::result_of<F(ArgTypes...)>::type;
@@ -1303,7 +1303,7 @@ constexpr bool HasRebindAlloc(...) {
 }
 
 template <typename T, typename U>
-constexpr bool HasRebindAlloc(typename T::template rebind<U>::other*) {
+constexpr bool HasRebindAlloc(typename std::allocator_traits<T>::template rebind_alloc<U>*) {
   return true;
 }
 
@@ -1527,7 +1527,7 @@ private:
     template <typename A, typename... Args>
     static auto construct_impl(int, A& a,  // NOLINT(runtime/references)
                                Args&&... args)
-        -> decltype(a.construct(std::forward<Args>(args)...)) {
+        -> decltype(std::allocator_traits<A>::construct(a, std::forward<Args>(args)...)) {
         std::allocator_traits<A>::construct(a, std::forward<Args>(args)...);
     }
 
@@ -1538,7 +1538,7 @@ private:
 
     template <typename A, typename T>
     static auto destroy_impl(int, A& a,  // NOLINT(runtime/references)
-                             T* p) -> decltype(a.destroy(p)) {
+                             T* p) -> decltype(std::allocator_traits<A>::destroy(a, p)) {
         std::allocator_traits<A>::destroy(a, p);
     }
     template <typename T>
@@ -2856,6 +2856,7 @@ class node_handle<Policy, PolicyTraits, Alloc,
     : public node_handle_base<PolicyTraits, Alloc> 
 {
     using Base = node_handle_base<PolicyTraits, Alloc>;
+    using slot_type = typename PolicyTraits::slot_type;
 
 public:
     using key_type = typename Policy::key_type;
@@ -3681,14 +3682,6 @@ constexpr Span<const T> MakeConstSpan(const T (&array)[N]) noexcept {
 // ---------------------------------------------------------------------------
 //  layout.h
 // ---------------------------------------------------------------------------
-#if defined(__GXX_RTTI)
-    #define PHMAP_INTERNAL_HAS_CXA_DEMANGLE
-#endif
-
-#ifdef PHMAP_INTERNAL_HAS_CXA_DEMANGLE
-    #include <cxxabi.h>
-#endif
-
 namespace phmap {
 namespace priv {
 
@@ -3888,7 +3881,7 @@ public:
         constexpr size_t Offset() const {
         static_assert(N < NumOffsets, "Index out of bounds");
         return adl_barrier::Align(
-            Offset<N - 1>() + SizeOf<ElementType<N - 1>>() * size_[N - 1],
+            Offset<N - 1>() + SizeOf<ElementType<N - 1>>::value * size_[N - 1],
             ElementAlignment<N>::value);
     }
 
@@ -4081,7 +4074,7 @@ public:
     constexpr size_t AllocSize() const {
         static_assert(NumTypes == NumSizes, "You must specify sizes of all fields");
         return Offset<NumTypes - 1>() +
-            SizeOf<ElementType<NumTypes - 1>>() * size_[NumTypes - 1];
+            SizeOf<ElementType<NumTypes - 1>>::value * size_[NumTypes - 1];
     }
 
     // If built with --config=asan, poisons padding bytes (if any) in the
@@ -4105,7 +4098,7 @@ public:
         // The `if` is an optimization. It doesn't affect the observable behaviour.
         if (ElementAlignment<N - 1>::value % ElementAlignment<N>::value) {
             size_t start =
-                Offset<N - 1>() + SizeOf<ElementType<N - 1>>() * size_[N - 1];
+                Offset<N - 1>() + SizeOf<ElementType<N - 1>>::value * size_[N - 1];
             ASAN_POISON_MEMORY_REGION(p + start, Offset<N>() - start);
         }
 #endif
