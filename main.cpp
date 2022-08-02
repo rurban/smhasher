@@ -732,7 +732,10 @@ HashInfo g_hashes[] =
   { wyhash_test,          64, 0x67031D43, "wyhash",         "wyhash v3 (64-bit)", GOOD,
     // all seeds with those lower bits
     { 0x14cc886e, 0x1bf4ed84, 0x14cc886e14cc886eULL} /* !! 2^33 bad seeds, but easy to check */ },
-  //{ wyhash_condom_test,   64, 0x7C62138D, "wyhash_condom",  "wyhash v3 condom 2 (64-bit)", GOOD, { } },
+  //{ wyhash_condom_test, 64, 0x7C62138D, "wyhash_condom",  "wyhash v3 condom 2 (64-bit)", GOOD, { } },
+#endif
+#ifndef HAVE_BIT32
+  { khashv32_test,        32, 0x2A336D18, "k-hashv32",      "Vectorized K-HashV, 32-bit", GOOD, {} /* */},
   { khashv64_test,        64, 0xC25A0905, "k-hashv64",      "Vectorized K-HashV, 64-bit", GOOD, {} /* */},
 #endif
   { nmhash32_test,        32, 0x12A30553, "nmhash32",       "nmhash32", GOOD, {}},

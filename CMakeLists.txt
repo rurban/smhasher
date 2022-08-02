@@ -601,6 +601,9 @@ if(CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
   unset(PMPML_SRC)
 endif()
 
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+  set(KHASHV_SRC k-hashv/khashv.h)
+endif()
 
 # IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/BeagleHashes_test.c") set(BEAGLE_SRC
 # BeagleHashes_test.c) set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}
@@ -694,7 +697,7 @@ add_library(
   # wyhash_condom.c
   ${ASCON_SRC}
   ${UMASH_SRC}
-  k-hashv/khashv.h
+  ${KHASHV_SRC}
   )
 
 add_executable(SMHasher main.cpp)
