@@ -1343,6 +1343,8 @@ inline void khash64_test ( const void *key, int len, uint32_t seed, void *out) {
 } // extern C
 #endif
 
+#ifndef HAVE_BIT32
 // call to khashv_hash_vector not inlined.
-inline void khashv32_test ( const void *key, int len, uint32_t seed, void *out);
-inline void khashv64_test ( const void *key, int len, uint32_t seed, void *out);
+void khashv32_test ( const void *key, int len, uint32_t seed, void *out);
+void khashv64_test ( const void *key, int len, uint32_t seed, void *out);
+#endif
