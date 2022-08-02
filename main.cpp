@@ -734,12 +734,12 @@ HashInfo g_hashes[] =
     { 0x14cc886e, 0x1bf4ed84, 0x14cc886e14cc886eULL} /* !! 2^33 bad seeds, but easy to check */ },
   //{ wyhash_condom_test, 64, 0x7C62138D, "wyhash_condom",  "wyhash v3 condom 2 (64-bit)", GOOD, { } },
 #endif
-#ifndef HAVE_BIT32
-  { khashv32_test,        32, 0x2A336D18, "k-hashv32",      "Vectorized K-HashV, 32-bit", GOOD, {} /* */},
-  { khashv64_test,        64, 0xC25A0905, "k-hashv64",      "Vectorized K-HashV, 64-bit", GOOD, {} /* */},
-#endif
   { nmhash32_test,        32, 0x12A30553, "nmhash32",       "nmhash32", GOOD, {}},
   { nmhash32x_test,       32, 0xA8580227, "nmhash32x",      "nmhash32x", GOOD, {}},
+#ifndef HAVE_BIT32
+  { khashv32_test,        32, 0xB69DF8EB, "k-hashv32",      "Vectorized K-HashV, 32-bit", GOOD, {}},
+  { khashv64_test,        64, 0xA6B7E55B, "k-hashv64",      "Vectorized K-HashV, 64-bit", GOOD, {}},
+#endif
 };
 
 HashInfo * findHash ( const char * name )
@@ -905,6 +905,8 @@ void Hash_Seed_init (pfHash hash, size_t seed) {
   else if(hash == hashx_test)
     hashx_seed_init(info, seed);
   */
+  else if(hash == khashv64_test || hash == khashv32_test)
+    khashv_seed_init(seed);
 #endif
 }
 

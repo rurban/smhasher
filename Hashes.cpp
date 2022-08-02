@@ -1227,16 +1227,17 @@ void nmhash32x_test ( const void * key, int len, uint32_t seed, void * out ) {
 
 #ifndef HAVE_BIT32
 #include "k-hashv/khashv.h"
+
+khashvSeed khashv_seed;
+void khashv_seed_init(size_t &seed) {
+  khashv_prep_seed64 (&khashv_seed, seed);
+}
 //objsize: 46b4a0-46b535: 149 + 426ad0-426f3a: 1130
 void khashv64_test ( const void *key, int len, uint32_t seed, void *out) {
-  khashvSeed myseed;
-  khashv_prep_seed32 (&myseed, seed);
-  *(uint64_t*)out = khashv64 (&myseed, (const uint8_t*)key, (size_t)len);
+  *(uint64_t*)out = khashv64 (&khashv_seed, (const uint8_t*)key, (size_t)len);
 }
 //objsize: 46b540-46b5d6: 150 + 1130
 void khashv32_test ( const void *key, int len, uint32_t seed, void *out) {
-  khashvSeed myseed;
-  khashv_prep_seed32 (&myseed, seed);
-  *(uint32_t*)out = khashv32 (&myseed, (const uint8_t*)key, (size_t)len);
+  *(uint32_t*)out = khashv32 (&khashv_seed, (const uint8_t*)key, (size_t)len);
 }
 #endif
