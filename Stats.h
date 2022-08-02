@@ -143,6 +143,20 @@ static double EstimateNbCollisions_Demerphq(const double nbH, const double nbBit
   return (nbH * (nbH - 1)) / pow(2.0, nbBits + 1);
 }
 
+// GNU R: qbirthday. rough estimate. FIXME
+static double EstimateNbCollisions_R(const double nbH, const double nbBits)
+{
+  return ceil(exp(((log(nbH) + lgamma(3) + log(-log1p(-0.5)))) / 2));
+}
+
+// GNU R: pbirthday. FIXME
+/*
+  static double EstimateNbCollisions_Rp(const double c)
+{
+  return (1 - prod((c:(c-0.5+1))/rep(2, 0.5)));
+}
+*/
+
 // The currently best calculation, highly prone to inaccuracies with low results (1.0 - 10.0)
 // TODO: return also the error.
 static double EstimateNbCollisions(const int nbH, const int nbBits)
