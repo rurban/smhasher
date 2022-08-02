@@ -1339,8 +1339,8 @@ inline void khash64_test ( const void *key, int len, uint32_t seed, void *out) {
 }
 
 #endif // HAVE_ALIGNED_ACCESS_REQUIRED
-  
-}
+
+} // extern C
 #endif
 
-
+void khashv64_test ( const void *key, int len, uint32_t seed, void *out);

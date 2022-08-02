@@ -693,7 +693,9 @@ add_library(
   pearson_hash/pearsonb.c
   # wyhash_condom.c
   ${ASCON_SRC}
-  ${UMASH_SRC})
+  ${UMASH_SRC}
+  k-hashv/khashv.h
+  )
 
 add_executable(SMHasher main.cpp)
 

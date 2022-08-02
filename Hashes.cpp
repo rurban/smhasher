@@ -1224,3 +1224,11 @@ void nmhash32_test ( const void * key, int len, uint32_t seed, void * out ) {
 void nmhash32x_test ( const void * key, int len, uint32_t seed, void * out ) {
   *(uint32_t*)out = NMHASH32X (key, (const size_t) len, seed);
 }
+
+#include "k-hashv/khashv.h"
+//objsize: ??
+void khashv64_test ( const void *key, int len, uint32_t seed, void *out) {
+  khashvSeed myseed;
+  khashv_prep_seed32 (&myseed, seed);
+  *(uint64_t*)out = khashv64 (&myseed, (const uint8_t*)key, (size_t)len);
+}
