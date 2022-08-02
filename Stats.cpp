@@ -15,7 +15,7 @@ double chooseK ( int n, int k )
     c *= t;
   }
 
-    return c;
+  return c;
 }
 
 double chooseUpToK ( int n, int k )
