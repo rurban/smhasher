@@ -1,8 +1,6 @@
 SMhasher
 ========
 
-[![SMHasher support vis xs:code](doc/SMhasher-banner.png)](https://xscode.com/rurban/smhasher)
-
 [![Linux Build status](https://travis-ci.org/rurban/smhasher.svg?branch=master)](https://travis-ci.org/rurban/smhasher/) [![Windows Build status](https://ci.appveyor.com/api/projects/status/tb6ckfcrhqi6pwn9/branch/master?svg=true)](https://ci.appveyor.com/project/rurban/smhasher) [![FreeBSD Build status](https://api.cirrus-ci.com/github/rurban/smhasher.svg?branch=master)](https://cirrus-ci.com/github/rurban/smhasher)
 
 | Hash function                                 |      MiB/sec |cycl./hash|cycl./map   | size| Quality problems               |
@@ -441,8 +439,3 @@ Typical undefined behaviour (**UB**) problems:
 
   With: FNV1A\_Pippip\_Yurii, FNV1A_Totenschiff, pair\_multiply\_shift, sumhash32
   shift exponent 64 is too large for 64-bit type 'long unsigned int'
-
-SUPPORT
--------
-
-You can get professional support here: <https://xscode.com/rurban/smhasher>
