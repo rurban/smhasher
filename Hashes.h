@@ -801,16 +801,13 @@ inline void sha1_32a(const void *key, int len, uint32_t seed, void *out) {
 }
 
 #include "tomcrypt.h"
-#ifndef _MAIN_CPP
-extern
-#endif
-       hash_state ltc_state;
 
 int blake2b_init(hash_state * md, unsigned long outlen,
                  const unsigned char *key, unsigned long keylen);
 inline void blake2b160_test(const void *key, int len, uint32_t seed, void *out)
 {
   // objsize
+  hash_state ltc_state;
   blake2b_init(&ltc_state, 20, NULL, 0);
   ltc_state.blake2b.h[0] ^= seed; // mix seed into lowest int
   blake2b_process(&ltc_state, (unsigned char *)key, len);
@@ -819,6 +816,7 @@ inline void blake2b160_test(const void *key, int len, uint32_t seed, void *out)
 inline void blake2b224_test(const void *key, int len, uint32_t seed, void *out)
 {
   // objsize
+  hash_state ltc_state;
   blake2b_init(&ltc_state, 28, NULL, 0);
   ltc_state.blake2b.h[0] ^= seed;
   blake2b_process(&ltc_state, (unsigned char *)key, len);
@@ -827,6 +825,7 @@ inline void blake2b224_test(const void *key, int len, uint32_t seed, void *out)
 inline void blake2b256_test(const void *key, int len, uint32_t seed, void *out)
 {
   // objsize
+  hash_state ltc_state;
   blake2b_init(&ltc_state, 32, NULL, 0);
   ltc_state.blake2b.h[0] ^= seed;
   blake2b_process(&ltc_state, (unsigned char *)key, len);
@@ -835,6 +834,7 @@ inline void blake2b256_test(const void *key, int len, uint32_t seed, void *out)
 inline void blake2b256_64(const void *key, int len, uint32_t seed, void *out)
 {
   // objsize
+  hash_state ltc_state;
   unsigned char buf[32];
   blake2b_init(&ltc_state, 32, NULL, 0);
   ltc_state.blake2b.h[0] ^= seed;
@@ -847,6 +847,7 @@ int blake2s_init(hash_state * md, unsigned long outlen,
 inline void blake2s128_test(const void * key, int len, uint32_t seed, void * out)
 {
   // objsize
+  hash_state ltc_state;
   blake2s_init(&ltc_state, 16, NULL, 0);
   ltc_state.blake2s.h[0] ^= seed;
   blake2s_process(&ltc_state, (unsigned char *)key, len);
@@ -855,6 +856,7 @@ inline void blake2s128_test(const void * key, int len, uint32_t seed, void * out
 inline void blake2s160_test(const void * key, int len, uint32_t seed, void * out)
 {
   // objsize
+  hash_state ltc_state;
   blake2s_init(&ltc_state, 20, NULL, 0);
   ltc_state.blake2s.h[0] ^= seed;
   blake2s_process(&ltc_state, (unsigned char *)key, len);
@@ -863,6 +865,7 @@ inline void blake2s160_test(const void * key, int len, uint32_t seed, void * out
 inline void blake2s224_test(const void * key, int len, uint32_t seed, void * out)
 {
   // objsize
+  hash_state ltc_state;
   blake2s_init(&ltc_state, 28, NULL, 0);
   ltc_state.blake2s.h[0] ^= seed;
   blake2s_process(&ltc_state, (unsigned char *)key, len);
@@ -871,6 +874,7 @@ inline void blake2s224_test(const void * key, int len, uint32_t seed, void * out
 inline void blake2s256_test(const void * key, int len, uint32_t seed, void * out)
 {
   // objsize
+  hash_state ltc_state;
   blake2s_init(&ltc_state, 32, NULL, 0);
   ltc_state.blake2s.h[0] ^= seed;
   blake2s_process(&ltc_state, (unsigned char *)key, len);
@@ -879,6 +883,7 @@ inline void blake2s256_test(const void * key, int len, uint32_t seed, void * out
 inline void blake2s256_64(const void * key, int len, uint32_t seed, void * out)
 {
   // objsize
+  hash_state ltc_state;
   unsigned char buf[32];
   blake2s_init(&ltc_state, 32, NULL, 0);
   ltc_state.blake2s.h[0] ^= seed;
@@ -890,6 +895,7 @@ inline void blake2s256_64(const void * key, int len, uint32_t seed, void * out)
 inline void sha2_224(const void *key, int len, uint32_t seed, void *out)
 {
   // objsize
+  hash_state ltc_state;
   sha224_init(&ltc_state);
   ltc_state.sha256.state[0] ^= seed;
   ltc_state.sha256.state[0] += len; // hardened against padding
@@ -900,6 +906,7 @@ inline void sha2_224_64(const void *key, int len, uint32_t seed, void *out)
 {
   // objsize
   unsigned char buf[28];
+  hash_state ltc_state;
   sha224_init(&ltc_state);
   ltc_state.sha256.state[0] ^= seed;
   ltc_state.sha256.state[0] += len; // hardened against padding
@@ -910,6 +917,7 @@ inline void sha2_224_64(const void *key, int len, uint32_t seed, void *out)
 inline void sha2_256(const void *key, int len, uint32_t seed, void *out)
 {
   // objsize
+  hash_state ltc_state;
   sha256_init(&ltc_state);
   ltc_state.sha256.state[0] ^= seed;
   ltc_state.sha256.state[0] += len; // hardened against padding
@@ -920,6 +928,7 @@ inline void sha2_256_64(const void *key, int len, uint32_t seed, void *out)
 {
   // objsize
   unsigned char buf[32];
+  hash_state ltc_state;
   sha256_init(&ltc_state);
   ltc_state.sha256.state[0] ^= seed;
   ltc_state.sha256.state[0] += len; // hardened against padding
@@ -930,6 +939,7 @@ inline void sha2_256_64(const void *key, int len, uint32_t seed, void *out)
 inline void rmd128(const void *key, int len, uint32_t seed, void *out)
 {
   // objsize
+  hash_state ltc_state;
   rmd128_init(&ltc_state);
   ltc_state.rmd128.state[0] ^= seed;
   rmd128_process(&ltc_state, (unsigned char *)key, len);
@@ -938,6 +948,7 @@ inline void rmd128(const void *key, int len, uint32_t seed, void *out)
 inline void rmd160(const void *key, int len, uint32_t seed, void *out)
 {
   // objsize
+  hash_state ltc_state;
   rmd160_init(&ltc_state);
   ltc_state.rmd160.state[0] = 0x67452301UL ^ seed;
   rmd160_process(&ltc_state, (unsigned char *)key, len);
@@ -946,6 +957,7 @@ inline void rmd160(const void *key, int len, uint32_t seed, void *out)
 inline void rmd256(const void *key, int len, uint32_t seed, void *out)
 {
   // objsize
+  hash_state ltc_state;
   rmd256_init(&ltc_state);
   ltc_state.rmd256.state[0] ^= seed;
   rmd256_process(&ltc_state, (unsigned char *)key, len);
@@ -956,6 +968,7 @@ inline void sha3_256_64(const void *key, int len, uint32_t seed, void *out)
 {
   // objsize
   unsigned char buf[32];
+  hash_state ltc_state;
   sha3_256_init(&ltc_state);
   ltc_state.sha3.s[0] ^= seed;
   sha3_process(&ltc_state, (unsigned char *)key, len);
@@ -965,6 +978,7 @@ inline void sha3_256_64(const void *key, int len, uint32_t seed, void *out)
 inline void sha3_256(const void *key, int len, uint32_t seed, void *out)
 {
   // objsize
+  hash_state ltc_state;
   sha3_256_init(&ltc_state);
   ltc_state.sha3.s[0] ^= seed;
   sha3_process(&ltc_state, (unsigned char *)key, len);

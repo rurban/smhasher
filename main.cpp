@@ -755,13 +755,16 @@ HashInfo * findHash ( const char * name )
 
 // optional hash state initializers
 void Hash_init (HashInfo* info) {
+  /*
   if (info->hash == sha2_224_64)
     sha224_init(&ltc_state);
   //else if (info->hash == md5_128 || info->hash == md5_32)
   //  md5_init();
   else if (info->hash == rmd128)
     rmd128_init(&ltc_state);
-  else if(info->hash == tabulation_32_test)
+  else
+  */
+  if(info->hash == tabulation_32_test)
     tabulation_32_init();
 #ifdef __SIZEOF_INT128__
   else if(info->hash == multiply_shift ||
