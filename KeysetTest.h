@@ -328,71 +328,74 @@ bool PerlinNoise ( hashfunc<hashtype> hash, int inputLen,
   return result;
 }
 
-static inline uint64_t pn_expand_val( const uint64_t v, const int vsize,
-	const int spacing )
+static inline uint64_t
+pn_expand_val (const uint64_t v, const int vsize, const int spacing)
 {
-	uint64_t r = 0;
-	int p = 0;
+  uint64_t r = 0;
+  int p = 0;
 
-	for( int i = 0; i < vsize; i++ )
-	{
-		r |= (( v >> i ) & 1 ) << p;
-		p += spacing;
-	}
+  for (int i = 0; i < vsize; i++)
+    {
+      r |= ((v >> i) & 1) << p;
+      p += spacing;
+    }
 
-	return( r );
+  return (r);
 }
 
-template< typename hashtype >
-bool PerlinNoiseAV ( hashfunc<hashtype> hash,
-                   bool testColl, bool testDist, bool drawDiagram )
+template <typename hashtype>
+bool
+PerlinNoiseAV (hashfunc<hashtype> hash, bool testColl, bool testDist,
+               bool drawDiagram)
 {
   //----------
 
   std::vector<hashtype> hashes;
 
-	const int pnbits = 7;
-	const int pncount = 1 << pnbits;
-	const int pnspacing = 4;
-	const int ocount = 4;
-	const int lcount = 12;
-	uint8_t msg[ 64 ];
+  const int pnbits = 7;
+  const int pncount = 1 << pnbits;
+  const int pnspacing = 4;
+  const int ocount = 4;
+  const int lcount = 12;
+  uint8_t msg[256];
 
-	for( int i = 1; i < pncount; i++ )
-	{
-		for( int ps = 0; ps < pnspacing; ps++ )
-		{
-			uint32_t seed = (uint32_t) pn_expand_val( i, pnbits,
-				pnspacing ) << ps;
+  printf ("Testing AV variant, %d count with %d spacing, %d-%d:\n", pncount, pnspacing,
+          ocount, lcount);
 
-			for( int k = 1; k < pncount; k++ )
-			{
-				uint32_t key = (uint32_t) pn_expand_val( k, pnbits,
-					pnspacing ) << ps;
+  for (int i = 1; i < pncount; i++)
+    {
+      for (int ps = 0; ps < pnspacing; ps++)
+        {
+          uint32_t seed = (uint32_t)pn_expand_val (i, pnbits, pnspacing) << ps;
 
-				for( int o = 0; o < ocount; o++ )
-				{
-					memset( msg, 0, sizeof( msg ));
-					memcpy( msg + o * 4, &key, sizeof( key ));
+          for (int k = 1; k < pncount; k++)
+            {
+              uint32_t key = (uint32_t)pn_expand_val (k, pnbits, pnspacing)
+                             << ps;
 
-					for( int l = 0; l < lcount; l++ )
-					{
-						const size_t msgl = 16 + l * 2;
+              for (int o = 0; o < ocount; o++)
+                {
+                  memset (msg, 0, sizeof (msg));
+                  memcpy (msg + o * 4, &key, sizeof (key));
 
-						hashtype h;
-						Hash_Seed_init (hash, seed);
-						hash(msg, msgl, seed, &h);
-						hashes.push_back(h);
-					}
-				}
-			}
-		}
-	}
+                  for (int l = 0; l < lcount; l++)
+                    {
+                      const size_t msgl = 16 + l * 2;
+
+                      hashtype h;
+                      Hash_Seed_init (hash, seed);
+                      hash (msg, msgl, seed, &h);
+                      hashes.push_back (h);
+                    }
+                }
+            }
+        }
+    }
 
   //----------
 
-  bool result = TestHashList(hashes,drawDiagram,testColl,testDist);
-  printf("\n");
+  bool result = TestHashList (hashes, drawDiagram, testColl, testDist);
+  printf ("\n");
 
   return result;
 }
