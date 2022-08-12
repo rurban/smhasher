@@ -85,8 +85,8 @@ SMhasher
 | [VHASH_64](doc/VHASH_64.txt)                  |      9392.39 |    74.72 | 227.92 (2) |1231 | sanity, Seed, Sparse         |
 | [farsh32](doc/farsh32.txt)                    |     14053.09 |    74.29 | 245.33 (3) | 944 | insecure: AppendedZeroes, collisions+bias, MomentChi2, LongNeighbors |
 | [farsh64](doc/farsh64.txt)                    |      7216.29 |   130.30 | 302.44 (3) | 944 | insecure: AppendedZeroes, collisions+bias, MomentChi2, LongNeighbors |
-| [farsh128](doc/farsh128.txt)                  |      3776.92 |   232.48 | 398.67 (6) | 944 | ?? |
-| [farsh256](doc/farsh256.txt)                  |      1895.77 |   459.86 | 575.95 (3) | 944 | ?? |
+| [farsh128](doc/farsh128.txt)                  |      3776.92 |   232.48 | 398.67 (6) | 944 | insecure: AppendedZeroes, collisions+bias, permut,combin,2bytes,zeroes,PerlinNoise |
+| [farsh256](doc/farsh256.txt)                  |      1895.77 |   459.86 | 575.95 (3) | 944 | insecure: AppendedZeroes, collisions+bias, permut,combin,2bytes,zeroes,PerlinNoise |
 | [jodyhash32](doc/jodyhash32.txt)              |      1428.37 |    44.36 | 185.85 (3) | 102 | bias, collisions, distr, BIC LongNeighbors |
 | [jodyhash64](doc/jodyhash64.txt)              |      2848.42 |    29.99 | 164.36 (1) | 118 | bias, collisions, distr, BIC, LongNeighbors |
 | [lookup3](doc/lookup3.txt)                    |      1658.31 |    48.84 | 194.15 (2) | 341 | UB, 28% bias, collisions, 30% distr, BIC  |
