@@ -891,7 +891,6 @@ inline void blake2s256_64(const void * key, int len, uint32_t seed, void * out)
   blake2s_done(&ltc_state, buf);
   memcpy(out, buf, 8);
 }
-// almost all seeds are bad
 inline void sha2_224(const void *key, int len, uint32_t seed, void *out)
 {
   // objsize
@@ -984,6 +983,7 @@ inline void sha3_256(const void *key, int len, uint32_t seed, void *out)
   sha3_process(&ltc_state, (unsigned char *)key, len);
   sha3_done(&ltc_state, (unsigned char *)out);
 }
+
 inline void wysha(const void *key, int len, unsigned seed, void *out) {
   uint64_t s[4] = {wyhash(key, len, seed + 0, _wyp), wyhash(key, len, seed + 1, _wyp),
                    wyhash(key, len, seed + 2, _wyp), wyhash(key, len, seed + 3, _wyp)};
