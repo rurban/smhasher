@@ -20,10 +20,10 @@ SMhasher
 | [sha1_32a](doc/sha1_32a.txt)                  |       353.03 |  1385.80 |1759.94 (5) |5126 | Cyclic low32, 36.6% distrib |
 | [md5-128](doc/md5-128.txt)                    |       353.76 |   638.29 | 803.39 (9) |4419 |                    |
 | [sha1-160](doc/sha1-160.txt)                  |       364.95 |  1470.55 |1794.16 (13)|5126 | Comb/Cyclic low32  |
-| [sha2-224](doc/sha2-224.txt)                  |       147.13 |  1354.81 |1589.92 (12)|     | Comb low32, MomentChi2 |
-| [sha2-224_64](doc/sha2-224_64.txt)            |       147.60 |  1360.10 |1620.93 (13)|     | Cyclic low32, MomentChi2  |
-| [sha2-256](doc/sha2-256.txt)                  |       147.80 |  1374.90 |1606.06 (16)|     | Moment Chi2 4 |
-| [sha2-256_64](doc/sha2-256_64.txt)            |       148.01 |  1376.34 |1624.71 (16)|     | Moment Chi2 7 |
+| [sha2-224](doc/sha2-224.txt)                  |       147.13 |  1354.81 |1589.92 (12)|     | Comb low32 |
+| [sha2-224_64](doc/sha2-224_64.txt)            |       147.60 |  1360.10 |1620.93 (13)|     | Cyclic low32  |
+| [sha2-256](doc/sha2-256.txt)                  |       147.80 |  1374.90 |1606.06 (16)|     |  |
+| [sha2-256_64](doc/sha2-256_64.txt)            |       148.01 |  1376.34 |1624.71 (16)|     |  |
 | [sha1ni](doc/sha1ni.txt)                      |      2019.96 |   135.84 | 564.40 (6) | 989 | insecure,sanity, Permutation, Zeroes, machine-specific |
 | [sha1ni_32](doc/sha1ni_32.txt)                |      2019.94 |   136.82 | 589.46 (1) | 989 | machine-specific |
 | [sha2ni-256](doc/sha2ni-256.txt)              |      1906.77 |   145.47 | 603.08 (22)|4241 | insecure,sanity, Permutation, Zeroes, machine-specific |
@@ -43,8 +43,8 @@ SMhasher
 | [blake2b-256_64](doc/blake2b-256_64.txt)      |       356.97 |  1222.76 |1435.03 (9) |     |               |
 | [asconhashv12](doc/asconhashv12.txt)          |       144.98 |   885.02 |1324.23 (38)|4341 |               |
 | [asconhashv12_64](doc/asconhashv12_64.txt)    |        86.73 |   684.02 | 606.93 (6) |6490 |               |
-| [sha3-256](doc/sha3-256.txt)                  |       100.58 |  3877.18 |4159.79 (37)|     | MomentChi2, PerlinNoise   |
-| [sha3-256_64](doc/sha3-256_64.txt)            |       100.57 |  3909.00 |4174.63 (16)|     | MomentChi2, PerlinNoise   |
+| [sha3-256](doc/sha3-256.txt)                  |       100.58 |  3877.18 |4159.79 (37)|     | PerlinNoise   |
+| [sha3-256_64](doc/sha3-256_64.txt)            |       100.57 |  3909.00 |4174.63 (16)|     | PerlinNoise   |
 | [hasshe2](doc/hasshe2.txt)                    |      2372.52 |    68.64 | 216.74 (5) | 445 | Permutation,TwoBytes,Zeroes,Seed|
 | [poly_1_mersenne](doc/poly_1_mersenne.txt)    |      1431.65 |    54.49 | 189.52 (3) | 479 | fails most tests |
 | [poly_2_mersenne](doc/poly_2_mersenne.txt)    |      1323.69 |    66.93 | 190.88 (2) | 479 |                  |

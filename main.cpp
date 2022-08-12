@@ -126,10 +126,10 @@ HashInfo g_hashes[] =
 #endif
   { sha1_160,            160, SHA1_VERIF, "sha1-160",     "SHA1", POOR},
   { sha1_32a,             32, SHA1a_VERIF,"sha1_32a",     "SHA1, low 32 bits", POOR},
-  { sha2_224,            224, 0x407AA518, "sha2-224",     "SHA2-224", GOOD, {} },
-  { sha2_224_64,          64, 0xF3E40ECA, "sha2-224_64",  "SHA2-224, low 64 bits", GOOD, {} },
-  { sha2_256,            256, 0xEBDA2FB1, "sha2-256",     "SHA2-256", POOR, {} },
-  { sha2_256_64,          64, 0xC1C4FA72, "sha2-256_64",  "SHA2-256, low 64 bits", POOR, {} },
+  { sha2_224,            224, 0x407AA518, "sha2-224",     "SHA2-224", POOR, {} },
+  { sha2_224_64,          64, 0xF3E40ECA, "sha2-224_64",  "SHA2-224, low 64 bits", POOR, {} },
+  { sha2_256,            256, 0xEBDA2FB1, "sha2-256",     "SHA2-256", GOOD, {} },
+  { sha2_256_64,          64, 0xC1C4FA72, "sha2-256_64",  "SHA2-256, low 64 bits", GOOD, {} },
 #if defined(HAVE_SHANI) && defined(__x86_64__)
   { sha1ni,              160, 0x375755A4, "sha1ni",       "SHA1_NI (amd64 HW SHA ext)", POOR, {0x67452301} },
   { sha1ni_32,            32, 0xE70686CC, "sha1ni_32",    "hardened SHA1_NI (amd64 HW SHA ext), low 32 bits", GOOD,
@@ -2082,7 +2082,7 @@ bool MomentChi2Test ( struct HashInfo *info, int inputSize)
   int const rank = (worsec2 < 500.) + (worsec2 < 50.) + (worsec2 < 5.);
   assert(0 <= rank && rank <= 3);
 
-  const char* rankstr[4] = { "FAIL !!!!", "pass", "Good !", "Great !!" };
+  const char* rankstr[4] = { "FAIL !!!!", "pass", "Good", "Great" };
   printf("\n  %s \n\n", rankstr[rank]);
   fflush(NULL);
 
