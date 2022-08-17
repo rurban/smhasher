@@ -1201,7 +1201,8 @@ void crc32c_pclmul_test(const void *key, int len, uint32_t seed, void *out)
       alignas(16) unsigned char const *input = (unsigned char const *)aligned_alloc(16, len);
 #else
       alignas(16) unsigned char const *input = NULL;
-      posix_memalign((void**)&input, 16, len);
+      if (posix_memalign((void**)&input, 16, len))
+        exit(1);
 #endif
       memcpy((void*)input, key, len);
       *(uint32_t *) out = crc32_pclmul_le_16(input, (size_t)len, seed);

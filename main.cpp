@@ -2613,7 +2613,7 @@ void ReportCollisionEstimates( void )
             double deltapct = delta/realcoll[i][j]*100.0;
             if (deltapct > 9999.999)
                 deltapct = 9999.999;
-            printf(" %+11.5f%% |", key, bit, deltapct);
+            printf(" %+11.5f%% |", deltapct);
         }
         printf("\n");
       }
