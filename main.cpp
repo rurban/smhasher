@@ -124,12 +124,12 @@ HashInfo g_hashes[] =
 #  define SHA1_64_VERIF         0x00000000
  #else
 #  define SHA1_VERIF            0x6AF411D8
-#  define SHA1_32_VERIF         0x995397D5
-#  define SHA1_64_VERIF         0xB3122757
+#  define SHA1_32_VERIF         0xB3122757
+#  define SHA1_64_VERIF         0x995397D5
 #endif
   { sha1_160,            160, SHA1_VERIF, "sha1-160",     "SHA1", POOR},
-  { sha1_64,              64, SHA1_64_VERIF,"sha1-64",    "SHA1, low 64 bits", POOR},
-  { sha1_32,              32, SHA1_32_VERIF,"sha1-32",    "SHA1, low 32 bits", POOR},
+  { sha1_32,              32, SHA1_32_VERIF,"sha1_32",    "SHA1, low 32 bits", POOR},
+  { sha1_64,              64, SHA1_64_VERIF,"sha1_64",    "SHA1, low 64 bits", POOR},
   { sha2_224,            224, 0x407AA518, "sha2-224",     "SHA2-224", POOR, {} },
   { sha2_224_64,          64, 0xF3E40ECA, "sha2-224_64",  "SHA2-224, low 64 bits", POOR, {} },
   { sha2_256,            256, 0xEBDA2FB1, "sha2-256",     "SHA2-256", GOOD, {} },
