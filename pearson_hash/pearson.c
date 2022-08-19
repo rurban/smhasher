@@ -100,7 +100,7 @@ void pearson_hash_256 (uint8_t *out, const uint8_t *in, size_t len) {
         __m128i hash_mask = _mm_set_epi64 ((__m64)lower_hash_mask, (__m64)upper_hash_mask);
         __m128i high_hash_mask = _mm_xor_si128 (tmp, hash_mask);
         __m128i hash= _mm_setzero_si128();
-        __m128i high_hash= _mm_setzero_si128(); hash;
+        __m128i high_hash= _mm_setzero_si128();
 
        // table lookup preparation
 #if defined (__AES__) // AES-NI -------------

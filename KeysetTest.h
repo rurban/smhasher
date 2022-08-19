@@ -885,10 +885,10 @@ bool ZeroKeyTest ( pfHash hash, bool drawDiagram )
 // Keyset 'Seed' - hash "the quick brown fox..." using different seeds
 
 template < typename hashtype >
-bool SeedTest ( pfHash hash, int keycount, bool drawDiagram )
+bool SeedTest ( pfHash hash, size_t keycount, bool drawDiagram )
 {
-  printf("Keyset 'Seed' - %d keys\n",keycount);
-  assert(keycount < (1<<31));
+  printf("Keyset 'Seed' - %d keys\n", keycount);
+  assert(keycount < 2147483648U /*(1U<<31)*/);
 
   const char text[64] = "The quick brown fox jumps over the lazy dog";
   const int len = (int)strlen(text);

@@ -789,7 +789,7 @@ struct RepeatWrapper {
   using Block = Repeat<InnerBlock, count>;
 
   static Block LoadOne(uint64_t entropy) {
-    alignas(16) Block result;
+    alignas(64) Block result;
     for (unsigned i = 0; i < count; ++i) {
       result.it[i] = InnerBlockWrapper::LoadOne(entropy);
     }
@@ -798,7 +798,7 @@ struct RepeatWrapper {
 
   static Block LoadBlock(const void* x) {
     auto y = reinterpret_cast<const char*>(x);
-    alignas(16) Block result;
+    alignas(64) Block result;
     for (unsigned i = 0; i < count; ++i) {
       result.it[i] = InnerBlockWrapper::LoadBlock(y + i * sizeof(InnerBlock));
     }
