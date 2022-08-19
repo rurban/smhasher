@@ -16,9 +16,10 @@ SMhasher
 | [pair_multiply_shift](doc/pair_multiply_shift)|      3716.95 |    40.22 | 186.34 (3) | 609 | fails most tests |
 | --------------------------                    |              |          |            |     |                      |
 | [crc32](doc/crc32.txt)                        |       392.10 |   131.62 | 204.58 (4) | 422 | insecure, 8590x collisions, distrib, PerlinNoise |
-| [md5_32a](doc/md5_32a.txt)                    |       353.64 |   629.85 | 799.56 (9) |4419 | 8590x collisions, distrib |
-| [sha1_32a](doc/sha1_32a.txt)                  |       353.03 |  1385.80 |1759.94 (5) |5126 | Cyclic low32, 36.6% distrib |
+| [md5_32](doc/md5_32.txt)                    |       353.64 |   629.85 | 799.56 (9) |4419 |  |
+| [md5_64](doc/md5_64.txt)                    |       353.64 |   629.85 | 799.56 (9) |4419 |  |
 | [md5-128](doc/md5-128.txt)                    |       353.76 |   638.29 | 803.39 (9) |4419 |                    |
+| [sha1_32a](doc/sha1_32a.txt)                  |       353.03 |  1385.80 |1759.94 (5) |5126 | Sanity, Cyclic low32, 36.6% distrib |
 | [sha1-160](doc/sha1-160.txt)                  |       364.95 |  1470.55 |1794.16 (13)|5126 | Comb/Cyclic low32  |
 | [sha2-224](doc/sha2-224.txt)                  |       147.13 |  1354.81 |1589.92 (12)|     | Comb low32 |
 | [sha2-224_64](doc/sha2-224_64.txt)            |       147.60 |  1360.10 |1620.93 (13)|     | Cyclic low32  |
@@ -218,7 +219,7 @@ Summary
 -------
 
 I added some SSE assisted hashes and fast intel/arm CRC32-C, AES and SHA HW variants.
-See also the old [https://github.com/aappleby/smhasher/wiki](https://github.com/aappleby/smhasher/wiki) and the improved, but unmaintained fork [https://github.com/demerphq/smhasher](https://github.com/demerphq/smhasher).
+See also the old [https://github.com/aappleby/smhasher/wiki](https://github.com/aappleby/smhasher/wiki), the improved, but unmaintained fork [https://github.com/demerphq/smhasher](https://github.com/demerphq/smhasher), and the new improved version SMHasher3 [https://gitlab.com/fwojcik/smhasher3](https://gitlab.com/fwojcik/smhasher3).
 
 So the fastest hash functions on x86_64 without quality problems are:
 
