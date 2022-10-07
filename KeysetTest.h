@@ -401,7 +401,9 @@ PerlinNoiseAV (hashfunc<hashtype> hash, bool testColl, bool testDist,
 
   //----------
 
-  bool result = TestHashList (hashes, drawDiagram, testColl, testDist);
+  bool result = TestHashList (hashes, drawDiagram, testColl, testDist,
+                              /*highbits*/true, /*lowbits*/true, /*verbose*/true,
+                              /*nofail*/true);
   printf ("\n");
 
   return result;

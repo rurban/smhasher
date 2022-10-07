@@ -617,8 +617,9 @@ hashtype bitreverse(hashtype n, size_t b = sizeof(hashtype) * 8)
 template < typename hashtype >
 bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
                     bool testCollision = true, bool testDist = true,
+                    /* next two for WindowedKeyTest: */
                     bool testHighBits = true, bool testLowBits = true,
-                    bool verbose = true)
+                    bool verbose = true, bool nofail = false)
 {
   bool result = true;
 
@@ -653,31 +654,31 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
       if (expected >= 0.1 && expected <= 10.0)
         {
           ratio = ceil(ratio);
-          if (ceil(ratio) > 4.0)
+          if (ceil(ratio) > 4.0 && !nofail)
             {
-              printf(" !!!!!\n");
+              printf(" !!!!!!\n");
               return false;
             }
           else if (ceil(ratio) > 2.0)
             printf(" !");
         }
       // allow expected 0.3 and actual 1
-      else if (ceil(ratio) > 2.0 && collcount > 1)
+      else if (ceil(ratio) > 2.0 && collcount > 1 && !nofail)
         {
           printf(" !!!!!\n");
           return false;
         }
       // don't allow expected 0.0+epsilon and actual 1
-      else if (expected < 0.001 && collcount == 1)
+      else if (expected < 0.001 && collcount == 1 && !nofail)
         {
-          printf(" !!!!!\n");
+          printf(" !!!!\n");
           return false;
         }
     }
     else
     {
       // For all hashes larger than 32 bits, _any_ collisions are a failure.
-      if (collcount > 0 && expected < 1.0)
+      if (collcount > 0 && expected < 1.0 && !nofail)
       {
         printf(" !!!!!");
         result = false;
