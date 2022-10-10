@@ -249,8 +249,8 @@ HashInfo g_hashes[] =
   { fibonacci_test, __WORDSIZE, FIBONACCI_VERIF, "fibonacci",   "wordwise Fibonacci", POOR,
     {0x0, 0xffffffff00000000ULL} /* !! all keys ending with 0x0000_0000 */ },
 #ifndef HAVE_ALIGNED_ACCESS_REQUIRED
-  { khash32_test,         32, 0x99B3FFCD, "k-hash32",    "K-Hash mixer, 32-bit", GOOD, {} },
-  { khash64_test,         64, 0xAB5518A1, "k-hash64",    "K-Hash mixer, 64-bit", GOOD, {} },
+  { khash32_test,         32, 0x99B3FFCD, "k-hash32",    "K-Hash mixer, 32-bit", POOR, {} },
+  { khash64_test,         64, 0xAB5518A1, "k-hash64",    "K-Hash mixer, 64-bit", POOR, {} },
 #endif
   { FNV32a_test,          32, 0xE3CBBE91, "FNV1a",       "Fowler-Noll-Vo hash, 32-bit", POOR,
     {0x811c9dc5} /* !! */ },
