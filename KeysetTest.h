@@ -109,7 +109,7 @@ bool TestSecret ( const HashInfo* info, const uint64_t secret ) {
       memset(&key, c, len);
       hash(key, len, secret, &h);
       if (h == 0 && c == 0) {
-        printf("Broken seed 0x%" PRIx64 " => 0 with key[%d] of all %d bytes confirmed => hash 0\n",
+        printf("Broken seed 0x%" PRIx64 " => 0 with key[%d] of all %d bytes confirmed => hash 0 !!!!\n",
                secret, len, c);
         hashes.push_back(h);
         result = false;
@@ -123,7 +123,7 @@ bool TestSecret ( const HashInfo* info, const uint64_t secret ) {
       printf("=> hashes: ");
       for (hashtype x : hashes) printf ("%lx ", x);
 #endif
-      printf ("\n");
+      printf (" !!!!\n");
       TestHashList(hashes, false);
       result = false;
     }
