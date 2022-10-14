@@ -179,7 +179,7 @@ HashInfo g_hashes[] =
 #  define POLY2_VERIF   0xA31DD921
 #  define POLY3_VERIF   0x26F7EDA0
 #  define POLY4_VERIF   0x8EE270BD
-#  define TABUL_VERIF   0x0534C36E
+#  define TABUL_VERIF   0x4917178C
 #elif defined __apple_build_version__ && defined __clang__
 #  define POLY1_VERIF   0xE389931F
 #  define POLY2_VERIF   0x458D056D
@@ -210,7 +210,7 @@ HashInfo g_hashes[] =
 #if defined(_MSC_VER) /* truncated long to 32 */
 #  define TABUL32_VERIF   0x3C3B7BDD
 #elif defined __FreeBSD__
-#  define TABUL32_VERIF   0x4D28A619
+#  define TABUL32_VERIF   0x84F58D1F
 #elif defined __apple_build_version__ && defined __clang__
 #  define TABUL32_VERIF   0x2C8EDFFE
 #else
