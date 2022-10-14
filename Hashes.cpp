@@ -1226,7 +1226,7 @@ void nmhash32x_test ( const void * key, int len, uint32_t seed, void * out ) {
   *(uint32_t*)out = NMHASH32X (key, (const size_t) len, seed);
 }
 
-#ifndef HAVE_BIT32
+#ifdef HAVE_KHASHV
 #include "k-hashv/khashv.h"
 
 khashvSeed khashv_seed;

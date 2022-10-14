@@ -601,7 +601,10 @@ if(CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
 endif()
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-  set(KHASHV_SRC k-hashv/khashv.h)
+  if(NOT WIN32)
+    add_definitions(-DHAVE_KHASHV)
+    set(KHASHV_SRC k-hashv/khashv.h)
+  endif()
 endif()
 
 # IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/BeagleHashes_test.c") set(BEAGLE_SRC

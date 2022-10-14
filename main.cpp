@@ -572,7 +572,7 @@ HashInfo g_hashes[] =
 #endif
   { nmhash32_test,        32, 0x12A30553, "nmhash32",       "nmhash32", GOOD, {}},
   { nmhash32x_test,       32, 0xA8580227, "nmhash32x",      "nmhash32x", GOOD, {}},
-#ifndef HAVE_BIT32
+#ifdef HAVE_KHASHV
 #ifdef __clang__ // also gcc 9.4
 #define KHASHV32_VERIF  0xB69DF8EB
 #define KHASHV64_VERIF  0xA6B7E55B
@@ -751,8 +751,10 @@ bool Hash_Seed_init (pfHash hash, size_t seed) {
   else if(hash == hashx_test)
     hashx_seed_init(info, seed);
   */
+# ifdef HAVE_KHASHV
   else if(hash == khashv64_test || hash == khashv32_test)
     khashv_seed_init(seed);
+# endif
 #endif
   else
       return false;
