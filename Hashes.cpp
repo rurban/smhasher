@@ -770,6 +770,7 @@ void clhash_init()
 {
   void* data = get_random_key_for_clhash(UINT64_C(0xb3816f6a2c68e530), 711);
   memcpy(clhash_random, data, RANDOM_BYTES_NEEDED_FOR_CLHASH);
+  free (data);
 }
 bool clhash_bad_seeds(std::vector<uint64_t> &seeds)
 {

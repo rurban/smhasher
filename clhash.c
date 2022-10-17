@@ -412,7 +412,7 @@ static inline void xorshift128plus_init(uint64_t key1, uint64_t key2, xorshift12
 
 
 /*
-Return a new 64-bit random number
+Return a new 64-bit random number, freshly allocated.
 */
 uint64_t xorshift128plus(xorshift128plus_key_t * key) {
     uint64_t s1 = key->part1;
