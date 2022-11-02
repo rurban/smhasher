@@ -109,7 +109,7 @@ bool TestSecret ( const HashInfo* info, const uint64_t secret ) {
       memset(&key, c, len);
       hash(key, len, secret, &h);
       if (h == 0 && c == 0) {
-        printf("Broken seed 0x%" PRIx64 " => 0 with key[%d] of all %d bytes confirmed => hash 0 !!!!\n",
+        printf("\nBroken seed 0x%" PRIx64 " => 0 with key[%d] of all %d bytes confirmed => hash 0 !!!!\n",
                secret, len, c);
         hashes.push_back(h);
         result = false;
@@ -121,7 +121,8 @@ bool TestSecret ( const HashInfo* info, const uint64_t secret ) {
       printf(" Bad seed 0x%" PRIx64 " for len %d confirmed ", secret, len);
 #if !defined __clang__ && !defined _MSC_VER
       printf("=> hashes: ");
-      for (hashtype x : hashes) printf ("%lx ", x);
+      for (hashtype x : hashes)
+        printbytes(&x, sizeof(x));
 #endif
       printf (" !!!!\n");
       TestHashList(hashes, false);
@@ -141,7 +142,7 @@ void TestSecretRangeThread ( const HashInfo* info, const uint64_t hi,
   int fails = 0;
   hashes.resize(4);
   result = true;
-  printf("at %lx ", hi | start);
+  printf("at %llx ", (long long unsigned int)(hi | start));
   size_t end = (size_t)start + (size_t)len;
   for (size_t y=start; y < end; y++) {
     static hashtype zero;
@@ -152,11 +153,12 @@ void TestSecretRangeThread ( const HashInfo* info, const uint64_t hi,
     Hash_Seed_init (hash, seed);
     for (int x : std::vector<int> {0,32,127,255}) {
       hashtype h;
-      uint8_t key[64]; // for crc32_pclmul, otherwie we would need only 16 byte
+      uint8_t key[64]; // for crc32_pclmul, otherwise we would need only 16 byte
       memset(&key, x, sizeof(key));
       hash(key, 16, seed, &h);
       if (h == 0 && x == 0) {
-        printf("Broken seed 0x%" PRIx64 " => 0 with key[16] of all %d bytes\n", seed, x);
+        printf("\nBroken seed 0x%" PRIx64 " => 0 with key[16] of all %d bytes\n",
+               seed, x);
         hashes.push_back(h);
         fails++;
         result = false;
@@ -239,7 +241,7 @@ bool BadSeedsTest ( HashInfo* info, bool testAll ) {
   if (getenv("SEED")) {
     const char *s = getenv("SEED");
     size_t seed = strtol(s, NULL, 0);
-    printf("\nTesting SEED=0x%" PRIx64 " ", seed);
+    printf("\nTesting SEED=0x%" PRIx64 " ", (uint64_t)seed);
     //if (*s && s[1] && *s == '0' && s[1] == 'x')
     //  seed = strtol(&s[2], NULL, 16);
     if (seed || secrets.size())
