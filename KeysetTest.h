@@ -1,3 +1,4 @@
+
 //-----------------------------------------------------------------------------
 // Keyset tests generate various sorts of difficult-to-hash keysets and compare
 // the distribution and collision frequency of the hash results against an
@@ -891,7 +892,7 @@ bool ZeroKeyTest ( pfHash hash, bool drawDiagram )
 template < typename hashtype >
 bool SeedTest ( pfHash hash, size_t keycount, bool drawDiagram )
 {
-  printf("Keyset 'Seed' - %d keys\n", keycount);
+  printf("Keyset 'Seed' - %zu keys\n", keycount);
   assert(keycount < 2147483648U /*(1U<<31)*/);
 
   const char text[64] = "The quick brown fox jumps over the lazy dog";

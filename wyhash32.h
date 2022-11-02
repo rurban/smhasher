@@ -14,8 +14,15 @@ static inline void _wymix32(unsigned  *A,  unsigned  *B){
   *A=(unsigned)c;
   *B=(unsigned)(c>>32);
 }
-// This version is vulnerable when used with a few bad seeds, which should be skipped beforehand:
-// 0x429dacdd, 0xd637dbf3
+// This version is vulnerable when used with a few bad seeds, which should be
+// skipped beforehand: 0x51a43a0f, 0x522235ae, 0x99ac2b20
+#ifdef __cplusplus
+static void wyhash32_seed_init(uint32_t &seed) {
+  if ((seed == 0x51a43a0f) || (seed == 0x522235ae) || (seed == 0x99ac2b20))
+    seed++;
+}
+#endif
+
 static inline unsigned wyhash32(const void *key, uint64_t len, unsigned seed) {
   const uint8_t *p=(const uint8_t *)key; uint64_t i=len;
   unsigned see1=(unsigned)len; seed^=(unsigned)(len>>32); _wymix32(&seed, &see1);

@@ -8,17 +8,13 @@
    uint64_t hash=wyhash(s.c_str(), s.size(), 0, _wyp);
 */
 
-#ifndef wyhash_final_version_3
-#define wyhash_final_version_3
+#ifndef wyhash_final_version_4
+#define wyhash_final_version_4
 
 #ifndef WYHASH_CONDOM
 //protections that produce different results:
 //1: normal valid behavior
 //2: extra protection against entropy loss (probability=2^-63), aka. "blind multiplication"
-//   There are 2 known bad seeds for the 32bit and many for the 64bit variants.
-//   Recommended is just to skip or inc those known bad seeds, if you dont want to set WYHASH_CONDOM 2
-//     32bit: 429dacdd, d637dbf3
-//     64bit: *14cc886e, *1bf4ed84
 #define WYHASH_CONDOM 1
 #endif
 
@@ -117,23 +113,51 @@ static inline uint64_t _wyr4(const uint8_t *p) {
   return (((v >> 24) & 0xff)| ((v >>  8) & 0xff00)| ((v <<  8) & 0xff0000)| ((v << 24) & 0xff000000));
 }
 #endif
-static inline uint64_t _wyr3(const uint8_t *p, size_t k) { return (((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];}
+static inline uint64_t
+_wyr3 (const uint8_t *p, size_t k)
+{
+  return (((uint64_t)p[0]) << 16) | (((uint64_t)p[k >> 1]) << 8) | p[k - 1];
+}
 
 #ifdef __cplusplus
 // skip bad seeds with WYHASH_CONDOM 1
-static void wyhash_seed_init(size_t &seed) {
-  if ((seed & 0x14cc886e) || (seed & 0xd637dbf3))
-    seed++;
+static void wyhash_seed_init(uint32_t &seed) {
+  static const uint32_t bad[]
+      = { 0x1b8fe073, 0x1fe1e0ed, 0x22e4e037, 0x2dbb9275, 0x2f3d0bb5,
+          0x2ffdf2b3, 0x3e4fbb13, 0x3f7d67b9, 0x41edfd1f, 0x4f119b24,
+          0x54f9f25f, 0x556f8cfe, 0x5898c767, 0x656de51a, 0x67e7b210,
+          0x6dc72c49, 0x72e07c2d, 0x7519ebfb, 0x7b6316c3, 0x84970155,
+          0x869e000a, 0x8bca8721, 0x8eb79e39, 0x923a154e, 0x976c10a7,
+          0x998ff92a, 0xa1d39054, 0xa890a461, 0xa99e8824, 0xae474ec3,
+          0xb79bb6d6, 0xb849c5a7, 0xb9e9f2ed, 0xbdf0469e, 0xc9277d58,
+          0xcc1ff38c, 0xcf327745, 0xd0de0b07, 0xd2a09b99, 0xd304cf19,
+          0xe10fc175, 0xe519e35e, 0xed698d7a, 0xfb180c1e, 0xff09c242 };
+  for (auto s : bad)
+    if (seed & s)
+        seed++;
 }
-static void wyhash32_seed_init(uint32_t &seed) {
-  if ((seed == 0x429dacdd) || (seed & 0xd637dbf3))
-    seed++;
+static void wyhash32low_seed_init(uint32_t &seed) {
+  static const uint32_t bad[] = {
+    0x10027575, 0x1b8fe073, 0x1fe1e0ed, 0x22e4e037, 0x270c37d9, 0x2dbb9275,
+    0x2f3d0bb5, 0x2ffdf2b3, 0x3e4fbb13, 0x3f7d67b9, 0x41edfd1f, 0x4f119b24,
+    0x54f9f25f, 0x556f8cfe, 0x5898c767, 0x656de51a, 0x67e7b210, 0x6dc72c49,
+    0x72e07c2d, 0x7519ebfb, 0x7b6316c3, 0x81430696, 0x847c31ec, 0x84970155,
+    0x869e000a, 0x8bca8721, 0x8eb79e39, 0x923a154e, 0x976c10a7, 0x998ff92a,
+    0x9cc49b0e, 0xa1d39054, 0xa890a461, 0xa99e8824, 0xae474ec3, 0xb79bb6d6,
+    0xb849c5a7, 0xb9e9f2ed, 0xbdf0469e, 0xc9277d58, 0xcc1ff38c, 0xcf327745,
+    0xd0de0b07, 0xd2a09b99, 0xd304cf19, 0xd6280a9f, 0xd7a19c7c, 0xd904642b,
+    0xe10fc175, 0xe3a241d2, 0xe519e35e, 0xea4e9ede, 0xeaf05b3d, 0xed698d7a,
+    0xfb180c1e, 0xff09c242
+  };
+  for (auto s : bad)
+    if (seed == s)
+        seed++;
 }
 #endif
 
 //wyhash main function
 static inline uint64_t wyhash(const void *key, size_t len, uint64_t seed, const uint64_t *secret){
-  const uint8_t *p=(const uint8_t *)key; seed^=*secret;	uint64_t	a,	b;
+  const uint8_t *p=(const uint8_t *)key; seed^=_wymix(seed^secret[0],secret[1]);	uint64_t	a,	b;
   if(_likely_(len<=16)){
     if(_likely_(len>=4)){ a=(_wyr4(p)<<32)|_wyr4(p+((len>>3)<<2)); b=(_wyr4(p+len-4)<<32)|_wyr4(p+len-4-((len>>3)<<2)); }
     else if(_likely_(len>0)){ a=_wyr3(p,len); b=0;}
@@ -156,20 +180,33 @@ static inline uint64_t wyhash(const void *key, size_t len, uint64_t seed, const 
   }
   return _wymix(secret[1]^len,_wymix(a^secret[1],b^seed));
 }
+
 //the default secret parameters
 static const uint64_t _wyp[4] = {0xa0761d6478bd642full, 0xe7037ed1a0b428dbull, 0x8ebc6af09c88c6e3ull, 0x589965cc75374cc3ull};
 
 //a useful 64bit-64bit mix function to produce deterministic pseudo random numbers that can pass BigCrush and PractRand
-static inline uint64_t wyhash64(uint64_t A, uint64_t B){ A^=_wyp[0]; B^=_wyp[1]; _wymum(&A,&B); return _wymix(A^_wyp[0],B^_wyp[1]);}
+static inline uint64_t wyhash64(uint64_t A, uint64_t B){ A^=0xa0761d6478bd642full; B^=0xe7037ed1a0b428dbull; _wymum(&A,&B); return _wymix(A^0xa0761d6478bd642full,B^0xe7037ed1a0b428dbull);}
 
 //The wyrand PRNG that pass BigCrush and PractRand
-static inline uint64_t wyrand(uint64_t *seed){ *seed+=_wyp[0]; return _wymix(*seed,*seed^_wyp[1]);}
+static inline uint64_t wyrand(uint64_t *seed){ *seed+=0xa0761d6478bd642full; return _wymix(*seed,*seed^0xe7037ed1a0b428dbull);}
 
 //convert any 64 bit pseudo random numbers to uniform distribution [0,1). It can be combined with wyrand, wyhash64 or wyhash.
 static inline double wy2u01(uint64_t r){ const double _wynorm=1.0/(1ull<<52); return (r>>12)*_wynorm;}
 
 //convert any 64 bit pseudo random numbers to APPROXIMATE Gaussian distribution. It can be combined with wyrand, wyhash64 or wyhash.
 static inline double wy2gau(uint64_t r){ const double _wynorm=1.0/(1ull<<20); return ((r&0x1fffff)+((r>>21)&0x1fffff)+((r>>42)&0x1fffff))*_wynorm-3.0;}
+
+#ifdef	WYTRNG
+#include <sys/time.h>
+//The wytrand true random number generator, passed BigCrush.
+static inline uint64_t wytrand(uint64_t *seed){
+	struct	timeval	t;	gettimeofday(&t,0);
+	uint64_t	teed=(((uint64_t)t.tv_sec)<<32)|t.tv_usec;
+	teed=_wymix(teed^_wyp[0],*seed^_wyp[1]);
+	*seed=_wymix(teed^_wyp[0],_wyp[2]);
+	return _wymix(*seed,*seed^_wyp[3]);
+}
+#endif
 
 #if(!WYHASH_32BIT_MUM)
 //fast range integer random number generation on [0,k) credit to Daniel Lemire. May not work when WYHASH_32BIT_MUM=1. It can be combined with wyrand, wyhash64 or wyhash.
@@ -200,71 +237,11 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
         if(x!=32){ ok=0; break; }
 #endif
       }
-       if(!ok)continue;
-       for(uint64_t j=3;j<0x100000000ull;j+=2) if(secret[i]%j==0){ ok=0; break; }
     }while(!ok);
   }
 }
 
-/*  This is world's fastest hash map: 2x faster than bytell_hash_map.
-    It does not store the keys, but only the hash/signature of keys.
-    First we use pos=hash1(key) to approximately locate the bucket.
-    Then we search signature=hash2(key) from pos linearly.
-    If we find a bucket with matched signature we report the bucket
-    Or if we meet a bucket whose signifure=0, we report a new position to insert
-    The signature collision probability is very low as we usually searched N~10 buckets.
-    By combining hash1 and hash2, we acturally have 128 bit anti-collision strength.
-    hash1 and hash2 can be the same function, resulting lower collision resistance but faster.
-    The signature is 64 bit, but can be modified to 32 bit if necessary for save space.
-    The above two can be activated by define WYHASHMAP_WEAK_SMALL_FAST
-    simple examples:
-    const	size_t	size=213432;
-    vector<wyhashmap_t>	idx(size);	//	allocate the index of fixed size. idx MUST be zeroed.
-    vector<value_class>	value(size);	//	we only care about the index, user should maintain his own value vectors.
-    string  key="dhskfhdsj"	//	the object to be inserted into idx
-    size_t	pos=wyhashmap(idx.data(), idx.size(), key.c_str(), key.size(), 1);	//	get the position and insert
-    if(pos<size)	value[pos]++;	//	we process the vallue
-    else	cerr<<"map is full\n";
-    pos=wyhashmap(idx.data(), idx.size(), key.c_str(), key.size(), 0);	// just lookup by setting insert=0
-    if(pos<size)	value[pos]++;	//	we process the vallue
-    else	cerr<<"the key does not exist\n";
-*/
-#ifdef	WYHASHMAP_WEAK_SMALL_FAST	// for small hashmaps whose size < 2^24 and acceptable collision
-typedef	uint32_t	wyhashmap_t;
-#else
-typedef	uint64_t	wyhashmap_t;
 #endif
-
-static	inline	size_t	wyhashmap(wyhashmap_t	*idx,	size_t	idx_size,	const	void *key, size_t	key_size,	uint8_t	insert){
-	size_t	i=1;	uint64_t	h2;	wyhashmap_t	sig;
-	do{	sig=h2=wyhash(key,key_size,i,_wyp);	i++;	}while(_unlikely_(!sig));
-#ifdef	WYHASHMAP_WEAK_SMALL_FAST
-	size_t	i0=wy2u0k(h2,idx_size);
-#else
-	size_t	i0=wy2u0k(wyhash(key,key_size,0,_wyp),idx_size);
-#endif
-	for(i=i0;	i<idx_size&&idx[i]&&idx[i]!=sig;	i++);
-	if(_unlikely_(i==idx_size)){
-		for(i=0;	i<i0&&idx[i]&&idx[i]!=sig;  i++);
-		if(i==i0)	return	idx_size;
-	}
-	if(!idx[i]){
-		if(insert)	idx[i]=sig;
-		else	return	idx_size;
-	}
-	return	i;
-}
-#endif
-
-/* test vectors for portability test
-wyhash("",0)=42bc986dc5eec4d3
-wyhash("a",1)=84508dc903c31551
-wyhash("abc",2)=bc54887cfc9ecb1
-wyhash("message digest",3)=6e2ff3298208a67c
-wyhash("abcdefghijklmnopqrstuvwxyz",4)=9a64e42e897195b9
-wyhash("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",5)=9199383239c32554
-wyhash("12345678901234567890123456789012345678901234567890123456789012345678901234567890",6)=7c1ccf6bba30f5a5
-*/
 
 /* The Unlicense
 This is free and unencumbered software released into the public domain.

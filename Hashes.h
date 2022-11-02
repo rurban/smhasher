@@ -599,18 +599,8 @@ void HighwayHash_init();
 // objsize 20-a12: 2546
 void HighwayHash64_test (const void * key, int len, uint32_t seed, void * out);
 
-#ifdef HAVE_INT64
+#if defined(HAVE_INT64) && !defined(HAVE_BIT32)
 #include "wyhash.h"
-static inline bool wyhash_bad_seeds(std::vector<uint64_t> &seeds)
-{
-  // and all seeds with those at at its low 32bits. see below
-  seeds = std::vector<uint64_t> { 0x14cc886e, 0x1bf4ed84 };
-  return true;
-}
-//static void wyhash_seed_init(size_t &seed) {
-//  if ((seed & 0x14cc886e) || (seed & 0x1bf4ed84))
-//    seed++;
-//}
 // objsize 40dbe0-40ddba: 474
 inline void wyhash_test (const void * key, int len, uint32_t seed, void * out) {
   *(uint64_t*)out = wyhash(key, (uint64_t)len, (uint64_t)seed, _wyp);
@@ -619,27 +609,7 @@ inline void wyhash_test (const void * key, int len, uint32_t seed, void * out) {
 inline void wyhash32low (const void * key, int len, uint32_t seed, void * out) {
   *(uint32_t*)out = 0xFFFFFFFF & wyhash(key, (uint64_t)len, (uint64_t)seed, _wyp);
 }
-// extra in wyhash_condom.c
-//void wyhash_condom_test (const void * key, int len, uint32_t seed, void * out);
 #endif // HAVE_INT64
-
-// https://github.com/wangyi-fudan/wyhash
-//static void wyhash32_seed_init(size_t &seed)
-//{
-//  // reject bad seeds
-//  const std::vector<uint32_t> bad_seeds = {
-//    UINT32_C(0x429dacdd), UINT32_C(0xd637dbf3)
-//  };
-//  while (std::find(bad_seeds.begin(), bad_seeds.end(), (uint32_t)seed) != bad_seeds.end())
-//    seed++;
-//}
-static inline bool wyhash32_bad_seeds(std::vector<uint32_t> &seeds)
-{
-  seeds = std::vector<uint32_t> {
-    UINT32_C(0x429dacdd), UINT32_C(0xd637dbf3),
-  };
-  return true;
-}
 
 #ifdef HAVE_BIT32
 // native 32bit. objsize: 8055230 - 80553da: 426
@@ -650,7 +620,6 @@ inline void wyhash32_test (const void * key, int len, uint32_t seed, void * out)
 #endif
 
 #ifdef HAVE_INT64
-
 #include "o1hash.h"
 // unseeded. objsize: 101
 // This is vulnerable to keys len>4 and key[len/2 -2]..[len/2 +2] being 0 (binary keys).
@@ -988,11 +957,13 @@ inline void sha3_256(const void *key, int len, uint32_t seed, void *out)
   sha3_done(&ltc_state, (unsigned char *)out);
 }
 
+#if defined(HAVE_INT64) && !defined(HAVE_BIT32)
 inline void wysha(const void *key, int len, unsigned seed, void *out) {
   uint64_t s[4] = {wyhash(key, len, seed + 0, _wyp), wyhash(key, len, seed + 1, _wyp),
                    wyhash(key, len, seed + 2, _wyp), wyhash(key, len, seed + 3, _wyp)};
   memcpy(out, s, 32);
 }
+#endif
 
 #if defined(HAVE_AESNI) && defined(__SIZEOF_INT128__) && \
   (defined(__x86_64__) || defined(_M_AMD64) || defined(__i386__)  || defined(_M_IX86))

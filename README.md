@@ -190,9 +190,9 @@ SMhasher
 | [t1ha0_aes_noavx](doc/t1ha0_aes_noavx.txt)    |     22785.26 |    38.71 | 180.61 (3) | 925 | LongNeighbors, machine-specific (x86 AES-NI) |
 | [t1ha0_aes_avx1](doc/t1ha0_aes_avx1)          |     22714.85 |    48.12 | 226.52 (16)| 843 | LongNeighbors, machine-specific (x64 AVX.txt)|
 | [t1ha0_aes_avx2](doc/t1ha0_aes_avx2.txt)      |     22345.33 |    44.38 | 556.47 (89)| 792 | LongNeighbors, machine-specific (x64 AVX2)   |
-| [wyhash32](doc/wyhash32.txt)                  |      2532.89 |    48.40 | 484.57 (1) | 426 | 2 bad seeds, 32-bit           |
-| [wyhash32low](doc/wyhash32low.txt)            |     12911.09 |    29.59 | 205.43 (2) | 474 | 2 bad seeds, PerlinNoise AV   |
-| [wyhash](doc/wyhash.txt)                      |     12879.00 |    30.35 | 196.77 (2) | 474 | 2^33 bad seeds, PerlinNoise AV|
+| [wyhash32](doc/wyhash32.txt)                  |      2532.89 |    48.40 | 484.57 (1) | 426 | 4 bad and broken seeds, 32-bit |
+| [wyhash32low](doc/wyhash32low.txt)            |     12911.09 |    29.59 | 205.43 (2) | 474 | 56 bad and broken seeds  |
+| [wyhash](doc/wyhash.txt)                      |     12879.00 |    30.35 | 196.77 (2) | 474 | 45 bad seeds  |
 | [umash32](doc/umash32.txt)                    |      4633.19 |    53.42 | 216.33 (3) |1530 |                            |
 | [umash32_hi](doc/umash32_hi.txt)              |      4662.92 |    54.22 | 214.20 (2) |1530 |                            |
 | [umash64](doc/umash64.txt)                    |      4662.09 |    53.42 | 188.09 (1) |1530 |                            |
@@ -385,7 +385,7 @@ PROBLEMS
   key. In the regular case with random seeds the probablity of such
   bad seeds is very low, like 2^32 or 2^64.
   A practical application needs to know if bad seeds exist and choose another
-  one. See e.g. `wyhash_seed_init()` and `wyhash_bad_seeds()` in `Hashes.h`.
+  one. See e.g. `mirhash_seed_init()` and `mirhash_bad_seeds()` in `Hashes.h`.
   Note that a bad seed is not really a problem when you skip this seed during initialization.
   It can still be a GOOD or recommended hash function.
   But a bad seed of `0` leading to collisions is considered a bug, a bad hash function.
@@ -396,8 +396,7 @@ PROBLEMS
   `<hash>_bad_seeds()` lists the confirmed bad seeds.
 
   Special care needs to be taken for crc, most FNV1 variants, fletcher,
-  Jenkins. And with GOOD hashes all MUM variants, like mirhash, MUM,
-  wyhash.
+  Jenkins. And with GOOD hashes most MUM variants, like mirhash, MUM, wyhash.
 
   Independently from this, when the attacker knows the seed it will lead
   to DDOS attacks. Even with crypto hashes in power2 hashtables.
