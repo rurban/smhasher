@@ -18,6 +18,7 @@
 #include <assert.h>
 
 #include <algorithm>  // for std::swap
+#include <iostream>
 #include <string>
 #if NCPU > 1 // disable with -DNCPU=0 or 1
 #include <thread>
@@ -119,12 +120,11 @@ bool TestSecret ( const HashInfo* info, const uint64_t secret ) {
         hashes.push_back(h);
     }
     if (!TestHashList(hashes, false, true, false, false, false, false)) {
-      printf(" Bad seed 0x%" PRIx64 " for len %d confirmed ", secret, len);
-#if !defined __clang__ && !defined _MSC_VER
+      printf("Bad seed 0x%" PRIx64 " for len %d confirmed ", secret, len);
       printf("=> hashes: ");
-      for (hashtype x : hashes)
-        printbytes(&x, sizeof(x));
-#endif
+      for (hashtype x : hashes) {
+        std::cout << x << " ";
+      }
       printf (" !!!!\n");
       TestHashList(hashes, false);
       result = false;

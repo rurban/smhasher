@@ -8,6 +8,8 @@
 #include <map>
 #include <set>
 #include <string>
+#include <iostream>
+using namespace std;
 #include <assert.h>
 
 //-----------------------------------------------------------------------------
@@ -241,83 +243,80 @@ private:
 
 //-----------------------------------------------------------------------------
 
-template < int _bits >
+template <int _bits>
 class Blob
 {
 public:
-
-  Blob()
+  Blob ()
   {
-    for(size_t i = 0; i < sizeof(bytes); i++)
-    {
-      bytes[i] = 0;
-    }
+    for (size_t i = 0; i < sizeof (bytes); i++)
+      {
+        bytes[i] = 0;
+      }
   }
 
-  Blob ( int x )
+  Blob (int x)
   {
-    for(size_t i = 0; i < sizeof(bytes); i++)
-    {
-      bytes[i] = 0;
-    }
-    *(int*)bytes = x;
+    for (size_t i = 0; i < sizeof (bytes); i++)
+      {
+        bytes[i] = 0;
+      }
+    *(int *)bytes = x;
   }
-  Blob ( unsigned long long x )
+  Blob (unsigned long long x) { *(unsigned long long *)bytes = x; }
+  Blob (unsigned long x) { *(unsigned long *)bytes = x; }
+
+  Blob (const Blob &k)
   {
-    *(unsigned long long*)bytes = x;
-  }
-  Blob ( unsigned long x )
-  {
-    *(unsigned long*)bytes = x;
+    for (size_t i = 0; i < sizeof (bytes); i++)
+      {
+        bytes[i] = k.bytes[i];
+      }
   }
 
-  Blob ( const Blob & k )
+  Blob &
+  operator= (const Blob &k)
   {
-    for(size_t i = 0; i < sizeof(bytes); i++)
-    {
-      bytes[i] = k.bytes[i];
-    }
-  }
-
-  Blob & operator = ( const Blob & k )
-  {
-    for(size_t i = 0; i < sizeof(bytes); i++)
-    {
-      bytes[i] = k.bytes[i];
-    }
+    for (size_t i = 0; i < sizeof (bytes); i++)
+      {
+        bytes[i] = k.bytes[i];
+      }
 
     return *this;
   }
 
-  Blob ( uint64_t a, uint64_t b )
+  Blob (uint64_t a, uint64_t b)
   {
-    uint64_t t[2] = {a,b};
-    set(&t,16);
+    uint64_t t[2] = { a, b };
+    set (&t, 16);
   }
 
-  void set ( const void * blob, size_t len )
+  void
+  set (const void *blob, size_t len)
   {
-    const uint8_t * k = (const uint8_t*)blob;
+    const uint8_t *k = (const uint8_t *)blob;
 
-    len = len > sizeof(bytes) ? sizeof(bytes) : len;
+    len = len > sizeof (bytes) ? sizeof (bytes) : len;
 
-    for(size_t i = 0; i < len; i++)
-    {
-      bytes[i] = k[i];
-    }
+    for (size_t i = 0; i < len; i++)
+      {
+        bytes[i] = k[i];
+      }
 
-    for(size_t i = len; i < sizeof(bytes); i++)
-    {
-      bytes[i] = 0;
-    }
+    for (size_t i = len; i < sizeof (bytes); i++)
+      {
+        bytes[i] = 0;
+      }
   }
 
-  uint8_t & operator [] ( int i )
+  uint8_t &
+  operator[] (int i)
   {
     return bytes[i];
   }
 
-  const uint8_t & operator [] ( int i ) const
+  const uint8_t &
+  operator[] (int i) const
   {
     return bytes[i];
   }
@@ -325,28 +324,34 @@ public:
   //----------
   // boolean operations
 
-  bool operator < ( const Blob & k ) const
+  bool
+  operator<(const Blob &k) const
   {
-    for(int i = sizeof(bytes) -1; i >= 0; i--)
-    {
-      if(bytes[i] < k.bytes[i]) return true;
-      if(bytes[i] > k.bytes[i]) return false;
-    }
+    for (int i = sizeof (bytes) - 1; i >= 0; i--)
+      {
+        if (bytes[i] < k.bytes[i])
+          return true;
+        if (bytes[i] > k.bytes[i])
+          return false;
+      }
 
     return false;
   }
 
-  bool operator == ( const Blob & k ) const
+  bool
+  operator== (const Blob &k) const
   {
-    for(size_t i = 0; i < sizeof(bytes); i++)
-    {
-      if(bytes[i] != k.bytes[i]) return false;
-    }
+    for (size_t i = 0; i < sizeof (bytes); i++)
+      {
+        if (bytes[i] != k.bytes[i])
+          return false;
+      }
 
     return true;
   }
 
-  bool operator != ( const Blob & k ) const
+  bool
+  operator!= (const Blob &k) const
   {
     return !(*this == k);
   }
@@ -354,106 +359,128 @@ public:
   //----------
   // bitwise operations
 
-  Blob operator ^ ( const Blob & k ) const
+  Blob
+  operator^ (const Blob &k) const
   {
     Blob t;
 
-    for(size_t i = 0; i < sizeof(bytes); i++)
-    {
-      t.bytes[i] = bytes[i] ^ k.bytes[i];
-    }
+    for (size_t i = 0; i < sizeof (bytes); i++)
+      {
+        t.bytes[i] = bytes[i] ^ k.bytes[i];
+      }
 
     return t;
   }
 
-  Blob & operator ^= ( const Blob & k )
+  Blob &
+  operator^= (const Blob &k)
   {
-    for(size_t i = 0; i < sizeof(bytes); i++)
-    {
-      bytes[i] ^= k.bytes[i];
-    }
+    for (size_t i = 0; i < sizeof (bytes); i++)
+      {
+        bytes[i] ^= k.bytes[i];
+      }
     return *this;
   }
 
-  int operator & ( int x )
+  int
+  operator& (int x)
   {
-    return (*(int*)bytes) & x;
+    return (*(int *)bytes) & x;
   }
-  int operator | ( int x )
+  int
+  operator| (int x)
   {
-    return (*(int*)bytes) | x;
+    return (*(int *)bytes) | x;
   }
 
-  Blob & operator |= ( const Blob & k )
+  Blob &
+  operator|= (const Blob &k)
   {
-    for(size_t i = 0; i < sizeof(bytes); i++)
-    {
-      bytes[i] |= k.bytes[i];
-    }
+    for (size_t i = 0; i < sizeof (bytes); i++)
+      {
+        bytes[i] |= k.bytes[i];
+      }
     return *this;
   }
-  Blob & operator |= ( uint8_t k )
+  Blob &
+  operator|= (uint8_t k)
   {
     bytes[0] |= k;
     return *this;
   }
 
-  Blob & operator &= ( const Blob & k )
+  Blob &
+  operator&= (const Blob &k)
   {
-    for(size_t i = 0; i < sizeof(bytes); i++)
-    {
-      bytes[i] &= k.bytes[i];
-    }
+    for (size_t i = 0; i < sizeof (bytes); i++)
+      {
+        bytes[i] &= k.bytes[i];
+      }
     return *this;
   }
 
-  Blob operator << ( int c )
+  Blob
+  operator<< (int c)
   {
     Blob t = *this;
 
-    lshift(&t.bytes[0], sizeof(bytes), c);
+    lshift (&t.bytes[0], sizeof (bytes), c);
 
     return t;
   }
 
-  Blob operator >> ( int c )
+  Blob
+  operator>> (int c)
   {
     Blob t = *this;
 
-    rshift(&t.bytes[0], sizeof(bytes), c);
+    rshift (&t.bytes[0], sizeof (bytes), c);
 
     return t;
   }
 
-  Blob & operator <<= ( int c )
+  Blob &
+  operator<<= (int c)
   {
-    lshift(&bytes[0], sizeof(bytes), c);
+    lshift (&bytes[0], sizeof (bytes), c);
 
     return *this;
   }
 
-  Blob & operator >>= ( int c )
+  Blob &
+  operator>>= (int c)
   {
-    rshift(&bytes[0], sizeof(bytes), c);
+    rshift (&bytes[0], sizeof (bytes), c);
 
     return *this;
   }
 
-  Blob & bitreverse ( void )
+  Blob &
+  bitreverse (void)
   {
     assert (_bits % 8 == 0);
     const int j = _bits / 8;
-    for (int i = 0; i < j; i++) {
-      bytes[j - i] = bitrev(bytes[i]);
-    }
+    for (int i = 0; i < j; i++)
+      {
+        bytes[j - i] = bitrev (bytes[i]);
+      }
     return *this;
   }
 
+  friend ostream&
+  operator<< (ostream& out, const Blob<_bits>& t)
+  {
+    out << "0x" << hex;
+    for (size_t i = 0; i < _bits/8; i++)
+      out << t.bytes[i];
+    out << dec;
+    return out;
+  }
+  
   //----------
 
 private:
-
-  uint8_t bytes[(_bits+7)/8];
+  uint8_t bytes[(_bits + 7) / 8];
 };
 
 typedef Blob<128> uint128_t;
