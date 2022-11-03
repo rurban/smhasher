@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -s
+#!/usr/bin/perl -s
 use strict;
 use vars '$h';
 use File::Copy 'mv';
