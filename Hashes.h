@@ -599,7 +599,13 @@ void HighwayHash_init();
 // objsize 20-a12: 2546
 void HighwayHash64_test (const void * key, int len, uint32_t seed, void * out);
 
-#if defined(HAVE_INT64) && !defined(HAVE_BIT32)
+#if defined HAVE_BIT32
+// native 32bit. objsize: 8055230 - 80553da: 426
+#include "wyhash32.h"
+inline void wyhash32_test (const void * key, int len, uint32_t seed, void * out) {
+  *(uint32_t*)out = wyhash32(key, (uint64_t)len, (unsigned)seed);
+}
+#elif defined HAVE_INT64
 #include "wyhash.h"
 // objsize 40dbe0-40ddba: 474
 inline void wyhash_test (const void * key, int len, uint32_t seed, void * out) {
@@ -608,14 +614,6 @@ inline void wyhash_test (const void * key, int len, uint32_t seed, void * out) {
 // objsize: 40da00-40dbda: 474
 inline void wyhash32low (const void * key, int len, uint32_t seed, void * out) {
   *(uint32_t*)out = 0xFFFFFFFF & wyhash(key, (uint64_t)len, (uint64_t)seed, _wyp);
-}
-#endif // HAVE_INT64
-
-#ifdef HAVE_BIT32
-// native 32bit. objsize: 8055230 - 80553da: 426
-#include "wyhash32.h"
-inline void wyhash32_test (const void * key, int len, uint32_t seed, void * out) {
-  *(uint32_t*)out = wyhash32(key, (uint64_t)len, (unsigned)seed);
 }
 #endif
 

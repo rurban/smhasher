@@ -1,4 +1,5 @@
 // Author: Wang Yi <godspeed_china@yeah.net>
+// Version 4.1
 #include <stdint.h>
 #include <string.h>
 #ifndef WYHASH32_BIG_ENDIAN
@@ -15,11 +16,17 @@ static inline void _wymix32(unsigned  *A,  unsigned  *B){
   *B=(unsigned)(c>>32);
 }
 // This version is vulnerable when used with a few bad seeds, which should be
-// skipped beforehand: 0x51a43a0f, 0x522235ae, 0x99ac2b20
+// skipped or changed beforehand: 0x51a43a0f, 0x522235ae, 0x99ac2b20
 #ifdef __cplusplus
 static void wyhash32_seed_init(uint32_t &seed) {
   if ((seed == 0x51a43a0f) || (seed == 0x522235ae) || (seed == 0x99ac2b20))
     seed++;
+}
+#else
+static bool wyhash32_badseed(const uint32_t seed) {
+  if ((seed == 0x51a43a0f) || (seed == 0x522235ae) || (seed == 0x99ac2b20))
+    return true;
+  return false;
 }
 #endif
 

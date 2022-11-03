@@ -10,6 +10,7 @@
 
 #ifndef wyhash_final_version_4
 #define wyhash_final_version_4
+// Version 4.1
 
 #ifndef WYHASH_CONDOM
 //protections that produce different results:
@@ -113,48 +114,74 @@ static inline uint64_t _wyr4(const uint8_t *p) {
   return (((v >> 24) & 0xff)| ((v >>  8) & 0xff00)| ((v <<  8) & 0xff0000)| ((v << 24) & 0xff000000));
 }
 #endif
-static inline uint64_t
-_wyr3 (const uint8_t *p, size_t k)
-{
-  return (((uint64_t)p[0]) << 16) | (((uint64_t)p[k >> 1]) << 8) | p[k - 1];
-}
+#if WYHASH_CONDOM
+// must be sorted
+static const uint32_t wyhash32low_badseeds[]
+= { 0x138d5f9f, 0x1e4f8661, 0x29362732, 0x49a7ee03,
+    0x4d29ced1, 0x5ee3628c, 0x833f0eb6, 0x928fce63,
+    0x99be0ae5, 0xac470842, 0xcaf21e71, 0xfc1c4878 };
+static const uint32_t wyhash_badseeds[] = { };
 
-#ifdef __cplusplus
-// skip bad seeds with WYHASH_CONDOM 1
+# if defined __cplusplus
+// fixup bad seeds with WYHASH_CONDOM
 static void wyhash_seed_init(uint32_t &seed) {
-  static const uint32_t bad[]
-      = { 0x1b8fe073, 0x1fe1e0ed, 0x22e4e037, 0x2dbb9275, 0x2f3d0bb5,
-          0x2ffdf2b3, 0x3e4fbb13, 0x3f7d67b9, 0x41edfd1f, 0x4f119b24,
-          0x54f9f25f, 0x556f8cfe, 0x5898c767, 0x656de51a, 0x67e7b210,
-          0x6dc72c49, 0x72e07c2d, 0x7519ebfb, 0x7b6316c3, 0x84970155,
-          0x869e000a, 0x8bca8721, 0x8eb79e39, 0x923a154e, 0x976c10a7,
-          0x998ff92a, 0xa1d39054, 0xa890a461, 0xa99e8824, 0xae474ec3,
-          0xb79bb6d6, 0xb849c5a7, 0xb9e9f2ed, 0xbdf0469e, 0xc9277d58,
-          0xcc1ff38c, 0xcf327745, 0xd0de0b07, 0xd2a09b99, 0xd304cf19,
-          0xe10fc175, 0xe519e35e, 0xed698d7a, 0xfb180c1e, 0xff09c242 };
-  for (auto s : bad)
-    if (seed & s)
+  // just linear search for now
+  for (auto s : wyhash_badseeds) {
+    if (s == seed) {
         seed++;
+        return;
+    }
+    if (s > seed)
+      return;
+  }
+}
+static void wyhash_seed_init(uint64_t &seed) {
+  // just linear search for now
+  for (auto s : wyhash_badseeds) {
+    if (s & seed) {
+        seed++;
+        return;
+    }
+  }
 }
 static void wyhash32low_seed_init(uint32_t &seed) {
-  static const uint32_t bad[] = {
-    0x10027575, 0x1b8fe073, 0x1fe1e0ed, 0x22e4e037, 0x270c37d9, 0x2dbb9275,
-    0x2f3d0bb5, 0x2ffdf2b3, 0x3e4fbb13, 0x3f7d67b9, 0x41edfd1f, 0x4f119b24,
-    0x54f9f25f, 0x556f8cfe, 0x5898c767, 0x656de51a, 0x67e7b210, 0x6dc72c49,
-    0x72e07c2d, 0x7519ebfb, 0x7b6316c3, 0x81430696, 0x847c31ec, 0x84970155,
-    0x869e000a, 0x8bca8721, 0x8eb79e39, 0x923a154e, 0x976c10a7, 0x998ff92a,
-    0x9cc49b0e, 0xa1d39054, 0xa890a461, 0xa99e8824, 0xae474ec3, 0xb79bb6d6,
-    0xb849c5a7, 0xb9e9f2ed, 0xbdf0469e, 0xc9277d58, 0xcc1ff38c, 0xcf327745,
-    0xd0de0b07, 0xd2a09b99, 0xd304cf19, 0xd6280a9f, 0xd7a19c7c, 0xd904642b,
-    0xe10fc175, 0xe3a241d2, 0xe519e35e, 0xea4e9ede, 0xeaf05b3d, 0xed698d7a,
-    0xfb180c1e, 0xff09c242
-  };
-  for (auto s : bad)
-    if (seed == s)
+  // just linear search for now
+  for (auto s : wyhash32low_badseeds) {
+    if (s == seed) {
         seed++;
+        return;
+    }
+    if (s > seed)
+      return;
+  }
 }
-#endif
+# else
+// check bad seeds with WYHASH_CONDOM
+static bool wyhash_badseed(const uint64_t seed) {
+  // just linear search for now
+  for (auto s : wyhash_badseeds) {
+    if (s & seed) {
+        return true;
+    }
+  }
+  return false;
+}
+static bool wyhash32low_badseed(const uint32_t seed) {
+  // just linear search for now
+  for (auto s : wyhash32low_badseeds) {
+    if (s == seed) {
+        return true;
+    }
+    if (s > seed)
+      return false;
+  }
+  return false;
+}
+# endif
+#endif // WYHASH_CONDOM
 
+
+static inline uint64_t _wyr3(const uint8_t *p, size_t k) { return (((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];}
 //wyhash main function
 static inline uint64_t wyhash(const void *key, size_t len, uint64_t seed, const uint64_t *secret){
   const uint8_t *p=(const uint8_t *)key; seed^=_wymix(seed^secret[0],secret[1]);	uint64_t	a,	b;
@@ -178,7 +205,8 @@ static inline uint64_t wyhash(const void *key, size_t len, uint64_t seed, const 
     while(_unlikely_(i>16)){  seed=_wymix(_wyr8(p)^secret[1],_wyr8(p+8)^seed);  i-=16; p+=16;  }
     a=_wyr8(p+i-16);  b=_wyr8(p+i-8);
   }
-  return _wymix(secret[1]^len,_wymix(a^secret[1],b^seed));
+  a^=secret[1]; b^=seed;  _wymum(&a,&b);
+  return  _wymix(a^secret[0]^len,b^secret[1]);
 }
 
 //the default secret parameters
