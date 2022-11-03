@@ -120,29 +120,29 @@ static const uint32_t wyhash32low_badseeds[]
 = { 0x138d5f9f, 0x1e4f8661, 0x29362732, 0x49a7ee03,
     0x4d29ced1, 0x5ee3628c, 0x833f0eb6, 0x928fce63,
     0x99be0ae5, 0xac470842, 0xcaf21e71, 0xfc1c4878 };
-static const uint32_t wyhash_badseeds[] = { };
+//static const uint32_t wyhash_badseeds[] = { };
 
 # if defined __cplusplus
 // fixup bad seeds with WYHASH_CONDOM
-static void wyhash_seed_init(uint32_t &seed) {
-  // just linear search for now
-  for (auto s : wyhash_badseeds) {
+static inline void wyhash_seed_init(uint32_t &seed) {
+  return;
+  /*for (auto s : wyhash_badseeds) {
     if (s == seed) {
         seed++;
         return;
     }
     if (s > seed)
       return;
-  }
+  }*/
 }
-static void wyhash_seed_init(uint64_t &seed) {
-  // just linear search for now
-  for (auto s : wyhash_badseeds) {
+static inline void wyhash_seed_init(uint64_t &seed) {
+  return;
+  /*for (auto s : wyhash_badseeds) {
     if (s & seed) {
         seed++;
         return;
     }
-  }
+  }*/
 }
 static void wyhash32low_seed_init(uint32_t &seed) {
   // just linear search for now
@@ -157,13 +157,12 @@ static void wyhash32low_seed_init(uint32_t &seed) {
 }
 # else
 // check bad seeds with WYHASH_CONDOM
-static bool wyhash_badseed(const uint64_t seed) {
-  // just linear search for now
-  for (auto s : wyhash_badseeds) {
+static inline bool wyhash_badseed(const uint64_t seed) {
+  /*for (auto s : wyhash_badseeds) {
     if (s & seed) {
         return true;
     }
-  }
+  }*/
   return false;
 }
 static bool wyhash32low_badseed(const uint32_t seed) {
