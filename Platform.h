@@ -169,7 +169,10 @@ __inline__ uint64_t rdtsc()
 // see https://www.intel.com/content/dam/www/public/us/en/documents/white-papers/ia-32-ia-64-benchmark-code-execution-paper.pdf 3.2.1 The Improved Benchmarking Method
 __inline__ uint64_t timer_start()
 {
-#if defined (__i386__) || (defined(__x86_64__) && defined (HAVE_BIT32))
+#if defined (__i386__) && defined (__PIC__)
+  // or see https://gcc.gnu.org/legacy-ml/gcc-patches/2007-09/msg00324.html
+  return rdtsc();
+#elif defined (__i386__) || (defined(__x86_64__) && defined (HAVE_BIT32))
   uint32_t cycles_high, cycles_low;
   __asm__ volatile
       ("cpuid\n\t"
@@ -194,7 +197,10 @@ __inline__ uint64_t timer_start()
 
 __inline__ uint64_t timer_end()
 {
-#if defined (__i386__) || (defined(__x86_64__) && defined (HAVE_BIT32))
+#if defined (__i386__) && defined (__PIC__)
+  // or see https://gcc.gnu.org/legacy-ml/gcc-patches/2007-09/msg00324.html
+  return rdtsc();
+#elif defined (__i386__) || (defined(__x86_64__) && defined (HAVE_BIT32))
   uint32_t cycles_high, cycles_low;
   __asm__ volatile
       ("rdtscp\n\t"
