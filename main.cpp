@@ -579,6 +579,10 @@ HashInfo g_hashes[] =
   { khashv32_test,        32, KHASHV32_VERIF, "k-hashv32",      "Vectorized K-HashV, 32-bit", GOOD, {}},
   { khashv64_test,        64, KHASHV64_VERIF, "k-hashv64",      "Vectorized K-HashV, 64-bit", GOOD, {}},
 #endif
+#if defined HAVE_BIT32
+  { phihash32_test,  32, 0x0000FF00, "phihash", "Golden Ratio hash from Linux Kernel.", Good, {}},
+#elif HAVE_INT64
+  { phihash_test,  64, 0x0000FF00, "phihash", "Golden Ratio hash from Linux Kernel.", Good, {}},
 };
 
 HashInfo * findHash ( const char * name )

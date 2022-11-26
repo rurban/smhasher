@@ -1243,3 +1243,16 @@ void khashv32_test ( const void *key, int len, uint32_t seed, void *out) {
   *(uint32_t*)out = khashv32 (&khashv_seed, (const uint8_t*)key, (size_t)len);
 }
 #endif
+
+
+#include "phihash.h"
+
+#if defined HAVE_BIT32
+inline void phihash32_test (const void * key, int len, uint32_t seed, void * out) {
+  *(uint32_t*)out = hash_32(*(u32 *)key, (uint64_t)len);
+}
+#elif defined HAVE_INT64
+inline void phihash_test (const void * key, int len, uint32_t seed, void * out) {
+  *(uint64_t*)out = hash_64(*(u64 *)key, (uint64_t)len);
+}
+#endif
