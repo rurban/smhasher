@@ -1,7 +1,11 @@
 #!/bin/bash
 hname="`hostname`"
-if [ x$hname = xe495 -o x$hname = xlorikeet ]; then
+if [ x$hname = xe495 ]; then
     ./testspeed-ryzen3.sh $@
+    exit
+fi
+if [ x$hname = xlorikeet ]; then
+    ./testspeed-ryzen5.sh $@
     exit
 fi
 if [ x$hname = xairc ]; then
