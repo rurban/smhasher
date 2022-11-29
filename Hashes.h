@@ -1336,3 +1336,9 @@ void khashv_seed_init(size_t &seed);
 void khashv32_test ( const void *key, int len, uint32_t seed, void *out);
 void khashv64_test ( const void *key, int len, uint32_t seed, void *out);
 #endif
+
+#if defined HAVE_INT64
+void phihash_test (const void *key, int len, uint32_t seed, void *out);
+#elif defined HAVE_BIT32
+void phihash32_test (const void *key, int len, uint32_t seed, void *out);
+#endif

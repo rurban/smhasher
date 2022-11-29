@@ -12,6 +12,7 @@ SMhasher
 | [BadHash](doc/BadHash.txt)                    |       769.94 |    73.97 | -|  47 | bad seed 0, test FAIL          |
 | [sumhash](doc/sumhash.txt)                    |     10699.57 |    29.53 | -| 363 | bad seed 0, test FAIL          |
 | [sumhash32](doc/sumhash32.txt)                |     42877.79 |    23.12 | -| 863 | UB, test FAIL                  |
+| [phihash](doc/phihash.txt)                    |  11475305.42 |    18.00 | 226.80 (8)| 345 | bad seeds, fails all tests |
 | [multiply_shift](doc/multiply_shift.txt)      |      8026.77 |    26.05 | 226.80 (8) | 345 | bad seeds & 0xfffffff0, fails most tests |
 | [pair_multiply_shift](doc/pair_multiply_shift)|      3716.95 |    40.22 | 186.34 (3) | 609 | fails most tests |
 | --------------------------                    |              |          |            |     |                      |

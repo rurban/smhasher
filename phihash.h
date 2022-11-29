@@ -2,6 +2,8 @@
 #define _LINUX_HASH_H
 /* Fast hashing routine for ints,  longs and pointers.
    (C) 2002 Nadia Yvette Chambers, IBM */
+/* Note that this hash has catastrophic properties and
+   should NOT be used for anything serious. -rurban */
 
 #include <stdint.h>
 
