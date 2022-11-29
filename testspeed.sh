@@ -8,6 +8,10 @@ if [ x$hname = xlorikeet ]; then
     ./testspeed-ryzen5.sh $@
     exit
 fi
+if [ x$hname = xreini ]; then
+    ./testspeed-intel.sh $@
+    exit
+fi
 if [ x$hname = xairc ]; then
     ./testspeed-air.sh $@
     exit
