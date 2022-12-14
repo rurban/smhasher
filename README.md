@@ -66,6 +66,7 @@ SMhasher
 | [FNV1a_YT](doc/FNV1a_YT.txt)                  |     13451.31 |    30.57 | 244.22 (5) | 321 | bad seed, UB, fails all tests          |
 | [FNV2](doc/FNV2.txt)                          |      6199.86 |    32.10 | 216.13 (5) | 278 | fails all tests              |
 | [FNV64](doc/FNV64.txt)                        |       762.15 |    73.38 | 204.27 (5) |  79 | fails all tests              |
+| [FNV128](doc/FNV128.txt)                      |       388.63 |   138.02 | 310.77 (11)| 171 | fails all tests              |
 | [k-hash32](doc/k-hash32.txt)                  |      2221.69 |    53.26 | 264.07 (4) | 808 | insecure, zeros, UB, bad seeds, fails all tests       |
 | [k-hash64](doc/k-hash64.txt)                  |      2418.02 |    49.37 | 247.61 (4) | 609 | insecure, zeros, UB, bad seeds, fails all tests       |
 | [fletcher2](doc/fletcher2.txt)                |     15241.81 |    21.05 | 349.08 (4) | 248 | bad seed 0, UB, fails all tests          |

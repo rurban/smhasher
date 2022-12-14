@@ -151,6 +151,10 @@ inline void FNV1A_PY_test(const void *key, int len, uint32_t seed, void *out) {
   *(uint32_t *)out = FNV1A_Pippip_Yurii((const char *)key, len, seed);
 }
 #endif
+void FNV128(uint64_t buf[2], const char *key, int len, uint64_t seed);
+inline void FNV128_test(const void *key, int len, uint32_t seed, void *out) {
+  FNV128((uint64_t*)out, (const char *)key, len, (uint64_t)seed);
+}
 uint64_t FNV64a(const char *key, int len, uint64_t seed);
 inline void FNV64a_test(const void *key, int len, uint32_t seed, void *out) {
   *(uint64_t *)out = FNV64a((const char *)key, len, (uint64_t)seed);

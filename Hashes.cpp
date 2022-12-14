@@ -349,6 +349,54 @@ FNV64a(const char *key, int len, uint64_t seed)
 
 #endif
 
+// objsize: 0x105cb-0x10520: 171
+// ported from https://github.com/golang/go/blob/master/src/hash/fnv/fnv.go
+void
+FNV128(uint64_t buf[2], const char *key, int len, uint64_t seed)
+{
+  uint8_t  *data = (uint8_t *)key;
+  const uint8_t *const end = &data[len];
+  const uint64_t prime128Lower = 0x13b;
+  const uint64_t prime128Shift = 24;
+  buf[0] = 0x6c62272e07bb0142 ^ seed;
+  buf[1] = 0x62b821756295c58d;
+
+  while (data < end) {
+    uint64_t a = prime128Lower;
+    uint64_t b = buf[1];
+
+    // TODO Should be improved with native int128 mult.
+    // But not even gcc has this yet
+    uint64_t a_lo = (uint32_t) a;
+    uint64_t a_hi = a >> 32;
+    uint64_t b_lo = (uint32_t) b;
+    uint64_t b_hi = b >> 32;
+
+    uint64_t a_x_b_hi = a_hi * b_hi;
+    uint64_t a_x_b_mid = a_hi * b_lo;
+    uint64_t b_x_a_mid = b_hi * a_lo;
+    uint64_t a_x_b_lo = a_lo * b_lo;
+
+    uint64_t carry_bit
+      = ((uint64_t) (uint32_t) a_x_b_mid + (uint64_t) (uint32_t) b_x_a_mid
+         + (a_x_b_lo >> 32))
+      >> 32;
+
+    uint64_t multhi
+      = a_x_b_hi + (a_x_b_mid >> 32) + (b_x_a_mid >> 32) + carry_bit;
+
+    uint64_t s0 = multhi;                 // high
+    uint64_t s1 = prime128Lower * buf[1]; // low
+    
+    s0 += buf[1] << (prime128Shift + prime128Lower * buf[0]);
+
+    // Update the values
+    buf[1] = s1;
+    buf[0] = s0;
+    buf[1] ^= (uint64_t) *data++;
+  }
+}
+
 //-----------------------------------------------------------------------------
 
 // objsize: 0x1090-0x10df: 79
