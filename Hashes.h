@@ -1178,6 +1178,9 @@ inline void aesnihash_test ( const void * key, int len, unsigned seed, void * ou
   uint64_t result = aesnihash ((uint8_t *)key, (unsigned long)len, (uint32_t)seed);
   *(uint64_t *)out = result;
 }
+
+extern void aesni128_test ( const void * key, int len, unsigned seed, void * out );
+extern void aesni64_test ( const void * key, int len, unsigned seed, void * out );
 #endif
 
 #ifdef HAVE_INT64

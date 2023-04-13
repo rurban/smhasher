@@ -370,6 +370,9 @@ HashInfo g_hashes[] =
 #if defined(HAVE_SSE2) && defined(HAVE_AESNI) && !defined(_MSC_VER)
   { aesnihash_test,       64, 0xA68E0D42, "aesnihash",    "majek's seeded aesnihash with aesenc, 64-bit for x64", POOR,
     {0x70736575} },
+
+  { aesni128_test,       128, 0xD82C9011, "aesni",    "aesni 128bit", GOOD,{} },
+  { aesni64_test,         64, 0x84DB5954, "aesni-low","aesni 64bit",  GOOD,{} },
 #endif
 #if defined(HAVE_SSE2) && defined(__x86_64__) && !defined(_WIN32) && !defined(_MSC_VER)
   { falkhash_test_cxx,    64, 0x2F99B071, "falkhash",    "falkhash.asm with aesenc, 64-bit for x64", POOR, {} },
