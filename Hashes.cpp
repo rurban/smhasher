@@ -1227,6 +1227,18 @@ uint64_t aesnihash(uint8_t *in, unsigned long src_sz, uint32_t seed) {
 
   return hash[0] ^ hash[1];
 }
+
+
+// From https://github.com/PeterRK/PageBloomFilter/blob/main/aesni-hash.h
+#include "aesni-hash.h"
+
+void aesni128_test ( const void * key, int len, unsigned seed, void * out ) {
+	*(__m128i*)out = AESNI_Hash128((const uint8_t*)key, len, seed);
+}
+void aesni64_test ( const void * key, int len, unsigned seed, void * out ) {
+	*(uint64_t*)out = AESNI_Hash64((const uint8_t*)key, len, seed);
+}
+
 #endif
 
 #if defined(HAVE_CLMUL) && !defined(_MSC_VER)
