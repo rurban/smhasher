@@ -14,5 +14,5 @@ else
              fi
         done
     done | tee "log.speed-ryzen5-$1"
-    ./speed.pl "log.speed-$1"
+    ./speed.pl "log.speed-ryzen5-$1"
 fi
