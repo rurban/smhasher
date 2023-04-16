@@ -5,9 +5,10 @@
  * a secure hash algorithm, but the calculation is drastically simpler
  * and faster.
  *
- * Copyright (C) 2014-2017 by Jody Bruchon <jody@jodybruchon.com>
+ * Copyright (C) 2014-2023 by Jody Bruchon <jody@jodybruchon.com>
  * Released under The MIT License
  */
+
 
 /*
  * ****** WARNING *******
@@ -19,110 +20,59 @@
  * ****** WARNING *******
  */
 
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "jody_hash32.h"
 
-/* Width of a jody_hash. Changing this will also require
- * changing the width of tail masks to match. */
-#define JODY_HASH_WIDTH 32
-
-/* DO NOT modify the shift unless you know what you're doing.
- * This shift was decided upon after lots of testing and
- * changing it will likely cause lots of hash collisions. */
-#ifndef JODY_HASH_SHIFT
-#define JODY_HASH_SHIFT 14
-#endif
-
-/* The salt value's purpose is to cause each byte in the
- * jodyhash32_t word to have a positionally dependent variation.
- * It is injected into the calculation to prevent a string of
- * identical bytes from easily producing an identical hash. */
-
-/* The tail mask table is used for block sizes that are
- * indivisible by the width of a jodyhash32_t. It is ANDed with the
- * final jodyhash32_t-sized element to zero out data in the buffer
- * that is not part of the data to be hashed. */
-
-/* Set hash parameters based on requested hash width */
-#if JODY_HASH_WIDTH == 64
-#define JODY_HASH_CONSTANT 0x1f3d5b79U
-static const jodyhash32_t tail_mask[] = {
-	0x0000000000000000,
-	0x00000000000000ff,
-	0x000000000000ffff,
-	0x0000000000ffffff,
-	0x00000000ffffffff,
-	0x000000ffffffffff,
-	0x0000ffffffffffff,
-	0x00ffffffffffffff,
-	0xffffffffffffffff
-};
-#endif /* JODY_HASH_WIDTH == 64 */
-#if JODY_HASH_WIDTH == 32
-#define JODY_HASH_CONSTANT 0x1f3d5b79U
-static const jodyhash32_t tail_mask[] = {
-	0x00000000,
-	0x000000ff,
-	0x0000ffff,
-	0x00ffffff,
-	0xffffffff,
-};
-#endif /* JODY_HASH_WIDTH == 32 */
-#if JODY_HASH_WIDTH == 16
-#define JODY_HASH_CONSTANT 0x1f5bU
-static const jodyhash32_t tail_mask[] = {
-	0x0000,
-	0x00ff,
-	0xffff,
-};
-#endif /* JODY_HASH_WIDTH == 16 */
-
-
-/* Hash a block of arbitrary size; must be divisible by sizeof(jodyhash32_t)
+/* Hash a block of arbitrary size; must be divisible by sizeof(jodyhash_t)
  * The first block should pass a start_hash of zero.
  * All blocks after the first should pass start_hash as the value
  * returned by the last call to this function. This allows hashing
  * of any amount of data. If data is not divisible by the size of
- * jodyhash32_t, it is MANDATORY that the caller provide a data buffer
- * which is divisible by sizeof(jodyhash32_t). */
-extern jodyhash32_t jody_block_hash32(const jodyhash32_t *data,
-		const jodyhash32_t start_hash, const size_t count)
+ * jodyhash_t, it is MANDATORY that the caller provide a data buffer
+ * which is divisible by sizeof(jodyhash_t). */
+jodyhash32_t jody_block_hash32(const jodyhash32_t * data, const jodyhash32_t start_hash, const size_t count)
 {
+	const jodyhash32_t s_constant = JH32_ROR2(JODY_HASH32_CONSTANT);
 	jodyhash32_t hash = start_hash;
-	jodyhash32_t element;
-	jodyhash32_t partial_salt;
-	size_t len;
+	jodyhash32_t element, element2, partial_constant;
+	size_t length = 0;
 
 	/* Don't bother trying to hash a zero-length block */
 	if (count == 0) return hash;
 
-	len = count / sizeof(jodyhash32_t);
-	for (; len > 0; len--) {
+	length = count / sizeof(jodyhash32_t);
+
+	/* Handle tails or everything */
+	for (; length > 0; length--) {
 		element = *data;
+		element2 = JH32_ROR(element);
+		element2 ^= s_constant;
+		element += JODY_HASH32_CONSTANT;
 		hash += element;
-		hash += JODY_HASH_CONSTANT;
-		hash = (hash << JODY_HASH_SHIFT) | hash >> (sizeof(jodyhash32_t) * 8 - JODY_HASH_SHIFT); /* bit rotate left */
-		hash ^= element;
-		hash = (hash << JODY_HASH_SHIFT) | hash >> (sizeof(jodyhash32_t) * 8 - JODY_HASH_SHIFT);
-		hash ^= JODY_HASH_CONSTANT;
+		hash ^= element2;
+		hash = JH32_ROL2(hash);
 		hash += element;
 		data++;
 	}
 
 	/* Handle data tail (for blocks indivisible by sizeof(jodyhash32_t)) */
-	len = count & (sizeof(jodyhash32_t) - 1);
-	if (len) {
-		partial_salt = JODY_HASH_CONSTANT & tail_mask[len];
-		element = *data & tail_mask[len];
+	length = count & (sizeof(jodyhash32_t) - 1);
+	if (length) {
+		partial_constant = JODY_HASH32_CONSTANT & tail32_mask[length];
+		element = *data & tail32_mask[length];
+		hash += partial_constant;
 		hash += element;
-		hash += partial_salt;
-		hash = (hash << JODY_HASH_SHIFT) | hash >> (sizeof(jodyhash32_t) * 8 - JODY_HASH_SHIFT);
+		hash = JH32_ROL(hash);
 		hash ^= element;
-		hash = (hash << JODY_HASH_SHIFT) | hash >> (sizeof(jodyhash32_t) * 8 - JODY_HASH_SHIFT);
-		hash ^= partial_salt;
+		hash = JH32_ROL(hash);
+		hash ^= partial_constant;
 		hash += element;
 	}
 
 	return hash;
+	fprintf(stderr, "out of memory\n");
+	exit(EXIT_FAILURE);
 }
