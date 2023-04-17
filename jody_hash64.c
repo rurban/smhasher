@@ -26,29 +26,15 @@
 #include <string.h>
 #include "jody_hash64.h"
 
-/* Vector intrinsic multi-case handler header
- * Shamelessly stolen from Marat Dukhan's answer on Stack Overflow:
- * https://stackoverflow.com/a/22291538
- */
+#ifdef __SSE2__
 #if defined(_MSC_VER)
      /* Microsoft C/C++-compatible compiler */
      #include <intrin.h>
 #elif defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))
      /* GCC-compatible compiler, targeting x86/x86-64 */
      #include <x86intrin.h>
-#elif defined(__GNUC__) && defined(__ARM_NEON__)
-     /* GCC-compatible compiler, targeting ARM with NEON */
-     #include <arm_neon.h>
-#elif defined(__GNUC__) && defined(__IWMMXT__)
-     /* GCC-compatible compiler, targeting ARM with WMMX */
-     #include <mmintrin.h>
-#elif (defined(__GNUC__) || defined(__xlC__)) && (defined(__VEC__) || defined(__ALTIVEC__))
-     /* XLC or GCC-compatible compiler, targeting PowerPC with VMX/VSX */
-     #include <altivec.h>
-#elif defined(__GNUC__) && defined(__SPE__)
-     /* GCC-compatible compiler, targeting PowerPC with SPE */
-     #include <spe.h>
-#endif
+#endif /* headers */
+#endif /* SSE2 */
 
 /* Hash a block of arbitrary size; must be divisible by sizeof(jodyhash_t)
  * The first block should pass a start_hash of zero.
@@ -64,6 +50,7 @@ extern jodyhash_t jody_block_hash(const jodyhash_t *data, const jodyhash_t start
 	jodyhash_t element, element2, partial_constant;
 	size_t length = 0;
 
+#ifdef __SSE2__
 	union UINT128 {
 		__m128i  v128;
 		uint64_t v64[2];
@@ -73,11 +60,13 @@ extern jodyhash_t jody_block_hash(const jodyhash_t *data, const jodyhash_t start
 	__m128i *aligned_data, *aligned_data_e;
 	__m128i v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12;
 	__m128i vec_const, vec_ror2;
+#endif /* __SSE2__ */
 
 
 	/* Don't bother trying to hash a zero-length block */
 	if (count == 0) return hash;
 
+#ifdef __SSE2__
 	__builtin_cpu_init ();
 	if (__builtin_cpu_supports ("sse2")) {
 			/* Use SSE2 if possible */
@@ -160,9 +149,12 @@ extern jodyhash_t jody_block_hash(const jodyhash_t *data, const jodyhash_t start
 				data += vec_allocsize / sizeof(jodyhash_t);
 				length = (count - vec_allocsize) / sizeof(jodyhash_t);
 			} else {
+#endif
 				length = count / sizeof(jodyhash_t);
+#ifdef __SSE2__
 			}
 		}
+#endif /* __SSE2__ */
 
 	/* Handle tails or everything */
 	for (; length > 0; length--) {
