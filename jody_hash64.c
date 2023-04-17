@@ -30,6 +30,8 @@
 #if defined(_MSC_VER)
      /* Microsoft C/C++-compatible compiler */
      #include <intrin.h>
+     #define aligned_alloc(a,b) _aligned_malloc(b,a)
+     #define aligned_free(a) _aligned_free(a)
 #elif defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))
      /* GCC-compatible compiler, targeting x86/x86-64 */
      #include <x86intrin.h>
@@ -67,8 +69,11 @@ extern jodyhash_t jody_block_hash(const jodyhash_t *data, const jodyhash_t start
 	if (count == 0) return hash;
 
 #ifdef __SSE2__
+#if defined(__GNUC__)
 	__builtin_cpu_init ();
-	if (__builtin_cpu_supports ("sse2")) {
+	if (__builtin_cpu_supports ("sse2"))
+#endif /* __GNUC__ */
+	{
 			/* Use SSE2 if possible */
 			vec_constant.v64[0]      = JODY_HASH_CONSTANT;
 			vec_constant.v64[1]      = JODY_HASH_CONSTANT;
