@@ -135,26 +135,26 @@ extern jodyhash_t jody_block_hash(jodyhash_t *data, const jodyhash_t start_hash,
 						default:
 						case 0:
 						/* Lower v1-v3 */
-						ep1 = (uint64_t)_mm_cvtsi128_si64x(v3);
-						ep2 = (uint64_t)_mm_cvtsi128_si64x(v1);
+						ep1 = (uint64_t)_mm_cvtsi128_si64(v3);
+						ep2 = (uint64_t)_mm_cvtsi128_si64(v1);
 						break;
 
 						case 1:
 						/* Upper v1-v3 */
-						ep1 = (uint64_t)_mm_cvtsi128_si64x(_mm_castps_si128(_mm_movehl_ps(vzero, _mm_castsi128_ps(v3))));
-						ep2 = (uint64_t)_mm_cvtsi128_si64x(_mm_castps_si128(_mm_movehl_ps(vzero, _mm_castsi128_ps(v1))));
+						ep1 = (uint64_t)_mm_cvtsi128_si64(_mm_castps_si128(_mm_movehl_ps(vzero, _mm_castsi128_ps(v3))));
+						ep2 = (uint64_t)_mm_cvtsi128_si64(_mm_castps_si128(_mm_movehl_ps(vzero, _mm_castsi128_ps(v1))));
 						break;
 
 						case 2:
 						/* Lower v4-v6 */
-						ep1 = (uint64_t)_mm_cvtsi128_si64x(v6);
-						ep2 = (uint64_t)_mm_cvtsi128_si64x(v4);
+						ep1 = (uint64_t)_mm_cvtsi128_si64(v6);
+						ep2 = (uint64_t)_mm_cvtsi128_si64(v4);
 						break;
 
 						case 3:
 						/* Upper v4-v6 */
-						ep1 = (uint64_t)_mm_cvtsi128_si64x(_mm_castps_si128(_mm_movehl_ps(vzero, _mm_castsi128_ps(v6))));
-						ep2 = (uint64_t)_mm_cvtsi128_si64x(_mm_castps_si128(_mm_movehl_ps(vzero, _mm_castsi128_ps(v4))));
+						ep1 = (uint64_t)_mm_cvtsi128_si64(_mm_castps_si128(_mm_movehl_ps(vzero, _mm_castsi128_ps(v6))));
+						ep2 = (uint64_t)_mm_cvtsi128_si64(_mm_castps_si128(_mm_movehl_ps(vzero, _mm_castsi128_ps(v4))));
 						break;
 					}
 					hash += ep1;
