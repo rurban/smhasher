@@ -7,7 +7,7 @@ if [ -z "$@" ]; then
     test -f log.hashes && mv log.hashes log.hashes.bak
     (for g in `build/SMHasher --listnames`; do build/SMHasher $g | tee doc/$g.txt; done) | tee log.hashes
 else
-    for g in `build/SMHasher --listnames | egrep "$@"`; do
+    for g in $@; do
         build/SMHasher $g | tee doc/$g.txt
         ./speed.pl doc/$g.txt && \
             ./fixupdocspeeds.pl doc/$g.txt
