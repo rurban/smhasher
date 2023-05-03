@@ -334,7 +334,7 @@ inline void jodyhash32_test( const void * key, int len, uint32_t seed, void * ou
 }
 #ifdef HAVE_INT64
 inline void jodyhash64_test( const void * key, int len, uint32_t seed, void * out ) {
-  *(uint64_t*)out = jody_block_hash((const jodyhash_t *)key, (jodyhash_t) seed, (size_t) len);
+  *(uint64_t*)out = jody_block_hash((jodyhash_t *)key, (jodyhash_t) seed, (size_t) len);
 }
 #endif
 
