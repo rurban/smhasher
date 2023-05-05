@@ -305,7 +305,7 @@ HashInfo g_hashes[] =
   { farsh128_test,       128, 0x82B6CBEC, "farsh128",    "FARSH 128bit", POOR, {} },
   { farsh256_test,       256, 0xFEBEA0BC, "farsh256",    "FARSH 256bit", POOR, {} },
 #endif
-  { jodyhash32_test,      32, 0xA2AEFC60, "jodyhash32",  "jodyhash, 32-bit (v6)", POOR, {} },
+  { jodyhash32_test,      32, 0xA2AEFC60, "jodyhash32",  "jodyhash, 32-bit (v6)", POOR, {0x9fd368f4} /* !! */ },
 #ifdef HAVE_INT64
   { jodyhash64_test,      64, 0xC1CBFA34, "jodyhash64",  "jodyhash, 64-bit (v7.1)", POOR, {} },
 #endif
