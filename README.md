@@ -88,8 +88,8 @@ SMhasher
 | [farsh64](doc/farsh64.txt)                    |     13742.68 |   114.13 | 331.15 (5) | 944 | insecure: AppendedZeroes, collisions+bias, MomentChi2, LongNeighbors |
 | [farsh128](doc/farsh128.txt)                  |      6915.41 |   234.60 | 401.77 (4) | 944 | insecure: AppendedZeroes, collisions+bias, permut,combin,2bytes,zeroes,PerlinNoise |
 | [farsh256](doc/farsh256.txt)                  |      3411.21 |   451.97 | 628.91 (3) | 944 | insecure: AppendedZeroes, collisions+bias, permut,combin,2bytes,zeroes,PerlinNoise |
-| [jodyhash32](doc/jodyhash32.txt)              |      1740.84 |    42.30 | 266.04 (19)| 102 | bias, collisions, distr, BIC LongNeighbors |
-| [jodyhash64](doc/jodyhash64.txt)              |      1572.69 |    28.57 | 227.79 (8) | 118 | bias, collisions, distr, BIC, LongNeighbors |
+| [jodyhash32](doc/jodyhash32.txt)              |      1728.77 |    42.48 | 280.30 (35)| 102 | bias, collisions, distr, BIC LongNeighbors |
+| [jodyhash64](doc/jodyhash64.txt)              |      4162.60 |    34.11 | 653.57 (133)| 118 | bias, collisions, distr, BIC, LongNeighbors |
 | [lookup3](doc/lookup3.txt)                    |      2467.12 |    39.90 | 247.48 (6) | 341 | UB, 28% bias, collisions, 30% distr, BIC  |
 | [superfast](doc/superfast.txt)                |      2062.25 |    49.52 | 247.20 (4) | 210 | UB, bad seed 0, 91% bias, 5273.01x collisions, 37% distr, BIC |
 | [MurmurOAAT](doc/MurmurOAAT.txt)              |       507.14 |   103.15 | 246.66 (6) |  47 | bad seed 0, collisions, 99.998% distr., BIC, LongNeighbors |
