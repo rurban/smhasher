@@ -23,8 +23,10 @@ static __m128i AESNI_Hash128(const uint8_t* msg, unsigned len, uint32_t seed = 0
 	bool greed = (((uintptr_t)msg + (len-1)) & 0xfffUL) >= 15; // do not cross page
 
 	if (len > 80) {
-		auto c = _mm_aesenc_si128(a, m);
-		auto d = _mm_aesdec_si128(b, m);
+		auto c = _mm_aesenc_si128(b, m);
+		auto d = _mm_aesdec_si128(a, m);
+		a = _mm_aesenc_si128(a, m);
+		b = _mm_aesdec_si128(b, m);
 		do {
 			a = _mm_xor_si128(a, _mm_lddqu_si128((const __m128i*)msg));
 			b = _mm_xor_si128(b, _mm_lddqu_si128((const __m128i*)(msg + 16)));
@@ -77,9 +79,9 @@ static __m128i AESNI_Hash128(const uint8_t* msg, unsigned len, uint32_t seed = 0
 			case 2: mix(GREEDILY_READ(2,msg)); break;
 			case 1: mix(GREEDILY_READ(1,msg)); break;
 			case 0:
-			default:
-				a = _mm_xor_si128(a, m);
-				b = _mm_shuffle_epi8(b, s);
+			default: // try to keep m & s from register spilling
+				a = _mm_add_epi8(a, s);
+				b = _mm_add_epi8(b, m);
 		}
 #undef GREEDILY_READ
 		return _mm_aesenc_si128(a, b);
@@ -125,9 +127,10 @@ static __m128i AESNI_Hash128(const uint8_t* msg, unsigned len, uint32_t seed = 0
 			mix(_mm_set_epi64x(0, x));
 			break;
 		case 0:
-		default:
-			a = _mm_xor_si128(a, m);
-			b = _mm_shuffle_epi8(b, s);
+		default: // try to keep m & s from register spilling
+			a = _mm_add_epi8(a, s);
+			b = _mm_add_epi8(b, m);
+
 	}
 	return _mm_aesenc_si128(a, b);
 }
