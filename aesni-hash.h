@@ -76,7 +76,10 @@ static __m128i AESNI_Hash128(const uint8_t* msg, unsigned len, uint32_t seed = 0
 			case 3: mix(GREEDILY_READ(3,msg)); break;
 			case 2: mix(GREEDILY_READ(2,msg)); break;
 			case 1: mix(GREEDILY_READ(1,msg)); break;
-			case 0: break;
+			case 0:
+			default:
+				a = _mm_xor_si128(a, m);
+				b = _mm_shuffle_epi8(b, s);
 		}
 #undef GREEDILY_READ
 		return _mm_aesenc_si128(a, b);
@@ -120,8 +123,11 @@ static __m128i AESNI_Hash128(const uint8_t* msg, unsigned len, uint32_t seed = 0
 		case 1:
 			x |= msg[0];
 			mix(_mm_set_epi64x(0, x));
-		case 0:
 			break;
+		case 0:
+		default:
+			a = _mm_xor_si128(a, m);
+			b = _mm_shuffle_epi8(b, s);
 	}
 	return _mm_aesenc_si128(a, b);
 }
