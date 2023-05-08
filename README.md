@@ -156,8 +156,8 @@ SMhasher
 | [mirhashstrict32low](doc/mirhashstrict32low.txt)|      3566.47 |    49.73 | 263.25 (4) |1112 | 1 bad seed, MomentChi2 9   |
 | [fasthash32](doc/fasthash32.txt)              |      6075.38 |    40.68 | 262.40 (6) | 566 | UB                         |
 | [fasthash64](doc/fasthash64.txt)              |      6173.22 |    38.08 | 228.68 (6) | 509 | UB                         |
-| [aesni](doc/aesni.txt)                        |     26257.38 |    31.79 | 314.81 (16)| 519 | machine-specific (x64 AES-NI)           |
-| [aesni-low](doc/aesni-low.txt)                |     28008.53 |    32.02 | 302.11 (14)| 519 | machine-specific (x64 AES-NI)           |
+| [aesni](doc/aesni.txt)                        |     28617.28 |    29.91 | 238.03 (8) | 519 | machine-specific (x64 AES-NI)           |
+| [aesni-low](doc/aesni-low.txt)                |     29438.07 |    29.84 | 237.24 (7) | 519 | machine-specific (x64 AES-NI)           |
 | [mx3](doc/mx3.txt)                            |      9039.63 |    48.63 | 236.57 (5) | 734 | UB                         |
 | [pengyhash](doc/pengyhash.txt)                |     13293.76 |    75.49 | 286.41 (6) | 421 |                            |
 | [City32](doc/City32.txt)                      |      5637.89 |    53.19 | 260.99 (6) |1319 |                            |
