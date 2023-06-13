@@ -1234,7 +1234,12 @@ inline void prvhash64s_128test ( const void * key, int len, unsigned seed, void 
 // objsize: 188d0 - 18ba8: 728
 inline void komihash_test ( const void * key, int len, unsigned seed, void * out )
 {
-  *(uint64_t*)out = komihash ((const uint8_t *)key, len, (uint64_t)seed);
+#if 0
+  *(uint64_t*)out = komihash_stream_oneshot ((const uint8_t *)key, (const size_t)len,
+                                             (uint64_t)seed);
+#else
+  *(uint64_t*)out = komihash ((const uint8_t *)key, (size_t)len, (uint64_t)seed);
+#endif
 }
 
 // objsize: 408dd0 - 4090ae: 734
