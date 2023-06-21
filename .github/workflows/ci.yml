@@ -12,7 +12,7 @@ jobs:
           - -DCMAKE_BUILD_TYPE=Debug
           - -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 1
         submodules: recursive
@@ -25,7 +25,7 @@ jobs:
   aarch64:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 1
         submodules: recursive
@@ -37,7 +37,7 @@ jobs:
   armv7:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 1
         submodules: recursive
@@ -52,7 +52,7 @@ jobs:
     steps:
     #- name: init
     #  run: brew install automake
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 1
         submodules: true
@@ -60,14 +60,13 @@ jobs:
     - run: make -j4 VERBOSE=1
     - run: make -j4 test ARGS=-V
   windows:
-    runs-on: windows-latest
+    runs-on: windows-2019
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 1
         submodules: recursive
-    - uses: ilammy/msvc-dev-cmd@v1
-    - run: cmake . -DCMAKE_BUILD_TYPE=Release -A x64
+    - run: cmake -G "Visual Studio 16 2019" -A x64 -DCMAKE_BUILD_TYPE=Release .
     - run: cmake --build . --config Release --verbose
     - run: Release\SMHasher.exe --test=VerifyAll,Sanity,Speed,Cyclic,Zeroes,Seed
   mingw:
@@ -93,7 +92,7 @@ jobs:
           base-devel
           mingw-w64-x86_64-toolchain
     - run: reg add "HKLM\Software\Microsoft\Windows\Windows Error Reporting" /f /v DontShowUI /d 1
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 1
         submodules: recursive
