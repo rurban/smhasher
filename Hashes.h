@@ -1231,7 +1231,7 @@ inline void prvhash64s_128test ( const void * key, int len, unsigned seed, void 
 #endif
 
 #include "komihash/komihash.h"
-// objsize: 188d0 - 18ba8: 728
+// objsize: 25830 - 25d5b: 1323
 inline void komihash_test ( const void * key, int len, unsigned seed, void * out )
 {
 #if 0
