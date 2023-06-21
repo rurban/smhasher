@@ -1302,4 +1302,18 @@ void khashv64_test ( const void *key, int len, uint32_t seed, void *out) {
 void khashv32_test ( const void *key, int len, uint32_t seed, void *out) {
   *(uint32_t*)out = khashv32 (&khashv_seed, (const uint8_t*)key, (size_t)len);
 }
-#endif
+#endif // HAVE_KHASHV
+
+PolymurHashParams g_polymurhashparams = {
+  UINT64_C(2172266433527442278), UINT64_C(706663945032637854),
+  UINT64_C(754693428422558902),  UINT64_C(9067629717964434866)
+};
+void polymur_seed_init (size_t &seed) {
+  polymur_init_params_from_seed(&g_polymurhashparams,
+                                UINT64_C(0xfedbca9876543210) ^ seed);
+}
+// objsize: 6ba30-6be98: 1128
+void polymur_test ( const void *key, int len, uint32_t seed, void *out) {
+  *(uint64_t*)out = polymur_hash((const uint8_t*)key, (size_t)len, &g_polymurhashparams,
+                                 (uint64_t)seed);
+}

@@ -1336,7 +1336,6 @@ inline void khash64_test ( const void *key, int len, uint32_t seed, void *out) {
   }
   *(uint64_t*)out = hash;
 }
-
 #endif // HAVE_ALIGNED_ACCESS_REQUIRED
 
 } // extern C
@@ -1348,3 +1347,8 @@ void khashv_seed_init(size_t &seed);
 void khashv32_test ( const void *key, int len, uint32_t seed, void *out);
 void khashv64_test ( const void *key, int len, uint32_t seed, void *out);
 #endif
+
+#include "polymur-hash/polymur-hash.h"
+extern PolymurHashParams g_polymurhashparams;
+void polymur_seed_init (size_t &seed);
+void polymur_test ( const void *key, int len, uint32_t seed, void *out);

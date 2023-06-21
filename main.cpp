@@ -419,7 +419,6 @@ HashInfo g_hashes[] =
   { prvhash64s_64test,    64, 0x891521D6, "prvhash64s_64", "prvhash64s 4.3 64bit", GOOD, {} }, // seed changes
   { prvhash64s_128test,  128, 0x0199728A, "prvhash64s_128","prvhash64s 4.3 128bit", GOOD, {} }, // seed compiler-specific
 #endif
-  { komihash_test,        64, 0x8157FF6D, "komihash",      "komihash 5.0", GOOD, {} },
   // as in rust and swift:
   { siphash13_test,       64, 0x29C010BF, "SipHash13",   "SipHash 1-3 - SSSE3 optimized", GOOD, {} },
 #ifndef _MSC_VER
@@ -583,6 +582,8 @@ HashInfo g_hashes[] =
   { khashv32_test,        32, KHASHV32_VERIF, "k-hashv32",      "Vectorized K-HashV, 32-bit", GOOD, {}},
   { khashv64_test,        64, KHASHV64_VERIF, "k-hashv64",      "Vectorized K-HashV, 64-bit", GOOD, {}},
 #endif
+  { komihash_test,        64, 0x8157FF6D, "komihash",    "komihash 5.0", GOOD, {} },
+  { polymur_test,         64, 0x4F894810, "polymur",     "github.com/orlp/polymur-hash v1", GOOD, {} },
 };
 
 HashInfo * findHash ( const char * name )
@@ -747,6 +748,8 @@ bool Hash_Seed_init (pfHash hash, size_t seed) {
   else if(hash == hashx_test)
     hashx_seed_init(info, seed);
   */
+  else if(hash == polymur_test)
+    polymur_seed_init(seed);
 # ifdef HAVE_KHASHV
   else if(hash == khashv64_test || hash == khashv32_test)
     khashv_seed_init(seed);
