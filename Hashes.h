@@ -937,6 +937,25 @@ inline void rmd256(const void *key, int len, uint32_t seed, void *out)
   rmd256_process(&ltc_state, (unsigned char *)key, len);
   rmd256_done(&ltc_state, (unsigned char *)out);
 }
+#include "edonr.h"
+inline void edonr224(const void *key, int len, uint32_t seed, void *out)
+{
+  // objsize
+  struct edonr_ctx ctx;
+  rhash_edonr224_init(&ctx);
+  ctx.u.data256.hash[0] ^= seed;
+  rhash_edonr256_update(&ctx, (unsigned char *)key, len);
+  rhash_edonr256_final(&ctx, (unsigned char *)out);
+}
+inline void edonr256(const void *key, int len, uint32_t seed, void *out)
+{
+  // objsize
+  struct edonr_ctx ctx;
+  rhash_edonr256_init(&ctx);
+  ctx.u.data256.hash[0] ^= seed;
+  rhash_edonr256_update(&ctx, (unsigned char *)key, len);
+  rhash_edonr256_final(&ctx, (unsigned char *)out);
+}
 // Keccak:
 inline void sha3_256_64(const void *key, int len, uint32_t seed, void *out)
 {

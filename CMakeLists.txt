@@ -711,6 +711,7 @@ add_library(
   ${BLAKE3_SRC}
   pengyhash.c
   pearson_hash/pearsonb.c
+  edonr.c
   # wyhash_condom.c
   ${ASCON_SRC}
   ${UMASH_SRC}

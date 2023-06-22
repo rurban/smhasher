@@ -144,6 +144,8 @@ HashInfo g_hashes[] =
   { rmd128,              128, 0xFF576977, "rmd128",       "RIPEMD-128", GOOD, {} },
   { rmd160,              160, 0x30B37AC6, "rmd160",       "RIPEMD-160", GOOD, {} },
   { rmd256,              256, 0xEB16FAD7, "rmd256",       "RIPEMD-256", GOOD, {} },
+  { edonr224,            224, 0x83A8E7AB, "edonr224",     "EDON-R 224", GOOD, {} },
+  { edonr256,            256, 0x06DD4F96, "edonr256",     "EDON-R 256", GOOD, {} },
 #if defined(HAVE_BIT32) && !defined(_WIN32)
 #  define BLAKE3_VERIF   0x58571F56
 #else
