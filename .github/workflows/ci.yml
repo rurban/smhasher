@@ -1,6 +1,11 @@
 name: CI
 on: [push, pull_request]
 
+# cancel older workflow runs
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   linux:
     runs-on: ubuntu-latest
