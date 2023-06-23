@@ -1,39 +1,25 @@
-// also known as BEBB4185
 // Copyright 2020 Cris Stringfellow
-// Licensed under GPL-3.0
-// https://github.com/cris691/discohash
+// https://github.com/dosyago/discohash
 #include <cstdio>
 #include <inttypes.h>
+#include <cstring>
 #include "discohash.h"
 
-#if defined(_MSC_VER)
-
-#define FORCE_INLINE  __forceinline
-
-// Other compilers
-
-#else // defined(_MSC_VER)
-
-#define FORCE_INLINE inline __attribute__((always_inline))
-
-#endif // !defined(_MSC_VER)
-
-const int STATE = 32;
-const int STATE64 = STATE >> 3;
-const int STATEM = STATE-1;
-const int HSTATE64M = (STATE64 >> 1)-1;
-const int STATE64M = STATE64-1;
-uint8_t disco_buf[STATE] = {0};
-uint64_t P = 0xFFFFFFFFFFFFFFFF - 58;
-uint64_t Q = 13166748625691186689U;
-uint8_t *ds8 = (uint8_t *)disco_buf;
-uint32_t *ds32 = (uint32_t *)disco_buf;
+constexpr int STATE = 32;
+constexpr int STATE64 = STATE >> 3;
+constexpr int STATEM = STATE-1;
+constexpr int HSTATE64M = (STATE64 >> 1)-1;
+constexpr int STATE64M = STATE64-1;
+alignas(uint64_t) uint8_t disco_buf[STATE] = {0};
+constexpr uint64_t P = 0xFFFFFFFFFFFFFFFF - 58;
+constexpr uint64_t Q = 13166748625691186689U;
+alignas(uint64_t) uint8_t *ds8 = (uint8_t *)disco_buf;
 uint64_t *ds = (uint64_t *)disco_buf;
 
   //--------
   // State mix function
 
-    FORCE_INLINE uint64_t rot( uint64_t v, int n) 
+    static inline uint64_t rot( uint64_t v, int n) 
     {
       n = n & 63U;
       if (n)
@@ -41,15 +27,7 @@ uint64_t *ds = (uint64_t *)disco_buf;
       return v; 
     }
 
-    FORCE_INLINE uint64_t rot32( uint64_t v, int n) 
-    {
-      n = n & 31U;
-      if (n)
-          v = (v >> n) | (v << (64-n));
-      return v; 
-    }
-
-    FORCE_INLINE uint8_t rot8( uint8_t v, int n) 
+    static inline uint8_t rot8( uint8_t v, int n) 
     {
       n = n & 7U;
       if (n)
@@ -57,36 +35,24 @@ uint64_t *ds = (uint64_t *)disco_buf;
       return v; 
     }
 
-    FORCE_INLINE void mixA()
-    {
-      int i = ds32[0] & 1;
-      int j = ds32[3] & 3;
-
-      ds[0] = rot(ds[0], ds[i]);
-      ds[i] *= (P % (ds32[j] + 1) + 1);
-      ds[1] += ds32[j];
-    }
-
-    FORCE_INLINE void mix(const int A)
+    static inline void mix(const int A)
     {
       const int B = A+1;
       ds[A] *= P;
       ds[A] = rot(ds[A], 23);
       ds[A] *= Q;
-      //ds[A] = rot(ds[A], 23);
       
       ds[B] ^= ds[A];
 
       ds[B] *= P;
       ds[B] = rot(ds[B], 23);
       ds[B] *= Q;
-      //ds[B] = rot(ds[B], 23);
     }
 
   //---------
   // Hash round function 
 
-    FORCE_INLINE void round( const uint64_t * m64, const uint8_t * m8, int len )
+    static inline void round( const uint64_t * m64, const uint8_t * m8, int len )
     {
       int index = 0;
       int sindex = 0;
@@ -98,11 +64,13 @@ uint64_t *ds = (uint64_t *)disco_buf;
         counter += ~m64[index] + 1;
         if ( sindex == HSTATE64M ) {
           mix(0);
+          sindex++;
         } else if ( sindex == STATE64M ) {
           mix(2);
-          sindex = -1;
+          sindex = 0;
+        } else {
+          sindex++;
         }
-        sindex++;
       }
 
       mix(1);
@@ -114,9 +82,10 @@ uint64_t *ds = (uint64_t *)disco_buf;
         counter8 += ~m8[sindex] + 1;
         mix(index%STATE64M);
         if ( sindex >= STATEM ) {
-          sindex = -1;
+          sindex = 0;
+        } else {
+          sindex++;
         }
-        sindex++;
       }
 
       mix(0);
@@ -127,12 +96,16 @@ uint64_t *ds = (uint64_t *)disco_buf;
   //---------
   // main hash function 
 
-    void BEBB4185_64 ( const void * key, int len, unsigned seed, void * out )
+    void DISCoHAsH_64 ( const void * key, int len, unsigned seed, void * out )
     {
+      int tempLen = len;
+      if ( tempLen == 0 ) {
+        tempLen = 1;
+      }
+      alignas(uint64_t) uint8_t* tempBuf = new uint8_t[tempLen];
       const uint8_t *key8Arr = (uint8_t *)key;
-      const uint64_t *key64Arr = (uint64_t *)key;
 
-      const uint8_t seedbuf[16] = {0};
+      alignas(uint64_t) const uint8_t seedbuf[16] = {0};
       const uint8_t *seed8Arr = (uint8_t *)seedbuf;
       const uint64_t *seed64Arr = (uint64_t *)seedbuf;
       uint32_t *seed32Arr = (uint32_t *)seedbuf;
@@ -140,7 +113,6 @@ uint64_t *ds = (uint64_t *)disco_buf;
       // the cali number from the Matrix (1999)
       seed32Arr[0] = 0xc5550690;
       seed32Arr[0] -= seed;
-      // if seed mod doesn't work let's try reverse order of seed/key round calls
       seed32Arr[1] = 1 + seed;
       seed32Arr[2] = ~(1 - seed);
       seed32Arr[3] = (1+seed) * 0xf00dacca;
@@ -151,23 +123,18 @@ uint64_t *ds = (uint64_t *)disco_buf;
       ds[2] = 0xaccadacca80081e5;
       ds[3] = 0xf00baaf00f00baaa;
 
-      round( key64Arr, key8Arr, len );
+      memcpy(tempBuf, key, len);
+      uint64_t* temp64 = reinterpret_cast<uint64_t*>(tempBuf);
+
+      round( temp64, key8Arr, len );
       round( seed64Arr, seed8Arr, 16 );
       round( ds, ds8, STATE   );
 
-      /**
-      printf("ds = %#018" PRIx64 " %#018" PRIx64 " %#018" PRIx64 " %#018" PRIx64 "\n",
-        ds[0], ds[1], ds[2], ds[3] );
-      **/
+      //uint64_t h[4] = {ds[2] + ds[3], ds[3] ^ ds[2], ds[0] + ds[1], ds[1] ^ ds[0]}; // full 256-bit output
 
-      const uint8_t output[STATE] = {0};
-      uint64_t *h = (uint64_t *)output;
+      uint64_t h[1] = {ds[2] + ds[3]}; // 64-bit output
 
-      //h[0] = ds[1];
-      h[0] = ds[2];
-      h[1] = ds[3];
+      memcpy(out, h, sizeof(h)); 
 
-      h[0] += h[1];
-
-      ((uint64_t *)out)[0] = h[0];
+      delete[] tempBuf;
     }

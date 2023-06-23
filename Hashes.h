@@ -1185,7 +1185,7 @@ inline void blake3_64 ( const void * key, int len, unsigned seed, void * out )
 // objsize: 452520-45358b: 4203
 #include "beamsplitter.h"
 
-// objsize: 452010-45251e: 1294 (BEBB4185)
+// objsize: 452010-45251e: 1294 (DISCoHAsH)
 #include "discohash.h"
 
 #if defined(HAVE_SSE2) && defined(HAVE_AESNI) && !defined(_MSC_VER)
