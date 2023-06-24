@@ -398,7 +398,7 @@ HashInfo g_hashes[] =
   // and now the quality hash funcs, slowest first
   { tifuhash_64,          64, TIFU_VERIF, "tifuhash_64", "Tiny Floatingpoint Unique Hash with continued egyptian fractions", GOOD, {} },
   { beamsplitter_64,      64, 0x1BDF358B, "beamsplitter","A possibly universal hash made with a 10x64 s-box.", GOOD, {} },
-  { DISCoHAsH_64,          64, 0xBEBB4185, "DISCoHAsH", "DISCoHAsH 64", GOOD, { } },
+  { DISCoHAsH_64,         64, 0xBEBB4185, "discohash",   "DISCoHAsH 64 (was BEBB4185)", GOOD, { } },
   { fasthash32_test,      32, 0xE9481AFC, "fasthash32",  "fast-hash 32bit", GOOD, {0x880355f21e6d1965ULL} },
   { fasthash64_test,      64, 0xA16231A7, "fasthash64",  "fast-hash 64bit", GOOD, {0x880355f21e6d1965ULL} },
   // different verif on gcc vs clang

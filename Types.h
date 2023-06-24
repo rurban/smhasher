@@ -9,6 +9,7 @@
 #include <set>
 #include <string>
 #include <iostream>
+#include <cstdint>
 using namespace std;
 #include <assert.h>
 
