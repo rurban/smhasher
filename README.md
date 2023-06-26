@@ -130,8 +130,8 @@ SMhasher
 | --------------------------------------        |              |          |            |     |                            |
 | [tifuhash_64](doc/tifuhash_64.txt)            |        35.60 |  1679.52 |1212.75 (15)| 276 | Cyclic low32               |
 | [floppsyhash](doc/floppsyhash.txt)            |        35.72 |  1868.92 |1411.07 (7) | 623 |                            |
-| [beamsplitter](doc/beamsplitter.txt)          |       789.22 |   682.45 |1150.33 (26)|4203 | UB       |
-| [discohash](doc/discohash.txt)                |      3959.08 |   199.92 | 413.43 (6) |1294 | msvc-specific |
+| [beamsplitter](doc/beamsplitter.txt)          |       789.22 |   682.45 |1150.33 (26)|4203 | UB                         |
+| [discohash](doc/discohash.txt)                |      3959.08 |   199.92 | 413.43 (6) |1294 |                            |
 | [chaskey](doc/chaskey.txt)                    |      1150.69 |   113.09 | 308.01 (5) |1609 | PerlinNoise                |
 | [SipHash](doc/SipHash.txt)                    |       945.64 |   146.95 | 346.53 (5) |1071 |                            |
 | [HalfSipHash](doc/HalfSipHash.txt)            |      1108.77 |    82.02 | 285.78 (5) | 700 | zeroes                     |
@@ -142,7 +142,7 @@ SMhasher
 | [prvhash64_64m](doc/prvhash64_64m.txt)        |      2950.58 |    48.38 | 260.27 (12)| 349 |                            |
 | [prvhash64_64](doc/prvhash64_64.txt)          |      3013.42 |    48.30 | 257.40 (9) | 384 |                            |
 | [prvhash64_128](doc/prvhash64_128.txt)        |      3134.68 |    88.00 | 305.26 (10)| 718  |                           |
-| [prvhash64s_64](doc/prvhash64s_64.txt)        |      6580.12 |   271.19 | 476.90 (10) |2640 |                            |
+| [prvhash64s_64](doc/prvhash64s_64.txt)        |      6580.12 |   271.19 | 476.90 (10) |2640 |                           |
 | [prvhash64s_128](doc/prvhash64s_128.txt)      |      6647.33 |   325.02 | 540.04 (9) |2799 |                            |
 | [SipHash13](doc/SipHash13.txt)                |      1813.55 |   106.44 | 314.29 (5) | 778 | 0.9% bias                  |
 | [TSip](doc/TSip.txt)                          |      4233.52 |    53.23 | 261.81 (6) | 519 | !msvc                      |
