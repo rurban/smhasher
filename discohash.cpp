@@ -1,3 +1,4 @@
+// also known as BEBB4185
 // Copyright 2020 Cris Stringfellow
 // https://github.com/dosyago/discohash
 #include <cstdio>
@@ -130,9 +131,31 @@ uint64_t *ds = (uint64_t *)disco_buf;
       round( seed64Arr, seed8Arr, 16 );
       round( ds, ds8, STATE   );
 
-      //uint64_t h[4] = {ds[2] + ds[3], ds[3] ^ ds[2], ds[0] + ds[1], ds[1] ^ ds[0]}; // full 256-bit output
+      uint64_t h[4] = {0, ds[3] ^ ds[2], 0, ds[1] ^ ds[0]}; // full 256-bit output
 
-      uint64_t h[1] = {ds[2] + ds[3]}; // 64-bit output
+      // subtraction here (discohash v2) more readily mixes the bits than addition, 
+      // achieves non-compressibility (using gzip -9) and maintains the statistical properties
+      // (smhasher quality tests) of discohash v1
+      h[0] -= ds[2];
+      h[0] -= ds[3];
+      h[2] -= ds[0];
+      h[2] -= ds[1];
+
+      /*
+      // 64-bit output
+      uint64_t h[1] = {0};
+      h[0] -= ds[2];
+      h[0] -= ds[3];
+      */
+
+      // how to make a cryptographic output? A finalization that only outputs half the state is one start 
+      // as it stands the current finalization can fairly easily recover 
+      // a hash-sized amount of the internal state in 128-bit and larger output
+      // I don't have good ideas now for that, as making the state twice as large (8 64-bit words) will require some modification 
+      // and it will be slower. Plus, adding multiplication instead of subtraction, for finalization ruins the statistical properties.
+      // I think for now I focus on keeping it a great non-cryptographic hash, and try to expand it into a cryptohash later.
+      // Maybe I need to invent a new hash, or maybe I can make this one faster somehow.
+      // One idea is maybe I can take ds[0] * ds[1] mod P, which relies on factorization in a finite field being hard.
 
       memcpy(out, h, sizeof(h)); 
 
