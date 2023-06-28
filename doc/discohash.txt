@@ -1,0 +1,2610 @@
+-------------------------------------------------------------------------------
+--- Testing discohash "DISCoHAsH 64 (was BEBB4185)" GOOD
+
+[[[ Sanity Tests ]]]
+
+Verification value 0xBEBB4185 ....... PASS
+Running sanity check 1     .......... PASS
+Running AppendedZeroesTest .......... PASS
+
+[[[ Speed Tests ]]]
+
+Bulk speed test - 262144-byte keys
+Alignment  7 -  1.246 bytes/cycle - 3563.56 MiB/sec @ 3 ghz
+Alignment  6 -  1.244 bytes/cycle - 3558.96 MiB/sec @ 3 ghz
+Alignment  5 -  1.246 bytes/cycle - 3565.26 MiB/sec @ 3 ghz
+Alignment  4 -  1.245 bytes/cycle - 3560.74 MiB/sec @ 3 ghz
+Alignment  3 -  1.245 bytes/cycle - 3562.89 MiB/sec @ 3 ghz
+Alignment  2 -  1.244 bytes/cycle - 3559.39 MiB/sec @ 3 ghz
+Alignment  1 -  1.244 bytes/cycle - 3560.49 MiB/sec @ 3 ghz
+Alignment  0 -  1.275 bytes/cycle - 3646.80 MiB/sec @ 3 ghz
+Average      -  1.249 bytes/cycle - 3572.26 MiB/sec @ 3 ghz
+
+Small key speed test -    1-byte keys -   159.80 cycles/hash
+Small key speed test -    2-byte keys -   197.67 cycles/hash
+Small key speed test -    3-byte keys -   218.57 cycles/hash
+Small key speed test -    4-byte keys -   254.26 cycles/hash
+Small key speed test -    5-byte keys -   273.47 cycles/hash
+Small key speed test -    6-byte keys -   293.52 cycles/hash
+Small key speed test -    7-byte keys -   326.73 cycles/hash
+Small key speed test -    8-byte keys -   138.50 cycles/hash
+Small key speed test -    9-byte keys -   170.49 cycles/hash
+Small key speed test -   10-byte keys -   205.53 cycles/hash
+Small key speed test -   11-byte keys -   233.74 cycles/hash
+Small key speed test -   12-byte keys -   251.89 cycles/hash
+Small key speed test -   13-byte keys -   284.99 cycles/hash
+Small key speed test -   14-byte keys -   312.87 cycles/hash
+Small key speed test -   15-byte keys -   331.66 cycles/hash
+Small key speed test -   16-byte keys -   160.78 cycles/hash
+Small key speed test -   17-byte keys -   206.21 cycles/hash
+Small key speed test -   18-byte keys -   234.97 cycles/hash
+Small key speed test -   19-byte keys -   255.64 cycles/hash
+Small key speed test -   20-byte keys -   273.83 cycles/hash
+Small key speed test -   21-byte keys -   304.54 cycles/hash
+Small key speed test -   22-byte keys -   322.52 cycles/hash
+Small key speed test -   23-byte keys -   342.92 cycles/hash
+Small key speed test -   24-byte keys -   162.45 cycles/hash
+Small key speed test -   25-byte keys -   191.18 cycles/hash
+Small key speed test -   26-byte keys -   223.33 cycles/hash
+Small key speed test -   27-byte keys -   220.96 cycles/hash
+Small key speed test -   28-byte keys -   237.75 cycles/hash
+Small key speed test -   29-byte keys -   252.13 cycles/hash
+Small key speed test -   30-byte keys -   255.83 cycles/hash
+Small key speed test -   31-byte keys -   277.30 cycles/hash
+Average                                    244.389 cycles/hash
+
+[[[ 'Hashmap' Speed Tests ]]]
+
+std::unordered_map
+Init std HashMapTest:     667.392 cycles/op (102401 inserts, 1% deletions)
+Running std HashMapTest:  508.590 cycles/op (28.9 stdv)
+
+greg7mdp/parallel-hashmap
+Init fast HashMapTest:    509.370 cycles/op (102401 inserts, 1% deletions)
+Running fast HashMapTest: 393.058 cycles/op (26.2 stdv)  ....... PASS
+
+[[[ Avalanche Tests ]]]
+
+Testing   24-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 0.680667%
+Testing   32-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 0.657333%
+Testing   40-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 0.721333%
+Testing   48-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 0.684667%
+Testing   56-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 0.707333%
+Testing   64-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 0.612667%
+Testing   72-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 0.796667%
+Testing   80-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 0.730000%
+Testing   96-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 0.732667%
+Testing  112-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 0.802667%
+Testing  128-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 0.694667%
+Testing  160-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 0.701333%
+Testing  512-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 0.842667%
+Testing 1024-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 0.770000%
+
+[[[ Keyset 'Sparse' Tests ]]]
+
+Keyset 'Sparse' - 16-bit keys with up to 9 bits set - 50643 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected          0.3, actual      0 (0.00x)
+Testing collisions (high 19-25 bits) - Worst is 19 bits: 2377/2368 (1.00x)
+Testing collisions (low  32-bit) - Expected          0.3, actual      0 (0.00x)
+Testing collisions (low  19-25 bits) - Worst is 25 bits: 41/38 (1.07x)
+Testing distribution - Worst bias is the 13-bit window at bit 30 - 0.440%
+
+Keyset 'Sparse' - 24-bit keys with up to 8 bits set - 1271626 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        188.2, actual    194 (1.03x) (6)
+Testing collisions (high 24-35 bits) - Worst is 30 bits: 779/752 (1.03x)
+Testing collisions (low  32-bit) - Expected        188.2, actual    176 (0.94x)
+Testing collisions (low  24-35 bits) - Worst is 34 bits: 49/47 (1.04x)
+Testing distribution - Worst bias is the 17-bit window at bit 44 - 0.102%
+
+Keyset 'Sparse' - 32-bit keys with up to 7 bits set - 4514873 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       2372.2, actual   2301 (0.97x)
+Testing collisions (high 25-38 bits) - Worst is 38 bits: 43/37 (1.16x)
+Testing collisions (low  32-bit) - Expected       2372.2, actual   2359 (0.99x) (-13)
+Testing collisions (low  25-38 bits) - Worst is 38 bits: 39/37 (1.05x)
+Testing distribution - Worst bias is the 18-bit window at bit 11 - 0.053%
+
+Keyset 'Sparse' - 40-bit keys with up to 6 bits set - 4598479 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       2460.8, actual   2524 (1.03x) (64)
+Testing collisions (high 25-38 bits) - Worst is 37 bits: 90/76 (1.17x)
+Testing collisions (low  32-bit) - Expected       2460.8, actual   2442 (0.99x) (-18)
+Testing collisions (low  25-38 bits) - Worst is 25 bits: 301286/301185 (1.00x)
+Testing distribution - Worst bias is the 19-bit window at bit 60 - 0.057%
+
+Keyset 'Sparse' - 48-bit keys with up to 6 bits set - 14196869 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected      23437.8, actual  23217 (0.99x) (-220)
+Testing collisions (high 27-42 bits) - Worst is 41 bits: 51/45 (1.11x)
+Testing collisions (low  32-bit) - Expected      23437.8, actual  23394 (1.00x) (-43)
+Testing collisions (low  27-42 bits) - Worst is 39 bits: 192/183 (1.05x)
+Testing distribution - Worst bias is the 20-bit window at bit  2 - 0.021%
+
+Keyset 'Sparse' - 56-bit keys with up to 5 bits set - 4216423 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       2069.0, actual   2034 (0.98x) (-34)
+Testing collisions (high 25-38 bits) - Worst is 37 bits: 67/64 (1.04x)
+Testing collisions (low  32-bit) - Expected       2069.0, actual   2087 (1.01x) (19)
+Testing collisions (low  25-38 bits) - Worst is 35 bits: 275/258 (1.06x)
+Testing distribution - Worst bias is the 19-bit window at bit 46 - 0.041%
+
+Keyset 'Sparse' - 64-bit keys with up to 5 bits set - 8303633 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       8021.7, actual   8093 (1.01x) (72)
+Testing collisions (high 26-40 bits) - Worst is 39 bits: 75/62 (1.20x)
+Testing collisions (low  32-bit) - Expected       8021.7, actual   8075 (1.01x) (54)
+Testing collisions (low  26-40 bits) - Worst is 40 bits: 36/31 (1.15x)
+Testing distribution - Worst bias is the 20-bit window at bit  4 - 0.037%
+
+Keyset 'Sparse' - 72-bit keys with up to 5 bits set - 15082603 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected      26451.8, actual  26418 (1.00x) (-33)
+Testing collisions (high 27-42 bits) - Worst is 42 bits: 32/25 (1.24x)
+Testing collisions (low  32-bit) - Expected      26451.8, actual  26383 (1.00x) (-68)
+Testing collisions (low  27-42 bits) - Worst is 31 bits: 52870/52841 (1.00x)
+Testing distribution - Worst bias is the 20-bit window at bit 23 - 0.020%
+
+Keyset 'Sparse' - 96-bit keys with up to 4 bits set - 3469497 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1401.0, actual   1409 (1.01x) (9)
+Testing collisions (high 25-38 bits) - Worst is 34 bits: 364/350 (1.04x)
+Testing collisions (low  32-bit) - Expected       1401.0, actual   1392 (0.99x) (-8)
+Testing collisions (low  25-38 bits) - Worst is 38 bits: 23/21 (1.05x)
+Testing distribution - Worst bias is the 19-bit window at bit 40 - 0.043%
+
+Keyset 'Sparse' - 160-bit keys with up to 4 bits set - 26977161 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected      84546.1, actual  84745 (1.00x) (199)
+Testing collisions (high 28-44 bits) - Worst is 44 bits: 25/20 (1.21x)
+Testing collisions (low  32-bit) - Expected      84546.1, actual  84172 (1.00x) (-374)
+Testing collisions (low  28-44 bits) - Worst is 44 bits: 24/20 (1.16x)
+Testing distribution - Worst bias is the 20-bit window at bit 13 - 0.014%
+
+Keyset 'Sparse' - 256-bit keys with up to 3 bits set - 2796417 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        910.2, actual    951 (1.04x) (41)
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 31/28 (1.09x)
+Testing collisions (low  32-bit) - Expected        910.2, actual    902 (0.99x) (-8)
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 33/28 (1.16x)
+Testing distribution - Worst bias is the 19-bit window at bit 35 - 0.074%
+
+Keyset 'Sparse' - 512-bit keys with up to 3 bits set - 22370049 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected      58155.4, actual  57928 (1.00x) (-227)
+Testing collisions (high 28-43 bits) - Worst is 42 bits: 60/56 (1.05x)
+Testing collisions (low  32-bit) - Expected      58155.4, actual  58676 (1.01x) (521)
+Testing collisions (low  28-43 bits) - Worst is 37 bits: 1876/1820 (1.03x)
+Testing distribution - Worst bias is the 20-bit window at bit 26 - 0.016%
+
+Keyset 'Sparse' - 1024-bit keys with up to 2 bits set - 524801 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected         32.1, actual     32 (1.00x)
+Testing collisions (high 22-32 bits) - Worst is 26 bits: 2101/2046 (1.03x)
+Testing collisions (low  32-bit) - Expected         32.1, actual     31 (0.97x)
+Testing collisions (low  22-32 bits) - Worst is 23 bits: 16232/16079 (1.01x)
+Testing distribution - Worst bias is the 16-bit window at bit  5 - 0.229%
+
+Keyset 'Sparse' - 2048-bit keys with up to 2 bits set - 2098177 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        512.4, actual    513 (1.00x) (1)
+Testing collisions (high 24-36 bits) - Worst is 35 bits: 73/64 (1.14x)
+Testing collisions (low  32-bit) - Expected        512.4, actual    500 (0.98x)
+Testing collisions (low  24-36 bits) - Worst is 30 bits: 2100/2048 (1.03x)
+Testing distribution - Worst bias is the 18-bit window at bit 36 - 0.077%
+
+
+[[[ Keyset 'Permutation' Tests ]]]
+
+Combination Lowbits Tests:
+Keyset 'Combination' - up to 7 blocks from a set of 8 - 2396744 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        668.6, actual    664 (0.99x) (-4)
+Testing collisions (high 24-37 bits) - Worst is 27 bits: 21420/21272 (1.01x)
+Testing collisions (low  32-bit) - Expected        668.6, actual    672 (1.01x) (4)
+Testing collisions (low  24-37 bits) - Worst is 36 bits: 56/41 (1.34x)
+Testing distribution - Worst bias is the 18-bit window at bit 53 - 0.063%
+
+
+Combination Highbits Tests
+Keyset 'Combination' - up to 7 blocks from a set of 8 - 2396744 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        668.6, actual    666 (1.00x) (-2)
+Testing collisions (high 24-37 bits) - Worst is 35 bits: 90/83 (1.08x)
+Testing collisions (low  32-bit) - Expected        668.6, actual    665 (0.99x) (-3)
+Testing collisions (low  24-37 bits) - Worst is 36 bits: 51/41 (1.22x)
+Testing distribution - Worst bias is the 18-bit window at bit 19 - 0.075%
+
+
+Combination Hi-Lo Tests:
+Keyset 'Combination' - up to 6 blocks from a set of 15 - 12204240 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected      17322.9, actual  17184 (0.99x) (-138)
+Testing collisions (high 27-41 bits) - Worst is 41 bits: 44/33 (1.30x)
+Testing collisions (low  32-bit) - Expected      17322.9, actual  17408 (1.00x) (86)
+Testing collisions (low  27-41 bits) - Worst is 36 bits: 1127/1083 (1.04x)
+Testing distribution - Worst bias is the 20-bit window at bit 53 - 0.021%
+
+
+Combination 0x8000000 Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       8186.7, actual   8115 (0.99x) (-71)
+Testing collisions (high 26-40 bits) - Worst is 36 bits: 524/511 (1.02x)
+Testing collisions (low  32-bit) - Expected       8186.7, actual   8242 (1.01x) (56)
+Testing collisions (low  26-40 bits) - Worst is 38 bits: 147/127 (1.15x)
+Testing distribution - Worst bias is the 20-bit window at bit 52 - 0.048%
+
+
+Combination 0x0000001 Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       8186.7, actual   8112 (0.99x) (-74)
+Testing collisions (high 26-40 bits) - Worst is 34 bits: 2050/2047 (1.00x)
+Testing collisions (low  32-bit) - Expected       8186.7, actual   8209 (1.00x) (23)
+Testing collisions (low  26-40 bits) - Worst is 40 bits: 46/31 (1.44x)
+Testing distribution - Worst bias is the 20-bit window at bit  0 - 0.053%
+
+
+Combination 0x800000000000000 Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       8186.7, actual   8022 (0.98x)
+Testing collisions (high 26-40 bits) - Worst is 40 bits: 32/31 (1.00x)
+Testing collisions (low  32-bit) - Expected       8186.7, actual   8325 (1.02x) (139)
+Testing collisions (low  26-40 bits) - Worst is 35 bits: 1070/1023 (1.05x)
+Testing distribution - Worst bias is the 20-bit window at bit 25 - 0.040%
+
+
+Combination 0x000000000000001 Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       8186.7, actual   8320 (1.02x) (134)
+Testing collisions (high 26-40 bits) - Worst is 32 bits: 8320/8186 (1.02x)
+Testing collisions (low  32-bit) - Expected       8186.7, actual   8298 (1.01x) (112)
+Testing collisions (low  26-40 bits) - Worst is 40 bits: 36/31 (1.13x)
+Testing distribution - Worst bias is the 19-bit window at bit 20 - 0.031%
+
+
+Combination 16-bytes [0-1] Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       8186.7, actual   8212 (1.00x) (26)
+Testing collisions (high 26-40 bits) - Worst is 40 bits: 42/31 (1.31x)
+Testing collisions (low  32-bit) - Expected       8186.7, actual   8236 (1.01x) (50)
+Testing collisions (low  26-40 bits) - Worst is 35 bits: 1057/1023 (1.03x)
+Testing distribution - Worst bias is the 20-bit window at bit 40 - 0.035%
+
+
+Combination 16-bytes [0-last] Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       8186.7, actual   8237 (1.01x) (51)
+Testing collisions (high 26-40 bits) - Worst is 36 bits: 549/511 (1.07x)
+Testing collisions (low  32-bit) - Expected       8186.7, actual   8069 (0.99x) (-117)
+Testing collisions (low  26-40 bits) - Worst is 30 bits: 32799/32682 (1.00x)
+Testing distribution - Worst bias is the 20-bit window at bit 26 - 0.027%
+
+
+Combination 32-bytes [0-1] Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       8186.7, actual   8143 (0.99x) (-43)
+Testing collisions (high 26-40 bits) - Worst is 36 bits: 530/511 (1.04x)
+Testing collisions (low  32-bit) - Expected       8186.7, actual   8136 (0.99x) (-50)
+Testing collisions (low  26-40 bits) - Worst is 39 bits: 73/63 (1.14x)
+Testing distribution - Worst bias is the 20-bit window at bit 20 - 0.048%
+
+
+Combination 32-bytes [0-last] Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       8186.7, actual   8242 (1.01x) (56)
+Testing collisions (high 26-40 bits) - Worst is 40 bits: 38/31 (1.19x)
+Testing collisions (low  32-bit) - Expected       8186.7, actual   8292 (1.01x) (106)
+Testing collisions (low  26-40 bits) - Worst is 40 bits: 37/31 (1.16x)
+Testing distribution - Worst bias is the 20-bit window at bit  9 - 0.036%
+
+
+Combination 64-bytes [0-1] Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       8186.7, actual   8219 (1.00x) (33)
+Testing collisions (high 26-40 bits) - Worst is 39 bits: 71/63 (1.11x)
+Testing collisions (low  32-bit) - Expected       8186.7, actual   8286 (1.01x) (100)
+Testing collisions (low  26-40 bits) - Worst is 38 bits: 139/127 (1.09x)
+Testing distribution - Worst bias is the 20-bit window at bit  7 - 0.036%
+
+
+Combination 64-bytes [0-last] Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       8186.7, actual   8071 (0.99x) (-115)
+Testing collisions (high 26-40 bits) - Worst is 28 bits: 129771/129717 (1.00x)
+Testing collisions (low  32-bit) - Expected       8186.7, actual   8368 (1.02x) (182)
+Testing collisions (low  26-40 bits) - Worst is 37 bits: 278/255 (1.09x)
+Testing distribution - Worst bias is the 20-bit window at bit 35 - 0.028%
+
+
+Combination 128-bytes [0-1] Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       8186.7, actual   8285 (1.01x) (99)
+Testing collisions (high 26-40 bits) - Worst is 34 bits: 2112/2047 (1.03x)
+Testing collisions (low  32-bit) - Expected       8186.7, actual   8201 (1.00x) (15)
+Testing collisions (low  26-40 bits) - Worst is 38 bits: 145/127 (1.13x)
+Testing distribution - Worst bias is the 20-bit window at bit 26 - 0.035%
+
+
+Combination 128-bytes [0-last] Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       8186.7, actual   8256 (1.01x) (70)
+Testing collisions (high 26-40 bits) - Worst is 35 bits: 1039/1023 (1.01x)
+Testing collisions (low  32-bit) - Expected       8186.7, actual   8268 (1.01x) (82)
+Testing collisions (low  26-40 bits) - Worst is 40 bits: 38/31 (1.19x)
+Testing distribution - Worst bias is the 20-bit window at bit 46 - 0.065%
+
+
+[[[ Keyset 'Window' Tests ]]]
+
+Keyset 'Window' -  32-bit key,  25-bit window - 32 tests, 33554432 keys per test
+Window at   0 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at   1 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at   2 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at   3 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at   4 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at   5 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at   6 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at   7 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at   8 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at   9 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  10 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  11 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  12 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  13 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  14 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  15 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  16 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  17 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  18 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  19 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  20 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  21 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  22 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  23 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  24 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  25 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  26 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  27 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  28 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  29 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  30 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  31 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  32 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+
+[[[ Keyset 'Cyclic' Tests ]]]
+
+Keyset 'Cyclic' - 8 cycles of 8 bytes - 1000000 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        116.4, actual     95 (0.82x)
+Testing collisions (high 23-34 bits) - Worst is 28 bits: 1912/1860 (1.03x)
+Testing collisions (low  32-bit) - Expected        116.4, actual    118 (1.01x) (2)
+Testing collisions (low  23-34 bits) - Worst is 33 bits: 61/58 (1.05x)
+Testing distribution - Worst bias is the 17-bit window at bit 53 - 0.156%
+
+Keyset 'Cyclic' - 8 cycles of 9 bytes - 1000000 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        116.4, actual    125 (1.07x) (9)
+Testing collisions (high 23-34 bits) - Worst is 33 bits: 69/58 (1.19x)
+Testing collisions (low  32-bit) - Expected        116.4, actual    122 (1.05x) (6)
+Testing collisions (low  23-34 bits) - Worst is 33 bits: 64/58 (1.10x)
+Testing distribution - Worst bias is the 17-bit window at bit  6 - 0.158%
+
+Keyset 'Cyclic' - 8 cycles of 10 bytes - 1000000 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        116.4, actual    130 (1.12x) (14)
+Testing collisions (high 23-34 bits) - Worst is 32 bits: 130/116 (1.12x)
+Testing collisions (low  32-bit) - Expected        116.4, actual    113 (0.97x)
+Testing collisions (low  23-34 bits) - Worst is 30 bits: 472/465 (1.01x)
+Testing distribution - Worst bias is the 17-bit window at bit 53 - 0.164%
+
+Keyset 'Cyclic' - 8 cycles of 11 bytes - 1000000 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        116.4, actual    110 (0.94x)
+Testing collisions (high 23-34 bits) - Worst is 23 bits: 57021/57305 (1.00x)
+Testing collisions (low  32-bit) - Expected        116.4, actual    142 (1.22x) (26)
+Testing collisions (low  23-34 bits) - Worst is 32 bits: 142/116 (1.22x)
+Testing distribution - Worst bias is the 17-bit window at bit 34 - 0.125%
+
+Keyset 'Cyclic' - 8 cycles of 12 bytes - 1000000 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        116.4, actual    118 (1.01x) (2)
+Testing collisions (high 23-34 bits) - Worst is 33 bits: 70/58 (1.20x)
+Testing collisions (low  32-bit) - Expected        116.4, actual    130 (1.12x) (14)
+Testing collisions (low  23-34 bits) - Worst is 32 bits: 130/116 (1.12x)
+Testing distribution - Worst bias is the 17-bit window at bit 56 - 0.093%
+
+Keyset 'Cyclic' - 8 cycles of 16 bytes - 1000000 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        116.4, actual    107 (0.92x)
+Testing collisions (high 23-34 bits) - Worst is 24 bits: 29318/29218 (1.00x)
+Testing collisions (low  32-bit) - Expected        116.4, actual    117 (1.01x) (1)
+Testing collisions (low  23-34 bits) - Worst is 31 bits: 235/232 (1.01x)
+Testing distribution - Worst bias is the 17-bit window at bit 40 - 0.116%
+
+
+[[[ Keyset 'TwoBytes' Tests ]]]
+
+Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected         49.6, actual     39 (0.79x)
+Testing collisions (high 23-33 bits) - Worst is 25 bits: 6327/6304 (1.00x)
+Testing collisions (low  32-bit) - Expected         49.6, actual     50 (1.01x) (1)
+Testing collisions (low  23-33 bits) - Worst is 31 bits: 128/99 (1.29x)
+Testing distribution - Worst bias is the 16-bit window at bit 45 - 0.141%
+
+Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       3483.1, actual   3502 (1.01x) (19)
+Testing collisions (high 26-39 bits) - Worst is 39 bits: 30/27 (1.10x)
+Testing collisions (low  32-bit) - Expected       3483.1, actual   3445 (0.99x) (-38)
+Testing collisions (low  26-39 bits) - Worst is 37 bits: 112/108 (1.03x)
+Testing distribution - Worst bias is the 20-bit window at bit 39 - 0.057%
+
+Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected      40289.5, actual  40349 (1.00x) (60)
+Testing collisions (high 27-42 bits) - Worst is 42 bits: 59/39 (1.50x)
+Testing collisions (low  32-bit) - Expected      40289.5, actual  40425 (1.00x) (136)
+Testing collisions (low  27-42 bits) - Worst is 41 bits: 97/78 (1.23x)
+Testing distribution - Worst bias is the 20-bit window at bit 12 - 0.013%
+
+Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected     227182.3, actual 227235 (1.00x) (53)
+Testing collisions (high 29-45 bits) - Worst is 45 bits: 37/27 (1.33x)
+Testing collisions (low  32-bit) - Expected     227182.3, actual 227152 (1.00x) (-30)
+Testing collisions (low  29-45 bits) - Worst is 33 bits: 113821/113786 (1.00x)
+Testing distribution - Worst bias is the 19-bit window at bit 54 - 0.005%
+
+Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected     865959.1, actual 865893 (1.00x) (-66)
+Testing collisions (high 30-47 bits) - Worst is 47 bits: 34/26 (1.28x)
+Testing collisions (low  32-bit) - Expected     865959.1, actual 865257 (1.00x) (-702)
+Testing collisions (low  30-47 bits) - Worst is 30 bits: 3394354/3395316 (1.00x)
+Testing distribution - Worst bias is the 19-bit window at bit 25 - 0.002%
+
+
+[[[ Keyset 'Text' Tests ]]]
+
+Keyset 'Text' - keys of form "FooXXXXBar" - 14776336 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected      25389.0, actual  25606 (1.01x) (217)
+Testing collisions (high 27-42 bits) - Worst is 39 bits: 205/198 (1.03x)
+Testing collisions (low  32-bit) - Expected      25389.0, actual  25188 (0.99x) (-201)
+Testing collisions (low  27-42 bits) - Worst is 29 bits: 201559/201492 (1.00x)
+Testing distribution - Worst bias is the 20-bit window at bit  5 - 0.018%
+
+Keyset 'Text' - keys of form "FooBarXXXX" - 14776336 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected      25389.0, actual  25261 (0.99x) (-128)
+Testing collisions (high 27-42 bits) - Worst is 42 bits: 28/24 (1.13x)
+Testing collisions (low  32-bit) - Expected      25389.0, actual  25174 (0.99x) (-215)
+Testing collisions (low  27-42 bits) - Worst is 39 bits: 207/198 (1.04x)
+Testing distribution - Worst bias is the 20-bit window at bit  9 - 0.021%
+
+Keyset 'Text' - keys of form "XXXXFooBar" - 14776336 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected      25389.0, actual  25539 (1.01x) (150)
+Testing collisions (high 27-42 bits) - Worst is 42 bits: 27/24 (1.09x)
+Testing collisions (low  32-bit) - Expected      25389.0, actual  25460 (1.00x) (71)
+Testing collisions (low  27-42 bits) - Worst is 40 bits: 104/99 (1.05x)
+Testing distribution - Worst bias is the 20-bit window at bit 62 - 0.018%
+
+Keyset 'Words' - 4000000 random keys of len 6-16 from alnum charset
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1862.1, actual   1925 (1.03x) (63)
+Testing collisions (high 25-38 bits) - Worst is 35 bits: 241/232 (1.04x)
+Testing collisions (low  32-bit) - Expected       1862.1, actual   1864 (1.00x) (2)
+Testing collisions (low  25-38 bits) - Worst is 29 bits: 15027/14864 (1.01x)
+Testing distribution - Worst bias is the 19-bit window at bit 18 - 0.077%
+
+Keyset 'Words' - 4000000 random keys of len 6-16 from password charset
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1862.1, actual   1854 (1.00x) (-8)
+Testing collisions (high 25-38 bits) - Worst is 26 bits: 116818/116875 (1.00x)
+Testing collisions (low  32-bit) - Expected       1862.1, actual   1912 (1.03x) (50)
+Testing collisions (low  25-38 bits) - Worst is 33 bits: 984/931 (1.06x)
+Testing distribution - Worst bias is the 19-bit window at bit  0 - 0.052%
+
+Keyset 'Words' - 104334 dict words
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected          1.3, actual      2 (1.58x) (1)
+Testing collisions (high 20-28 bits) - Worst is 24 bits: 341/323 (1.05x)
+Testing collisions (low  32-bit) - Expected          1.3, actual      2 (1.58x) (1)
+Testing collisions (low  20-28 bits) - Worst is 28 bits: 27/20 (1.33x)
+Testing distribution - Worst bias is the 14-bit window at bit 40 - 0.420%
+
+
+[[[ Keyset 'Zeroes' Tests ]]]
+
+Keyset 'Zeroes' - 204800 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected          4.9, actual      9 (1.84x) (5)
+Testing collisions (high 21-29 bits) - Worst is 29 bits: 54/39 (1.38x)
+Testing collisions (low  32-bit) - Expected          4.9, actual      5 (1.02x) (1)
+Testing collisions (low  21-29 bits) - Worst is 27 bits: 173/156 (1.11x)
+Testing distribution - Worst bias is the 15-bit window at bit 23 - 0.330%
+
+
+[[[ Keyset 'Seed' Tests ]]]
+
+Keyset 'Seed' - 5000000 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       2909.3, actual   2886 (0.99x) (-23)
+Testing collisions (high 26-39 bits) - Worst is 36 bits: 188/181 (1.03x)
+Testing collisions (low  32-bit) - Expected       2909.3, actual   2927 (1.01x) (18)
+Testing collisions (low  26-39 bits) - Worst is 38 bits: 47/45 (1.03x)
+Testing distribution - Worst bias is the 19-bit window at bit 34 - 0.038%
+
+
+[[[ Keyset 'PerlinNoise' Tests ]]]
+
+Testing 16777216 coordinates (L2) : 
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected      32725.4, actual  32715 (1.00x) (-10)
+Testing collisions (high 27-42 bits) - Worst is 42 bits: 39/31 (1.22x)
+Testing collisions (low  32-bit) - Expected      32725.4, actual  33098 (1.01x) (373)
+Testing collisions (low  27-42 bits) - Worst is 41 bits: 81/63 (1.27x)
+
+Testing AV variant, 128 count with 4 spacing, 4-12:
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1116.2, actual   1078 (0.97x)
+Testing collisions (high 25-37 bits) - Worst is 35 bits: 158/139 (1.13x)
+Testing collisions (low  32-bit) - Expected       1116.2, actual   1084 (0.97x)
+Testing collisions (low  25-37 bits) - Worst is 33 bits: 559/558 (1.00x)
+
+
+[[[ Diff 'Differential' Tests ]]]
+
+Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 64 bit hashes.
+1000 reps, 8303632000 total tests, expecting 0.00 random collisions..........
+0 total collisions, of which 0 single collisions were ignored
+
+Testing 11017632 up-to-4-bit differentials in 128-bit keys -> 64 bit hashes.
+1000 reps, 11017632000 total tests, expecting 0.00 random collisions..........
+0 total collisions, of which 0 single collisions were ignored
+
+Testing 2796416 up-to-3-bit differentials in 256-bit keys -> 64 bit hashes.
+1000 reps, 2796416000 total tests, expecting 0.00 random collisions..........
+0 total collisions, of which 0 single collisions were ignored
+
+
+[[[ DiffDist 'Differential Distribution' Tests ]]]
+
+Testing bit 0
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    515 (1.01x) (4)
+Testing collisions (high 24-36 bits) - Worst is 34 bits: 144/127 (1.13x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    512 (1.00x) (1)
+Testing collisions (low  24-36 bits) - Worst is 36 bits: 40/31 (1.25x)
+Testing distribution - Worst bias is the 18-bit window at bit 62 - 0.089%
+
+Testing bit 1
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    510 (1.00x) (-1)
+Testing collisions (high 24-36 bits) - Worst is 35 bits: 72/63 (1.13x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    494 (0.97x)
+Testing collisions (low  24-36 bits) - Worst is 30 bits: 2101/2046 (1.03x)
+Testing distribution - Worst bias is the 18-bit window at bit 62 - 0.074%
+
+Testing bit 2
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    551 (1.08x) (40)
+Testing collisions (high 24-36 bits) - Worst is 32 bits: 551/511 (1.08x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    497 (0.97x)
+Testing collisions (low  24-36 bits) - Worst is 28 bits: 8233/8170 (1.01x)
+Testing distribution - Worst bias is the 18-bit window at bit 47 - 0.060%
+
+Testing bit 3
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    488 (0.95x)
+Testing collisions (high 24-36 bits) - Worst is 25 bits: 64168/64191 (1.00x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    480 (0.94x)
+Testing collisions (low  24-36 bits) - Worst is 24 bits: 125760/125777 (1.00x)
+Testing distribution - Worst bias is the 18-bit window at bit 28 - 0.081%
+
+Testing bit 4
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    509 (0.99x) (-2)
+Testing collisions (high 24-36 bits) - Worst is 35 bits: 71/63 (1.11x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    510 (1.00x) (-1)
+Testing collisions (low  24-36 bits) - Worst is 30 bits: 2108/2046 (1.03x)
+Testing distribution - Worst bias is the 18-bit window at bit 63 - 0.088%
+
+Testing bit 5
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    533 (1.04x) (22)
+Testing collisions (high 24-36 bits) - Worst is 33 bits: 278/255 (1.09x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    532 (1.04x) (21)
+Testing collisions (low  24-36 bits) - Worst is 35 bits: 69/63 (1.08x)
+Testing distribution - Worst bias is the 18-bit window at bit 13 - 0.068%
+
+Testing bit 6
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    509 (0.99x) (-2)
+Testing collisions (high 24-36 bits) - Worst is 34 bits: 142/127 (1.11x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    505 (0.99x) (-6)
+Testing collisions (low  24-36 bits) - Worst is 34 bits: 128/127 (1.00x)
+Testing distribution - Worst bias is the 18-bit window at bit 43 - 0.057%
+
+Testing bit 7
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    519 (1.01x) (8)
+Testing collisions (high 24-36 bits) - Worst is 31 bits: 1049/1023 (1.02x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    543 (1.06x) (32)
+Testing collisions (low  24-36 bits) - Worst is 31 bits: 1093/1023 (1.07x)
+Testing distribution - Worst bias is the 18-bit window at bit 59 - 0.085%
+
+Testing bit 8
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    503 (0.98x) (-8)
+Testing collisions (high 24-36 bits) - Worst is 35 bits: 69/63 (1.08x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    504 (0.98x) (-7)
+Testing collisions (low  24-36 bits) - Worst is 29 bits: 4167/4090 (1.02x)
+Testing distribution - Worst bias is the 18-bit window at bit 33 - 0.079%
+
+Testing bit 9
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    501 (0.98x)
+Testing collisions (high 24-36 bits) - Worst is 30 bits: 2105/2046 (1.03x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    539 (1.05x) (28)
+Testing collisions (low  24-36 bits) - Worst is 35 bits: 75/63 (1.17x)
+Testing distribution - Worst bias is the 18-bit window at bit 63 - 0.071%
+
+Testing bit 10
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    495 (0.97x)
+Testing collisions (high 24-36 bits) - Worst is 35 bits: 68/63 (1.06x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    485 (0.95x)
+Testing collisions (low  24-36 bits) - Worst is 26 bits: 32829/32429 (1.01x)
+Testing distribution - Worst bias is the 18-bit window at bit 32 - 0.079%
+
+Testing bit 11
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    525 (1.03x) (14)
+Testing collisions (high 24-36 bits) - Worst is 34 bits: 141/127 (1.10x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    531 (1.04x) (20)
+Testing collisions (low  24-36 bits) - Worst is 33 bits: 273/255 (1.07x)
+Testing distribution - Worst bias is the 18-bit window at bit 49 - 0.061%
+
+Testing bit 12
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    505 (0.99x) (-6)
+Testing collisions (high 24-36 bits) - Worst is 33 bits: 268/255 (1.05x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    502 (0.98x) (-9)
+Testing collisions (low  24-36 bits) - Worst is 36 bits: 39/31 (1.22x)
+Testing distribution - Worst bias is the 18-bit window at bit  0 - 0.067%
+
+Testing bit 13
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    467 (0.91x)
+Testing collisions (high 24-36 bits) - Worst is 27 bits: 16310/16298 (1.00x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    514 (1.00x) (3)
+Testing collisions (low  24-36 bits) - Worst is 27 bits: 16386/16298 (1.01x)
+Testing distribution - Worst bias is the 18-bit window at bit 12 - 0.068%
+
+Testing bit 14
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    547 (1.07x) (36)
+Testing collisions (high 24-36 bits) - Worst is 36 bits: 49/31 (1.53x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    521 (1.02x) (10)
+Testing collisions (low  24-36 bits) - Worst is 34 bits: 134/127 (1.05x)
+Testing distribution - Worst bias is the 18-bit window at bit 36 - 0.131%
+
+Testing bit 15
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    503 (0.98x) (-8)
+Testing collisions (high 24-36 bits) - Worst is 36 bits: 41/31 (1.28x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    555 (1.08x) (44)
+Testing collisions (low  24-36 bits) - Worst is 36 bits: 42/31 (1.31x)
+Testing distribution - Worst bias is the 18-bit window at bit 54 - 0.064%
+
+Testing bit 16
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    513 (1.00x) (2)
+Testing collisions (high 24-36 bits) - Worst is 36 bits: 41/31 (1.28x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    534 (1.04x) (23)
+Testing collisions (low  24-36 bits) - Worst is 36 bits: 37/31 (1.16x)
+Testing distribution - Worst bias is the 18-bit window at bit 28 - 0.057%
+
+Testing bit 17
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    500 (0.98x)
+Testing collisions (high 24-36 bits) - Worst is 30 bits: 2077/2046 (1.01x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    532 (1.04x) (21)
+Testing collisions (low  24-36 bits) - Worst is 36 bits: 38/31 (1.19x)
+Testing distribution - Worst bias is the 18-bit window at bit 33 - 0.086%
+
+Testing bit 18
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    523 (1.02x) (12)
+Testing collisions (high 24-36 bits) - Worst is 34 bits: 140/127 (1.09x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    496 (0.97x)
+Testing collisions (low  24-36 bits) - Worst is 30 bits: 2102/2046 (1.03x)
+Testing distribution - Worst bias is the 18-bit window at bit 27 - 0.059%
+
+Testing bit 19
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    516 (1.01x) (5)
+Testing collisions (high 24-36 bits) - Worst is 35 bits: 68/63 (1.06x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    510 (1.00x) (-1)
+Testing collisions (low  24-36 bits) - Worst is 33 bits: 260/255 (1.02x)
+Testing distribution - Worst bias is the 18-bit window at bit  9 - 0.117%
+
+Testing bit 20
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    524 (1.02x) (13)
+Testing collisions (high 24-36 bits) - Worst is 33 bits: 266/255 (1.04x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    508 (0.99x) (-3)
+Testing collisions (low  24-36 bits) - Worst is 31 bits: 1054/1023 (1.03x)
+Testing distribution - Worst bias is the 18-bit window at bit 39 - 0.087%
+
+Testing bit 21
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    481 (0.94x)
+Testing collisions (high 24-36 bits) - Worst is 36 bits: 46/31 (1.44x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    477 (0.93x)
+Testing collisions (low  24-36 bits) - Worst is 27 bits: 16320/16298 (1.00x)
+Testing distribution - Worst bias is the 18-bit window at bit 60 - 0.069%
+
+Testing bit 22
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    528 (1.03x) (17)
+Testing collisions (high 24-36 bits) - Worst is 32 bits: 528/511 (1.03x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    522 (1.02x) (11)
+Testing collisions (low  24-36 bits) - Worst is 36 bits: 39/31 (1.22x)
+Testing distribution - Worst bias is the 18-bit window at bit  4 - 0.091%
+
+Testing bit 23
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    504 (0.98x) (-7)
+Testing collisions (high 24-36 bits) - Worst is 36 bits: 43/31 (1.34x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    525 (1.03x) (14)
+Testing collisions (low  24-36 bits) - Worst is 36 bits: 39/31 (1.22x)
+Testing distribution - Worst bias is the 18-bit window at bit 23 - 0.052%
+
+Testing bit 24
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    489 (0.96x)
+Testing collisions (high 24-36 bits) - Worst is 28 bits: 8248/8170 (1.01x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    526 (1.03x) (15)
+Testing collisions (low  24-36 bits) - Worst is 29 bits: 4214/4090 (1.03x)
+Testing distribution - Worst bias is the 18-bit window at bit 59 - 0.062%
+
+Testing bit 25
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    496 (0.97x)
+Testing collisions (high 24-36 bits) - Worst is 36 bits: 44/31 (1.38x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    506 (0.99x) (-5)
+Testing collisions (low  24-36 bits) - Worst is 33 bits: 285/255 (1.11x)
+Testing distribution - Worst bias is the 18-bit window at bit 19 - 0.118%
+
+Testing bit 26
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    515 (1.01x) (4)
+Testing collisions (high 24-36 bits) - Worst is 36 bits: 37/31 (1.16x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    558 (1.09x) (47)
+Testing collisions (low  24-36 bits) - Worst is 34 bits: 151/127 (1.18x)
+Testing distribution - Worst bias is the 18-bit window at bit 47 - 0.075%
+
+Testing bit 27
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    526 (1.03x) (15)
+Testing collisions (high 24-36 bits) - Worst is 36 bits: 45/31 (1.41x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    526 (1.03x) (15)
+Testing collisions (low  24-36 bits) - Worst is 36 bits: 37/31 (1.16x)
+Testing distribution - Worst bias is the 18-bit window at bit 34 - 0.082%
+
+Testing bit 28
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    527 (1.03x) (16)
+Testing collisions (high 24-36 bits) - Worst is 36 bits: 40/31 (1.25x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    490 (0.96x)
+Testing collisions (low  24-36 bits) - Worst is 33 bits: 265/255 (1.04x)
+Testing distribution - Worst bias is the 18-bit window at bit 36 - 0.096%
+
+Testing bit 29
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    490 (0.96x)
+Testing collisions (high 24-36 bits) - Worst is 30 bits: 2068/2046 (1.01x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    514 (1.00x) (3)
+Testing collisions (low  24-36 bits) - Worst is 32 bits: 514/511 (1.00x)
+Testing distribution - Worst bias is the 18-bit window at bit 29 - 0.062%
+
+Testing bit 30
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    484 (0.95x)
+Testing collisions (high 24-36 bits) - Worst is 35 bits: 74/63 (1.16x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    488 (0.95x)
+Testing collisions (low  24-36 bits) - Worst is 25 bits: 64114/64191 (1.00x)
+Testing distribution - Worst bias is the 18-bit window at bit 22 - 0.068%
+
+Testing bit 31
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    511 (1.00x)
+Testing collisions (high 24-36 bits) - Worst is 34 bits: 135/127 (1.05x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    512 (1.00x) (1)
+Testing collisions (low  24-36 bits) - Worst is 26 bits: 32488/32429 (1.00x)
+Testing distribution - Worst bias is the 18-bit window at bit  1 - 0.056%
+
+Testing bit 32
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    543 (1.06x) (32)
+Testing collisions (high 24-36 bits) - Worst is 35 bits: 75/63 (1.17x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    567 (1.11x) (56)
+Testing collisions (low  24-36 bits) - Worst is 34 bits: 153/127 (1.20x)
+Testing distribution - Worst bias is the 18-bit window at bit 43 - 0.077%
+
+Testing bit 33
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    503 (0.98x) (-8)
+Testing collisions (high 24-36 bits) - Worst is 26 bits: 32320/32429 (1.00x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    520 (1.02x) (9)
+Testing collisions (low  24-36 bits) - Worst is 35 bits: 74/63 (1.16x)
+Testing distribution - Worst bias is the 18-bit window at bit 12 - 0.111%
+
+Testing bit 34
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    516 (1.01x) (5)
+Testing collisions (high 24-36 bits) - Worst is 35 bits: 71/63 (1.11x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    538 (1.05x) (27)
+Testing collisions (low  24-36 bits) - Worst is 35 bits: 70/63 (1.09x)
+Testing distribution - Worst bias is the 18-bit window at bit  1 - 0.068%
+
+Testing bit 35
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    566 (1.11x) (55)
+Testing collisions (high 24-36 bits) - Worst is 36 bits: 38/31 (1.19x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    478 (0.93x)
+Testing collisions (low  24-36 bits) - Worst is 36 bits: 36/31 (1.13x)
+Testing distribution - Worst bias is the 18-bit window at bit  7 - 0.079%
+
+Testing bit 36
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    491 (0.96x)
+Testing collisions (high 24-36 bits) - Worst is 30 bits: 2071/2046 (1.01x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    494 (0.97x)
+Testing collisions (low  24-36 bits) - Worst is 33 bits: 269/255 (1.05x)
+Testing distribution - Worst bias is the 18-bit window at bit 60 - 0.045%
+
+Testing bit 37
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    511 (1.00x)
+Testing collisions (high 24-36 bits) - Worst is 34 bits: 132/127 (1.03x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    491 (0.96x)
+Testing collisions (low  24-36 bits) - Worst is 36 bits: 34/31 (1.06x)
+Testing distribution - Worst bias is the 18-bit window at bit 13 - 0.082%
+
+Testing bit 38
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    523 (1.02x) (12)
+Testing collisions (high 24-36 bits) - Worst is 36 bits: 53/31 (1.66x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    496 (0.97x)
+Testing collisions (low  24-36 bits) - Worst is 36 bits: 42/31 (1.31x)
+Testing distribution - Worst bias is the 18-bit window at bit 42 - 0.071%
+
+Testing bit 39
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    493 (0.96x)
+Testing collisions (high 24-36 bits) - Worst is 34 bits: 150/127 (1.17x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    525 (1.03x) (14)
+Testing collisions (low  24-36 bits) - Worst is 33 bits: 270/255 (1.05x)
+Testing distribution - Worst bias is the 18-bit window at bit 34 - 0.090%
+
+Testing bit 40
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    514 (1.00x) (3)
+Testing collisions (high 24-36 bits) - Worst is 36 bits: 37/31 (1.16x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    502 (0.98x) (-9)
+Testing collisions (low  24-36 bits) - Worst is 36 bits: 41/31 (1.28x)
+Testing distribution - Worst bias is the 17-bit window at bit 56 - 0.076%
+
+Testing bit 41
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    499 (0.97x)
+Testing collisions (high 24-36 bits) - Worst is 25 bits: 64575/64191 (1.01x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    482 (0.94x)
+Testing collisions (low  24-36 bits) - Worst is 25 bits: 64280/64191 (1.00x)
+Testing distribution - Worst bias is the 18-bit window at bit 62 - 0.054%
+
+Testing bit 42
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    483 (0.94x)
+Testing collisions (high 24-36 bits) - Worst is 25 bits: 64193/64191 (1.00x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    497 (0.97x)
+Testing collisions (low  24-36 bits) - Worst is 35 bits: 66/63 (1.03x)
+Testing distribution - Worst bias is the 18-bit window at bit 49 - 0.100%
+
+Testing bit 43
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    549 (1.07x) (38)
+Testing collisions (high 24-36 bits) - Worst is 32 bits: 549/511 (1.07x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    498 (0.97x)
+Testing collisions (low  24-36 bits) - Worst is 36 bits: 35/31 (1.09x)
+Testing distribution - Worst bias is the 18-bit window at bit 44 - 0.047%
+
+Testing bit 44
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    495 (0.97x)
+Testing collisions (high 24-36 bits) - Worst is 35 bits: 72/63 (1.13x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    493 (0.96x)
+Testing collisions (low  24-36 bits) - Worst is 30 bits: 2078/2046 (1.02x)
+Testing distribution - Worst bias is the 18-bit window at bit 15 - 0.062%
+
+Testing bit 45
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    553 (1.08x) (42)
+Testing collisions (high 24-36 bits) - Worst is 33 bits: 281/255 (1.10x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    544 (1.06x) (33)
+Testing collisions (low  24-36 bits) - Worst is 35 bits: 79/63 (1.23x)
+Testing distribution - Worst bias is the 18-bit window at bit 54 - 0.057%
+
+Testing bit 46
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    464 (0.91x)
+Testing collisions (high 24-36 bits) - Worst is 25 bits: 64321/64191 (1.00x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    521 (1.02x) (10)
+Testing collisions (low  24-36 bits) - Worst is 33 bits: 281/255 (1.10x)
+Testing distribution - Worst bias is the 18-bit window at bit 19 - 0.066%
+
+Testing bit 47
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    498 (0.97x)
+Testing collisions (high 24-36 bits) - Worst is 35 bits: 73/63 (1.14x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    523 (1.02x) (12)
+Testing collisions (low  24-36 bits) - Worst is 32 bits: 523/511 (1.02x)
+Testing distribution - Worst bias is the 18-bit window at bit 42 - 0.054%
+
+Testing bit 48
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    500 (0.98x)
+Testing collisions (high 24-36 bits) - Worst is 35 bits: 72/63 (1.13x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    531 (1.04x) (20)
+Testing collisions (low  24-36 bits) - Worst is 32 bits: 531/511 (1.04x)
+Testing distribution - Worst bias is the 18-bit window at bit 14 - 0.091%
+
+Testing bit 49
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    514 (1.00x) (3)
+Testing collisions (high 24-36 bits) - Worst is 31 bits: 1039/1023 (1.01x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    486 (0.95x)
+Testing collisions (low  24-36 bits) - Worst is 34 bits: 133/127 (1.04x)
+Testing distribution - Worst bias is the 18-bit window at bit  2 - 0.082%
+
+Testing bit 50
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    521 (1.02x) (10)
+Testing collisions (high 24-36 bits) - Worst is 36 bits: 38/31 (1.19x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    480 (0.94x)
+Testing collisions (low  24-36 bits) - Worst is 24 bits: 126075/125777 (1.00x)
+Testing distribution - Worst bias is the 18-bit window at bit 27 - 0.127%
+
+Testing bit 51
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    528 (1.03x) (17)
+Testing collisions (high 24-36 bits) - Worst is 34 bits: 136/127 (1.06x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    536 (1.05x) (25)
+Testing collisions (low  24-36 bits) - Worst is 34 bits: 138/127 (1.08x)
+Testing distribution - Worst bias is the 18-bit window at bit  6 - 0.077%
+
+Testing bit 52
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    520 (1.02x) (9)
+Testing collisions (high 24-36 bits) - Worst is 34 bits: 149/127 (1.16x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    519 (1.01x) (8)
+Testing collisions (low  24-36 bits) - Worst is 32 bits: 519/511 (1.01x)
+Testing distribution - Worst bias is the 18-bit window at bit 32 - 0.073%
+
+Testing bit 53
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    547 (1.07x) (36)
+Testing collisions (high 24-36 bits) - Worst is 34 bits: 145/127 (1.13x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    511 (1.00x)
+Testing collisions (low  24-36 bits) - Worst is 36 bits: 37/31 (1.16x)
+Testing distribution - Worst bias is the 18-bit window at bit 62 - 0.095%
+
+Testing bit 54
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    512 (1.00x) (1)
+Testing collisions (high 24-36 bits) - Worst is 33 bits: 262/255 (1.02x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    474 (0.93x)
+Testing collisions (low  24-36 bits) - Worst is 29 bits: 4134/4090 (1.01x)
+Testing distribution - Worst bias is the 18-bit window at bit  2 - 0.068%
+
+Testing bit 55
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    541 (1.06x) (30)
+Testing collisions (high 24-36 bits) - Worst is 36 bits: 38/31 (1.19x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    542 (1.06x) (31)
+Testing collisions (low  24-36 bits) - Worst is 33 bits: 294/255 (1.15x)
+Testing distribution - Worst bias is the 18-bit window at bit  3 - 0.098%
+
+Testing bit 56
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    503 (0.98x) (-8)
+Testing collisions (high 24-36 bits) - Worst is 35 bits: 82/63 (1.28x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    536 (1.05x) (25)
+Testing collisions (low  24-36 bits) - Worst is 35 bits: 81/63 (1.27x)
+Testing distribution - Worst bias is the 18-bit window at bit  3 - 0.097%
+
+Testing bit 57
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    488 (0.95x)
+Testing collisions (high 24-36 bits) - Worst is 35 bits: 65/63 (1.02x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    500 (0.98x)
+Testing collisions (low  24-36 bits) - Worst is 35 bits: 70/63 (1.09x)
+Testing distribution - Worst bias is the 18-bit window at bit 33 - 0.083%
+
+Testing bit 58
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    512 (1.00x) (1)
+Testing collisions (high 24-36 bits) - Worst is 30 bits: 2095/2046 (1.02x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    536 (1.05x) (25)
+Testing collisions (low  24-36 bits) - Worst is 36 bits: 35/31 (1.09x)
+Testing distribution - Worst bias is the 18-bit window at bit  6 - 0.110%
+
+Testing bit 59
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    528 (1.03x) (17)
+Testing collisions (high 24-36 bits) - Worst is 35 bits: 73/63 (1.14x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    478 (0.93x)
+Testing collisions (low  24-36 bits) - Worst is 29 bits: 4156/4090 (1.02x)
+Testing distribution - Worst bias is the 18-bit window at bit 12 - 0.073%
+
+Testing bit 60
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    524 (1.02x) (13)
+Testing collisions (high 24-36 bits) - Worst is 33 bits: 271/255 (1.06x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    514 (1.00x) (3)
+Testing collisions (low  24-36 bits) - Worst is 36 bits: 38/31 (1.19x)
+Testing distribution - Worst bias is the 18-bit window at bit 13 - 0.059%
+
+Testing bit 61
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    541 (1.06x) (30)
+Testing collisions (high 24-36 bits) - Worst is 32 bits: 541/511 (1.06x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    467 (0.91x)
+Testing collisions (low  24-36 bits) - Worst is 28 bits: 8180/8170 (1.00x)
+Testing distribution - Worst bias is the 18-bit window at bit 13 - 0.067%
+
+Testing bit 62
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    503 (0.98x) (-8)
+Testing collisions (high 24-36 bits) - Worst is 24 bits: 125880/125777 (1.00x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    535 (1.05x) (24)
+Testing collisions (low  24-36 bits) - Worst is 36 bits: 35/31 (1.09x)
+Testing distribution - Worst bias is the 18-bit window at bit 13 - 0.063%
+
+Testing bit 63
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        511.9, actual    502 (0.98x) (-9)
+Testing collisions (high 24-36 bits) - Worst is 33 bits: 266/255 (1.04x)
+Testing collisions (low  32-bit) - Expected        511.9, actual    515 (1.01x) (4)
+Testing collisions (low  24-36 bits) - Worst is 34 bits: 135/127 (1.05x)
+Testing distribution - Worst bias is the 18-bit window at bit 24 - 0.122%
+
+
+[[[ MomentChi2 Tests ]]]
+
+Analyze hashes produced from a serie of linearly increasing numbers of 32-bit, using a step of 2 ... 
+Target values to approximate : 38918200.000000 - 273633.333333 
+4 threads starting...  done
+Popcount 1 stats : 38924897.604056 - 273785.984455
+Popcount 0 stats : 38915750.866050 - 273663.876408
+MomentChi2 for bits 1 :   81.9443 
+MomentChi2 for bits 0 :   10.9598 
+
+Derivative stats (transition from 2 consecutive values) : 
+Popcount 1 stats : 38918583.117023 - 273639.202221
+Popcount 0 stats : 38919473.047160 - 273678.770838
+MomentChi2 for deriv b1 :    0.2682 
+MomentChi2 for deriv b0 :   2.96111 
+
+  pass 
+
+
+[[[ Prng Tests ]]]
+
+Generating 33554432 random numbers : 
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected     130731.3, actual 130902 (1.00x) (171)
+Testing collisions (high 28-44 bits) - Worst is 33 bits: 65727/65450 (1.00x)
+Testing collisions (low  32-bit) - Expected     130731.3, actual 130923 (1.00x) (192)
+Testing collisions (low  28-44 bits) - Worst is 42 bits: 136/127 (1.06x)
+
+[[[ BIC 'Bit Independence Criteria' Tests ]]]
+
+...........
+Max bias 0.008568 - ( 87 :   2, 55)
+
+
+Input vcode 0x00000001, Output vcode 0x00000001, Result vcode 0x00000001
+Verification value is 0x00000001 - Testing took -1293.161370 seconds
+-------------------------------------------------------------------------------
+[[[ BadSeeds Tests ]]]
+
+Testing 865 internal secrets:
+0x1001ee 0x10056d 0x100ea7 0x10270c 0x105b31 0x105b45 0x10624e 0x106ab9 0x106b29 0x1070d4 0x1073d5 0x10798a 0x108973 0x108fda 0x10aac7 0x10adb8 0x10af83 0x10ba9a 0x10c3f8 0x1100e 0x1115d6 0x1128af 0x112936 0x113509 0x11440e 0x114efa 0x1150af 0x119311 0x119385 0x119803 0x11a6ab 0x11a936 0x11aa17 0x11abbd 0x11c93 0x11d2d 0x11dc2e 0x11e043 0x11e824 0x12374f 0x123b91 0x123d66 0x123ff4 0x1240a0 0x128ac3 0x12d1d9 0x12e995 0x12f5d4 0x1304df 0x1307d4 0x1384b3 0x1384bd 0x138a18 0x13e21 0x13e7d3 0x13ec3 0x13fc5b 0x145e34 0x146acc 0x147a10 0x14810c 0x149013 0x14a00d 0x14a2f7 0x14be23 0x14e138 0x14e2ce 0x14e6d5 0x14e875 0x14e96a 0x14ea15 0x153e42 0x1543f2 0x155ade 0x156240 0x156a09 0x156e70 0x157501 0x157559 0x15d387 0x15ee8b 0x15ef4b 0x162a21 0x162a90 0x163bcb 0x16405d 0x164582 0x164663 0x166d59 0x1672d5 0x167779 0x167e80 0x169017 0x16c216 0x16c2ac 0x16d1c6 0x16d373 0x16d54d 0x16d7d0 0x16dae3 0x16e31a 0x16ea2c 0x16eb10 0x16f044 0x16f0b9 0x16f412 0x171b2d 0x17256c 0x172667 0x1730b3 0x1730ed 0x1738a9 0x1757ab 0x1774d7 0x1781fb 0x1795a5 0x179ac1 0x179ba9 0x17a445 0x17bbe1 0x17ce50 0x180a39 0x180ac1 0x182bfd 0x183e53 0x184020 0x184404 0x184549 0x1874f3 0x1876b4 0x1881ca 0x18876f 0x188a6b 0x1890a9 0x1897fa 0x18ad35 0x1943d 0x19fd2 0x1a07e 0x1a0eb 0x1f89e 0x1fcf8 0x22a35 0x22ba9 0x22c73 0x23eca 0x25df1 0x2672f 0x26a39 0x285c8 0x288a2 0x28995 0x2db44 0x2de4f 0x2de83 0x2e09d 0x32fa6 0x331fe 0x33dd4 0x346ce 0x35208 0x38a3d 0x38b26 0x38be5 0x39148 0x39a88 0x3ac69 0x3ad16 0x3ad9e 0x3b792 0x3b807 0x3b8a5 0x3ba55 0x3bc21 0x3bcbc 0x3bd8 0x3c898 0x3ca40 0x40000d6c 0x40004cff 0x40004ec8 0x40005c11 0x40006297 0x400064dd 0x4000781c 0x40007a98 0x40007c11 0x40007df8 0x40007f4b 0x40008043 0x4000870f 0x40008e12 0x40008e62 0x40008f70 0x40009688 0x400096d6 0x4000a4eb 0x4000a60b 0x4000a8f2 0x4000abbf 0x4000b237 0x4000b5aa 0x4000b6e7 0x4000b70a 0x4000b968 0x4000bbc9 0x4000d26b 0x4000d338 0x4000d3be 0x4000d462 0x4000db50 0x4000deac 0x4000e7f3 0x4000e89b 0x40011791 0x40013562 0x40013569 0x40013bf1 0x4001421d 0x4001470a 0x4001476d 0x400156f8 0x4001574e 0x40017b5d 0x40017b7a 0x40018e70 0x40018eed 0x400190f7 0x400196be 0x40019b5f 0x4001b415 0x4001b73f 0x4001d2bf 0x4001d407 0x4001d8fb 0x4001daff 0x4001ea14 0x400213dd 0x40022633 0x4002326a 0x40023723 0x4002380e 0x40023ac7 0x40023c52 0x4002410f 0x40026393 0x4002734a 0x4002769e 0x40027ba0 0x40027f3e 0x4002b817 0x4002bbc9 0x4002d326 0x4002d9e4 0x4002da76 0x4002fe74 0x40030f55 0x40031d77 0x400324a6 0x40033b5c 0x4003a16a 0x4003dfcc 0x4003e225 0x4003f439 0x40058821 0x40061129 0x400617b5 0x400618a2 0x40061993 0x40062f36 0x40063113 0x40064122 0x40064ce8 0x40065358 0x400710bc 0x4009663f 0x400a2441 0x400a286e 0x400b476c 0x400b49a4 0x400b5ce3 0x400b69ac 0x400b7016 0x400b9145 0x400b9193 0x400b988e 0x400bc99f 0x400bcfae 0x400bd042 0x400bd581 0x400bd58b 0x400bddf8 0x400c02f3 0x400c03df 0x400c0504 0x400c05e6 0x400c07a9 0x400c0b1a 0x400c0c31 0x400c0e2f 0x400c0fd6 0x400c1065 0x400c1c5a 0x400c1d08 0x400c2175 0x400c2a3f 0x400c2bc0 0x400c2c14 0x400c2e43 0x400c2fb7 0x400c3082 0x400c32e0 0x400ccadd 0x400cd0e5 0x400cd835 0x400cdcf8 0x400cf107 0x400cf8fc 0x400cfc1b 0x400cfc28 0x400d0a49 0x400d2e92 0x400d2f4b 0x400d35cc 0x400d456c 0x400d4793 0x400d6e69 0x400d6f64 0x400d730c 0x400d767c 0x400d78a2 0x400d80aa 0x400d86d4 0x400d8a9d 0x400d8d03 0x400d8df8 0x400d8f67 0x400d8ffc 0x400d90b2 0x400dc737 0x400dee67 0x400e09f8 0x400e0a76 0x400e1eef 0x400e26fb 0x400e279e 0x400e2b71 0x400e30dc 0x400e7cc0 0x400e934c 0x400ea154 0x400ead2a 0x400ec428 0x400ed4eb 0x400ee5f7 0x400ef55c 0x400f3116 0x400f31f9 0x400f8e28 0x400f9ca2 0x400f9cc3 0x400fb3b1 0x400fb8ac 0x400fb8af 0x400fc968 0x400fcd32 0x40102e7a 0x40105081 0x40105274 0x40106ce3 0x40107b18 0x40107d59 0x40107fe0 0x4010802c 0x40108113 0x40108655 0x4010c154 0x4011179f 0x40112701 0x401127af 0x40115ecd 0x40115f95 0x4011610a 0x40117329 0x4011894d 0x40118cb6 0x4011a012 0x4011a3d3 0x4011a7f9 0x4011b191 0x40124f69 0x401256f9 0x40125762 0x401276ff 0x4012b16a 0x4012c28b 0x4012c7ab 0x4012c7b2 0x4012cc8b 0x4012fae7 0x40133f99 0x40135296 0x4013569b 0x40135888 0x4013599c 0x40136dcd 0x401377b4 0x40138038 0x40138551 0x40138bb7 0x4013ae83 0x4013b286 0x4013b409 0x4013b57a 0x4013b7bb 0x4013b98d 0x40141361 0x401413d3 0x40141494 0x40141b19 0x40142e73 0x40144520 0x4014529f 0x401463fb 0x401469aa 0x40146a8d 0x4014b1fb 0x4014b679 0x4014c2d1 0x4014cfad 0x4014d54a 0x4014e8c9 0x4014fbaf 0x401507fa 0x401530e2 0x40156f33 0x40158118 0x4015826b 0x40158d54 0x40158d91 0x4015a296 0x4015a61b 0x4015a9f3 0x4015b074 0x4015b4a4 0x4015c4d0 0x4015cbcc 0x4015cd11 0x4015d79e 0x4015d8a5 0x4015ddad 0x4015e38e 0x4015e927 0x4015ef23 0x4015f372 0x4015f52d 0x40163d60 0x401652c3 0x40165732 0x401659bb 0x40165aeb 0x40167a5b 0x401691a9 0x4016948f 0x40169825 0x4016f6ca 0x4016faae 0x4016fc7a 0x4016fd31 0x4016fdaf 0x4017074f 0x4017084a 0x40179631 0x401796ed 0x401799e4 0x40179b56 0x4017a6fe 0x4017b699 0x4017ba94 0x422ec 0x49cd 0x49ff 0x4be83 0x4bfb5 0x4c570 0x4cd61 0x4d3a9 0x4de36 0x4e30b 0x4ee8a 0x6271d 0x63923 0x78a8 0x79c1 0x7def 0x80001895 0x80001ec9 0x80002a60 0x80002d7b 0x80002fb4 0x800042ba 0x80004727 0x8000473b 0x80004879 0x80004c50 0x80004ffe 0x80005689 0x800056c6 0x800058cd 0x80007034 0x800071e7 0x8000749b 0x80007623 0x80007654 0x80007acb 0x80007f68 0x8000b154 0x8000b1d0 0x8000b3eb 0x8000b420 0x8000b433 0x8000b665 0x8000bfcb 0x8000c038 0x8000c107 0x8000c3de 0x8000c8a2 0x8000caa3 0x8000d18d 0x8000d3c5 0x8000d595 0x8000e778 0x8000e8a4 0x8000f6cb 0x8001191e 0x80011c97 0x800120d0 0x80012c36 0x80019b2e 0x80019e18 0x8001b5f9 0x8001bf9a 0x8001ca66 0x8001e32f 0x8001e47c 0x8001eb9d 0x800205fb 0x8002c60e 0x8002c8cb 0x8002ce0d 0x8002d3b8 0x8002d43f 0x8002ddaf 0x8002e521 0x8002e855 0x8002f005 0x8002f8a0 0x8002fbaa 0x80040b70 0x80040bf9 0x800430d8 0x8004371f 0x8004377b 0x80043ac8 0x80045d38 0x80045ecd 0x80052ae2 0x80052e0f 0x800532ba 0x8005d6e0 0x800801d8 0x80085e74 0x8008b912 0x80091ae4 0x80094f32 0x8009f19d 0x8009f585 0x8009f587 0x8009f732 0x8009f9af 0x800a096a 0x800a0c22 0x800a252a 0x800a3ab1 0x800a3b7f 0x800a3eac 0x800a4197 0x800a4251 0x800a4413 0x800a51ea 0x800a5f55 0x800a6cb3 0x800aaaca 0x800ab02a 0x800ab0d6 0x800ab286 0x800abd5d 0x800abf4c 0x800ac9cc 0x800afa75 0x800afcc4 0x800b03ee 0x800b3345 0x800b4deb 0x800b8370 0x800b8497 0x800b9276 0x800b975c 0x800b97b0 0x800c35fb 0x800c3661 0x800c4830 0x800c6498 0x800d093e 0x800d13a1 0x800d2486 0x800d260d 0x800d2bd5 0x800d3fd1 0x800d40a3 0x800d4382 0x800d5e75 0x800d8121 0x800d963c 0x800d97ef 0x800d9b10 0x800d9c8e 0x800db325 0x800db61e 0x800dc561 0x800de0be 0x800de531 0x800df3f1 0x800dfa04 0x800e69b9 0x800e937a 0x800e93f1 0x800e9caf 0x800e9cbc 0x800eaa9d 0x800ebc56 0x800ec0c6 0x800ec41e 0x800f1ad4 0x800f1b91 0x800f23de 0x800f23fa 0x800f9fa1 0x800fa0ca 0x800fa384 0x800fa8ff 0x800fab7e 0x800faba2 0x800fac75 0x800faca3 0x800fadaa 0x800fadc5 0x800fb065 0x800fb802 0x800fd8bc 0x801001df 0x80100c3c 0x801037d6 0x8010397f 0x80103a5e 0x80103aa6 0x80103c31 0x80103efe 0x8010424a 0x80104449 0x8010735a 0x801083f5 0x8010d6e2 0x8010e2a1 0x8010e61b 0x80110c4c 0x8011188b 0x80114eb9 0x80114f03 0x801150f6 0x801155f5 0x8011576b 0x8011613e 0x80117430 0x801175ba 0x80118be1 0x80118c2f 0x80119181 0x8011a615 0x80121629 0x80121ad3 0x80121d8a 0x80121e1e 0x8012284d 0x8012287a 0x8012345f 0x80123626 0x80123b2c 0x80123cc0 0x80123ed4 0x801250a5 0x801259e9 0x80125ec1 0x801265d3 0x80128803 0x8012ffb9 0x80130aaa 0x80130afc 0x8013123a 0x80131c25 0x80132522 0x80133f6a 0x80134384 0x8013704e 0x801370e1 0x801374b8 0x80137694 0x80138184 0x801387cd 0x80139198 0x80139a18 0x8013ba63 0x8013bb98 0x8013bcbc 0x8013cf36 0x801417a2 0x80143b4b 0x80143db8 0x80144c6d 0x80145840 0x80145c0f 0x801462c7 0x801471fd 0x8014825e 0x80148be8 0x80148d1b 0x8014b084 0x8014b0d8 0x8014dc44 0x8014e819 0x8014fd66 0x8015049f 0x80151666 0x80151cc0 0x80151e87 0x801537cb 0x80154344 0x801552b3 0x801553b0 0x80155617 0x80155c5f 0x80159fed 0x8015f8e5 0x8015f969 0x801643e2 0x801671a6 0x80169d3f 0x8016a7c3 0x8016aad4 0x8016b41c 0x82cdf 0x8d3c5 0x8d3ff 0x926e 0xa07fb 0xa0f19 0xa2f0 0xac0f 0xb10b5 0xb1596 0xb1ae5 0xb1d9b 0xb293 0xb691 0xb7cb 0xba972 0xbae83 0xbb7d1 0xbb82e 0xbc3e8 0xbc78 0xbc800 0xc218f 0xc257e 0xc2c8 0xc3185 0xc3b65 0xc3d8b 0xc3fc3 0xc4041 0xc422 0xc70c 0xcc904 0xccb10 0xccf77 0xcd2b5 0xcdbda 0xce1ac 0xce2e9 0xce44f 0xcf131 0xcf5cf 0xcf63e 0xcf666 0xd1e2d 0xd432a 0xd4649 0xd484c 0xd4927 0xd4bf8 0xd4f6b 0xd6c40 0xd7971 0xd8c2 0xdc0c1 0xdc278 0xdc33e 0xdc4f8 0xdc6db 0xdd288 0xdd4c 0xe048 0xe10e 0xe1ad7 0xe1b01 0xe1cc6 0xe323f 0xe33e2 0xe35b6 0xe36a5 0xe483 0xe5cb 0xe66dd 0xe8274 0xea68d 0xea6a7 0xea844 0xea87d 0xeab86 0xeab8e 0xeaca9 0xeacc 0xeafc8 0xeb620 0xebca5 0xebd4e 0xee285 0xee48a 0xf13a7 0xf260f 0xf4b4e 0xf5726 0xf6985 0xf6a38 0xf6a64 0xf6f50 0xf707e 0xf70db 0xfaacc 0xfab7b 0xfb1a8 0xfb5dd 0xfb9ed 0xfbae4 0xfde9e PASS
+
+
+[[[ BadSeeds Tests ]]]
+
+Testing 0 internal secrets:
+0x0 PASS
+Testing the first 0xffffffff seeds ...
+4 threads starting...
+at 0 at 40000000 at 80000000 at c0000000  !!!!!Bad seed 0x385
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x40000cf1
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x80002883
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc0003819
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x80003a21
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x80003d4e
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x3afa
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x8000443a
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x800044ce
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x80004bb2
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x800052bd
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x80005523
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x501b
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc0006b3d
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc0006ca1
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x80006135
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc00071a9
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x40006227
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x800064d1
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x4000694c
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc0007db2
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc0007f44
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc000811e
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x80007176
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc0008704
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x40007af2
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!! !!!!!Bad seed 0x8000768f
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Bad seed 0x69fe
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc0008c85
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc0008cbc
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x8000811d
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x400093a2
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x7b2a
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc000a264
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc000a405
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x7dae
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x80008ab7
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc000ad8e
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x8a1f
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x4000b60d
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc000c808
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc000c8dd
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc000ca21
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc000ca72
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc000cd81
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x4000c8f2
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc000d95d
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x8000b140
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x8000b165
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xb0ee
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xb22c
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x4000f3f1
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc000fbb3
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x4000f419
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc226
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc603
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc66c
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc001146d
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x8000d1bf
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xcf18
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x400118fe
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x40011f51
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x8000dbcf
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc0012ddf
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc0013ba9
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc0013c1a
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc001423d
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x40013ea8
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc0014a7b
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x40014802
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x400148b3
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc0015768
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc0016172
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x40015d9a
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc0016ac4
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc0016c93
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc0016e34
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc0017533
+ !!!!!Bad seed 0xc0017f0d
+ !!!!!Bad seed 0x400185fa
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x80012ba0
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc0019e97
+ !!!!!Bad seed 0xc001a07e
+ !!!!!Bad seed 0xc001a52a
+ !!!!!Bad seed 0xc001a7b8
+ !!!!!Bad seed 0x80014610
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc001b3ac
+ !!!!!Bad seed 0xc001b4be
+ !!!!!Bad seed 0x80014ccf
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x80015324
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc001c0f6
+ !!!!!Bad seed 0xc001c47d
+ !!!!!Bad seed 0xc001c6b1
+ !!!!!Bad seed 0x80015b6e
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x167e5
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x16b14
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc001d7ae
+ !!!!!Bad seed 0x4001c6cd
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc001f5a5
+ !!!!!Bad seed 0x80018079
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x80018624
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x19ffa
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x80018904
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x4001d9bc
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x1a831
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc0020ab4
+ !!!!!Bad seed 0xc0020c56
+ !!!!!Bad seed 0xc0020d8f
+ !!!!!Bad seed 0xc00212a8
+ !!!!!Bad seed 0xc00212d7
+ !!!!!Bad seed 0xc002158b
+ !!!!!Bad seed 0x80019511
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x4001e94f
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x80019d4a
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x1c36c
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc0023a5b
+ !!!!!Bad seed 0x8001b416
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x8001c044
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x40020bc7
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc0025bec
+ !!!!!Bad seed 0xc0025dcc
+ !!!!!Bad seed 0xc0025f63
+ !!!!!Bad seed 0x202c7
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc0026241
+ !!!!!Bad seed 0x8001cd8b
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x2095d
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!! !!!!!Bad seed 0x21b87
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x21be4
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x8001dfe1
+Bad seed 0xc002708a
+ !!!!!Bad seed 0x40022c61
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x8001eae9
+ !!!!!Bad seed 0xc0028202
+ !!!!!Bad seed 0x23408
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x8001f207
+ !!!!!Bad seed 0xc0028ec0
+ !!!!!Bad seed 0x8001f638
+ !!!!!Bad seed 0xc002909a
+ !!!!!Bad seed 0x800207fb
+ !!!!!Bad seed 0x25dba
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc002aef6
+ !!!!!Bad seed 0xc002b0cf
+ !!!!!Bad seed 0xc002b289
+ !!!!!Bad seed 0x26766
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc002b842
+ !!!!!Bad seed 0x4002694e
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x80021c42
+ !!!!!Bad seed 0xc002c925
+ !!!!!Bad seed 0xc002ca94
+ !!!!!Bad seed 0xc002cd5a
+ !!!!!Bad seed 0xc002ce89
+ !!!!!Bad seed 0x80022337
+ !!!!!Bad seed 0x800223bf
+ !!!!!Bad seed 0xc002da64
+ !!!!!Bad seed 0xc002dd7a
+ !!!!!Bad seed 0xc002eb9a
+ !!!!!Bad seed 0x4002a0b7
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x800238c8
+ !!!!!Bad seed 0x2939e
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x4002b0dc
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x8002410c
+ !!!!!Bad seed 0x29df4
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x4002b649
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc0030675
+ !!!!!Bad seed 0xc00309d3
+ !!!!!Bad seed 0x2a4ae
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x2a5c8
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc0030bac
+ !!!!!Bad seed 0x2a681
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc003103e
+ !!!!!Bad seed 0x4002c7dd
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x80025c59
+ !!!!!Bad seed 0x2b67a
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x80025d97
+ !!!!!Bad seed 0xc0032559
+ !!!!!Bad seed 0x80025fed
+ !!!!!Bad seed 0xc0032bd6
+ !!!!!Bad seed 0x800263e0
+ !!!!!Bad seed 0x800265a0
+ !!!!!Bad seed 0x8002698a
+ !!!!!Bad seed 0x800269cc
+ !!!!!Bad seed 0xc00340ce
+ !!!!!Bad seed 0xc0034515
+ !!!!!Bad seed 0x800278c9
+ !!!!!Bad seed 0xc00351d5
+ !!!!!Bad seed 0xc0035709
+ !!!!!Bad seed 0x2f032
+ !!!!!Bad seed 0x80029669
+ !!!!!Bad seed 0xc0037208
+ !!!!!Bad seed 0x2fc62
+ !!!!!Bad seed 0xc00379da
+ !!!!!Bad seed 0xc00387f8
+ !!!!!Bad seed 0x31aad
+ !!!!!Bad seed 0x322da
+ !!!!!Bad seed 0x32503
+ !!!!!Bad seed 0x32643
+ !!!!!Bad seed 0x8002c337
+ !!!!!Bad seed 0xc0039d50
+ !!!!!Bad seed 0xc0039d57
+ !!!!!Bad seed 0xc003ab0f
+ !!!!!Bad seed 0x8002d2ef
+ !!!!!Bad seed 0x340b0
+ !!!!!Bad seed 0xc003b2a3
+ !!!!!Bad seed 0xc003c2f6
+ !!!!!Bad seed 0x4003967d
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x8002f3c5
+ !!!!!Bad seed 0x4003a5c7
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0xc003da25
+ !!!!!Bad seed 0xc003da57
+ !!!!!Bad seed 0xc003db7a
+ !!!!!Bad seed 0x3693a
+ !!!!!Bad seed 0xc003e446
+ !!!!!Bad seed 0xc003e44f
+ !!!!!Bad seed 0xc003ef45
+ !!!!!Bad seed 0xc003f2ef
+ !!!!!Bad seed 0xc003f4b0
+ !!!!!Bad seed 0xc003fca0
+ !!!!!Bad seed 0x383be
+ !!!!!Bad seed 0x80031b18
+ !!!!!Bad seed 0xc0040be3
+ !!!!!Bad seed 0x39343
+ !!!!!Bad seed 0x39b3a
+ !!!!!Bad seed 0x3a0f7
+ !!!!!Bad seed 0xc004214d
+ !!!!!Bad seed 0xc0042974
+ !!!!!Bad seed 0x3a937
+ !!!!!Bad seed 0xc00435cf
+ !!!!!Bad seed 0x3b647
+ !!!!!Bad seed 0x3ba98
+ !!!!!Bad seed 0x80034ee6
+ !!!!!Bad seed 0xc00446c4
+ !!!!!Bad seed 0x3c43f
+ !!!!!Bad seed 0x3c4b5
+ !!!!!Bad seed 0x800357dd
+ !!!!!Bad seed 0x4004288e
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x3cd2c
+ !!!!!Bad seed 0x40042fb8
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x3d64b
+ !!!!!Bad seed 0x800366f6
+ !!!!!Bad seed 0x80036a7e
+ !!!!!Bad seed 0x3dc13
+ !!!!!Bad seed 0x800370e0
+ !!!!!Bad seed 0x800376d4
+ !!!!!Bad seed 0x800378c3
+ !!!!!Bad seed 0x80037b32
+ !!!!!Bad seed 0x80038284
+ !!!!!Bad seed 0x3f477
+ !!!!!Bad seed 0x800383bf
+ !!!!!Bad seed 0x80038721
+ !!!!!Bad seed 0x80038942
+ !!!!!Bad seed 0x80038bb7
+ !!!!!Bad seed 0x3fd0f
+ !!!!!Bad seed 0x80038dfb
+ !!!!!Bad seed 0x400468ac
+Testing collisions ( 64-bit) - Expected    0.0, actual      1 (3074457345618258432.00x) (1) !!!!!
+Testing collisions (high 32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+Testing collisions (low  32-bit) - Expected          0.0, actual      1 (715827882.67x) (1)
+ !!!!!Bad seed 0x80039840
+ !!!!!Bad seed 0x40ba4
+ !!!!!Bad seed 0x4004733e
+ !!!!!Bad seed 0x8003a2e1
+ !!!!!Bad seed 0x40047dec
+ !!!!!Bad seed 0x8003a471
+ !!!!!Bad seed 0x400480cc
+ !!!!!Bad seed 0x4335b
+ !!!!!Bad seed 0xc004bb8a
+ !!!!!Bad seed 0x4004ac79
+ !!!!!Bad seed 0x4004aec9
+ !!!!!Bad seed 0xc004c482
+ !!!!!Bad seed 0xc004ca5c
+ !!!!!Bad seed 0x4004b96e
+ !!!!!Bad seed 0x45680
+ !!!!!Bad seed 0x4004c037
+ !!!!!Bad seed 0xc004d307
+ !!!!!Bad seed 0x4004c111
+ !!!!!Bad seed 0x4004c4b2
+ !!!!!Bad seed 0xc004e192
+ !!!!!Bad seed 0xc004e4d9
+ !!!!!Bad seed 0x4004e69c
+ !!!!!Bad seed 0x4004eeea
+ !!!!!Bad seed 0x80042216
+ !!!!!Bad seed 0x4004efd1
+ !!!!!Bad seed 0x47c48
+ !!!!!Bad seed 0x4004f379
+ !!!!!Bad seed 0x800429b8
+ !!!!!Bad seed 0x4004f7ee
+ !!!!!Bad seed 0xc0050494
+ !!!!!Bad seed 0xc0050a3f
+ !!!!!Bad seed 0x40050de5
+ !!!!!Bad seed 0x40050f6c
+ !!!!!Bad seed 0x40050f6f
+ !!!!!Bad seed 0x800446a1
+ !!!!!Bad seed 0x400514cf
+ !!!!!Bad seed 0x400514d5
+ !!!!!Bad seed 0x40051965
+ !!!!!Bad seed 0x4aabb
+ !!!!!Bad seed 0x40052b79
+ !!!!!Bad seed 0x40052bac
+ !!!!!Bad seed 0xc005313d
+ !!!!!Bad seed 0x40053a21
+ !!!!!Bad seed 0x4bdad
+ !!!!!Bad seed 0x4005408b
+ !!!!!Bad seed 0x4005419f
+ !!!!!Bad seed 0x4c2d0
+ !!!!!Bad seed 0xc0054178
+ !!!!!Bad seed 0x40054764
+ !!!!!Bad seed 0x40054e45
+ !!!!!Bad seed 0x40054ea4
+ !!!!!Bad seed 0x400550ce
+ !!!!!Bad seed 0x40055559
+ !!!!!Bad seed 0xc005519d
+ !!!!!Bad seed 0x40055a2a
+ !!!!!Bad seed 0xc0055520
+ !!!!!Bad seed 0x40056ead
+ !!!!!Bad seed 0x4005729f
+ !!!!!Bad seed 0x40057479
+ !!!!!Bad seed 0x400577d1
+ !!!!!Bad seed 0xc0056cdf
+ !!!!!Bad seed 0x40058061
+ !!!!!Bad seed 0x40058397
+ !!!!!Bad seed 0x40059343
+ !!!!!Bad seed 0xc0057ef8
+ !!!!!Bad seed 0x40059df0
+ !!!!!Bad seed 0x40059e3c
+ !!!!!Bad seed 0xc0058084
+ !!!!!Bad seed 0x4005a7a7
+ !!!!!Bad seed 0x4005a889
+ !!!!!Bad seed 0x52114
+ !!!!!Bad seed 0x80050ad1
+ !!!!!Bad seed 0x80050cae
+ !!!!!Bad seed 0x8005114e
+ !!!!!Bad seed 0x551c8
+ !!!!!Bad seed 0x55761
+ !!!!!Bad seed 0x4005e4e0
+ !!!!!Bad seed 0x80052f9d
+ !!!!!Bad seed 0x80053201
+ !!!!!Bad seed 0x800533bf
+ !!!!!Bad seed 0x568d5
+ !!!!!Bad seed 0x56a4c
+ !!!!!Bad seed 0x8005394f
+ !!!!!Bad seed 0x4005f8cc
+ !!!!!Bad seed 0x800546d4
+ !!!!!Bad seed 0x80054f48
+ !!!!!Bad seed 0xc005fa8b
+ !!!!!Bad seed 0x40061514
+ !!!!!Bad seed 0x800568a5
+ !!!!!Bad seed 0x80057450
+ !!!!!Bad seed 0x400628f5
+ !!!!!Bad seed 0x40062c11
+ !!!!!Bad seed 0x80057ffc
+ !!!!!Bad seed 0x80059067
+ !!!!!Bad seed 0x40064288
+ !!!!!Bad seed 0x800594b6
+ !!!!!Bad seed 0x80059cae
+ !!!!!Bad seed 0x8005a00a
+ !!!!!Bad seed 0x8005a1fa
+ !!!!!Bad seed 0x8005a7af
+ !!!!!Bad seed 0x8005a860
+ !!!!!Bad seed 0x8005a91a
+ !!!!!Bad seed 0x8005ae4a
+ !!!!!Bad seed 0x8005b330
+ !!!!!Bad seed 0x8005b349
+ !!!!!Bad seed 0x8005bc37
+ !!!!!Bad seed 0x8005bfe6
+ !!!!!Bad seed 0x8005c464
+ !!!!!Bad seed 0x8005c8e7
+ !!!!!Bad seed 0x8005ca9d
+ !!!!!Bad seed 0x8005cb99
+ !!!!!Bad seed 0x5ff2c
+ !!!!! !!!!!Bad seed 0xc0067436
+Bad seed 0x400677aa
+ !!!!!Bad seed 0x40068796
+ !!!!!Bad seed 0x8005ddc2
+ !!!!!Bad seed 0x8005e6fd
+ !!!!!Bad seed 0x8005ea53
+ !!!!!Bad seed 0x8005eb67
+ !!!!!Bad seed 0x62142
+ !!!!!Bad seed 0xc006aae3
+ !!!!!Bad seed 0x636e8
+ !!!!!Bad seed 0x80061148
+ !!!!!Bad seed 0x6480d
+ !!!!!Bad seed 0x8006159e
+ !!!!!Bad seed 0x64cf3
+ !!!!!Bad seed 0x800619c7
+ !!!!!Bad seed 0x80061aee
+ !!!!!Bad seed 0x80061b04
+ !!!!!Bad seed 0x4006bd17
+ !!!!!Bad seed 0x64ea0
+ !!!!!Bad seed 0x6518a
+ !!!!!Bad seed 0x4006c1b9
+ !!!!!Bad seed 0xc006e7d0
+ !!!!!Bad seed 0x67bb3
+ !!!!!Bad seed 0x800652df
+ !!!!!Bad seed 0xc007028b
+ !!!!! !!!!!Bad seed 0xc00704ef
+Bad seed 0x80065d41
+ !!!!!Bad seed 0x69b26
+ !!!!!Bad seed 0x69b40
+ !!!!!Bad seed 0x6aa95
+ !!!!!Bad seed 0x400727be
+ !!!!!Bad seed 0x40072c9f
+ !!!!!Bad seed 0x40072e06
+ !!!!!Bad seed 0x6c70b
+ !!!!! !!!!!Bad seed 0x6cae6
+ !!!!!Bad seed 0x80069348
+Bad seed 0x40074433
+ !!!!!Bad seed 0x40074f7a
+ !!!!!Bad seed 0xc00747b1
+ !!!!!Bad seed 0xc0074d3c
+ !!!!! !!!!!Bad seed 0xc0075b15
+Bad seed 0x8006ac16
+ !!!!!Bad seed 0x6f304
+ !!!!!Bad seed 0x4007ab1e
+ !!!!!Bad seed 0x7126b
+ !!!!!Bad seed 0x8006f429
+ !!!!!Bad seed 0x71c83
+ !!!!!Bad seed 0xc0079455
+ !!!!!Bad seed 0x8006fce8
+ !!!!!Bad seed 0x4007c5f6
+ !!!!!Bad seed 0xc007a153
+ !!!!!Bad seed 0x800725dc
+ !!!!!Bad seed 0x73785
+ !!!!!Bad seed 0x4007e1a1
+ !!!!!Bad seed 0x4007f581
+ !!!!!Bad seed 0x770b9
+ !!!!!Bad seed 0x4007fb1e
+ !!!!!Bad seed 0x80076376
+ !!!!!Bad seed 0x78d72
+ !!!!!Bad seed 0x80076952
+ !!!!!Bad seed 0x79be1
+ !!!!!Bad seed 0x7a17c
+ !!!!!Bad seed 0x7a22b
+ !!!!!Bad seed 0x400820ab
+ !!!!!Bad seed 0x40082ba5
+ !!!!! !!!!!Bad seed 0x7aed4
+ !!!!! !!!!!Bad seed 0x7af7f
+Bad seed 0x80079877
+Bad seed 0x40083084
+ !!!!!Bad seed 0x80079aef
+ !!!!!Bad seed 0x7afe3
+ !!!!!Bad seed 0x7bd23
+ !!!!!Bad seed 0xc0084a33
+ !!!!!Bad seed 0x8007bf27
+ !!!!!Bad seed 0xc0084eaa
+ !!!!!Bad seed 0x7d989
+ !!!!!Bad seed 0x40086e9b
+ !!!!! !!!!!Bad seed 0xc0085d6f
+Bad seed 0x4008705d
+ !!!!!Bad seed 0xc0086266
+ !!!!! !!!!!Bad seed 0xc0086a45
+Bad seed 0x8007e4c2
+ !!!!!Bad seed 0x7f4b6
+ !!!!!Bad seed 0xc00871f8
+ !!!!!Bad seed 0x8007eb36
+ !!!!!Bad seed 0x8007ebe4
+ !!!!!Bad seed 0x828bf
+ !!!!!Bad seed 0x82d86
+ !!!!!Bad seed 0x80082b33
+ !!!!!Bad seed 0x830c7
+ !!!!!Bad seed 0x83220
+ !!!!!Bad seed 0x800842b9
+ !!!!!Bad seed 0x86146
+ !!!!!Bad seed 0x80087333
+ !!!!!Bad seed 0x800873ce
+ !!!!!Bad seed 0x80087699
+ !!!!!Bad seed 0xc008df71
+ !!!!!Bad seed 0x400910e4
+ !!!!!Bad seed 0xc008e61f
+ !!!!!Bad seed 0x4009188e
+ !!!!!Bad seed 0xc008ef93
+ !!!!!Bad seed 0x89338
+ !!!!!Bad seed 0x89ead
+ !!!!!Bad seed 0x400938a3
+ !!!!!Bad seed 0x40093c4e
+ !!!!!Bad seed 0xc00922c8
+ !!!!!Bad seed 0x8008c7c4
+ !!!!!Bad seed 0x8008cf7a
+ !!!!!Bad seed 0x8c3b2
+ !!!!! !!!!!Bad seed 0x40096514
+Bad seed 0x8008e9ee
+ !!!!!Bad seed 0x8008ebc3
+ !!!!!Bad seed 0x4009724f
+ !!!!!Bad seed 0x8fd7f
+ !!!!!Bad seed 0xc0097b89
+ !!!!!Bad seed 0xc00985d7
+ !!!!!Bad seed 0x927ca
+ !!!!!Bad seed 0x4009af76
+ !!!!!Bad seed 0x945fb
+ !!!!!Bad seed 0x80096413
+ !!!!! !!!!!Bad seed 0xc009dff2
+ !!!!!Bad seed 0xc009e08b
+Bad seed 0x4009c97c
+ !!!!!Bad seed 0x80098077
+ !!!!!Bad seed 0x8009835c
+ !!!!!Bad seed 0x4009ea0e
+ !!!!!Bad seed 0x9693e
+ !!!!!Bad seed 0x4009f184
+ !!!!!Bad seed 0x96b64
+ !!!!!Bad seed 0x96da0
+ !!!!!Bad seed 0x4009fe7a
+ !!!!!Bad seed 0x971a3
+ !!!!! !!!!!Bad seed 0xc00a25a2
+Bad seed 0x97e80
+ !!!!!Bad seed 0xc00a2db5
+ !!!!!Bad seed 0x8009ad31
+ !!!!!Bad seed 0x400a33e2
+ !!!!!Bad seed 0x99410
+ !!!!!Bad seed 0xc00a5121
+ !!!!!Bad seed 0x9a79a
+ !!!!!Bad seed 0x9aa8b
+ !!!!!Bad seed 0x400a4eef
+ !!!!!Bad seed 0x9ab0e
+ !!!!!Bad seed 0x400a4f33
+ !!!!!Bad seed 0x400a4f80
+ !!!!!Bad seed 0x9acdf
+ !!!!!Bad seed 0x400a532b
+ !!!!!Bad seed 0xc00a7a7d
+ !!!!!Bad seed 0x9ebb6
+ !!!!!Bad seed 0x9fc1f
+ !!!!!Bad seed 0x800a18cf
+ !!!!! !!!!!Bad seed 0xa0d0f
+Bad seed 0xc00ac0fd
+ !!!!!Bad seed 0x800a2350
+ !!!!!Bad seed 0x400abd36
+ !!!!!Bad seed 0x400abfed
+ !!!!!Bad seed 0xc00ad2d9
+ !!!!!Bad seed 0x400ad0f7
+ !!!!!Bad seed 0xc00ada5b
+ !!!!!Bad seed 0xc00add44
+ !!!!! !!!!!Bad seed 0xa6264
+Bad seed 0x800a6d2a
+ !!!!! !!!!!Bad seed 0x400afb57
+Bad seed 0xc00af8df
+ !!!!!Bad seed 0x400b01df
+ !!!!!Bad seed 0xa6dfe
+ !!!!! !!!!!Bad seed 0x400b1a2c
+Bad seed 0x800a8445
+ !!!!!Bad seed 0x800a8505
+ !!!!!Bad seed 0xa758b
+ !!!!!Bad seed 0x800a89b9
+ !!!!!Bad seed 0xc00b2691
+ !!!!!Bad seed 0xa8575
+ !!!!!Bad seed 0xc00b3ee6
+ !!!!! !!!!!Bad seed 0xc00b4a82
+Bad seed 0xa9c3a
+ !!!!!Bad seed 0xaaaa5
+ !!!!!Bad seed 0xaab07
+ !!!!! !!!!!Bad seed 0x400b400f
+Bad seed 0xaad42
+ !!!!!Bad seed 0xabd70
+ !!!!!Bad seed 0x400b4ac5
+ !!!!!Bad seed 0xacaf3
+ !!!!!Bad seed 0x800ad976
+ !!!!!Bad seed 0xc00b8732
+ !!!!!Bad seed 0xada0c
+ !!!!!Bad seed 0xc00b97df
+ !!!!!Bad seed 0x400b6857
+ !!!!!Bad seed 0xae873
+ !!!!!Bad seed 0x400b6c7f
+ !!!!!Bad seed 0xc00b9fe4
+ !!!!!Bad seed 0x800b21e4
+ !!!!!Bad seed 0xaff5f
+ !!!!!Bad seed 0xc00badfb
+ !!!!!Bad seed 0x800b292d
+ !!!!!Bad seed 0xc00bb3f0
+ !!!!!Bad seed 0xc00bb75f
+ !!!!!Bad seed 0xb14b7
+ !!!!!Bad seed 0xc00bc465
+ !!!!!Bad seed 0x800b42ff
+ !!!!!Bad seed 0x800b48c5
+ !!!!!Bad seed 0x400b9fd3
+ !!!!!Bad seed 0xb25c7
+ !!!!!Bad seed 0x800b5f88
+ !!!!!Bad seed 0x400bb7f4
+ !!!!!Bad seed 0xc00be83f
+ !!!!!Bad seed 0xb48c2
+ !!!!!Bad seed 0x800b7773
+ !!!!!Bad seed 0xc00bf857
+ !!!!!Bad seed 0xb4fab
+ !!!!!Bad seed 0x800b7ef5
+ !!!!!Bad seed 0x800b8975
+ !!!!!Bad seed 0x400bf014
+ !!!!!Bad seed 0xc00c1ca2
+ !!!!!Bad seed 0x400c03ce
+ !!!!!Bad seed 0x800bd277
+ !!!!!Bad seed 0x400c3866
+ !!!!!Bad seed 0x400c3a42
+ !!!!!Bad seed 0xc00c5ab2
+ !!!!!Bad seed 0x400c4a0d
+ !!!!!Bad seed 0x400c6266
+ !!!!!Bad seed 0xc00c80b0
+ !!!!!Bad seed 0x800c18ab
+ !!!!!Bad seed 0x800c1a84
+ !!!!!Bad seed 0xc00c87c4
+ !!!!! !!!!!Bad seed 0x800c24b4
+ !!!!!Bad seed 0xbfcb9
+Bad seed 0x400c6dcf
+ !!!!!Bad seed 0xc03b4
+ !!!!!Bad seed 0xc00c9b7c
+ !!!!!Bad seed 0xc00c9f35
+ !!!!!Bad seed 0x800c384f
+ !!!!!Bad seed 0xc00cac57
+ !!!!! !!!!!Bad seed 0x400c96e8
+Bad seed 0xc22b9
+ !!!!!Bad seed 0xc2711
+ !!!!!Bad seed 0x800c5242
+ !!!!!Bad seed 0xc3481
+ !!!!!Bad seed 0x400cb4ea
+ !!!!!Bad seed 0x800c6aaf
+ !!!!!Bad seed 0xc4da9
+ !!!!!Bad seed 0x400cc7c1
+ !!!!!Bad seed 0x400cd160
+ !!!!!Bad seed 0x800c95a1
+ !!!!!Bad seed 0x400ce051
+ !!!!!Bad seed 0xc00d009e
+ !!!!!Bad seed 0x400ceff8
+ !!!!!Bad seed 0x400cf6c5
+ !!!!!Bad seed 0x800cb725
+ !!!!!Bad seed 0xc00d0d33
+ !!!!!Bad seed 0xc75b7
+ !!!!!Bad seed 0x800cc446
+ !!!!!Bad seed 0x400d1592
+ !!!!!Bad seed 0xc94d9
+ !!!!!Bad seed 0x800cd283
+ !!!!!Bad seed 0x400d29ba
+ !!!!!Bad seed 0xc00d5fda
+ !!!!!Bad seed 0x800d0d92
+ !!!!!Bad seed 0xc00d7642
+ !!!!!Bad seed 0x400d696b
+ !!!!!Bad seed 0xcd811
+ !!!!! !!!!!Bad seed 0x800d2d4f
+Bad seed 0xc00d8f05
+ !!!!!Bad seed 0x800d434b
+ !!!!!Bad seed 0x400d9858
+ !!!!!Bad seed 0xc00da71c
+ !!!!!Bad seed 0x400db225
+ !!!!!Bad seed 0xd142b
+ !!!!!Bad seed 0x400ddb19
+ !!!!!Bad seed 0x400ddbf3
+ !!!!!Bad seed 0x400ddd87
+ !!!!!Bad seed 0xc00de18d
+ !!!!!Bad seed 0x400de0ec
+ !!!!!Bad seed 0x400de3dd
+ !!!!!Bad seed 0xd30ee
+ !!!!!Bad seed 0x400e024e
+ !!!!!Bad seed 0x800da9fa
+ !!!!!Bad seed 0xc00e109d
+ !!!!!Bad seed 0xc00e1e54
+ !!!!!Bad seed 0x400e2d7e
+ !!!!!Bad seed 0x800dcc1a
+ !!!!!Bad seed 0xd5fc8
+ !!!!!Bad seed 0xc00e3d64
+ !!!!!Bad seed 0x400e4596
+ !!!!! !!!!!Bad seed 0xc00e4b27
+Bad seed 0x400e4829
+ !!!!!Bad seed 0xc00e4b4f
+ !!!!!Bad seed 0x400e5823
+ !!!!!Bad seed 0x400e6048
+ !!!!!Bad seed 0x800e0189
+ !!!!!Bad seed 0xc00e636d
+ !!!!!Bad seed 0xc00e67f3
+ !!!!!Bad seed 0xdc176
+ !!!!!Bad seed 0x400e8bd7
+ !!!!! !!!!!Bad seed 0x400e905a
+Bad seed 0xc00e83d5
+ !!!!!Bad seed 0x800e28e1
+ !!!!!Bad seed 0xdef95
+ !!!!!Bad seed 0xc00e96ca
+ !!!!!Bad seed 0xe22d8
+ !!!!!Bad seed 0xe2ae1
+ !!!!!Bad seed 0x400ed5be
+ !!!!! !!!!!Bad seed 0x800e92cf
+Bad seed 0xe2bae
+ !!!!! !!!!!Bad seed 0x400f062c
+Bad seed 0xc00ee4c1
+ !!!!!Bad seed 0x400f18b4
+ !!!!! !!!!! !!!!!Bad seed 0xc00ef09a
+Bad seed 0x800eca60
+Bad seed 0x400f1dd6
+ !!!!!Bad seed 0xe70e5
+ !!!!!Bad seed 0x800ee106
+ !!!!!Bad seed 0x800ee15d
+ !!!!!Bad seed 0x400f45e1
+ !!!!!Bad seed 0x800f1985
+ !!!!!Bad seed 0xe8f80
+ !!!!!Bad seed 0xc00f537b
+ !!!!!Bad seed 0x400f9748
+ !!!!!Bad seed 0xe9e31
+ !!!!!Bad seed 0xc00f5de6
+ !!!!!Bad seed 0x800f5011
+ !!!!!Bad seed 0xc00f6e98
+ !!!!!Bad seed 0xebcf9
+ !!!!!Bad seed 0xec19d
+ !!!!!Bad seed 0x400fcbf4
+ !!!!!Bad seed 0x800f8a48
+ !!!!!Bad seed 0xef427
+ !!!!!Bad seed 0xef625
+ !!!!!Bad seed 0x800fa71a
+ !!!!! !!!!!Bad seed 0xf0296
+Bad seed 0x4010025a
+ !!!!!Bad seed 0xf05c4
+ !!!!!Bad seed 0x800fb208
+ !!!!!Bad seed 0xc00fa5a6
+ !!!!!Bad seed 0xc00fc76f
+ !!!!!Bad seed 0xf381f
+ !!!!!Bad seed 0xf3b98
+ !!!!!Bad seed 0xf4209
+ !!!!!Bad seed 0x800ff7dc
+ !!!!!Bad seed 0x4010446c
+ !!!!!Bad seed 0xf488c
+ !!!!!Bad seed 0x4010458d
+ !!!!!Bad seed 0xc010036c
+ !!!!!Bad seed 0x801009d1
+ !!!!!Bad seed 0xc0100b9b
+ !!!!!Bad seed 0xf61e1
+ !!!!!Bad seed 0x40106205
+ !!!!!Bad seed 0xf648b
+ !!!!!Bad seed 0xc0101862
+ !!!!!Bad seed 0x8010194e
+ !!!!!Bad seed 0xc0101ea8
+ !!!!!Bad seed 0xf6e8c
+ !!!!!Bad seed 0xf720e
+ !!!!!Bad seed 0xc0102955
+ !!!!!Bad seed 0x80103e34
+ !!!!!Bad seed 0x401090ec
+ !!!!!Bad seed 0xf9318
+ !!!!!Bad seed 0xc0104fae
+ !!!!!Bad seed 0x801059f9
+ !!!!! !!!!!Bad seed 0xc01056bd
+Bad seed 0xfa068
+ !!!!! !!!!!Bad seed 0xc0105f86
+Bad seed 0x4010b910
+ !!!!!Bad seed 0x4010c462
+ !!!!!Bad seed 0xfbe35
+ !!!!!Bad seed 0x80109053
+ !!!!!Bad seed 0xfd4d0
+ !!!!!Bad seed 0xc0109485
+ !!!!!Bad seed 0xfdefc
+ !!!!!Bad seed 0xc0109c61
+ !!!!!Bad seed 0xc010a453
+ !!!!!Bad seed 0x401101de
+ !!!!!Bad seed 0x8010bd75
+ !!!!!Bad seed 0x101154
+ !!!!!Bad seed 0x10150b
+ !!!!!Bad seed 0xc010c45b
+ !!!!!Bad seed 0xc010d7a2
+ !!!!! !!!!! !!!!!Bad seed 0x80110466
+Bad seed 0xc010e918
+Bad seed 0x40114a85
+ !!!!!Bad seed 0x105c61
+ !!!!!Bad seed 0xc010e9c8
+ !!!!!Bad seed 0xc010eaf2
+ !!!!!Bad seed 0x10619e
+ !!!!!Bad seed 0x40115424
+ !!!!!Bad seed 0x401165b9
+ !!!!!Bad seed 0xc01107e6
+ !!!!!Bad seed 0x108b29
+ !!!!!Bad seed 0x40118214
+ !!!!!Bad seed 0xc01117a0
+ !!!!!Bad seed 0x40118f41
+ !!!!!Bad seed 0xc01129fb
+ !!!!!Bad seed 0x10c346
+ !!!!!Bad seed 0xc0113129
+ !!!!!Bad seed 0x8011757e
+ !!!!!Bad seed 0xc01142bb
+ !!!!!Bad seed 0x10ff07
+ !!!!!Bad seed 0xc0115bd4
+ !!!!!Bad seed 0xc0115c7c
+ !!!!!Bad seed 0xc0116056
+ !!!!!Bad seed 0xc0116bde
+ !!!!!Bad seed 0xc0116f0f
+ !!!!!Bad seed 0x80119dd7
+ !!!!!Bad seed 0xc0117669
+ !!!!!Bad seed 0x8011a8bc
+ !!!!!Bad seed 0x111c11
+ !!!!!Bad seed 0xc0119188
+ !!!!!Bad seed 0x11268a
+ !!!!!Bad seed 0xc0119c55
+ !!!!!Bad seed 0x8011c272
+ !!!!!Bad seed 0xc0119e93
+ !!!!!Bad seed 0xc011a0a8
+ !!!!!Bad seed 0x114c82
+ !!!!!Bad seed 0x1156fa
+ !!!!!Bad seed 0x115715
+ !!!!!Bad seed 0xc011b7f4
+ !!!!!Bad seed 0x40122381
+ !!!!!Bad seed 0x401225d2
+ !!!!!Bad seed 0x40122649
+ !!!!!Bad seed 0x40122651
+ !!!!! !!!!! !!!!!Bad seed 0x40123058
+Bad seed 0x80120404
+Bad seed 0x117f81
+ !!!!!Bad seed 0x80120453
+ !!!!!Bad seed 0x80120b0a
+ !!!!!Bad seed 0xc011e8ed
+ !!!!!Bad seed 0x40125702
+ !!!!!Bad seed 0x40125d0b
+ !!!!!Bad seed 0x11ad90
+ !!!!!Bad seed 0x11aea4
+ !!!!!Bad seed 0x11b481
+ !!!!!Bad seed 0xc0120338
+ !!!!!Bad seed 0x11bf3c
+ !!!!!Bad seed 0xc01212fb
+ !!!!!Bad seed 0x11c834
+ !!!!!Bad seed 0x401280df
+ !!!!!Bad seed 0x11dc15
+ !!!!!Bad seed 0x40129346
+ !!!!!Bad seed 0xc0125003
+ !!!!!Bad seed 0x120a8e
+ !!!!!Bad seed 0x8012a6ff
+ !!!!!Bad seed 0xc0127904
+ !!!!!Bad seed 0x8012afef
+ !!!!!Bad seed 0xc0128004
+ !!!!!Bad seed 0xc0128210
+ !!!!!Bad seed 0x123566
+ !!!!!Bad seed 0x8012c7d1
+ !!!!!Bad seed 0x8012c943
+ !!!!!Bad seed 0x4012f7a9
+ !!!!!Bad seed 0x40130639
+ !!!!! !!!!! !!!!!Bad seed 0x8012df04
+Bad seed 0x12570b
+Bad seed 0x4013117f
+ !!!!!Bad seed 0x8012e4f6
+ !!!!!Bad seed 0x126184
+ !!!!!Bad seed 0x40131693
+ !!!!!Bad seed 0x40132c7b
+ !!!!!Bad seed 0x40132d2d
+ !!!!!Bad seed 0x40133054
+ !!!!!Bad seed 0xc012e4ee
+ !!!!!Bad seed 0x4013354c
+ !!!!!Bad seed 0x4013362f
+ !!!!! !!!!!Bad seed 0x40133e7c
+Bad seed 0x80131ec7
+ !!!!!Bad seed 0x401340a4
+ !!!!!Bad seed 0xc012f6a1
+ !!!!!Bad seed 0xc012fd05
+ !!!!!Bad seed 0x129115
+ !!!!!Bad seed 0x4013499c
+ !!!!!Bad seed 0x80132c1f
+ !!!!!Bad seed 0xc0130772
+ !!!!!Bad seed 0x80133fe1
+ !!!!!Bad seed 0x12bf43
+ !!!!!Bad seed 0x801352fb
+ !!!!!Bad seed 0x12c8a6
+ !!!!!Bad seed 0x12d2d0
+ !!!!!Bad seed 0x40137d27
+ !!!!! !!!!!Bad seed 0x12d3db
+Bad seed 0x401380a4
+ !!!!!Bad seed 0xc01334f8
+ !!!!!Bad seed 0x801372aa
+ !!!!! !!!!!Bad seed 0x801378ea
+Bad seed 0x40138779
+ !!!!! !!!!!Bad seed 0x80137ad4
+Bad seed 0xc0133edb
+ !!!!! !!!!! !!!!!Bad seed 0x401394c5
+Bad seed 0x12e8b3
+Bad seed 0xc0133ef5
+ !!!!!Bad seed 0xc0134027
+ !!!!!Bad seed 0x40139c36
+ !!!!!Bad seed 0x8013a1f2
+ !!!!!Bad seed 0xc01360f3
+ !!!!!Bad seed 0x8013a99d
+ !!!!! !!!!!Bad seed 0xc013725a
+Bad seed 0x132c89
+ !!!!!Bad seed 0x8013c334
+ !!!!!Bad seed 0x8013c476
+ !!!!!Bad seed 0x133442
+ !!!!!Bad seed 0xc0138756
+ !!!!!Bad seed 0x8013dc7f
+ !!!!!Bad seed 0xc0138f25
+ !!!!!Bad seed 0x8013e472
+ !!!!!Bad seed 0x8013e61b
+ !!!!!Bad seed 0x8013e74c
+ !!!!!Bad seed 0x8013e83e
+ !!!!!Bad seed 0x8013e996
+ !!!!!Bad seed 0x8013fca1
+ !!!!! !!!!!Bad seed 0x401406f3
+ !!!!!Bad seed 0xc013b306
+Bad seed 0x8013ffb0
+ !!!!!Bad seed 0x40140c3c
+ !!!!!Bad seed 0x13823c
+ !!!!! !!!!! !!!!!Bad seed 0x1387b5
+Bad seed 0xc013c45a
+Bad seed 0x801411c6
+ !!!!!Bad seed 0x1387f0
+ !!!!!Bad seed 0xc013c772
+ !!!!! !!!!!Bad seed 0x80141b12
+Bad seed 0xc013c9b4
+ !!!!!Bad seed 0x801420fd
+ !!!!!Bad seed 0x139a25
+ !!!!!Bad seed 0x801438a2
+ !!!!!Bad seed 0x40147471
+ !!!!!Bad seed 0x8014609b
+ !!!!!Bad seed 0x80146a7f
+ !!!!!Bad seed 0x8014710d
+ !!!!!Bad seed 0x13e6d9
+ !!!!!Bad seed 0x80148449
+ !!!!!Bad seed 0x401497ee
+ !!!!!Bad seed 0x4014a59e
+ !!!!!Bad seed 0x4014b014
+ !!!!!Bad seed 0xc014514e
+ !!!!!Bad seed 0x4014c8d3
+ !!!!!Bad seed 0x8014b591
+ !!!!!Bad seed 0x141675
+ !!!!!Bad seed 0x1418bd
+ !!!!!Bad seed 0x8014b924
+ !!!!!Bad seed 0x4014d878
+ !!!!!Bad seed 0x8014bde2
+ !!!!! !!!!!Bad seed 0x4014da12
+Bad seed 0x14234a
+ !!!!!Bad seed 0x4014daf3
+ !!!!!Bad seed 0xc0148589
+ !!!!!Bad seed 0x4014dbbe
+ !!!!!Bad seed 0x142daa
+ !!!!!Bad seed 0x4014e0a5
+ !!!!!Bad seed 0xc0149aeb
+ !!!!!Bad seed 0xc0149b4b
+ !!!!!Bad seed 0x8014e2fc
+ !!!!!Bad seed 0xc014a062
+ !!!!!Bad seed 0x4014ef65
+ !!!!!Bad seed 0xc014b21a
+ !!!!!Bad seed 0x4014f168
+ !!!!!Bad seed 0x4014f1b0
+ !!!!!Bad seed 0x147ab9
+ !!!!!Bad seed 0x4014f53b
+ !!!!!Bad seed 0xc014c3c3
+ !!!!! !!!!!Bad seed 0x8014f452
+Bad seed 0x14843c
+ !!!!!Bad seed 0x8014f9c4
+ !!!!! !!!!!Bad seed 0x148f4a
+Bad seed 0x8014faa3
+ !!!!!Bad seed 0x149041
+ !!!!!Bad seed 0xc014d542
+ !!!!!Bad seed 0x4015153f
+ !!!!!Bad seed 0x80151e1b
+ !!!!!Bad seed 0xc014ee78
+ !!!!!Bad seed 0x14b50d
+ !!!!!Bad seed 0x14b51f
+ !!!!!Bad seed 0x14b9c8
+ !!!!!Bad seed 0x801526a0
+ !!!!!Bad seed 0x14bc1d
+ !!!!!Bad seed 0x14bd7c
+ !!!!!Bad seed 0x40156651
+ !!!!!Bad seed 0x14c275
+ !!!!!Bad seed 0x14c584
+ !!!!!Bad seed 0x80153d16
+ !!!!!Bad seed 0x401578d2
+ !!!!!Bad seed 0x80154ada
+ !!!!! !!!!!Bad seed 0x80154bec
+Bad seed 0xc0151ab7
+ !!!!!Bad seed 0x14e7b9
+ !!!!!Bad seed 0x14ea78
+ !!!!!Bad seed 0x40159656
+ !!!!!Bad seed 0x14ffba
+ !!!!!Bad seed 0x4015a31d
+ !!!!!Bad seed 0x15179b
+ !!!!!Bad seed 0x4015ae27
+ !!!!!Bad seed 0xc0155cab
+ !!!!!Bad seed 0x80157f88
+ !!!!!Bad seed 0x152d34
+ !!!!!Bad seed 0xc0157127
+ !!!!!Bad seed 0x8015a761
+ !!!!!Bad seed 0x1555c4
+ !!!!!Bad seed 0x8015ba90
+ !!!!!Bad seed 0xc015851b
+ !!!!!Bad seed 0x1564a7
+ !!!!!Bad seed 0x156583
+ !!!!!Bad seed 0x40160df6
+ !!!!!Bad seed 0xc0159a98
+ !!!!! !!!!!Bad seed 0x8015d259
+Bad seed 0x15737a
+ !!!!!Bad seed 0x1579d4
+ !!!!!Bad seed 0xc015ae89
+ !!!!!Bad seed 0x4016279c
+ !!!!!Bad seed 0xc015c2ff
+ !!!!! !!!!!Bad seed 0x8015f98a
+Bad seed 0xc015c6ab
+ !!!!!Bad seed 0x1597ca
+ !!!!!Bad seed 0x159ea6
+ !!!!!Bad seed 0xc015d0a0
+ !!!!!Bad seed 0x80160683
+ !!!!!Bad seed 0x40164942
+ !!!!!Bad seed 0xc015da8d
+ !!!!!Bad seed 0xc015dd25
+ !!!!!Bad seed 0x15b468
+ !!!!!Bad seed 0xc015e7ad
+ !!!!!Bad seed 0x40166278
+ !!!!! !!!!!Bad seed 0x80163352
+Bad seed 0xc015f944
+ !!!!!Bad seed 0x15e7ca
+ !!!!!Bad seed 0x40169436
+ !!!!!Bad seed 0x801651f8
+ !!!!!Bad seed 0x8016588a
+ !!!!!Bad seed 0x4016a3ca
+ !!!!!Bad seed 0x801664e2
+ !!!!!Bad seed 0x4016abb4
+ !!!!!Bad seed 0xc0163d91
+ !!!!!Bad seed 0x4016bda1
+ !!!!!Bad seed 0xc01644dd
+ !!!!!Bad seed 0x4016c4a7
+ !!!!!Bad seed 0xc0165197
+ !!!!!Bad seed 0xc016534e
+ !!!!!Bad seed 0x164b51
+ !!!!!Bad seed 0x8016a9df
+ !!!!!Bad seed 0x164fff
+ !!!!!Bad seed 0x165aff
+ !!!!!Bad seed 0x8016bb85
+ !!!!!Bad seed 0xc01680ba
+ !!!!!Bad seed 0x8016ca82
+ !!!!!Bad seed 0xc0168542
+ !!!!!Bad seed 0xc01689d7
+ !!!!!Bad seed 0x16714d
+ !!!!!Bad seed 0xc0169187
+ !!!!!Bad seed 0xc01691bf
+ !!!!!Bad seed 0x40171064
+ !!!!!Bad seed 0x40171802
+ !!!!! !!!!!Bad seed 0x8016f1e2
+Bad seed 0x16947e
+ !!!!!Bad seed 0xc016b297
+ !!!!!Bad seed 0x8016f55f
+ !!!!!Bad seed 0x169c66
+ !!!!! !!!!!Bad seed 0x40173c8a
+Bad seed 0x80170ae7
+ !!!!!Bad seed 0xc016db27
+ !!!!!Bad seed 0x16b894
+ !!!!!Bad seed 0x16c4ff
+ !!!!!Bad seed 0xc0170504
+ !!!!! !!!!!Bad seed 0x40178fd6
+Bad seed 0x16e9d3
+ !!!!!Bad seed 0x4017d1dd
+ !!!!!Bad seed 0xc01750fc
+ !!!!! !!!!!Bad seed 0x171aa7
+Bad seed 0x4017dd08
+ !!!!!Bad seed 0xc017660b
+ !!!!!Bad seed 0x172db7
+ !!!!! !!!!!Bad seed 0xc0176a83
+Bad seed 0x4017f08c
+ !!!!!Bad seed 0x8017ae84
+ !!!!!Bad seed 0xc0176e21
+ !!!!!Bad seed 0xc01773c5
+ !!!!!Bad seed 0x4018183a
+ !!!!!Bad seed 0x4018185a
+ !!!!!Bad seed 0x40181c05
+ !!!!!Bad seed 0x8017d8ab
+ !!!!!Bad seed 0x40182177
+ !!!!!Bad seed 0x8017e49c
+ !!!!!Bad seed 0xc017a94b
+ !!!!! !!!!!Bad seed 0x401852b8
+Bad seed 0x801804e2
+ !!!!!Bad seed 0xc017c08e
+ !!!!!Bad seed 0x801808e9
+ !!!!!Bad seed 0x401865c0
+ !!!!!Bad seed 0xc017c974
+ !!!!! !!!!!Bad seed 0x40186711
+Bad seed 0x17a84a
+ !!!!!Bad seed 0x40186899
+ !!!!! !!!!!Bad seed 0x40187a10
+Bad seed 0x80182820
+ !!!!!Bad seed 0x17c9ab
+ !!!!! !!!!!Bad seed 0x80182974
+Bad seed 0x17ca5a
+ !!!!!Bad seed 0xc017e3d3
+ !!!!!Bad seed 0x4018a3ea
+ !!!!!Bad seed 0x801862aa
+ !!!!!Bad seed 0x17ec16
+ !!!!!Bad seed 0xc01802ff
+ !!!!!Bad seed 0x17f4e5
+ !!!!!Bad seed 0x801873ad
+ !!!!!Bad seed 0xc0182464
+ !!!!!Bad seed 0xc01827e3
+ !!!!!Bad seed 0x4018de43
+ !!!!!Bad seed 0x80188e40
+ !!!!!Bad seed 0x801897a3
+ !!!!!Bad seed 0xc0183ff7
+ !!!!! !!!!!Bad seed 0x401906e6
+Bad seed 0x8018ada5
+ !!!!!Bad seed 0x8018afc9
+ !!!!!Bad seed 0x8018b36b
+ !!!!!Bad seed 0x40192197
+ !!!!!Bad seed 0x401927cc
+ !!!!!Bad seed 0xc01872d2
+ !!!!!Bad seed 0x8018e3ab
+ !!!!!Bad seed 0x401934d1
+ !!!!!Bad seed 0xc018837d
+ !!!!!Bad seed 0x401953d5
+ !!!!!Bad seed 0x40195a0a
+ !!!!!Bad seed 0xc018c8ca
+ !!!!!Bad seed 0x401989c3
+ !!!!!Bad seed 0xc018eda0
+ !!!!!Bad seed 0xc018f551
+ !!!!!Bad seed 0x4019a17c
+ !!!!!Bad seed 0xc0190974
