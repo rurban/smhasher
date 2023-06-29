@@ -6,7 +6,7 @@
 #include <cstring>
 #include "discohash.h"
 
-constexpr int STATE = 32;
+constexpr int STATE = 64;
 constexpr int STATE64 = STATE >> 3;
 constexpr int STATEM = STATE-1;
 constexpr int HSTATE64M = (STATE64 >> 1)-1;
@@ -92,6 +92,12 @@ uint64_t *ds = (uint64_t *)disco_buf;
       mix(0);
       mix(1);
       mix(2);
+
+      mix(3);
+      mix(4);
+      mix(5);
+
+      mix(6);
     }
 
   //---------
@@ -123,6 +129,10 @@ uint64_t *ds = (uint64_t *)disco_buf;
       ds[1] = 0x0fedcba987654321;
       ds[2] = 0xaccadacca80081e5;
       ds[3] = 0xf00baaf00f00baaa;
+      ds[4] = 0xbeefdeadbeefc0de;
+      ds[5] = 0xabad1deafaced00d;
+      ds[6] = 0xfaceb00cfacec0de;
+      ds[7] = 0xdeadc0dedeadbeef;
 
       memcpy(tempBuf, key, len);
       uint64_t* temp64 = reinterpret_cast<uint64_t*>(tempBuf);
@@ -131,21 +141,34 @@ uint64_t *ds = (uint64_t *)disco_buf;
       round( seed64Arr, seed8Arr, 16 );
       round( ds, ds8, STATE   );
 
-      uint64_t h[4] = {0, ds[3] ^ ds[2], 0, ds[1] ^ ds[0]}; // full 256-bit output
+      // 512-bit internal state 256-bit output
+      uint64_t h[4] = {0}; // This will hold the final 256-bit output
 
-      // subtraction here (discohash v2) more readily mixes the bits than addition, 
-      // achieves non-compressibility (using gzip -9) and maintains the statistical properties
-      // (smhasher quality tests) of discohash v1
-      h[0] -= ds[2];
-      h[0] -= ds[3];
-      h[2] -= ds[0];
-      h[2] -= ds[1];
+      h[0] -= ds[0];
+      h[0] -= ds[4];
+      h[1] = ds[1] ^ ds[5];
+      h[2] -= ds[2];
+      h[2] -= ds[6];
+      h[3] = ds[3] ^ ds[7];
+
+      /**
+        // 256-bit internal state
+        uint64_t h[4] = {0, ds[3] ^ ds[2], 0, ds[1] ^ ds[0]}; // full 256-bit output 
+
+        // subtraction here (discohash v2) more readily mixes the bits than addition, 
+        // achieves non-compressibility (using gzip -9) and maintains the statistical properties
+        // (smhasher quality tests) of discohash v1
+        h[0] -= ds[2];
+        h[0] -= ds[3];
+        h[2] -= ds[0];
+        h[2] -= ds[1];
+      */
 
       /*
-      // 64-bit output
-      uint64_t h[1] = {0};
-      h[0] -= ds[2];
-      h[0] -= ds[3];
+        // 64-bit output
+        uint64_t h[1] = {0};
+        h[0] -= ds[2];
+        h[0] -= ds[3];
       */
 
       // how to make a cryptographic output? A finalization that only outputs half the state is one start 
