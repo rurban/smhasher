@@ -131,8 +131,8 @@ SMhasher
 | [tifuhash_64](doc/tifuhash_64.txt)            |        35.60 |  1679.52 |1212.75 (15)| 276 | Cyclic low32               |
 | [floppsyhash](doc/floppsyhash.txt)            |        35.72 |  1868.92 |1411.07 (7) | 623 |                            |
 | [beamsplitter](doc/beamsplitter.txt)          |       789.22 |   682.45 |1150.33 (26)|4203 | UB                         |
-| [discohash](doc/discohash.txt)                |      3959.08 |   199.92 | 413.43 (6) |1294 | bad seeds                  |
-| [discoNONG](doc/discoNONG.txt)                |      3763.67 |   325.26 | -          |     | bad seeds                  |
+| [discohash](doc/discohash.txt)                |      4384.56 |   197.24 | 712.79 (10)|1294 | bad seeds                  |
+| [discoNONG](doc/discoNONG.txt)                |      3662.81 |   340.40 | 819.97 (200)|    | bad seeds                  |
 | [chaskey](doc/chaskey.txt)                    |      1150.69 |   113.09 | 308.01 (5) |1609 | PerlinNoise                |
 | [SipHash](doc/SipHash.txt)                    |       945.64 |   146.95 | 346.53 (5) |1071 |                            |
 | [HalfSipHash](doc/HalfSipHash.txt)            |      1108.77 |    82.02 | 285.78 (5) | 700 | zeroes                     |
