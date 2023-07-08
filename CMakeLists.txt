@@ -675,7 +675,6 @@ add_library(
   floppsyhash.cpp
   fasthash.cpp
   beamsplitter.cpp
-  discohash.cpp
   discohash_512.cpp
   xxhash.c
   metrohash/metrohash64.cpp
