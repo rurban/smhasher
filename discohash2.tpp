@@ -1,3 +1,4 @@
+// -*- c++ -*-
 #pragma once
 /*
  * Discohash v2 

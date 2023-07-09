@@ -131,8 +131,11 @@ SMhasher
 | [tifuhash_64](doc/tifuhash_64.txt)            |        35.60 |  1679.52 |1212.75 (15)| 276 | Cyclic low32               |
 | [floppsyhash](doc/floppsyhash.txt)            |        35.72 |  1868.92 |1411.07 (7) | 623 |                            |
 | [beamsplitter](doc/beamsplitter.txt)          |       789.22 |   682.45 |1150.33 (26)|4203 | UB                         |
-| [discohash](doc/discohash.txt)                |      4384.56 |   197.24 | 712.79 (10)|1294 | bad seeds                  |
-| [discoNONG](doc/discoNONG.txt)                |      3662.81 |   340.40 | 819.97 (200)|    | bad seeds                  |
+| [discohash1](doc/discohash1.txt)              |      4923.07 |   163.05 | -|1294 |                            |
+| [discohash1-128](doc/discohash1-128.txt)      |      4967.81 |   188.54 | 701.67 (2) |1294 |                            |
+| [discohash2](doc/discohash2.txt)              |      5007.35 |   164.10 | 712.79 (10)|1294 |                            |
+| [discohash2-128](doc/discohash2-128.txt)      |      4966.56 |   188.85 | 689.98 (1) |1294 |                            |
+| [discoNONG](doc/discoNONG.txt)                |      4437.01 |   326.97 | 840.01 (2) |    | bad seeds                   |
 | [chaskey](doc/chaskey.txt)                    |      1150.69 |   113.09 | 308.01 (5) |1609 | PerlinNoise                |
 | [SipHash](doc/SipHash.txt)                    |       945.64 |   146.95 | 346.53 (5) |1071 |                            |
 | [HalfSipHash](doc/HalfSipHash.txt)            |      1108.77 |    82.02 | 285.78 (5) | 700 | zeroes                     |
@@ -422,7 +425,7 @@ Typical undefined behaviour (**UB**) problems:
   flag. But generally using misaligned accesses is fine.
 
   These are: mx3, Spooky, mirhash (_but not strict_), MUM, fasthash,
-  Murmur3*, Murmur2*, metrohash* (all but cmetro*), Crap8, discohash,
+  Murmur3*, Murmur2*, metrohash* (all but cmetro*), Crap8,
   beamsplitter, lookup3, fletcher4, fletcher2, all sanmayce
   FNV1a\_ variants (FNV1a\_YT, FNV1A\_Pippip\_Yurii, FNV1A\_Totenschiff,
   ...), fibonacci.

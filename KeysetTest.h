@@ -111,7 +111,7 @@ bool TestSecret ( const HashInfo* info, const uint64_t secret ) {
       memset(&key, c, len);
       hash(key, len, secret, &h);
       if (h == 0 && c == 0) {
-        printf("\nBroken seed 0x%" PRIx64 " => 0 with key[%d] of all %d bytes confirmed => hash 0 !!!!\n",
+        printf("\nBroken seed 0x%08" PRIx64 " => 0 with key[%d] of all %d bytes confirmed => hash 0 !!!!\n",
                secret, len, c);
         hashes.push_back(h);
         result = false;
@@ -120,7 +120,7 @@ bool TestSecret ( const HashInfo* info, const uint64_t secret ) {
         hashes.push_back(h);
     }
     if (!TestHashList(hashes, false, true, false, false, false, false)) {
-      printf("Bad seed 0x%" PRIx64 " for len %d confirmed ", secret, len);
+      printf("Bad seed 0x%08" PRIx64 " for len %d confirmed ", secret, len);
       printf("=> hashes: ");
       for (hashtype x : hashes) {
         std::cout << x << " ";
@@ -149,7 +149,7 @@ void TestSecretRangeThread ( const HashInfo* info, const uint64_t hi,
     static hashtype zero;
     uint64_t seed = hi | y;
     if ((seed & UINT64_C(0x1ffffff)) == UINT64_C(0x1ffffff))
-      printf ("%" PRIx64 " ", seed);
+      printf ("%0x08" PRIx64 " ", seed);
     hashes.clear();
     Hash_Seed_init (hash, seed);
     for (int x : std::vector<int> {0,32,127,255}) {
@@ -158,7 +158,7 @@ void TestSecretRangeThread ( const HashInfo* info, const uint64_t hi,
       memset(&key, x, sizeof(key));
       hash(key, 16, seed, &h);
       if (h == 0 && x == 0) {
-        printf("\nBroken seed 0x%" PRIx64 " => 0 with key[16] of all %d bytes\n",
+        printf("\nBroken seed 0x%08" PRIx64 " => 0 with key[16] of all %d bytes\n",
                seed, x);
         hashes.push_back(h);
         fails++;
@@ -170,7 +170,7 @@ void TestSecretRangeThread ( const HashInfo* info, const uint64_t hi,
     }
     if (!TestHashList(hashes, false, true, false, false, false, false)) {
       fails++;
-      printf("Bad seed 0x%" PRIx64 "\n", seed);
+      printf("Bad seed 0x%08" PRIx64 "\n", seed);
       if (fails < 32) // don't print too many lines
         TestHashList(hashes, false);
       result = false;
