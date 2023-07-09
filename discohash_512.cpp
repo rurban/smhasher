@@ -127,7 +127,7 @@ round (const uint64_t *m64, const uint8_t *m8, int len)
 }
 
 void
-DISCoHAsH_512_64 (const void *key, int len, unsigned seed, void *out)
+DISCoHAsH_512_64 (const void *key, int len, seed_t seed, void *out)
 {
   int tempLen = len;
   if (tempLen == 0)
