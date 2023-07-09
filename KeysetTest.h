@@ -149,7 +149,7 @@ void TestSecretRangeThread ( const HashInfo* info, const uint64_t hi,
     static hashtype zero;
     uint64_t seed = hi | y;
     if ((seed & UINT64_C(0x1ffffff)) == UINT64_C(0x1ffffff))
-      printf ("%0x08" PRIx64 " ", seed);
+      printf ("0x%08" PRIx64 " ", seed);
     hashes.clear();
     Hash_Seed_init (hash, seed);
     for (int x : std::vector<int> {0,32,127,255}) {

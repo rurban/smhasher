@@ -398,11 +398,11 @@ HashInfo g_hashes[] =
 // and now the quality hash funcs, slowest first
 { tifuhash_64,          64, TIFU_VERIF, "tifuhash_64", "Tiny Floatingpoint Unique Hash with continued egyptian fractions", GOOD, {} },
 { beamsplitter_64,      64, 0x1BDF358B, "beamsplitter","A possibly universal hash made with a 10x64 s-box.", GOOD, {} },
-{ discohash1::DISCoHAsH<64>,        64, 0xBEBB4185, "discohash1",   "DISCoHAsH 64 (was BEBB4185) v1", GOOD, {} },
+{ discohash1::DISCoHAsH<64>,        64,  0xBEBB4185, "discohash1",   "DISCoHAsH 64 (was BEBB4185) v1", GOOD, {} },
 { discohash1::DISCoHAsH<128>,       128, 0x05C0460C, "discohash1-128",   "DISCoHAsH v1", GOOD, {} },
 { discohash2::DISCoHAsH_2<64>,      64,  0x8FF45ABF, "discohash2",       "DISCoHAsH v2", GOOD, {} },
 { discohash2::DISCoHAsH_2<128>,     128, 0x95E58C14, "discohash2-128",   "DISCoHAsH v2", GOOD, {} },
-{ DISCoHAsH_512_64,     64, 0x9182A886, "discoNONG",   "discoNONG - discohash with 512-bit internal state 64-bit output", GOOD,
+{ DISCoHAsH_512_64,                 64,  0x9182A886, "discoNONG",   "discoNONG - discohash with 512-bit internal state 64-bit output", GOOD,
   {
     0x00005147, 0x00009dce, 0x0000addc, 0x0000f64c, 0x0001234d, 0x0001386a,
     0x0001544c, 0x000197b1, 0x0001df9b, 0x0002182a, 0x000257af, 0x00028019,
@@ -870,8 +870,6 @@ void Bad_Seed_init (pfHash hash, uint32_t &seed) {
     seed++;
   else if(hash == MurmurHash64B_test)
     MurmurHash64B_seed_init(seed);
-  else if(hash == discohash1::DISCoHAsH<64>)
-    discohash1::DISCoHAsH_64_seed_init(seed);
   else if(hash == DISCoHAsH_512_64)
     DISCoHAsH_512_64_seed_init(seed);
 #endif
