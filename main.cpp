@@ -755,7 +755,7 @@ HashInfo g_hashes[] =
 { khashv32_test,        32, KHASHV32_VERIF, "k-hashv32",      "Vectorized K-HashV, 32-bit", GOOD, {}},
 { khashv64_test,        64, KHASHV64_VERIF, "k-hashv64",      "Vectorized K-HashV, 64-bit", GOOD, {}},
 #endif
-{ komihash_test,        64, 0x8157FF6D, "komihash",    "komihash 5.1", GOOD, {} },
+{ komihash_test,        64, 0x8157FF6D, "komihash",    "komihash 5.7", GOOD, {} },
 { polymur_test,         64, 0x4F894810, "polymur",     "github.com/orlp/polymur-hash v1", GOOD, {} },
 };
 
