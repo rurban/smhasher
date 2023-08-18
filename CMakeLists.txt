@@ -659,6 +659,7 @@ add_library(
   MurmurHash2.cpp
   MurmurHash3.cpp
   Platform.cpp
+  pvalue.c
   Random.cpp
   sha1.cpp
   ${SIPHASH_SRC}
