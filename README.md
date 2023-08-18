@@ -49,174 +49,174 @@ SMhasher
 | [asconhashv12_64](doc/asconhashv12_64.txt)    |       159.68 |   386.90 | 480.86 (4) |6490 |               |
 | [sha3-256](doc/sha3-256.txt)                  |       100.58 |  3877.18 |4159.79 (37)|     | PerlinNoise   |
 | [sha3-256_64](doc/sha3-256_64.txt)            |       100.57 |  3909.00 |4174.63 (16)|     | PerlinNoise   |
-| [hasshe2](doc/hasshe2.txt)                    |      2791.93 |    63.87 | 278.67 (5) | 445 | Permutation,TwoBytes,Zeroes,Seed|
-| [poly_1_mersenne](doc/poly_1_mersenne.txt)    |      1344.26 |    62.49 | 258.52 (4) | 479 | fails most tests |
-| [poly_2_mersenne](doc/poly_2_mersenne.txt)    |      1355.51 |    70.68 | 267.09 (5) | 479 |                  |
-| [poly_3_mersenne](doc/poly_3_mersenne.txt)    |      1344.95 |    80.08 | 277.61 (6) | 479 |                  |
-| [poly_4_mersenne](doc/poly_4_mersenne.txt)    |      1358.32 |    88.02 | 281.05 (5) | 479 |                  |
-| [tabulation32](doc/tabulation32.txt)          |      5666.25 |    40.75 | 247.27 (4) | 848 | collisions       |
-| [tabulation](doc/tabulation.txt)              |      7860.10 |    39.88 | 260.99 (6) | 554 |                  |
-| [crc32_hw](doc/crc32_hw.txt)                  |      6056.18 |    42.22 | 244.54 (5) | 653 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (SSE4.2/NEON) |
-| [crc32_hw1](doc/crc32_hw1.txt)                |      7304.11 |    49.65 | 248.61 (6) | 671 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2)  |
-| [crc64_hw](doc/crc64_hw.txt)                  |      6149.22 |    40.10 | 214.15 (5) | 652 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (SSE4.2/NEON) |
+| [hasshe2](doc/hasshe2.txt)                    |      2773.89 |    64.35 | 282.30 (3) | 445 | Permutation,TwoBytes,Zeroes,Seed|
+| [poly_1_mersenne](doc/poly_1_mersenne.txt)    |      1369.21 |    61.59 | 248.86 (4) | 479 | fails most tests |
+| [poly_2_mersenne](doc/poly_2_mersenne.txt)    |      1364.03 |    70.30 | 261.00 (6) | 479 |                  |
+| [poly_3_mersenne](doc/poly_3_mersenne.txt)    |      1342.82 |    80.22 | 268.79 (2) | 479 |                  |
+| [poly_4_mersenne](doc/poly_4_mersenne.txt)    |      1343.19 |    89.13 | 277.52 (3) | 479 |                  |
+| [tabulation32](doc/tabulation32.txt)          |      5781.16 |    40.00 | 241.79 (10) | 848 | collisions       |
+| [tabulation](doc/tabulation.txt)              |      7875.01 |    39.95 | 249.49 (3) | 554 |                  |
+| [crc32_hw](doc/crc32_hw.txt)                  |      6244.38 |    41.23 | 226.80 (2) | 653 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (SSE4.2/NEON) |
+| [crc32_hw1](doc/crc32_hw1.txt)                |      7569.29 |    49.07 | 233.75 (3) | 671 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2)  |
+| [crc64_hw](doc/crc64_hw.txt)                  |      6143.62 |    40.48 | 223.13 (2) | 652 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (SSE4.2/NEON) |
 | [crc32_pclmul](doc/crc32_pclmul.txt)          |           -  |     -    |     -      |     | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2+PCLMUL) |
-| [o1hash](doc/o1hash.txt)                      |  11599548.76 |    18.21 | 223.19 (4) | 101 | insecure, no seed, zeros, fails all tests |
-| [fibonacci](doc/fibonacci.txt)                |     15940.72 |    22.98 | 840.87 (4) |1692 | UB, zeros, fails all tests       |
-| [FNV1a](doc/FNV1a.txt)                        |       762.10 |    73.72 | 250.05 (6) | 204 | bad seed, zeros, fails all tests       |
-| [FNV1A_Totenschiff](doc/FNV1A_Totenschiff.txt)|      6150.00 |    26.35 | 251.72 (5) | 270 | UB, zeros, fails all tests   |
-| [FNV1A_Pippip_Yurii](doc/FNV1A_Pippip_Yurii.txt)|      6094.18 |    28.29 | 260.05 (6) | 147 | UB, sanity, fails all tests  |
-| [FNV1a_YT](doc/FNV1a_YT.txt)                  |     13451.31 |    30.57 | 244.22 (5) | 321 | bad seed, UB, fails all tests          |
-| [FNV2](doc/FNV2.txt)                          |      6199.86 |    32.10 | 216.13 (5) | 278 | fails all tests              |
-| [FNV64](doc/FNV64.txt)                        |       762.15 |    73.38 | 204.27 (5) |  79 | fails all tests              |
-| [FNV128](doc/FNV128.txt)                      |       388.63 |   138.02 | 310.77 (11)| 171 | fails all tests              |
-| [k-hash32](doc/k-hash32.txt)                  |      2221.69 |    53.26 | 264.07 (4) | 808 | insecure, zeros, UB, bad seeds, fails all tests       |
-| [k-hash64](doc/k-hash64.txt)                  |      2418.02 |    49.37 | 247.61 (4) | 609 | insecure, zeros, UB, bad seeds, fails all tests       |
-| [fletcher2](doc/fletcher2.txt)                |     15241.81 |    21.05 | 349.08 (4) | 248 | bad seed 0, UB, fails all tests          |
-| [fletcher4](doc/fletcher4.txt)                |     15339.28 |    20.88 | 352.19 (4) | 371 | bad seed 0, UB, fails all tests          |
-| [bernstein](doc/bernstein.txt)                |      1014.45 |    58.11 | 238.29 (4) |  41 | bad seed 0, fails all tests              |
-| [sdbm](doc/sdbm.txt)                          |       770.27 |    70.06 | 234.11 (6) |  41 | bad seed 0, fails all tests              |
-| [x17](doc/x17.txt)                            |       761.56 |    74.03 | 240.13 (6) |  79 | 99.98% bias, fails all tests |
-| [libiberty](doc/libiberty.txt)                |       610.09 |    85.35 | 242.93 (5) |  37 | insecure, 100% bias, fails all tests, bad seed |
-| [gcc](doc/gcc.txt)                            |       616.49 |    85.62 | 242.07 (5) |  39 | insecure, 100% bias, fails all tests, bad seed |
-| [JenkinsOOAT](doc/JenkinsOOAT.txt)            |       619.78 |   108.61 | 268.47 (5) | 153 | bad seed 0, 53.5% bias, fails all tests  |
-| [JenkinsOOAT_perl](doc/JenkinsOOAT_perl.txt)  |       615.95 |    93.03 | 257.38 (4) |  65 | bad seed 0, 1.5-11.5% bias, 7.2x collisions, BIC, LongNeighbors |
-| [MicroOAAT](doc/MicroOAAT.txt)                |       739.74 |    75.39 | 244.15 (5) |  68 | 100% bias, distrib, BIC      |
-| [pearsonhash64](doc/pearsonhash64.txt)        |       434.37 |   123.30 | 229.72 (6) |     | Avalanche, Seed, SSSE3 only. broken MSVC     |
-| [pearsonhash128](doc/pearsonhash128.txt)      |       441.53 |   119.06 | 238.70 (5) |     | Avalanche, Seed, SSSE3 only. broken MSVC     |
-| [pearsonhash256](doc/pearsonhash256.txt)      |       430.46 |   118.16 | 248.71 (6) |     | Avalanche, Seed, SSSE3 only. broken MSVC     |
-| [VHASH_32](doc/VHASH_32.txt)                  |     13283.54 |    64.91 | 295.63 (5) |1231 | sanity, Seed, MomentChi2     |
-| [VHASH_64](doc/VHASH_64.txt)                  |     13057.72 |    66.00 | 291.31 (5) |1231 | sanity, Seed, Sparse         |
-| [farsh32](doc/farsh32.txt)                    |     27073.86 |    66.85 | 291.09 (5) | 944 | insecure: AppendedZeroes, collisions+bias, MomentChi2, LongNeighbors |
-| [farsh64](doc/farsh64.txt)                    |     13742.68 |   114.13 | 331.15 (5) | 944 | insecure: AppendedZeroes, collisions+bias, MomentChi2, LongNeighbors |
-| [farsh128](doc/farsh128.txt)                  |      6915.41 |   234.60 | 401.77 (4) | 944 | insecure: AppendedZeroes, collisions+bias, permut,combin,2bytes,zeroes,PerlinNoise |
-| [farsh256](doc/farsh256.txt)                  |      3411.21 |   451.97 | 628.91 (3) | 944 | insecure: AppendedZeroes, collisions+bias, permut,combin,2bytes,zeroes,PerlinNoise |
-| [jodyhash32](doc/jodyhash32.txt)              |      1739.08 |    42.57 | 255.95 (10) | 102 | bias, collisions, distr, BIC LongNeighbors |
-| [jodyhash64](doc/jodyhash64.txt)              |      4794.51 |    28.17 | 247.51 (7) | 118 | bias, collisions, distr, BIC, LongNeighbors |
-| [lookup3](doc/lookup3.txt)                    |      2467.12 |    39.90 | 247.48 (6) | 341 | UB, 28% bias, collisions, 30% distr, BIC  |
-| [superfast](doc/superfast.txt)                |      2062.25 |    49.52 | 247.20 (4) | 210 | UB, bad seed 0, 91% bias, 5273.01x collisions, 37% distr, BIC |
-| [MurmurOAAT](doc/MurmurOAAT.txt)              |       507.14 |   103.15 | 246.66 (6) |  47 | bad seed 0, collisions, 99.998% distr., BIC, LongNeighbors |
-| [Crap8](doc/Crap8.txt)                        |      3097.22 |    36.49 | 252.62 (6) | 342 | UB, 2.42% bias, collisions, 2% distrib |
-| [Murmur1](doc/Murmur1.txt)                    |      2065.77 |    47.62 | 247.08 (4) | 358 | UB, 1 bad seed, 511x collisions, Diff, BIC |
-| [Murmur2](doc/Murmur2.txt)                    |      3043.78 |    41.85 | 249.46 (6) | 358 | UB, 1 bad seed, 1.7% bias, 81x coll, 1.7% distrib, BIC |
-| [Murmur2A](doc/Murmur2A.txt)                  |      3073.22 |    46.11 | 253.88 (5) | 407 | UB, 1 bad seed, 12.7% bias, LongNeighbors          |
-| [Murmur2B](doc/Murmur2B.txt)                  |      6178.48 |    38.12 | 237.04 (5) | 433 | UB, 1.8% bias, collisions, 3.4% distrib, BIC |
-| [Murmur2C](doc/Murmur2C.txt)                  |      3794.65 |    49.28 | 231.58 (5) | 444 | UB, 2^32 bad seeds, 91% bias, collisions, distr, BIC, LongNeighbors |
-| [Murmur3A](doc/Murmur3A.txt)                  |      3037.83 |    48.32 | 250.33 (5) | 351 | UB, 1 bad seed, Moment Chi2 69     |
-| [PMurHash32](doc/PMurHash32.txt)              |      3112.42 |    47.26 | 252.54 (5) |1862 | 1 bad seed, Moment Chi2 69         |
-| [Murmur3C](doc/Murmur3C.txt)                  |      4834.87 |    56.75 | 258.31 (5) | 859 | UB, LongNeighbors, Text, DiffDist  |
-| [mirhash32low](doc/mirhash32low.txt)          |      6057.51 |    37.61 | 254.30 (8) |1112 | UB, 4 bad seeds, Cyclic, LongNeighbors, machine-specific (32/64 differs) |
-| [PMPML_32](doc/PMPML_32.txt)                  |      6870.14 |    43.94 | 265.62 (5) |1084 | Avalanche >512, unseeded: Seed, BIC, MomentChi2, PerlinNoise |
-| [PMPML_64](doc/PMPML_64.txt)                  |      9984.71 |    49.26 | 249.64 (7) |1305 | unseeded: Seed, MomentChi2, BIC        |
-| [xxHash32](doc/xxHash32.txt)                  |      5896.91 |    48.59 | 248.97 (7) | 738 | LongNeighbors, collisions with 4bit diff, MomentChi2 220 |
-| [metrohash64](doc/metrohash64.txt)            |     14443.60 |    40.32 | 225.16 (5) | 624 | UB, LongNeighbors, BIC         |
-| [metrohash64_1](doc/metrohash64_1.txt)        |     14549.52 |    40.57 | 259.47 (5) | 624 | UB, LongNeighbors, BIC, MomentChi2         |
-| [metrohash64crc_1](doc/metrohash64crc_1.txt)  |      8164.67 |    45.69 | 225.83 (4) | 632 | UB, Cyclic 8/8 byte, DiffDist, BIC, MomentChi2, machine-specific (SSE4.2/NEON) |
-| [metrohash64crc_2](doc/metrohash64crc_2.txt)  |      7971.63 |    44.07 | 234.54 (7) | 632 | UB, Cyclic 8/8 byte, DiffDist, BIC, machine-specific (SSE4.2/NEON) |
-| [cmetrohash64_1o](doc/cmetrohash64_1o.txt)    |     14734.93 |    39.62 | 223.84 (4) |3506 | UB, LongNeighbors, BIC, MomentChi2  |
-| [cmetrohash64_1](doc/cmetrohash64_1.txt)      |     14453.95 |    40.43 | 239.68 (6) | 652 | UB, LongNeighbors, BIC, MomentChi2 |
-| [City64noSeed](doc/City64noSeed.txt)          |     13900.14 |    32.21 | 244.86 (4) |1038 | Avalanche, Sparse, TwoBytes, MomentChi2, Seed |
-| [City64](doc/City64.txt)                      |     14011.88 |    45.67 | 244.04 (5) |1120 | Sparse, TwoBytes           |
-| [t1ha1_64le](doc/t1ha1_64le.txt)              |     13369.16 |    31.55 | 242.73 (6) | 517 | Avalanche                  |
-| [t1ha1_64be](doc/t1ha1_64be.txt)              |     11591.96 |    32.69 | 244.10 (5) | 555 | Avalanche                  |
-| [t1ha0_32le](doc/t1ha0_32le.txt)              |      7245.81 |    49.24 | 258.06 (6) | 509 | Sparse, LongNeighbors      |
-| [t1ha0_32be](doc/t1ha0_32be.txt)              |      6754.43 |    50.64 | 253.15 (7) | 533 | Sparse, LongNeighbors      |
-| [t1ha2_stream](doc/t1ha2_stream.txt)          |     13718.38 |    82.35 | 293.58 (5) |1665 | Sparse, Permutation, LongNeighbors |
-| [t1ha2_stream128](doc/t1ha2_stream128.txt)    |     13801.39 |    96.21 | 320.21 (6) |1665 | Sparse, Permutation, LongNeighbors |
-| [aesnihash](doc/aesnihash.txt)                |      5183.33 |    58.52 | 322.74 (36)|1209 | fails many tests, machine-specific (x64 AES-NI) |
-| [falkhash](doc/falkhash.txt)                  |     50838.94 |   123.38 | 330.16 (6) | 264 | Sparse, LongNeighbors, machine-specific (x64 AES-NI) |
-| [MeowHash](doc/MeowHash.txt)                  |     29521.98 |    65.83 | 287.28 (4) |1764 | Sparse, invertible, machine-specific (x64 AES-NI)  |
-| [MeowHash64low](doc/MeowHash64low.txt)        |     29793.14 |    65.24 | 285.78 (5) |1764 | Sparse, invertible, machine-specific (x64 AES-NI)    |
-| [MeowHash32low](doc/MeowHash32low.txt)        |     30002.99 |    64.81 | 297.76 (6) |1764 | Sparse, invertible, machine-specific (x64 AES-NI)    |
+| [o1hash](doc/o1hash.txt)                      |  11629440.57 |    18.15 | 199.35 (2) | 101 | insecure, no seed, zeros, fails all tests |
+| [fibonacci](doc/fibonacci.txt)                |     16878.32 |    22.94 | 803.18 (15)|1692 | UB, zeros, fails all tests       |
+| [FNV1a](doc/FNV1a.txt)                        |       760.52 |    73.83 | 254.29 (5) | 204 | bad seed, zeros, fails all tests       |
+| [FNV1A_Totenschiff](doc/FNV1A_Totenschiff.txt)|      6274.78 |    26.23 | 251.13 (2) | 270 | UB, zeros, fails all tests   |
+| [FNV1A_Pippip_Yurii](doc/FNV1A_Pippip_Yurii.txt)|      6172.14 |    27.55 | 244.80 (2) | 147 | UB, sanity, fails all tests  |
+| [FNV1a_YT](doc/FNV1a_YT.txt)                  |     13486.49 |    30.50 | 237.43 (4) | 321 | bad seed, UB, fails all tests          |
+| [FNV2](doc/FNV2.txt)                          |      6171.60 |    32.20 | 208.59 (4) | 278 | fails all tests              |
+| [FNV64](doc/FNV64.txt)                        |       774.37 |    72.43 | 201.15 (2) |  79 | fails all tests              |
+| [FNV128](doc/FNV128.txt)                      |       390.14 |   136.42 | 289.00 (3) | 171 | fails all tests              |
+| [k-hash32](doc/k-hash32.txt)                  |      2230.42 |    53.05 | 264.64 (3) | 808 | insecure, zeros, UB, bad seeds, fails all tests       |
+| [k-hash64](doc/k-hash64.txt)                  |      2451.88 |    48.66 | 249.44 (2) | 609 | insecure, zeros, UB, bad seeds, fails all tests       |
+| [fletcher2](doc/fletcher2.txt)                |     15552.61 |    20.61 | 335.31 (3) | 248 | bad seed 0, UB, fails all tests          |
+| [fletcher4](doc/fletcher4.txt)                |     15556.93 |    20.60 | 358.60 (3) | 371 | bad seed 0, UB, fails all tests          |
+| [bernstein](doc/bernstein.txt)                |      1045.97 |    58.31 | 225.78 (3) |  41 | bad seed 0, fails all tests              |
+| [sdbm](doc/sdbm.txt)                          |       784.83 |    68.57 | 222.68 (5) |  41 | bad seed 0, fails all tests              |
+| [x17](doc/x17.txt)                            |       748.75 |    74.13 | 236.00 (10) |  79 | 99.98% bias, fails all tests |
+| [libiberty](doc/libiberty.txt)                |       628.66 |    84.95 | 225.07 (4) |  37 | insecure, 100% bias, fails all tests, bad seed |
+| [gcc](doc/gcc.txt)                            |       611.69 |    86.47 | 231.51 (5) |  39 | insecure, 100% bias, fails all tests, bad seed |
+| [JenkinsOOAT](doc/JenkinsOOAT.txt)            |       627.64 |   107.04 | 252.79 (3) | 153 | bad seed 0, 53.5% bias, fails all tests  |
+| [JenkinsOOAT_perl](doc/JenkinsOOAT_perl.txt)  |       608.10 |    94.17 | 254.09 (4) |  65 | bad seed 0, 1.5-11.5% bias, 7.2x collisions, BIC, LongNeighbors |
+| [MicroOAAT](doc/MicroOAAT.txt)                |       701.35 |    76.68 | 251.01 (3) |  68 | 100% bias, distrib, BIC      |
+| [pearsonhash64](doc/pearsonhash64.txt)        |       434.17 |   124.14 | 230.79 (4) |     | Avalanche, Seed, SSSE3 only. broken MSVC     |
+| [pearsonhash128](doc/pearsonhash128.txt)      |       434.23 |   121.34 | 221.03 (7) |     | Avalanche, Seed, SSSE3 only. broken MSVC     |
+| [pearsonhash256](doc/pearsonhash256.txt)      |       444.08 |   119.11 | 229.75 (4) |     | Avalanche, Seed, SSSE3 only. broken MSVC     |
+| [VHASH_32](doc/VHASH_32.txt)                  |     13053.40 |    65.84 | 289.86 (3) |1231 | sanity, Seed, MomentChi2     |
+| [VHASH_64](doc/VHASH_64.txt)                  |     13465.50 |    63.88 | 286.38 (5) |1231 | sanity, Seed, Sparse         |
+| [farsh32](doc/farsh32.txt)                    |     27038.23 |    66.88 | 278.89 (5) | 944 | insecure: AppendedZeroes, collisions+bias, MomentChi2, LongNeighbors |
+| [farsh64](doc/farsh64.txt)                    |     13829.32 |   112.46 | 332.59 (3) | 944 | insecure: AppendedZeroes, collisions+bias, MomentChi2, LongNeighbors |
+| [farsh128](doc/farsh128.txt)                  |      6878.88 |   233.35 | 384.85 (3) | 944 | insecure: AppendedZeroes, collisions+bias, permut,combin,2bytes,zeroes,PerlinNoise |
+| [farsh256](doc/farsh256.txt)                  |      3467.37 |   440.40 | 593.57 (5) | 944 | insecure: AppendedZeroes, collisions+bias, permut,combin,2bytes,zeroes,PerlinNoise |
+| [jodyhash32](doc/jodyhash32.txt)              |      1794.34 |    41.12 | 235.12 (4) | 102 | bias, collisions, distr, BIC LongNeighbors |
+| [jodyhash64](doc/jodyhash64.txt)              |      4813.10 |    40.72 | 239.22 (6) | 118 | bias, collisions, distr, BIC, LongNeighbors |
+| [lookup3](doc/lookup3.txt)                    |      2475.35 |    39.65 | 240.10 (3) | 341 | UB, 28% bias, collisions, 30% distr, BIC  |
+| [superfast](doc/superfast.txt)                |      2058.22 |    49.56 | 254.12 (3) | 210 | UB, bad seed 0, 91% bias, 5273.01x collisions, 37% distr, BIC |
+| [MurmurOAAT](doc/MurmurOAAT.txt)              |       506.66 |   103.33 | 236.89 (3) |  47 | bad seed 0, collisions, 99.998% distr., BIC, LongNeighbors |
+| [Crap8](doc/Crap8.txt)                        |      3041.14 |    37.25 | 247.87 (4) | 342 | UB, 2.42% bias, collisions, 2% distrib |
+| [Murmur1](doc/Murmur1.txt)                    |      2027.85 |    48.51 | 253.34 (3) | 358 | UB, 1 bad seed, 511x collisions, Diff, BIC |
+| [Murmur2](doc/Murmur2.txt)                    |      3089.18 |    41.22 | 238.42 (4) | 358 | UB, 1 bad seed, 1.7% bias, 81x coll, 1.7% distrib, BIC |
+| [Murmur2A](doc/Murmur2A.txt)                  |      3087.98 |    45.90 | 238.54 (4) | 407 | UB, 1 bad seed, 12.7% bias, LongNeighbors          |
+| [Murmur2B](doc/Murmur2B.txt)                  |      5919.38 |    38.18 | 215.96 (3) | 433 | UB, 1.8% bias, collisions, 3.4% distrib, BIC |
+| [Murmur2C](doc/Murmur2C.txt)                  |      3810.98 |    49.09 | 218.51 (3) | 444 | UB, 2^32 bad seeds, 91% bias, collisions, distr, BIC, LongNeighbors |
+| [Murmur3A](doc/Murmur3A.txt)                  |      2982.67 |    49.08 | 245.78 (4) | 351 | UB, 1 bad seed, Moment Chi2 69     |
+| [PMurHash32](doc/PMurHash32.txt)              |      3005.85 |    48.88 | 242.38 (3) |1862 | 1 bad seed, Moment Chi2 69         |
+| [Murmur3C](doc/Murmur3C.txt)                  |      4833.18 |    56.87 | 250.47 (6) | 859 | UB, LongNeighbors, Text, DiffDist  |
+| [mirhash32low](doc/mirhash32low.txt)          |      6145.39 |    36.95 | 235.09 (4) |1112 | UB, 4 bad seeds, Cyclic, LongNeighbors, machine-specific (32/64 differs) |
+| [PMPML_32](doc/PMPML_32.txt)                  |      6639.68 |    45.33 | 257.45 (3) |1084 | Avalanche >512, unseeded: Seed, BIC, MomentChi2, PerlinNoise |
+| [PMPML_64](doc/PMPML_64.txt)                  |      9833.77 |    50.00 | 251.64 (6) |1305 | unseeded: Seed, MomentChi2, BIC        |
+| [xxHash32](doc/xxHash32.txt)                  |      5865.17 |    49.20 | 242.74 (3) | 738 | LongNeighbors, collisions with 4bit diff, MomentChi2 220 |
+| [metrohash64](doc/metrohash64.txt)            |     14741.56 |    39.44 | 215.76 (2) | 624 | UB, LongNeighbors, BIC         |
+| [metrohash64_1](doc/metrohash64_1.txt)        |     14298.77 |    40.31 | 223.25 (4) | 624 | UB, LongNeighbors, BIC, MomentChi2         |
+| [metrohash64crc_1](doc/metrohash64crc_1.txt)  |      6929.69 |    44.65 | 223.68 (3) | 632 | UB, Cyclic 8/8 byte, DiffDist, BIC, MomentChi2, machine-specific (SSE4.2/NEON) |
+| [metrohash64crc_2](doc/metrohash64crc_2.txt)  |      8150.65 |    43.72 | 219.45 (5) | 632 | UB, Cyclic 8/8 byte, DiffDist, BIC, machine-specific (SSE4.2/NEON) |
+| [cmetrohash64_1o](doc/cmetrohash64_1o.txt)    |     14921.73 |    38.95 | 213.25 (2) |3506 | UB, LongNeighbors, BIC, MomentChi2  |
+| [cmetrohash64_1](doc/cmetrohash64_1.txt)      |     14151.73 |    40.90 | 211.89 (2) | 652 | UB, LongNeighbors, BIC, MomentChi2 |
+| [City64noSeed](doc/City64noSeed.txt)          |     14209.19 |    31.80 | 225.90 (5) |1038 | Avalanche, Sparse, TwoBytes, MomentChi2, Seed |
+| [City64](doc/City64.txt)                      |     13887.84 |    46.32 | 239.77 (3) |1120 | Sparse, TwoBytes           |
+| [t1ha1_64le](doc/t1ha1_64le.txt)              |     13442.64 |    31.41 | 219.58 (3) | 517 | Avalanche                  |
+| [t1ha1_64be](doc/t1ha1_64be.txt)              |     11586.02 |    32.74 | 232.55 (3) | 555 | Avalanche                  |
+| [t1ha0_32le](doc/t1ha0_32le.txt)              |      7401.21 |    48.27 | 238.99 (3) | 509 | Sparse, LongNeighbors      |
+| [t1ha0_32be](doc/t1ha0_32be.txt)              |      6217.37 |    50.66 | 244.51 (3) | 533 | Sparse, LongNeighbors      |
+| [t1ha2_stream](doc/t1ha2_stream.txt)          |     14011.63 |    80.72 | 275.17 (3) |1665 | Sparse, Permutation, LongNeighbors |
+| [t1ha2_stream128](doc/t1ha2_stream128.txt)    |     13136.06 |    97.80 | 306.11 (7) |1665 | Sparse, Permutation, LongNeighbors |
+| [aesnihash](doc/aesnihash.txt)                |      5579.32 |    56.83 | 258.71 (5) |1209 | fails many tests, machine-specific (x64 AES-NI) |
+| [falkhash](doc/falkhash.txt)                  |     50631.69 |   123.02 | 322.14 (7) | 264 | Sparse, LongNeighbors, machine-specific (x64 AES-NI) |
+| [MeowHash](doc/MeowHash.txt)                  |     29969.40 |    64.96 | 274.29 (4) |1764 | Sparse, invertible, machine-specific (x64 AES-NI)  |
+| [MeowHash64low](doc/MeowHash64low.txt)        |     29485.59 |    65.98 | 278.05 (3) |1764 | Sparse, invertible, machine-specific (x64 AES-NI)    |
+| [MeowHash32low](doc/MeowHash32low.txt)        |     26944.58 |    65.95 | 292.79 (9) |1764 | Sparse, invertible, machine-specific (x64 AES-NI)    |
 | --------------------------------------        |              |          |            |     |                            |
 | [tifuhash_64](doc/tifuhash_64.txt)            |        35.60 |  1679.52 |1212.75 (15)| 276 | Cyclic low32               |
 | [floppsyhash](doc/floppsyhash.txt)            |        35.72 |  1868.92 |1411.07 (7) | 623 |                            |
 | [beamsplitter](doc/beamsplitter.txt)          |       789.22 |   682.45 |1150.33 (26)|4203 | UB                         |
-| [discohash1](doc/discohash1.txt)              |      4158.02 |   200.07 | 392.03 (3) |1294 |                            |
-| [discohash1-128](doc/discohash1-128.txt)      |      3815.35 |   236.58 | 436.62 (4) |1294 |                            |
-| [discohash2](doc/discohash2.txt)              |      4058.64 |   204.75 | 410.22 (3) |1294 |                            |
-| [discohash2-128](doc/discohash2-128.txt)      |      4147.52 |   232.69 | 427.82 (3) |1294 |                            |
-| [discoNONG](doc/discoNONG.txt)                |      3664.12 |   418.35 | 605.05 (5) |    | bad seeds                   |
-| [chaskey](doc/chaskey.txt)                    |      1150.69 |   113.09 | 308.01 (5) |1609 | PerlinNoise                |
-| [SipHash](doc/SipHash.txt)                    |       945.64 |   146.95 | 346.53 (5) |1071 |                            |
-| [HalfSipHash](doc/HalfSipHash.txt)            |      1108.77 |    82.02 | 285.78 (5) | 700 | zeroes                     |
-| [GoodOAAT](doc/GoodOAAT.txt)                  |       744.66 |    85.45 | 244.27 (5) | 237 |                            |
-| [pearsonbhash64](doc/pearsonbhash64.txt)      |      1743.30 |   100.63 | 280.97 (6) | 683 |                            |
-| [pearsonbhash128](doc/pearsonbhash128.txt)    |      1668.94 |   105.95 | 294.48 (4) |1134 |                            |
-| [pearsonbhash256](doc/pearsonbhash256.txt)    |      1413.41 |   124.67 | 321.99 (6) | 844 |                            |
-| [prvhash64_64m](doc/prvhash64_64m.txt)        |      2999.14 |    48.44 | 361.73 (27)| 349 |                            |
-| [prvhash64_64](doc/prvhash64_64.txt)          |      2968.64 |    49.33 | 549.32 (24)| 384 |                            |
-| [prvhash64_128](doc/prvhash64_128.txt)        |      3206.91 |    69.44 | 347.14 (14)| 718  |                           |
-| [prvhash64s_64](doc/prvhash64s_64.txt)        |      6553.66 |   274.48 | 540.62 (16)|2640 |                           |
-| [prvhash64s_128](doc/prvhash64s_128.txt)      |      6477.93 |   373.10 | 553.80 (14)|2799 |                            |
-| [SipHash13](doc/SipHash13.txt)                |      1813.55 |   106.44 | 314.29 (5) | 778 | 0.9% bias                  |
-| [TSip](doc/TSip.txt)                          |      4233.52 |    53.23 | 261.81 (6) | 519 | !msvc                      |
-| [seahash](doc/seahash.txt)                    |      8322.53 |    58.50 | 267.77 (5) | 871 | PerlinNoise, !msvc         |
-| [seahash32low](doc/seahash32low.txt)          |      8177.83 |    59.45 | 292.87 (6) | 871 | PerlinNoise 32, !msvc      |
-| [clhash](doc/clhash.txt)                      |     17688.81 |    69.15 | 287.95 (6) |1809 | PerlinNoise, machine-specific (x64 SSE4.2) |
+| [discohash1](doc/discohash1.txt)              |      4131.12 |   199.00 | 398.35 (5) |1294 |                            |
+| [discohash1-128](doc/discohash1-128.txt)      |      4072.95 |   234.17 | 438.43 (5) |1294 |                            |
+| [discohash2](doc/discohash2.txt)              |      3986.52 |   207.52 | 421.99 (2) |1294 |                            |
+| [discohash2-128](doc/discohash2-128.txt)      |      4094.73 |   236.61 | 433.35 (4) |1294 |                            |
+| [discoNONG](doc/discoNONG.txt)                |      3698.45 |   399.67 | 597.78 (9) |    | bad seeds                   |
+| [chaskey](doc/chaskey.txt)                    |      1143.05 |   113.70 | 294.43 (4) |1609 | PerlinNoise                |
+| [SipHash](doc/SipHash.txt)                    |       943.53 |   147.15 | 338.74 (4) |1071 |                            |
+| [HalfSipHash](doc/HalfSipHash.txt)            |      1141.57 |    79.65 | 263.96 (3) | 700 | zeroes                     |
+| [GoodOAAT](doc/GoodOAAT.txt)                  |       743.81 |    85.62 | 231.22 (3) | 237 |                            |
+| [pearsonbhash64](doc/pearsonbhash64.txt)      |      1794.83 |    97.80 | 268.90 (8) | 683 |                            |
+| [pearsonbhash128](doc/pearsonbhash128.txt)    |      1691.62 |   104.57 | 272.38 (4) |1134 |                            |
+| [pearsonbhash256](doc/pearsonbhash256.txt)    |      1442.59 |   126.04 | 309.34 (4) | 844 |                            |
+| [prvhash64_64m](doc/prvhash64_64m.txt)        |      3077.18 |    47.31 | 241.92 (3) | 349 |                            |
+| [prvhash64_64](doc/prvhash64_64.txt)          |      3015.08 |    48.03 | 240.64 (3) | 384 |                            |
+| [prvhash64_128](doc/prvhash64_128.txt)        |      3353.81 |    67.64 | 266.32 (2) | 718  |                           |
+| [prvhash64s_64](doc/prvhash64s_64.txt)        |      6591.34 |   273.50 | 464.65 (3) |2640 |                           |
+| [prvhash64s_128](doc/prvhash64s_128.txt)      |      6581.40 |   333.83 | 528.07 (5) |2799 |                            |
+| [SipHash13](doc/SipHash13.txt)                |      1812.75 |   106.56 | 310.76 (5) | 778 | 0.9% bias                  |
+| [TSip](doc/TSip.txt)                          |      4233.17 |    53.31 | 249.19 (3) | 519 | !msvc                      |
+| [seahash](doc/seahash.txt)                    |      8261.80 |    58.94 | 256.08 (4) | 871 | PerlinNoise, !msvc         |
+| [seahash32low](doc/seahash32low.txt)          |      8266.17 |    58.90 | 290.21 (16)| 871 | PerlinNoise 32, !msvc      |
+| [clhash](doc/clhash.txt)                      |     18703.04 |    70.19 | 282.12 (6) |1809 | PerlinNoise, machine-specific (x64 SSE4.2) |
 | [HighwayHash64](doc/HighwayHash64.txt)        |      6242.58 |    99.55 | 248.41 (3) |2546 |                            |
-| [Murmur3F](doc/Murmur3F.txt)                  |      7625.10 |    52.69 | 228.96 (5) | 699 | UB                         |
-| [MUM](doc/MUM.txt)                            |      9353.53 |    35.80 | 239.36 (6) |1912 | UB, too many bad seeds, machine-specific (32/64 differs) |
-| [MUMlow](doc/MUMlow.txt)                      |      8978.00 |    36.15 | 267.84 (5) |1912 | UB, 5 bad seeds                      |
-| [mirhash](doc/mirhash.txt)                    |      6008.40 |    37.79 | 237.03 (5) |1112 | UB, 2^36 bad seeds, LongNeighbors, machine-specific (32/64 differs) |
-| [mirhashstrict](doc/mirhashstrict.txt)        |      3545.19 |    50.03 | 234.09 (6) |1112 |                            |
-| [mirhashstrict32low](doc/mirhashstrict32low.txt)|      3566.47 |    49.73 | 263.25 (4) |1112 | 1 bad seed, MomentChi2 9   |
-| [fasthash32](doc/fasthash32.txt)              |      6075.38 |    40.68 | 262.40 (6) | 566 | UB                         |
-| [fasthash64](doc/fasthash64.txt)              |      6173.22 |    38.08 | 228.68 (6) | 509 | UB                         |
-| [aesni](doc/aesni.txt)                        |     31065.90 |    30.02 | 235.58 (8) | 519 | machine-specific (x64 AES-NI)           |
-| [aesni-low](doc/aesni-low.txt)                |     30410.61 |    29.75 | 236.47 (6) | 519 | machine-specific (x64 AES-NI)           |
-| [mx3](doc/mx3.txt)                            |      9039.63 |    48.63 | 236.57 (5) | 734 | UB                         |
-| [pengyhash](doc/pengyhash.txt)                |     13293.76 |    75.49 | 286.41 (6) | 421 |                            |
-| [City32](doc/City32.txt)                      |      5637.89 |    53.19 | 260.99 (6) |1319 |                            |
-| [City64low](doc/City64low.txt)                |     13897.36 |    46.24 | 267.69 (5) |1120|                             |
-| [City128](doc/City128.txt)                    |     14129.60 |    87.98 | 290.70 (7) |1841 |                            |
-| [CityCrc128](doc/CityCrc128.txt)              |      8041.40 |    54.69 | 257.22 (5) | 295 |                            |
-| [FarmHash32](doc/FarmHash32.txt)              |     21706.27 |    47.69 | 271.51 (6) |11489| machine-specific (x64 SSE4/AVX) |
-| [FarmHash64](doc/FarmHash64.txt)              |     12965.76 |    46.42 | 258.29 (6) |3758 |                            |
-| [FarmHash128](doc/FarmHash128.txt)            |     14144.18 |    69.22 | 269.64 (5) | 163 |                            |
-| [farmhash32_c](doc/farmhash32_c.txt)          |     21913.08 |    47.22 | 267.19 (5) | 762 | machine-specific (x64 SSE4/AVX) |
-| [farmhash64_c](doc/farmhash64_c.txt)          |     12853.81 |    46.99 | 250.29 (5) |3688 |                            |
-| [farmhash128_c](doc/farmhash128_c.txt)        |     13877.86 |    68.19 | 271.10 (4) |1890 |                            |
-| [metrohash64_2](doc/metrohash64_2.txt)        |     13634.01 |    40.14 | 231.99 (6) | 627 | UB, LongNeighbors          |
-| [cmetrohash64_2](doc/cmetrohash64_2.txt)      |     14292.65 |    40.64 | 224.73 (4) | 655 | LongNeighbors              |
-| [metrohash128](doc/metrohash128.txt)          |     15640.32 |    73.22 | 269.23 (5) | 773 | UB, LongNeighbors          |
-| [metrohash128_1](doc/metrohash128_1.txt)      |     15802.66 |    72.40 | 266.20 (6) | 773 | UB, LongNeighbors          |
-| [metrohash128_2](doc/metrohash128_2.txt)      |     15576.05 |    73.58 | 273.15 (6) | 773 | UB, LongNeighbors          |
-| [metrohash128crc_1](doc/metrohash128crc_1.txt)|      7961.55 |    78.91 | 276.21 (5) | 723 | UB, machine-specific (SSE4.2/NEON) |
-| [metrohash128crc_2](doc/metrohash128crc_2.txt)|      8016.22 |    78.59 | 274.52 (5) | 723 | UB, machine-specific (SSE4.2/NEON) |
-| [xxHash64](doc/xxHash64.txt)                  |     12226.39 |    49.20 | 236.97 (5) |1999 |                            |
-| [Spooky32](doc/Spooky32.txt)                  |     13122.35 |    56.13 | 260.40 (5) |2221 | UB                         |
-| [Spooky64](doc/Spooky64.txt)                  |     13340.58 |    55.22 | 250.99 (5) |2221 | UB                         |
-| [Spooky128](doc/Spooky128.txt)                |     13119.47 |    58.89 | 250.41 (6) |2221 | UB                         |
-| [SpookyV2_32](doc/SpookyV2_32.txt)            |     13326.98 |    56.54 | 261.84 (4) |2069 |                            |
-| [SpookyV2_64](doc/SpookyV2_64.txt)            |     13104.98 |    57.54 | 252.86 (7) |2069 |                            |
-| [SpookyV2_128](doc/SpookyV2_128.txt)          |     13316.09 |    59.19 | 252.60 (5) |2069 |                            |
+| [Murmur3F](doc/Murmur3F.txt)                  |      7623.44 |    52.69 | 221.87 (3) | 699 | UB                         |
+| [MUM](doc/MUM.txt)                            |      9563.99 |    34.99 | 228.55 (5) |1912 | UB, too many bad seeds, machine-specific (32/64 differs) |
+| [MUMlow](doc/MUMlow.txt)                      |      9261.89 |    36.17 | 247.66 (4) |1912 | UB, 5 bad seeds                      |
+| [mirhash](doc/mirhash.txt)                    |      6139.07 |    37.02 | 209.47 (3) |1112 | UB, 2^36 bad seeds, LongNeighbors, machine-specific (32/64 differs) |
+| [mirhashstrict](doc/mirhashstrict.txt)        |      3549.01 |    49.99 | 224.91 (2) |1112 |                            |
+| [mirhashstrict32low](doc/mirhashstrict32low.txt)|      3441.35 |    50.60 | 247.19 (3) |1112 | 1 bad seed, MomentChi2 9   |
+| [fasthash32](doc/fasthash32.txt)              |      6128.28 |    40.30 | 241.64 (4) | 566 | UB                         |
+| [fasthash64](doc/fasthash64.txt)              |      5818.92 |    38.70 | 220.74 (2) | 509 | UB                         |
+| [aesni](doc/aesni.txt)                        |     31232.34 |    29.21 | 230.14 (4) | 519 | machine-specific (x64 AES-NI)           |
+| [aesni-low](doc/aesni-low.txt)                |     31221.14 |    29.64 | 226.18 (3) | 519 | machine-specific (x64 AES-NI)           |
+| [mx3](doc/mx3.txt)                            |      9034.90 |    48.71 | 227.89 (2) | 734 | UB                         |
+| [pengyhash](doc/pengyhash.txt)                |     13428.80 |    74.24 | 275.42 (5) | 421 |                            |
+| [City32](doc/City32.txt)                      |      5551.28 |    54.40 | 261.64 (2) |1319 |                            |
+| [City64low](doc/City64low.txt)                |     13904.10 |    46.24 | 260.08 (3) |1120|                             |
+| [City128](doc/City128.txt)                    |     14031.96 |    89.09 | 290.05 (10)|1841 |                            |
+| [CityCrc128](doc/CityCrc128.txt)              |      7916.44 |    55.50 | 240.79 (2) | 295 |                            |
+| [FarmHash32](doc/FarmHash32.txt)              |     21755.58 |    47.54 | 258.35 (3) |11489| machine-specific (x64 SSE4/AVX) |
+| [FarmHash64](doc/FarmHash64.txt)              |     12845.53 |    47.11 | 251.58 (3) |3758 |                            |
+| [FarmHash128](doc/FarmHash128.txt)            |     13913.65 |    70.25 | 263.06 (3) | 163 |                            |
+| [farmhash32_c](doc/farmhash32_c.txt)          |     21601.86 |    47.38 | 273.00 (3) | 762 | machine-specific (x64 SSE4/AVX) |
+| [farmhash64_c](doc/farmhash64_c.txt)          |     12834.10 |    47.23 | 246.20 (2) |3688 |                            |
+| [farmhash128_c](doc/farmhash128_c.txt)        |     13753.24 |    68.96 | 263.76 (3) |1890 |                            |
+| [metrohash64_2](doc/metrohash64_2.txt)        |     14316.37 |    40.23 | 218.28 (3) | 627 | UB, LongNeighbors          |
+| [cmetrohash64_2](doc/cmetrohash64_2.txt)      |     14294.26 |    40.76 | 221.40 (4) | 655 | LongNeighbors              |
+| [metrohash128](doc/metrohash128.txt)          |     15634.66 |    73.28 | 261.23 (4) | 773 | UB, LongNeighbors          |
+| [metrohash128_1](doc/metrohash128_1.txt)      |     15806.97 |    72.30 | 260.90 (4) | 773 | UB, LongNeighbors          |
+| [metrohash128_2](doc/metrohash128_2.txt)      |     15822.60 |    72.30 | 255.34 (3) | 773 | UB, LongNeighbors          |
+| [metrohash128crc_1](doc/metrohash128crc_1.txt)|      8009.23 |    78.72 | 281.55 (13)| 723 | UB, machine-specific (SSE4.2/NEON) |
+| [metrohash128crc_2](doc/metrohash128crc_2.txt)|      7878.22 |    79.90 | 275.22 (4) | 723 | UB, machine-specific (SSE4.2/NEON) |
+| [xxHash64](doc/xxHash64.txt)                  |     12108.87 |    49.78 | 228.83 (2) |1999 |                            |
+| [Spooky32](doc/Spooky32.txt)                  |     13108.95 |    56.27 | 255.36 (3) |2221 | UB                         |
+| [Spooky64](doc/Spooky64.txt)                  |     13529.36 |    58.76 | 236.31 (3) |2221 | UB                         |
+| [Spooky128](doc/Spooky128.txt)                |     11781.35 |    58.91 | 242.91 (3) |2221 | UB                         |
+| [SpookyV2_32](doc/SpookyV2_32.txt)            |     13529.16 |    55.55 | 248.37 (4) |2069 |                            |
+| [SpookyV2_64](doc/SpookyV2_64.txt)            |     12678.82 |    56.71 | 243.21 (4) |2069 |                            |
+| [SpookyV2_128](doc/SpookyV2_128.txt)          |     13512.82 |    58.33 | 244.56 (5) |2069 |                            |
 | [ahash64](doc/ahash64.txt)                    |      9862.62 |    27.32 | 181.68 (1) | 412 | rust                       |
-| [xxh3](doc/xxh3.txt)                          |     20383.53 |    30.79 | 237.87 (6) | 744 | DiffDist bit 7 w. 36 bits, BIC |
-| [xxh3low](doc/xxh3low.txt)                    |     20722.94 |    30.26 | 256.34 (7) | 756 |                            |
-| [xxh128](doc/xxh128.txt)                      |     18819.68 |    32.66 | 256.52 (4) |1012 |                            |
-| [xxh128low](doc/xxh128low.txt)                |     19043.36 |    31.99 | 250.40 (6) |1012 |                            |
-| [t1ha2_atonce](doc/t1ha2_atonce.txt)          |     13926.52 |    37.70 | 245.33 (6) | 541 | Zeroes low3                |
-| [t1ha2_atonce128](doc/t1ha2_atonce128.txt)    |     13854.28 |    57.06 | 266.53 (4) | 613 | LongNeighbors              |
-| [t1ha0_aes_noavx](doc/t1ha0_aes_noavx.txt)    |     27527.84 |    37.23 | 245.10 (6) | 925 | LongNeighbors, machine-specific (x86 AES-NI) |
+| [xxh3](doc/xxh3.txt)                          |     21033.55 |    29.48 | 226.77 (4) | 744 | DiffDist bit 7 w. 36 bits, BIC |
+| [xxh3low](doc/xxh3low.txt)                    |     17093.19 |    30.57 | 242.07 (7) | 756 |                            |
+| [xxh128](doc/xxh128.txt)                      |     18802.16 |    32.37 | 234.30 (4) |1012 |                            |
+| [xxh128low](doc/xxh128low.txt)                |     18833.05 |    32.30 | 234.68 (3) |1012 |                            |
+| [t1ha2_atonce](doc/t1ha2_atonce.txt)          |     13854.44 |    37.92 | 233.54 (2) | 541 | Zeroes low3                |
+| [t1ha2_atonce128](doc/t1ha2_atonce128.txt)    |     14148.42 |    55.70 | 253.74 (6) | 613 | LongNeighbors              |
+| [t1ha0_aes_noavx](doc/t1ha0_aes_noavx.txt)    |     27231.59 |    37.70 | 236.10 (3) | 925 | LongNeighbors, machine-specific (x86 AES-NI) |
 | [t1ha0_aes_avx1](doc/t1ha0_aes_avx1)          |     22714.85 |    48.12 | 226.52 (16)| 843 | LongNeighbors, machine-specific (x64 AVX.txt)|
-| [t1ha0_aes_avx2](doc/t1ha0_aes_avx2.txt)      |     55655.02 |    37.25 | 258.23 (5) | 792 | LongNeighbors, machine-specific (x64 AVX2)   |
+| [t1ha0_aes_avx2](doc/t1ha0_aes_avx2.txt)      |     56919.46 |    36.70 | 233.14 (2) | 792 | LongNeighbors, machine-specific (x64 AVX2)   |
 | [wyhash32](doc/wyhash32.txt)                  |      2532.89 |    48.40 | 484.57 (1) | 426 | 4 bad and broken seeds, 32-bit |
-| [wyhash32low](doc/wyhash32low.txt)            |     22895.72 |    28.87 | 260.96 (6) | 474 | 12 bad and broken seeds  |
-| [wyhash](doc/wyhash.txt)                      |     22513.04 |    29.01 | 228.76 (5) | 474 |                           |
-| [umash32](doc/umash32.txt)                    |     22373.83 |    41.98 | 257.19 (6) |1530 |                            |
-| [umash32_hi](doc/umash32_hi.txt)              |     22935.43 |    42.16 | 257.93 (5) |1530 |                            |
-| [umash64](doc/umash64.txt)                    |     22695.69 |    42.02 | 246.91 (5) |1530 |                            |
-| [umash128](doc/umash128.txt)                  |     13024.01 |    42.98 | 242.48 (4) |1530 |                            |
-| [halftime_hash64](doc/halftime_hash64.txt)    |      4765.33 |    99.67 | 324.58 (4) |2911 |                            |
-| [halftime_hash128](doc/halftime_hash128.txt)  |     17545.03 |    98.17 | 322.50 (5) |2462 |                            |
-| [halftime_hash256](doc/halftime_hash256.txt)  |     18018.00 |    99.86 | 326.90 (4) |2622 |                            |
-| [halftime_hash512](doc/halftime_hash512.txt)  |     10894.15 |   118.66 | 335.38 (5) |3550 |                            |
-| [nmhash32](doc/nmhash32.txt)                  |     12785.12 |    56.66 | 271.67 (4) |2445 |                            |
-| [nmhash32x](doc/nmhash32x.txt)                |     12702.23 |    42.94 | 261.02 (5) |1494 |                            |
-| [k-hashv32](doc/k-hashv32.txt)                |      9044.40 |    53.38 | 259.25 (5) |1280 |                            |
+| [wyhash32low](doc/wyhash32low.txt)            |     22892.78 |    28.87 | 242.56 (4) | 474 | 12 bad and broken seeds  |
+| [wyhash](doc/wyhash.txt)                      |     23254.03 |    28.47 | 216.10 (3) | 474 |                           |
+| [umash32](doc/umash32.txt)                    |     21427.57 |    42.12 | 255.55 (5) |1530 |                            |
+| [umash32_hi](doc/umash32_hi.txt)              |     21483.12 |    42.65 | 251.09 (4) |1530 |                            |
+| [umash64](doc/umash64.txt)                    |     21690.08 |    41.67 | 238.01 (4) |1530 |                            |
+| [umash128](doc/umash128.txt)                  |     13211.88 |    43.37 | 237.40 (3) |1530 |                            |
+| [halftime_hash64](doc/halftime_hash64.txt)    |      4735.63 |    99.90 | 315.34 (3) |2911 |                            |
+| [halftime_hash128](doc/halftime_hash128.txt)  |     17534.53 |    97.97 | 311.10 (4) |2462 |                            |
+| [halftime_hash256](doc/halftime_hash256.txt)  |     18003.39 |    99.46 | 315.09 (3) |2622 |                            |
+| [halftime_hash512](doc/halftime_hash512.txt)  |     10890.15 |   118.05 | 333.45 (3) |3550 |                            |
+| [nmhash32](doc/nmhash32.txt)                  |     12969.62 |    55.88 | 265.69 (4) |2445 |                            |
+| [nmhash32x](doc/nmhash32x.txt)                |     12775.08 |    42.66 | 246.05 (3) |1494 |                            |
+| [k-hashv32](doc/k-hashv32.txt)                |      9181.87 |    52.76 | 245.14 (3) |1280 |                            |
 | [k-hashv64](doc/k-hashv32.txt)                |      7850.92 |    46.94 | 193.94 (1) |1279 |                            |
-| [komihash](doc/komihash.txt)                  |     12129.93 |    33.38 | 237.97 (3) |1323 |                            |
-| [polymur](doc/polymur.txt)                    |      9515.85 |    43.20 | 247.34 (8) |1128 |                            |
+| [komihash](doc/komihash.txt)                  |     12191.22 |    33.19 | 230.67 (3) |1323 |                            |
+| [polymur](doc/polymur.txt)                    |      9676.33 |    42.70 | 246.53 (3) |1128 |                            |
 
 The sortable table variants:
 
