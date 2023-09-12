@@ -630,6 +630,77 @@ endif()
 # "${CMAKE_CURRENT_SOURCE_DIR}/fanom_hash.h") set(CMAKE_CXX_FLAGS
 # "${CMAKE_CXX_FLAGS} -DHAVE_FANOM_HASH") ENDIF()
 
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  set(RUST_NOT_DEBUG false)
+else()
+  set(RUST_NOT_DEBUG true)
+endif()
+
+set(RUST_ENABLED true CACHE BOOL "enable rust support (requires cargo)")
+set(RUST_TARGET "" CACHE STRING "set target for cross compiling (blank for current)")
+set(RUST_CPU_NATIVE ${RUST_NOT_DEBUG} CACHE BOOL
+   "enable all native features (e.g. non-portable SIMD instructions)")
+
+if(RUST_ENABLED)
+  message(STATUS "With rust-hashes")
+  set(RUST_TOOLCHAIN "") # use the default
+  set(CARGO_PATH "--manifest-path=${CMAKE_CURRENT_SOURCE_DIR}/rust-hashes/Cargo.toml")
+  set(RUST_LIB_PATH "${CMAKE_CURRENT_SOURCE_DIR}/rust-hashes/target")
+
+  if(NOT RUST_TARGET STREQUAL "") # set target arch if needed
+    message(STATUS "Cross compiling Rust to ${RUST_TARGET}")
+    set(CARGO_TARGET "--target=${RUST_TARGET}")
+    set(RUST_LIB_PATH "${RUST_LIB_PATH}/${RUST_TARGET}")
+  endif()
+
+  if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(CARGO_PROFILE "--release")
+    set(RUST_LIB_PATH "${RUST_LIB_PATH}/release")
+  else()
+    set(RUST_LIB_PATH "${RUST_LIB_PATH}/debug")
+  endif()
+
+  if(CMAKE_BUILD_TYPE STREQUAL "asan")
+    set(RUSTFLAGS "${RUSTFLAGS} -Zsanitizer=address")
+    set(RUST_TOOLCHAIN "+nightly") # sanitizers are unstable and require nightly
+  endif()
+
+  if(RUST_CPU_NATIVE) # enable all CPU features
+    set(RUSTFLAGS "${RUSTFLAGS} -Ctarget-cpu=native")
+  endif()
+
+  if(CMAKE_POSITION_INDEPENDENT_CODE)
+    set(RUSTFLAGS "${RUSTFLAGS} -Crelocation-model=pic")
+  endif()
+
+  if(WIN32)
+    set(RUST_LIB_PATH "${RUST_LIB_PATH}/rust_hashes.lib")
+    # give us a reminder of what needs to be linked
+    set(RUSTFLAGS "${RUSTFLAGS} --print=native-static-libs")
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "i?[356x]86")
+      # these are not included by default on Windows
+      find_library(BCRYPT bcrypt)
+      find_library(NTDLL ntdll)
+    endif()
+  else()
+    set(RUST_LIB_PATH "${RUST_LIB_PATH}/librust_hashes.a")
+  endif()
+
+  # enable the faster dependency protocol for < 1.70 (no runtime effect)
+  set(ENV{CARGO_REGISTRIES_CRATES_IO_PROTOCOL} "sparse")
+  set(ENV{RUSTFLAGS} "${RUSTFLAGS}")
+  set(RUST_LIB_PATH "${RUST_LIB_PATH}/librust_hashes.a")
+  
+  message(STATUS "RUSTFLAGS: $ENV{RUSTFLAGS}")
+  add_custom_target(
+    librust_hashes
+    COMMAND cargo ${RUST_TOOLCHAIN} build --quiet ${CARGO_PATH}
+            ${CARGO_TARGET} ${CARGO_PROFILE}
+  )
+
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DRUST_ENABLED")
+endif()
+
 if((CMAKE_MAJOR_VERSION EQUAL 3 AND CMAKE_MINOR_VERSION GREATER_EQUAL 9)
    AND (CMAKE_BUILD_TYPE STREQUAL "Release"))
   cmake_policy(SET CMP0069 NEW)
@@ -734,6 +805,11 @@ endif()
 target_link_libraries(SMHasher SMHasherSupport
                       ${HIGHWAY_LIB} ${BLAKE3_LIB} ${AHASH_C_LIB}
                       ${CMAKE_THREAD_LIBS_INIT})
+
+if (RUST_ENABLED)
+  add_dependencies(SMHasher librust_hashes)
+  target_link_libraries(SMHasher ${RUST_LIB_PATH} ${BCRYPT} ${NTDLL})
+endif()
 
 SET(exectargets ${exectargets} SMHasher)
 # add_executable( bittest bittest.cpp )
