@@ -48,6 +48,11 @@ init:
 #- if "%APPVEYOR_BUILD_WORKER_IMAGE%" == "Visual Studio 2013" (call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" amd64)
 # call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
 
+install:
+  - appveyor DownloadFile https://win.rustup.rs/ -FileName rustup-init.exe
+  - rustup-init.exe -y --default-toolchain stable --profile minimal
+  - $Env:PATH += "$Env:USERPROFILE\.cargo\bin"
+
 build_script:
   - git submodule update --init
   #- if "%MINGW%"=="1" call build-msys2.bat

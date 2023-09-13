@@ -8,6 +8,9 @@ task:
   install_script:
     - pkg install -y cmake git
     - git submodule update --init
+    - >
+      fetch -q --no-tlsv1 -o- https://sh.rustup.rs |
+      sh -s -- -y --default-toolchain stable --profile minimal
   build_script:
     - cmake .
     - make VERBOSE=1
