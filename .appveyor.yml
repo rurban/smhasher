@@ -51,7 +51,6 @@ init:
 install:
   - appveyor DownloadFile https://win.rustup.rs/ -FileName rustup-init.exe
   - rustup-init.exe -y --default-toolchain stable --profile minimal
-  # - $Env:PATH += "$Env:USERPROFILE\.cargo\bin"
   - set PATH=%PATH%;%USERPROFILE%\.cargo\bin
 
 build_script:
@@ -67,3 +66,10 @@ build_script:
 
 test_script:
   - Release\SMHasher --test=VerifyAll,Sanity,Speed,Cyclic,Zeroes,Seed
+
+# TODO remove debugging
+on_failure:
+  - rustc -vV
+  - ls rust-hashes/target/
+  - ls rust-hashes/target/release
+  - dumpbin /symbols /exports rust-hashes/target/release/rust_hashes.lib
