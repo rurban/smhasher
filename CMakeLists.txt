@@ -631,38 +631,38 @@ endif()
 # "${CMAKE_CXX_FLAGS} -DHAVE_FANOM_HASH") ENDIF()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-  set(not_debug false)
+  set(RUST_NOT_DEBUG false)
 else()
-  set(not_debug true)
+  set(RUST_NOT_DEBUG true)
 endif()
 
-set(RUST_ENABLED true CACHE boolean "enable rust support (requires cargo)")
-set(RUST_TARGET "" CACHE string "set target for cross compiling (blank for current)")
-set(RUST_CPU_NATIVE not_debug CACHE boolean
-   "enable all native features (e.g. non-portable SIMD instructions)")
+set(RUST_ENABLED true CACHE BOOL "enable rust support (requires cargo)")
+set(RUST_TARGET "" CACHE STRING "set target for cross compiling (blank for current)")
+set(RUST_SIMD ${RUST_NOT_DEBUG} CACHE BOOL
+    "enable native features (non-portable SIMD instructions)")
 
 if(RUST_ENABLED)
   message(STATUS "Rust enabled")
-  set(rust_toolchain "") # use the default
-  set(cargo_path "--manifest-path=${CMAKE_CURRENT_SOURCE_DIR}/rust-hashes/Cargo.toml")
-  set(rust_lib_path "${CMAKE_CURRENT_SOURCE_DIR}/rust-hashes/target")
+  set(RUST_TOOLCHAIN "") # use the default
+  set(CARGO_PATH "--manifest-path=${CMAKE_CURRENT_SOURCE_DIR}/rust-hashes/Cargo.toml")
+  set(RUST_LIB_PATH "${CMAKE_CURRENT_SOURCE_DIR}/rust-hashes/target")
 
   if(NOT RUST_TARGET STREQUAL "") # set target arch if needed
     message(STATUS "Cross compiling Rust to ${RUST_TARGET}")
-    set(cargo_target "--target=${RUST_TARGET}")
-    set(rust_lib_path "${rust_lib_path}/${RUST_TARGET}")
+    set(CARGO_TARGET "--target=${RUST_TARGET}")
+    set(RUST_LIB_PATH "${RUST_LIB_PATH}/${RUST_TARGET}")
   endif()
 
   if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set(cargo_profile "--release")
-    set(rust_lib_path "${rust_lib_path}/release")
+    set(CARGO_PROFILE "--release")
+    set(RUST_LIB_PATH "${RUST_LIB_PATH}/release")
   else()
-    set(rust_lib_path "${rust_lib_path}/debug")
+    set(RUST_LIB_PATH "${RUST_LIB_PATH}/debug")
   endif()
 
   if(CMAKE_BUILD_TYPE STREQUAL "asan")
-    set(RUSTFLAGS "${RUSTFLAGS} -Zsanitizer=address")
-    set(rust_toolchain "+nightly") # sanitizers are unstable and require nightly
+    set(ENV{RUSTFLAGS} "${RUSTFLAGS} -Zsanitizer=address")
+    set(RUST_TOOLCHAIN "+nightly") # sanitizers are unstable and require nightly
   endif()
 
   if(RUST_CPU_NATIVE) # enable all CPU features
@@ -676,15 +676,15 @@ if(RUST_ENABLED)
   # enable the faster dependency protocol for < 1.70 (no runtime effect)
   set(ENV{CARGO_REGISTRIES_CRATES_IO_PROTOCOL} "sparse")
   set(ENV{RUSTFLAGS} "${RUSTFLAGS}")
-  set(rust_lib_path "${rust_lib_path}/librust_hashes.a")
-  
+  set(RUST_LIB_PATH "${RUST_LIB_PATH}/librust_hashes.a")
+
   message(STATUS "RUSTFLAGS: $ENV{RUSTFLAGS}")
   add_custom_target(
     librust_hashes
-    COMMAND cargo ${rust_toolchain} build --quiet ${cargo_path}
-            ${cargo_target} ${cargo_profile}
+    COMMAND cargo ${RUST_TOOLCHAIN} build --quiet ${CARGO_PATH}
+            ${CARGO_TARGET} ${CARGO_PROFILE}
   )
-
+  
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DRUST_ENABLED")
 endif()
 
@@ -795,7 +795,7 @@ target_link_libraries(SMHasher SMHasherSupport
 
 if (RUST_ENABLED)
   add_dependencies(SMHasher librust_hashes)
-  target_link_libraries(SMHasher ${rust_lib_path})
+  target_link_libraries(SMHasher ${RUST_LIB_PATH})
 endif()
 
 SET(exectargets ${exectargets} SMHasher)
