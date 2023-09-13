@@ -1,7 +1,7 @@
 //! Provide C interfaces to common Rust hash functions
 
 use std::ffi::{c_int, c_uint, c_void};
-use std::hash::{BuildHasher, Hasher};
+use std::hash::Hasher;
 use std::ops::FnOnce;
 use std::ptr;
 use std::slice;
@@ -92,9 +92,11 @@ where
 // This macro creates the given symbol for each wrapper
 hashes! {
     adler_rs: hashdefault_wrapper::<adler::Adler32>,
-    ahash_rs: seeded_wrapper(|seed: u32|
-        ahash::RandomState::with_seed(seed as usize).build_hasher()
-    ),
+    ahash_rs: |buf, seed, out: *mut c_void| {
+        let seed64 = seed as u64;
+        let build_hasher = ahash::RandomState::with_seeds(seed64, seed64, seed64, seed64);
+        unsafe { ptr::write(out.cast(), build_hasher.hash_one(buf)) };
+    },
     ascon_rs: digest_wrapper::<ascon_hash::AsconHash>,
     ascona_rs: digest_wrapper::<ascon_hash::AsconAHash>,
     blake2b512_rs: digest_wrapper::<blake2::Blake2b512>,
