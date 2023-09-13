@@ -661,7 +661,7 @@ if(RUST_ENABLED)
   endif()
 
   if(CMAKE_BUILD_TYPE STREQUAL "asan")
-    set(ENV{RUSTFLAGS} "${RUSTFLAGS} -Zsanitizer=address")
+    set(RUSTFLAGS "${RUSTFLAGS} -Zsanitizer=address")
     set(RUST_TOOLCHAIN "+nightly") # sanitizers are unstable and require nightly
   endif()
 
@@ -673,10 +673,20 @@ if(RUST_ENABLED)
     set(RUSTFLAGS "${RUSTFLAGS} -Crelocation-model=pic")
   endif()
 
+  if(WIN32)
+    set(RUST_LIB_PATH "${RUST_LIB_PATH}/rust_hashes.lib")
+    # give us a reminder of what needs to be linked
+    set(RUSTFLAGS "${RUSTFLAGS} --print=native-static-libs")
+    # we need to specify a few extra libraries on Windows
+    find_library(BCRYPT bcrypt)   
+    find_library(NTDLL ntdll)
+  else()
+    set(RUST_LIB_PATH "${RUST_LIB_PATH}/librust_hashes.a")
+  endif()
+
   # enable the faster dependency protocol for < 1.70 (no runtime effect)
   set(ENV{CARGO_REGISTRIES_CRATES_IO_PROTOCOL} "sparse")
   set(ENV{RUSTFLAGS} "${RUSTFLAGS}")
-  set(RUST_LIB_PATH "${RUST_LIB_PATH}/librust_hashes.a")
 
   message(STATUS "RUSTFLAGS: $ENV{RUSTFLAGS}")
   add_custom_target(
@@ -795,7 +805,7 @@ target_link_libraries(SMHasher SMHasherSupport
 
 if (RUST_ENABLED)
   add_dependencies(SMHasher librust_hashes)
-  target_link_libraries(SMHasher ${RUST_LIB_PATH})
+  target_link_libraries(SMHasher ${RUST_LIB_PATH} ${BCRYPT} ${NTDLL})
 endif()
 
 SET(exectargets ${exectargets} SMHasher)
