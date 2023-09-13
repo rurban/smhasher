@@ -677,9 +677,12 @@ if(RUST_ENABLED)
     set(RUST_LIB_PATH "${RUST_LIB_PATH}/rust_hashes.lib")
     # give us a reminder of what needs to be linked
     set(RUSTFLAGS "${RUSTFLAGS} --print=native-static-libs")
-    # we need to specify a few extra libraries on Windows
-    find_library(BCRYPT bcrypt)   
-    find_library(NTDLL ntdll)
+
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "i?[356x]86")
+      # these are not included by default on Windows
+      find_library(BCRYPT bcrypt)   
+      find_library(NTDLL ntdll)
+    endif()
   else()
     set(RUST_LIB_PATH "${RUST_LIB_PATH}/librust_hashes.a")
   endif()
