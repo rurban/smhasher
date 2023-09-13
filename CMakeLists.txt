@@ -7,7 +7,7 @@ if(POLICY CMP0065)
   cmake_policy(SET CMP0065 NEW) # since 3.4. ENABLE_EXPORTS.
 endif()
 if(POLICY CMP0066) # honor per-config flags in try_compile() source-file
-                   # signature.
+# signature.
   cmake_policy(SET CMP0066 NEW) # since 3.7
 endif()
 
@@ -548,7 +548,8 @@ endif()
 find_library(AHASH_C ahash_c
              HINTS /usr/local/lib)
 if(AHASH_C
-   AND (NOT(CMAKE_CROSSCOMPILING)))
+   AND (NOT(CMAKE_CROSSCOMPILING))
+   AND (NOT RUST_ENABLED)) # FIXME: clashes with librust_hashes
   if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     set(AHASH_C_LIB ahash_c)
     add_definitions(-DHAVE_AHASH_C)
@@ -639,7 +640,7 @@ endif()
 set(RUST_ENABLED true CACHE BOOL "enable rust support (requires cargo)")
 set(RUST_TARGET "" CACHE STRING "set target for cross compiling (blank for current)")
 set(RUST_CPU_NATIVE ${RUST_NOT_DEBUG} CACHE BOOL
-   "enable all native features (e.g. non-portable SIMD instructions)")
+    "enable native features (non-portable SIMD instructions)")
 
 if(RUST_ENABLED)
   message(STATUS "With rust-hashes")
@@ -688,10 +689,7 @@ if(RUST_ENABLED)
 
   # enable the faster dependency protocol for < 1.70 (no runtime effect)
   set(ENV{CARGO_REGISTRIES_CRATES_IO_PROTOCOL} "sparse")
-  set(ENV{RUSTFLAGS} "${RUSTFLAGS}")
-  set(RUST_LIB_PATH "${RUST_LIB_PATH}/librust_hashes.a")
-  
-  message(STATUS "RUSTFLAGS: $ENV{RUSTFLAGS}")
+
   add_custom_target(
     librust_hashes
     COMMAND cargo ${RUST_TOOLCHAIN} build --quiet ${CARGO_PATH}
