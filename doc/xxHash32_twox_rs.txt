@@ -1,0 +1,74 @@
+-------------------------------------------------------------------------------
+--- Testing xxHash32_twox_rs "32-bit xxHash implementation (crate `twox_hash`)" GOOD
+
+[[[ Sanity Tests ]]]
+
+Verification value 0xBA88B743 ....... PASS
+Running sanity check 1     .......... PASS
+Running AppendedZeroesTest .......... PASS
+
+[[[ Speed Tests ]]]
+
+Bulk speed test - 262144-byte keys
+Alignment  7 -  2.483 bytes/cycle - 7104.25 MiB/sec @ 3 ghz
+Alignment  6 -  2.443 bytes/cycle - 6989.40 MiB/sec @ 3 ghz
+Alignment  5 -  2.487 bytes/cycle - 7116.59 MiB/sec @ 3 ghz
+Alignment  4 -  2.482 bytes/cycle - 7099.94 MiB/sec @ 3 ghz
+Alignment  3 -  2.483 bytes/cycle - 7102.63 MiB/sec @ 3 ghz
+Alignment  2 -  2.500 bytes/cycle - 7151.97 MiB/sec @ 3 ghz
+Alignment  1 -  2.492 bytes/cycle - 7128.56 MiB/sec @ 3 ghz
+Alignment  0 -  2.478 bytes/cycle - 7089.34 MiB/sec @ 3 ghz
+Average      -  2.481 bytes/cycle - 7097.84 MiB/sec @ 3 ghz
+
+Small key speed test -    1-byte keys -    33.00 cycles/hash
+Small key speed test -    2-byte keys -    37.00 cycles/hash
+Small key speed test -    3-byte keys -    41.00 cycles/hash
+Small key speed test -    4-byte keys -    32.00 cycles/hash
+Small key speed test -    5-byte keys -    37.00 cycles/hash
+Small key speed test -    6-byte keys -    40.84 cycles/hash
+Small key speed test -    7-byte keys -    45.00 cycles/hash
+Small key speed test -    8-byte keys -    36.99 cycles/hash
+Small key speed test -    9-byte keys -    63.96 cycles/hash
+Small key speed test -   10-byte keys -    66.00 cycles/hash
+Small key speed test -   11-byte keys -    70.94 cycles/hash
+Small key speed test -   12-byte keys -    43.93 cycles/hash
+Small key speed test -   13-byte keys -    62.98 cycles/hash
+Small key speed test -   14-byte keys -    67.00 cycles/hash
+Small key speed test -   15-byte keys -    71.80 cycles/hash
+Small key speed test -   16-byte keys -    31.83 cycles/hash
+Small key speed test -   17-byte keys -    38.42 cycles/hash
+Small key speed test -   18-byte keys -    42.00 cycles/hash
+Small key speed test -   19-byte keys -    45.80 cycles/hash
+Small key speed test -   20-byte keys -    37.42 cycles/hash
+Small key speed test -   21-byte keys -    41.87 cycles/hash
+Small key speed test -   22-byte keys -    44.59 cycles/hash
+Small key speed test -   23-byte keys -    48.75 cycles/hash
+Small key speed test -   24-byte keys -    40.98 cycles/hash
+Small key speed test -   25-byte keys -    64.10 cycles/hash
+Small key speed test -   26-byte keys -    67.81 cycles/hash
+Small key speed test -   27-byte keys -    72.06 cycles/hash
+Small key speed test -   28-byte keys -    44.00 cycles/hash
+Small key speed test -   29-byte keys -    63.23 cycles/hash
+Small key speed test -   30-byte keys -    67.79 cycles/hash
+Small key speed test -   31-byte keys -    71.90 cycles/hash
+Average                                    50.709 cycles/hash
+
+[[[ 'Hashmap' Speed Tests ]]]
+
+std::unordered_map
+Init std HashMapTest:     24.968 cycles/op (479826 inserts, 1% deletions)
+Running std HashMapTest:  640.617 cycles/op (4.5 stdv)
+
+greg7mdp/parallel-hashmap
+Init fast HashMapTest:    939.379 cycles/op (479826 inserts, 1% deletions)
+Running fast HashMapTest: 507.502 cycles/op (3.0 stdv)  ....... PASS
+
+[[[ Avalanche Tests ]]]
+
+Testing   24-bit keys ->  32-bit hashes, 300000 reps.[[[ BadSeeds Tests ]]]
+
+Testing 0 internal secrets:
+0x0 PASS
+Testing the first 0xffffffff seeds ...
+4 threads starting...
+at 80000000 at 0 at c0000000 

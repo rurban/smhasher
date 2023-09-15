@@ -12,6 +12,7 @@ SMhasher
 | [BadHash](doc/BadHash.txt)                    |       769.94 |    73.97 | -|  47 | bad seed 0, test FAIL          |
 | [sumhash](doc/sumhash.txt)                    |     10699.57 |    29.53 | -| 363 | bad seed 0, test FAIL          |
 | [sumhash32](doc/sumhash32.txt)                |     42877.79 |    23.12 | -| 863 | UB, test FAIL                  |
+| [hash_hasher_rs](doc/hash_hasher_rs.txt)      |  14423076.92 |    17.18 | 448.49 (1) |     | rust, sanity, fails all tests   |
 | [multiply_shift](doc/multiply_shift.txt)      |      8026.77 |    26.05 | 226.80 (8) | 345 | bad seeds & 0xfffffff0, fails most tests |
 | [pair_multiply_shift](doc/pair_multiply_shift)|      3716.95 |    40.22 | 186.34 (3) | 609 | fails most tests |
 | --------------------------                    |              |          |            |     |                      |
@@ -49,12 +50,14 @@ SMhasher
 | [asconhashv12_64](doc/asconhashv12_64.txt)    |       159.68 |   386.90 | 480.86 (4) |6490 |               |
 | [sha3-256](doc/sha3-256.txt)                  |       100.58 |  3877.18 |4159.79 (37)|     | PerlinNoise   |
 | [sha3-256_64](doc/sha3-256_64.txt)            |       100.57 |  3909.00 |4174.63 (16)|     | PerlinNoise   |
+| [FxHash32](doc/FxHash32.txt)                  |         0.00 |     0.00 |   0.00 (0) |     | rust, fixed seed                |
+| [FxHash64](doc/FxHash64.txt)                  |         0.00 |     0.00 |   0.00 (0) |     | rust, fixed seed                |
 | [hasshe2](doc/hasshe2.txt)                    |      2773.89 |    64.35 | 282.30 (3) | 445 | Permutation,TwoBytes,Zeroes,Seed|
 | [poly_1_mersenne](doc/poly_1_mersenne.txt)    |      1369.21 |    61.59 | 248.86 (4) | 479 | fails most tests |
 | [poly_2_mersenne](doc/poly_2_mersenne.txt)    |      1364.03 |    70.30 | 261.00 (6) | 479 |                  |
 | [poly_3_mersenne](doc/poly_3_mersenne.txt)    |      1342.82 |    80.22 | 268.79 (2) | 479 |                  |
 | [poly_4_mersenne](doc/poly_4_mersenne.txt)    |      1343.19 |    89.13 | 277.52 (3) | 479 |                  |
-| [tabulation32](doc/tabulation32.txt)          |      5781.16 |    40.00 | 241.79 (10) | 848 | collisions       |
+| [tabulation32](doc/tabulation32.txt)          |      5781.16 |    40.00 | 241.79 (10)| 848 | collisions       |
 | [tabulation](doc/tabulation.txt)              |      7875.01 |    39.95 | 249.49 (3) | 554 |                  |
 | [crc32_hw](doc/crc32_hw.txt)                  |      6244.38 |    41.23 | 226.80 (2) | 653 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (SSE4.2/NEON) |
 | [crc32_hw1](doc/crc32_hw1.txt)                |      7569.29 |    49.07 | 233.75 (3) | 671 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2)  |
@@ -62,10 +65,10 @@ SMhasher
 | [crc32_pclmul](doc/crc32_pclmul.txt)          |           -  |     -    |     -      |     | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2+PCLMUL) |
 | [o1hash](doc/o1hash.txt)                      |  11629440.57 |    18.15 | 199.35 (2) | 101 | insecure, no seed, zeros, fails all tests |
 | [fibonacci](doc/fibonacci.txt)                |     16878.32 |    22.94 | 803.18 (15)|1692 | UB, zeros, fails all tests       |
-| [FNV1a](doc/FNV1a.txt)                        |       760.52 |    73.83 | 254.29 (5) | 204 | bad seed, zeros, fails all tests       |
+| [FNV1a](doc/FNV1a.txt)                        |       760.52 |    73.83 | 254.29 (5) | 204 | bad seed, zeros, fails all tests |
 | [FNV1A_Totenschiff](doc/FNV1A_Totenschiff.txt)|      6274.78 |    26.23 | 251.13 (2) | 270 | UB, zeros, fails all tests   |
-| [FNV1A_Pippip_Yurii](doc/FNV1A_Pippip_Yurii.txt)|      6172.14 |    27.55 | 244.80 (2) | 147 | UB, sanity, fails all tests  |
-| [FNV1a_YT](doc/FNV1a_YT.txt)                  |     13486.49 |    30.50 | 237.43 (4) | 321 | bad seed, UB, fails all tests          |
+| [FNV1A_Pippip_Yurii](doc/FNV1A_Pippip_Yurii.txt)|    6172.14 |    27.55 | 244.80 (2) | 147 | UB, sanity, fails all tests  |
+| [FNV1a_YT](doc/FNV1a_YT.txt)                  |     13486.49 |    30.50 | 237.43 (4) | 321 | bad seed, UB, fails all tests|
 | [FNV2](doc/FNV2.txt)                          |      6171.60 |    32.20 | 208.59 (4) | 278 | fails all tests              |
 | [FNV64](doc/FNV64.txt)                        |       774.37 |    72.43 | 201.15 (2) |  79 | fails all tests              |
 | [FNV128](doc/FNV128.txt)                      |       390.14 |   136.42 | 289.00 (3) | 171 | fails all tests              |

@@ -1,0 +1,1734 @@
+-------------------------------------------------------------------------------
+--- Testing hash_hasher_rs "A hasher designed to work on already hashed or hash-like data (crate `hash_hasher`)" SKIP
+
+[[[ Sanity Tests ]]]
+
+Verification value 0xFAF9F8F7 ....... PASS
+Running sanity check 1     . 0: 0x5C == 0x5C  FAIL  !!!!!
+Running AppendedZeroesTest . FAIL !!!!!
+
+[[[ Speed Tests ]]]
+
+Bulk speed test - 262144-byte keys
+Alignment  7 - 5041.231 bytes/cycle - 14423076.92 MiB/sec @ 3 ghz
+Alignment  6 - 5041.231 bytes/cycle - 14423076.92 MiB/sec @ 3 ghz
+Alignment  5 - 5041.231 bytes/cycle - 14423076.92 MiB/sec @ 3 ghz
+Alignment  4 - 5041.231 bytes/cycle - 14423076.92 MiB/sec @ 3 ghz
+Alignment  3 - 5041.231 bytes/cycle - 14423076.92 MiB/sec @ 3 ghz
+Alignment  2 - 5041.231 bytes/cycle - 14423076.92 MiB/sec @ 3 ghz
+Alignment  1 - 5041.231 bytes/cycle - 14423076.92 MiB/sec @ 3 ghz
+Alignment  0 - 5041.231 bytes/cycle - 14423076.92 MiB/sec @ 3 ghz
+Average      - 5041.231 bytes/cycle - 14423076.92 MiB/sec @ 3 ghz
+
+Small key speed test -    1-byte keys -    11.00 cycles/hash
+Small key speed test -    2-byte keys -    13.00 cycles/hash
+Small key speed test -    3-byte keys -    13.69 cycles/hash
+Small key speed test -    4-byte keys -    15.00 cycles/hash
+Small key speed test -    5-byte keys -    15.00 cycles/hash
+Small key speed test -    6-byte keys -    16.00 cycles/hash
+Small key speed test -    7-byte keys -    17.00 cycles/hash
+Small key speed test -    8-byte keys -    18.00 cycles/hash
+Small key speed test -    9-byte keys -    18.00 cycles/hash
+Small key speed test -   10-byte keys -    18.00 cycles/hash
+Small key speed test -   11-byte keys -    18.00 cycles/hash
+Small key speed test -   12-byte keys -    18.00 cycles/hash
+Small key speed test -   13-byte keys -    18.00 cycles/hash
+Small key speed test -   14-byte keys -    18.00 cycles/hash
+Small key speed test -   15-byte keys -    18.00 cycles/hash
+Small key speed test -   16-byte keys -    18.00 cycles/hash
+Small key speed test -   17-byte keys -    18.00 cycles/hash
+Small key speed test -   18-byte keys -    18.00 cycles/hash
+Small key speed test -   19-byte keys -    18.00 cycles/hash
+Small key speed test -   20-byte keys -    18.00 cycles/hash
+Small key speed test -   21-byte keys -    18.00 cycles/hash
+Small key speed test -   22-byte keys -    18.00 cycles/hash
+Small key speed test -   23-byte keys -    18.00 cycles/hash
+Small key speed test -   24-byte keys -    18.00 cycles/hash
+Small key speed test -   25-byte keys -    18.00 cycles/hash
+Small key speed test -   26-byte keys -    18.00 cycles/hash
+Small key speed test -   27-byte keys -    18.00 cycles/hash
+Small key speed test -   28-byte keys -    18.00 cycles/hash
+Small key speed test -   29-byte keys -    18.00 cycles/hash
+Small key speed test -   30-byte keys -    18.00 cycles/hash
+Small key speed test -   31-byte keys -    18.00 cycles/hash
+Average                                    17.183 cycles/hash
+
+[[[ 'Hashmap' Speed Tests ]]]
+
+std::unordered_map
+Init std HashMapTest:     2144.534 cycles/op (479826 inserts, 1% deletions)
+Running std HashMapTest:  986.772 cycles/op (4.2 stdv)
+
+greg7mdp/parallel-hashmap
+Init fast HashMapTest:    898.261 cycles/op (479826 inserts, 1% deletions)
+Running fast HashMapTest: 448.489 cycles/op (1.3 stdv)  ....... PASS
+
+[[[ Avalanche Tests ]]]
+
+Testing   24-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 100.000000% !!!!!
+Testing   32-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 100.000000% !!!!!
+Testing   40-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 100.000000% !!!!!
+Testing   48-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 100.000000% !!!!!
+Testing   56-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 100.000000% !!!!!
+Testing   64-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 100.000000% !!!!!
+Testing   72-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 100.000000% !!!!!
+Testing   80-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 100.000000% !!!!!
+Testing   96-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 100.000000% !!!!!
+Testing  112-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 100.000000% !!!!!
+Testing  128-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 100.000000% !!!!!
+Testing  160-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 100.000000% !!!!!
+Testing  512-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 100.000000% !!!!!
+Testing 1024-bit keys ->  64-bit hashes, 300000 reps.......... worst bias is 100.000000% !!!!!
+*********FAIL*********
+
+[[[ Keyset 'Sparse' Tests ]]]
+
+Keyset 'Sparse' - 16-bit keys with up to 9 bits set - 50643 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected          0.3, actual  50642 (169618.08x) (50642) !!!!!
+Testing collisions (high 19-25 bits) - Worst is 25 bits: 50642/38 (1325.80x) !!!!!
+Testing collisions (low  32-bit) - Expected          0.3, actual      0 (0.00x)
+Testing collisions (low  19-25 bits) - Worst is  0 bits:  0/ 1 (0.00x)
+Testing distribution - Worst bias is the 13-bit window at bit 16 - 99.988% !!!!!
+
+Keyset 'Sparse' - 24-bit keys with up to 8 bits set - 1271626 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        188.2, actual 1271625 (6755.75x) (1271437) !!!!!
+Testing collisions (high 24-35 bits) - Worst is 35 bits: 1271625/23 (54041.30x) !!!!!
+Testing collisions (low  32-bit) - Expected        188.2, actual      0 (0.00x)
+Testing collisions (low  24-35 bits) - Worst is  0 bits:  0/ 1 (0.00x)
+Testing distribution - Worst bias is the 17-bit window at bit 24 - 99.999% !!!!!
+
+Keyset 'Sparse' - 32-bit keys with up to 7 bits set - 4514873 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       2372.2, actual 4514872 (1903.25x) (4512500) !!!!!
+Testing collisions (high 25-38 bits) - Worst is 38 bits: 4514809/37 (121764.48x) !!!!!
+Testing collisions (low  32-bit) - Expected       2372.2, actual      0 (0.00x)
+Testing collisions (low  25-38 bits) - Worst is 31 bits: 942649/4742 (198.76x) !!!!!
+Testing distribution - Worst bias is the 19-bit window at bit 32 - 100.000% !!!!!
+
+Keyset 'Sparse' - 40-bit keys with up to 6 bits set - 4598479 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       2460.8, actual 4598232 (1868.56x) (4595772) !!!!!
+Testing collisions (high 25-38 bits) - Worst is 38 bits: 4592003/38 (119383.99x) !!!!!
+Testing collisions (low  32-bit) - Expected       2460.8, actual 3449462 (1401.74x) (3447002) !!!!!
+Testing collisions (low  25-38 bits) - Worst is 38 bits: 1252863/38 (32572.23x) !!!!!
+Testing distribution - Worst bias is the 19-bit window at bit 40 - 100.000% !!!!!
+
+Keyset 'Sparse' - 48-bit keys with up to 6 bits set - 14196869 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected      23437.8, actual 14181976 (605.09x) (14158539) !!!!!
+Testing collisions (high 27-42 bits) - Worst is 42 bits: 13882957/22 (605880.73x) !!!!!
+Testing collisions (low  32-bit) - Expected      23437.8, actual 13047852 (556.70x) (13024415) !!!!!
+Testing collisions (low  27-42 bits) - Worst is 42 bits: 7976101/22 (348093.41x) !!!!!
+Testing distribution - Worst bias is the 20-bit window at bit 44 - 100.000% !!!!!
+
+Keyset 'Sparse' - 56-bit keys with up to 5 bits set - 4216423 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       2069.0, actual 4160968 (2011.12x) (4158900) !!!!!
+Testing collisions (high 25-38 bits) - Worst is 38 bits: 4041986/32 (124990.96x) !!!!!
+Testing collisions (low  32-bit) - Expected       2069.0, actual 3973598 (1920.56x) (3971530) !!!!!
+Testing collisions (low  25-38 bits) - Worst is 38 bits: 3631488/32 (112297.07x) !!!!!
+Testing distribution - Worst bias is the 19-bit window at bit 45 - 99.998% !!!!!
+
+Keyset 'Sparse' - 64-bit keys with up to 5 bits set - 8303633 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       8021.7, actual 8060808 (1004.87x) (8052787) !!!!!
+Testing collisions (high 26-40 bits) - Worst is 40 bits: 7543534/31 (240585.54x) !!!!!
+Testing collisions (low  32-bit) - Expected       8021.7, actual 8060808 (1004.87x) (8052787) !!!!!
+Testing collisions (low  26-40 bits) - Worst is 40 bits: 7543534/31 (240585.54x) !!!!!
+Testing distribution - Worst bias is the 20-bit window at bit  0 - 99.997% !!!!!
+
+Keyset 'Sparse' - 72-bit keys with up to 5 bits set - 15082603 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 6778970 (1099412977983.73x) (6778970) !!!!!
+Testing collisions (high 32-bit) - Expected      26451.8, actual 14839778 (561.01x) (14813327) !!!!!
+Testing collisions (high 27-42 bits) - Worst is 42 bits: 14107621/25 (545495.94x) !!!!!
+Testing collisions (low  32-bit) - Expected      26451.8, actual 14839778 (561.01x) (14813327) !!!!!
+Testing collisions (low  27-42 bits) - Worst is 42 bits: 14107621/25 (545495.94x) !!!!!
+Testing distribution - Worst bias is the 20-bit window at bit  0 - 99.998% !!!!!
+
+Keyset 'Sparse' - 96-bit keys with up to 4 bits set - 3469497 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 2790376 (8552233279736.23x) (2790376) !!!!!
+Testing collisions (high 32-bit) - Expected       1401.0, actual 3428048 (2446.93x) (3426648) !!!!!
+Testing collisions (high 25-38 bits) - Worst is 38 bits: 3386504/21 (154664.39x) !!!!!
+Testing collisions (low  32-bit) - Expected       1401.0, actual 3428048 (2446.93x) (3426648) !!!!!
+Testing collisions (low  25-38 bits) - Worst is 38 bits: 3386504/21 (154664.39x) !!!!!
+Testing distribution - Worst bias is the 19-bit window at bit  0 - 99.999% !!!!!
+
+Keyset 'Sparse' - 160-bit keys with up to 4 bits set - 26977161 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 26298040 (1333154945951.55x) (26298040) !!!!!
+Testing collisions (high 32-bit) - Expected      84546.1, actual 26935712 (318.59x) (26851166) !!!!!
+Testing collisions (high 28-44 bits) - Worst is 44 bits: 26827175/20 (1296977.67x) !!!!!
+Testing collisions (low  32-bit) - Expected      84546.1, actual 26935712 (318.59x) (26851166) !!!!!
+Testing collisions (low  28-44 bits) - Worst is 44 bits: 26827175/20 (1296977.67x) !!!!!
+Testing distribution - Worst bias is the 20-bit window at bit  0 - 100.000% !!!!!
+
+Keyset 'Sparse' - 256-bit keys with up to 3 bits set - 2796417 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 2752672 (12986749736704.80x) (2752672) !!!!!
+Testing collisions (high 32-bit) - Expected        910.2, actual 2790928 (3066.40x) (2790018) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 2787943/28 (97999.30x) !!!!!
+Testing collisions (low  32-bit) - Expected        910.2, actual 2790928 (3066.40x) (2790018) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 2787943/28 (97999.30x) !!!!!
+Testing distribution - Worst bias is the 19-bit window at bit  0 - 100.000% !!!!!
+
+Keyset 'Sparse' - 512-bit keys with up to 3 bits set - 22370049 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 22326304 (1646010876797.45x) (22326304) !!!!!
+Testing collisions (high 32-bit) - Expected      58155.4, actual 22364560 (384.57x) (22306405) !!!!!
+Testing collisions (high 28-43 bits) - Worst is 43 bits: 22356761/28 (785950.53x) !!!!!
+Testing collisions (low  32-bit) - Expected      58155.4, actual 22364560 (384.57x) (22306405) !!!!!
+Testing collisions (low  28-43 bits) - Worst is 43 bits: 22356761/28 (785950.53x) !!!!!
+Testing distribution - Worst bias is the 20-bit window at bit  0 - 100.000% !!!!!
+
+Keyset 'Sparse' - 1024-bit keys with up to 2 bits set - 524801 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 522720 (70021329907128.45x) (522720) !!!!!
+Testing collisions (high 32-bit) - Expected         32.1, actual 524272 (16352.18x) (524240) !!!!!
+Testing collisions (high 22-32 bits) - Worst is 32 bits: 524272/32 (16352.18x) !!!!!
+Testing collisions (low  32-bit) - Expected         32.1, actual 524272 (16352.18x) (524240) !!!!!
+Testing collisions (low  22-32 bits) - Worst is 32 bits: 524272/32 (16352.18x) !!!!!
+Testing distribution - Worst bias is the 16-bit window at bit  0 - 99.998% !!!!!
+
+Keyset 'Sparse' - 2048-bit keys with up to 2 bits set - 2098177 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 2096096 (17566160652218.94x) (2096096) !!!!!
+Testing collisions (high 32-bit) - Expected        512.4, actual 2097648 (4093.64x) (2097136) !!!!!
+Testing collisions (high 24-36 bits) - Worst is 36 bits: 2097510/32 (65483.86x) !!!!!
+Testing collisions (low  32-bit) - Expected        512.4, actual 2097648 (4093.64x) (2097136) !!!!!
+Testing collisions (low  24-36 bits) - Worst is 36 bits: 2097510/32 (65483.86x) !!!!!
+Testing distribution - Worst bias is the 18-bit window at bit  0 - 100.000% !!!!!
+
+*********FAIL*********
+
+[[[ Keyset 'Permutation' Tests ]]]
+
+Combination Lowbits Tests:
+Keyset 'Combination' - up to 7 blocks from a set of 8 - 2396744 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 2396680 (15392765509080.80x) (2396680) !!!!!
+Testing collisions (high 32-bit) - Expected        668.6, actual 2396736 (3584.66x) (2396068) !!!!!
+Testing collisions (high 24-37 bits) - Worst is 37 bits: 2396736/20 (114688.39x) !!!!!
+Testing collisions (low  32-bit) - Expected        668.6, actual 2396736 (3584.66x) (2396068) !!!!!
+Testing collisions (low  24-37 bits) - Worst is 37 bits: 2396736/20 (114688.39x) !!!!!
+Testing distribution - Worst bias is the 18-bit window at bit  0 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination Highbits Tests
+Keyset 'Combination' - up to 7 blocks from a set of 8 - 2396744 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 2396680 (15392765509080.80x) (2396680) !!!!!
+Testing collisions (high 32-bit) - Expected        668.6, actual 2396736 (3584.66x) (2396068) !!!!!
+Testing collisions (high 24-37 bits) - Worst is 37 bits: 2396736/20 (114688.39x) !!!!!
+Testing collisions (low  32-bit) - Expected        668.6, actual 2396736 (3584.66x) (2396068) !!!!!
+Testing collisions (low  24-37 bits) - Worst is 37 bits: 2396736/20 (114688.39x) !!!!!
+Testing distribution - Worst bias is the 18-bit window at bit  8 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination Hi-Lo Tests:
+Keyset 'Combination' - up to 6 blocks from a set of 15 - 12204240 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 12204015 (3022950302031.70x) (12204015) !!!!!
+Testing collisions (high 32-bit) - Expected      17322.9, actual 12204225 (704.51x) (12186903) !!!!!
+Testing collisions (high 27-41 bits) - Worst is 41 bits: 12204120/33 (360367.52x) !!!!!
+Testing collisions (low  32-bit) - Expected      17322.9, actual 12204225 (704.51x) (12186903) !!!!!
+Testing collisions (low  27-41 bits) - Worst is 41 bits: 12204120/33 (360367.52x) !!!!!
+Testing distribution - Worst bias is the 20-bit window at bit 27 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination 0x8000000 Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 8388602 (4398045986815.31x) (8388602) !!!!!
+Testing collisions (high 32-bit) - Expected       8186.7, actual 8388604 (1024.67x) (8380418) !!!!!
+Testing collisions (high 26-40 bits) - Worst is 40 bits: 8388604/31 (262144.70x) !!!!!
+Testing collisions (low  32-bit) - Expected       8186.7, actual 8388604 (1024.67x) (8380418) !!!!!
+Testing collisions (low  26-40 bits) - Worst is 40 bits: 8388602/31 (262144.64x) !!!!!
+Testing distribution - Worst bias is the 20-bit window at bit  8 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination 0x0000001 Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 8388602 (4398045986815.31x) (8388602) !!!!!
+Testing collisions (high 32-bit) - Expected       8186.7, actual 8388604 (1024.67x) (8380418) !!!!!
+Testing collisions (high 26-40 bits) - Worst is 40 bits: 8388602/31 (262144.64x) !!!!!
+Testing collisions (low  32-bit) - Expected       8186.7, actual 8388604 (1024.67x) (8380418) !!!!!
+Testing collisions (low  26-40 bits) - Worst is 40 bits: 8388604/31 (262144.70x) !!!!!
+Testing distribution - Worst bias is the 20-bit window at bit  0 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination 0x800000000000000 Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 8388604 (4398047035391.94x) (8388604) !!!!!
+Testing collisions (high 32-bit) - Expected       8186.7, actual 8388605 (1024.67x) (8380419) !!!!!
+Testing collisions (high 26-40 bits) - Worst is 40 bits: 8388605/31 (262144.73x) !!!!!
+Testing collisions (low  32-bit) - Expected       8186.7, actual 8388604 (1024.67x) (8380418) !!!!!
+Testing collisions (low  26-40 bits) - Worst is 40 bits: 8388604/31 (262144.70x) !!!!!
+Testing distribution - Worst bias is the 20-bit window at bit  8 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination 0x000000000000001 Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 8388604 (4398047035391.94x) (8388604) !!!!!
+Testing collisions (high 32-bit) - Expected       8186.7, actual 8388604 (1024.67x) (8380418) !!!!!
+Testing collisions (high 26-40 bits) - Worst is 40 bits: 8388604/31 (262144.70x) !!!!!
+Testing collisions (low  32-bit) - Expected       8186.7, actual 8388605 (1024.67x) (8380419) !!!!!
+Testing collisions (low  26-40 bits) - Worst is 40 bits: 8388605/31 (262144.73x) !!!!!
+Testing distribution - Worst bias is the 20-bit window at bit  0 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination 16-bytes [0-1] Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 8388605 (4398047559680.25x) (8388605) !!!!!
+Testing collisions (high 32-bit) - Expected       8186.7, actual 8388605 (1024.67x) (8380419) !!!!!
+Testing collisions (high 26-40 bits) - Worst is 40 bits: 8388605/31 (262144.73x) !!!!!
+Testing collisions (low  32-bit) - Expected       8186.7, actual 8388605 (1024.67x) (8380419) !!!!!
+Testing collisions (low  26-40 bits) - Worst is 40 bits: 8388605/31 (262144.73x) !!!!!
+Testing distribution - Worst bias is the 20-bit window at bit  0 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination 16-bytes [0-last] Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 8388604 (4398047035391.94x) (8388604) !!!!!
+Testing collisions (high 32-bit) - Expected       8186.7, actual 8388605 (1024.67x) (8380419) !!!!!
+Testing collisions (high 26-40 bits) - Worst is 40 bits: 8388605/31 (262144.73x) !!!!!
+Testing collisions (low  32-bit) - Expected       8186.7, actual 8388604 (1024.67x) (8380418) !!!!!
+Testing collisions (low  26-40 bits) - Worst is 40 bits: 8388604/31 (262144.70x) !!!!!
+Testing distribution - Worst bias is the 20-bit window at bit  8 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination 32-bytes [0-1] Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 8388605 (4398047559680.25x) (8388605) !!!!!
+Testing collisions (high 32-bit) - Expected       8186.7, actual 8388605 (1024.67x) (8380419) !!!!!
+Testing collisions (high 26-40 bits) - Worst is 40 bits: 8388605/31 (262144.73x) !!!!!
+Testing collisions (low  32-bit) - Expected       8186.7, actual 8388605 (1024.67x) (8380419) !!!!!
+Testing collisions (low  26-40 bits) - Worst is 40 bits: 8388605/31 (262144.73x) !!!!!
+Testing distribution - Worst bias is the 20-bit window at bit  0 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination 32-bytes [0-last] Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 8388604 (4398047035391.94x) (8388604) !!!!!
+Testing collisions (high 32-bit) - Expected       8186.7, actual 8388605 (1024.67x) (8380419) !!!!!
+Testing collisions (high 26-40 bits) - Worst is 40 bits: 8388605/31 (262144.73x) !!!!!
+Testing collisions (low  32-bit) - Expected       8186.7, actual 8388604 (1024.67x) (8380418) !!!!!
+Testing collisions (low  26-40 bits) - Worst is 40 bits: 8388604/31 (262144.70x) !!!!!
+Testing distribution - Worst bias is the 20-bit window at bit  8 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination 64-bytes [0-1] Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 8388605 (4398047559680.25x) (8388605) !!!!!
+Testing collisions (high 32-bit) - Expected       8186.7, actual 8388605 (1024.67x) (8380419) !!!!!
+Testing collisions (high 26-40 bits) - Worst is 40 bits: 8388605/31 (262144.73x) !!!!!
+Testing collisions (low  32-bit) - Expected       8186.7, actual 8388605 (1024.67x) (8380419) !!!!!
+Testing collisions (low  26-40 bits) - Worst is 40 bits: 8388605/31 (262144.73x) !!!!!
+Testing distribution - Worst bias is the 20-bit window at bit  0 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination 64-bytes [0-last] Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 8388604 (4398047035391.94x) (8388604) !!!!!
+Testing collisions (high 32-bit) - Expected       8186.7, actual 8388605 (1024.67x) (8380419) !!!!!
+Testing collisions (high 26-40 bits) - Worst is 40 bits: 8388605/31 (262144.73x) !!!!!
+Testing collisions (low  32-bit) - Expected       8186.7, actual 8388604 (1024.67x) (8380418) !!!!!
+Testing collisions (low  26-40 bits) - Worst is 40 bits: 8388604/31 (262144.70x) !!!!!
+Testing distribution - Worst bias is the 20-bit window at bit  8 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination 128-bytes [0-1] Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 8388605 (4398047559680.25x) (8388605) !!!!!
+Testing collisions (high 32-bit) - Expected       8186.7, actual 8388605 (1024.67x) (8380419) !!!!!
+Testing collisions (high 26-40 bits) - Worst is 40 bits: 8388605/31 (262144.73x) !!!!!
+Testing collisions (low  32-bit) - Expected       8186.7, actual 8388605 (1024.67x) (8380419) !!!!!
+Testing collisions (low  26-40 bits) - Worst is 40 bits: 8388605/31 (262144.73x) !!!!!
+Testing distribution - Worst bias is the 20-bit window at bit  0 - 100.000% !!!!!
+
+*********FAIL*********
+
+Combination 128-bytes [0-last] Tests:
+Keyset 'Combination' - up to 22 blocks from a set of 2 - 8388606 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 8388604 (4398047035391.94x) (8388604) !!!!!
+Testing collisions (high 32-bit) - Expected       8186.7, actual 8388605 (1024.67x) (8380419) !!!!!
+Testing collisions (high 26-40 bits) - Worst is 40 bits: 8388605/31 (262144.73x) !!!!!
+Testing collisions (low  32-bit) - Expected       8186.7, actual 8388604 (1024.67x) (8380418) !!!!!
+Testing collisions (low  26-40 bits) - Worst is 40 bits: 8388604/31 (262144.70x) !!!!!
+Testing distribution - Worst bias is the 20-bit window at bit  8 - 100.000% !!!!!
+
+*********FAIL*********
+
+[[[ Keyset 'Window' Tests ]]]
+
+Keyset 'Window' -  32-bit key,  25-bit window - 32 tests, 33554432 keys per test
+Window at   0 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at   1 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at   2 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at   3 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at   4 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at   5 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at   6 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at   7 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at   8 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at   9 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  10 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  11 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  12 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  13 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  14 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  15 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  16 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  17 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  18 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  19 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  20 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  21 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  22 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  23 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  24 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  25 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  26 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  27 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  28 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  29 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  30 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  31 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Window at  32 - Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+
+[[[ Keyset 'Cyclic' Tests ]]]
+
+Keyset 'Cyclic' - 8 cycles of 8 bytes - 1000000 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        116.4, actual      0 (0.00x)
+Testing collisions (high 23-34 bits) - Worst is 23 bits: 56845/57305 (0.99x)
+Testing collisions (low  32-bit) - Expected        116.4, actual    107 (0.92x)
+Testing collisions (low  23-34 bits) - Worst is 31 bits: 245/232 (1.05x)
+Testing distribution - Worst bias is the 16-bit window at bit 36 - 0.122%
+
+Keyset 'Cyclic' - 8 cycles of 9 bytes - 1000000 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        116.4, actual    115 (0.99x) (-1)
+Testing collisions (high 23-34 bits) - Worst is 31 bits: 249/232 (1.07x)
+Testing collisions (low  32-bit) - Expected        116.4, actual    116 (1.00x)
+Testing collisions (low  23-34 bits) - Worst is 33 bits: 64/58 (1.10x)
+Testing distribution - Worst bias is the 16-bit window at bit 44 - 0.122%
+
+Keyset 'Cyclic' - 8 cycles of 10 bytes - 1000000 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        116.4, actual    123 (1.06x) (7)
+Testing collisions (high 23-34 bits) - Worst is 32 bits: 123/116 (1.06x)
+Testing collisions (low  32-bit) - Expected        116.4, actual    123 (1.06x) (7)
+Testing collisions (low  23-34 bits) - Worst is 33 bits: 70/58 (1.20x)
+Testing distribution - Worst bias is the 17-bit window at bit 42 - 0.115%
+
+Keyset 'Cyclic' - 8 cycles of 11 bytes - 1000000 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        116.4, actual    109 (0.94x)
+Testing collisions (high 23-34 bits) - Worst is 26 bits: 7509/7413 (1.01x)
+Testing collisions (low  32-bit) - Expected        116.4, actual    143 (1.23x) (27)
+Testing collisions (low  23-34 bits) - Worst is 33 bits: 77/58 (1.32x)
+Testing distribution - Worst bias is the 17-bit window at bit 43 - 0.109%
+
+Keyset 'Cyclic' - 8 cycles of 12 bytes - 1000000 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        116.4, actual     95 (0.82x)
+Testing collisions (high 23-34 bits) - Worst is 34 bits: 30/29 (1.03x)
+Testing collisions (low  32-bit) - Expected        116.4, actual    118 (1.01x) (2)
+Testing collisions (low  23-34 bits) - Worst is 33 bits: 68/58 (1.17x)
+Testing distribution - Worst bias is the 17-bit window at bit 56 - 0.130%
+
+Keyset 'Cyclic' - 8 cycles of 16 bytes - 1000000 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected        116.4, actual    114 (0.98x)
+Testing collisions (high 23-34 bits) - Worst is 34 bits: 33/29 (1.13x)
+Testing collisions (low  32-bit) - Expected        116.4, actual    119 (1.02x) (3)
+Testing collisions (low  23-34 bits) - Worst is 31 bits: 246/232 (1.06x)
+Testing distribution - Worst bias is the 17-bit window at bit 58 - 0.115%
+
+
+[[[ Keyset 'TwoBytes' Tests ]]]
+
+Keyset 'TwoBytes' - up-to-4-byte keys, 652545 total keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 261375 (22646103971038.65x) (261375) !!!!!
+Testing collisions (high 32-bit) - Expected         49.6, actual 652544 (13164.41x) (652495) !!!!!
+Testing collisions (high 23-33 bits) - Worst is 33 bits: 652543/24 (26328.11x) !!!!!
+Testing collisions (low  32-bit) - Expected         49.6, actual 261375 (5272.97x) (261326) !!!!!
+Testing collisions (low  23-33 bits) - Worst is 33 bits: 261375/24 (10545.68x) !!!!!
+Testing distribution - Worst bias is the 16-bit window at bit 32 - 99.998% !!!!!
+
+Keyset 'TwoBytes' - up-to-8-byte keys, 5471025 total keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 3648285 (4496774986619.34x) (3648285) !!!!!
+Testing collisions (high 32-bit) - Expected       3483.1, actual 5079854 (1458.44x) (5076371) !!!!!
+Testing collisions (high 26-39 bits) - Worst is 39 bits: 4950187/27 (181838.38x) !!!!!
+Testing collisions (low  32-bit) - Expected       3483.1, actual 5079854 (1458.44x) (5076371) !!!!!
+Testing collisions (low  26-39 bits) - Worst is 39 bits: 4950187/27 (181838.38x) !!!!!
+Testing distribution - Worst bias is the 20-bit window at bit 44 - 100.000% !!!!!
+
+Keyset 'TwoBytes' - up-to-12-byte keys, 18616785 total keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 16794044 (1787704205111.65x) (16794044) !!!!!
+Testing collisions (high 32-bit) - Expected      40289.5, actual 18225614 (452.37x) (18185325) !!!!!
+Testing collisions (high 27-42 bits) - Worst is 42 bits: 17961431/39 (455850.06x) !!!!!
+Testing collisions (low  32-bit) - Expected      40289.5, actual 18225614 (452.37x) (18185325) !!!!!
+Testing collisions (low  27-42 bits) - Worst is 42 bits: 17961431/39 (455850.06x) !!!!!
+Testing distribution - Worst bias is the 20-bit window at bit 44 - 100.000% !!!!!
+
+Keyset 'TwoBytes' - up-to-16-byte keys, 44251425 total keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 42428684 (799382742817.97x) (42428684) !!!!!
+Testing collisions (high 32-bit) - Expected     227182.3, actual 43860254 (193.06x) (43633072) !!!!!
+Testing collisions (high 29-45 bits) - Worst is 45 bits: 43560343/27 (1565369.12x) !!!!!
+Testing collisions (low  32-bit) - Expected     227182.3, actual 43860254 (193.06x) (43633072) !!!!!
+Testing collisions (low  29-45 bits) - Worst is 45 bits: 43560343/27 (1565369.12x) !!!!!
+Testing distribution - Worst bias is the 20-bit window at bit 44 - 100.000% !!!!!
+
+Keyset 'TwoBytes' - up-to-20-byte keys, 86536545 total keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 84713804 (417354214338.22x) (84713804) !!!!!
+Testing collisions (high 32-bit) - Expected     865959.1, actual 86145374 (99.48x) (85279415) !!!!!
+Testing collisions (high 30-47 bits) - Worst is 47 bits: 85722967/26 (3222092.30x) !!!!!
+Testing collisions (low  32-bit) - Expected     865959.1, actual 86145374 (99.48x) (85279415) !!!!!
+Testing collisions (low  30-47 bits) - Worst is 47 bits: 85722967/26 (3222092.30x) !!!!!
+Testing distribution - Worst bias is the 20-bit window at bit 44 - 100.000% !!!!!
+
+*********FAIL*********
+
+[[[ Keyset 'Text' Tests ]]]
+
+Keyset 'Text' - keys of form "FooXXXXBar" - 14776336 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected      25389.0, actual 14538008 (572.61x) (14512619) !!!!!
+Testing collisions (high 27-42 bits) - Worst is 39 bits: 6911512/198 (34805.13x) !!!!!
+Testing collisions (low  32-bit) - Expected      25389.0, actual 14776274 (581.99x) (14750885) !!!!!
+Testing collisions (low  27-42 bits) - Worst is 42 bits: 14760960/24 (594663.68x) !!!!!
+Testing distribution - Worst bias is the 20-bit window at bit  0 - 100.000% !!!!!
+
+Keyset 'Text' - keys of form "FooBarXXXX" - 14776336 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected      25389.0, actual 14776335 (582.00x) (14750946) !!!!!
+Testing collisions (high 27-42 bits) - Worst is 42 bits: 14776212/24 (595278.13x) !!!!!
+Testing collisions (low  32-bit) - Expected      25389.0, actual      0 (0.00x)
+Testing collisions (low  27-42 bits) - Worst is 29 bits: 8579808/201492 (42.58x) !!!!!
+Testing distribution - Worst bias is the 20-bit window at bit 31 - 100.000% !!!!!
+
+Keyset 'Text' - keys of form "XXXXFooBar" - 14776336 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 14772492 (2496146065028.92x) (14772492) !!!!!
+Testing collisions (high 32-bit) - Expected      25389.0, actual 14772492 (581.85x) (14747103) !!!!!
+Testing collisions (high 27-42 bits) - Worst is 42 bits: 14772492/24 (595128.26x) !!!!!
+Testing collisions (low  32-bit) - Expected      25389.0, actual 14776335 (582.00x) (14750946) !!!!!
+Testing collisions (low  27-42 bits) - Worst is 42 bits: 14776335/24 (595283.08x) !!!!!
+Testing distribution - Worst bias is the 20-bit window at bit  0 - 100.000% !!!!!
+
+Keyset 'Words' - 4000000 random keys of len 6-16 from alnum charset
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1862.1, actual 925251 (496.89x) (923389) !!!!!
+Testing collisions (high 25-38 bits) - Worst is 38 bits: 375814/29 (12912.94x) !!!!!
+Testing collisions (low  32-bit) - Expected       1862.1, actual 495167 (265.92x) (493305) !!!!!
+Testing collisions (low  25-38 bits) - Worst is 38 bits: 11620/29 (399.26x) !!!!!
+Testing distribution - Worst bias is the 19-bit window at bit 45 - 99.951% !!!!!
+
+Keyset 'Words' - 4000000 random keys of len 6-16 from password charset
+Testing collisions ( 64-bit) - Expected    0.0, actual      0 (0.00x)
+Testing collisions (high 32-bit) - Expected       1862.1, actual 581801 (312.45x) (579939) !!!!!
+Testing collisions (high 25-38 bits) - Worst is 38 bits: 251418/29 (8638.70x) !!!!!
+Testing collisions (low  32-bit) - Expected       1862.1, actual 136587 (73.35x) (134725) !!!!!
+Testing collisions (low  25-38 bits) - Worst is 38 bits: 2608/29 (89.61x) !!!!!
+Testing distribution - Worst bias is the 19-bit window at bit 45 - 99.944% !!!!!
+
+Keyset 'Words' - 479826 dict words
+Testing collisions ( 64-bit) - Expected    0.0, actual 135454 (21705755341645.36x) (135454) !!!!!
+Testing collisions (high 32-bit) - Expected         26.8, actual 426347 (15907.52x) (426321) !!!!!
+Testing collisions (high 22-32 bits) - Worst is 32 bits: 426347/26 (15907.52x) !!!!!
+Testing collisions (low  32-bit) - Expected         26.8, actual 435407 (16245.56x) (435381) !!!!!
+Testing collisions (low  22-32 bits) - Worst is 32 bits: 435407/26 (16245.56x) !!!!!
+Testing distribution - Worst bias is the 16-bit window at bit 47 - 99.958% !!!!!
+
+*********FAIL*********
+
+[[[ Keyset 'Zeroes' Tests ]]]
+
+Keyset 'Zeroes' - 204800 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 204799 (180143985094819.84x) (204799) !!!!!
+Testing collisions (high 32-bit) - Expected          4.9, actual 204799 (41943.71x) (204795) !!!!!
+Testing collisions (high 21-29 bits) - Worst is 29 bits: 204799/39 (5243.55x) !!!!!
+Testing collisions (low  32-bit) - Expected          4.9, actual 204799 (41943.71x) (204795) !!!!!
+Testing collisions (low  21-29 bits) - Worst is 29 bits: 204799/39 (5243.55x) !!!!!
+Testing distribution - Worst bias is the 15-bit window at bit  0 - 99.997% !!!!!
+
+*********FAIL*********
+
+[[[ Keyset 'Seed' Tests ]]]
+
+Keyset 'Seed' - 5000000 keys
+Testing collisions ( 64-bit) - Expected    0.0, actual 4999999 (7378697629483.82x) (4999999) !!!!!
+Testing collisions (high 32-bit) - Expected       2909.3, actual 4999999 (1718.65x) (4997090) !!!!!
+Testing collisions (high 26-39 bits) - Worst is 39 bits: 4999999/22 (219902.99x) !!!!!
+Testing collisions (low  32-bit) - Expected       2909.3, actual 4999999 (1718.65x) (4997090) !!!!!
+Testing collisions (low  26-39 bits) - Worst is 39 bits: 4999999/22 (219902.99x) !!!!!
+Testing distribution - Worst bias is the 19-bit window at bit  0 - 100.000% !!!!!
+
+*********FAIL*********
+
+[[[ Keyset 'PerlinNoise' Tests ]]]
+
+Testing 16777216 coordinates (L2) : 
+Testing collisions ( 64-bit) - Expected    0.0, actual 16773120 (2198486515680.01x) (16773120) !!!!!
+Testing collisions (high 32-bit) - Expected      32725.4, actual 16777215 (512.67x) (16744490) !!!!!
+Testing collisions (high 27-42 bits) - Worst is 42 bits: 16777215/31 (524288.67x) !!!!!
+Testing collisions (low  32-bit) - Expected      32725.4, actual 16773120 (512.54x) (16740395) !!!!!
+Testing collisions (low  27-42 bits) - Worst is 42 bits: 16773120/31 (524160.70x) !!!!!
+
+Testing AV variant, 128 count with 4 spacing, 4-12:
+Testing collisions ( 64-bit) - Expected    0.0, actual 3095299 (11907898511022.73x) (3095299)
+Testing collisions (high 32-bit) - Expected       1116.2, actual 3096227 (2774.02x) (3095111) !!!!!
+Testing collisions (high 25-37 bits) - Worst is 37 bits: 3096131/34 (88745.27x) !!!!!
+Testing collisions (low  32-bit) - Expected       1116.2, actual 3096259 (2774.05x) (3095143) !!!!!
+Testing collisions (low  25-37 bits) - Worst is 37 bits: 3096211/34 (88747.56x) !!!!!
+
+*********FAIL*********
+
+[[[ Diff 'Differential' Tests ]]]
+
+Testing 8303632 up-to-5-bit differentials in 64-bit keys -> 64 bit hashes.
+1000 reps, 8303632000 total tests, expecting 0.00 random collisions..........
+0 total collisions, of which 0 single collisions were ignored
+
+Testing 11017632 up-to-4-bit differentials in 128-bit keys -> 64 bit hashes.
+1000 reps, 11017632000 total tests, expecting 0.00 random collisions..........
+679120000 total collisions, of which 0 single collisions were ignored !!!!!
+
+Testing 2796416 up-to-3-bit differentials in 256-bit keys -> 64 bit hashes.
+1000 reps, 2796416000 total tests, expecting 0.00 random collisions..........[[[ BadSeeds Tests ]]]
+
+Testing 0 internal secrets:
+0x0 
+Broken seed 0x00000000 => 0 with key[1] of all 0 bytes confirmed => hash 0 !!!!
+
+Broken seed 0x00000000 => 0 with key[2] of all 0 bytes confirmed => hash 0 !!!!
+
+Broken seed 0x00000000 => 0 with key[4] of all 0 bytes confirmed => hash 0 !!!!
+
+Broken seed 0x00000000 => 0 with key[8] of all 0 bytes confirmed => hash 0 !!!!
+
+Broken seed 0x00000000 => 0 with key[12] of all 0 bytes confirmed => hash 0 !!!!
+
+Broken seed 0x00000000 => 0 with key[16] of all 0 bytes confirmed => hash 0 !!!!
+
+Broken seed 0x00000000 => 0 with key[32] of all 0 bytes confirmed => hash 0 !!!!
+
+Broken seed 0x00000000 => 0 with key[64] of all 0 bytes confirmed => hash 0 !!!!
+
+Broken seed 0x00000000 => 0 with key[128] of all 0 bytes confirmed => hash 0 !!!!
+Testing the first 0xffffffff seeds ...
+4 threads starting...
+at 0 
+Broken seed 0x00000000 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000001 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000002 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000003 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000004 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000005 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000006 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000007 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000008 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000009 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000000a => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000000b => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000000c => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000000d => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000000e => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000000f => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000010 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000011 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000012 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000013 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000014 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000015 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000016 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000017 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000018 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000019 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000001a => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000001b => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000001c => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000001d => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000001e => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000001f => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000020 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000021 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000022 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000023 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000024 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000025 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000026 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000027 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000028 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000029 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000002a => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000002b => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000002c => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000002d => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000002e => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000002f => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000030 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000031 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000032 => 0 with key[16] of all 0 bytes
+at 40000000 
+Broken seed 0x40000000 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000033 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000034 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000035 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000036 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000037 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000038 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000039 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000003a => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000003b => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000003c => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000003d => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000003e => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000003f => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000040 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000041 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000042 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000043 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000044 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000045 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000046 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000047 => 0 with key[16] of all 0 bytes
+at c0000000 
+Broken seed 0xc0000000 => 0 with key[16] of all 0 bytes
+at 80000000 
+Broken seed 0x80000000 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000048 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000049 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000004a => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000004b => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000001 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x40000001 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000004c => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000001 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000002 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000003 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000004 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000002 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000003 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000004 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000005 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000006 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000007 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000008 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000009 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000000a => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000000b => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000000c => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000000d => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000005 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000006 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000004d => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000000e => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000000f => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000010 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x40000002 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000007 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000008 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000009 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000000a => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000000b => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000004e => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000004f => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000050 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000051 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000011 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000012 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000013 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000014 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000015 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000016 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000017 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000018 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000019 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000001a => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000001b => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000001c => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000001d => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000001e => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000001f => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000020 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000021 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000022 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000023 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000024 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000025 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000026 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000027 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000028 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000052 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x40000003 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000000c => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000029 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x40000004 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000002a => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000002b => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000002c => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000002d => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000002e => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000002f => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000030 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000031 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000032 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000033 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000034 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000035 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000036 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000037 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000038 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000039 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000003a => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000003b => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000000d => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000000e => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000000f => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000010 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000011 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000012 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000013 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000014 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000015 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000016 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000017 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000018 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000019 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000001a => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000001b => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000001c => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000001d => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000001e => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000001f => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000020 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000021 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000022 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000023 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000024 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000025 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000026 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000027 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000053 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000054 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000055 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000056 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000057 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x40000005 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x40000006 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x40000007 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x40000008 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000003c => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000003d => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000003e => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000003f => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000040 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000028 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000029 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000002a => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000002b => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000002c => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000002d => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000058 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000002e => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000002f => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000030 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000031 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000032 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000041 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000042 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000033 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000034 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000059 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000043 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000044 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000045 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000046 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000047 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000048 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000049 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000004a => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000004b => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000035 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000036 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x40000009 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000004c => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000004d => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000004e => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000004f => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000050 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000051 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000052 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000053 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000054 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000055 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000056 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000057 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000058 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000059 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000005a => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000005b => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000005c => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000005d => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000005e => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000005f => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000060 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000061 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000062 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000063 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000064 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000065 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000066 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000067 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000068 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000069 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000006a => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000005a => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000005b => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000005c => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000005d => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000005e => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000005f => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000060 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000061 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000062 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000063 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000064 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000065 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000066 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000067 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000037 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000068 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000069 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000006a => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000006b => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000006c => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000006d => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000006e => 0 with key[16] of all 0 bytes
+
+Broken seed 0x4000000a => 0 with key[16] of all 0 bytes
+
+Broken seed 0x4000000b => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000006b => 0 with key[16] of all 0 bytes
+
+Broken seed 0x4000000c => 0 with key[16] of all 0 bytes
+
+Broken seed 0x4000000d => 0 with key[16] of all 0 bytes
+
+Broken seed 0x4000000e => 0 with key[16] of all 0 bytes
+
+Broken seed 0x4000000f => 0 with key[16] of all 0 bytes
+
+Broken seed 0x40000010 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x40000011 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x40000012 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x40000013 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x0000006f => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000070 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000071 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000072 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000073 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000074 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000006c => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000038 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000039 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x00000075 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000003a => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000003b => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000003c => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000003d => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000003e => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000003f => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000040 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000041 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000042 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000043 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000044 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000045 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000046 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000047 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000048 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000049 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000004a => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000004b => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000004c => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000004d => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000004e => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000004f => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000050 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000051 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000052 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000053 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000054 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000055 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000056 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000057 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000058 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000059 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000005a => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000005b => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000005c => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000005d => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000005e => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000005f => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000060 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000061 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000062 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000063 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000064 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000065 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000066 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000067 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000068 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000069 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000006a => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000006b => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000006c => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000006d => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000006e => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000006f => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000070 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000071 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000072 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000073 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000074 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000075 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000076 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000077 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000078 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000079 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000007a => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000007b => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000007c => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000007d => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000007e => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000007f => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000080 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000081 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000082 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000083 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000084 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000085 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000086 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000087 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000088 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000089 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000008a => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000008b => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000008c => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000008d => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000008e => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000008f => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000090 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000091 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000092 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000093 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000094 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000095 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000096 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000097 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000098 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000099 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000009a => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000009b => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000009c => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000009d => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000009e => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000009f => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000a0 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000a1 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000a2 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000a3 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000a4 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000a5 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000a6 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000a7 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000a8 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000a9 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000aa => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000ab => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000ac => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000ad => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000ae => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000af => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000b0 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000b1 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000b2 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000b3 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000b4 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000b5 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000b6 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000b7 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000b8 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000b9 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000ba => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000bb => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000bc => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000bd => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000be => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000bf => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000c0 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000c1 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000c2 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000c3 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000c4 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000c5 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000c6 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000c7 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000c8 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000c9 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000ca => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000cb => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000cc => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000cd => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000ce => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000cf => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000d0 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000d1 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000d2 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000d3 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000d4 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000d5 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000d6 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000d7 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000d8 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000d9 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000da => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000db => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000dc => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000dd => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000de => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000df => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000e0 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000e1 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000e2 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000e3 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000e4 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000e5 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000e6 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000e7 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000e8 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000e9 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000ea => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000eb => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000ec => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000ed => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000ee => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000ef => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000f0 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000f1 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000f2 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000f3 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000f4 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000f5 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000f6 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000f7 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000f8 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000f9 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000fa => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000fb => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000fc => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000fd => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000fe => 0 with key[16] of all 0 bytes
+
+Broken seed 0x800000ff => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000100 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000101 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000102 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000103 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000104 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000105 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000106 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000107 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000108 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000109 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000010a => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000010b => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000010c => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000010d => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000010e => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000010f => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000110 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000111 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000112 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000113 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000114 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000115 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000116 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000117 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000118 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000119 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000011a => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000011b => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000011c => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000011d => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000011e => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000011f => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000120 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000121 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000122 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000123 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000124 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000125 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000126 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000127 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000128 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x80000129 => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000012a => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000012b => 0 with key[16] of all 0 bytes
+
+Broken seed 0x8000012c => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000006d => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000006e => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc000006f => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000070 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000071 => 0 with key[16] of all 0 bytes
+
+Broken seed 0xc0000072 => 0 with key[16] of all 0 bytes
