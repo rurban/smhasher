@@ -11,7 +11,7 @@ use digest::{Digest, ExtendableOutput, XofReader};
 /// Default domain separation
 const TURBO_DOMAIN_SEP: u8 = 0x1f;
 
-/// This maco does the following:
+/// This macro does the following:
 /// - Accepts a repeating list of `identifer: function`
 /// - Creates a C function with that identifier
 /// - Turn data into a Rust slice
@@ -162,6 +162,11 @@ hashes! {
         siphasher::sip128::SipHasher24::new_with_keys(seed.into(), 0)
     ),
     whirlpool_rs: digest_wrapper::<whirlpool::Whirlpool>,
+    whirlpool256_rs: |buf, _seed, out: *mut c_void| {
+      let mut hash = whirlpool::Whirlpool::new();
+      hash.update(buf);
+      hash.finalize_into(unsafe { &mut *out.cast() });
+    },
     wyhash_rs: seeded_wrapper(wyhash::WyHash::with_seed),
     xxhash3_rs: seeded_wrapper(xxhash_rust::xxh3::Xxh3::with_seed),
     xxhash128_rs: |buf, _seed, out: *mut c_void| unsafe {
