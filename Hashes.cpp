@@ -1317,3 +1317,11 @@ void polymur_test ( const void *key, int len, uint32_t seed, void *out) {
   *(uint64_t*)out = polymur_hash((const uint8_t*)key, (size_t)len, &g_polymurhashparams,
                                  (uint64_t)seed);
 }
+
+#ifdef RUST_ENABLED
+void wyhash_rs_seed_init (uint32_t &seed) {
+  if (wyhash_rs_badseed (seed))
+    seed++;
+}
+#endif
+

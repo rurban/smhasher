@@ -1367,3 +1367,11 @@ void khashv64_test ( const void *key, int len, uint32_t seed, void *out);
 extern PolymurHashParams g_polymurhashparams;
 void polymur_seed_init (size_t &seed);
 void polymur_test ( const void *key, int len, uint32_t seed, void *out);
+
+#ifdef RUST_ENABLED
+// rust crate wyhash 0.5.0
+static bool wyhash_rs_badseed(const uint32_t seed) {
+  return (0x52e45cf4 == seed || 0x9d4d660c == seed);
+}
+void wyhash_rs_seed_init (uint32_t &seed);
+#endif

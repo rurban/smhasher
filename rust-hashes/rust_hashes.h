@@ -103,6 +103,8 @@ void siphash128_24_rs(const void *blob, int len, unsigned int seed, void *out);
 
 void whirlpool_rs(const void *blob, int len, unsigned int seed, void *out);
 
+void whirlpool256_rs(const void *blob, int len, unsigned int seed, void *out);
+
 void wyhash_rs(const void *blob, int len, unsigned int seed, void *out);
 
 void xxhash3_rs(const void *blob, int len, unsigned int seed, void *out);

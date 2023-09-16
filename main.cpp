@@ -760,6 +760,7 @@ HashInfo g_hashes[] =
 #endif
 { komihash_test,        64, 0x8157FF6D, "komihash",    "komihash 5.7", GOOD, {} },
 { polymur_test,         64, 0x4F894810, "polymur",     "github.com/orlp/polymur-hash v1", GOOD, {} },
+
 #ifdef RUST_ENABLED
 { adler_rs,             32, 0x6E8E8F4D, "Adler_rs",           "Adler-32 checksum implementation (used by `zlib`, crate `adler`)", GOOD, {} },
 // instable verif, as the library
@@ -818,8 +819,9 @@ HashInfo g_hashes[] =
 { siphash24_rs,         64, 0x57B661ED, "SipHash_2-4_rs",     "SipHash with 2 rounds and 4 finalization rounds (crate `siphasher`)", GOOD, {} },
 { siphash128_13_rs,     64, 0x8E66D3B7, "SipHash128_1-3_rs",  "SipHash128 with 1 round and 3 finalization rounds (crate `siphasher`)", GOOD, {} },
 { siphash128_24_rs,     64, 0xA158D579, "SipHash128_2-4_rs",  "SipHash128 with 2 rounds and 4 finalization rounds (crate `siphasher`)", GOOD, {} },
-{ whirlpool_rs,        512, 0xF7E0FD50, "Whirlpool_rs",       "Whirlpool algorithm (crate `whirlpool`)", GOOD, {} },
-{ wyhash_rs,            64, 0x1196BB84, "WyHash_rs",          "WyHash algorithm (crate `wyhash`)", POOR, {} },
+//{ whirlpool_rs,      512, 0xF7E0FD50, "Whirlpool_rs",       "Whirlpool algorithm (crate `whirlpool`)", GOOD, {} },
+//{ whirlpool256_rs,   256, 0xF7E0FD50, "Whirlpool256_rs",    "Whirlpool algorithm (256 bits) (crate `whirlpool`)", GOOD, {} },
+{ wyhash_rs,            64, 0x1196BB84, "WyHash_rs",          "WyHash 0.5.0 (crate `wyhash`)", GOOD, { 0x52e45cf4, 0x9d4d660c } },
 { xxhash3_rs,           64, 0x9A636405, "xxHash3_rs",         "64-bit xxHash implementation (crate `xxhash-rust`)", POOR, {} },
 { xxhash128_rs,        128, 0x88B45661, "xxHash128_rs",       "128-bit xxHash implementation (crate `xxhash-rust`)", POOR, {} },
 { xxhash32_rs,          32, 0xBA88B743, "xxHash32_rs",        "32-bit xxHash implementation (crate `xxhash-rust`)", POOR, {} },
@@ -929,6 +931,10 @@ void Bad_Seed_init (pfHash hash, uint32_t &seed) {
   else if(hash == wyhash32low)
     wyhash32low_seed_init(seed);
 #endif
+#ifdef RUST_ENABLED
+  else if (hash == wyhash_rs)
+    wyhash_rs_seed_init (seed);
+#endif
 #ifdef HAVE_INT64
   else if(hash == mirhash_test)
     mirhash_seed_init(seed);
@@ -962,6 +968,16 @@ bool Hash_Seed_init (pfHash hash, size_t seed) {
   //  VHASH_seed_init(seed);
   if(hash == tabulation_32_test)
     tabulation_32_seed_init(seed);
+#ifdef RUST_ENABLED
+  else if (hash == wyhash_rs) {
+    if (wyhash_rs_badseed (seed32) ||
+        seed & 0x0000000052e45cf4 == 0x52e45cf4 ||
+        seed & 0x000000009d4d660c == 0x9d4d660c)
+      seed++;
+  else if (seed & 0x52e45cf400000000 == 0x52e45cf400000000 || seed & 0x9d4d660c00000000 == 0x9d4d660c00000000)
+    seed +=  0x100000000;
+  }
+#endif
 #ifdef __SIZEOF_INT128__
   else if(hash == multiply_shift || hash == pair_multiply_shift)
     multiply_shift_seed_init(seed32);
