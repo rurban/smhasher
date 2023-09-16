@@ -1,0 +1,108 @@
+-------------------------------------------------------------------------------
+--- Testing FxHash32 "FxHash (FireFox hash) with 32 bits (crate `fxhash`)" GOOD
+
+[[[ Sanity Tests ]]]
+
+Verification value 0xBBE55FD6 ....... PASS
+Running sanity check 1     .......... PASS
+Running AppendedZeroesTest .......... PASS
+
+[[[ Speed Tests ]]]
+
+Bulk speed test - 262144-byte keys
+Alignment  7 -  1.077 bytes/cycle - 3080.54 MiB/sec @ 3 ghz
+Alignment  6 -  1.077 bytes/cycle - 3080.49 MiB/sec @ 3 ghz
+Alignment  5 -  1.077 bytes/cycle - 3080.48 MiB/sec @ 3 ghz
+Alignment  4 -  1.077 bytes/cycle - 3080.61 MiB/sec @ 3 ghz
+Alignment  3 -  1.077 bytes/cycle - 3080.54 MiB/sec @ 3 ghz
+Alignment  2 -  1.077 bytes/cycle - 3080.54 MiB/sec @ 3 ghz
+Alignment  1 -  1.077 bytes/cycle - 3080.54 MiB/sec @ 3 ghz
+Alignment  0 -  1.077 bytes/cycle - 3080.61 MiB/sec @ 3 ghz
+Average      -  1.077 bytes/cycle - 3080.54 MiB/sec @ 3 ghz
+
+Small key speed test -    1-byte keys -    13.00 cycles/hash
+Small key speed test -    2-byte keys -    17.00 cycles/hash
+Small key speed test -    3-byte keys -    21.00 cycles/hash
+Small key speed test -    4-byte keys -    14.00 cycles/hash
+Small key speed test -    5-byte keys -    18.00 cycles/hash
+Small key speed test -    6-byte keys -    22.00 cycles/hash
+Small key speed test -    7-byte keys -    25.79 cycles/hash
+Small key speed test -    8-byte keys -    18.00 cycles/hash
+Small key speed test -    9-byte keys -    22.00 cycles/hash
+Small key speed test -   10-byte keys -    26.00 cycles/hash
+Small key speed test -   11-byte keys -    29.76 cycles/hash
+Small key speed test -   12-byte keys -    21.00 cycles/hash
+Small key speed test -   13-byte keys -    25.00 cycles/hash
+Small key speed test -   14-byte keys -    29.88 cycles/hash
+Small key speed test -   15-byte keys -    33.00 cycles/hash
+Small key speed test -   16-byte keys -    24.00 cycles/hash
+Small key speed test -   17-byte keys -    28.00 cycles/hash
+Small key speed test -   18-byte keys -    32.00 cycles/hash
+Small key speed test -   19-byte keys -    36.00 cycles/hash
+Small key speed test -   20-byte keys -    28.00 cycles/hash
+Small key speed test -   21-byte keys -    32.00 cycles/hash
+Small key speed test -   22-byte keys -    36.00 cycles/hash
+Small key speed test -   23-byte keys -    40.00 cycles/hash
+Small key speed test -   24-byte keys -    32.46 cycles/hash
+Small key speed test -   25-byte keys -    36.99 cycles/hash
+Small key speed test -   26-byte keys -    40.00 cycles/hash
+Small key speed test -   27-byte keys -    43.00 cycles/hash
+Small key speed test -   28-byte keys -    36.00 cycles/hash
+Small key speed test -   29-byte keys -    40.00 cycles/hash
+Small key speed test -   30-byte keys -    43.00 cycles/hash
+Small key speed test -   31-byte keys -    47.00 cycles/hash
+Average                                    29.351 cycles/hash
+
+[[[ 'Hashmap' Speed Tests ]]]
+
+std::unordered_map
+Init std HashMapTest:     679.304 cycles/op (479826 inserts, 1% deletions)
+Running std HashMapTest:  546.764 cycles/op (3.9 stdv)
+
+greg7mdp/parallel-hashmap
+Init fast HashMapTest:    804.287 cycles/op (479826 inserts, 1% deletions)
+Running fast HashMapTest: 401.612 cycles/op (1.8 stdv)  ....... PASS
+
+[[[ Avalanche Tests ]]]
+
+Testing   24-bit keys ->  32-bit hashes, 300000 reps.......... worst bias is 100.000000% !!!!!
+Testing   32-bit keys ->  32-bit hashes, 300000 reps.......... worst bias is 100.000000% !!!!!
+Testing   40-bit keys ->  32-bit hashes, 300000 reps.......... worst bias is 78.310000% !!!!!
+Testing   48-bit keys ->  32-bit hashes, 300000 reps.......... worst bias is 5.068000% !!!!!
+Testing   56-bit keys ->  32-bit hashes, 300000 reps.......... worst bias is 1.037333% !!!!!
+Testing   64-bit keys ->  32-bit hashes, 300000 reps.......... worst bias is 78.310000% !!!!!
+Testing   72-bit keys ->  32-bit hashes, 300000 reps.......... worst bias is 100.000000% !!!!!
+Testing   80-bit keys ->  32-bit hashes, 300000 reps.......... worst bias is 0.576000%
+Testing   96-bit keys ->  32-bit hashes, 300000 reps.......... worst bias is 5.015333% !!!!!
+Testing  112-bit keys ->  32-bit hashes, 300000 reps.......... worst bias is 0.632667%
+Testing  128-bit keys ->  32-bit hashes, 300000 reps.......... worst bias is 0.664000%
+Testing  160-bit keys ->  32-bit hashes, 300000 reps.......... worst bias is 0.642667%
+Testing  512-bit keys ->  32-bit hashes, 300000 reps.[[[ BadSeeds Tests ]]]
+
+Testing 0 internal secrets:
+0x0 
+Broken seed 0x00000000 => 0 with key[1] of all 0 bytes confirmed => hash 0 !!!!
+
+Broken seed 0x00000000 => 0 with key[2] of all 0 bytes confirmed => hash 0 !!!!
+
+Broken seed 0x00000000 => 0 with key[4] of all 0 bytes confirmed => hash 0 !!!!
+
+Broken seed 0x00000000 => 0 with key[8] of all 0 bytes confirmed => hash 0 !!!!
+
+Broken seed 0x00000000 => 0 with key[12] of all 0 bytes confirmed => hash 0 !!!!
+
+Broken seed 0x00000000 => 0 with key[16] of all 0 bytes confirmed => hash 0 !!!!
+
+Broken seed 0x00000000 => 0 with key[32] of all 0 bytes confirmed => hash 0 !!!!
+
+Broken seed 0x00000000 => 0 with key[64] of all 0 bytes confirmed => hash 0 !!!!
+
+Broken seed 0x00000000 => 0 with key[128] of all 0 bytes confirmed => hash 0 !!!!
+Testing the first 0xffffffff seeds ...
+4 threads starting...
+at 40000000 
+Broken seed 0x40000000 => 0 with key[16] of all 0 bytes
+at 0 
+Broken seed 0x00000000 => 0 with key[16] of all 0 bytes
+at 80000000 
+Broken seed 0x80000000 => 0 with key[16] of all 0 bytes
