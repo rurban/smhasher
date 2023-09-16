@@ -50,8 +50,8 @@ SMhasher
 | [asconhashv12_64](doc/asconhashv12_64.txt)    |       159.68 |   386.90 | 480.86 (4) |6490 |               |
 | [sha3-256](doc/sha3-256.txt)                  |       100.58 |  3877.18 |4159.79 (37)|     | PerlinNoise   |
 | [sha3-256_64](doc/sha3-256_64.txt)            |       100.57 |  3909.00 |4174.63 (16)|     | PerlinNoise   |
-| [FxHash32](doc/FxHash32.txt)                  |      3080.54 |    29.35 | 401.61 (2) |     | rust, fixed seed                |
-| [FxHash64](doc/FxHash64.txt)                  |         0.00 |     0.00 |   0.00 (0) |     | rust, fixed seed                |
+| [FxHash32](doc/FxHash32.txt)                  |      3080.54 |    29.35 | 401.61 (2) |     | rust, fixed seed, fails all tests |
+| [FxHash64](doc/FxHash64.txt)                  |      6140.18 |    24.03 | 397.79 (14)|     | rust, fixed seed, fails all tests |
 | [hasshe2](doc/hasshe2.txt)                    |      2773.89 |    64.35 | 282.30 (3) | 445 | Permutation,TwoBytes,Zeroes,Seed|
 | [poly_1_mersenne](doc/poly_1_mersenne.txt)    |      1369.21 |    61.59 | 248.86 (4) | 479 | fails most tests |
 | [poly_2_mersenne](doc/poly_2_mersenne.txt)    |      1364.03 |    70.30 | 261.00 (6) | 479 |                  |
