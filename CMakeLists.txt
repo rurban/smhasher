@@ -822,6 +822,11 @@ if(NOT (CMAKE_CROSSCOMPILING))
   add_test(Cyclic SMHasher --test=Cyclic)
   add_test(Zeroes SMHasher --test=Zeroes)
   add_test(Seed SMHasher --test=Seed)
+  if(NOT WIN32)
+    if(RUST_ENABLED)
+      add_test(Rust_Bindings ${PROJECT_SOURCE_DIR}/check-rust-bindings.sh)
+    endif()
+  endif()
 endif()
 
 add_custom_target(
