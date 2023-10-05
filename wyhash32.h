@@ -1,5 +1,4 @@
 // Author: Wang Yi <godspeed_china@yeah.net>
-// Version 4.1
 #include <stdint.h>
 #include <string.h>
 #ifndef WYHASH32_BIG_ENDIAN
@@ -16,20 +15,25 @@ static inline void _wymix32(unsigned  *A,  unsigned  *B){
   *B=(unsigned)(c>>32);
 }
 // This version is vulnerable when used with a few bad seeds, which should be
-// skipped or changed beforehand: 0x51a43a0f, 0x522235ae, 0x99ac2b20
+// changed or skipped beforehand. Of these 4, 3 are completely broken.
 #ifdef __cplusplus
 static void wyhash32_seed_init(uint32_t &seed) {
-  if ((seed == 0x51a43a0f) || (seed == 0x522235ae) || (seed == 0x99ac2b20))
-    seed++;
+  if ((seed == 0x51a43a0f) ||
+      (seed == 0x522235ae) ||
+      (seed == 0x99ac2b20) ||
+      (seed == 0x9a4f1376))
+  seed++;
 }
 #else
 static bool wyhash32_badseed(const uint32_t seed) {
-  if ((seed == 0x51a43a0f) || (seed == 0x522235ae) || (seed == 0x99ac2b20))
+  if ((seed == 0x51a43a0f) ||
+      (seed == 0x522235ae) ||
+      (seed == 0x99ac2b20) ||
+      (seed == 0x9a4f1376))
     return true;
   return false;
 }
 #endif
-
 static inline unsigned wyhash32(const void *key, uint64_t len, unsigned seed) {
   const uint8_t *p=(const uint8_t *)key; uint64_t i=len;
   unsigned see1=(unsigned)len; seed^=(unsigned)(len>>32); _wymix32(&seed, &see1);

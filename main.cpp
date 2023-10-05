@@ -734,13 +734,12 @@ HashInfo g_hashes[] =
 { xxh128low_test,       64, 0x54D1CC70, "xxh128low",   "xxHash v3, 128-bit, low 64-bits part", GOOD,
   {0x47ebda34}},
 #ifdef HAVE_BIT32
-{ wyhash32_test,        32, 0x09DE8066, "wyhash32",    "wyhash v4 (32-bit native)", GOOD,
-  { 0x51a43a0f, 0x522235ae, 0x99ac2b20 } },
+{ wyhash32_test,        32, 0x09DE8066, "wyhash32",    "wyhash v4.2 (32-bit native)", GOOD,
+  {0x51a43a0f, 0x522235ae, 0x99ac2b20, 0x9a4f1376} },
 #else
-{ wyhash32low,          32, 0x006B76C4, "wyhash32low", "wyhash v4.1 lower 32bit", GOOD,
-  { 0x138d5f9f, 0x1e4f8661, 0x29362732, 0x49a7ee03, 0x4d29ced1, 0x5ee3628c, 0x833f0eb6,
-    0x928fce63, 0x99be0ae5, 0xac470842, 0xcaf21e71, 0xfc1c4878 } },
-{ wyhash_test,          64, 0xBD5E840C, "wyhash", "wyhash v4.1 (64-bit)", GOOD, {}},
+{ wyhash32low,          32, 0xC5DF9AA0, "wyhash32low", "wyhash v4.2 lower 32bit", GOOD,
+  {0x1443cf9a, 0x2ae375a2, 0x729973d2, 0x72d3aa79, 0xd3e475d5} },
+{ wyhash_test,          64, 0x9DAE7DD3, "wyhash", "wyhash v4.2 (64-bit)", GOOD, {}},
 #endif
 { nmhash32_test,        32, 0x12A30553, "nmhash32",       "nmhash32", GOOD, {}},
 { nmhash32x_test,       32, 0xA8580227, "nmhash32x",      "nmhash32x", GOOD, {}},

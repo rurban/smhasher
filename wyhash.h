@@ -8,9 +8,8 @@
    uint64_t hash=wyhash(s.c_str(), s.size(), 0, _wyp);
 */
 
-#ifndef wyhash_final_version_4
-#define wyhash_final_version_4
-// Version 4.1
+#ifndef wyhash_final_version_4_2
+#define wyhash_final_version_4_2
 
 #ifndef WYHASH_CONDOM
 //protections that produce different results:
@@ -117,12 +116,10 @@ static inline uint64_t _wyr4(const uint8_t *p) {
 #if WYHASH_CONDOM
 // must be sorted
 static const uint32_t wyhash32low_badseeds[]
-= { 0x138d5f9f, 0x1e4f8661, 0x29362732, 0x49a7ee03,
-    0x4d29ced1, 0x5ee3628c, 0x833f0eb6, 0x928fce63,
-    0x99be0ae5, 0xac470842, 0xcaf21e71, 0xfc1c4878 };
+  = { 0x1443cf9a, 0x2ae375a2, 0x729973d2, 0x72d3aa79, 0xd3e475d5 };
 //static const uint32_t wyhash_badseeds[] = { };
 
-# if defined __cplusplus
+#if defined __cplusplus
 // fixup bad seeds with WYHASH_CONDOM
 static inline void wyhash_seed_init(uint32_t &seed) {
   return;
@@ -179,7 +176,6 @@ static bool wyhash32low_badseed(const uint32_t seed) {
 # endif
 #endif // WYHASH_CONDOM
 
-
 static inline uint64_t _wyr3(const uint8_t *p, size_t k) { return (((uint64_t)p[0])<<16)|(((uint64_t)p[k>>1])<<8)|p[k-1];}
 //wyhash main function
 static inline uint64_t wyhash(const void *key, size_t len, uint64_t seed, const uint64_t *secret){
@@ -191,14 +187,14 @@ static inline uint64_t wyhash(const void *key, size_t len, uint64_t seed, const 
   }
   else{
     size_t i=len; 
-    if(_unlikely_(i>48)){
+    if(_unlikely_(i>=48)){
       uint64_t see1=seed, see2=seed;
       do{
         seed=_wymix(_wyr8(p)^secret[1],_wyr8(p+8)^seed);
         see1=_wymix(_wyr8(p+16)^secret[2],_wyr8(p+24)^see1);
         see2=_wymix(_wyr8(p+32)^secret[3],_wyr8(p+40)^see2);
         p+=48; i-=48;
-      }while(_likely_(i>48));
+      }while(_likely_(i>=48));
       seed^=see1^see2;
     }
     while(_unlikely_(i>16)){  seed=_wymix(_wyr8(p)^secret[1],_wyr8(p+8)^seed);  i-=16; p+=16;  }
@@ -209,13 +205,13 @@ static inline uint64_t wyhash(const void *key, size_t len, uint64_t seed, const 
 }
 
 //the default secret parameters
-static const uint64_t _wyp[4] = {0xa0761d6478bd642full, 0xe7037ed1a0b428dbull, 0x8ebc6af09c88c6e3ull, 0x589965cc75374cc3ull};
+static const uint64_t _wyp[4] = {0x2d358dccaa6c78a5ull, 0x8bb84b93962eacc9ull, 0x4b33a62ed433d4a3ull, 0x4d5a2da51de1aa47ull};
 
 //a useful 64bit-64bit mix function to produce deterministic pseudo random numbers that can pass BigCrush and PractRand
-static inline uint64_t wyhash64(uint64_t A, uint64_t B){ A^=0xa0761d6478bd642full; B^=0xe7037ed1a0b428dbull; _wymum(&A,&B); return _wymix(A^0xa0761d6478bd642full,B^0xe7037ed1a0b428dbull);}
+static inline uint64_t wyhash64(uint64_t A, uint64_t B){ A^=0x2d358dccaa6c78a5ull; B^=0x8bb84b93962eacc9ull; _wymum(&A,&B); return _wymix(A^0x2d358dccaa6c78a5ull,B^0x8bb84b93962eacc9ull);}
 
 //The wyrand PRNG that pass BigCrush and PractRand
-static inline uint64_t wyrand(uint64_t *seed){ *seed+=0xa0761d6478bd642full; return _wymix(*seed,*seed^0xe7037ed1a0b428dbull);}
+static inline uint64_t wyrand(uint64_t *seed){ *seed+=0x2d358dccaa6c78a5ull; return _wymix(*seed,*seed^0x8bb84b93962eacc9ull);}
 
 //convert any 64 bit pseudo random numbers to uniform distribution [0,1). It can be combined with wyrand, wyhash64 or wyhash.
 static inline double wy2u01(uint64_t r){ const double _wynorm=1.0/(1ull<<52); return (r>>12)*_wynorm;}
@@ -239,7 +235,6 @@ static inline uint64_t wytrand(uint64_t *seed){
 //fast range integer random number generation on [0,k) credit to Daniel Lemire. May not work when WYHASH_32BIT_MUM=1. It can be combined with wyrand, wyhash64 or wyhash.
 static inline uint64_t wy2u0k(uint64_t r, uint64_t k){ _wymum(&r,&k); return k; }
 #endif
-
 //make your own secret
 static inline void make_secret(uint64_t seed, uint64_t *secret){
   uint8_t c[] = {15, 23, 27, 29, 30, 39, 43, 45, 46, 51, 53, 54, 57, 58, 60, 71, 75, 77, 78, 83, 85, 86, 89, 90, 92, 99, 101, 102, 105, 106, 108, 113, 114, 116, 120, 135, 139, 141, 142, 147, 149, 150, 153, 154, 156, 163, 165, 166, 169, 170, 172, 177, 178, 180, 184, 195, 197, 198, 201, 202, 204, 209, 210, 212, 216, 225, 226, 228, 232, 240 };
@@ -248,7 +243,7 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
     do{
       ok=1; secret[i]=0;
       for(size_t j=0;j<64;j+=8) secret[i]|=((uint64_t)c[wyrand(&seed)%sizeof(c)])<<j;
-      if(secret[i]%2==0){ ok=0; continue; }
+      if(secret[i]%2==0){ ok=0; continue; }      
       for(size_t j=0;j<i;j++) {
 #if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__clang__)
         if(__builtin_popcountll(secret[j]^secret[i])!=32){ ok=0; break; }
@@ -264,6 +259,8 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
         if(x!=32){ ok=0; break; }
 #endif
       }
+      if(!ok)	continue;
+      for(uint64_t	k=3;	k<0x100000000ull;	k+=2)	if((secret[i]%k)==0){	ok=0;	break;	}
     }while(!ok);
   }
 }
