@@ -8,6 +8,7 @@
 #include "MurmurHash2.h"
 #include "MurmurHash3.h"
 #include "PMurHash.h"
+#include "xmsx.h"
 
 #define XXH_INLINE_ALL
 #include "xxhash.h"
@@ -311,6 +312,7 @@ inline void MurmurHash2A_test ( const void * key, int len, uint32_t seed, void *
   *(uint32_t*)out = MurmurHash2A(key,len,seed);
 }
 
+
 #if __WORDSIZE >= 64
 inline void MurmurHash64A_test ( const void * key, int len, uint32_t seed, void * out )
 {
@@ -328,6 +330,16 @@ inline void MurmurHash64B_test ( const void * key, int len, uint32_t seed, void 
   *(uint64_t*)out = MurmurHash64B(key,len,seed);
 }
 #endif
+
+inline void xmsx32_test ( const void * key, int len, uint32_t seed, void * out )
+{
+  *(uint32_t*)out = xmsx32(key, (size_t)len, seed);
+}
+
+inline void xmsx64_test ( const void * key, int len, uint32_t seed, void * out )
+{
+  *(uint64_t*)out = xmsx64(key, (size_t)len, seed);
+}
 
 inline void jodyhash32_test( const void * key, int len, uint32_t seed, void * out ) {
   *(uint32_t*)out = jody_block_hash32((const jodyhash32_t *)key, (jodyhash32_t) seed, (size_t) len);
