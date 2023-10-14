@@ -677,6 +677,7 @@ add_library(
   beamsplitter.cpp
   discohash_512.cpp
   xxhash.c
+  gxhash.c
   metrohash/metrohash64.cpp
   metrohash/metrohash128.cpp
   cmetrohash64.c
