@@ -141,7 +141,7 @@ static inline output finalize(state hash, uint32_t seed) {
 }
 #endif
 
-#elif defined(__ARM_NEON) || defined(__ARM_NEON__)
+#elif defined(__ARM_NEON) || defined(__ARM_NEON__) || defined(__aarch64__)
 #include <arm_neon.h>
 
 typedef int8x16_t state;
