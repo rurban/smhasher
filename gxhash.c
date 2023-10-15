@@ -226,7 +226,7 @@ static inline state finalize(state hash, uint32_t seed) {
 
     return hash;
 }
-#elif
+#else
 // Fallback ?
 #endif
 
