@@ -4,9 +4,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#if defined(__SSE__) && defined(__AES__) && defined(__AVX2__)
+#if defined(__SSE__) && defined(__AES__)
 #include <immintrin.h>
 
+#if defined(__AVX2__) && defined(__VAES__)
 typedef __m256i state;
 typedef __m128i output;
 
@@ -75,6 +76,71 @@ static inline output finalize(state hash, uint32_t seed) {
 
     return hash128;
 }
+#else
+typedef __m128i state;
+typedef __m128i output;
+
+static inline state create_empty() {
+    return _mm_setzero_si128();
+}
+
+static inline state load_unaligned(const state* p) {
+    return _mm_loadu_si128(p);
+}
+
+static inline int check_same_page(const state* ptr) {
+    uintptr_t address = (uintptr_t)ptr;
+    uintptr_t offset_within_page = address & 0xFFF;
+    return offset_within_page <= (4096 - sizeof(state) - 1);
+}
+
+static inline state get_partial_safe(const uint8_t* data, size_t len) {
+    uint8_t buffer[sizeof(state)] = {0};
+    memcpy(buffer, data, len);
+    return _mm_loadu_si128((const state*)buffer);
+}
+
+static inline state get_partial(const state* p, intptr_t len) {
+    static const uint8_t MASK[2 * sizeof(state)] = {
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+
+    if (check_same_page(p)) {
+        const uint8_t* mask_ptr = &MASK[16 - len];
+        state mask = _mm_loadu_si128((const state*)mask_ptr);
+        return _mm_and_si128(_mm_loadu_si128(p), mask);
+    } else {
+        return get_partial_safe((const uint8_t*)p, (size_t)len);
+    }
+}
+
+static inline state compress(state a, state b) {
+
+    state salt1 = _mm_set_epi32(4104244489u, 3710553163u, 3367764511u, 4219769173u);
+    state salt2 = _mm_set_epi32(3624366803u, 3553132711u, 2860740361u, 2722013029u);
+
+    a = _mm_aesdec_si128(a, salt1);
+    b = _mm_aesdec_si128(b, salt2);
+
+    return _mm_aesdeclast_si128(a, b);
+}
+
+static inline output finalize(state hash, uint32_t seed) {
+
+    __m128i salt1 = _mm_set_epi32(0x713B01D0, 0x8F2F35DB, 0xAF163956, 0x85459F85);
+    __m128i salt2 = _mm_set_epi32(0x1DE09647, 0x92CFA39C, 0x3DD99ACA, 0xB89C054F);
+    __m128i salt3 = _mm_set_epi32(0xC78B122B, 0x5544B1B7, 0x689D2B7D, 0xD0012E32);
+
+    hash = _mm_aesenc_si128(hash, _mm_set1_epi32(seed));
+    hash = _mm_aesenc_si128(hash, salt1);
+    hash = _mm_aesenc_si128(hash, salt2);
+    hash = _mm_aesenclast_si128(hash, salt3);
+
+    return hash;
+}
+#endif
+
 #elif defined(__ARM_NEON) || defined(__ARM_NEON__)
 #include <arm_neon.h>
 
