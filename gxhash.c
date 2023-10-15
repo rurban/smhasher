@@ -10,15 +10,11 @@
 typedef __m256i state;
 typedef __m128i output;
 
-inline state create_empty() {
+static inline state create_empty() {
     return _mm256_setzero_si256();
 }
 
-inline void prefetch(const state* p) {
-    _mm_prefetch((const char*)p, 3);
-}
-
-inline state load_unaligned(const state* p) {
+static inline state load_unaligned(const state* p) {
     return _mm256_loadu_si256(p);
 }
 
@@ -34,7 +30,7 @@ static inline state get_partial_safe(const uint8_t* data, size_t len) {
     return _mm256_loadu_si256((const state*)buffer);
 }
 
-inline state get_partial(const state* p, intptr_t len) {
+static inline state get_partial(const state* p, intptr_t len) {
     static const uint8_t MASK[2 * sizeof(state)] = {
         0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
         0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
@@ -51,11 +47,10 @@ inline state get_partial(const state* p, intptr_t len) {
     }
 }
 
-inline state compress(state a, state b) {
-
+static inline state compress(state a, state b) {
     // return _mm256_aesdeclast_epi128(a, b); // GxHash0
 
-    state salt1 = _mm256_set_epi32(4104244489u, 3710553163u, 3367764511u, 4219769173u, 3229102777u, 4201852661u, 3065017993u, 2722855403u)
+    state salt1 = _mm256_set_epi32(4104244489u, 3710553163u, 3367764511u, 4219769173u, 3229102777u, 4201852661u, 3065017993u, 2722855403u);
     state salt2 = _mm256_set_epi32(3624366803u, 3553132711u, 2860740361u, 2722013029u, 2350914373u, 3418786373u, 3841501031u, 3172997263u);
 
     a = _mm256_aesdec_epi128(a, salt1);
@@ -64,7 +59,7 @@ inline state compress(state a, state b) {
     return _mm256_aesdeclast_epi128(a, b);
 }
 
-inline output finalize(state hash, uint32_t seed) {
+static inline output finalize(state hash, uint32_t seed) {
     __m128i lower = _mm256_castsi256_si128(hash);
     __m128i upper = _mm256_extracti128_si256(hash, 1);
     __m128i hash128 = _mm_xor_si128(lower, upper);
