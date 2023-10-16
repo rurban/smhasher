@@ -21,7 +21,6 @@ jobs:
       with:
         fetch-depth: 1
         submodules: recursive
-    - run: "grep -m 1 'flags' /proc/cpuinfo | cut -d: -f2 | tr ' ' '\n'"
     - run: cmake ${{ matrix.CMAKE_ARGS }} .
     - run: make -j4 VERBOSE=1
     - run: make -j4 test ARGS=-V
