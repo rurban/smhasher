@@ -49,13 +49,11 @@ static inline state get_partial(const state* p, intptr_t len) {
 }
 
 static inline state compress(state a, state b) {
-    // return _mm256_aesdeclast_epi128(a, b); // GxHash0
+    state keys_1 = _mm256_set_epi32(0xFC3BC28E, 0x89C222E5, 0xB09D3E21, 0xF2784542, 0x4155EE07, 0xC897CCE2, 0x780AF2C3, 0x8A72B781);
+    state keys_2 = _mm256_set_epi32(0x03FCE279, 0xCB6B2E9B, 0xB361DC58, 0x39136BD9, 0x7A83D76B, 0xB1E8F9F0, 0x028925A8, 0x3B9A4E71);
 
-    state salt1 = _mm256_set_epi32(4104244489u, 3710553163u, 3367764511u, 4219769173u, 3229102777u, 4201852661u, 3065017993u, 2722855403u);
-    state salt2 = _mm256_set_epi32(3624366803u, 3553132711u, 2860740361u, 2722013029u, 2350914373u, 3418786373u, 3841501031u, 3172997263u);
-
-    a = _mm256_aesdec_epi128(a, salt1);
-    b = _mm256_aesdec_epi128(b, salt2);
+    b = _mm256_aesdec_epi128(b, keys_1);
+    b = _mm256_aesdec_epi128(b, keys_2);
 
     return _mm256_aesdeclast_epi128(a, b);
 }
@@ -65,14 +63,14 @@ static inline output finalize(state hash, uint32_t seed) {
     __m128i upper = _mm256_extracti128_si256(hash, 1);
     __m128i hash128 = _mm_xor_si128(lower, upper);
 
-    __m128i salt1 = _mm_set_epi32(0x713B01D0, 0x8F2F35DB, 0xAF163956, 0x85459F85);
-    __m128i salt2 = _mm_set_epi32(0x1DE09647, 0x92CFA39C, 0x3DD99ACA, 0xB89C054F);
-    __m128i salt3 = _mm_set_epi32(0xC78B122B, 0x5544B1B7, 0x689D2B7D, 0xD0012E32);
+    __m128i keys_1 = _mm_set_epi32(0x5A3BC47E, 0x89F216D5, 0xB09D2F61, 0xE37845F2);
+    __m128i keys_2 = _mm_set_epi32(0xE7554D6F, 0x6EA75BBA, 0xDE3A74DB, 0x3D423129);
+    __m128i keys_3 = _mm_set_epi32(0xC992E848, 0xA735B3F2, 0x790FC729, 0x444DF600);
 
     hash128 = _mm_aesenc_si128(hash128, _mm_set1_epi32(seed));
-    hash128 = _mm_aesenc_si128(hash128, salt1);
-    hash128 = _mm_aesenc_si128(hash128, salt2);
-    hash128 = _mm_aesenclast_si128(hash128, salt3);
+    hash128 = _mm_aesenc_si128(hash128, keys_1);
+    hash128 = _mm_aesenc_si128(hash128, keys_2);
+    hash128 = _mm_aesenclast_si128(hash128, keys_3);
 
     return hash128;
 }
@@ -116,26 +114,24 @@ static inline state get_partial(const state* p, intptr_t len) {
 }
 
 static inline state compress(state a, state b) {
+    state keys_1 = _mm_set_epi32(0xFC3BC28E, 0x89C222E5, 0xB09D3E21, 0xF2784542);
+    state keys_2 = _mm_set_epi32(0x4155EE07, 0xC897CCE2, 0x780AF2C3, 0x8A72B781);
 
-    state salt1 = _mm_set_epi32(4104244489u, 3710553163u, 3367764511u, 4219769173u);
-    state salt2 = _mm_set_epi32(3624366803u, 3553132711u, 2860740361u, 2722013029u);
-
-    a = _mm_aesdec_si128(a, salt1);
-    b = _mm_aesdec_si128(b, salt2);
+    b = _mm_aesdec_si128(b, keys_1);
+    b = _mm_aesdec_si128(b, keys_2);
 
     return _mm_aesdeclast_si128(a, b);
 }
 
 static inline output finalize(state hash, uint32_t seed) {
-
-    __m128i salt1 = _mm_set_epi32(0x713B01D0, 0x8F2F35DB, 0xAF163956, 0x85459F85);
-    __m128i salt2 = _mm_set_epi32(0x1DE09647, 0x92CFA39C, 0x3DD99ACA, 0xB89C054F);
-    __m128i salt3 = _mm_set_epi32(0xC78B122B, 0x5544B1B7, 0x689D2B7D, 0xD0012E32);
+    __m128i keys_1 = _mm_set_epi32(0x5A3BC47E, 0x89F216D5, 0xB09D2F61, 0xE37845F2);
+    __m128i keys_2 = _mm_set_epi32(0xE7554D6F, 0x6EA75BBA, 0xDE3A74DB, 0x3D423129);
+    __m128i keys_3 = _mm_set_epi32(0xC992E848, 0xA735B3F2, 0x790FC729, 0x444DF600);
 
     hash = _mm_aesenc_si128(hash, _mm_set1_epi32(seed));
-    hash = _mm_aesenc_si128(hash, salt1);
-    hash = _mm_aesenc_si128(hash, salt2);
-    hash = _mm_aesenclast_si128(hash, salt3);
+    hash = _mm_aesenc_si128(hash, keys_1);
+    hash = _mm_aesenc_si128(hash, keys_2);
+    hash = _mm_aesenclast_si128(hash, keys_3);
 
     return hash;
 }
@@ -162,7 +158,7 @@ static inline int check_same_page(const state* ptr) {
 }
 
 static inline state get_partial(const state* p, int len) {
-    static const int8_t MASK[32] = {
+    static const int8_t MASK[] = {
         0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     };
@@ -170,7 +166,7 @@ static inline state get_partial(const state* p, int len) {
     int8x16_t partial;
     if (check_same_page(p)) {
         // Unsafe (hence the check) but much faster
-        int8x16_t mask = vld1q_s8(&MASK[16 - len]);
+        int8x16_t mask = vld1q_s8(&MASK[sizeof(state) - len]);
         partial = vandq_s8(load_unaligned(p), mask);
     } else {
         // Safer but slower, using memcpy
@@ -189,40 +185,30 @@ static inline uint8x16_t aes_encrypt(uint8x16_t data, uint8x16_t keys) {
     return veorq_u8(mixed, keys);
 }
 
-static inline uint8x16_t aes_decrypt(uint8x16_t data, uint8x16_t keys) {
-    uint8x16_t encrypted = vaesdq_u8(data, vdupq_n_u8(0));
-    uint8x16_t mixed = vaesmcq_u8(encrypted);
-    return veorq_u8(mixed, keys);
-}
-
 static inline uint8x16_t aes_encrypt_last(uint8x16_t data, uint8x16_t keys) {
     uint8x16_t encrypted = vaeseq_u8(data, vdupq_n_u8(0));
     return veorq_u8(encrypted, keys);
 }
 
-// Somewhat computationally expensive, but at least it passes SMHasher
-static inline state compress(state a, state b) {
-    
-    //return aes_encrypt_last(a, b); // GxHash0
+static inline state compress(state a, state b) {  
+    static const uint32_t keys_1[4] = {0xFC3BC28E, 0x89C222E5, 0xB09D3E21, 0xF2784542};
+    static const uint32_t keys_2[4] = {0x4155EE07, 0xC897CCE2, 0x780AF2C3, 0x8A72B781};
 
-    static const uint32_t salt_a_data[4] = {4104244489u, 3710553163u, 3367764511u, 4219769173u};
-    static const uint32_t salt_b_data[4] = {3624366803u, 3553132711u, 2860740361u, 2722013029u};
-
-    a = aes_encrypt(a, vld1q_u32(salt_a_data));
-    b = aes_encrypt(b, vld1q_u32(salt_b_data));
+    b = aes_encrypt(b, vld1q_u32(keys_1));
+    b = aes_encrypt(b, vld1q_u32(keys_2));
 
     return aes_encrypt_last(a, b);
 }
 
 static inline state finalize(state hash, uint32_t seed) {
-    static const uint32_t salt1_data[4] = {0x713B01D0, 0x8F2F35DB, 0xAF163956, 0x85459F85};
-    static const uint32_t salt2_data[4] = {0x1DE09647, 0x92CFA39C, 0x3DD99ACA, 0xB89C054F};
-    static const uint32_t salt3_data[4] = {0xC78B122B, 0x5544B1B7, 0x689D2B7D, 0xD0012E32};
+    static const uint32_t keys_1[4] = {0x5A3BC47E, 0x89F216D5, 0xB09D2F61, 0xE37845F2};
+    static const uint32_t keys_2[4] = {0xE7554D6F, 0x6EA75BBA, 0xDE3A74DB, 0x3D423129};
+    static const uint32_t keys_3[4] = {0xC992E848, 0xA735B3F2, 0x790FC729, 0x444DF600};
 
     hash = aes_encrypt(hash, vdupq_n_u32(seed));
-    hash = aes_encrypt(hash, vld1q_u32(salt1_data));
-    hash = aes_encrypt(hash, vld1q_u32(salt2_data));
-    hash = aes_encrypt_last(hash, vld1q_u32(salt3_data));
+    hash = aes_encrypt(hash, vld1q_u32(keys_1));
+    hash = aes_encrypt(hash, vld1q_u32(keys_2));
+    hash = aes_encrypt_last(hash, vld1q_u32(keys_3));
 
     return hash;
 }
@@ -237,6 +223,11 @@ static inline output gxhash(const uint8_t* input, int len, uint32_t seed) {
     const state* end_address;
     int remaining_blocks_count = len / VECTOR_SIZE;
     state hash_vector = create_empty();
+
+    if (len <= VECTOR_SIZE) {
+        hash_vector = get_partial(v, len);
+        goto skip;
+    }
 
     const int UNROLL_FACTOR = 8;
     if (len >= VECTOR_SIZE * UNROLL_FACTOR) {
@@ -292,6 +283,7 @@ static inline output gxhash(const uint8_t* input, int len, uint32_t seed) {
         hash_vector = compress(hash_vector, partial_vector);
     }
 
+skip:
     return finalize(hash_vector, seed);
 }
 
