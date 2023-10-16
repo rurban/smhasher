@@ -503,6 +503,8 @@ if(AES_FOUND AND (PROCESSOR_FAMILY STREQUAL "Intel"))
                                 PROPERTIES COMPILE_FLAGS "/arch:avx")
     set_source_files_properties(t1ha/t1ha0_ia32aes_avx2.c
       PROPERTIES COMPILE_FLAGS "/arch:avx2")
+    set_source_files_properties(gxhash.c
+      PROPERTIES COMPILE_FLAGS "/arch:avx2")
   else()
     set_source_files_properties(
       t1ha/t1ha0_ia32aes_noavx.c PROPERTIES COMPILE_FLAGS
@@ -589,12 +591,14 @@ if(SSE42_FOUND)
   endif()
 endif()
 if(AVX2_FOUND)
+  add_definitions(-DHAVE_AVX2)
   set(BLAKE3_SRC ${BLAKE3_SRC} blake3/blake3_avx2.c)
   set_source_files_properties(
     blake3/blake3_avx2.c PROPERTIES COMPILE_FLAGS
                                     "-DBLAKE3_USE_SSE41 -DBLAKE3_USE_AVX2 -mavx2")
 endif()
 if(AVX512F_FOUND AND AVX512VL_FOUND)
+  add_definitions(-DHAVE_AVX512)
   set(BLAKE3_SRC ${BLAKE3_SRC} blake3/blake3_avx512.c)
   set_source_files_properties(
     blake3/blake3_avx512.c
