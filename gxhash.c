@@ -7,7 +7,7 @@
 #if defined(__SSE__) && defined(__AES__)
 #include <immintrin.h>
 
-#if defined(__AVX2__) && defined(__VAES__)
+#if defined(HAVE_AVX2) && defined(__VAES__)
 typedef __m256i state;
 typedef __m128i output;
 
@@ -76,7 +76,7 @@ static inline output finalize(state hash, uint32_t seed) {
 
     return hash128;
 }
-#else
+#else // __AVX2__ && __VAES__
 typedef __m128i state;
 typedef __m128i output;
 
@@ -139,7 +139,7 @@ static inline output finalize(state hash, uint32_t seed) {
 
     return hash;
 }
-#endif
+#endif // __AVX2__ && __VAES__
 
 #elif defined(__ARM_NEON) || defined(__ARM_NEON__) || defined(__aarch64__)
 #include <arm_neon.h>
@@ -304,3 +304,4 @@ uint64_t gxhash64(const uint8_t* input, int len, uint32_t seed) {
     output full_hash = gxhash(input, len, seed);
     return *(uint64_t*)&full_hash;
 }
+
