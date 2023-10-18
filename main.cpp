@@ -106,6 +106,9 @@ HashInfo g_hashes[] =
 #define FNV2_VERIF           0x1967C625
 #endif
 
+{ xmsx32_test,          32, 0x6B54E1D4, "xmsx32", "XMSX-32", GOOD, { 0x1505929f, 0xf0a6a74a } },
+{ xmsx64_test,          64, 0x2DF7A6BD, "xmsx64", "XMSX-64", POOR, { } },
+
 #ifdef __SIZEOF_INT128__
 // M. Dietzfelbinger, T. Hagerup, J. Katajainen, and M. Penttonen. A reliable randomized
 // algorithm for the closest-pair problem. J. Algorithms, 25:19–51, 1997.
