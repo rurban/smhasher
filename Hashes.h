@@ -336,11 +336,6 @@ inline void xmsx32_test ( const void * key, int len, uint32_t seed, void * out )
   *(uint32_t*)out = xmsx32(key, (size_t)len, seed);
 }
 
-inline void xmsx64_test ( const void * key, int len, uint32_t seed, void * out )
-{
-  *(uint64_t*)out = xmsx64(key, (size_t)len, seed);
-}
-
 inline void jodyhash32_test( const void * key, int len, uint32_t seed, void * out ) {
   *(uint32_t*)out = jody_block_hash32((const jodyhash32_t *)key, (jodyhash32_t) seed, (size_t) len);
 }

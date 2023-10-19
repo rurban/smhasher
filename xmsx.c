@@ -6,7 +6,7 @@
 #include "xmsx.h"
 #include <string.h>
 
-static uint64_t xmsx_round(uint64_t h, uint32_t d)
+static uint64_t xmsx32_round(uint64_t h, uint32_t d)
 {
     const uint64_t p = 0xcdb32970830fcaa1ULL;
 
@@ -16,12 +16,12 @@ static uint64_t xmsx_round(uint64_t h, uint32_t d)
     return h;
 }
 
-uint64_t xmsx(const void *buf, size_t len, uint32_t seed)
+uint32_t xmsx32(const void *buf, size_t len, uint32_t seed)
 {
     const unsigned char *data = (const unsigned char *)buf;
     uint64_t h = ((uint64_t)seed << 32) | seed;
 
-    h = xmsx_round(h, len);
+    h = xmsx32_round(h, len);
 
     while (len) {
         uint32_t d;
@@ -37,21 +37,11 @@ uint64_t xmsx(const void *buf, size_t len, uint32_t seed)
             len = word_size;
         }
 
-        h = xmsx_round(h, d);
+        h = xmsx32_round(h, d);
 
         len -= word_size;
         data += word_size;
     }
 
-    return xmsx_round(h, h >> 47);
-}
-
-uint32_t xmsx32(const void *buf, size_t len, uint32_t seed)
-{
-    return xmsx(buf, len, seed);
-}
-
-uint64_t xmsx64(const void *buf, size_t len, uint32_t seed)
-{
-    return xmsx(buf, len, seed);
+    return xmsx32_round(h, h >> 47);
 }
