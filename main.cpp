@@ -626,7 +626,6 @@ HashInfo g_hashes[] =
 { mum_low_test,         32, MUMLOW_VERIF,"MUMlow",     "github.com/vnmakarov/mum-hash", GOOD,
   {0x11fb062a, 0x3ca9411b, 0x3edd9a7d, 0x41f18860, 0x691457ba} /* !! */ },
 { xmsx32_test,          32, 0x6B54E1D4, "xmsx32", "XMSX-32", GOOD, { 0x1505929f, 0xf0a6a74a } },
-{ xmsx64_test,          64, 0x2DF7A6BD, "xmsx64", "XMSX-64", POOR, { } },
 #if defined(__GNUC__) && UINT_MAX != ULONG_MAX
 #define MIR_VERIF            0x00A393C8
 #define MIRLOW_VERIF         0xE320CE68

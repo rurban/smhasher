@@ -158,7 +158,6 @@ SMhasher
 | [MUM](doc/MUM.txt)                            |      9563.99 |    34.99 | 228.55 (5) |1912 | UB, too many bad seeds, machine-specific (32/64 differs) |
 | [MUMlow](doc/MUMlow.txt)                      |      9261.89 |    36.17 | 247.66 (4) |1912 | UB, 5 bad seeds              |
 | [xmsx32](doc/xmsx32.txt)                      |      2039.10 |    46.39 | 249.30 (7) | 192 | 2 bad seeds                  |
-| [xmsx64](doc/xmsx64.txt)                      |      2042.57 |    46.12 | 248.73 (4) | 192 | collisions (many bad high bits), MomentChi2              |
 | [mirhash](doc/mirhash.txt)                    |      6139.07 |    37.02 | 209.47 (3) |1112 | UB, 2^36 bad seeds, LongNeighbors, machine-specific (32/64 differs) |
 | [mirhashstrict](doc/mirhashstrict.txt)        |      3549.01 |    49.99 | 224.91 (2) |1112 |                            |
 | [mirhashstrict32low](doc/mirhashstrict32low.txt)|      3441.35 |    50.60 | 247.19 (3) |1112 | 1 bad seed, MomentChi2 9   |
