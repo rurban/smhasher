@@ -129,8 +129,13 @@ static inline state get_partial(const state* p, int len) {
 }
 
 static inline state compress(state a, state b) {
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+    state keys_1 = _mm_set_epi32(0xF2784542, 0xB09D3E21, 0x89C222E5, 0xFC3BC28E);
+    state keys_2 = _mm_set_epi32(0x39136BD9, 0xB361DC58, 0xCB6B2E9B, 0x03FCE279);
+#else
     state keys_1 = _mm_set_epi32(0xFC3BC28E, 0x89C222E5, 0xB09D3E21, 0xF2784542);
     state keys_2 = _mm_set_epi32(0x03FCE279, 0xCB6B2E9B, 0xB361DC58, 0x39136BD9);
+#endif
 
     b = _mm_aesenc_si128(b, keys_1);
     b = _mm_aesenc_si128(b, keys_2);
@@ -143,9 +148,15 @@ static inline state compress_fast(state a, state b) {
 }
 
 static inline state finalize(state hash, uint32_t seed) {
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+    state keys_1 = _mm_set_epi32(0xE37845F2, 0xB09D2F61, 0x89F216D5, 0x5A3BC47E);
+    state keys_2 = _mm_set_epi32(0x3D423129, 0xDE3A74DB, 0x6EA75BBA, 0xE7554D6F);
+    state keys_3 = _mm_set_epi32(0x444DF600, 0x790FC729, 0xA735B3F2, 0xC992E848);
+#else
     state keys_1 = _mm_set_epi32(0x5A3BC47E, 0x89F216D5, 0xB09D2F61, 0xE37845F2);
     state keys_2 = _mm_set_epi32(0xE7554D6F, 0x6EA75BBA, 0xDE3A74DB, 0x3D423129);
     state keys_3 = _mm_set_epi32(0xC992E848, 0xA735B3F2, 0x790FC729, 0x444DF600);
+#endif
 
     hash = _mm_aesenc_si128(hash, _mm_set1_epi32(seed + 0xC992E848));
     hash = _mm_aesenc_si128(hash, keys_1);
