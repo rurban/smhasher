@@ -9,7 +9,6 @@
 
 #if defined(HAVE_AVX2) && defined(__VAES__)
 typedef __m256i state;
-typedef __m128i output;
 
 static inline state create_empty() {
     return _mm256_setzero_si256();
@@ -62,25 +61,20 @@ static inline state compress_fast(state a, state b) {
     return _mm256_aesenc_epi128(a, b);
 }
 
-static inline output finalize(state hash, uint32_t seed) {
-    __m128i lower = _mm256_castsi256_si128(hash);
-    __m128i upper = _mm256_extracti128_si256(hash, 1);
-    __m128i hash128 = _mm_xor_si128(lower, upper);
+static inline state finalize(state hash, uint32_t seed) {
+    __m128i keys_1 = _mm256_set_epi32(0x713B01D0, 0x8F2F35DB, 0xAF163956, 0x85459F85, 0xB49D3E21, 0xF2784542, 0x2155EE07, 0xC197CCE2);
+    __m128i keys_2 = _mm256_set_epi32(0x1DE09647, 0x92CFA39C, 0x3DD99ACA, 0xB89C054F, 0xCB6B2E9B, 0xC361DC58, 0x39136BD9, 0x7A83D76F);
+    __m128i keys_3 = _mm256_set_epi32(0xC78B122B, 0x5544B1B7, 0x689D2B7D, 0xD0012E32, 0xE2784542, 0x4155EE07, 0xC897CCE2, 0x780BF2C2);
 
-    __m128i keys_1 = _mm_set_epi32(0x5A3BC47E, 0x89F216D5, 0xB09D2F61, 0xE37845F2);
-    __m128i keys_2 = _mm_set_epi32(0xE7554D6F, 0x6EA75BBA, 0xDE3A74DB, 0x3D423129);
-    __m128i keys_3 = _mm_set_epi32(0xC992E848, 0xA735B3F2, 0x790FC729, 0x444DF600);
+    hash = _mm256_aesenc_epi128(hash128, _mm256_set1_epi32(seed));
+    hash = _mm256_aesenc_epi128(hash128, keys_1);
+    hash = _mm256_aesenc_epi128(hash128, keys_2);
+    hash = _mm256_aesenclast_epi128(hash128, keys_3);
 
-    hash128 = _mm_aesenc_si128(hash128, _mm_set1_epi32(seed));
-    hash128 = _mm_aesenc_si128(hash128, keys_1);
-    hash128 = _mm_aesenc_si128(hash128, keys_2);
-    hash128 = _mm_aesenclast_si128(hash128, keys_3);
-
-    return hash128;
+    return hash;
 }
 #else // __AVX2__ && __VAES__
 typedef __m128i state;
-typedef __m128i output;
 
 static inline state create_empty() {
     return _mm_setzero_si128();
@@ -131,7 +125,7 @@ static inline state compress_fast(state a, state b) {
     return _mm_aesenc_si128(a, b);
 }
 
-static inline output finalize(state hash, uint32_t seed) {
+static inline state finalize(state hash, uint32_t seed) {
     __m128i keys_1 = _mm_set_epi32(0x5A3BC47E, 0x89F216D5, 0xB09D2F61, 0xE37845F2);
     __m128i keys_2 = _mm_set_epi32(0xE7554D6F, 0x6EA75BBA, 0xDE3A74DB, 0x3D423129);
     __m128i keys_3 = _mm_set_epi32(0xC992E848, 0xA735B3F2, 0x790FC729, 0x444DF600);
@@ -149,7 +143,6 @@ static inline output finalize(state hash, uint32_t seed) {
 #include <arm_neon.h>
 
 typedef int8x16_t state;
-typedef int8x16_t output;
 
 static inline state create_empty() {
     return vdupq_n_s8(0);
@@ -224,7 +217,7 @@ static inline state finalize(state hash, uint32_t seed) {
 // Fallback ?
 #endif
 
-static inline output gxhash(const uint8_t* input, int len, uint32_t seed) {
+static inline state gxhash(const uint8_t* input, int len, uint32_t seed) {
     const int VECTOR_SIZE = sizeof(state);
     const state* p = (const state*)input;
     const state* v = p;
@@ -284,11 +277,11 @@ skip:
 }
 
 uint32_t gxhash32(const uint8_t* input, int len, uint32_t seed) {
-    output full_hash = gxhash(input, len, seed);
+    state full_hash = gxhash(input, len, seed);
     return *(uint32_t*)&full_hash;
 }
 
 uint64_t gxhash64(const uint8_t* input, int len, uint32_t seed) {
-    output full_hash = gxhash(input, len, seed);
+    state full_hash = gxhash(input, len, seed);
     return *(uint64_t*)&full_hash;
 }
