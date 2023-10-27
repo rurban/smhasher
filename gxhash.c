@@ -52,10 +52,14 @@ static inline state compress(state a, state b) {
     state keys_1 = _mm256_set_epi32(0xFC3BC28E, 0x89C222E5, 0xB09D3E21, 0xF2784542, 0x4155EE07, 0xC897CCE2, 0x780AF2C3, 0x8A72B781);
     state keys_2 = _mm256_set_epi32(0x03FCE279, 0xCB6B2E9B, 0xB361DC58, 0x39136BD9, 0x7A83D76B, 0xB1E8F9F0, 0x028925A8, 0x3B9A4E71);
 
-    b = _mm256_aesdec_epi128(b, keys_1);
-    b = _mm256_aesdec_epi128(b, keys_2);
+    b = _mm256_aesenc_epi128(b, keys_1);
+    b = _mm256_aesenc_epi128(b, keys_2);
 
-    return _mm256_aesdeclast_epi128(a, b);
+    return _mm256_aesenclast_epi128(a, b);
+}
+
+static inline state compress_fast(state a, state b) {
+    return _mm256_aesenc_epi128(a, b);
 }
 
 static inline output finalize(state hash, uint32_t seed) {
@@ -115,12 +119,16 @@ static inline state get_partial(const state* p, intptr_t len) {
 
 static inline state compress(state a, state b) {
     state keys_1 = _mm_set_epi32(0xFC3BC28E, 0x89C222E5, 0xB09D3E21, 0xF2784542);
-    state keys_2 = _mm_set_epi32(0x4155EE07, 0xC897CCE2, 0x780AF2C3, 0x8A72B781);
+    state keys_2 = _mm_set_epi32(0x03FCE279, 0xCB6B2E9B, 0xB361DC58, 0x39136BD9);
 
-    b = _mm_aesdec_si128(b, keys_1);
-    b = _mm_aesdec_si128(b, keys_2);
+    b = _mm_aesenc_si128(b, keys_1);
+    b = _mm_aesenc_si128(b, keys_2);
 
-    return _mm_aesdeclast_si128(a, b);
+    return _mm_aesenclast_si128(a, b);
+}
+
+static inline state compress_fast(state a, state b) {
+    return _mm_aesenc_si128(a, b);
 }
 
 static inline output finalize(state hash, uint32_t seed) {
@@ -158,15 +166,11 @@ static inline int check_same_page(const state* ptr) {
 }
 
 static inline state get_partial(const state* p, int len) {
-    static const int8_t MASK[] = {
-        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-    };
-
     int8x16_t partial;
     if (check_same_page(p)) {
         // Unsafe (hence the check) but much faster
-        int8x16_t mask = vld1q_s8(&MASK[sizeof(state) - len]);
+        static const int8_t indices[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+        int8x16_t mask = vcgtq_s8(vdupq_n_u8(len), vld1q_s8(indices));
         partial = vandq_s8(load_unaligned(p), mask);
     } else {
         // Safer but slower, using memcpy
@@ -190,9 +194,9 @@ static inline uint8x16_t aes_encrypt_last(uint8x16_t data, uint8x16_t keys) {
     return veorq_u8(encrypted, keys);
 }
 
-static inline state compress(state a, state b) {  
+static inline state compress(state a, state b) {
     static const uint32_t keys_1[4] = {0xFC3BC28E, 0x89C222E5, 0xB09D3E21, 0xF2784542};
-    static const uint32_t keys_2[4] = {0x4155EE07, 0xC897CCE2, 0x780AF2C3, 0x8A72B781};
+    static const uint32_t keys_2[4] = {0x03FCE279, 0xCB6B2E9B, 0xB361DC58, 0x39136BD9};
 
     b = aes_encrypt(b, vld1q_u32(keys_1));
     b = aes_encrypt(b, vld1q_u32(keys_2));
@@ -200,12 +204,16 @@ static inline state compress(state a, state b) {
     return aes_encrypt_last(a, b);
 }
 
+static inline state compress_fast(state a, state b) {
+    return aes_encrypt(a, b);
+}
+
 static inline state finalize(state hash, uint32_t seed) {
     static const uint32_t keys_1[4] = {0x5A3BC47E, 0x89F216D5, 0xB09D2F61, 0xE37845F2};
     static const uint32_t keys_2[4] = {0xE7554D6F, 0x6EA75BBA, 0xDE3A74DB, 0x3D423129};
     static const uint32_t keys_3[4] = {0xC992E848, 0xA735B3F2, 0x790FC729, 0x444DF600};
 
-    hash = aes_encrypt(hash, vdupq_n_u32(seed));
+    hash = aes_encrypt(hash, vdupq_n_u32(seed + 0xC992E848));
     hash = aes_encrypt(hash, vld1q_u32(keys_1));
     hash = aes_encrypt(hash, vld1q_u32(keys_2));
     hash = aes_encrypt_last(hash, vld1q_u32(keys_3));
@@ -234,15 +242,6 @@ static inline output gxhash(const uint8_t* input, int len, uint32_t seed) {
         int unrollable_blocks_count = (len / (VECTOR_SIZE * UNROLL_FACTOR)) * UNROLL_FACTOR;
         end_address = v + unrollable_blocks_count;
 
-        state s0 = load_unaligned(v++);
-        state s1 = load_unaligned(v++);
-        state s2 = load_unaligned(v++);
-        state s3 = load_unaligned(v++);
-        state s4 = load_unaligned(v++);
-        state s5 = load_unaligned(v++);
-        state s6 = load_unaligned(v++);
-        state s7 = load_unaligned(v++);
-
         while (v < end_address) {
             state v0 = load_unaligned(v++);
             state v1 = load_unaligned(v++);
@@ -253,19 +252,16 @@ static inline output gxhash(const uint8_t* input, int len, uint32_t seed) {
             state v6 = load_unaligned(v++);
             state v7 = load_unaligned(v++);
 
-            s0 = compress(s0, v0);
-            s1 = compress(s1, v1);
-            s2 = compress(s2, v2);
-            s3 = compress(s3, v3);
-            s4 = compress(s4, v4);
-            s5 = compress(s5, v5);
-            s6 = compress(s6, v6);
-            s7 = compress(s7, v7);
-        }
+            v0 = compress_fast(v0, v1);
+            v0 = compress_fast(v0, v2);
+            v0 = compress_fast(v0, v3);
+            v0 = compress_fast(v0, v4);
+            v0 = compress_fast(v0, v5);
+            v0 = compress_fast(v0, v6);
+            v0 = compress_fast(v0, v7);
 
-        state a = compress(compress(s0, s1), compress(s2, s3));
-        state b = compress(compress(s4, s5), compress(s6, s7));
-        hash_vector = compress(a, b);
+            hash_vector = compress(hash_vector, v0);
+        }
 
         remaining_blocks_count -= unrollable_blocks_count;
     }
@@ -296,4 +292,3 @@ uint64_t gxhash64(const uint8_t* input, int len, uint32_t seed) {
     output full_hash = gxhash(input, len, seed);
     return *(uint64_t*)&full_hash;
 }
-
