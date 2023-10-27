@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#if defined(__SSE__) && defined(__AES__)
+#if defined(__AES__)
 #include <immintrin.h>
 
 #if defined(HAVE_AVX2) && defined(__VAES__)
@@ -31,20 +31,23 @@ static inline state get_partial_safe(const uint8_t* data, size_t len) {
 }
 
 static inline state get_partial(const state* p, intptr_t len) {
-    static const uint8_t MASK[2 * sizeof(state)] = {
-        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-    };
-
+    state partial;
     if (check_same_page(p)) {
-        const uint8_t* mask_ptr = &MASK[32 - len];
-        __m256i mask = _mm256_loadu_si256((const __m256i*)mask_ptr);
-        return _mm256_and_si256(_mm256_loadu_si256(p), mask);
+        // Unsafe (hence the check) but much faster
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+        state indices = _mm256_set_epi8(31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
+#else
+        state indices = _mm256_set_epi8(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31);
+#endif
+        state mask = _mm256_cmpgt_epi8(_mm256_set1_epi8(len), indices);
+        partial = _mm256_and_si256(_mm256_loadu_si256(p), mask);
     } else {
-        return get_partial_safe((const uint8_t*)p, (size_t)len);
+        // Safer but slower, using memcpy
+        partial = get_partial_safe((const uint8_t*)p, (size_t)len);
     }
+    
+    // Prevents padded zeroes to introduce bias
+    return _mm256_add_epi32(partial, _mm256_set1_epi32(len));
 }
 
 static inline state compress(state a, state b) {
@@ -62,14 +65,14 @@ static inline state compress_fast(state a, state b) {
 }
 
 static inline state finalize(state hash, uint32_t seed) {
-    __m128i keys_1 = _mm256_set_epi32(0x713B01D0, 0x8F2F35DB, 0xAF163956, 0x85459F85, 0xB49D3E21, 0xF2784542, 0x2155EE07, 0xC197CCE2);
-    __m128i keys_2 = _mm256_set_epi32(0x1DE09647, 0x92CFA39C, 0x3DD99ACA, 0xB89C054F, 0xCB6B2E9B, 0xC361DC58, 0x39136BD9, 0x7A83D76F);
-    __m128i keys_3 = _mm256_set_epi32(0xC78B122B, 0x5544B1B7, 0x689D2B7D, 0xD0012E32, 0xE2784542, 0x4155EE07, 0xC897CCE2, 0x780BF2C2);
+    state keys_1 = _mm256_set_epi32(0x713B01D0, 0x8F2F35DB, 0xAF163956, 0x85459F85, 0xB49D3E21, 0xF2784542, 0x2155EE07, 0xC197CCE2);
+    state keys_2 = _mm256_set_epi32(0x1DE09647, 0x92CFA39C, 0x3DD99ACA, 0xB89C054F, 0xCB6B2E9B, 0xC361DC58, 0x39136BD9, 0x7A83D76F);
+    state keys_3 = _mm256_set_epi32(0xC78B122B, 0x5544B1B7, 0x689D2B7D, 0xD0012E32, 0xE2784542, 0x4155EE07, 0xC897CCE2, 0x780BF2C2);
 
-    hash = _mm256_aesenc_epi128(hash128, _mm256_set1_epi32(seed));
-    hash = _mm256_aesenc_epi128(hash128, keys_1);
-    hash = _mm256_aesenc_epi128(hash128, keys_2);
-    hash = _mm256_aesenclast_epi128(hash128, keys_3);
+    hash = _mm256_aesenc_epi128(hash, _mm256_set1_epi32(seed));
+    hash = _mm256_aesenc_epi128(hash, keys_1);
+    hash = _mm256_aesenc_epi128(hash, keys_2);
+    hash = _mm256_aesenclast_epi128(hash, keys_3);
 
     return hash;
 }
@@ -96,19 +99,33 @@ static inline state get_partial_safe(const uint8_t* data, size_t len) {
     return _mm_loadu_si128((const state*)buffer);
 }
 
-static inline state get_partial(const state* p, intptr_t len) {
-    static const uint8_t MASK[2 * sizeof(state)] = {
-        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-    };
+static inline int are_equal_m128i(__m128i a, __m128i b) {
+    __m128i result = _mm_cmpeq_epi32(a, b);
 
+    // Extract the results. If all are -1, then all 32-bit elements were equal.
+    int mask = _mm_movemask_epi8(result);
+    return mask == 0xFFFF; // all 16 bytes were equal
+}
+
+static inline state get_partial(const state* p, int len) {
+    state partial;
     if (check_same_page(p)) {
-        const uint8_t* mask_ptr = &MASK[16 - len];
-        state mask = _mm_loadu_si128((const state*)mask_ptr);
-        return _mm_and_si128(_mm_loadu_si128(p), mask);
+        // Unsafe (hence the check) but much faster
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+        state indices = _mm_set_epi8(15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
+#else
+        state indices = _mm_set_epi8(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
+#endif
+        state mask = _mm_cmpgt_epi8 (_mm_set1_epi8 ((size_t)len), indices);
+        state d = _mm_loadu_si128(p);
+        partial = _mm_and_si128(d, mask);
     } else {
-        return get_partial_safe((const uint8_t*)p, (size_t)len);
+        // Safer but slower, using memcpy
+        partial = get_partial_safe((const uint8_t*)p, (size_t)len);
     }
+    
+    // Prevents padded zeroes to introduce bias
+    return _mm_add_epi8(partial, _mm_set1_epi8(len));
 }
 
 static inline state compress(state a, state b) {
@@ -126,11 +143,11 @@ static inline state compress_fast(state a, state b) {
 }
 
 static inline state finalize(state hash, uint32_t seed) {
-    __m128i keys_1 = _mm_set_epi32(0x5A3BC47E, 0x89F216D5, 0xB09D2F61, 0xE37845F2);
-    __m128i keys_2 = _mm_set_epi32(0xE7554D6F, 0x6EA75BBA, 0xDE3A74DB, 0x3D423129);
-    __m128i keys_3 = _mm_set_epi32(0xC992E848, 0xA735B3F2, 0x790FC729, 0x444DF600);
+    state keys_1 = _mm_set_epi32(0x5A3BC47E, 0x89F216D5, 0xB09D2F61, 0xE37845F2);
+    state keys_2 = _mm_set_epi32(0xE7554D6F, 0x6EA75BBA, 0xDE3A74DB, 0x3D423129);
+    state keys_3 = _mm_set_epi32(0xC992E848, 0xA735B3F2, 0x790FC729, 0x444DF600);
 
-    hash = _mm_aesenc_si128(hash, _mm_set1_epi32(seed));
+    hash = _mm_aesenc_si128(hash, _mm_set1_epi32(seed + 0xC992E848));
     hash = _mm_aesenc_si128(hash, keys_1);
     hash = _mm_aesenc_si128(hash, keys_2);
     hash = _mm_aesenclast_si128(hash, keys_3);
@@ -162,7 +179,11 @@ static inline state get_partial(const state* p, int len) {
     int8x16_t partial;
     if (check_same_page(p)) {
         // Unsafe (hence the check) but much faster
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+        static const int8_t indices[] = {15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
+#else
         static const int8_t indices[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+#endif
         int8x16_t mask = vcgtq_s8(vdupq_n_u8(len), vld1q_s8(indices));
         partial = vandq_s8(load_unaligned(p), mask);
     } else {
@@ -272,7 +293,7 @@ static inline state gxhash(const uint8_t* input, int len, uint32_t seed) {
         hash_vector = compress(hash_vector, partial_vector);
     }
 
-skip:
+ skip:
     return finalize(hash_vector, seed);
 }
 
