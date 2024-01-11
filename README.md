@@ -217,7 +217,7 @@ SMhasher
 | [nmhash32x](doc/nmhash32x.txt)                |     12775.08 |    42.66 | 246.05 (3) |1494 |                            |
 | [k-hashv32](doc/k-hashv32.txt)                |      9181.87 |    52.76 | 245.14 (3) |1280 |                            |
 | [k-hashv64](doc/k-hashv32.txt)                |      7850.92 |    46.94 | 193.94 (1) |1279 |                            |
-| [komihash](doc/komihash.txt)                  |     12191.22 |    33.19 | 230.67 (3) |1323 |                            |
+| [komihash](doc/komihash.txt)                  |     12242.78 |    33.02 | 236.07 (2) |1323 |                            |
 | [polymur](doc/polymur.txt)                    |      9676.33 |    42.70 | 246.53 (3) |1128 |                            |
 
 The sortable table variants:
