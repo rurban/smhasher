@@ -1,6 +1,6 @@
 #!/bin/bash
 make -C build32
-which performance && performance
+./start-bench.sh
 if [ -z "$@" ]; then
     test -f log.speed32 && mv log.speed32 log.speed32.bak
     (for g in `build32/SMHasher --listnames`; do \
@@ -16,3 +16,4 @@ else
      done | tee "log.speed32-$1"
     ./speed.pl -h=doc/i686 "log.speed32-$1"
 fi
+./stop-bench.sh

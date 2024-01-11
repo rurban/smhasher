@@ -1,6 +1,6 @@
 #!/bin/bash
 make -C build
-which performance && performance
+./start-bench.sh
 if [ -z "$@" ]
 then
     test -f log.speed && mv log.speed log.speed.bak
@@ -17,3 +17,4 @@ else
     done | tee "log.speed-air-$1"
     ./speed.pl -h=doc/air "log.speed-air-$1"
 fi
+./stop-bench.sh
