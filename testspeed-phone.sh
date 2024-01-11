@@ -1,4 +1,5 @@
 #!/bin/sh
+./start-bench.sh
 if [ "x`uname -m`" != "xaarch64" ]; then
     set -x
     make -C build-aarch64
@@ -21,3 +22,4 @@ else
         #./speed.pl -h=doc/phone "log.speed-phone-$1"
     fi
 fi
+./stop-bench.sh

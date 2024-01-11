@@ -22,7 +22,7 @@ if [ x`uname -m` = xaarch64 ]; then
 fi
 
 make -C build
-which performance && performance
+./start-bench.sh
 if [ -z "$@" ]; then
     test -f log.speed && mv log.speed log.speed.bak
     (for g in `build/SMHasher --listnames`; do \
@@ -40,3 +40,4 @@ else
     ./speed.pl "log.speed-$1" && \
         ./fixupdocspeeds.pl "log.speed-$1"
 fi
+./stop-bench.sh

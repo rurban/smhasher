@@ -1,6 +1,6 @@
 #!/bin/bash
 make -C build
-which performance && performance
+./start-bench.sh
 if [ -z "$1" ]; then
     test -f log.speed && mv log.speed log.speed.bak
     (for g in `build/SMHasher --listnames`; do \
@@ -16,3 +16,4 @@ else
     done | tee "log.speed-ryzen5-$1"
     ./speed.pl "log.speed-ryzen5-$1"
 fi
+./stop-bench.sh
