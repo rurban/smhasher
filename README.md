@@ -238,6 +238,7 @@ So the fastest hash functions on x86_64 without quality problems are:
 
 * xxh3low
 * wyhash
+* umash (even universal!)
 * ahash64
 * t1ha2_atonce
 * komihash
