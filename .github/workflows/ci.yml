@@ -21,6 +21,7 @@ jobs:
       with:
         fetch-depth: 1
         submodules: recursive
+    - uses: dtolnay/rust-toolchain@stable
     - run: cmake ${{ matrix.CMAKE_ARGS }} .
     - run: make -j4 VERBOSE=1
     - if: ${{ ! contains(matrix.CMAKE_ARGS, 'CMAKE_BUILD_TYPE') }}
@@ -34,10 +35,13 @@ jobs:
       with:
         fetch-depth: 1
         submodules: recursive
+    - uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: aarch64-unknown-linux-gnu
     - run: sudo gem install apt-spy2 && sudo apt-spy2 fix
     - run: sudo apt-get update -y
     - run: sudo apt-get install -o Acquire::Retries=5 -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
-    - run: cmake -DCMAKE_TOOLCHAIN_FILE=CMakeARM64Cross.txt
+    - run: cmake -DCMAKE_TOOLCHAIN_FILE=CMakeARM64Cross.txt -DRUST_TARGET=aarch64-unknown-linux-gnu
     - run: make -j4 VERBOSE=1
   armv7:
     runs-on: ubuntu-latest
@@ -46,10 +50,13 @@ jobs:
       with:
         fetch-depth: 1
         submodules: recursive
+    - uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: armv7-unknown-linux-gnueabihf
     - run: sudo gem install apt-spy2 && sudo apt-spy2 fix
     - run: sudo apt-get update -y
     - run: sudo apt-get install -o Acquire::Retries=5 -y gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
-    - run: cmake -DCMAKE_TOOLCHAIN_FILE=CMakeARMCross.txt
+    - run: cmake -DCMAKE_TOOLCHAIN_FILE=CMakeARMCross.txt -DRUST_TARGET=armv7-unknown-linux-gnueabihf
     - run: make -j4 VERBOSE=1
   macOS:
     name: macOS
@@ -61,6 +68,7 @@ jobs:
       with:
         fetch-depth: 1
         submodules: true
+    - uses: dtolnay/rust-toolchain@stable
     - run: CXXFLAGS='-std=c++17' cmake .
     - run: make -j4 VERBOSE=1
     - run: make -j4 test ARGS=-V
@@ -71,6 +79,7 @@ jobs:
       with:
         fetch-depth: 1
         submodules: recursive
+    - uses: dtolnay/rust-toolchain@stable
     - run: cmake -G "Visual Studio 16 2019" -A x64 -DCMAKE_BUILD_TYPE=Release .
     - run: cmake --build . --config Release --verbose
     - run: Release\SMHasher.exe --test=VerifyAll,Sanity,Speed,Cyclic,Zeroes,Seed
@@ -96,6 +105,7 @@ jobs:
           cmake
           base-devel
           mingw-w64-x86_64-toolchain
+    - uses: dtolnay/rust-toolchain@stable
     - run: reg add "HKLM\Software\Microsoft\Windows\Windows Error Reporting" /f /v DontShowUI /d 1
     - uses: actions/checkout@v3
       with:
@@ -109,3 +119,27 @@ jobs:
     - shell: msys2 {0}
       run: make -j4 test ARGS=-V
       continue-on-error: true
+  rust_check:
+    name: check rust bindings
+    runs-on: ubuntu-latest
+    env:
+      RUST_GENERATE_BINDINGS: 1
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+        submodules: recursive
+    - uses: dtolnay/rust-toolchain@nightly
+    - uses: Swatinem/rust-cache@v2
+    - run: |
+        cd rust-hashes
+        mv rust_hashes.h committed.h
+        cargo build # regenerate the bindings
+        diff -up committed.h rust_hashes.h
+        if [ $? -eq 0 ]; then
+          echo "Files match"
+        else
+          echo "Binding files changed or do not match"
+          echo "regenerate them with `RUST_GENERATE_BINDINGS=1 cargo +nightly build`"
+          exit 1
+        fi
