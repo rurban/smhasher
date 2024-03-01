@@ -12,6 +12,7 @@
 
 #define XXH_INLINE_ALL
 #include "xxhash.h"
+#include "gxhash.h"
 
 #include "metrohash/metrohash64.h"
 #include "metrohash/metrohash128.h"
@@ -353,6 +354,10 @@ inline void xxHash32_test( const void * key, int len, uint32_t seed, void * out 
 inline void xxHash64_test( const void * key, int len, uint32_t seed, void * out ) {
   // objsize 630-7fc + c10-1213: 1999
   *(uint64_t*)out = (uint64_t) XXH64(key, (size_t) len, (unsigned long long) seed);
+}
+inline void gxhash64_test( const void * key, int len, uint32_t seed, void * out ) {
+  // objsize 630-7fc + c10-1213: 1999
+  *(uint64_t*)out = (uint64_t) gxhash64((uint8_t*)key, (size_t) len, seed);
 }
 #endif
 
