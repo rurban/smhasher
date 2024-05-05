@@ -1374,3 +1374,16 @@ void khashv64_test ( const void *key, int len, uint32_t seed, void *out);
 extern PolymurHashParams g_polymurhashparams;
 void polymur_seed_init (size_t &seed);
 void polymur_test ( const void *key, int len, uint32_t seed, void *out);
+
+
+/* This version of CRC64 can approach HW crc speeds without hardware support,
+   and can be applied to any polynomial. */
+#include "crc64.h"
+#include "crcspeed.h"
+#include "crccombine.h"
+
+extern "C" void crc64_jones_test1(const void *input, int len, uint32_t seed, void *out);
+extern "C" void crc64_jones_test2(const void *input, int len, uint32_t seed, void *out);
+extern "C" void crc64_jones_test3(const void *input, int len, uint32_t seed, void *out);
+extern "C" void crc64_jones_default(const void *input, int len, uint32_t seed, void *out);
+

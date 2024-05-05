@@ -242,6 +242,11 @@ HashInfo g_hashes[] =
 { crc32c_pclmul_test,   32, 0x0, "crc32_pclmul","-mpclmul crc32 in asm on HW", POOR, {0x0} /* !! */ },
 #endif
 #ifdef HAVE_INT64
+/* Implementation of CRC64 using the Jones polynomial currently used by Valkey. */
+{ crc64_jones_test1,    64, 0x7DC1B496, "crc64_jones1", "crc64, jones polynomial, standard fast software method from Mark Adler", POOR, {0xdeadbeef}},
+{ crc64_jones_test2,    64, 0x7DC1B496, "crc64_jones2", "crc64, jones polynomial, 2 pipelines in 1 thread, joined at the end", POOR, {0xdeadbeef}},
+{ crc64_jones_test3,    64, 0x7DC1B496, "crc64_jones3", "crc64, jones polynomial, 3 pipelines in 1 thread, joined at the end", POOR, {0xdeadbeef}},
+{ crc64_jones_default,  64, 0x7DC1B496, "crc64_jones",  "crc64, jones polynomial, auto 1-3 pipelines depending on length, joined at the end", POOR, {0xdeadbeef}},
 { o1hash_test,          64, 0x85051E87, "o1hash",       "o(1)hash unseeded, from wyhash", POOR, {0x0} /* !! */ },
 #endif
 #if 0 && defined(__x86_64__) && (defined(__linux__) || defined(__APPLE__))

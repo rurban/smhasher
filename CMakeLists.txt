@@ -717,6 +717,9 @@ add_library(
   ${UMASH_SRC}
   ${KHASHV_SRC}
   xmsx.c
+  crc64.c
+  crcspeed.c
+  crccombine.c
   )
 
 add_executable(SMHasher main.cpp)
