@@ -1,6 +1,4 @@
 #include <stdint.h>
-#include <stdio.h>
-#include <strings.h>
 #if defined(__i386__) || defined(__X86_64__)
 #include <immintrin.h>
 #endif
