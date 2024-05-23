@@ -629,6 +629,14 @@ inline void wyhash32low (const void * key, int len, uint32_t seed, void * out) {
 #endif
 
 #ifdef HAVE_INT64
+#include "rapidhash.h"
+// objsize 40dbe0-40ddba: 474
+inline void rapidhash_test (const void * key, int len, uint32_t seed, void * out) {
+  *(uint64_t*)out = rapidhash_withSeed(key, (uint64_t)len, (uint64_t)seed);
+}
+#endif
+
+#ifdef HAVE_INT64
 #include "o1hash.h"
 // unseeded. objsize: 101
 // This is vulnerable to keys len>4 and key[len/2 -2]..[len/2 +2] being 0 (binary keys).

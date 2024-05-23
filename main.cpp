@@ -747,6 +747,9 @@ HashInfo g_hashes[] =
   {0x1443cf9a, 0x2ae375a2, 0x729973d2, 0x72d3aa79, 0xd3e475d5} },
 { wyhash_test,          64, 0x9DAE7DD3, "wyhash", "wyhash v4.2 (64-bit)", GOOD, {}},
 #endif
+#ifdef HAVE_INT64
+{ rapidhash_test,          64, 0x99726D15, "rapidhash", "rapidhash v1 (64-bit)", GOOD, {}},
+#endif
 { nmhash32_test,        32, 0x12A30553, "nmhash32",       "nmhash32", GOOD, {}},
 { nmhash32x_test,       32, 0xA8580227, "nmhash32x",      "nmhash32x", GOOD, {}},
 #ifdef HAVE_KHASHV
