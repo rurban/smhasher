@@ -749,6 +749,7 @@ HashInfo g_hashes[] =
 #endif
 #ifdef HAVE_INT64
 { rapidhash_test,          64, 0x99726D15, "rapidhash", "rapidhash v1 (64-bit)", GOOD, {}},
+{ rapidhash_unrolled_test,          64, 0x99726D15, "rapidhash_unrolled", "rapidhash v1 (64-bit)", GOOD, {}},
 #endif
 { nmhash32_test,        32, 0x12A30553, "nmhash32",       "nmhash32", GOOD, {}},
 { nmhash32x_test,       32, 0xA8580227, "nmhash32x",      "nmhash32x", GOOD, {}},
