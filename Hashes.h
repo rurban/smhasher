@@ -630,9 +630,12 @@ inline void wyhash32low (const void * key, int len, uint32_t seed, void * out) {
 
 #ifdef HAVE_INT64
 #include "rapidhash.h"
-// objsize 40dbe0-40ddba: 474
 inline void rapidhash_test (const void * key, int len, uint32_t seed, void * out) {
-  *(uint64_t*)out = rapidhash_withSeed(key, (uint64_t)len, (uint64_t)seed);
+  *(uint64_t*)out = rapidhash_withSeed_compact(key, (uint64_t)len, (uint64_t)seed);
+}
+
+inline void rapidhash_unrolled_test (const void * key, int len, uint32_t seed, void * out) {
+  *(uint64_t*)out = rapidhash_withSeed_unrolled(key, (uint64_t)len, (uint64_t)seed);
 }
 #endif
 

@@ -67,7 +67,7 @@
  *  This setting does not alter the output hash.
  */
 #ifndef RAPIDHASH_UNROLLED
-#define RAPIDHASH_UNROLLED (1)
+#define RAPIDHASH_UNROLLED (0)
 #endif
 
 /*
@@ -211,6 +211,35 @@ static inline uint64_t rapid_read32(const uint8_t *p) {
  */
 static inline uint64_t rapid_readSmall(const uint8_t *p, size_t k) { return (((uint64_t)p[0])<<56)|(((uint64_t)p[k>>1])<<32)|p[k-1];}
 
+#define rapidhash_internal_prologue \
+const uint8_t *p=(const uint8_t *)key; seed^=rapid_mix(seed^secret[2],secret[1])^len;  uint64_t  a,  b;\
+  if(_likely_(len<=16)){\
+    if(_likely_(len>=4)){\
+      const uint8_t * plast = p + len - 4;\
+      a = (rapid_read32(p) << 32) | rapid_read32(plast);\
+      const uint64_t delta = ((len&24)>>(len>>3));\
+      b = ((rapid_read32(p + delta) << 32) | rapid_read32(plast - delta)); }\
+    else if(_likely_(len>0)){ a=rapid_readSmall(p,len); b=0;}\
+    else a=b=0;\
+  }\
+  else{\
+    size_t i=len;\
+    if(_unlikely_(i>48)){\
+      uint64_t see1=seed, see2=seed;
+
+#define rapidhash_internal_epilogue \
+    seed^=see1^see2;\
+    }\
+    if(i>16){\
+      seed=rapid_mix(rapid_read64(p)^secret[2],rapid_read64(p+8)^seed^secret[1]);\
+      if(i>32)\
+        seed=rapid_mix(rapid_read64(p+16)^secret[2],rapid_read64(p+24)^seed);\
+    }\
+    a=rapid_read64(p+i-16);  b=rapid_read64(p+i-8);\
+  }\
+  a^=secret[1]; b^=seed;  rapid_mum(&a,&b);\
+  return  rapid_mix(a^secret[0]^len,b^secret[1]);
+
 /*
  *  rapidhash main function
  *
@@ -221,58 +250,37 @@ static inline uint64_t rapid_readSmall(const uint8_t *p, size_t k) { return (((u
  *
  *  Returns a 64-bit hash.
  */
-static inline uint64_t rapidhash_internal(const void *key, size_t len, uint64_t seed, const uint64_t* secret){
-  const uint8_t *p=(const uint8_t *)key; seed^=rapid_mix(seed^secret[2],secret[1])^len;  uint64_t  a,  b;
-  if(_likely_(len<=16)){
-    if(_likely_(len>=4)){ 
-      const uint8_t * plast = p + len - 4;
-      a = (rapid_read32(p) << 32) | rapid_read32(plast);
-      const uint64_t delta = ((len&24)>>(len>>3));
-      b = ((rapid_read32(p + delta) << 32) | rapid_read32(plast - delta)); }
-    else if(_likely_(len>0)){ a=rapid_readSmall(p,len); b=0;}
-    else a=b=0;
-  }
-  else{
-    size_t i=len; 
-    if(_unlikely_(i>48)){
-      uint64_t see1=seed, see2=seed;
-#if (RAPIDHASH_UNROLLED==1)
-      while(_likely_(i>96)){
-        seed=rapid_mix(rapid_read64(p)^secret[0],rapid_read64(p+8)^seed);
-        see1=rapid_mix(rapid_read64(p+16)^secret[1],rapid_read64(p+24)^see1);
-        see2=rapid_mix(rapid_read64(p+32)^secret[2],rapid_read64(p+40)^see2);
-        seed=rapid_mix(rapid_read64(p+48)^secret[0],rapid_read64(p+56)^seed);
-        see1=rapid_mix(rapid_read64(p+64)^secret[1],rapid_read64(p+72)^see1);
-        see2=rapid_mix(rapid_read64(p+80)^secret[2],rapid_read64(p+88)^see2);
-        p+=96; i-=96;
-      }
-      if(_unlikely_(i>48)){
-        seed=rapid_mix(rapid_read64(p)^secret[0],rapid_read64(p+8)^seed);
-        see1=rapid_mix(rapid_read64(p+16)^secret[1],rapid_read64(p+24)^see1);
-        see2=rapid_mix(rapid_read64(p+32)^secret[2],rapid_read64(p+40)^see2);
-        p+=48; i-=48;
-      }
-#else
-      do {
-        seed=rapid_mix(rapid_read64(p)^secret[0],rapid_read64(p+8)^seed);
-        see1=rapid_mix(rapid_read64(p+16)^secret[1],rapid_read64(p+24)^see1);
-        see2=rapid_mix(rapid_read64(p+32)^secret[2],rapid_read64(p+40)^see2);
-        p+=48; i-=48;
-      } while (_likely_(i>48));
-#endif
-      seed^=see1^see2;
-    }
-    if(i>16){
-      seed=rapid_mix(rapid_read64(p)^secret[2],rapid_read64(p+8)^seed^secret[1]);
-      if(i>32)
-        seed=rapid_mix(rapid_read64(p+16)^secret[2],rapid_read64(p+24)^seed);
-    }
-    a=rapid_read64(p+i-16);  b=rapid_read64(p+i-8);
-  }
-  a^=secret[1]; b^=seed;  rapid_mum(&a,&b);
-  return  rapid_mix(a^secret[0]^len,b^secret[1]);
+static inline uint64_t rapidhash_internal_compact(const void *key, size_t len, uint64_t seed, const uint64_t* secret){
+  rapidhash_internal_prologue
+  do {
+    seed=rapid_mix(rapid_read64(p)^secret[0],rapid_read64(p+8)^seed);
+    see1=rapid_mix(rapid_read64(p+16)^secret[1],rapid_read64(p+24)^see1);
+    see2=rapid_mix(rapid_read64(p+32)^secret[2],rapid_read64(p+40)^see2);
+    p+=48; i-=48;
+  } while (_likely_(i>48));
+  rapidhash_internal_epilogue
 }
 
+
+static inline uint64_t rapidhash_internal_unrolled(const void *key, size_t len, uint64_t seed, const uint64_t* secret){
+  rapidhash_internal_prologue
+  while(_likely_(i>96)){
+    seed=rapid_mix(rapid_read64(p)^secret[0],rapid_read64(p+8)^seed);
+    see1=rapid_mix(rapid_read64(p+16)^secret[1],rapid_read64(p+24)^see1);
+    see2=rapid_mix(rapid_read64(p+32)^secret[2],rapid_read64(p+40)^see2);
+    seed=rapid_mix(rapid_read64(p+48)^secret[0],rapid_read64(p+56)^seed);
+    see1=rapid_mix(rapid_read64(p+64)^secret[1],rapid_read64(p+72)^see1);
+    see2=rapid_mix(rapid_read64(p+80)^secret[2],rapid_read64(p+88)^see2);
+    p+=96; i-=96;
+  }
+  if(_unlikely_(i>48)){
+    seed=rapid_mix(rapid_read64(p)^secret[0],rapid_read64(p+8)^seed);
+    see1=rapid_mix(rapid_read64(p+16)^secret[1],rapid_read64(p+24)^see1);
+    see2=rapid_mix(rapid_read64(p+32)^secret[2],rapid_read64(p+40)^see2);
+    p+=48; i-=48;
+  }
+  rapidhash_internal_epilogue
+}
 /*
  *  rapidhash default seeded hash function.
  *
@@ -284,8 +292,12 @@ static inline uint64_t rapidhash_internal(const void *key, size_t len, uint64_t 
  *
  *  Returns a 64-bit hash.
  */
-static inline uint64_t rapidhash_withSeed(const void *key, size_t len, uint64_t seed) {
-  return rapidhash_internal(key, len, seed, rapid_secret);
+static inline uint64_t rapidhash_withSeed_compact(const void *key, size_t len, uint64_t seed) {
+  return rapidhash_internal_compact(key, len, seed, rapid_secret);
+}
+
+static inline uint64_t rapidhash_withSeed_unrolled(const void *key, size_t len, uint64_t seed) {
+  return rapidhash_internal_unrolled(key, len, seed, rapid_secret);
 }
 
 /*
@@ -299,5 +311,5 @@ static inline uint64_t rapidhash_withSeed(const void *key, size_t len, uint64_t 
  *  Returns a 64-bit hash.
  */
 static inline uint64_t rapidhash(const void *key, size_t len) {
-  return rapidhash_withSeed(key, len, RAPID_SEED);
+  return rapidhash_withSeed_unrolled(key, len, RAPID_SEED);
 }
