@@ -212,7 +212,7 @@ static inline uint64_t rapid_read32(const uint8_t *p) {
 static inline uint64_t rapid_readSmall(const uint8_t *p, size_t k) { return (((uint64_t)p[0])<<56)|(((uint64_t)p[k>>1])<<32)|p[k-1];}
 
 #define rapidhash_internal_prologue \
-const uint8_t *p=(const uint8_t *)key; seed^=rapid_mix(seed^secret[2],secret[1])^len;  uint64_t  a,  b;\
+const uint8_t *p=(const uint8_t *)key; seed^=rapid_mix(seed^secret[0],secret[1])^len;  uint64_t  a,  b;\
   if(_likely_(len<=16)){\
     if(_likely_(len>=4)){\
       const uint8_t * plast = p + len - 4;\
@@ -257,14 +257,14 @@ static inline uint64_t rapidhash_internal_compact(const void *key, size_t len, u
     see1=rapid_mix(rapid_read64(p+16)^secret[1],rapid_read64(p+24)^see1);
     see2=rapid_mix(rapid_read64(p+32)^secret[2],rapid_read64(p+40)^see2);
     p+=48; i-=48;
-  } while (_likely_(i>48));
+  } while (_likely_(i>=48));
   rapidhash_internal_epilogue
 }
 
 
 static inline uint64_t rapidhash_internal_unrolled(const void *key, size_t len, uint64_t seed, const uint64_t* secret){
   rapidhash_internal_prologue
-  while(_likely_(i>96)){
+  while(_likely_(i>=96)){
     seed=rapid_mix(rapid_read64(p)^secret[0],rapid_read64(p+8)^seed);
     see1=rapid_mix(rapid_read64(p+16)^secret[1],rapid_read64(p+24)^see1);
     see2=rapid_mix(rapid_read64(p+32)^secret[2],rapid_read64(p+40)^see2);
@@ -273,7 +273,7 @@ static inline uint64_t rapidhash_internal_unrolled(const void *key, size_t len, 
     see2=rapid_mix(rapid_read64(p+80)^secret[2],rapid_read64(p+88)^see2);
     p+=96; i-=96;
   }
-  if(_unlikely_(i>48)){
+  if(_unlikely_(i>=48)){
     seed=rapid_mix(rapid_read64(p)^secret[0],rapid_read64(p+8)^seed);
     see1=rapid_mix(rapid_read64(p+16)^secret[1],rapid_read64(p+24)^see1);
     see2=rapid_mix(rapid_read64(p+32)^secret[2],rapid_read64(p+40)^see2);
