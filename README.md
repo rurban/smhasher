@@ -160,7 +160,7 @@ SMhasher
 | [xmsx32](doc/xmsx32.txt)                      |      2039.10 |    46.39 | 249.30 (7) | 192 | 2 bad seeds                  |
 | [mirhash](doc/mirhash.txt)                    |      6139.07 |    37.02 | 209.47 (3) |1112 | UB, 2^36 bad seeds, LongNeighbors, machine-specific (32/64 differs) |
 | [mirhashstrict](doc/mirhashstrict.txt)        |      3549.01 |    49.99 | 224.91 (2) |1112 |                            |
-| [mirhashstrict32low](doc/mirhashstrict32low.txt)|      3441.35 |    50.60 | 247.19 (3) |1112 | 1 bad seed, MomentChi2 9   |
+| [mirhashstrict32low](doc/mirhashstrict32low.txt)|    3441.35 |    50.60 | 247.19 (3) |1112 | 1 bad seed, MomentChi2 9   |
 | [fasthash32](doc/fasthash32.txt)              |      6128.28 |    40.30 | 241.64 (4) | 566 | UB                         |
 | [fasthash64](doc/fasthash64.txt)              |      5818.92 |    38.70 | 220.74 (2) | 509 | UB                         |
 | [aesni](doc/aesni.txt)                        |     31232.34 |    29.21 | 230.14 (4) | 519 | machine-specific (x64 AES-NI)           |
@@ -204,6 +204,8 @@ SMhasher
 | [wyhash32](doc/wyhash32.txt)                  |      2532.89 |    48.40 | 484.57 (1) | 426 | 4 bad and broken seeds, 32-bit |
 | [wyhash32low](doc/wyhash32low.txt)            |     22393.77 |    29.04 | 243.40 (3) | 474 | 5 bad seeds  |
 | [wyhash](doc/wyhash.txt)                      |     22540.23 |    28.87 | 236.16 (8) | 474 |                           |
+| [rapidhash](doc/rapidhash.txt)                |     23789.79 |    22.80 | 138.71 (7) | 574 |                           |
+| [rapidhash_unrolled](doc/rapidhash_unrolled.txt)|     23892.88 |    23.41 | 139.47 (12)| 782 |                           |
 | [umash32](doc/umash32.txt)                    |     21427.57 |    42.12 | 255.55 (5) |1530 |                            |
 | [umash32_hi](doc/umash32_hi.txt)              |     21483.12 |    42.65 | 251.09 (4) |1530 |                            |
 | [umash64](doc/umash64.txt)                    |     21690.08 |    41.67 | 238.01 (4) |1530 |                            |
@@ -236,6 +238,7 @@ See also the old [https://github.com/aappleby/smhasher/wiki](https://github.com/
 
 So the fastest hash functions on x86_64 without quality problems are:
 
+* rapidhash (an improved wyhash)
 * xxh3low
 * wyhash
 * umash (even universal!)

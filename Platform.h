@@ -7,7 +7,7 @@
 // fixme: bad system call with threads (8 cpu octocore)
 # define NCPU 0
 #elif !defined NCPU
-# define NCPU 4
+# define NCPU 8
 #endif
 
 #if NCPU > 1
