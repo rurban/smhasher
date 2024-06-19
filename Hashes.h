@@ -87,9 +87,9 @@ static inline bool crc64c_bad_seeds(std::vector<uint64_t> &seeds)
   seeds = std::vector<uint64_t> { UINT64_C(0) };
   return true;
 }
-void CityHashCrc64_test(const void *key, int len, uint32_t seed, void *out);
 #if defined(__x86_64__)
 void CityHashCrc128_test(const void *key, int len, uint32_t seed, void *out);
+void CityHashCrc256_test(const void *key, int len, uint32_t seed, void *out);
 #endif
 #endif
 
