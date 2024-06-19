@@ -354,7 +354,7 @@ HashInfo g_hashes[] =
 #  endif
 # endif
 #endif
-{ CityHash32_test,      32, 0x5C28AD62, "City32",      "Google CityHash32WithSeed (old)", POOR, {0x2eb38c9f} /* !! */},
+{ CityHash32_test,      32, 0x68254F81, "City32",      "Google CityHash32 (v1.1)", POOR, {} /* !! */},
 #ifdef HAVE_INT64
 { metrohash64_test,      64, 0x6FA828C9, "metrohash64",    "MetroHash64, 64-bit", POOR, {} },
 { metrohash64_1_test,    64, 0xEE88F7D2, "metrohash64_1",  "MetroHash64_1, 64-bit (legacy)", POOR, {} },
@@ -372,8 +372,8 @@ HashInfo g_hashes[] =
 { metrohash128crc_1_test,128, 0x5E75144E, "metrohash128crc_1", "MetroHash128crc_1 for x64 (legacy)", GOOD, {} },
 { metrohash128crc_2_test,128, 0x1ACF3E77, "metrohash128crc_2", "MetroHash128crc_2 for x64 (legacy)", GOOD, {} },
 #endif
-{ CityHash64noSeed_test, 64, 0x63FC6063, "City64noSeed","Google CityHash64 without seed (default version, misses one final avalanche)", POOR, {} },
-{ CityHash64_test,      64, 0x25A20825, "City64",       "Google CityHash64WithSeed (old)", POOR, {} },
+{ CityHash64noSeed_test, 64, 0x4C4E54B1, "City64noSeed","Google CityHash64 without seed (v1.1)(default version, misses one final avalanche)", POOR, {} },
+{ CityHash64_test,      64, 0x5FABC5C5, "City64",       "Google CityHash64WithSeed (v1.1)", POOR, {} },
 #if defined(HAVE_SSE2) && defined(HAVE_AESNI) && !defined(_MSC_VER)
 { aesnihash_test,       64, 0xA68E0D42, "aesnihash",    "majek's seeded aesnihash with aesenc, 64-bit for x64", POOR,
   {0x70736575} },
@@ -649,10 +649,11 @@ HashInfo g_hashes[] =
 { mirhashstrict32low,   32, 0xD50D1F09,   "mirhashstrict32low", "mirhashstrict - lower 32bit", POOR,
   {0x7fcc747f} /* !! */ },
 #endif
-{ CityHash64_low_test,  32, 0xCC5BC861, "City64low",   "Google CityHash64WithSeed (low 32-bits)", GOOD, {} },
+{ CityHash64_low_test,  32, 0x6C4EF416, "City64low",   "Google CityHash64WithSeed (v1.1)(low 32-bits)", GOOD, {} },
 #if defined(HAVE_SSE42) && defined(__x86_64__)
-{ CityHash128_test,    128, 0x6531F54E, "City128",     "Google CityHash128WithSeed (old)", GOOD, {} },
-{ CityHashCrc128_test, 128, 0xD4389C97, "CityCrc128",  "Google CityHashCrc128WithSeed SSE4.2 (old)", GOOD, {} },
+{ CityHash128_test,    128, 0x305C0D9A, "City128",     "Google CityHash128WithSeed (v1.1)", GOOD, {} },
+{ CityHashCrc128_test, 128, 0x98C09AB4, "CityCrc128",  "Google CityHashCrc128WithSeed SSE4.2 (v1.1)", GOOD, {} },
+{ CityHashCrc256_test, 256, 0x2A7036C8, "CityCrc256",  "Google CityHashCrc256 SSE4.2 (v1.1)", GOOD, {} },
 #endif
 
 #if defined(__FreeBSD__) || defined(HAVE_ASAN)
