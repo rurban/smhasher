@@ -156,20 +156,19 @@ static uint32_t Mur(uint32_t a, uint32_t h) {
   return h * 5 + 0xe6546b64;
 }
 
-static uint32_t Hash32Len13to24(const char *s, size_t len) {
+static uint32_t Hash32Len13to24(const char *s, size_t len, uint32_t seed) {
   uint32_t a = Fetch32(s - 4 + (len >> 1));
   uint32_t b = Fetch32(s + 4);
   uint32_t c = Fetch32(s + len - 8);
   uint32_t d = Fetch32(s + (len >> 1));
   uint32_t e = Fetch32(s);
   uint32_t f = Fetch32(s + len - 4);
-  uint32_t h = static_cast<uint32_t>(len);
-
+  uint32_t h = static_cast<uint32_t>(len + seed);
   return fmix(Mur(f, Mur(e, Mur(d, Mur(c, Mur(b, Mur(a, h)))))));
 }
 
-static uint32_t Hash32Len0to4(const char *s, size_t len) {
-  uint32_t b = 0;
+static uint32_t Hash32Len0to4(const char *s, size_t len, uint32_t seed) {
+  uint32_t b = seed;
   uint32_t c = 9;
   for (size_t i = 0; i < len; i++) {
     signed char v = static_cast<signed char>(s[i]);
@@ -179,23 +178,23 @@ static uint32_t Hash32Len0to4(const char *s, size_t len) {
   return fmix(Mur(b, Mur(static_cast<uint32_t>(len), c)));
 }
 
-static uint32_t Hash32Len5to12(const char *s, size_t len) {
-  uint32_t a = static_cast<uint32_t>(len), b = a * 5, c = 9, d = b;
+static uint32_t Hash32Len5to12(const char *s, size_t len, uint32_t seed) {
+  uint32_t a = static_cast<uint32_t>(len + seed), b = a * 5, c = 9, d = b;
   a += Fetch32(s);
   b += Fetch32(s + len - 4);
   c += Fetch32(s + ((len >> 1) & 4));
   return fmix(Mur(c, Mur(b, Mur(a, d))));
 }
 
-uint32_t CityHash32(const char *s, size_t len) {
+uint32_t CityHash32WithSeed(const char *s, size_t len, uint32_t seed) {
   if (len <= 24) {
     return len <= 12
-               ? (len <= 4 ? Hash32Len0to4(s, len) : Hash32Len5to12(s, len))
-               : Hash32Len13to24(s, len);
+               ? (len <= 4 ? Hash32Len0to4(s, len, seed) : Hash32Len5to12(s, len, seed))
+               : Hash32Len13to24(s, len, seed);
   }
 
   // len > 24
-  uint32_t h = static_cast<uint32_t>(len), g = c1 * h, f = g;
+  uint32_t h = static_cast<uint32_t>(len + seed), g = c1 * h, f = g;
   uint32_t a0 = Rotate32(Fetch32(s + len - 4) * c1, 17) * c2;
   uint32_t a1 = Rotate32(Fetch32(s + len - 8) * c1, 17) * c2;
   uint32_t a2 = Rotate32(Fetch32(s + len - 16) * c1, 17) * c2;

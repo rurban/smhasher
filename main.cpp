@@ -354,7 +354,7 @@ HashInfo g_hashes[] =
 #  endif
 # endif
 #endif
-{ CityHash32_test,      32, 0x68254F81, "City32",      "Google CityHash32 (v1.1)", POOR, {} /* !! */},
+{ CityHash32_test,      32, 0xEDED9084, "City32",      "Google CityHash32WithSeed (v1.1)", POOR, {0x2eb38c9f} /* !! */},
 #ifdef HAVE_INT64
 { metrohash64_test,      64, 0x6FA828C9, "metrohash64",    "MetroHash64, 64-bit", POOR, {} },
 { metrohash64_1_test,    64, 0xEE88F7D2, "metrohash64_1",  "MetroHash64_1, 64-bit (legacy)", POOR, {} },
