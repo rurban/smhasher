@@ -696,6 +696,7 @@ add_library(
   ${T1HA_SRC}
   ${SHA_SRC}
   mum.cc
+  mum_v3.cc
   jody_hash32.c
   jody_hash64.c
   ${TSIP_SRC}
