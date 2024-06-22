@@ -1,3 +1,4 @@
+#define MUM_V1
 #include "mum.h"
 
 void mum_hash_test(const void *key, int len, uint32_t seed, void *out) {

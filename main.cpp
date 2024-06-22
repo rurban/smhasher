@@ -648,6 +648,8 @@ HashInfo g_hashes[] =
   {0x0} /* !! and many more. too many */ },
 { mum_low_test,         32, MUMLOW_VERIF,"MUMlow",     "github.com/vnmakarov/mum-hash", GOOD,
   {0x11fb062a, 0x3ca9411b, 0x3edd9a7d, 0x41f18860, 0x691457ba} /* !! */ },
+{ mum_v3_hash_test,     64, MUM_VERIF,  "MUMv3",       "github.com/vnmakarov/mum-hash", POOR,
+  {0x0, 0x8bd72b8c}},
 { xmsx32_test,          32, 0x6B54E1D4, "xmsx32", "XMSX-32", GOOD, { 0x1505929f, 0xf0a6a74a } },
 #if defined(__GNUC__) && UINT_MAX != ULONG_MAX
 #define MIR_VERIF            0x00A393C8

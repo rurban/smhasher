@@ -719,6 +719,7 @@ add_library(
   ${SHA_SRC}
   ${GX_SRC}
   mum.cc
+  mum_v3.cc
   jody_hash32.c
   jody_hash64.c
   ${TSIP_SRC}
