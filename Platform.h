@@ -124,9 +124,21 @@ inline uint64_t rotr64 ( uint64_t x, int8_t r )
 
 __inline__ uint64_t timeofday()
 {
+#if defined(CLOCK_MONOTONIC_RAW) || defined(CLOCK_MONOTONIC)
+# if defined(CLOCK_MONOTONIC_RAW)
+  // CLOCK_MONOTONIC_RAW access is measurably faster on some platforms.
+  const clockid_t clock = CLOCK_MONOTONIC_RAW;
+# else
+  const clockid_t clock = CLOCK_MONOTONIC;
+# endif
+  struct timespec ts;
+  clock_gettime(clock, &ts);
+  return int64_t(ts.tv_sec) * 1000000000 + ts.tv_nsec;
+#else
   struct timeval tv;
   gettimeofday(&tv, NULL);
-  return (int64_t)((tv.tv_sec) * 1000000 + tv.tv_usec);
+  return int64_t(tv.tv_sec) * 1000000000 + tv.tv_usec * 1000;
+#endif
 }
 
 #if defined(__mips16) && !defined(__mips16e2) && (defined(_MIPS_ARCH_MIPS32R2) || defined(_MIPS_ARCH_MIPS32R3) || defined(_MIPS_ARCH_MIPS32R5) || defined(_MIPS_ARCH_MIPS32R6))
