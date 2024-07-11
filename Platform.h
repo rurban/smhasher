@@ -129,6 +129,12 @@ __inline__ uint64_t timeofday()
   return (int64_t)((tv.tv_sec) * 1000000 + tv.tv_usec);
 }
 
+#if defined(__mips16) && !defined(__mips16e2) && (defined(_MIPS_ARCH_MIPS32R2) || defined(_MIPS_ARCH_MIPS32R3) || defined(_MIPS_ARCH_MIPS32R5) || defined(_MIPS_ARCH_MIPS32R6))
+// `rdhwr` is MIPS32r2 or MIPS16e2 and not MIPS16. Some OpenWRT builds run
+// with `-mips32r2 -mtune=24kc -mips16`, so MIPS16 has to be disabled for alike
+// builds to get acces to `rdhwr` from assembler's standpoint.
+__attribute__((nomips16))
+#endif
 __inline__ uint64_t rdtsc()
 {
 #ifdef _MSC_VER
@@ -161,6 +167,16 @@ __inline__ uint64_t rdtsc()
     return (uint64_t)(pmccntr) * 64;  // Should optimize to << 6
   }
   return timeofday();
+#elif defined(__mips__)
+  // Access to these registers _might_ be prohibited to user-mode code,
+  // but there is no way to check it. Linux allows it in configure_hwrena():
+  // https://github.com/torvalds/linux/blob/v6.9/arch/mips/kernel/traps.c#L2190-L2194
+  uint32_t cntr, scale = 1;
+  asm volatile(
+      "rdhwr %0, $2\n\t" // MIPS_HWR_CC
+      "rdhwr %1, $3\n\t" // MIPS_HWR_CCRES
+      : "=r" (cntr), "=r" (scale));
+  return uint64_t(cntr) * scale;
 #else
   return timeofday();
 #endif
