@@ -57,6 +57,7 @@ void SetAffinity ( int cpu );
 
 #pragma intrinsic(__rdtsc)
 // Read Time Stamp Counter
+#define timer_counts_ns() (false)
 #define rdtsc()       __rdtsc()
 #define timer_start() __rdtsc()
 #define timer_end()   __rdtsc()
@@ -251,6 +252,11 @@ __inline__ uint64_t timer_end()
 #endif
 }
 
+__inline__ bool timer_counts_ns ( void )
+{
+  const double ratio = double(timer_start()) / timeofday();
+  return (0.999 < ratio && ratio < 1.001);
+}
 
 #include <strings.h>
 #define _stricmp strcasecmp
