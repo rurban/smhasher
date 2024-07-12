@@ -18,7 +18,8 @@ using namespace std;
 std::vector<std::string> HashMapInit(bool verbose) {
   std::vector<std::string> words;
   std::string line;
-  std::string filename = "/usr/share/dict/words";
+  const char* const env_words = getenv("SMHASHER_WORDS");
+  std::string filename(env_words ? env_words : "/usr/share/dict/words");
   int lines = 0, sum = 0;
   std::ifstream wordfile(filename.c_str());
   if (!wordfile.is_open()) {
