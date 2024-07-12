@@ -142,7 +142,7 @@ __inline__ uint64_t timeofday()
 #endif
 }
 
-#if defined(__mips16) && !defined(__mips16e2) && (defined(_MIPS_ARCH_MIPS32R2) || defined(_MIPS_ARCH_MIPS32R3) || defined(_MIPS_ARCH_MIPS32R5) || defined(_MIPS_ARCH_MIPS32R6))
+#if defined(__mips16) && !defined(__mips16e2) && (_MIPS_ISA == _MIPS_ISA_MIPS32 && __mips_isa_rev >= 2)
 // `rdhwr` is MIPS32r2 or MIPS16e2 and not MIPS16. Some OpenWRT builds run
 // with `-mips32r2 -mtune=24kc -mips16`, so MIPS16 has to be disabled for alike
 // builds to get acces to `rdhwr` from assembler's standpoint.
