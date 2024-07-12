@@ -1,11 +1,21 @@
 #include "Platform.h"
 
 #include <stdio.h>
+#include <assert.h>
 
-void testRDTSC ( void )
+long getenvlong(const char *name, long minval, long defval, long maxval)
 {
-  int64_t temp = rdtsc();
-  printf("%ld",(long)temp);
+  assert(minval <= defval && defval <= maxval);
+  const char *s = getenv(name);
+  if (!s)
+    return defval;
+  char *tail;
+  long l = strtol(s, &tail, 0);
+  if (*tail)
+    return defval;
+  if (l < minval) l = minval;
+  if (l > maxval) l = maxval;
+  return l;
 }
 
 #if defined(_WIN32)

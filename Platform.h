@@ -21,6 +21,7 @@ void SetThreadAffinity ( std::thread &t, int cpu );
 # endif
 #endif
 void SetAffinity ( int cpu );
+long getenvlong(const char *name, long minval, long defval, long maxval);
 
 // That's not UINT64_MAX as it's converted to int64_t sometimes.
 constexpr uint64_t timer_inf = INT64_MAX;
