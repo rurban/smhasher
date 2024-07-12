@@ -25,7 +25,9 @@ bool g_testExtra       = false; // excessive torture tests: Sparse, Avalanche, D
 bool g_testVerifyAll   = false;
 
 bool g_testSanity      = false;
-bool g_testSpeed       = false;
+bool g_testSpeedAll    = false;
+bool g_testSpeedBulk   = false;
+bool g_testSpeedSmall  = false;
 bool g_testHashmap     = false;
 bool g_testAvalanche   = false;
 bool g_testSparse      = false;
@@ -56,7 +58,9 @@ TestOpts g_testopts[] =
 { g_testAll,          "All" },
 { g_testVerifyAll,    "VerifyAll" },
 { g_testSanity,       "Sanity" },
-{ g_testSpeed,        "Speed" },
+{ g_testSpeedAll,     "Speed" },
+{ g_testSpeedBulk,    "SpeedBulk" },
+{ g_testSpeedSmall,   "SpeedSmall" },
 { g_testHashmap,      "Hashmap" },
 { g_testAvalanche,    "Avalanche" },
 { g_testSparse,       "Sparse" },
@@ -997,7 +1001,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("PASS\n\n"); fflush(NULL); // if not it does exit(1)
   }
 
-  if (g_testAll || g_testSpeed || g_testHashmap) {
+  if (g_testAll || g_testSpeedBulk || g_testSpeedSmall || g_testHashmap) {
     printf("--- Testing %s \"%s\" %s\n\n", info->name, info->desc, quality_str[info->quality]);
   } else {
     fprintf(stderr, "--- Testing %s \"%s\" %s\n\n", info->name, info->desc, quality_str[info->quality]);
@@ -1021,7 +1025,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   //-----------------------------------------------------------------------------
   // Speed tests
 
-  if(g_testSpeed || g_testAll)
+  if(g_testSpeedBulk || g_testSpeedSmall || g_testAll)
   {
     double sum = 0.0;
     printf("[[[ Speed Tests ]]]\n\n");
@@ -1038,19 +1042,27 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     fflush(NULL);
 
     Seed_init (info, info->verification);
-    BulkSpeedTest(info->hash,info->verification);
-    printf("\n");
-    fflush(NULL);
 
-    for(int i = 1; i < 32; i++)
-    {
-      volatile int j = i;
-      sum += TinySpeedTest(hashfunc<hashtype>(info->hash),sizeof(hashtype),j,info->verification,true);
+    if (g_testSpeedBulk || g_testAll) {
+      BulkSpeedTest(info->hash,info->verification);
+      printf("\n");
+      fflush(NULL);
     }
-    g_speed = sum = sum / 31.0;
-    printf("Average                                    %6.3f cycles/hash\n",sum);
-    printf("\n");
-    fflush(NULL);
+
+    if (g_testSpeedSmall || g_testAll) {
+      const int dflmax = g_testExtra ? 64 : 32;
+      const int minkey = getenvlong("SMHASHER_SMALLKEY_MIN", 1, 1, TIMEHASH_SMALL_LEN_MAX);
+      const int maxkey = getenvlong("SMHASHER_SMALLKEY_MAX", minkey, dflmax, TIMEHASH_SMALL_LEN_MAX);
+      for(int i = minkey; i <= maxkey; i++)
+      {
+        volatile int j = i;
+        sum += TinySpeedTest(hashfunc<hashtype>(info->hash),sizeof(hashtype),j,info->verification,true);
+      }
+      g_speed = sum = sum / (maxkey - minkey + 1);
+      printf("Average                                    %6.3f cycles/hash\n",sum);
+      printf("\n");
+      fflush(NULL);
+    }
   } else {
     // known slow hashes (> 500), cycle/hash
     const struct { pfHash h; double cycles; } speeds[] = {
@@ -2786,6 +2798,8 @@ int main ( int argc, const char ** argv )
     // Not a command ? => interpreted as hash name
     hashToTest = arg;
   }
+  if (g_testSpeedAll)
+    g_testSpeedBulk = g_testSpeedSmall = true;
 
   // Code runs on the 3rd CPU by default? only for speed tests
   //SetAffinity((1 << 2));
