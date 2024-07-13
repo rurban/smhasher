@@ -273,11 +273,6 @@ void BulkSpeedTest ( pfHash hash, uint32_t seed )
   const int trials = 2999;
   const int blocksize = 256 * 1024;
 
-  if (timer_counts_ns())
-    printf("WARNING: no cycle counter, cycle == 1ns\n");
-  if (timer_start() == timer_end())
-    printf("WARNING: timer resolution is low\n");
-
   printf("Bulk speed test - %d-byte keys\n",blocksize);
   double sumbpc = 0.0;
 
