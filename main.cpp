@@ -1313,7 +1313,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     }
 
     {
-      printf("Combination 0x8000000 Tests:\n");
+      printf("Combination 0x80000000 Tests:\n");
       fflush(NULL);
 
       bool result = true;
@@ -1333,7 +1333,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     }
 
     {
-      printf("Combination 0x0000001 Tests:\n");
+      printf("Combination 0x00000001 Tests:\n");
 
       bool result = true;
 
@@ -1352,7 +1352,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     }
 
     {
-      printf("Combination 0x800000000000000 Tests:\n");
+      printf("Combination 0x8000000000000000 Tests:\n");
       fflush(NULL);
 
       bool result = true;
@@ -1372,7 +1372,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     }
 
     {
-      printf("Combination 0x000000000000001 Tests:\n");
+      printf("Combination 0x0000000000000001 Tests:\n");
       fflush(NULL);
 
       bool result = true;
