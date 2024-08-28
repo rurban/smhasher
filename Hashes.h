@@ -957,6 +957,14 @@ inline void rmd256(const void *key, int len, uint32_t seed, void *out)
   rmd256_process(&ltc_state, (unsigned char *)key, len);
   rmd256_done(&ltc_state, (unsigned char *)out);
 }
+#if !defined(__BYTE_ORDER__) || !defined(__ORDER_BIG_ENDIAN__) || !defined(__ORDER_LITTLE_ENDIAN__)
+#  error __BYTE_ORDER__ and __ORDER_BIG_ENDIAN__ should be defined.
+#elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+#  undef HAVE_EDONR // BE build fails due to missing rhash_swap_copy_str_to_u32()
+#else
+#  define HAVE_EDONR
+#endif
+#ifdef HAVE_EDONR
 #include "edonr.h"
 inline void edonr224(const void *key, int len, uint32_t seed, void *out)
 {
@@ -976,6 +984,7 @@ inline void edonr256(const void *key, int len, uint32_t seed, void *out)
   rhash_edonr256_update(&ctx, (unsigned char *)key, len);
   rhash_edonr256_final(&ctx, (unsigned char *)out);
 }
+#endif
 // Keccak:
 inline void sha3_256_64(const void *key, int len, uint32_t seed, void *out)
 {
