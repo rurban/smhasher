@@ -20,6 +20,7 @@
 // Avalanche fails if a bit is biased by more than 1%
 #define AVALANCHE_FAIL 0.01
 
+void PrintAvalancheDiagram ( int x, int y, int reps, double scale, int * bins );
 double maxBias ( std::vector<int> & counts, int reps );
 
 //-----------------------------------------------------------------------------
@@ -122,6 +123,8 @@ bool AvalancheTest ( pfHash hash, const int reps, bool verbose )
     result = false;
   }
   printf("\n");
+  if(!result && verbose)
+    PrintAvalancheDiagram(keybits, hashbits, reps, 1./b, bins.data());
   return result;
 }
 
