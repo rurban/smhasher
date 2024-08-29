@@ -121,9 +121,7 @@
 
 #elif defined(__WINDOWS__)
 
-#   ifdef __MINGW32__
-#     include <stdlib.h>
-#   endif
+#   include <stdlib.h>
 
 #   if BYTE_ORDER == LITTLE_ENDIAN
 
