@@ -1027,8 +1027,14 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("[[[ Speed Tests ]]]\n\n");
     if (timer_counts_ns())
       printf("WARNING: no cycle counter, cycle == 1ns\n");
-    if (timer_start() == timer_end())
-      printf("WARNING: timer resolution is low\n");
+    {
+      const uint64_t begin = timer_start(), end = timer_end();
+      const uint64_t delta = timer_sub(end, begin);
+      if (delta > 64) // "good" is ~30..40 ticks
+        printf("WARNING: timer resolution is %llu (%#llx) ticks (%#llx - %#llx). Broken VDSO?\n",
+            (unsigned long long)delta, (unsigned long long)delta,
+            (unsigned long long)end,   (unsigned long long)begin);
+    }
     fflush(NULL);
 
     Seed_init (info, info->verification);
