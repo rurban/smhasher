@@ -1321,7 +1321,8 @@ extern "C" {
 #include "pearson_hash/pearsonb.h"
 // objsize: 417b50-417dfb = 683
 inline void pearsonb64_test ( const void * key, int len, uint32_t seed, void * out ) {
-  *(uint64_t*)out = pearsonb_hash_64 ((const uint8_t*)key, (size_t) len, (uint64_t) seed);
+  // pearsonb_hash_64(): caller is responsible for storing it the big endian way to memory
+  *(uint64_t*)out = htobe64(pearsonb_hash_64 ((const uint8_t*)key, (size_t) len, (uint64_t) seed));
 }
 // objsize: 41a1f0-41a65e: 1134
 inline void pearsonb128_test ( const void * key, int len, uint32_t seed, void * out ) {
