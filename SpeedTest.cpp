@@ -170,12 +170,10 @@ NEVER_INLINE int64_t timehash ( pfHash hash, const void * key, int len, int seed
   uint32_t temp[16];
 
   begin = timer_start();
-  
   hash(key,len,seed,temp);
-  
   end = timer_end();
-  
-  return end - begin;
+
+  return timer_sub(end, begin);
 }
 
 //-----------------------------------------------------------------------------
@@ -213,7 +211,7 @@ NEVER_INLINE int64_t timehash_small ( pfHash hash, const void * key, int len, in
   end = timer_end();
   delete[] buf;
 
-  return (int64_t)((end - begin) / (double)NUM_TRIALS);
+  return timer_sub(end, begin) / NUM_TRIALS;
 }
 
 //-----------------------------------------------------------------------------
@@ -353,7 +351,7 @@ double HashMapSpeedTest ( pfHash pfhash, const int hashbits,
         hashmap.erase(line);
     }
     end = timer_end();
-    t1 = (double)(end - begin) / (double)words.size();
+    t1 = double(timer_sub(end, begin)) / words.size();
   }
   fflush(NULL);
   printf("%0.3f cycles/op (%zu inserts, 1%% deletions)\n",
@@ -378,7 +376,7 @@ double HashMapSpeedTest ( pfHash pfhash, const int hashbits,
             found++;
         }
       end = timer_end();
-      t = (double)(end - begin) / (double)words.size();
+      t = double(timer_sub(end, begin)) / words.size();
       if(found > 0 && t > 0) times.push_back(t);
     }
   hashmap.clear();
@@ -414,7 +412,7 @@ double HashMapSpeedTest ( pfHash pfhash, const int hashbits,
         phashmap.erase(line);
     }
     end = timer_end();
-    t1 = (double)(end - begin) / (double)words.size();
+    t1 = double(timer_sub(end,  begin)) / words.size();
   }
   fflush(NULL);
   printf("%0.3f cycles/op (%zu inserts, 1%% deletions)\n",
@@ -438,7 +436,7 @@ double HashMapSpeedTest ( pfHash pfhash, const int hashbits,
             found++;
         }
       end = timer_end();
-      t = (double)(end - begin) / (double)words.size();
+      t = double(timer_sub(end, begin)) / words.size();
       if(found > 0 && t > 0) times.push_back(t);
     }
   phashmap.clear();
