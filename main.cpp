@@ -975,6 +975,17 @@ void SelfTest(bool verbose) {
 
 //----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
+// 0-31 Bytes Random Length Benchmark
+void RandomLengthBenchmark( pfHash hash){
+	const unsigned    maxlen=32;  char    temp[maxlen]={};  uint64_t  out[16],    sum=0;  volatile int64_t begin, end;
+	begin = timer_start();
+	for(uint64_t  i=0;    i<0x1000000;   i++){   hash(temp, sum&(maxlen-1), i, out); sum+=*out;    }	
+	end = timer_end();
+	printf("\n0-31 Bytes Random Length Benchmark:\t%0.3f cycles/op\n\n",  (double)(end - begin) / 0x1000000); 
+    fflush(NULL);
+}
+
 template < typename hashtype >
 void test ( hashfunc<hashtype> hash, HashInfo* info )
 {
@@ -1051,6 +1062,9 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("Average                                    %6.3f cycles/hash\n",sum);
     printf("\n");
     fflush(NULL);
+
+    RandomLengthBenchmark(info->hash);
+
   } else {
     // known slow hashes (> 500), cycle/hash
     const struct { pfHash h; double cycles; } speeds[] = {
