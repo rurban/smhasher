@@ -156,6 +156,12 @@ inline uint64_t rotr64 ( uint64_t x, int8_t r )
 #   undef CLOCK_MONOTONIC_FASTEST
 #endif
 
+#ifdef CLOCK_MONOTONIC_COARSE
+#   define CLOCK_MNTCOARSE_FASTEST CLOCK_MONOTONIC_COARSE
+#else
+#   define CLOCK_MNTCOARSE_FASTEST CLOCK_MONOTONIC_FASTEST
+#endif
+
 __inline__ uint64_t timeofday()
 {
 #ifdef CLOCK_MONOTONIC_FASTEST
@@ -230,7 +236,7 @@ __inline__ uint64_t timer_mips()
   // Unfortunately, 32-bit counter overflows in a few seconds, so wall clock timestamp
   // has to be embedded into the timer value. Hopefully, clock_gettime call is VDSO...
   struct timespec ts;
-  clock_gettime(CLOCK_MONOTONIC_FASTEST, &ts);
+  clock_gettime(CLOCK_MNTCOARSE_FASTEST, &ts);
   const uint32_t s28 = ts.tv_sec & (UINT32_MAX >> 4);
   return uint64_t(scale) << 60 | (uint64_t(s28) << 32) | cntr;
 }
