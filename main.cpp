@@ -6,6 +6,9 @@
 #include "AvalancheTest.h"
 #include "DifferentialTest.h"
 #include "HashMapTest.h"
+#ifdef RUST_ENABLED
+#include "rust-hashes/rust_hashes.h"
+#endif
 
 #if NCPU > 1 // disable with -DNCPU=0 or 1
 #include <thread>
@@ -769,6 +772,60 @@ HashInfo g_hashes[] =
 #endif
 { komihash_test,        64, 0x8157FF6D, "komihash",    "komihash 5.10", GOOD, {} },
 { polymur_test,         64, 0x4F894810, "polymur",     "github.com/orlp/polymur-hash v1", GOOD, {} },
+#ifdef RUST_ENABLED
+{ adler_rs,             32, 0x00000000, "Adler_rs",           "Adler-32 checksum implementation (used by `zlib`, crate `adler`)", GOOD, {} },
+{ ahash_rs,             64, 0x00000000, "aHash_rs",           "aHash keyed hash function (crate `ahash`)", GOOD, {} },
+{ ascon_rs,            256, 0x00000000, "Ascon_rs",           "Ascon hash (crate `ascon-hash`)", GOOD, {} },
+{ ascona_rs,           256, 0x00000000, "AsconA_rs",          "AsconA hash (crate `ascon-hash`)", GOOD, {} },
+{ blake2b512_rs,       512, 0x00000000, "BLAKE2b-512_rs",     "BLAKE2b-512 (crate `blake2`)", GOOD , {} },
+{ blake2s256_rs,       256, 0x00000000, "BLAKE2s-256_rs",     "BLAKE2s-256 (crate `blake2`)", GOOD, {} },
+{ blake3_rs,           256, 0x00000000, "BLAKE3_rs",          "BLAKE3 (crate `blake3`)", GOOD, {} },
+{ crc32fast_rs,         32, 0x00000000, "CRC32_rs",           "CRC32 (crate `crc32fast`)", GOOD, {} },
+{ fnvhash_rs,           64, 0x00000000, "FNV_rs",             "Fowler-Noll-Vo hash function (crate `fnv`)", GOOD, {} },
+{ fxhash32_rs,          32, 0x00000000, "FxHash32",           "FxHash (FireFox hash) with 32 bits (crate `fxhash`)", GOOD, {} },
+{ fxhash64_rs,          64, 0x00000000, "FxHash64",           "FxHash (FireFox hash) with 64 bits (crate `fxhash`)", GOOD, {} },
+{ hash_hasher_rs,       64, 0x00000000, "hash_hasher_rs",     "A hasher designed to work on already hashed or hash-like data (crate `hash_hasher`)", GOOD, {} },
+{ highway_rs,           64, 0x00000000, "Highway_rs",         "An implementation of Google's HighwayHash (crate `highway`)", GOOD, {} },
+{ md5_rs,              128, 0x00000000, "MD5_rs",             "MD5 algorithm (crate `md-5`)", GOOD, {} },
+{ ripemd128_rs,        128, 0x00000000, "RIPEMD-128_rs",      "RIPEMD-128 algorithm (crate `ripemd`)", GOOD, {} },
+{ ripemd160_rs,        160, 0x00000000, "RIPEMD-160_rs",      "RIPEMD-160 algorithm (crate `ripemd`)", GOOD, {} },
+{ ripemd256_rs,        256, 0x00000000, "RIPEMD-256_rs",      "RIPEMD-256 algorithm (crate `ripemd`)", GOOD, {} },
+{ ripemd320_rs,        320, 0x00000000, "RIPEMD-320_rs",      "RIPEMD-320 algorithm (crate `ripemd`)", GOOD, {} },
+{ sha1_rs,             160, 0x00000000, "SHA-1_rs",           "SHA-1 algorithm (crate `sha1`)", GOOD, {} },
+{ sha224_rs,           224, 0x00000000, "SHA-224_rs",         "SHA-224 algorithm (crate `sha2`)", GOOD, {} },
+{ sha256_rs,           256, 0x00000000, "SHA-256_rs",         "SHA-256 algorithm (crate `sha2`)", GOOD, {} },
+{ sha384_rs,           384, 0x00000000, "SHA-384_rs",         "SHA-384 algorithm (crate `sha2`)", GOOD, {} },
+{ sha512_rs,           512, 0x00000000, "SHA-512_rs",         "SHA-512 algorithm (crate `sha2`)", GOOD, {} },
+{ sha512_224_rs,       224, 0x00000000, "SHA-512/224_rs",     "SHA-512 algorithm with 224-bit output (crate `sha2`)", GOOD, {} },
+{ sha512_256_rs,       256, 0x00000000, "SHA-512/256_rs",     "SHA-512 algorithm with 256-bit output (crate `sha2`)", GOOD, {} },
+{ cshake128_rs,        128, 0x00000000, "CSHAKE128_rs",       "CSHAKE128 algorithm with variable-length output (128 bits for test, crate `sha3`)", GOOD, {} },
+{ cshake256_rs,        256, 0x00000000, "CSHAKE256_rs",       "CSHAKE256 algorithm with variable-length output (256 bits for test, crate `sha3`)", GOOD, {} },
+{ keccak224_rs,        224, 0x00000000, "Keccak-224_rs",      "Keccak-224 algorithm (crate `sha3`)", GOOD, {} },
+{ keccak256_rs,        256, 0x00000000, "Keccak-256_rs",      "Keccak-256 algorithm (crate `sha3`)", GOOD, {} },
+{ keccak256full_rs,   1600, 0x00000000, "Keccak-256_CryptoNight_rs","Keccak-256 hash algorithm, SHA-3 CryptoNight with 1600-bit output (crate `sha3`)", GOOD, {} },
+{ keccak384_rs,        384, 0x00000000, "Keccak-384_rs",      "Keccak-384 algorithm (crate `sha3`)", GOOD, {} },
+{ keccak512_rs,        512, 0x00000000, "Keccak-512_rs",      "Keccak-512 algorithm (crate `sha3`)", GOOD, {} },
+{ sha3_224_rs,         224, 0x00000000, "SHA-3-224_rs",       "SHA-3 algorithm with 224-bit output (crate `sha3`)", GOOD, {} },
+{ sha3_256_rs,         256, 0x00000000, "SHA-3-256_rs",       "SHA-3 algorithm with 256-bit output (crate `sha3`)", GOOD, {} },
+{ sha3_384_rs,         384, 0x00000000, "SHA-3-384_rs",       "SHA-3 algorithm with 384-bit output (crate `sha3`)", GOOD, {} },
+{ sha3_512_rs,         512, 0x00000000, "SHA-3-512_rs",       "SHA-3 algorithm with 512-bit output (crate `sha3`)", GOOD, {} },
+{ shake128_rs,         123, 0x00000000, "SHAKE128_rs",        "SHAKE128 algorithm with variable-length output (128 bits for test, crate `sha3`)", GOOD, {} },
+{ shake256_rs,         256, 0x00000000, "SHAKE256_rs",        "SHAKE256 algorithm with variable-length output (256 bits for test, crate `sha3`)", GOOD, {} },
+{ turboshake128_1f_rs, 128, 0x00000000, "TurboSHAKE128_rs",   "turboshake128 algorithm with variable-length output (128 bits for test, domain separation 0x1f, crate `sha3`)", GOOD, {} },
+{ turboshake256_1f_rs, 256, 0x00000000, "TurboSHAKE256_rs",   "turboshake256 algorithm with variable-length output (256 bits for test, domain separation 0x1f, crate `sha3`)", GOOD, {} },
+{ twox_xxhash32_rs,     32, 0x00000000, "xxHash32_twox_rs",   "32-bit xxHash implementation (crate `twox_hash`)", GOOD, {} },
+{ twox_xxhash64_rs,     64, 0x00000000, "xxHash64_twox_rs",   "64-bit xxHash implementation (crate `twox_hash`)", GOOD, {} },
+{ siphash13_rs,         64, 0x00000000, "SipHash_1-3_rs",     "SipHash with 1 round and 3 finalization rounds (crate `siphasher`)", GOOD, {} },
+{ siphash24_rs,         64, 0x00000000, "SipHash_2-4_rs",     "SipHash with 2 rounds and 4 finalization rounds (crate `siphasher`)", GOOD, {} },
+{ siphash128_13_rs,     64, 0x00000000, "SipHash128_1-3_rs",  "SipHash128 with 1 round and 3 finalization rounds (crate `siphasher`)", GOOD, {} },
+{ siphash128_24_rs,     64, 0x00000000, "SipHash128_2-4_rs",  "SipHash128 with 2 rounds and 4 finalization rounds (crate `siphasher`)", GOOD, {} },
+{ whirlpool_rs,        512, 0x00000000, "Whirlpool_rs",       "Whirlpool algorithm (crate `whirlpool`)", GOOD, {} },
+{ wyhash_rs,            64, 0x00000000, "WyHash_rs",          "WyHash algorithm (crate `wyhash`)", GOOD, {} },
+{ xxhash3_rs,           64, 0x00000000, "xxHash3_rs",         "64-bit xxHash implementation (crate `xxhash-rust`)", GOOD, {} },
+{ xxhash128_rs,        128, 0x00000000, "xxHash128_rs",       "128-bit xxHash implementation (crate `xxhash-rust`)", GOOD, {} },
+{ xxhash32_rs,          32, 0x00000000, "xxHash32_rs",        "32-bit xxHash implementation (crate `xxhash-rust`)", GOOD, {} },
+{ xxhash64_rs,          64, 0x00000000, "xxHash64_rs",        "64-bit xxHash implementation (crate `xxhash-rust`)", GOOD, {} },
+#endif
 };
 
 HashInfo * findHash ( const char * name )
