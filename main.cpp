@@ -1027,7 +1027,6 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
   if(g_testSpeedBulk || g_testSpeedSmall || g_testAll)
   {
-    double sum = 0.0;
     printf("[[[ Speed Tests ]]]\n\n");
     if (timer_counts_ns())
       printf("WARNING: no cycle counter, cycle == 1ns\n");
@@ -1053,13 +1052,15 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       const int dflmax = g_testExtra ? 64 : 32;
       const int minkey = getenvlong("SMHASHER_SMALLKEY_MIN", 1, 1, TIMEHASH_SMALL_LEN_MAX);
       const int maxkey = getenvlong("SMHASHER_SMALLKEY_MAX", minkey, dflmax, TIMEHASH_SMALL_LEN_MAX);
-      for(int i = minkey; i <= maxkey; i++)
+      std::vector<double> cph(maxkey+1, NAN);
+      for(int i = minkey, g_speed = 0.0; i <= maxkey; i++)
       {
         volatile int j = i;
-        sum += TinySpeedTest(hashfunc<hashtype>(info->hash),sizeof(hashtype),j,info->verification,true);
+        cph[j] = TinySpeedTest(hashfunc<hashtype>(info->hash),sizeof(hashtype),j,info->verification,true);
+        g_speed += cph[j];
       }
-      g_speed = sum = sum / (maxkey - minkey + 1);
-      printf("Average                                    %6.3f cycles/hash\n",sum);
+      g_speed /= (maxkey - minkey + 1);
+      ReportTinySpeedTest(cph, minkey, maxkey);
       printf("\n");
       fflush(NULL);
     }

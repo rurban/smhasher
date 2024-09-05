@@ -8,10 +8,14 @@
 #include <math.h>    // for sqrt
 #include <algorithm> // for sort, min
 #include <string>
+#include <sstream>
 
 #include <unordered_map>
 #include <parallel_hashmap/phmap.h>
 #include <functional>
+
+#define COUNT_OF(x) ((sizeof(x)/sizeof(0[x])) / ((size_t)(!(sizeof(x) % sizeof(0[x])))))
+#define ARRAY_END(x) (&(x)[COUNT_OF(x)])
 
 typedef std::unordered_map<std::string, int,
   std::function<size_t (const std::string &key)>> std_hashmap;
@@ -240,7 +244,7 @@ double SpeedTest ( pfHash hash, uint32_t seed, const int trials, const int block
 
     double t;
 
-    if(blocksize < 100)
+    if(blocksize <= TIMEHASH_SMALL_LEN_MAX)
     {
       t = (double)timehash_small(hash,block,blocksize,itrial);
     }
@@ -303,6 +307,107 @@ double TinySpeedTest ( pfHash hash, int hashsize, int keysize, uint32_t seed, bo
   
   printf("%8.2f cycles/hash\n",cycles);
   return cycles;
+}
+
+static void ReportAverage ( const std::vector<double>& cph, int minkey, int maxkey )
+{
+  double sum = 0;
+  for (int i = minkey; i <= maxkey; i++)
+    sum += cph[i];
+  sum /= (maxkey - minkey + 1);
+  printf("Average                                 %9.3f cycles/hash\n",sum);
+}
+
+static void ReportWeighted ( const std::vector<double>& cph, const std::vector<double>& weights, int minkey, int maxkey, const char *name )
+{
+  assert(0 <= minkey && minkey <= maxkey && maxkey <= cph.size() + 1);
+  if (weights.size() < cph.size()) {
+    printf("Average, weighted by key length, SKIP %s dataset, need %lu more weights\n",
+        name, cph.size() - weights.size());
+    return;
+  }
+  double tot = 0.0, use = 0.0, sum = 0.0;
+  for (int i = 0; i < minkey; i++)
+    tot += weights[i];
+  for (int i = minkey; i <= maxkey; i++) {
+    sum += weights[i] * cph[i];
+    use += weights[i];
+    tot += weights[i];
+  }
+  for (int i = maxkey + 1; i < weights.size(); i++)
+    tot += weights[i];
+  printf("Average, weighted by key length freq.   %9.3f cycles/hash (using %.1f%% of %s dataset)\n",
+      sum / use, 100. * use / tot, name);
+}
+
+// These are lengths of top 7,073,200 domain names from Tranco. The list represents "popular" domain
+// names.  The dataset was downloaded from https://tranco-list.eu/list/LJ5W4/1000000 on 2024-Sep-05
+// SHA256(tranco_LJ5W4.csv) = 4593f2a162697946f36ef7bbe7c8b434eec42e0e93c4298517c4a3966b08c054
+//
+// Victor Le Pochat, Tom Van Goethem, Samaneh Tajalizadehkhoob, Maciej Korczyński, and Wouter
+// Joosen. 2019. "Tranco: A Research-Oriented Top Sites Ranking Hardened Against Manipulation",
+// Proceedings of the 26th Annual Network and Distributed System Security Symposium (NDSS 2019).
+// https://doi.org/10.14722/ndss.2019.23386
+//
+static const unsigned TrancoDNSNameLengths[] = { 0, 0, 5, 0, 326, 5568, 41632, 88175, 151138, 253649,
+  386024, 416786, 458718, 482490, 491891, 473417, 450606, 413517, 371676, 327361, 288868, 251641,
+  213514, 178542, 159986, 132611, 113222, 101498, 82455, 67296, 67906, 56843, 53731, 49744, 36404,
+  32346, 30329, 26978, 24359, 24345, 19161, 16914, 16370, 13708, 13714, 10832, 13548, 9635, 8125,
+  15536, 6273, 8207, 7490, 5196, 7330, 6202, 3801, 4455, 3756, 3709, 4142, 3989, 3593, 4783, 5052,
+  1403, 1580, 2072, 1998, 1420, 1836, 1872, 1135, 2664, 1172, 837, 998, 1063, 685, 566, 2020, 627,
+  2146, 1144, 635, 618, 569, 756, 411, 361, 362, 1138, 218, 278, 182, 185, 175, 220, 3205, 143, 353,
+  131, 132, 199, 134, 139, 130, 168, 135, 169, 630, 155, 137, 129, 229, 154, 166, 205, 204, 203, 208,
+  201, 211, 141, 157, 147, 172, 183, 134, 155, 123, 159, 148, 165, 145, 143, 112, 111, 112, 115, 128,
+  120, 116, 119, 137, 123, 106, 118, 105, 125, 126, 106, 99, 124, 102, 94, 95, 113, 105, 103, 118, 81,
+  103, 86, 78, 80, 82, 70, 72, 74, 52, 58, 71, 46, 67, 65, 70, 74, 75, 66, 59, 81, 110, 97, 107, 116,
+  109, 72, 67, 89, 82, 79, 73, 82, 83, 73, 71, 89, 98, 103, 90, 118, 120, 67, 63, 50, 71, 57, 67, 64,
+  54, 55, 65, 53, 73, 65, 63, 60, 83, 80, 61, 87, 82, 55, 74, 66, 38, 41, 22, 47, 27, 36, 30, 38, 33,
+  46, 33, 36, 58, 50, 61, 71, 99, 46, 50, 54, 38, 17, 15, 4, 3, 0, 0, 116, 0, 0 };
+
+// These are lengths of 1,000,000 calls to umash_full() during the batch hash table phase.
+// It's arguably with an off-by-one, since NUL terminators are included in the hashed data.
+//
+// All the lengths are clamped to 256 bytes per TIMEHASH_SMALL_LEN_MAX.
+// The last bin UmashStartupLengths[256] is essentially the long tail that is never used.
+//
+// startup-1M.2020-08-28.trace.bz2 @ https://github.com/backtrace-labs/umash/wiki/Execution-traces
+// SHA256(trace.bz2) = 02bae7f0e07880bf24fdd67b6d5fc2a675c6ca05b534081925a16f06c11659c0
+//
+static const unsigned UmashStartupLengths[] = { 0, 7, 51, 396, 1312, 3110, 5616, 7887, 11145, 68172,
+  14618, 16670, 9502, 8275, 7444, 8088, 105451, 246, 100, 117, 116, 487, 367, 179, 293, 58, 56, 124,
+  191, 340, 323, 333, 303, 274, 238, 202, 246, 409961, 235, 10119, 239, 171, 128, 100, 5217, 51, 62,
+  53, 42, 69, 63, 89, 38, 52, 102, 84, 90, 75, 61, 90, 55, 57, 60, 71, 106, 92520, 54, 57, 101, 316,
+  961, 1873, 1714, 290, 88, 185, 600, 1038, 1762, 3228, 3174, 284, 266, 292, 752, 1381, 1331, 145,
+  161, 177, 1517, 304, 176, 9464, 342, 1809, 286, 962, 116, 390, 383, 244, 50, 54, 46, 88, 191, 74,
+  54, 91, 110, 11347, 4310, 5021, 51, 189, 902, 60, 3476, 44543, 275, 5960, 58, 1705, 84, 15, 34, 68,
+  1113, 43, 55, 27, 126, 15, 33, 1512, 14, 359, 13, 43, 7604, 78108, 43, 27, 7, 23, 140, 5, 3, 0, 13,
+  6, 8, 33, 54, 3, 0, 0, 13, 10, 13, 0, 6, 5, 11, 0, 11, 25, 11, 9, 0, 12, 13, 0, 0, 41, 3, 4, 8, 49,
+  29, 25, 17, 10, 3, 29, 7, 9, 2, 20, 17, 17, 5, 35, 3, 5, 0, 13, 0, 149, 17, 6, 8, 3, 11, 17, 0, 1,
+  780, 0, 0, 14, 29, 10, 3, 14, 20, 9, 12, 29, 11, 6, 10, 6, 12, 0, 10, 7, 22, 13, 6, 10, 14, 167, 0,
+  3, 0, 11, 7, 5, 9, 35, 4, 5, 7, 2, 14, 6, 7, 2, 16, 5, 6, 8, 0, 4, 1022 };
+
+// Weighted average exist under assumption that hash speed does not depend on input,
+// which is not true due to multiplication instruction having certain amount of variance.
+void ReportTinySpeedTest ( const std::vector<double>& cycles_per_hash, int minkey, int maxkey )
+{
+  ReportAverage(cycles_per_hash, minkey, maxkey);
+
+  std::vector<double> w(TrancoDNSNameLengths, ARRAY_END(TrancoDNSNameLengths));
+  ReportWeighted(cycles_per_hash, w, minkey, maxkey, "top-7m Tranco DNS names");
+  w.clear();
+
+  w.insert(w.begin(), UmashStartupLengths, ARRAY_END(UmashStartupLengths));
+  ReportWeighted(cycles_per_hash, w, minkey, maxkey, "startup-1M UMASH trace");
+  w.clear();
+
+  if (const char *ew = getenv("SMHASHER_SMALLKEY_WEIGHTS"))
+  {
+    std::istringstream ssws(ew);
+    for (double flt; ssws >> flt; )
+      w.push_back(flt);
+    ReportWeighted(cycles_per_hash, w, minkey, maxkey, "${SMHASHER_SMALLKEY_WEIGHTS}");
+    w.clear();
+  }
 }
 
 double HashMapSpeedTest ( pfHash pfhash, const int hashbits,
@@ -453,4 +558,3 @@ double HashMapSpeedTest ( pfHash pfhash, const int hashbits,
   return mean;
 }
 
-//-----------------------------------------------------------------------------
