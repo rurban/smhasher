@@ -113,9 +113,9 @@ HashInfo g_hashes[] =
 #ifdef __SIZEOF_INT128__
 // M. Dietzfelbinger, T. Hagerup, J. Katajainen, and M. Penttonen. A reliable randomized
 // algorithm for the closest-pair problem. J. Algorithms, 25:19–51, 1997.
-{ multiply_shift,       64, 0xFCE355A6, "multiply_shift", "Dietzfelbinger Multiply-shift on strings", POOR,
+{ multiply_shift,       64, 0x654E7474, "multiply_shift", "Dietzfelbinger Multiply-shift on strings", POOR,
   { 0xfffffff0, 0x1fffffff0, 0xb13dea7c9c324e51ULL, 0x75f17d6b3588f843ULL } /* !! all & 0xfffffff0 (2^32 bad seeds) */ },
-{ pair_multiply_shift,  64, 0xD4B20347, "pair_multiply_shift", "Pair-multiply-shift", POOR,
+{ pair_multiply_shift,  64, 0x26A5AB8C, "pair_multiply_shift", "Pair-multiply-shift", POOR,
   { 0xb13dea7c9c324e51ULL, 0x75f17d6b3588f843ULL } },
 #endif
 { crc32,                32, 0x3719DB20, "crc32",       "CRC-32 soft", POOR, {} },
@@ -592,7 +592,7 @@ HashInfo g_hashes[] =
 { fasthash64_test,      64, 0xA16231A7, "fasthash64",  "fast-hash 64bit", GOOD, {0x880355f21e6d1965ULL} },
 // different verif on gcc vs clang
 { floppsyhash_64,       64, 0x0,        "floppsyhash", "slow hash designed for floating point hardware", GOOD, {} },
-{ chaskey_test,         64, 0x81A90131, "chaskey",     "mouha.be/chaskey/ with added seed support", GOOD, {} },
+{ chaskey_test,         64, 0xBB4F6706, "chaskey",     "mouha.be/chaskey/ with added seed support", GOOD, {} },
 { siphash_test,         64, 0xC58D7F9C, "SipHash",     "SipHash 2-4 - SSSE3 optimized", GOOD, {} },
 { halfsiphash_test,     32, 0xA7A05F72, "HalfSipHash", "HalfSipHash 2-4, 32bit", GOOD, {} },
 { GoodOAAT_test,        32, 0x7B14EEE5, "GoodOAAT",    "Small non-multiplicative OAAT", GOOD, {0x3b00} },
@@ -606,7 +606,7 @@ HashInfo g_hashes[] =
 // as in rust and swift:
 { siphash13_test,       64, 0x29C010BF, "SipHash13",   "SipHash 1-3 - SSSE3 optimized", GOOD, {} },
 #ifndef _MSC_VER
-{ tsip_test,            64, 0x8E48155B, "TSip",        "Damian Gryski's Tiny SipHash variant", GOOD, {} },
+{ tsip_test,            64, 0xF47B451B, "TSip",        "Damian Gryski's Tiny SipHash variant", GOOD, {} },
 #ifdef HAVE_INT64
 { seahash_test,         64, 0xF0374078, "seahash",     "seahash (64-bit, little-endian)", GOOD, {} },
 { seahash32low,         32, 0x712F0EE8, "seahash32low","seahash - lower 32bit", GOOD, {} },
@@ -996,6 +996,8 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
   if(g_testVerifyAll)
   {
+    for (HashInfo *i = g_hashes; i != ARRAY_END(g_hashes); i++)
+      Hash_init(i); // init all the hashes, not just `info`
     printf("[[[ VerifyAll Tests ]]]\n\n"); fflush(NULL);
     SelfTest(g_drawDiagram);
     printf("PASS\n\n"); fflush(NULL); // if not it does exit(1)
