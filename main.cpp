@@ -768,7 +768,7 @@ HashInfo g_hashes[] =
 { khashv64_test,        64, KHASHV64_VERIF, "k-hashv64",      "Vectorized K-HashV, 64-bit", GOOD, {}},
 #endif
 { komihash_test,        64, 0x8157FF6D, "komihash",    "komihash 5.10", GOOD, {} },
-{ polymur_test,         64, 0x4F894810, "polymur",     "github.com/orlp/polymur-hash v1", GOOD, {} },
+{ polymur_test,         64, 0x4F894810, "polymur",     "github.com/orlp/polymur-hash v1, __SIZEOF_INT128__:" MACRO_ITOA(__SIZEOF_INT128__), GOOD, {} },
 };
 
 HashInfo * findHash ( const char * name )
