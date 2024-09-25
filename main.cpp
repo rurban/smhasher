@@ -319,12 +319,12 @@ HashInfo g_hashes[] =
 { jodyhash64_test,      64, 0xC1CBFA34, "jodyhash64",  "jodyhash, 64-bit (v7.1)", POOR, {} },
 #endif
 { lookup3_test,         32, 0x3D83917A, "lookup3",     "Bob Jenkins' lookup3", POOR, {0x21524101} /* !! */},
-#ifdef __aarch64__
+#if defined(CHAR_MIN) && CHAR_MIN == 0 // Well-defined "char is unsigned" case.
 #define SFAST_VERIF 0x6306A6FE
-#else
+#elif CHAR_MIN < 0 // UB in SuperFastHash: (negative-signed << N)
 #define SFAST_VERIF 0x0C80403A
 #endif
-{ SuperFastHash_test,   32, SFAST_VERIF,"superfast",   "Paul Hsieh's SuperFastHash", POOR, {0x0} /* !! */},
+{ SuperFastHash_test,   32, SFAST_VERIF,"superfast",   "Paul Hsieh's SuperFastHash, CHAR_MIN:" MACRO_ITOA(CHAR_MIN), POOR, {0x0} /* !! */},
 { MurmurOAAT_test,      32, 0x5363BD98, "MurmurOAAT",  "Murmur one-at-a-time", POOR,
   {0x0 /*, 0x5bd1e995*/} /* !! */ },
 { Crap8_test,           32, 0x743E97A1, "Crap8",       "Crap8", POOR, {/*0x83d2e73b, 0x97e1cc59*/} },
