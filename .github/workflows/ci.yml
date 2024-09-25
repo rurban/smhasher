@@ -23,10 +23,7 @@ jobs:
         submodules: recursive
     - run: cmake ${{ matrix.CMAKE_ARGS }} .
     - run: make -j4 VERBOSE=1
-    - if: ${{ ! contains(matrix.CMAKE_ARGS, 'CMAKE_BUILD_TYPE') }}
-      run: make -j4 test ARGS=-V
-    - if: ${{ contains(matrix.CMAKE_ARGS, 'CMAKE_BUILD_TYPE') }}
-      run: ./SMHasher --test=Sanity,Speed,Cyclic,Zeroes,Seed
+    - run: make -j4 test ARGS=-V
   aarch64:
     runs-on: ubuntu-latest
     steps:
