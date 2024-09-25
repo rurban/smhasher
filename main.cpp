@@ -754,8 +754,8 @@ HashInfo g_hashes[] =
 { rapidhash_test,          64, 0xAF404C4B, "rapidhash", "rapidhash v1", GOOD, {}},
 { rapidhash_unrolled_test,          64, 0xAF404C4B, "rapidhash_unrolled", "rapidhash v1 - unrolled", GOOD, {}},
 #endif
-{ nmhash32_test,        32, 0x12A30553, "nmhash32",       "nmhash32", GOOD, {}},
-{ nmhash32x_test,       32, 0xA8580227, "nmhash32x",      "nmhash32x", GOOD, {}},
+{ nmhash32_test,        32, 0x12A30553, "nmhash32",       nmhash32_desc, GOOD, {}},
+{ nmhash32x_test,       32, 0xA8580227, "nmhash32x",      nmhash32x_desc, GOOD, {}},
 #ifdef HAVE_KHASHV
 #ifdef __clang__ // also gcc 9.4
 #define KHASHV32_VERIF  0xB69DF8EB

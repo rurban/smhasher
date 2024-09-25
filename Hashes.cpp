@@ -1278,6 +1278,8 @@ void crc32c_pclmul_test(const void *key, int len, uint32_t seed, void *out)
 #endif
 
 #include "hash-garage/nmhash.h"
+const char * const nmhash32_desc("nmhash32, le:" MACRO_ITOA(NMHASH_LITTLE_ENDIAN) ", vector:" MACRO_ITOA(NMH_VECTOR) ", align:" MACRO_ITOA(NMH_ACC_ALIGN));
+const char * const nmhash32x_desc("nmhash32x, le:" MACRO_ITOA(NMHASH_LITTLE_ENDIAN) ", vector:" MACRO_ITOA(NMH_VECTOR) ", align:" MACRO_ITOA(NMH_ACC_ALIGN));
 // objsize: 4202f0-420c7d: 2445
 void nmhash32_test ( const void * key, int len, uint32_t seed, void * out ) {
   *(uint32_t*)out = NMHASH32 (key, (const size_t) len, seed);
