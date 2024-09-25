@@ -761,6 +761,7 @@ SET(exectargets ${exectargets} SMHasher)
 
 if(NOT (CMAKE_CROSSCOMPILING))
   enable_testing()
+  add_test(List SMHasher --list)
   add_test(VerifyAll SMHasher --test=VerifyAll)
   add_test(Sanity SMHasher --test=Sanity)
   add_test(Speed SMHasher --test=Speed)

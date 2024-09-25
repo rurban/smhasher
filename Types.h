@@ -13,6 +13,9 @@
 using namespace std;
 #include <assert.h>
 
+#define MACRO_ITOA_(x) #x
+#define MACRO_ITOA(x) MACRO_ITOA_(x)
+
 //-----------------------------------------------------------------------------
 // If the optimizer detects that a value in a speed test is constant or unused,
 // the optimizer may remove references to it or otherwise create code that
