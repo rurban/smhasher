@@ -12,6 +12,9 @@
 
 #ifdef _WIN32
 #define posix_memalign(p, a, s) (((*(p)) = _aligned_malloc((s), (a))), *(p) ?0 :errno)
+void free_random_key_for_clhash(void *p) { _aligned_free(p); }
+#else
+void free_random_key_for_clhash(void *p) { free(p); }
 #endif
 
 // computes a << 1
