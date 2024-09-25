@@ -759,7 +759,18 @@ SET(exectargets ${exectargets} SMHasher)
 #
 # target_link_libraries( bittest SMHasherSupport ${CMAKE_THREAD_LIBS_INIT} )
 
-if(NOT (CMAKE_CROSSCOMPILING))
+set(QEMU_TESTING FALSE)
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+  file(TIMESTAMP "/proc/sys/fs/binfmt_misc/qemu-${CMAKE_SYSTEM_PROCESSOR}" QEMU_TIMESTAMP)
+  if(QEMU_TIMESTAMP) # file exists
+    file(READ "/proc/sys/fs/binfmt_misc/qemu-${CMAKE_SYSTEM_PROCESSOR}" QEMU_BINFMT)
+    if(QEMU_BINFMT MATCHES "^enabled\n")
+      set(QEMU_TESTING TRUE)
+    endif()
+  endif()
+endif()
+
+if(NOT (CMAKE_CROSSCOMPILING) OR QEMU_TESTING)
   enable_testing()
   add_test(List SMHasher --list)
   add_test(VerifyAll SMHasher --test=VerifyAll --verbose)
