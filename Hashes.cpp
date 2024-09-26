@@ -1341,11 +1341,12 @@ void khashv32_test ( const void *key, int len, uint32_t seed, void *out) {
 }
 #endif // HAVE_KHASHV
 
-PolymurHashParams g_polymurhashparams = {
+#include "polymur-hash/polymur-hash.h"
+static PolymurHashParams g_polymurhashparams = {
   UINT64_C(2172266433527442278), UINT64_C(706663945032637854),
   UINT64_C(754693428422558902),  UINT64_C(9067629717964434866)
 };
-void polymur_seed_init (size_t &seed) {
+void polymur_seed_init (size_t seed) {
   polymur_init_params_from_seed(&g_polymurhashparams,
                                 UINT64_C(0xfedbca9876543210) ^ seed);
 }
