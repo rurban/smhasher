@@ -1278,8 +1278,43 @@ void crc32c_pclmul_test(const void *key, int len, uint32_t seed, void *out)
 #endif
 
 #include "hash-garage/nmhash.h"
-const char * const nmhash32_desc("nmhash32, le:" MACRO_ITOA(NMHASH_LITTLE_ENDIAN) ", vector:" MACRO_ITOA(NMH_VECTOR) ", align:" MACRO_ITOA(NMH_ACC_ALIGN));
-const char * const nmhash32x_desc("nmhash32x, le:" MACRO_ITOA(NMHASH_LITTLE_ENDIAN) ", vector:" MACRO_ITOA(NMH_VECTOR) ", align:" MACRO_ITOA(NMH_ACC_ALIGN));
+#define NMHASH32_DESC_STR "NMHASH_LITTLE_ENDIAN:" MACRO_ITOA(NMHASH_LITTLE_ENDIAN) ", " \
+                          "NMH_VECTOR:" MACRO_ITOA(NMH_VECTOR) ", " \
+                          "NMH_ACC_ALIGN:" MACRO_ITOA(NMH_ACC_ALIGN) ", " \
+                          "NMH_RESTRICT:" MACRO_ITOA(NMH_RESTRICT)
+const char * const nmhash32_desc("nmhash32, " NMHASH32_DESC_STR);
+const char * const nmhash32x_desc("nmhash32x, " NMHASH32_DESC_STR);
+
+bool nmhash32_broken( void ) {
+  static bool done = false, result;
+  if (done)
+    return result;
+
+  const char entropy[] = "rwgk8M1uxM6XX6c3teQX2yaw8FQWArmcWUSBJ8dcQQJWHYC9Wt2BmpvETxwhYcJTheTbjf49SVRaDJhbEZCq7ki1D6KxpKQSjgwqsiHGSgHLxvPG5kcRnBhjJ1YC8kuh";
+
+  NMH_ALIGN(NMH_ACC_ALIGN) uint32_t accX[sizeof(NMH_ACC_INIT)/sizeof(*NMH_ACC_INIT)];
+  static_assert(sizeof(entropy) >= sizeof(accX), "Need more entropy in entropy[]");
+  memcpy(accX, entropy, sizeof(accX));
+
+  const size_t nbGroups = sizeof(NMH_ACC_INIT) / sizeof(*NMH_ACC_INIT);
+  size_t i;
+
+  for (i = 0; i < nbGroups * 2; ++i) {
+    ((uint16_t*)accX)[i] *= ((uint16_t*)__NMH_M1_V)[i];
+  }
+
+  // XXX: no memory barrier takes place here, just like in NMHASH32_long_round_scalar()
+  // and it affects the `acc` result.
+
+  uint32_t acc = 0;
+  for (i = 0; i < nbGroups; ++i)
+    acc += accX[i];
+
+  result = (acc != UINT32_C(0x249abaee));
+  done = true;
+  return result;
+}
+
 // objsize: 4202f0-420c7d: 2445
 void nmhash32_test ( const void * key, int len, uint32_t seed, void * out ) {
   *(uint32_t*)out = NMHASH32 (key, (const size_t) len, seed);
