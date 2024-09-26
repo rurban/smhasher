@@ -935,10 +935,10 @@ bool Hash_Seed_init (pfHash hash, size_t seed) {
   else if(hash == hashx_test)
     hashx_seed_init(info, seed);
   */
-# ifdef HAVE_KHASHV
+#endif
+#ifdef HAVE_KHASHV
   else if(hash == khashv64_test || hash == khashv32_test)
     khashv_seed_init(seed);
-# endif
 #endif
   else if(hash == polymur_test)
     polymur_seed_init(seed);
