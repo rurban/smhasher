@@ -761,15 +761,10 @@ HashInfo g_hashes[] =
 { nmhash32_test,        32, nmhash32_broken() ? 0U : 0x12A30553, "nmhash32",  nmhash32_desc,  GOOD, {}},
 { nmhash32x_test,       32, nmhash32_broken() ? 0U : 0xA8580227, "nmhash32x", nmhash32x_desc, GOOD, {}},
 #ifdef HAVE_KHASHV
-#ifdef __clang__ // also gcc 9.4
-#define KHASHV32_VERIF  0xB69DF8EB
-#define KHASHV64_VERIF  0xA6B7E55B
-#else // new gcc-11
-#define KHASHV32_VERIF  0 /* 0x9A8F7952 */
-#define KHASHV64_VERIF  0 /* 0X90A2A4F9 */
-#endif
-{ khashv32_test,        32, KHASHV32_VERIF, "k-hashv32",      "Vectorized K-HashV, 32-bit", GOOD, {}},
-{ khashv64_test,        64, KHASHV64_VERIF, "k-hashv64",      "Vectorized K-HashV, 64-bit", GOOD, {}},
+// There are certain GCC versions producing 0x9A8F7952 and 0X90A2A4F9 as verification values
+// for k-hashv32 and k-hashv64.  That deserves further investigation.
+{ khashv32_test,        32, 0xB69DF8EB, "k-hashv32",      khashv32_desc, GOOD, {}},
+{ khashv64_test,        64, 0xA6B7E55B, "k-hashv64",      khashv64_desc, GOOD, {}},
 #endif
 { komihash_test,        64, 0x8157FF6D, "komihash",    "komihash 5.10", GOOD, {} },
 { polymur_test,         64, 0x4F894810, "polymur",     "github.com/orlp/polymur-hash v1, __SIZEOF_INT128__:" MACRO_ITOA(__SIZEOF_INT128__), GOOD, {} },

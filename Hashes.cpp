@@ -1327,6 +1327,14 @@ void nmhash32x_test ( const void * key, int len, uint32_t seed, void * out ) {
 #ifdef HAVE_KHASHV
 #include "k-hashv/khashv.h"
 
+#define KHASH_VER_STR "vector:" MACRO_ITOA(KHASH_VECTOR) ", " \
+                      "scalar:" MACRO_ITOA(KHASHV_SCALAR) ", " \
+                      "__SSE3__:" MACRO_ITOA(__SSE3__) ", " \
+                      "__SSE4_1__:" MACRO_ITOA(__SSE4_1__) ", " \
+                      "__AVX512VL__:" MACRO_ITOA(__AVX512VL__)
+const char * const khashv32_desc("Vectorized K-HashV, 32-bit, " KHASH_VER_STR);
+const char * const khashv64_desc("Vectorized K-HashV, 64-bit, " KHASH_VER_STR);
+
 khashvSeed khashv_seed;
 void khashv_seed_init(size_t &seed) {
   khashv_prep_seed64 (&khashv_seed, seed);
