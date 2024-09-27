@@ -388,7 +388,7 @@ FNV128(uint64_t buf[2], const char *key, int len, uint64_t seed)
     uint64_t s0 = multhi;                 // high
     uint64_t s1 = prime128Lower * buf[1]; // low
     
-    s0 += buf[1] << (prime128Shift + prime128Lower * buf[0]);
+    s0 += (buf[1] << prime128Shift) + prime128Lower * buf[0];
 
     // Update the values
     buf[1] = s1;
