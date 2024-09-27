@@ -152,12 +152,9 @@ HashInfo g_hashes[] =
 { edonr224,            224, 0x83A8E7AB, "edonr224",     "EDON-R 224", GOOD, {} },
 { edonr256,            256, 0x06DD4F96, "edonr256",     "EDON-R 256", GOOD, {} },
 #endif
-#if defined(HAVE_BIT32) && !defined(_WIN32)
-#  define BLAKE3_VERIF   0x58571F56
-#else
-#  define BLAKE3_VERIF   0x50E4CD91
-#endif
-{ blake3c_test,        256, BLAKE3_VERIF, "blake3_c",   "BLAKE3 c",   GOOD, {0x6a09e667} },
+// There are certain 32-bit non-Windows machines producing 0x58571F56 as verification value for blake3_c.
+// That deserves further investigation.
+{ blake3c_test,        256, 0x50E4CD91, "blake3_c",   "BLAKE3 c",   GOOD, {0x6a09e667} },
 #if defined(HAVE_BLAKE3)
 { blake3_test,         256, 0x0, "blake3",       "BLAKE3 Rust", GOOD, {} },
 { blake3_64,            64, 0x0, "blake3_64",    "BLAKE3 Rust, low 64 bits", GOOD, {} },
