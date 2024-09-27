@@ -606,7 +606,7 @@ HashInfo g_hashes[] =
 // as in rust and swift:
 { siphash13_test,       64, 0x29C010BF, "SipHash13",   "SipHash 1-3 - SSSE3 optimized", GOOD, {} },
 #ifndef _MSC_VER
-{ tsip_test,            64, 0xF47B451B, "TSip",        "Damian Gryski's Tiny SipHash variant", GOOD, {} },
+{ tsip_test,            64, 0x5C2395A5, "TSip",        "Damian Gryski's Tiny SipHash variant", GOOD, {} },
 #ifdef HAVE_INT64
 { seahash_test,         64, 0xF0374078, "seahash",     "seahash (64-bit, little-endian)", GOOD, {} },
 { seahash32low,         32, 0x712F0EE8, "seahash32low","seahash - lower 32bit", GOOD, {} },
