@@ -693,7 +693,7 @@ HashInfo g_hashes[] =
 { SpookyV2_128_test,   128, 0x893CFCBE, "SpookyV2_128", "Bob Jenkins' SpookyV2, 128-bit result", GOOD, {} },
 { pengyhash_test,       64, 0x1FC2217B, "pengyhash",   "pengyhash", GOOD, {} },
 { mx3hash64_test,       64, 0x4DB51E5B, "mx3",         "mx3 64bit", GOOD, {0x10} /* !! and all & 0x10 */},
-#if defined(HAVE_SSE42) &&  (defined(__x86_64__) ||  defined(__aarch64__)) && !defined(_MSC_VER)
+#ifdef HAVE_UMASH
 { umash32,              32, 0x9451AF3B, "umash32",     "umash 32", GOOD, {0x90e37057} /* !! */},
 { umash32_hi,           32, 0x0CC4850F, "umash32_hi",  "umash 32 hi", GOOD, {} },
 { umash,                64, 0x161495C6, "umash64",     "umash 64", GOOD, {} },
@@ -920,13 +920,6 @@ bool Hash_Seed_init (pfHash hash, size_t seed) {
 #if defined(HAVE_SSE42) && defined(__x86_64__)
   else if (hash == clhash_test)
     clhash_seed_init(seed);
-# ifndef _MSC_VER  
-  else if (hash == umash32 ||
-          hash == umash32_hi ||
-          hash == umash ||
-          hash == umash128)
-    umash_seed_init(seed);
-# endif
   else if (hash == halftime_hash_style64_test || hash == halftime_hash_style128_test ||
            hash == halftime_hash_style256_test || hash == halftime_hash_style512_test)
     halftime_hash_seed_init(seed);
@@ -934,6 +927,10 @@ bool Hash_Seed_init (pfHash hash, size_t seed) {
   else if(hash == hashx_test)
     hashx_seed_init(info, seed);
   */
+#endif
+#ifdef HAVE_UMASH
+  else if (hash == umash32 || hash == umash32_hi || hash == umash || hash == umash128)
+    umash_seed_init(seed);
 #endif
 #ifdef HAVE_KHASHV
   else if(hash == khashv64_test || hash == khashv32_test)

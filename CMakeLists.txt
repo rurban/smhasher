@@ -604,6 +604,7 @@ if(SSE42_FOUND
    AND (CMAKE_SIZEOF_VOID_P EQUAL 8)
    AND (NOT MSVC))
   set(UMASH_SRC umash.c umash.hpp)
+  add_definitions(-DHAVE_UMASH)
 endif()
 
 set(ASCON_SRC asconhashv12/hash.c)
