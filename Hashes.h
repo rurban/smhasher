@@ -1156,14 +1156,14 @@ void farsh256_test ( const void * key, int len, unsigned seed, void * out );
 extern "C" {
 #include "blake3/blake3_impl.h"
 // The C API, serially
-  inline void blake3c_test ( const void * key, int len, unsigned seed, void * out )
+  inline void blake3c_test ( const void * key, int len, uint32_t seed, void * out )
   {
     blake3_hasher hasher;
 #if 1
     blake3_hasher_init (&hasher);
     // See GH #168
-    hasher.key[0] ^= (uint32_t)seed;
-    hasher.chunk.cv[0] ^= (uint32_t)seed;
+    hasher.key[0] ^= seed;
+    hasher.chunk.cv[0] ^= seed;
 #else
     // same speed
     uint32_t seed_key[8] = {0x6A09E667 ^ (uint32_t)seed, 0xBB67AE85, 0x3C6EF372,
