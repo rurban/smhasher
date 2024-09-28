@@ -462,6 +462,7 @@ inline void mum_low_test ( const void * key, int len, uint32_t seed, void * out 
   *(uint32_t*)out = (uint32_t)result;
 }
 
+void mum_v3_hash_test(const void * key, int len, uint32_t seed, void * out);
 
 //-----------------------------------------------------------------------------
 
