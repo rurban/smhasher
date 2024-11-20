@@ -626,6 +626,11 @@ inline void wyhash_test (const void * key, int len, uint32_t seed, void * out) {
 inline void wyhash32low (const void * key, int len, uint32_t seed, void * out) {
   *(uint32_t*)out = 0xFFFFFFFF & wyhash(key, (uint64_t)len, (uint64_t)seed, _wyp);
 }
+
+#include "w1hash.h"
+inline void w1hash_test (const void * key, int len, uint32_t seed, void * out) {
+  *(uint64_t*)out = w1hash_with_seed(key, len, seed);
+}
 #endif
 
 #ifdef HAVE_INT64
