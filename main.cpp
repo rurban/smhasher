@@ -750,6 +750,7 @@ HashInfo g_hashes[] =
 { wyhash32low,          32, 0xC5DF9AA0, "wyhash32low", "wyhash v4.2 lower 32bit", GOOD,
   {0x1443cf9a, 0x2ae375a2, 0x729973d2, 0x72d3aa79, 0xd3e475d5} },
 { wyhash_test,          64, 0x9DAE7DD3, "wyhash", "wyhash v4.2 (64-bit)", GOOD, {}},
+{ w1hash_test,          64, 0x648948F1, "w1hash", "w1hash (64-bit)", GOOD, {}},
 #endif
 #ifdef HAVE_INT64
 { rapidhash_test,          64, 0xAF404C4B, "rapidhash", "rapidhash v1", GOOD, {}},
