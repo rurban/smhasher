@@ -21,6 +21,8 @@ void SetThreadAffinity ( std::thread &t, int cpu );
 # endif
 #endif
 void SetAffinity ( int cpu );
+void SampleCpuFreq(void);
+unsigned int GetCpuFreqMHz();
 long getenvlong(const char *name, long minval, long defval, long maxval);
 
 // That's not UINT64_MAX as it's converted to int64_t sometimes.
@@ -84,6 +86,7 @@ static inline uint64_t timer_sub(uint64_t a, uint64_t b)
 #pragma intrinsic(__rdtsc)
 // Read Time Stamp Counter
 #define timer_counts_ns() (false)
+uint64_t timeofday(void);
 #define rdtsc()       __rdtsc()
 #define timer_start() __rdtsc()
 #define timer_end()   __rdtsc()
