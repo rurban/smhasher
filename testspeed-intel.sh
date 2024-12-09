@@ -13,7 +13,7 @@ else
                  build/SMHasher --test=Speed,Hashmap $g 2>&1
              fi
         done
-    done | tee "log.speed-ryzen3-$1"
+    done | tee "log.speed-intel-$1"
     ./speed.pl -h=doc/intel "log.speed-intel-$1"
 fi
 ./stop-bench.sh
