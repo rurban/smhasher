@@ -59,7 +59,11 @@ SMhasher
 | [crc32_hw](doc/crc32_hw.txt)                  |      6244.38 |    41.23 | 226.80 (2) | 653 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (SSE4.2/NEON) |
 | [crc32_hw1](doc/crc32_hw1.txt)                |      7569.29 |    49.07 | 233.75 (3) | 671 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2)  |
 | [crc64_hw](doc/crc64_hw.txt)                  |      6143.62 |    40.48 | 223.13 (2) | 652 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (SSE4.2/NEON) |
-| [crc32_pclmul](doc/crc32_pclmul.txt)          |           -  |     -    |     -      |     | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2+PCLMUL) |
+| [crc32_pclmul](doc/crc32_pclmul.txt)          |     13138.45 |    93.25 | 420.88 (8) |     | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2+PCLMUL) |
+| [crc64_jones1](doc/crc64_jones1.txt)          |      2019.00 |    64.02 | 139.65 (1) |     | insecure, 100% bias, collisions, distrib, BIC, machine-specific  |
+| [crc64_jones2](doc/crc64_jones2.txt)          |      3571.56 |   223.29 | 140.80 (2) |     | insecure, 100% bias, collisions, distrib, BIC, machine-specific  |
+| [crc64_jones3](doc/crc64_jones3.txt)          |      4033.06 |   213.39 | 165.77 (4) |     | insecure, 100% bias, collisions, distrib, BIC, machine-specific  |
+| [crc64_jones](doc/crc64_jones.txt)          |        4044.60 |    63.78 | 127.94 (3) |     | insecure, 100% bias, collisions, distrib, BIC, machine-specific  |
 | [o1hash](doc/o1hash.txt)                      |  11629440.57 |    18.15 | 199.35 (2) | 101 | insecure, no seed, zeros, fails all tests |
 | [fibonacci](doc/fibonacci.txt)                |     16878.32 |    22.94 | 803.18 (15)|1692 | UB, zeros, fails all tests       |
 | [FNV1a](doc/FNV1a.txt)                        |       760.52 |    73.83 | 254.29 (5) | 204 | bad seed, zeros, fails all tests       |
@@ -171,6 +175,7 @@ SMhasher
 | [City64low](doc/City64low.txt)                |     13904.10 |    46.24 | 260.08 (3) |1120|                             |
 | [City128](doc/City128.txt)                    |     14031.96 |    89.09 | 290.05 (10)|1841 |                            |
 | [CityCrc128](doc/CityCrc128.txt)              |      7916.44 |    55.50 | 240.79 (2) | 295 |                            |
+| [CityCrc256](doc/CityCrc256.txt)              |      7916.44 |    55.50 | 240.79 (2) |     |                            |
 | [FarmHash32](doc/FarmHash32.txt)              |     21755.58 |    47.54 | 258.35 (3) |11489| machine-specific (x64 SSE4/AVX) |
 | [FarmHash64](doc/FarmHash64.txt)              |     12845.53 |    47.11 | 251.58 (3) |3758 |                            |
 | [FarmHash128](doc/FarmHash128.txt)            |     13913.65 |    70.25 | 263.06 (3) | 163 |                            |
@@ -204,6 +209,7 @@ SMhasher
 | [wyhash32](doc/wyhash32.txt)                  |      2532.89 |    48.40 | 484.57 (1) | 426 | 4 bad and broken seeds, 32-bit |
 | [wyhash32low](doc/wyhash32low.txt)            |     22393.77 |    29.04 | 243.40 (3) | 474 | 5 bad seeds  |
 | [wyhash](doc/wyhash.txt)                      |     22540.23 |    28.87 | 236.16 (8) | 474 |                           |
+| [w1hash](doc/w1hash.txt)                      |              |          |            |     |                           |
 | [rapidhash](doc/rapidhash.txt)                |     23789.79 |    22.80 | 138.71 (7) | 574 |                           |
 | [rapidhash_unrolled](doc/rapidhash_unrolled.txt)|     23892.88 |    23.41 | 139.47 (12)| 782 |                           |
 | [umash32](doc/umash32.txt)                    |     21427.57 |    42.12 | 255.55 (5) |1530 |                            |
@@ -220,6 +226,7 @@ SMhasher
 | [k-hashv64](doc/k-hashv32.txt)                |      7850.92 |    46.94 | 193.94 (1) |1279 |                            |
 | [komihash](doc/komihash.txt)                  |     12242.78 |    33.02 | 236.07 (2) |1323 |                            |
 | [polymur](doc/polymur.txt)                    |      9676.33 |    42.70 | 246.53 (3) |1128 |                            |
+| [gxhash64](doc/gxhash64.txt)                  |              |          |            |     |                            |
 
 The sortable table variants:
 
