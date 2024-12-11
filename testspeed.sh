@@ -4,12 +4,21 @@ if [ x$hname = xe495 ]; then
     ./testspeed-ryzen3.sh $@
     exit
 fi
+# the new default
 #if [ x$hname = xlorikeet ]; then
 #    ./testspeed-ryzen5.sh $@
 #    exit
 #fi
 if [ x$hname = xreini ]; then
     ./testspeed-intel.sh $@
+    exit
+fi
+if [ x$hname = xreinip50 ]; then
+    ./testspeed-i7.sh $@
+    exit
+fi
+if [ x$hname = xmamba ]; then
+    ./testspeed-epyc.sh $@
     exit
 fi
 if [ x$hname = xairc ]; then
