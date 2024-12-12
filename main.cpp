@@ -405,7 +405,7 @@ HashInfo g_hashes[] =
 #endif
 // and now the quality hash funcs, slowest first
 { tifuhash_64,          64, TIFU_VERIF, "tifuhash_64", "Tiny Floatingpoint Unique Hash with continued egyptian fractions", GOOD, {} },
-{ beamsplitter_64,      64, 0x17703D82, "beamsplitter","A possibly universal hash made with a 10x64 s-box.", GOOD, {} },
+{ beamsplitter_64,      64, 0, "beamsplitter", "A possibly universal hash made with a 10x64 s-box.", GOOD, {} },
 { discohash1::DISCoHAsH<64>,        64,  0xBEBB4185, "discohash1",   "DISCoHAsH 64 (was BEBB4185) v1", GOOD, {} },
 { discohash1::DISCoHAsH<128>,       128, 0x05C0460C, "discohash1-128",   "DISCoHAsH v1", GOOD, {} },
 { discohash2::DISCoHAsH_2<64>,      64,  0x8FF45ABF, "discohash2",       "DISCoHAsH v2", GOOD, {} },
