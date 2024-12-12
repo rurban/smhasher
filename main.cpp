@@ -676,7 +676,14 @@ HashInfo g_hashes[] =
 { farmhash64_c_test,    64, FARM64_VERIF, "farmhash64_c",  "farmhash64_with_seed (C99)", GOOD, {} },
 { farmhash128_c_test,  128, FARM128_VERIF,"farmhash128_c", "farmhash128_with_seed (C99)", GOOD, {} },
 #endif
-{ gxhash64_test,        64, 0x9189E456, "gxhash64",    "gxHash, 64-bit", GOOD, {} },
+#ifdef HAVE_AESNI
+#ifdef _MSC_VER
+#define GX_VFY 0x9189E456
+#else
+#define GX_VFY 0x87FA3129
+#endif
+{ gxhash64_test,        64, GX_VFY, "gxhash64",    "gxHash, 64-bit, AES-only, unportable", GOOD, {} },
+#endif
 { xxHash64_test,        64, 0x024B7CF4, "xxHash64",    "xxHash, 64-bit", GOOD, {} },
 #if 0
 { xxhash256_test,       64, 0x024B7CF4, "xxhash256",   "xxhash256, 64-bit unportable", GOOD, {} },

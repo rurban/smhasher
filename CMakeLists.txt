@@ -520,6 +520,10 @@ else()
   set(T1HA_SRC t1ha/t1ha0.c t1ha/t1ha1.c t1ha/t1ha2.c)
 endif(AES_FOUND AND (PROCESSOR_FAMILY STREQUAL "Intel"))
 
+if(AES_FOUND)
+  set(GX_SRC gxhash.c)
+endif(AES_FOUND)
+
 if(SHA_FOUND)
   # todo: arm, power
   set(SHA_SRC SHA-Intrinsics/sha1-x86.c SHA-Intrinsics/sha256-x86.c)
@@ -696,7 +700,7 @@ add_library(
   beamsplitter.cpp
   discohash_512.cpp
   xxhash.c
-  gxhash.c
+  ${GX_SRC}
   metrohash/metrohash64.cpp
   metrohash/metrohash128.cpp
   cmetrohash64.c
