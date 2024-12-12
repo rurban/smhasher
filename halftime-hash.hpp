@@ -19,7 +19,7 @@ namespace advanced {
 
 namespace {
 
-#if __AVX512F__
+#ifdef __AVX512F__
 
 using u512 = __m512i;
 
@@ -43,7 +43,7 @@ struct BlockWrapper512 {
 
 #endif
 
-#if __AVX2__
+#ifdef __AVX2__
 
 using u256 = __m256i;
 
@@ -120,7 +120,7 @@ struct BlockWrapper128 {
 
 #endif
 
-#if __SSE2__
+#ifdef __SSE2__
 
 using u128 = __m128i;
 
@@ -929,7 +929,7 @@ inline uint64_t TabulateAfter(const uint64_t* entropy, const char* char_input,
   return result;
 }
 
-#if __AVX512F__
+#ifdef __AVX512F__
 
 template <unsigned dimension, unsigned in_width, unsigned encoded_dimension,
           unsigned out_width>
@@ -941,7 +941,7 @@ inline void V4Avx512(const uint64_t* entropy, const char* char_input, size_t len
 
 #endif
 
-#if __AVX2__
+#ifdef __AVX2__
 
 template <unsigned dimension, unsigned in_width, unsigned encoded_dimension,
           unsigned out_width>
@@ -961,7 +961,7 @@ inline void V4Avx2(const uint64_t* entropy, const char* char_input, size_t lengt
 
 #endif
 
-#if __SSE2__
+#ifdef __SSE2__
 
 template <unsigned dimension, unsigned in_width, unsigned encoded_dimension,
           unsigned out_width>
@@ -1076,21 +1076,21 @@ inline void V1(const uint64_t* entropy, const char* char_input, size_t length,
   SPECIALIZE(version, isa, 3, 7, 3, 9)  \
   SPECIALIZE(version, isa, 2, 6, 3, 7)
 
-#if __AVX512F__
+#ifdef __AVX512F__
 
 SPECIALIZE_4(4, Avx512)
 SPECIALIZE_4(3, Avx2)
 SPECIALIZE_4(2, Sse2)
 SPECIALIZE_4(1, Scalar)
 
-#elif __AVX2__
+#elif defined __AVX2__
 
 SPECIALIZE_4(4, Avx2)
 SPECIALIZE_4(3, Avx2)
 SPECIALIZE_4(2, Sse2)
 SPECIALIZE_4(1, Scalar)
 
-#elif __SSE2__
+#elif defined __SSE2__
 
 SPECIALIZE_4(4, Sse2)
 SPECIALIZE_4(3, Sse2)
