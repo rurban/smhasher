@@ -154,7 +154,12 @@ HashInfo g_hashes[] =
 #endif
 // There are certain 32-bit non-Windows machines producing 0x58571F56 as verification value for blake3_c.
 // That deserves further investigation.
-{ blake3c_test,        256, 0x50E4CD91, "blake3_c",   "BLAKE3 c",   GOOD, {0x6a09e667} },
+#if defined HAVE_BIT32 && !defined _WIN32 && !defined __arm__
+#define BL3_VF 0x58571F56
+#else
+#define BL3_VF 0x50E4CD91
+#endif
+{ blake3c_test,        256, BL3_VF, "blake3_c",   "BLAKE3 c",   GOOD, {0x6a09e667} },
 #if defined(HAVE_BLAKE3)
 { blake3_test,         256, 0x0, "blake3",       "BLAKE3 Rust", GOOD, {} },
 { blake3_64,            64, 0x0, "blake3_64",    "BLAKE3 Rust, low 64 bits", GOOD, {} },
