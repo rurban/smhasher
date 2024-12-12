@@ -836,6 +836,8 @@ void clhash_seed_init(size_t &seed)
 
 #endif
 
+#ifndef _MSC_VER
+// FIXME stopped working on MSVC
 #include "halftime-hash.hpp"
 
 alignas(64) static uint64_t
@@ -961,6 +963,8 @@ void halftime_hash_seed_init(size_t &seed)
 #undef ROTL
 }
 #endif
+
+#endif // !_MSC_VER
 
 
 // Multiply shift from
