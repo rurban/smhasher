@@ -700,7 +700,6 @@ add_library(
   beamsplitter.cpp
   discohash_512.cpp
   xxhash.c
-  ${GX_SRC}
   metrohash/metrohash64.cpp
   metrohash/metrohash128.cpp
   cmetrohash64.c
@@ -711,6 +710,7 @@ add_library(
   # ${FHTW_OBJ}
   ${T1HA_SRC}
   ${SHA_SRC}
+  ${GX_SRC}
   mum.cc
   jody_hash32.c
   jody_hash64.c

@@ -1365,3 +1365,7 @@ void polymur_test ( const void *key, int len, uint32_t seed, void *out) {
   *(uint64_t*)out = polymur_hash((const uint8_t*)key, (size_t)len, &g_polymurhashparams,
                                  (uint64_t)seed);
 }
+
+#if defined(HAVE_SSE2) && defined(HAVE_AESNI) && !defined(_MSC_VER)
+#include "aesnihash-peterrk.hpp"
+#endif

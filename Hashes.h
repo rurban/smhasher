@@ -539,6 +539,7 @@ inline void t1ha0_ia32aes_noavx_test(const void * key, int len, uint32_t seed, v
   // objsize 0-39d: 925
   *(uint64_t*)out = t1ha0_ia32aes_noavx(key, len, seed);
 }
+void aesnihash_peterrk(const void * in, int len0, uint32_t seed, void * out);
 #endif
 #if defined(__AVX__)
 inline void t1ha0_ia32aes_avx1_test(const void * key, int len, uint32_t seed, void * out)
