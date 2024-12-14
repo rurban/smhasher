@@ -1424,3 +1424,9 @@ extern "C" void crc64_jones_test2(const void *input, int len, uint32_t seed, voi
 extern "C" void crc64_jones_test3(const void *input, int len, uint32_t seed, void *out);
 extern "C" void crc64_jones_default(const void *input, int len, uint32_t seed, void *out);
 
+void rainbow64_test (const void *key, int len, uint32_t seed, void *out);
+void rainbow128_test (const void *key, int len, uint32_t seed, void *out);
+void rainbow256_test (const void *key, int len, uint32_t seed, void *out);
+void rainstorm64_test (const void *key, int len, uint32_t seed, void *out);
+void rainstorm128_test (const void *key, int len, uint32_t seed, void *out);
+void rainstorm256_test (const void *key, int len, uint32_t seed, void *out);

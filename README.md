@@ -228,6 +228,12 @@ SMhasher
 | [komihash](doc/komihash.txt)                  |     12179.74 |    33.23 | 224.80 (2) |1323 |                            |
 | [polymur](doc/polymur.txt)                    |      9913.53 |    41.68 | 232.56 (3) |1128 |                            |
 | [gxhash64](doc/gxhash64.txt)                  |     48919.73 |    36.61 | 236.98 (3) |     | AES only                   |
+w| [rainbow](doc/rainbow.txt)                   |     48919.73 |    36.61 | 236.98 (3) |     |                            |
+| [rainbow128](doc/rainbow128.txt)              |     48919.73 |    36.61 | 236.98 (3) |     |                            |
+| [rainbow256](doc/rainbow256.txt)              |     48919.73 |    36.61 | 236.98 (3) |     |                            |
+| [rainstorm](doc/rainstorm.txt)                |     48919.73 |    36.61 | 236.98 (3) |     |                            |
+| [rainstorm128](doc/rainstorm128.txt)          |     48919.73 |    36.61 | 236.98 (3) |     |                            |
+| [rainstorm256](doc/rainstorm256.txt)          |     48919.73 |    36.61 | 236.98 (3) |     |                            |
 
 The sortable table variants:
 
@@ -236,6 +242,7 @@ The sortable table variants:
 * [fast AMD EPYC 9554P 64-Core Processor (Server from 2024)](https://rurban.github.io/smhasher/doc/epyc.html)
 * [Intel i5-2300 2.8GHz](https://rurban.github.io/smhasher/doc/intel.html)
 * [AMD Ryzen 5 PRO 3350G 3.6GHz 32bit 32bit](https://rurban.github.io/smhasher/doc/i686.html)
+* [AMD Ryzen 3 3200U 3.5GHz](https://rurban.github.io/smhasher/doc/ryzen3.html)
 * [Mac Air i7-4650](https://rurban.github.io/smhasher/doc/air.html)
 * [Cortex-A53 2GHz (Sony XPeria L4)](https://rurban.github.io/smhasher/doc/phone.html)
 
