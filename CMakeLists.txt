@@ -751,6 +751,8 @@ add_library(
   crc64.c
   crcspeed.c
   crccombine.c
+  rainbow_test.cpp
+  rainstorm_test.cpp
   )
 
 add_executable(SMHasher main.cpp)

@@ -1,6 +1,6 @@
 #!/bin/bash
 make -C build
-./start-bench.sh
+#./start-bench.sh
 if [ -z "$1" ]; then
     test -f log.speed-epyc && mv log.speed-epyc log.speed-epyc.bak
     (for g in `build/SMHasher --listnames`; do \

@@ -172,6 +172,12 @@ SMhasher
 | [aesni](doc/aesni.txt)                        |     31185.98 |    29.45 | 226.75 (2) | 519 | machine-specific (x64 AES-NI)           |
 | [aesni-low](doc/aesni-low.txt)                |     31027.39 |    29.47 | 232.54 (2) | 519 | machine-specific (x64 AES-NI)           |
 | [mx3](doc/mx3.txt)                            |      9332.99 |    47.07 | 221.61 (2) | 734 | UB                         |
+| [rainbow](doc/rainbow.txt)                    |      6115.72 |    71.13 | 470.84 (12)|     |                            |
+| [rainbow-128](doc/rainbow-128.txt)            |      6463.52 |    68.99 | 474.64 (5) |     |                            |
+| [rainbow-256](doc/rainbow-256.txt)            |      5455.59 |    86.42 | 522.60 (24)|     |                            |
+| [rainstorm](doc/rainstorm.txt)                |      1848.60 |   181.45 | 657.74 (43)|     |                            |
+| [rainstorm-128](doc/rainstorm-128.txt)        |     48919.73 |    36.61 | 236.98 (3) |     |                            |
+| [rainstorm-256](doc/rainstorm-256.txt)        |     48919.73 |    36.61 | 236.98 (3) |     |                            |
 | [pengyhash](doc/pengyhash.txt)                |     13347.17 |    74.79 | 278.74 (3) | 421 |                            |
 | [City32](doc/City32.txt)                      |      5745.83 |    52.44 | 242.69 (2) |1319 |                            |
 | [City64low](doc/City64low.txt)                |     13119.17 |    47.92 | 251.81 (2) |1120|                             |

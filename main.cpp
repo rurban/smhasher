@@ -793,6 +793,12 @@ HashInfo g_hashes[] =
 { komihash_test,        64, 0x8157FF6D, "komihash",    "komihash 5.23", GOOD, {} },
 { a5hash_test,          64, 0xBF40CAE1, "a5hash",      "a5hash 5.6", GOOD, {} },
 { polymur_test,         64, 0x4F894810, "polymur",     "github.com/orlp/polymur-hash v1, __SIZEOF_INT128__:" MACRO_ITOA(__SIZEOF_INT128__), GOOD, {} },
+{ rainbow64_test,       64, 0x2972C52E, "rainbow",     "Rainbow 64-bit v1.0.6 (aka Newhash 128-bit)", GOOD, {} },
+{ rainbow128_test,     128, 0xFD9BCADD, "rainbow-128", "Rainbow 128-bit v1.0.6 (aka Newhash 128-bit)", GOOD, {} },
+{ rainbow256_test,     256, 0xB327563D, "rainbow-256", "Rainbow 256-bit v1.0.6 (aka Newhash 256-bit)", GOOD, {} },
+{ rainstorm64_test,     64, 0xC8DB71D5, "rainstorm",     "Rainstorm 64-bit v0.0.6", GOOD, {} },
+{ rainstorm128_test,   128, 0x17E0FC1B, "rainstorm-128", "Rainstorm 128-bit v0.0.6", GOOD, {} },
+{ rainstorm256_test,   256, 0x8BDBF180, "rainstorm-256", "Rainstorm 256-bit v0.0.6", GOOD, {} },
 };
 
 HashInfo * findHash ( const char * name )
