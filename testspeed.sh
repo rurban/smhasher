@@ -9,10 +9,6 @@ fi
 #    ./testspeed-ryzen5.sh $@
 #    exit
 #fi
-if [ x$hname = xreini ]; then
-    ./testspeed-intel.sh $@
-    exit
-fi
 if [ x$hname = xreinip50 ]; then
     ./testspeed-i7.sh $@
     exit
@@ -21,12 +17,17 @@ if [ x$hname = xmamba ]; then
     ./testspeed-epyc.sh $@
     exit
 fi
+# deprecated:
 if [ x$hname = xairc ]; then
     ./testspeed-air.sh $@
     exit
 fi
 if [ x`uname -m` = xaarch64 ]; then
     ./testspeed-phone.sh $@
+    exit
+fi
+if [ x$hname = xreini ]; then
+    ./testspeed-intel.sh $@
     exit
 fi
 
