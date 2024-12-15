@@ -96,11 +96,21 @@ void aesnihash_peterrk(const void * in, int len0, uint32_t seed, void * out) {
         case 11: mix(GREEDILY_READ(11, msg)); break;
         case 10: mix(GREEDILY_READ(10, msg)); break;
         case  9: mix(GREEDILY_READ(9, msg)); break;
+#ifndef _MSC_VER
         case  8: mix((__m128i)_mm_load_sd((const double *)msg)); break;
+#else
+        // MSVC cannot copy __m128d -> __m128i
+        case  8: mix(GREEDILY_READ(7, msg)); break;
+#endif
         case  7: mix(GREEDILY_READ(7, msg)); break;
         case  6: mix(GREEDILY_READ(6, msg)); break;
         case  5: mix(GREEDILY_READ(5, msg)); break;
+#ifndef _MSC_VER
         case  4: mix((__m128i)_mm_load_ss((const float *)msg)); break;
+#else
+        // MSVC cannot copy __m128 -> __m128i
+        case  4: mix(GREEDILY_READ(4, msg)); break;
+#endif
         case  3: mix(GREEDILY_READ(3, msg)); break;
         case  2: mix(GREEDILY_READ(2, msg)); break;
         case  1: mix(GREEDILY_READ(1, msg)); break;
