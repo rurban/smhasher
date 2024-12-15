@@ -21,7 +21,7 @@ jobs:
       with:
         fetch-depth: 1
         submodules: recursive
-    - run: cmake ${{ matrix.CMAKE_ARGS }} .
+    - run: cmake ${{ matrix.CMAKE_ARGS }} -DGITHUB_ACTIONS=ON .
     - run: make -j4 VERBOSE=1
     - run: make -j4 test ARGS=-V
   aarch64:

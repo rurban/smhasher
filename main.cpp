@@ -689,6 +689,7 @@ HashInfo g_hashes[] =
 { farmhash128_c_test,  128, FARM128_VERIF,"farmhash128_c", "farmhash128_with_seed (C99)", GOOD, {} },
 #endif
 #ifdef HAVE_AESNI
+// FIXME
 #if defined __linux && defined GITHUB_ACTIONS
 #define GX_VFY 0x87FA3129
 #else

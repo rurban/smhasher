@@ -40,6 +40,11 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -DNDEBUG")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG")
 
+option(GITHUB_ACTIONS "If compiled via github actions" OFF)
+if (GITHUB_ACTIONS)
+  add_definitions(-DGITHUB_ACTIONS)
+endif()
+
 include(CheckTypeSize)
 check_type_size(__int64 __INT64)
 check_type_size(int64_t INT64_T)
