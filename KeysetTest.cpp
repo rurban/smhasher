@@ -60,14 +60,14 @@ bool VerificationTest ( HashInfo* info, bool verbose )
       return true;
     } else {
       if (verbose)
-        printf("Verification value 0x%08X ....... FAIL! (Expected 0x%08X)\n",
+        printf("Verification value 0x%08X ....... \x1b[31mFAIL!\x1b[39m (Expected 0x%08X)\n",
                verification, expected);
       return false;
     }
   } else {
     if (!expected) {
       if (verbose)
-        printf("Verification value 0x%08X ....... INSECURE (should not be 0)\n",
+        printf("Verification value 0x%08X ....... \x1b[31mINSECURE\x1b[39m (should not be 0)\n",
                verification);
       return true;
     } else {
