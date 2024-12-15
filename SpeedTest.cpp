@@ -14,6 +14,8 @@
 #include <parallel_hashmap/phmap.h>
 #include <functional>
 
+#include "cpucycles.h"
+
 #define COUNT_OF(x) ((sizeof(x)/sizeof(0[x])) / ((size_t)(!(sizeof(x) % sizeof(0[x])))))
 #define ARRAY_END(x) (&(x)[COUNT_OF(x)])
 
@@ -275,10 +277,12 @@ void BulkSpeedTest ( pfHash hash, uint32_t seed )
   const int trials = 2999;
   const int blocksize = 256 * 1024;
 
+  printf("Using libcpucycles-%s\n", cpucycles_version());
   printf("Bulk speed test - %d-byte keys\n",blocksize);
   double sumbpc = 0.0;
 
   volatile double warmup_cycles = SpeedTest(hash,seed,trials,blocksize,0);
+  long long cpu_cycles = cpucycles_persecond();
 
   for(int align = 7; align >= 0; align--)
   {
@@ -286,12 +290,14 @@ void BulkSpeedTest ( pfHash hash, uint32_t seed )
 
     double bestbpc = double(blocksize)/cycles;
 
-    double bestbps = (bestbpc * 3000000000.0 / 1048576.0);
-    printf("Alignment %2d - %6.3f bytes/cycle - %7.2f MiB/sec @ 3 ghz\n",align,bestbpc,bestbps);
+    double bestbps = (bestbpc * cpu_cycles / 1048576.0) / 100000.0;
+    printf("Alignment %2d - %6.3f bytes/cycle - %7.2f MiB/sec @ %0.1f GHz\n",
+           align, bestbpc, bestbps);
     sumbpc += bestbpc;
   }
   sumbpc = sumbpc / 8.0;
-  printf("Average      - %6.3f bytes/cycle - %7.2f MiB/sec @ 3 ghz\n",sumbpc,(sumbpc * 3000000000.0 / 1048576.0));
+  printf("Average      - %6.3f bytes/cycle - %7.2f MiB/sec @ %0.1f GHz\n",
+         sumbpc, (sumbpc * cpu_cycles / 1048576.0) / 100000.0);
   fflush(NULL);
 }
 

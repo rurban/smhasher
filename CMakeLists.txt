@@ -13,6 +13,22 @@ endif()
 
 project(SMHasher C CXX ASM)
 
+# cat https://cpucycles.cr.yp.to/libcpucycles-latest-version.txt
+set(libcpucycle_version 20240318)
+include(ExternalProject)
+# libcpucycle-prefix/src/libcpucycle/build/amd64/package/lib/libcpucycles.a
+# => lib/libcpucycles.a
+ExternalProject_Add(
+  libcpucycle
+  URL https://cpucycles.cr.yp.to/libcpucycles-${libcpucycle_version}.tar.gz
+  DOWNLOAD_EXTRACT_TIMESTAMP false
+  #PREFIX ""
+  BINARY_DIR libcpucycle-prefix/src/libcpucycle
+  CONFIGURE_COMMAND cd ../libcpucycle && ./configure --prefix=${CMAKE_BINARY_DIR}
+  BUILD_COMMAND cd ../libcpucycle && make
+  INSTALL_COMMAND cd ../libcpucycle && make install
+  )
+
 include(CheckCCompilerFlag)
 # Check if the same compile family is used for both C and CXX
 if(NOT (CMAKE_C_COMPILER_ID STREQUAL CMAKE_CXX_COMPILER_ID))
@@ -669,6 +685,10 @@ if((CMAKE_MAJOR_VERSION EQUAL 3 AND CMAKE_MINOR_VERSION GREATER_EQUAL 9)
   check_ipo_supported(RESULT ipo_supported OUTPUT error)
 endif()
 
+include_directories(
+  ${CMAKE_BINARY_DIR}/include
+  )
+
 add_library(
   SMHasherSupport STATIC
   AvalancheTest.cpp
@@ -770,7 +790,8 @@ endif()
 
 target_link_libraries(SMHasher SMHasherSupport
                       ${HIGHWAY_LIB} ${BLAKE3_LIB} ${AHASH_C_LIB}
-                      ${CMAKE_THREAD_LIBS_INIT})
+                      ${CMAKE_THREAD_LIBS_INIT}
+                      ${CMAKE_BINARY_DIR}/lib/libcpucycles.a)
 
 SET(exectargets ${exectargets} SMHasher)
 # add_executable( bittest bittest.cpp )
