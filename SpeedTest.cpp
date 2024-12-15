@@ -250,11 +250,15 @@ double SpeedTest ( pfHash hash, uint32_t seed, const int trials, const int block
     }
     else
     {
+      SampleCpuFreq();
       t = (double)timehash(hash,block,blocksize,itrial);
     }
 
     if(t > 0) times.push_back(t);
   }
+
+  if (blocksize > TIMEHASH_SMALL_LEN_MAX)
+    SampleCpuFreq();
 
   //----------
   
@@ -280,18 +284,20 @@ void BulkSpeedTest ( pfHash hash, uint32_t seed )
 
   volatile double warmup_cycles = SpeedTest(hash,seed,trials,blocksize,0);
 
+  const double MHz2MiBps = (1000.0 * 1000.0) / (1024.0 * 1024.0);
   for(int align = 7; align >= 0; align--)
   {
     double cycles = SpeedTest(hash,seed,trials,blocksize,align);
 
     double bestbpc = double(blocksize)/cycles;
-
-    double bestbps = (bestbpc * 3000000000.0 / 1048576.0);
-    printf("Alignment %2d - %6.3f bytes/cycle - %7.2f MiB/sec @ 3 ghz\n",align,bestbpc,bestbps);
+    const unsigned cpuMHz = GetCpuFreqMHz();
+    double bestbps = (bestbpc * cpuMHz * MHz2MiBps);
+    printf("Alignment %2d - %6.3f bytes/cycle - %7.2f MiB/sec @ %u MHz\n",align,bestbpc,bestbps,cpuMHz);
     sumbpc += bestbpc;
   }
+  const unsigned cpuMHz = GetCpuFreqMHz();
   sumbpc = sumbpc / 8.0;
-  printf("Average      - %6.3f bytes/cycle - %7.2f MiB/sec @ 3 ghz\n",sumbpc,(sumbpc * 3000000000.0 / 1048576.0));
+  printf("Average      - %6.3f bytes/cycle - %7.2f MiB/sec @ %u MHz\n",sumbpc,sumbpc*cpuMHz*MHz2MiBps,cpuMHz);
   fflush(NULL);
 }
 
