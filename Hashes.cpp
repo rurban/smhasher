@@ -1366,6 +1366,17 @@ void polymur_test ( const void *key, int len, uint32_t seed, void *out) {
                                  (uint64_t)seed);
 }
 
+#if defined(HAVE_AESNI)
+void gxhash32_seed_init(uint32_t &seed)
+{
+  // reject bad seeds
+  std::vector<uint32_t> bad_seeds;
+  gxhash32_bad_seeds(bad_seeds);
+  while (std::find(bad_seeds.begin(), bad_seeds.end(), seed) != bad_seeds.end())
+    seed++;
+}
+#endif
+
 #if defined(HAVE_SSE2) && defined(HAVE_AESNI)
 #include "aesnihash-peterrk.hpp"
 #endif

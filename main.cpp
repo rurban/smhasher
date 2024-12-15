@@ -691,10 +691,15 @@ HashInfo g_hashes[] =
 #ifdef HAVE_AESNI
 // FIXME
 #if defined __linux && defined GITHUB_ACTIONS
+#define GX32_VFY 0x2D5674B0
 #define GX_VFY 0x87FA3129
 #else
+#define GX32_VFY 0xEC19D715
 #define GX_VFY 0x9189E456
 #endif
+{ gxhash32_test,        32, GX32_VFY,   "gxhash32",    "gxHash, 32-bit, AES-only", GOOD,
+        {0xe1c1ec7d, 0x0376a937, 0x64ef3cc9, 0x282c25a4, 0xab1d407e, 0xef794206,
+         0x90626a1e, 0x9c0731c3, 0x3c1daeaa, 0xbd359253} },
 { gxhash64_test,        64, GX_VFY,     "gxhash64",    "gxHash, 64-bit, AES-only, unportable", GOOD, {} },
 #endif
 { xxHash64_test,        64, 0x024B7CF4, "xxHash64",    "xxHash, 64-bit", GOOD, {} },
@@ -912,6 +917,10 @@ void Bad_Seed_init (pfHash hash, uint32_t &seed) {
           (hash == poly_3_mersenne && seed == 0x3d25f745))
     seed++;
 #endif
+#ifdef HAVE_AESNI
+  else if (hash == gxhash32_test)
+    gxhash32_seed_init(seed);
+#endif
 #if defined(HAVE_SSE42) && defined(__x86_64__)
   else if (hash == clhash_test && seed == 0x0)
     seed++;
@@ -962,7 +971,7 @@ bool Hash_Seed_init (pfHash hash, size_t seed) {
   else if(hash == polymur_test)
     polymur_seed_init(seed);
   else
-      return false;
+    return false;
   return true;
 }
 

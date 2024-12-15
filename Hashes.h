@@ -350,14 +350,28 @@ inline void xxHash32_test( const void * key, int len, uint32_t seed, void * out 
   // objsize 10-104 + 3e0-5ce: 738
   *(uint32_t*)out = (uint32_t) XXH32(key, (size_t) len, (unsigned) seed);
 }
+// objsize 4183e0 - 4186c0: 736
+inline void gxhash32_test( const void * key, int len, uint32_t seed, void * out ) {
+  *(uint32_t*)out = gxhash32((uint8_t*)key, (size_t) len, seed);
+}
+static inline bool gxhash32_bad_seeds(std::vector<uint32_t> &seeds)
+{
+  seeds = std::vector<uint32_t>{
+    0xe1c1ec7d, 0x0376a937, 0x64ef3cc9, 0x282c25a4,
+    0xab1d407e, 0xef794206, 0x90626a1e, 0x9c0731c3,
+    0x3c1daeaa, 0xbd359253 };
+  return true;
+}
+void gxhash32_seed_init(uint32_t &seed);
+
 #ifdef HAVE_INT64
 inline void xxHash64_test( const void * key, int len, uint32_t seed, void * out ) {
   // objsize 630-7fc + c10-1213: 1999
   *(uint64_t*)out = (uint64_t) XXH64(key, (size_t) len, (unsigned long long) seed);
 }
+// objsize 418110 - 4183e0: 720
 inline void gxhash64_test( const void * key, int len, uint32_t seed, void * out ) {
-  // objsize 630-7fc + c10-1213: 1999
-  *(uint64_t*)out = (uint64_t) gxhash64((uint8_t*)key, (size_t) len, seed);
+  *(uint64_t*)out = gxhash64((uint8_t*)key, (size_t) len, seed);
 }
 #endif
 

@@ -228,7 +228,8 @@ SMhasher
 | [k-hashv64](doc/k-hashv64.txt)                |      9251.05 |    51.72 | 251.83 (2) |1279 |                            |
 | [komihash](doc/komihash.txt)                  |     12179.74 |    33.23 | 224.80 (2) |1323 |                            |
 | [polymur](doc/polymur.txt)                    |      9913.53 |    41.68 | 232.56 (3) |1128 |                            |
-| [gxhash64](doc/gxhash64.txt)                  |     48919.73 |    36.61 | 236.98 (3) |     | AES only                   |
+| [gxhash32](doc/gxhash32.txt)                  |     47943.08 |    37.71 | 251.38 (2) |736  | AES only                   |
+| [gxhash64](doc/gxhash64.txt)                  |     48919.73 |    36.61 | 236.98 (3) |720  | AES only                   |
 
 The sortable table variants:
 
