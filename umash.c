@@ -7,6 +7,7 @@
  *
  * Copyright 2020-2022 Backtrace I/O, Inc.
  * Copyright 2022 Paul Khuong
+ * Copyright 2022 Dougall Johnson
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -162,7 +163,13 @@ v128_clmul(uint64_t x, uint64_t y)
 static inline v128
 v128_clmul_cross(v128 x)
 {
-	return v128_clmul(vgetq_lane_u64(x, 0), vgetq_lane_u64(x, 1));
+	v128 swapped = vextq_u64(x, x, 1);
+#if UMASH_INLINE_ASM
+	/* Keep the result out of GPRs. */
+	__asm__("" : "+w"(swapped));
+#endif
+
+	return v128_clmul(vgetq_lane_u64(x, 0), vgetq_lane_u64(swapped, 0));
 }
 
 #else
@@ -306,6 +313,14 @@ add_mod_slow(uint64_t x, uint64_t y)
 	if (LIKELY(sum < (uint64_t)-16))
 		return sum + fixup;
 
+#ifdef UMASH_INLINE_ASM
+	/*
+	 * Some compilers like to compile the likely branch above with
+	 * conditional moves or predication.  Insert a compiler barrier
+	 * in the slow path here to force a branch.
+	 */
+	__asm__("" : "+r"(sum));
+#endif
 	return add_mod_slow_slow_path(sum, fixup);
 }
 

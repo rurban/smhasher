@@ -7,6 +7,7 @@
  *
  * Copyright 2020-2022 Backtrace I/O, Inc.
  * Copyright 2022 Paul Khuong
+ * Copyright 2022 Dougall Johnson
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -75,7 +76,6 @@ TEST_DEF umash_fprint_multiple_blocks_fn umash_fprint_multiple_blocks_generic;
  * always forwards to `umash_multiple_blocks_generic`.
  */
 #if defined(__x86_64__) && UMASH_DYNAMIC_DISPATCH
-#include <cpuid.h>
 #include <stdatomic.h>
 
 static umash_multiple_blocks_fn umash_multiple_blocks_initial,
@@ -110,6 +110,21 @@ umash_long_pick(void)
 			__asm__("cpuid" : "+a"(eax), "+b"(ebx), "+c"(ecx), "+d"(edx));
 			has_vpclmulqdq = (ecx & vpclmulqdq_bit) != 0;
 		}
+
+		/* Confirm OS support for AVX. */
+		if (has_vpclmulqdq) {
+			uint64_t feature_mask;
+			/* 1: XSAVE SSE; 2: AVX enabled. */
+			uint64_t avx_mask = (1UL << 1) | (1UL << 2);
+			uint64_t hi, lo;
+
+			__asm__("xgetbv" : "=a"(lo), "=d"(hi) : "c"(0));
+
+			feature_mask = (hi << 32) | lo;
+			/* If the OS doesn't save AVX registers, stick to SSE. */
+			if ((feature_mask & avx_mask) != avx_mask)
+				has_vpclmulqdq = false;
+		}
 	}
 
 	if (has_vpclmulqdq) {
@@ -137,9 +152,13 @@ umash_multiple_blocks_initial(uint64_t initial, const uint64_t multipliers[stati
 	return impl(initial, multipliers, oh_ptr, seed, blocks, n_blocks);
 }
 
-TEST_DEF inline uint64_t
-umash_multiple_blocks(uint64_t initial, const uint64_t multipliers[static 2],
-    const uint64_t *oh_ptr, uint64_t seed, const void *blocks, size_t n_blocks)
+TEST_DEF
+#ifndef UMASH_TEST_ONLY
+inline /* Can't have an extern inline refer to static data. */
+#endif
+    uint64_t
+    umash_multiple_blocks(uint64_t initial, const uint64_t multipliers[static 2],
+	const uint64_t *oh_ptr, uint64_t seed, const void *blocks, size_t n_blocks)
 {
 	/*
 	 * We should use a relaxed load here, but compilers have
@@ -165,10 +184,14 @@ umash_fprint_multiple_blocks_initial(struct umash_fp initial,
 	return impl(initial, multipliers, oh, seed, data, n_blocks);
 }
 
-TEST_DEF inline struct umash_fp
-umash_fprint_multiple_blocks(struct umash_fp initial,
-    const uint64_t multipliers[static 2][2], const uint64_t *oh, uint64_t seed,
-    const void *data, size_t n_blocks)
+TEST_DEF
+#ifndef UMASH_TEST_ONLY
+inline /* Can't have an extern inline refer to static data. */
+#endif
+    struct umash_fp
+    umash_fprint_multiple_blocks(struct umash_fp initial,
+	const uint64_t multipliers[static 2][2], const uint64_t *oh, uint64_t seed,
+	const void *data, size_t n_blocks)
 {
 
 	/*
@@ -295,6 +318,23 @@ split_accumulator_update(const struct split_accumulator acc, const uint64_t m0,
 	};
 }
 
+#ifndef UMASH_LONG_PH_PARAMS_IN_REGS
+/*
+ * Cache hash parameters in SIMD registers if there's room. Neon on
+ * aarch64 has 32x128-bit, and AVX-512 VL extends SSE/AVX to 32
+ * registers (if AVX-512 VL is available, the compiler may silently
+ * use the additional registers, so we might as well optimise for
+ * their presence). Our 15x 128-bit PH parameters fit in 32 registers.
+ *
+ * Platform-specific routines make their own decision.
+ */
+#if defined(__aarch64__) || defined(__ARM_ARCH_ISA_A64) || defined(__AVX512VL__)
+#define UMASH_LONG_PH_PARAMS_IN_REGS 1
+#else
+#define UMASH_LONG_PH_PARAMS_IN_REGS 0
+#endif
+#endif
+
 TEST_DEF HOT uint64_t
 umash_multiple_blocks_generic(uint64_t initial, const uint64_t multipliers[static 2],
     const uint64_t *oh_ptr, uint64_t seed, const void *blocks, size_t n_blocks)
@@ -304,6 +344,33 @@ umash_multiple_blocks_generic(uint64_t initial, const uint64_t multipliers[stati
 	const uint64_t kx = oh_ptr[UMASH_OH_PARAM_COUNT - 2];
 	const uint64_t ky = oh_ptr[UMASH_OH_PARAM_COUNT - 1];
 	struct split_accumulator ret = { .base = initial };
+
+#if UMASH_LONG_PH_PARAMS_IN_REGS
+#define K(N)       \
+	v128 k##N; \
+	memcpy(&k##N, &oh_ptr[N], sizeof(k##N))
+
+	K(0);
+	K(2);
+	K(4);
+	K(6);
+	K(8);
+	K(10);
+	K(12);
+	K(14);
+	K(16);
+	K(18);
+	K(20);
+	K(22);
+	K(24);
+	K(26);
+	K(28);
+#undef K
+
+#define GET_PARAM(V, I) ((V) = k##I)
+#else
+#define GET_PARAM(V, I) memcpy(&(V), &oh_ptr[I], sizeof((V)))
+#endif
 
 	assert(n_blocks > 0);
 
@@ -334,42 +401,168 @@ umash_multiple_blocks_generic(uint64_t initial, const uint64_t multipliers[stati
 		memcpy(&x, data, sizeof(x));           \
 		data = (const char *)data + sizeof(x); \
                                                        \
-		memcpy(&k, &oh_ptr[I], sizeof(k));     \
+		GET_PARAM(k, I);                       \
 		x ^= k;                                \
 		acc ^= v128_clmul_cross(x);            \
 	} while (0)
 
-		PH(0);
-		PH(2);
+#if defined(__ARM_FEATURE_CRYPTO)
+/*
+ * Specialised PH2 for the first iteration (overwrite the accumulator
+ * instead of `xor`ing into it).  We use inline assembly to issue
+ * instructions in pairs that work well on Apple ARMs.
+ */
+#if !UMASH_INLINE_ASM
+#define PH2_START_BODY								   \
+	do {									   \
+		v128 result;                                                       \
+		result = vreinterpretq_u64_p128(                                   \
+		    vmull_p64(vgetq_lane_u64(x1, 0), vgetq_lane_u64(swapped, 0))); \
+                                                                                   \
+		acc = vreinterpretq_u64_p128(vmull_high_p64(                       \
+		    vreinterpretq_p64_u64(x2), vreinterpretq_p64_u64(swapped)));   \
+		acc ^= result;                                                     \
+	} while (0)
+#elif defined(__clang__)
+#define PH2_START_BODY							\
+	do {								\
+		v128 tmp;						\
+		__asm__("pmull.1q   %[tmp], %[swapped], %[x1]  \n\t"	\
+			"pmull2.1q  %[acc], %[swapped], %[x2]  \n\t"	\
+			"eor.16b    %[acc], %[acc],     %[tmp] \n\t"	\
+			: [acc] "=w"(acc), [tmp]"=&w"(tmp)		\
+			: [swapped] "w"(swapped), [x1] "w"(x1), [x2] "w"(x2)); \
+	} while (0)
+#else
+/* Assume GCC syntax if !clang. */
+#define PH2_START_BODY							\
+	do {							        \
+		v128 tmp;						\
+		__asm__("pmull   %[tmp].1q,  %[swapped].1d, %[x1].1d    \n\t" \
+			"pmull2  %[acc].1q,  %[swapped].2d, %[x2].2d    \n\t" \
+			"eor     %[acc].16b, %[acc].16b,    %[tmp].16b  \n\t" \
+			: [acc] "=w"(acc), [tmp]"=&w"(tmp)		\
+			: [swapped] "w"(swapped), [x1] "w"(x1), [x2] "w"(x2)); \
+	} while (0)
+#endif
+#define PH2_START(I, J)                                 \
+	do {                                            \
+		v128 x1, x2;                            \
+		v128 k;                                 \
+                                                        \
+		memcpy(&x1, data, sizeof(x1));          \
+		data = (const char *)data + sizeof(x1); \
+                                                        \
+		memcpy(&x2, data, sizeof(x2));          \
+		data = (const char *)data + sizeof(x2); \
+                                                        \
+		GET_PARAM(k, I);                        \
+		x1 ^= k;                                \
+		GET_PARAM(k, J);                        \
+		x2 ^= k;                                \
+                                                        \
+		v128 swapped = vextq_u64(x1, x2, 1);    \
+		PH2_START_BODY;                         \
+	} while (0)
+
+/*
+ * Handle pairs of PH with a single `vextq` to transpose two 128-bit
+ * registers at once.  This lets us use `pmull` on the low and high
+ * lanes for the first and second PH.
+ */
+#if !UMASH_INLINE_ASM
+#define PH2_BODY                                                                   \
+	do {                                                                       \
+		acc ^= vreinterpretq_u64_p128(                                     \
+		    vmull_p64(vgetq_lane_u64(x1, 0), vgetq_lane_u64(swapped, 0))); \
+		acc ^= vreinterpretq_u64_p128(vmull_high_p64(                      \
+		    vreinterpretq_p64_u64(x2), vreinterpretq_p64_u64(swapped)));   \
+	} while (0)
+#elif defined(__clang__)
+#define PH2_BODY                                                        \
+	do {						                \
+		v128 tmp;						\
+		__asm__("pmull.1q   %[tmp], %[swapped], %[x1] \n\t"	\
+			"eor.16b    %[tmp], %[tmp], %[acc]    \n\t"	\
+			"pmull2.1q  %[acc], %[swapped], %[x2] \n\t"	\
+			"eor.16b    %[acc], %[acc], %[tmp]    \n\t"	\
+			: [acc] "+w"(acc), [tmp] "=&w"(tmp)		\
+			: [swapped] "w"(swapped), [x1] "w"(x1), [x2] "w"(x2)); \
+	} while (0)
+#else
+#define PH2_BODY                                                        \
+	 do {						                \
+		 v128 tmp;						\
+		 __asm__("pmull   %[tmp].1q,  %[swapped].1d, %[x1].1d   \n\t" \
+			 "eor     %[tmp].16b, %[tmp].16b,    %[acc].16b \n\t" \
+			 "pmull2  %[acc].1q,  %[swapped].2d, %[x2].2d   \n\t" \
+			 "eor     %[acc].16b, %[acc].16b,    %[tmp].16b \n\t" \
+			 : [acc] "+w"(acc), [tmp]"=&w"(tmp)		\
+			 : [swapped] "w"(swapped), [x1] "w"(x1), [x2] "w"(x2));	\
+	} while (0)
+#endif
+
+#define PH2(I, J)                                       \
+	do {                                            \
+		v128 x1, x2;                            \
+		v128 k;                                 \
+                                                        \
+		memcpy(&x1, data, sizeof(x1));          \
+		data = (const char *)data + sizeof(x1); \
+                                                        \
+		memcpy(&x2, data, sizeof(x2));          \
+		data = (const char *)data + sizeof(x2); \
+                                                        \
+		GET_PARAM(k, I);                        \
+		x1 ^= k;                                \
+		GET_PARAM(k, J);                        \
+		x2 ^= k;                                \
+                                                        \
+		v128 swapped = vextq_u64(x1, x2, 1);    \
+		PH2_BODY;                               \
+	} while (0)
+#else
+#define PH2(I, J)      \
+	do {           \
+		PH(I); \
+		PH(J); \
+	} while (0)
+#define PH2_START PH2
+#endif
+
+		PH2_START(0, 2);
 		FORCE();
 
-		PH(4);
-		PH(6);
+		PH2(4, 6);
 		FORCE();
 
-		PH(8);
-		PH(10);
+		PH2(8, 10);
 		FORCE();
 
-		PH(12);
-		PH(14);
+		PH2(12, 14);
 		FORCE();
 
-		PH(16);
-		PH(18);
+		PH2(16, 18);
 		FORCE();
 
-		PH(20);
-		PH(22);
+		PH2(20, 22);
 		FORCE();
 
-		PH(24);
-		PH(26);
+		PH2(24, 26);
 		FORCE();
 
 		PH(28);
+
+#ifdef PH2_START_BODY
+#undef PH2_START_BODY
+#undef PH2_BODY
+#endif
+
+#undef PH2_START
+#undef PH2
 #undef PH
 #undef FORCE
+#undef GET_PARAM
 
 		memcpy(&oh, &acc, sizeof(oh));
 
@@ -412,6 +605,34 @@ umash_fprint_multiple_blocks_generic(struct umash_fp initial,
 	struct split_accumulator acc0 = { .base = initial.hash[0] };
 	struct split_accumulator acc1 = { .base = initial.hash[1] };
 
+#if UMASH_LONG_PH_PARAMS_IN_REGS
+#define K(N)       \
+	v128 k##N; \
+	memcpy(&k##N, &oh[N], sizeof(k##N))
+
+	K(0);
+	K(2);
+	K(4);
+	K(6);
+	K(8);
+	K(10);
+	K(12);
+	K(14);
+	K(16);
+	K(18);
+	K(20);
+	K(22);
+	K(24);
+	K(26);
+	K(28);
+	K(30);
+#undef K
+
+#define GET_PARAM(V, I) ((V) = k##I)
+#else
+#define GET_PARAM(V, I) memcpy(&(V), &oh[I], sizeof((V)))
+#endif
+
 	do {
 		struct umash_oh compressed[2];
 		v128 acc = V128_ZERO; /* Base umash */
@@ -434,7 +655,7 @@ umash_fprint_multiple_blocks_generic(struct umash_fp initial,
 		memcpy(&x, block, sizeof(x));            \
 		block = (const char *)block + sizeof(x); \
                                                          \
-		memcpy(&k, &oh[I], sizeof(k));           \
+		GET_PARAM(k, I);                         \
                                                          \
 		x ^= k;                                  \
 		lrc ^= x;                                \
@@ -488,11 +709,12 @@ umash_fprint_multiple_blocks_generic(struct umash_fp initial,
 			v128 x, k;
 
 			memcpy(&x, block, sizeof(x));
-			memcpy(&k, &oh[30], sizeof(k));
+			GET_PARAM(k, 30);
 
 			lrc ^= x ^ k;
 		}
 
+#undef GET_PARAM
 		acc_shifted ^= acc;
 		acc_shifted = v128_shift(acc_shifted);
 
@@ -540,7 +762,7 @@ umash_fprint_multiple_blocks_generic(struct umash_fp initial,
 /**
  * Updates a 64-bit UMASH state for `n_blocks` 256-byte blocks in data.
  */
-TEST_DEF HOT __attribute__((__target__(("avx2,vpclmulqdq")))) uint64_t
+TEST_DEF HOT __attribute__((__target__("avx2,vpclmulqdq"))) uint64_t
 umash_multiple_blocks_vpclmulqdq(uint64_t initial, const uint64_t multipliers[static 2],
     const uint64_t *oh_ptr, uint64_t seed, const void *blocks, size_t n_blocks)
 {
@@ -646,7 +868,7 @@ umash_multiple_blocks_vpclmulqdq(uint64_t initial, const uint64_t multipliers[st
 	return split_accumulator_eval(ret);
 }
 
-TEST_DEF HOT __attribute__((__target__(("avx2,vpclmulqdq")))) struct umash_fp
+TEST_DEF HOT __attribute__((__target__("avx2,vpclmulqdq"))) struct umash_fp
 umash_fprint_multiple_blocks_vpclmulqdq(struct umash_fp initial,
     const uint64_t multipliers[static 2][2], const uint64_t *oh, uint64_t seed,
     const void *data, size_t n_blocks)
