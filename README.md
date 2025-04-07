@@ -214,10 +214,10 @@ SMhasher
 | [w1hash](doc/w1hash.txt)                      |     14208.56 |    26.85 | 221.76 (2) |     |                           |
 | [rapidhash](doc/rapidhash.txt)                |     22147.09 |    29.07 | 214.80 (2) | 574 |                           |
 | [rapidhash_unrolled](doc/rapidhash_unrolled.txt)|     21723.13 |    29.40 | 220.97 (3) | 782 |                           |
-| [umash32](doc/umash32.txt)                    |     21999.19 |    41.14 | 239.07 (2) |1530 |                            |
-| [umash32_hi](doc/umash32_hi.txt)              |     22347.33 |    41.22 | 251.12 (4) |1530 |                            |
-| [umash64](doc/umash64.txt)                    |     21963.54 |    41.12 | 228.34 (1) |1530 |                            |
-| [umash128](doc/umash128.txt)                  |     13629.66 |    41.65 | 228.25 (1) |1530 |                            |
+| [umash32](doc/umash32.txt)                    |     24556.40 |    40.01 | 490.26 (33)|1530 |                            |
+| [umash32_hi](doc/umash32_hi.txt)              |     26601.23 |    42.25 | 484.02 (17)|1530 |                            |
+| [umash64](doc/umash64.txt)                    |     26628.37 |    39.87 | 502.33 (38)|1530 |                            |
+| [umash128](doc/umash128.txt)                  |     14523.56 |    43.73 | 475.12 (12)|1530 |                            |
 | [halftime_hash64](doc/halftime_hash64.txt)    |      4801.79 |    99.05 | 310.02 (2) |2911 |                            |
 | [halftime_hash128](doc/halftime_hash128.txt)  |     18220.34 |    94.31 | 307.50 (1) |2462 |                            |
 | [halftime_hash256](doc/halftime_hash256.txt)  |     18249.32 |    97.56 | 322.85 (2) |2622 |                            |
