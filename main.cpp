@@ -606,11 +606,11 @@ HashInfo g_hashes[] =
 { halfsiphash_test,     32, 0xA7A05F72, "HalfSipHash", "HalfSipHash 2-4, 32bit", GOOD, {} },
 { GoodOAAT_test,        32, 0x7B14EEE5, "GoodOAAT",    "Small non-multiplicative OAAT", GOOD, {0x3b00} },
 #ifdef HAVE_INT64
-{ prvhash64_64mtest,    64, 0xD37C7E74, "prvhash64_64m", "prvhash64m 4.3 64bit", GOOD, {} },
-{ prvhash64_64test,     64, 0xD37C7E74, "prvhash64_64",  "prvhash64 4.3 64bit", GOOD, {} },
-{ prvhash64_128test,   128, 0xB447480F, "prvhash64_128", "prvhash64 4.3 128bit", GOOD, {} },
-{ prvhash64s_64test,    64, 0x891521D6, "prvhash64s_64", "prvhash64s 4.3 64bit", GOOD, {} }, // seed changes
-{ prvhash64s_128test,  128, 0x0199728A, "prvhash64s_128","prvhash64s 4.3 128bit", GOOD, {} }, // seed compiler-specific
+{ prvhash64_64mtest,    64, 0xD37C7E74, "prvhash64_64m", "prvhash64m 4.3.4 64bit", GOOD, {} },
+{ prvhash64_64test,     64, 0xD37C7E74, "prvhash64_64",  "prvhash64 4.3.4 64bit", GOOD, {} },
+{ prvhash64_128test,   128, 0xB447480F, "prvhash64_128", "prvhash64 4.3.4 128bit", GOOD, {} },
+{ prvhash64s_64test,    64, 0x891521D6, "prvhash64s_64", "prvhash64s 4.3.4 64bit", GOOD, {} }, // seed changes
+{ prvhash64s_128test,  128, 0x0199728A, "prvhash64s_128","prvhash64s 4.3.4 128bit", GOOD, {} }, // seed compiler-specific
 #endif
 // as in rust and swift:
 { siphash13_test,       64, 0x29C010BF, "SipHash13",   "SipHash 1-3 - SSSE3 optimized", GOOD, {} },
