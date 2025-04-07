@@ -1,11 +1,8 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.5)
 cmake_policy(SET CMP0003 NEW)
-if(POLICY CMP0056) # Honor link flags in try_compile() source-file signature.
-  cmake_policy(SET CMP0056 NEW) # since 3.2
-endif()
-if(POLICY CMP0065)
-  cmake_policy(SET CMP0065 NEW) # since 3.4. ENABLE_EXPORTS.
-endif()
+# Honor link flags in try_compile() source-file signature.
+cmake_policy(SET CMP0056 NEW) # since 3.2
+cmake_policy(SET CMP0065 NEW) # since 3.4. ENABLE_EXPORTS.
 if(POLICY CMP0066) # honor per-config flags in try_compile() source-file
                    # signature.
   cmake_policy(SET CMP0066 NEW) # since 3.7
