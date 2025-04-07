@@ -4,9 +4,6 @@
 #include <math.h>
 #include "tifuhash.h"
 
-#if defined(_MSC_VER)
-
-#define FORCE_INLINE	__forceinline
 #ifndef M_PI
 #define M_PI 3.14159265358979323846264338327950288
 #endif
@@ -14,12 +11,11 @@
 #define M_E  2.71828182845904523536028747135266250
 #endif
 
+#if defined(_MSC_VER)
+#define FORCE_INLINE	__forceinline
 // Other compilers
-
 #else	// defined(_MSC_VER)
-
 #define	FORCE_INLINE inline __attribute__((always_inline))
-
 #endif // !defined(_MSC_VER)
 
 //---------
