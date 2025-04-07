@@ -64,6 +64,18 @@ unsigned int GetCpuFreqMHz( void )
 
 #include <windows.h>
 
+uint64_t timeofday(void)
+{
+  // GetTickCount               ~ Windows 2000+
+  // GetTickCount64             ~ Vista+, Server 2008+
+  // QueryUnbiasedInterruptTime ~ Windows 7+, Server 2008 R2
+  // see https://learn.microsoft.com/en-us/windows/win32/winprog/using-the-windows-headers
+  unsigned long long ns100;
+  if (QueryUnbiasedInterruptTime(&ns100))
+    return ns100 * 100u;
+  return GetTickCount64() * 1000000U;
+}
+
 void SetAffinity ( int cpu )
 {
   SetProcessAffinityMask(GetCurrentProcess(),cpu);
@@ -76,18 +88,6 @@ void SetThreadAffinity ( std::thread &t, int cpu )
     SetThreadIdealProcessor((HANDLE)t.native_handle(), (DWORD)cpu);
 }
 #endif
-
-uint64_t timeofday(void)
-{
-  // GetTickCount               ~ Windows 2000+
-  // GetTickCount64             ~ Vista+, Server 2008+
-  // QueryUnbiasedInterruptTime ~ Windows 7+, Server 2008 R2
-  // see https://learn.microsoft.com/en-us/windows/win32/winprog/using-the-windows-headers
-  unsigned long long ns100;
-  if (QueryUnbiasedInterruptTime(&ns100))
-    return ns100 * 100u;
-  return GetTickCount64() * 1000000U;
-}
 
 #else
 

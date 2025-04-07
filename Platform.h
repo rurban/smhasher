@@ -107,6 +107,10 @@ uint64_t timeofday(void);
 
 #else	//	!defined(_MSC_VER)
 
+#ifdef _WIN32
+uint64_t timeofday();
+#endif
+
 #if !defined (__i386__) && !defined (__x86_64__)
 #include <cstddef>
 #endif
@@ -166,6 +170,8 @@ inline uint64_t rotr64 ( uint64_t x, int8_t r )
 #   define CLOCK_MNTCOARSE_FASTEST CLOCK_MONOTONIC_FASTEST
 #endif
 
+#ifndef _WIN32
+
 __inline__ uint64_t timeofday()
 {
 #ifdef CLOCK_MONOTONIC_FASTEST
@@ -179,6 +185,8 @@ __inline__ uint64_t timeofday()
   return int64_t(tv.tv_sec) * 1000000000 + tv.tv_usec * 1000;
 #endif
 }
+
+#endif
 
 __inline__ uint64_t rdtsc()
 {
