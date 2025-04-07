@@ -716,7 +716,7 @@ HashInfo g_hashes[] =
 { pengyhash_test,       64, 0x1FC2217B, "pengyhash",   "pengyhash", GOOD, {} },
 { mx3hash64_test,       64, 0x4DB51E5B, "mx3",         "mx3 64bit", GOOD, {0x10} /* !! and all & 0x10 */},
 #ifdef HAVE_UMASH
-{ umash32,              32, 0x9451AF3B, "umash32",     "umash 32", GOOD, {0x90e37057} /* !! */},
+{ umash32,              32, 0x9451AF3B, "umash32",     "umash 32", GOOD, {0x36ced9cb, 0x707764c0, 0x7a1583fe, 0xf4999214, 0xf838ac4a} /* !! */},
 { umash32_hi,           32, 0x0CC4850F, "umash32_hi",  "umash 32 hi", GOOD, {} },
 { umash,                64, 0x161495C6, "umash64",     "umash 64", GOOD, {} },
 { umash128,            128, 0x36D4EC95, "umash128",    "umash 128", GOOD, {} },
@@ -920,6 +920,14 @@ void Bad_Seed_init (pfHash hash, uint32_t &seed) {
 #ifdef HAVE_AESNI
   else if (hash == gxhash32_test)
     gxhash32_seed_init(seed);
+#endif
+#ifdef HAVE_UMASH
+  else if (hash == umash32) {
+    const std::vector<uint32_t> badseeds = {0x36ced9cb, 0x707764c0, 0x7a1583fe, 0xf4999214, 0xf838ac4a};
+    if (std::find(badseeds.begin(), badseeds.end(), seed) == badseeds.end()) {
+      seed++;
+    }
+  }
 #endif
 #if defined(HAVE_SSE42) && defined(__x86_64__)
   else if (hash == clhash_test && seed == 0x0)
