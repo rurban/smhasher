@@ -1312,6 +1312,13 @@ inline void komihash_test ( const void * key, int len, unsigned seed, void * out
 #endif
 }
 
+#include "a5hash/a5hash.h"
+// objsize: 429a40 - 429bdf: 415
+inline void a5hash_test ( const void * key, int len, unsigned seed, void * out )
+{
+  *(uint64_t*)out = a5hash ((const uint8_t *)key, (size_t)len, (uint64_t)seed);
+}
+
 // objsize: 408dd0 - 4090ae: 734
 #include "mx3/mx3.h"
 inline void mx3hash64_test ( const void * key, int len, uint32_t seed, void * out ) {
