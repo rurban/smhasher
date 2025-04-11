@@ -34,13 +34,15 @@ static inline void PUT_U64(uint64_t value, uint8_t* data, size_t index) {
 
 #include "rainbow.hpp"
 
-//objsize: 
+//objsize: 4f7da0 - 4f811c: 892
 void rainbow64_test ( const void *key, int len, uint32_t seed, void *out) {
   rainbow<64>(key, (size_t)len, seed, out);
 }
+//objsize: 4f8120 - 4f84c9: 937
 void rainbow128_test ( const void *key, int len, uint32_t seed, void *out) {
   rainbow<128>(key, (size_t)len, seed, out);
 }
+//objsize: 4f84d0 - 4f89af: 1247
 void rainbow256_test ( const void *key, int len, uint32_t seed, void *out) {
     rainbow<256>(key, (size_t)len, seed, out);
 }

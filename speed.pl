@@ -84,14 +84,14 @@ sub fixuphtml {
       $_ = <$I>;
       if (defined $bulk) {
         $bulk =~ s/^\s+//;
-        s{<td align="right">(.+?)</td>}{<td align="right">$bulk</td>};
+        s{<td align="right">(.*?)</td>}{<td align="right">$bulk</td>};
       }
       print $O $_;
 
       $_ = <$I>;
       if (defined $small) {
         $small =~ s/^\s+//;
-        s{<td align="right">(.+?)</td>}{<td align="right">$small</td>};
+        s{<td align="right">(.*?)</td>}{<td align="right">$small</td>};
       }
       print $O $_;
 

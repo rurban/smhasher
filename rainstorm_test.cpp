@@ -34,12 +34,15 @@ static inline void PUT_U64(uint64_t value, uint8_t* data, size_t index) {
 
 #include "rainstorm.hpp"
 
+//objsize: 4f89b0 - 4f916c: 1980
 void rainstorm64_test ( const void *key, int len, uint32_t seed, void *out) {
   rainstorm<64>(key, (size_t)len, seed, out);
 }
+//objsize: 4f9170 - 4f99bc: 2128
 void rainstorm128_test ( const void *key, int len, uint32_t seed, void *out) {
   rainstorm<128>(key, (size_t)len, seed, out);
 }
+//objsize: 4f99c0 - 4fa32c: 2412
 void rainstorm256_test ( const void *key, int len, uint32_t seed, void *out) {
   rainstorm<256>(key, (size_t)len, seed, out);
 }
