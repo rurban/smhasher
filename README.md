@@ -232,7 +232,7 @@ SMhasher
 | [nmhash32x](doc/nmhash32x.txt)                |     13072.64 |    42.09 | 288.12 (3) |1494 |                            |
 | [k-hashv32](doc/k-hashv32.txt)                |      8393.09 |    53.95 | 252.98 (3) |1280 |                            |
 | [k-hashv64](doc/k-hashv64.txt)                |      9251.05 |    51.72 | 251.83 (2) |1279 |                            |
-| [komihash](doc/komihash.txt)                  |     11382.15 |    33.10 | 486.61 (32)|1323 |                            |
+| [komihash](doc/komihash.txt)                  |     11257.39 |    33.90 | 464.92 (8) |1323 |                            |
 | [a5hash](doc/a5hash.txt)                      |      9687.41 |    29.15 | 446.46 (11)|415  |                            |
 | [polymur](doc/polymur.txt)                    |      9913.53 |    41.68 | 232.56 (3) |1128 |                            |
 | [gxhash32](doc/gxhash32.txt)                  |     47943.08 |    37.71 | 251.38 (2) |736  | AES only                   |
