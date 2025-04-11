@@ -215,10 +215,10 @@ SMhasher
 | [t1ha0_aes_avx1](doc/t1ha0_aes_avx1.txt)      |     27881.52 |    36.78 | 227.13 (2) | 843 | LongNeighbors, machine-specific (x64 AVX)    |
 | [t1ha0_aes_avx2](doc/t1ha0_aes_avx2.txt)      |     56581.83 |    36.51 | 223.59 (1) | 792 | LongNeighbors, machine-specific (x64 AVX2)   |
 | [wyhash32](doc/wyhash32.txt)                  |      2532.89 |    48.40 | 484.57 (1) | 426 | 4 bad and broken seeds, 32-bit |
-| [wyhash32low](doc/wyhash32low.txt)            |     23104.85 |    28.56 | 239.71 (4) | 474 | 5 bad seeds  |
-| [wyhash](doc/wyhash.txt)                      |     22640.53 |    28.91 | 229.00 (2) | 474 |                           |
-| [w1hash](doc/w1hash.txt)                      |     14208.56 |    26.85 | 221.76 (2) |     |                           |
-| [rapidhash](doc/rapidhash.txt)                |     22147.09 |    29.07 | 214.80 (2) | 574 |                           |
+| [wyhash32low](doc/wyhash32low.txt)            |     23104.85 |    28.56 | 239.71 (4) | 532 | 5 bad seeds  |
+| [wyhash](doc/wyhash.txt)                      |     22640.53 |    28.91 | 229.00 (2) | 532 |                           |
+| [w1hash](doc/w1hash.txt)                      |     14208.56 |    26.85 | 221.76 (2) |1497 |                           |
+| [rapidhash](doc/rapidhash.txt)                |     22147.09 |    29.07 | 214.80 (2) | 487 |                           |
 | [rapidhash_unrolled](doc/rapidhash_unrolled.txt)|     21723.13 |    29.40 | 220.97 (3) | 782 |                           |
 | [umash32](doc/umash32.txt)                    |     24556.40 |    40.01 | 490.26 (33)|1530 |                            |
 | [umash32_hi](doc/umash32_hi.txt)              |     26601.23 |    42.25 | 484.02 (17)|1530 |                            |
@@ -232,9 +232,9 @@ SMhasher
 | [nmhash32x](doc/nmhash32x.txt)                |     13072.64 |    42.09 | 288.12 (3) |1494 |                            |
 | [k-hashv32](doc/k-hashv32.txt)                |      8393.09 |    53.95 | 252.98 (3) |1280 |                            |
 | [k-hashv64](doc/k-hashv64.txt)                |      9251.05 |    51.72 | 251.83 (2) |1279 |                            |
-| [komihash](doc/komihash.txt)                  |     11257.39 |    33.90 | 464.92 (8) |1323 |                            |
-| [a5hash](doc/a5hash.txt)                      |      9687.41 |    29.15 | 446.46 (11)|415  |                            |
-| [polymur](doc/polymur.txt)                    |      9913.53 |    41.68 | 232.56 (3) |1128 |                            |
+| [komihash](doc/komihash.txt)                  |     11257.39 |    33.90 | 464.92 (8) |1015 |                            |
+| [a5hash](doc/a5hash.txt)                      |      9687.41 |    29.15 | 446.46 (11)| 424 |                            |
+| [polymur](doc/polymur.txt)                    |      9913.53 |    41.68 | 232.56 (3) |1141 |                            |
 | [gxhash32](doc/gxhash32.txt)                  |     47943.08 |    37.71 | 251.38 (2) |736  | AES only                   |
 | [gxhash64](doc/gxhash64.txt)                  |     48919.73 |    36.61 | 236.98 (3) |720  | AES only                   |
 
