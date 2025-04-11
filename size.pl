@@ -27,6 +27,8 @@ sub parse_objdump {
     my $line = $lines[0];
     if ($line =~ /^[0-9a-f]+ ([0-9a-f]+) T $test\(/) {
       my $size = $1;
+      # TODO if $size < 200 check if the code does not contain call
+      # if so, add the size of this call function also
       return hex($size);
     }
   }
@@ -86,7 +88,7 @@ sub updhtml {
   open $in, '<', $file or die "Could not open file: $!";
   open $out, '>', "$file.new" or die "Could not open file: $!";
   while (my $line = <$in>) {
-    $_ = $line;
+    $_ = "$line";
     if (!$found and m{^<td align="left"><a href="\Q$n\E\.txt">\Q$n\E</a></td>}) {
       $found = 1;
     }
@@ -95,11 +97,14 @@ sub updhtml {
       $found++;
     }
     if ($found == 5) {
+      $s =~ s/^\s+//; #trim 
+      $s =~ s/\s+$//; #trim
       my $oldsize = int($s);
-      if ($oldsize != $size) {
+      if ($oldsize != $size and abs($size - $oldsize) < 100) {
         print $out "<td align=\"right\">$size</td>";
         $changed = 1;
       } else {
+        warn "suspicious $size != $oldsize\n" if $oldsize != $size;
         print $out $_;
       }
       $found = 0;

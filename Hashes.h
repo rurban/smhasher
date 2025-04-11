@@ -1181,7 +1181,8 @@ void farsh256_test ( const void * key, int len, unsigned seed, void * out );
 
 extern "C" {
 #include "blake3/blake3_impl.h"
-// The C API, serially
+  // The C API, serially
+  // objsize: 425e10-429e5e=16462
   inline void blake3c_test ( const void * key, int len, uint32_t seed, void * out )
   {
     blake3_hasher hasher;
