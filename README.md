@@ -5,22 +5,22 @@ SMhasher
 
 | Hash function                                 |      MiB/sec |cycl./hash|cycl./map   | size| Quality problems               |
 |:----------------------------------------------|-------------:|---------:|-----------:|----:|--------------------------------|
-| [donothing32](doc/donothing32.txt)            |  11536809.55 |     4.00 | -|      13 | bad seed 0, test NOP           |
-| [donothing64](doc/donothing64.txt)            |  12269832.97 |     4.00 | -|      13 | bad seed 0, test NOP           |
-| [donothing128](doc/donothing128.txt)          |  11961841.48 |     4.08 | -|      13 | bad seed 0, test NOP           |
-| [NOP_OAAT_read64](doc/NOP_OAAT_read64.txt)    |  11652662.97 |    14.00 | -|      47 | test NOP                       |
-| [BadHash](doc/BadHash.txt)                    |       794.68 |    72.80 | -|      48 | bad seed 0, test FAIL          |
-| [sumhash](doc/sumhash.txt)                    |     10184.67 |    29.40 | -|     417 | bad seed 0, test FAIL          |
-| [sumhash32](doc/sumhash32.txt)                |     44755.87 |    23.46 | -|     697 | UB, test FAIL                  |
+| [donothing32](doc/donothing32.txt)            |  11536809.55 |     4.00 |    -       |  13 | bad seed 0, test NOP           |
+| [donothing64](doc/donothing64.txt)            |  12269832.97 |     4.00 |    -       |  13 | bad seed 0, test NOP           |
+| [donothing128](doc/donothing128.txt)          |  11961841.48 |     4.08 |    -       |  13 | bad seed 0, test NOP           |
+| [NOP_OAAT_read64](doc/NOP_OAAT_read64.txt)    |  11652662.97 |    14.00 |    -       |  47 | test NOP                       |
+| [BadHash](doc/BadHash.txt)                    |       794.68 |    72.80 |    -       |  48 | bad seed 0, test FAIL          |
+| [sumhash](doc/sumhash.txt)                    |     10184.67 |    29.40 |    -       | 417 | bad seed 0, test FAIL          |
+| [sumhash32](doc/sumhash32.txt)                |     44755.87 |    23.46 |    -       | 697 | UB, test FAIL                  |
 | [multiply_shift](doc/multiply_shift.txt)      |      8286.63 |    25.39 | 209.06 (2) | 345 | bad seeds & 0xfffffff0, fails most tests |
-| [pair_multiply_shift](doc/pair_multiply_shift.txt)|      5728.05 |    39.67 | 218.48 (12)| 609 | fails most tests |
+| [pair_multiply_shift](doc/pair_multiply_shift.txt)|  5728.05 |    39.67 | 218.48 (12)| 609 | fails most tests |
 | --------------------------                    |              |          |            |     |                      |
 | [crc32](doc/crc32.txt)                        |       369.88 |   142.33 | 396.81 (101)| 363 | insecure, 8590x collisions, distrib, PerlinNoise |
 | [md5_32](doc/md5_32.txt)                      |       359.43 |   638.92 | 865.21 (6) | 598 |  |
 | [md5_64](doc/md5_64.txt)                      |       360.20 |   640.38 | 869.55 (6) | 662 |  |
 | [md5-128](doc/md5-128.txt)                    |       344.63 |   669.59 | 856.34 (5) | 557 |                    |
-| [sha1_32](doc/sha1_32.txt)                  |       353.03 |  1385.80 |1759.94 (5) |5126 | Sanity, Cyclic low32, 36.6% distrib |
-| [sha1_64](doc/sha1_64.txt)                  |       353.03 |  1385.80 |1759.94 (5) |5126 | Sanity, Cyclic low32, 36.6% distrib |
+| [sha1_32](doc/sha1_32.txt)                    |       353.03 |  1385.80 |1759.94 (5) |5126 | Sanity, Cyclic low32, 36.6% distrib |
+| [sha1_64](doc/sha1_64.txt)                    |       353.03 |  1385.80 |1759.94 (5) |5126 | Sanity, Cyclic low32, 36.6% distrib |
 | [sha1-160](doc/sha1-160.txt)                  |       364.95 |  1470.55 |1794.16 (13)|5126 | Comb/Cyclic low32  |
 | [sha2-224](doc/sha2-224.txt)                  |       147.13 |  1354.81 |1589.92 (12)| 695 | Comb low32 |
 | [sha2-224_64](doc/sha2-224_64.txt)            |       147.60 |  1360.10 |1620.93 (13)| 600 | Cyclic low32  |
@@ -68,7 +68,7 @@ SMhasher
 | [fibonacci](doc/fibonacci.txt)                |     15409.62 |    22.67 | 872.83 (3) |1692 | UB, zeros, fails all tests       |
 | [FNV1a](doc/FNV1a.txt)                        |       754.70 |    75.28 | 226.30 (2) |  54 | bad seed, zeros, fails all tests       |
 | [FNV1A_Totenschiff](doc/FNV1A_Totenschiff.txt)|      6166.85 |    26.60 | 235.71 (2) | 270 | UB, zeros, fails all tests   |
-| [FNV1A_Pippip_Yurii](doc/FNV1A_Pippip_Yurii.txt)|      6115.29 |    28.03 | 233.52 (2) | 147 | UB, sanity, fails all tests  |
+| [FNV1A_Pippip_Yurii](doc/FNV1A_Pippip_Yurii.txt)|    6115.29 |    28.03 | 233.52 (2) | 147 | UB, sanity, fails all tests  |
 | [FNV1a_YT](doc/FNV1a_YT.txt)                  |     13481.70 |    30.67 | 233.71 (7) | 336 | bad seed, UB, fails all tests          |
 | [FNV2](doc/FNV2.txt)                          |      5630.87 |    32.09 | 207.08 (1) | 278 | fails all tests              |
 | [FNV64](doc/FNV64.txt)                        |       747.70 |    74.18 | 189.18 (1) |  70 | fails all tests              |
@@ -128,7 +128,7 @@ SMhasher
 | [t1ha2_stream](doc/t1ha2_stream.txt)          |     13673.22 |    81.12 | 263.88 (3) |1643 | Sparse, Permutation, LongNeighbors |
 | [t1ha2_stream128](doc/t1ha2_stream128.txt)    |     13913.43 |    94.60 | 296.15 (4) |1570 | Sparse, Permutation, LongNeighbors |
 | [aesnihash](doc/aesnihash.txt)                |      5365.60 |    57.21 | 255.87 (3) | 590 | fails many tests, machine-specific (x64 AES-NI) |
-| [aesni-hash-peterrk](doc/aesni-hash-peterrk.txt)|     29107.73 |    28.86 | 217.57 (1) | | machine-specific (x64 AES-NI) |
+| [aesni-hash-peterrk](doc/aesni-hash-peterrk.txt)|   29107.73 |    28.86 | 217.57 (1) |     | machine-specific (x64 AES-NI) |
 | [falkhash](doc/falkhash.txt)                  |     52401.48 |   122.70 | 316.79 (4) | 264 | Sparse, LongNeighbors, machine-specific (x64 AES-NI) |
 | [MeowHash](doc/MeowHash.txt)                  |     29969.81 |    64.90 | 273.79 (8) |1764 | Sparse, invertible, machine-specific (x64 AES-NI)  |
 | [MeowHash64low](doc/MeowHash64low.txt)        |     29438.45 |    63.76 | 269.41 (4) |1764 | Sparse, invertible, machine-specific (x64 AES-NI)    |
@@ -166,7 +166,7 @@ SMhasher
 | [xmsx32](doc/xmsx32.txt)                      |      2105.03 |    45.35 | 238.92 (3) | 189 | 2 bad seeds                  |
 | [mirhash](doc/mirhash.txt)                    |      5793.85 |    38.15 | 212.91 (2) |1112 | UB, 2^36 bad seeds, LongNeighbors, machine-specific (32/64 differs) |
 | [mirhashstrict](doc/mirhashstrict.txt)        |      3587.79 |    49.85 | 219.49 (2) | 699 |                            |
-| [mirhashstrict32low](doc/mirhashstrict32low.txt)|      3642.77 |    50.16 | 233.34 (3) |1112 | 1 bad seed, MomentChi2 9   |
+| [mirhashstrict32low](doc/mirhashstrict32low.txt)|    3642.77 |    50.16 | 233.34 (3) |1112 | 1 bad seed, MomentChi2 9   |
 | [fasthash32](doc/fasthash32.txt)              |      6107.05 |    40.49 | 237.83 (2) | 566 | UB                         |
 | [fasthash64](doc/fasthash64.txt)              |      5600.11 |    38.04 | 219.71 (2) | 509 | UB                         |
 | [aesni](doc/aesni.txt)                        |     31185.98 |    29.45 | 226.75 (2) | 519 | machine-specific (x64 AES-NI)           |
