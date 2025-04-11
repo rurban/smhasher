@@ -13,42 +13,42 @@ SMhasher
 | [sumhash](doc/sumhash.txt)                    |     10184.67 |    29.40 |    -       | 417 | bad seed 0, test FAIL          |
 | [sumhash32](doc/sumhash32.txt)                |     44755.87 |    23.46 |    -       | 697 | UB, test FAIL                  |
 | [multiply_shift](doc/multiply_shift.txt)      |      8286.63 |    25.39 | 209.06 (2) | 345 | bad seeds & 0xfffffff0, fails most tests |
-| [pair_multiply_shift](doc/pair_multiply_shift.txt)|  5728.05 |    39.67 | 218.48 (12)| 609 | fails most tests |
-| --------------------------                    |              |          |            |     |                      |
-| [crc32](doc/crc32.txt)                        |       369.88 |   142.33 | 396.81 (101)| 363 | insecure, 8590x collisions, distrib, PerlinNoise |
-| [md5_32](doc/md5_32.txt)                      |       359.43 |   638.92 | 865.21 (6) | 598 |  |
-| [md5_64](doc/md5_64.txt)                      |       360.20 |   640.38 | 869.55 (6) | 662 |  |
+| [pair_multiply_shift](doc/pair_multiply_shift.txt)|  5728.05 |    39.67 | 218.48 (12)| 609 | fails most tests   |
+| --------------------------                    |              |          |            |     |                    |
+| [crc32](doc/crc32.txt)                        |       369.88 |   142.33 | 396.81 (101)|363 | insecure, 8590x collisions, distrib, PerlinNoise |
+| [md5_32](doc/md5_32.txt)                      |       359.43 |   638.92 | 865.21 (6) | 598 |                    |
+| [md5_64](doc/md5_64.txt)                      |       360.20 |   640.38 | 869.55 (6) | 662 |                    |
 | [md5-128](doc/md5-128.txt)                    |       344.63 |   669.59 | 856.34 (5) | 557 |                    |
 | [sha1_32](doc/sha1_32.txt)                    |       353.03 |  1385.80 |1759.94 (5) |5126 | Sanity, Cyclic low32, 36.6% distrib |
 | [sha1_64](doc/sha1_64.txt)                    |       353.03 |  1385.80 |1759.94 (5) |5126 | Sanity, Cyclic low32, 36.6% distrib |
 | [sha1-160](doc/sha1-160.txt)                  |       364.95 |  1470.55 |1794.16 (13)|5126 | Comb/Cyclic low32  |
-| [sha2-224](doc/sha2-224.txt)                  |       147.13 |  1354.81 |1589.92 (12)| 695 | Comb low32 |
-| [sha2-224_64](doc/sha2-224_64.txt)            |       147.60 |  1360.10 |1620.93 (13)| 600 | Cyclic low32  |
-| [sha2-256](doc/sha2-256.txt)                  |       147.80 |  1374.90 |1606.06 (16)| 663 |  |
-| [sha2-256_64](doc/sha2-256_64.txt)            |       148.01 |  1376.34 |1624.71 (16)| 600 |  |
+| [sha2-224](doc/sha2-224.txt)                  |       147.13 |  1354.81 |1589.92 (12)| 695 | Comb low32         |
+| [sha2-224_64](doc/sha2-224_64.txt)            |       147.60 |  1360.10 |1620.93 (13)| 600 | Cyclic low32       |
+| [sha2-256](doc/sha2-256.txt)                  |       147.80 |  1374.90 |1606.06 (16)| 663 |                    |
+| [sha2-256_64](doc/sha2-256_64.txt)            |       148.01 |  1376.34 |1624.71 (16)| 600 |                    |
 | [sha1ni](doc/sha1ni.txt)                      |      1632.88 |   170.77 | 379.84 (5) |1321 | insecure,sanity, Permutation, Zeroes, machine-specific |
-| [sha1ni_32](doc/sha1ni_32.txt)                |      1583.50 |   172.17 | 387.70 (4) |1273 | machine-specific |
+| [sha1ni_32](doc/sha1ni_32.txt)                |      1583.50 |   172.17 | 387.70 (4) |1273 | machine-specific   |
 | [sha2ni-256](doc/sha2ni-256.txt)              |      1556.66 |   180.75 | 393.79 (5) |1495 | insecure,sanity, Permutation, Zeroes, machine-specific |
 | [sha2ni-256_64](doc/sha2ni-256_64.txt)        |      1508.82 |   184.89 | 393.07 (6) |1409 | Zeroes, machine-specific |
 | [blake3_c](doc/blake3_c.txt)                  |      1298.04 |   354.25 | 563.63 (4) |16462| no 32bit portability     |
-| [rmd128](doc/rmd128.txt)                      |       294.42 |   712.67 | 930.65 (4) | 950 |               |
-| [rmd160](doc/rmd160.txt)                      |       202.16 |  1045.79 |1287.74 (16)| 950 | Cyclic hi32   |
-| [rmd256](doc/rmd256.txt)                      |       366.21 |   615.39 | 830.04 (7) |1026 |               |
-| [edonr224](doc/edonr224.txt)                  |       863.77 |   304.76 | 496.66 (3) | 834 |               |
-| [edonr256](doc/edonr256.txt)                  |       870.97 |   296.40 | 517.82 (6) | 834 |               |
-| [blake2s-128](doc/blake2s-128.txt)            |       295.30 |   698.09 |1059.24 (51)| 329 |               |
-| [blake2s-160](doc/blake2s-160.txt)            |       215.01 |  1026.74 |1239.54 (11)| 329 |               |
-| [blake2s-224](doc/blake2s-224.txt)            |       207.06 |  1063.86 |1236.50 (20)| 329 |               |
-| [blake2s-256](doc/blake2s-256.txt)            |       215.28 |  1014.88 |1230.38 (28)| 329 |               |
-| [blake2s-256_64](doc/blake2s-256_64.txt)      |       211.52 |  1044.22 |1228.43 (8) | 323 |               |
-| [blake2b-160](doc/blake2b-160.txt)            |       356.08 |  1236.84 |1458.15 (12)| 505 |               |
-| [blake2b-224](doc/blake2b-224.txt)            |       356.59 |  1228.50 |1425.87 (16)| 505 |               |
-| [blake2b-256](doc/blake2b-256.txt)            |       355.97 |  1232.22 |1443.31 (19)| 505 |               |
-| [blake2b-256_64](doc/blake2b-256_64.txt)      |       356.97 |  1222.76 |1435.03 (9) | 501 |               |
-| [asconhashv12](doc/asconhashv12.txt)          |       144.98 |   885.02 |1324.23 (38)|4341 |               |
-| [asconhashv12_64](doc/asconhashv12_64.txt)    |       159.33 |   402.54 | 473.15 (4) |6490 |               |
-| [sha3-256](doc/sha3-256.txt)                  |       100.58 |  3877.18 |4159.79 (37)|1686 | PerlinNoise   |
-| [sha3-256_64](doc/sha3-256_64.txt)            |       100.57 |  3909.00 |4174.63 (16)|1630 | PerlinNoise   |
+| [rmd128](doc/rmd128.txt)                      |       294.42 |   712.67 | 930.65 (4) | 950 |                  |
+| [rmd160](doc/rmd160.txt)                      |       202.16 |  1045.79 |1287.74 (16)| 950 | Cyclic hi32      |
+| [rmd256](doc/rmd256.txt)                      |       366.21 |   615.39 | 830.04 (7) |1026 |                  |
+| [edonr224](doc/edonr224.txt)                  |       863.77 |   304.76 | 496.66 (3) | 834 |                  |
+| [edonr256](doc/edonr256.txt)                  |       870.97 |   296.40 | 517.82 (6) | 834 |                  |
+| [blake2s-128](doc/blake2s-128.txt)            |       295.30 |   698.09 |1059.24 (51)| 329 |                  |
+| [blake2s-160](doc/blake2s-160.txt)            |       215.01 |  1026.74 |1239.54 (11)| 329 |                  |
+| [blake2s-224](doc/blake2s-224.txt)            |       207.06 |  1063.86 |1236.50 (20)| 329 |                  |
+| [blake2s-256](doc/blake2s-256.txt)            |       215.28 |  1014.88 |1230.38 (28)| 329 |                  |
+| [blake2s-256_64](doc/blake2s-256_64.txt)      |       211.52 |  1044.22 |1228.43 (8) | 323 |                  |
+| [blake2b-160](doc/blake2b-160.txt)            |       356.08 |  1236.84 |1458.15 (12)| 505 |                  |
+| [blake2b-224](doc/blake2b-224.txt)            |       356.59 |  1228.50 |1425.87 (16)| 505 |                  |
+| [blake2b-256](doc/blake2b-256.txt)            |       355.97 |  1232.22 |1443.31 (19)| 505 |                  |
+| [blake2b-256_64](doc/blake2b-256_64.txt)      |       356.97 |  1222.76 |1435.03 (9) | 501 |                  |
+| [asconhashv12](doc/asconhashv12.txt)          |       144.98 |   885.02 |1324.23 (38)|4341 |                  |
+| [asconhashv12_64](doc/asconhashv12_64.txt)    |       159.33 |   402.54 | 473.15 (4) |6490 |                  |
+| [sha3-256](doc/sha3-256.txt)                  |       100.58 |  3877.18 |4159.79 (37)|1686 | PerlinNoise      |
+| [sha3-256_64](doc/sha3-256_64.txt)            |       100.57 |  3909.00 |4174.63 (16)|1630 | PerlinNoise      |
 | [hasshe2](doc/hasshe2.txt)                    |      2879.93 |    62.47 | 272.34 (2) | 505 | Permutation,TwoBytes,Zeroes,Seed|
 | [poly_1_mersenne](doc/poly_1_mersenne.txt)    |      1278.37 |    63.42 | 244.41 (1) | 479 | fails most tests |
 | [poly_2_mersenne](doc/poly_2_mersenne.txt)    |      1391.90 |    69.97 | 255.44 (3) | 479 |                  |
@@ -215,11 +215,11 @@ SMhasher
 | [t1ha0_aes_avx1](doc/t1ha0_aes_avx1.txt)      |     27881.52 |    36.78 | 227.13 (2) | 679 | LongNeighbors, machine-specific (x64 AVX)    |
 | [t1ha0_aes_avx2](doc/t1ha0_aes_avx2.txt)      |     56581.83 |    36.51 | 223.59 (1) | 628 | LongNeighbors, machine-specific (x64 AVX2)   |
 | [wyhash32](doc/wyhash32.txt)                  |      2532.89 |    48.40 | 484.57 (1) | 426 | 4 bad and broken seeds, 32-bit |
-| [wyhash32low](doc/wyhash32low.txt)            |     23104.85 |    28.56 | 239.71 (4) | 532 | 5 bad seeds  |
-| [wyhash](doc/wyhash.txt)                      |     22640.53 |    28.91 | 229.00 (2) | 532 |                           |
-| [w1hash](doc/w1hash.txt)                      |     14208.56 |    26.85 | 221.76 (2) |1497 |                           |
-| [rapidhash](doc/rapidhash.txt)                |     22147.09 |    29.07 | 214.80 (2) | 487 |                           |
-| [rapidhash_unrolled](doc/rapidhash_unrolled.txt)|     21723.13 |    29.40 | 220.97 (3) | 782 |                           |
+| [wyhash32low](doc/wyhash32low.txt)            |     23104.85 |    28.56 | 239.71 (4) | 532 | 5 bad seeds                |
+| [wyhash](doc/wyhash.txt)                      |     22640.53 |    28.91 | 229.00 (2) | 532 |                            |
+| [w1hash](doc/w1hash.txt)                      |     14208.56 |    26.85 | 221.76 (2) |1497 |                            |
+| [rapidhash](doc/rapidhash.txt)                |     22147.09 |    29.07 | 214.80 (2) | 487 |                            |
+| [rapidhash_unrolled](doc/rapidhash_unrolled.txt)|   21723.13 |    29.40 | 220.97 (3) | 782 |                            |
 | [umash32](doc/umash32.txt)                    |     24556.40 |    40.01 | 490.26 (33)|1530 |                            |
 | [umash32_hi](doc/umash32_hi.txt)              |     26601.23 |    42.25 | 484.02 (17)|1530 |                            |
 | [umash64](doc/umash64.txt)                    |     26628.37 |    39.87 | 502.33 (38)|1530 |                            |
