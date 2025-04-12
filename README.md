@@ -106,7 +106,7 @@ SMhasher
 | [Murmur2B](doc/Murmur2B.txt)                  |      6039.96 |    38.70 | 212.23 (1) | 307 | UB, 1.8% bias, collisions, 3.4% distrib, BIC |
 | [Murmur2C](doc/Murmur2C.txt)                  |      3802.68 |    49.82 | 220.13 (2) | 311 | UB, 2^32 bad seeds, 91% bias, collisions, distr, BIC, LongNeighbors |
 | [Murmur3A](doc/Murmur3A.txt)                  |      3027.30 |    48.99 | 234.49 (2) | 264 | UB, 1 bad seed, Moment Chi2 69     |
-| [PMurHash32](doc/PMurHash32.txt)              |      3001.44 |    48.99 | 240.35 (3) |1862 | 1 bad seed, Moment Chi2 69         |
+| [PMurHash32](doc/PMurHash32.txt)              |      3001.44 |    48.99 | 240.35 (3) |1862 | UB, 1 bad seed, Moment Chi2 69         |
 | [Murmur3C](doc/Murmur3C.txt)                  |      4824.95 |    57.39 | 243.91 (2) | 780 | UB, LongNeighbors, Text, DiffDist  |
 | [mirhash32low](doc/mirhash32low.txt)          |      6168.04 |    38.35 | 234.32 (2) |1112 | UB, 4 bad seeds, Cyclic, LongNeighbors, machine-specific (32/64 differs) |
 | [PMPML_32](doc/PMPML_32.txt)                  |      6904.30 |    44.25 | 233.59 (2) |1020 | Avalanche >512, unseeded: Seed, BIC, MomentChi2, PerlinNoise |
@@ -225,8 +225,8 @@ SMhasher
 | [umash64](doc/umash64.txt)                    |     26628.37 |    39.87 | 502.33 (38)|1530 |                            |
 | [umash128](doc/umash128.txt)                  |     14523.56 |    43.73 | 475.12 (12)|1530 |                            |
 | [halftime_hash64](doc/halftime_hash64.txt)    |      4801.79 |    99.05 | 310.02 (2) | 444 |                            |
-| [halftime_hash128](doc/halftime_hash128.txt)  |     18220.34 |    94.31 | 307.50 (1) | 444 |                            |
-| [halftime_hash256](doc/halftime_hash256.txt)  |     18249.32 |    97.56 | 322.85 (2) | 444 |                            |
+| [halftime_hash128](doc/halftime_hash128.txt)  |     18220.34 |    94.31 | 307.50 (1) | 444 | UB overflow                |
+| [halftime_hash256](doc/halftime_hash256.txt)  |     18249.32 |    97.56 | 322.85 (2) | 444 | UB overflow                |
 | [halftime_hash512](doc/halftime_hash512.txt)  |     10906.18 |   118.54 | 326.76 (3) | 444 |                            |
 | [nmhash32](doc/nmhash32.txt)                  |     12676.08 |    57.09 | 255.20 (2) |2445 |                            |
 | [nmhash32x](doc/nmhash32x.txt)                |     13072.64 |    42.09 | 288.12 (3) |1494 |                            |
@@ -478,3 +478,8 @@ Typical undefined behaviour (**UB**) problems:
 
   With: FNV1A\_Pippip\_Yurii, FNV1A_Totenschiff, pair\_multiply\_shift, sumhash32
   shift exponent 64 is too large for 64-bit type 'long unsigned int'
+  PMurHash left-shifts 128 by 24 into int.
+
+* left shift of negative value
+
+  With: SuperFastHash left shift of -126

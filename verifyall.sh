@@ -9,3 +9,8 @@ fi
 echo build-debug with asan
 test -d build-debug || cmake -S . -B build-debug -DCMAKE_RELEASE_TYPE=Debug
 make -j4 -C build-debug && build-debug/SMHasher --verbose --test=VerifyAll
+
+if test -d build-asan; then
+    echo build-asan
+    make -j4 -C build-asan && build-asan/SMHasher --verbose --test=VerifyAll
+fi
