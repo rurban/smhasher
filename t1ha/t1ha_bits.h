@@ -172,7 +172,9 @@
 #endif
 
 #if __GNUC_PREREQ(4, 5) || __has_builtin(__builtin_unreachable)
+#ifndef unreachable
 #define unreachable() __builtin_unreachable()
+#endif
 #endif
 
 #define bswap64(v) __builtin_bswap64(v)
