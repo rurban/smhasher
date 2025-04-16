@@ -234,6 +234,8 @@ SMhasher
 | [k-hashv64](doc/k-hashv64.txt)                |      9251.05 |    51.72 | 251.83 (2) |1280 |                            |
 | [komihash](doc/komihash.txt)                  |     11257.39 |    33.90 | 464.92 (8) |1015 |                            |
 | [a5hash](doc/a5hash.txt)                      |      9641.86 |    29.08 | 447.01 (4) | 372 |                            |
+| [a5hash32](doc/a5hash32.txt)                  |      8279.94 |    32.74 | 492.32 (28)| 505 | bad seeds                  |
+| [a5hash128](doc/a5hash128.txt)                |      8962.04 |    29.03 | 446.46 (11)| 799 | broken                     |
 | [polymur](doc/polymur.txt)                    |      9913.53 |    41.68 | 232.56 (3) |1141 |                            |
 | [gxhash32](doc/gxhash32.txt)                  |     47943.08 |    37.71 | 251.38 (2) | 736 | oob UB, AES only           |
 | [gxhash64](doc/gxhash64.txt)                  |     48919.73 |    36.61 | 236.98 (3) | 720 | oob UB, AES only           |

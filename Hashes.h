@@ -1314,10 +1314,21 @@ inline void komihash_test ( const void * key, int len, unsigned seed, void * out
 }
 
 #include "a5hash/a5hash.h"
-// objsize: 429a40 - 429bdf: 415
+// objsize: 372
 inline void a5hash_test ( const void * key, int len, unsigned seed, void * out )
 {
   *(uint64_t*)out = a5hash ((const uint8_t *)key, (size_t)len, (uint64_t)seed);
+}
+// objsize: 505
+inline void a5hash32_test ( const void * key, int len, unsigned seed, void * out )
+{
+  *(uint32_t*)out = a5hash32 ((const uint8_t *)key, (size_t)len, (uint64_t)seed);
+}
+// objsize: 799
+// FIXME
+inline void a5hash128_test ( const void * key, int len, unsigned seed, void * out )
+{
+  a5hash128 ((const uint8_t *)key, (size_t)len, (uint64_t)seed, out);
 }
 
 // objsize: 408dd0 - 4090ae: 734

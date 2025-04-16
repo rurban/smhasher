@@ -792,6 +792,8 @@ HashInfo g_hashes[] =
 #endif
 { komihash_test,        64, 0x8157FF6D, "komihash",    "komihash 5.24", GOOD, {} },
 { a5hash_test,          64, 0xBF40CAE1, "a5hash",      "a5hash 5.11", GOOD, {} },
+//{ a5hash32_test,        32, 0xA948D11B, "a5hash32",    "a5hash 5.11 32bit", POOR, {} },
+//{ a5hash128_test,      128, 0x03783B4B, "a5hash128",   "a5hash 5.11 128bit", POOR, {} },
 { polymur_test,         64, 0x4F894810, "polymur",     "github.com/orlp/polymur-hash v1, __SIZEOF_INT128__:" MACRO_ITOA(__SIZEOF_INT128__), GOOD, {} },
 { rainbow64_test,       64, 0x2972C52E, "rainbow",     "Rainbow 64-bit v1.0.6 (aka Newhash 128-bit)", GOOD, {} },
 { rainbow128_test,     128, 0xFD9BCADD, "rainbow-128", "Rainbow 128-bit v1.0.6 (aka Newhash 128-bit)", GOOD, {} },
