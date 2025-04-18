@@ -790,7 +790,7 @@ HashInfo g_hashes[] =
 { khashv32_test,        32, 0xB69DF8EB, "k-hashv32",      khashv32_desc, GOOD, {}},
 { khashv64_test,        64, 0xA6B7E55B, "k-hashv64",      khashv64_desc, GOOD, {}},
 #endif
-{ komihash_test,        64, 0x8157FF6D, "komihash",    "komihash 5.24", GOOD, {} },
+{ komihash_test,        64, 0x8157FF6D, "komihash",    "komihash 5.25", GOOD, {} },
 { a5hash_test,          64, 0xBF40CAE1, "a5hash",      "a5hash 5.11", GOOD, {} },
 { polymur_test,         64, 0x4F894810, "polymur",     "github.com/orlp/polymur-hash v1, __SIZEOF_INT128__:" MACRO_ITOA(__SIZEOF_INT128__), GOOD, {} },
 { rainbow64_test,       64, 0x2972C52E, "rainbow",     "Rainbow 64-bit v1.0.6 (aka Newhash 128-bit)", GOOD, {} },
