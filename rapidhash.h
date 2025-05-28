@@ -181,9 +181,11 @@
      #endif
    #endif
  #else
-   uint64_t ha=*A>>32, hb=*B>>32, la=(uint32_t)*A, lb=(uint32_t)*B, hi, lo;
+   uint64_t ha=*A>>32, hb=*B>>32, la=(uint32_t)*A, lb=(uint32_t)*B;
    uint64_t rh=ha*hb, rm0=ha*lb, rm1=hb*la, rl=la*lb, t=rl+(rm0<<32), c=t<rl;
-   lo=t+(rm1<<32); c+=lo<t; hi=rh+(rm0>>32)+(rm1>>32)+c;
+   uint64_t lo=t+(rm1<<32); 
+   c+=lo<t; 
+   uint64_t hi=rh+(rm0>>32)+(rm1>>32)+c;
    #ifdef RAPIDHASH_PROTECTED
    *A^=lo;  *B^=hi;
    #else
