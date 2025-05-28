@@ -679,12 +679,17 @@ inline void w1hash_test (const void * key, int len, uint32_t seed, void * out) {
 #include "rapidhash.h"
 // objsize: 181e0-1841e: 574
 inline void rapidhash_test (const void * key, int len, uint32_t seed, void * out) {
-  *(uint64_t*)out = rapidhash_withSeed_compact(key, (uint64_t)len, (uint64_t)seed);
+  *(uint64_t*)out = rapidhash_withSeed(key, (uint64_t)len, (uint64_t)seed);
 }
 
 // objsize: 18420-1872e: 782
-inline void rapidhash_unrolled_test (const void * key, int len, uint32_t seed, void * out) {
-  *(uint64_t*)out = rapidhash_withSeed_unrolled(key, (uint64_t)len, (uint64_t)seed);
+inline void rapidhashMicro_test (const void * key, int len, uint32_t seed, void * out) {
+  *(uint64_t*)out = rapidhashMicro_withSeed(key, (uint64_t)len, (uint64_t)seed);
+}
+
+// objsize: 18420-1872e: 782
+inline void rapidhashNano_test (const void * key, int len, uint32_t seed, void * out) {
+  *(uint64_t*)out = rapidhashNano_withSeed(key, (uint64_t)len, (uint64_t)seed);
 }
 #endif
 
