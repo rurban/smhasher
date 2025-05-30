@@ -373,8 +373,8 @@ RAPIDHASH_INLINE_CONSTEXPR uint64_t rapidhash_internal(const void *key, size_t l
           b = rapid_read64(plast);
         } else {
           const uint8_t* plast = p + len - 4;
-          b = rapid_read32(p);
-          a = rapid_read32(plast);
+          a = rapid_read32(p);
+          b = rapid_read32(plast);
         }
       } else if (len > 0) {
         a = (((uint64_t)p[0])<<45)|p[len-1];
@@ -443,8 +443,8 @@ RAPIDHASH_INLINE_CONSTEXPR uint64_t rapidhash_internal(const void *key, size_t l
           b = rapid_read64(plast);
         } else {
           const uint8_t* plast = p + len - 4;
-          b = rapid_read32(p);
-          a = rapid_read32(plast);
+          a = rapid_read32(p);
+          b = rapid_read32(plast);
         }
       } else if (len > 0) {
         a = (((uint64_t)p[0])<<45)|p[len-1];
