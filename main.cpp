@@ -791,9 +791,9 @@ HashInfo g_hashes[] =
 { w1hash_test,          64, 0x648948F1, "w1hash", "w1hash (64-bit)", GOOD, {}},
 #endif
 #ifdef HAVE_INT64
-{ rapidhash_test,          64, 0x1FDC65EE, "rapidhash", "rapidhash v3", GOOD, {}},
-{ rapidhashMicro_test,          64, 0x5B61CB21, "rapidhashMicro", "rapidhashMicro", GOOD, {}},
-{ rapidhashNano_test,          64, 0x8F36208E, "rapidhashNano", "rapidhashNano", GOOD, {}},
+{ rapidhash_test,       64, 0x1FDC65EE, "rapidhash", "rapidhash v3", GOOD, {}},
+{ rapidhashMicro_test,  64, 0x6F183D61, "rapidhashMicro", "rapidhashMicro", GOOD, {}},
+{ rapidhashNano_test,   64, 0x2C200DC7, "rapidhashNano", "rapidhashNano", GOOD, {}},
 #endif
 { nmhash32_test,        32, nmhash32_broken() ? 0U : 0x12A30553, "nmhash32",  nmhash32_desc,  GOOD, {}},
 { nmhash32x_test,       32, nmhash32_broken() ? 0U : 0xA8580227, "nmhash32x", nmhash32x_desc, GOOD, {}},
