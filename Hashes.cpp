@@ -331,6 +331,9 @@ FNV1A_Pippip_Yurii(const char *key, int wrdlen, uint32_t seed)
 #undef _PADr_KAZE
 } // Last update: 2019-Oct-30, 14 C lines strong, Kaze.
 
+#include "Pippip.h"
+#undef _PADr_KAZE
+
 // objsize: 0x1090-0x10df: 79
 uint64_t
 FNV64a(const char *key, int len, uint64_t seed)
@@ -347,7 +350,7 @@ FNV64a(const char *key, int len, uint64_t seed)
   return h;
 }
 
-#endif
+#endif // HAVE_INT64
 
 // objsize: 0x105cb-0x10520: 171
 // ported from https://github.com/golang/go/blob/master/src/hash/fnv/fnv.go

@@ -148,10 +148,25 @@ inline void FNV1A_Totenschiff_test(const void *key, int len, uint32_t seed,
                                    void *out) {
   *(uint32_t *)out = FNV1A_Totenschiff((const char *)key, len, seed);
 }
-uint32_t FNV1A_Pippip_Yurii(const char *key, int wrdlen, uint32_t seed);
-inline void FNV1A_PY_test(const void *key, int len, uint32_t seed, void *out) {
-  *(uint32_t *)out = FNV1A_Pippip_Yurii((const char *)key, len, seed);
+
+#if defined(HAVE_AESNI) && defined(__SIZEOF_INT128__) && (defined(__x86_64__) || defined(_M_AMD64))
+/* version 2025-Jul-17, requires now AESNI and x64
+   badseeds: 0x1077bd26, 0x1c07e567, 0x1c2e04b6, 0x2179e8c6, 0x7ca5ded3, 0x7d9bbad9,
+             0x9ac97b61, 0xb6957619, 0xbb54fecc, 0xfac5c910
+ */
+void FNV1A_Pippip_Yurii_OOO_128bit_AES_TriXZi_Mikayla (const char *str, size_t wrdlen, uint32_t seed, void *output);
+// objsize: 1b7a0-1bab9 (incl badseeds test), excl: 1b85e-1bab9: 603
+inline void FNV1A_PY_test(const void *key, int len, uint32_t seed, void *out)
+{
+  const std::vector<uint32_t> badseeds
+      = { 0x1077bd26, 0x1c07e567, 0x1c2e04b6, 0x2179e8c6, 0x7ca5ded3,
+          0x7d9bbad9, 0x9ac97b61, 0xb6957619, 0xbb54fecc, 0xfac5c910 };
+  if (std::find(badseeds.begin(), badseeds.end(), seed) != badseeds.end())
+    seed++;
+  FNV1A_Pippip_Yurii_OOO_128bit_AES_TriXZi_Mikayla ((const char *)key,
+                                                    (size_t)len, seed, out);
 }
+#  endif
 #endif
 void FNV128(uint64_t buf[2], const char *key, int len, uint64_t seed);
 inline void FNV128_test(const void *key, int len, uint32_t seed, void *out) {

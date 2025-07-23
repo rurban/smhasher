@@ -271,9 +271,12 @@ HashInfo g_hashes[] =
   {0x811c9dc5} /* !! */ },
 #ifdef HAVE_INT64
 { FNV1A_Totenschiff_test,32,0x95D95ACF, "FNV1A_Totenschiff",  "FNV1A_Totenschiff_v1 64-bit sanmayce", POOR,
-  {0x811c9dc5} },
-{ FNV1A_PY_test,        32, 0xE79AE3E4, "FNV1A_Pippip_Yurii", "FNV1A-Pippip_Yurii 32-bit sanmayce", POOR,
-  {0x811c9dc5} },
+  {0x811c9dc5} /* !! */ },
+#if defined(HAVE_AESNI) && defined(__SIZEOF_INT128__) && (defined(__x86_64__) || defined(_M_AMD64))
+{ FNV1A_PY_test,        32, 0xDFE2D53C, "FNV1A_Pippip_Yurii", "FNV1A-Pippip_Yurii_OOO_128bit_AES_TriXZi_Mikayla 32-bit sanmayce", POOR,
+        {0x1077bd26, 0x1c07e567, 0x1c2e04b6, 0x2179e8c6, 0x7ca5ded3, 0x7d9bbad9, 0x9ac97b61,
+         0xb6957619, 0xbb54fecc, 0xfac5c910} /* !! */ },
+#endif
 { FNV32a_YT_test,       32, 0xD8AFFD71, "FNV1a_YT",    "FNV1a-YoshimitsuTRIAD 32-bit sanmayce", POOR,
   {0x811c9dc5, 0x23d4a49d} /* !! */ },
 { FNV64a_test,          64, 0x103455FC, "FNV64",       "Fowler-Noll-Vo hash, 64-bit", POOR,
