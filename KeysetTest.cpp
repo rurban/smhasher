@@ -92,7 +92,7 @@ bool VerificationTest ( HashInfo* info, bool verbose )
 
 bool SanityTest ( pfHash hash, const int hashbits )
 {
-  printf("Running sanity check 1     ");
+  printf("Running sanity check 1       ");
 
   Rand r(883743);
 
@@ -143,7 +143,7 @@ bool SanityTest ( pfHash hash, const int hashbits )
             {
               for(int i=0; i < hashbytes; i++){
                 if (hash1[i] == hash2[i]) {
-                  printf(" %d: 0x%02X == 0x%02X ", i, hash1[i], hash2[i]);
+                  printf(" FAIL [%d]/%d: 0x%02X == 0x%02X ", i, bit, hash1[i], hash2[i]);
                   break;
                 }
               }
@@ -161,7 +161,7 @@ bool SanityTest ( pfHash hash, const int hashbits )
             {
               for(int i=0; i < hashbytes; i++){
                 if (hash1[i] != hash2[i]) {
-                  printf(" %d: 0x%02X != 0x%02X ", i, hash1[i], hash2[i]);
+                  printf(" FAIL [%d]/%d: 0x%02X != 0x%02X ", i, bit, hash1[i], hash2[i]);
                   break;
                 }
               }
@@ -176,7 +176,7 @@ bool SanityTest ( pfHash hash, const int hashbits )
  end_sanity:
   if(result == false)
   {
-    printf(" FAIL  !!!!!\n");
+    printf(" !!!!!\n");
   }
   else
   {

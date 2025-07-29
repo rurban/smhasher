@@ -227,7 +227,7 @@ bool BadSeedsTest ( HashInfo* info, bool testAll ) {
   const std::vector<size_t> secrets = info->secrets;
 #endif
 #if !defined __arm__ && !defined __aarch64__
-  printf("Testing %lu internal secrets:\n", (unsigned long)secrets.size());
+  printf("Testing %lu internal bad seeds:\n", (unsigned long)secrets.size());
 #endif
   for (auto secret : secrets) {
     result &= TestSecret<hashtype>(info, secret);
