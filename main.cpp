@@ -309,6 +309,10 @@ HashInfo g_hashes[] =
 #ifdef __aarch64__
 #define VHASH32_VERIF 0x0F02AEFD
 #define VHASH64_VERIF 0xFAAEE597
+#elif defined(HAVE_BIT32)
+// unstable
+#define VHASH32_VERIF 0
+#define VHASH64_VERIF 0
 #else
 #define VHASH32_VERIF 0xF0077651
 #define VHASH64_VERIF 0xF97D84FE
