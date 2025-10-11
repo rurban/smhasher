@@ -219,8 +219,9 @@ SMhasher
 | [wyhash32low](doc/wyhash32low.txt)            |     23104.85 |    28.56 | 239.71 (4) | 532 | 5 bad seeds                |
 | [wyhash](doc/wyhash.txt)                      |     22640.53 |    28.91 | 229.00 (2) | 532 |                            |
 | [w1hash](doc/w1hash.txt)                      |     14208.56 |    26.85 | 221.76 (2) |1497 |                            |
-| [rapidhash](doc/rapidhash.txt)                |     22147.09 |    29.07 | 214.80 (2) | 487 |                            |
-| [rapidhash_unrolled](doc/rapidhash_unrolled.txt)|   21723.13 |    29.40 | 220.97 (3) | 782 |                            |
+| [rapidhash](doc/rapidhash.txt)                |     21513.71 |    22.04 | 169.05 (29)| 487 |                            |
+| [rapidhashMicro](doc/rapidhashMicro.txt)      |     21513.71 |    22.04 | 169.05 (29)| 487 |                            |
+| [rapidhashNano](doc/rapidhashNano.txt)        |     21295.09 |    22.53 | 166.80 (31)| 782 |                            |
 | [umash32](doc/umash32.txt)                    |     24556.40 |    40.01 | 490.26 (33)|1530 |                            |
 | [umash32_hi](doc/umash32_hi.txt)              |     26601.23 |    42.25 | 484.02 (17)|1530 |                            |
 | [umash64](doc/umash64.txt)                    |     26628.37 |    39.87 | 502.33 (38)|1530 |                            |
