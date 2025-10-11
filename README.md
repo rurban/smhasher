@@ -163,6 +163,7 @@ SMhasher
 | [Murmur3F](doc/Murmur3F.txt)                  |      7104.08 |    52.69 | 216.34 (2) | 632 | UB                         |
 | [MUM](doc/MUM.txt)                            |      9631.26 |    34.78 | 219.14 (2) |1912 | UB, too many bad seeds, machine-specific (32/64 differs) |
 | [MUMlow](doc/MUMlow.txt)                      |      8532.17 |    35.95 | 238.37 (2) |1912 | UB, 5 bad seeds              |
+| [MUMv3](doc/MUMv3.txt)                        |     16628.30 |    21.58 | 180.82 (24)|1177 | 1 bad seed              |
 | [xmsx32](doc/xmsx32.txt)                      |      2105.03 |    45.35 | 238.92 (3) | 189 | 2 bad seeds                  |
 | [mirhash](doc/mirhash.txt)                    |      5793.85 |    38.15 | 212.91 (2) |1112 | UB, 2^36 bad seeds, LongNeighbors, machine-specific (32/64 differs) |
 | [mirhashstrict](doc/mirhashstrict.txt)        |      3587.79 |    49.85 | 219.49 (2) | 699 |                            |

@@ -652,7 +652,7 @@ HashInfo g_hashes[] =
 { mum_low_test,         32, MUMLOW_VERIF,"MUMlow",     "github.com/vnmakarov/mum-hash", GOOD,
   {0x11fb062a, 0x3ca9411b, 0x3edd9a7d, 0x41f18860, 0x691457ba} /* !! */ },
 { mum_v3_hash_test,     64, MUMv3_VERIF, "MUMv3",      "github.com/vnmakarov/mum-hash", POOR,
-  {0x0, 0x8bd72b8c}},
+  {0x0, 0x8bd72b8c, 0xf00000ff} /* !! and many more. too many */},
 { xmsx32_test,          32, 0x6B54E1D4, "xmsx32", "XMSX-32", GOOD, { 0x1505929f, 0xf0a6a74a } },
 #if defined(__GNUC__) && UINT_MAX != ULONG_MAX
 #define MIR_VERIF            0x00A393C8
@@ -904,6 +904,8 @@ void Bad_Seed_init (pfHash hash, uint32_t &seed) {
     seed++;
   else if (hash == MurmurHash3_x86_128 && seed == 0x239b961b)
     seed++;
+  else if(hash == mum_v3_hash_test)
+    mum_v3_seed_init(seed);
 #ifdef HAVE_BIT32
   else if(hash == wyhash32_test)
     wyhash32_seed_init(seed);

@@ -1385,3 +1385,10 @@ void gxhash32_seed_init(uint32_t &seed)
 #if defined(HAVE_SSE2) && defined(HAVE_AESNI)
 #include "aesnihash-peterrk.hpp"
 #endif
+
+// all seeds with bytes 2-6 set to 0 are bad
+void mum_v3_seed_init(uint32_t &seed) {
+  // skip really bad seed patterns: 0x.00000..
+  if ((seed & 0xfffff00ULL) == 0x0ULL)
+    seed++;
+}

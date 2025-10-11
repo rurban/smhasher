@@ -498,7 +498,10 @@ inline void mum_low_test ( const void * key, int len, uint32_t seed, void * out 
   *(uint32_t*)out = (uint32_t)result;
 }
 
+// objsize 82090-82529: 1177
+// all seeds with bytes 2-6 set to 0 are bad
 void mum_v3_hash_test(const void * key, int len, uint32_t seed, void * out);
+void mum_v3_seed_init(uint32_t &seed);
 
 //-----------------------------------------------------------------------------
 
