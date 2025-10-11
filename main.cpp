@@ -233,7 +233,7 @@ HashInfo g_hashes[] =
 #  if defined(_MSC_VER) /* truncated long to 32? */
 #   define CRC32_VERIF   0xC2B84071
 #   define CRC64_VERIF   0x6BBC19D6
-#  else  
+#  else
 #   define CRC32_VERIF   0x0C7346F0
 #   define CRC64_VERIF   0xE7C3FD0E
 #  endif
@@ -637,18 +637,21 @@ HashInfo g_hashes[] =
 #if defined __aarch64__
 #define MUM_VERIF            0x280B2CC6
 #define MUMLOW_VERIF         0xB13E0239
+#define MUMv3_VERIF          0x0AD998DF
 #elif defined(__GNUC__) && UINT_MAX != ULONG_MAX
 #define MUM_VERIF            0x3EEAE2D4
 #define MUMLOW_VERIF         0x520263F5
+#define MUMv3_VERIF          0x8BD72B8C
 #else
 #define MUM_VERIF            0xA973C6C0
 #define MUMLOW_VERIF         0x7F898826
+#define MUMv3_VERIF          0xB5560703
 #endif
 { mum_hash_test,        64, MUM_VERIF,  "MUM",         "github.com/vnmakarov/mum-hash", POOR,
   {0x0} /* !! and many more. too many */ },
 { mum_low_test,         32, MUMLOW_VERIF,"MUMlow",     "github.com/vnmakarov/mum-hash", GOOD,
   {0x11fb062a, 0x3ca9411b, 0x3edd9a7d, 0x41f18860, 0x691457ba} /* !! */ },
-{ mum_v3_hash_test,     64, MUM_VERIF,  "MUMv3",       "github.com/vnmakarov/mum-hash", POOR,
+{ mum_v3_hash_test,     64, MUMv3_VERIF, "MUMv3",      "github.com/vnmakarov/mum-hash", POOR,
   {0x0, 0x8bd72b8c}},
 { xmsx32_test,          32, 0x6B54E1D4, "xmsx32", "XMSX-32", GOOD, { 0x1505929f, 0xf0a6a74a } },
 #if defined(__GNUC__) && UINT_MAX != ULONG_MAX
