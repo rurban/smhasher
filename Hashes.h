@@ -150,6 +150,7 @@ inline void FNV1A_Totenschiff_test(const void *key, int len, uint32_t seed,
 }
 
 #if defined(HAVE_AESNI) && defined(__SIZEOF_INT128__) && (defined(__x86_64__) || defined(_M_AMD64))
+
 /* version 2025-Jul-17, requires now AESNI and x64
    badseeds: 0x1077bd26, 0x1c07e567, 0x1c2e04b6, 0x2179e8c6, 0x7ca5ded3, 0x7d9bbad9,
              0x9ac97b61, 0xb6957619, 0xbb54fecc, 0xfac5c910
@@ -166,8 +167,9 @@ inline void FNV1A_PY_test(const void *key, int len, uint32_t seed, void *out)
   FNV1A_Pippip_Yurii_OOO_128bit_AES_TriXZi_Mikayla ((const char *)key,
                                                     (size_t)len, seed, out);
 }
-#  endif
-#endif
+#endif // 128bit_AES
+#endif // HAVE_INT64
+
 void FNV128(uint64_t buf[2], const char *key, int len, uint64_t seed);
 inline void FNV128_test(const void *key, int len, uint32_t seed, void *out) {
   FNV128((uint64_t*)out, (const char *)key, len, (uint64_t)seed);

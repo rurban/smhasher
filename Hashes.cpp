@@ -301,7 +301,7 @@ FNV1A_Totenschiff(const char *key, int len, uint32_t seed)
 #undef _PADr_KAZE
 }
 
-#ifdef HAVE_INT128
+#if defined(HAVE_AESNI) && defined(__SIZEOF_INT128__) && (defined(__x86_64__) || defined(_M_AMD64))
 // Dedicated to Pippip, the main character in the 'Das Totenschiff' roman, actually the B.Traven himself, his real name was Hermann Albert Otto Maksymilian Feige.
 // CAUTION: Add 8 more bytes to the buffer being hashed, usually malloc(...+8) - to prevent out of boundary reads!
 // Many thanks go to Yurii 'Hordi' Hordiienko, he lessened with 3 instructions the original 'Pippip', thus:
@@ -334,7 +334,7 @@ FNV1A_Pippip_Yurii(const char *key, int wrdlen, uint32_t seed)
 
 #include "Pippip.h"
 #undef _PADr_KAZE
-#endif // HAVE_INT128
+#endif // 128bit_AES
 
 // objsize: 0x1090-0x10df: 79
 uint64_t
