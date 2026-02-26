@@ -1373,6 +1373,12 @@ extern "C" {
   // objsize: c300 - dc5a: 6490
   void asconhashv12_256 ( const void * key, int len, uint32_t seed, void * out );
 }
+#include "tachyon/tachyon.h"
+// objsize: CPUID-dispatched: AVX-512+VAES -> AES-NI -> portable
+inline void Tachyon_Hash ( const void * key, int len, uint32_t seed, void * out ) {
+  tachyon_hash_seeded((const uint8_t*)key, (size_t)len, (uint64_t)seed, (uint8_t*)out);
+}
+
 
 extern const char * const nmhash32_desc;
 extern const char * const nmhash32x_desc;

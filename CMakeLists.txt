@@ -595,6 +595,19 @@ if(SSE42_FOUND AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
   # endif()
 endif()
 
+# --- Tachyon ---
+# Runtime CPUID dispatch: AVX-512+VAES -> AES-NI -> portable
+set(TACHYON_SRC
+    tachyon/tachyon_dispatcher.c
+    tachyon/tachyon_portable.c
+    tachyon/tachyon_aesni.c
+    tachyon/tachyon_avx512.c
+)
+set_source_files_properties(tachyon/tachyon_avx512.c
+    PROPERTIES COMPILE_FLAGS "-mavx512f -mavx512bw -mvaes -mvpclmulqdq -maes -msse4.1 -mpclmul")
+set_source_files_properties(tachyon/tachyon_aesni.c
+    PROPERTIES COMPILE_FLAGS "-maes -msse4.1 -mpclmul")
+
 set(BLAKE3_SRC blake3/blake3.c blake3/blake3_dispatch.c
                blake3/blake3_portable.c)
 if(SSE42_FOUND)
@@ -747,6 +760,7 @@ add_library(
   vmac.cpp
   rijndael-alg-fst.c
   ${BLAKE3_SRC}
+  ${TACHYON_SRC}
   pengyhash.c
   pearson_hash/pearsonb.c
   edonr.c
