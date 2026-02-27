@@ -600,13 +600,18 @@ endif()
 set(TACHYON_SRC
     tachyon/tachyon_dispatcher.c
     tachyon/tachyon_portable.c
-    tachyon/tachyon_aesni.c
-    tachyon/tachyon_avx512.c
 )
-set_source_files_properties(tachyon/tachyon_avx512.c
-    PROPERTIES COMPILE_FLAGS "-mavx512f -mavx512bw -mvaes -mvpclmulqdq -maes -msse4.1 -mpclmul")
-set_source_files_properties(tachyon/tachyon_aesni.c
-    PROPERTIES COMPILE_FLAGS "-maes -msse4.1 -mpclmul")
+if(AES_FOUND AND (PROCESSOR_FAMILY STREQUAL "Intel"))
+  list(APPEND TACHYON_SRC
+      tachyon/tachyon_aesni.c
+      tachyon/tachyon_avx512.c
+  )
+  set_source_files_properties(tachyon/tachyon_avx512.c
+      PROPERTIES COMPILE_FLAGS "-mavx512f -mavx512bw -mvaes -mvpclmulqdq -maes -msse4.1 -mpclmul")
+  set_source_files_properties(tachyon/tachyon_aesni.c
+      PROPERTIES COMPILE_FLAGS "-maes -msse4.1 -mpclmul")
+endif()
+
 
 set(BLAKE3_SRC blake3/blake3.c blake3/blake3_dispatch.c
                blake3/blake3_portable.c)
