@@ -11,6 +11,23 @@
 // ----------------------------------------------------------------------------
 //fake / bad hashes
 
+// Read/write 32-bit words little-endian so the verification value (which the
+// test harness reads little-endian) is the same on big- and little-endian
+// hosts.  See issue #298.
+static inline uint32_t sm_get_u32_le(const uint8_t *p)
+{
+  return (uint32_t)p[0] | ((uint32_t)p[1] << 8) |
+         ((uint32_t)p[2] << 16) | ((uint32_t)p[3] << 24);
+}
+static inline void sm_put_u32_le(uint32_t v, void *out)
+{
+  uint8_t *o = (uint8_t *)out;
+  o[0] = (uint8_t)v;
+  o[1] = (uint8_t)(v >> 8);
+  o[2] = (uint8_t)(v >> 16);
+  o[3] = (uint8_t)(v >> 24);
+}
+
 // objsize: 0x2f-0x0: 47
 void
 BadHash(const void *key, int len, uint32_t seed, void *out)
@@ -25,7 +42,7 @@ BadHash(const void *key, int len, uint32_t seed, void *out)
     h ^= *data++;
   }
 
-  *(uint32_t *) out = h;
+  sm_put_u32_le(h, out);
 }
 
 // objsize: 0x19b-0x30: 363
@@ -40,7 +57,7 @@ sumhash(const void *key, int len, uint32_t seed, void *out)
     h += *data++;
   }
 
-  *(uint32_t *) out = h;
+  sm_put_u32_le(h, out);
 }
 
 // objsize: 0x4ff-0x1a0: 863
@@ -48,11 +65,12 @@ void
 sumhash32(const void *key, int len, uint32_t seed, void *out)
 {
   uint32_t	  h = seed;
-  const uint32_t *data = (const uint32_t *)key;
-  const uint32_t *const end = &data[len/4];
+  const uint8_t  *data = (const uint8_t *)key;
+  const uint8_t *const end = &data[len & ~3];
 
   while (data < end) {
-    h += *data++;
+    h += sm_get_u32_le(data);
+    data += 4;
   }
   if (len & 3) {
     uint8_t *dc = (uint8_t*)data; //byte stepper
@@ -62,7 +80,7 @@ sumhash32(const void *key, int len, uint32_t seed, void *out)
     }
   }
 
-  *(uint32_t *) out = h;
+  sm_put_u32_le(h, out);
 }
 
 // objsize: 0x50d-0x500: 13
