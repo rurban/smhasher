@@ -360,7 +360,7 @@ HashInfo g_hashes[] =
 { PMurHash32_test,      32, 0xB0F57EE3, "PMurHash32",  "Shane Day's portable-ized MurmurHash3 for x86, 32-bit", POOR,
   {0xfca58b2d} /* !! */ }, // 0x4b600, 0xcc9e2d51
 { MurmurHash3_x86_128, 128, 0xB3ECE62A, "Murmur3C",    "MurmurHash3 for x86, 128-bit", POOR, {0x239b961b} },
-#if !defined(DEBUG) && !defined(CROSSCOMPILING) && !defined(__aarch64__)
+#if defined(HAVE_PMPML)
 # ifndef HAVE_ASAN
 // TODO seeded
 { PMPML_32_CPP,         32, 0xEAE2E3CC, "PMPML_32",    "PMP_Multilinear 32-bit unseeded", POOR, {} },

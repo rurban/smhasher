@@ -232,8 +232,20 @@ if(CMAKE_COMPILER_IS_GNUCC
   # "${CMAKE_C_FLAGS} -msha") set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msha")
   # ENDIF (SHA_TRUE)
   if(NOT CMAKE_CROSSCOMPILING)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -march=native")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -march=native")
+    include(CheckCXXCompilerFlag)
+    set(SMHASHER_NATIVE_FLAG "")
+    check_cxx_compiler_flag("-march=native" SMHASHER_HAS_MARCH_NATIVE)
+    if(SMHASHER_HAS_MARCH_NATIVE)
+      set(SMHASHER_NATIVE_FLAG "-march=native")
+    else()
+      # POWER/ppc64 (and some others) use -mcpu=native, not -march=native
+      check_cxx_compiler_flag("-mcpu=native" SMHASHER_HAS_MCPU_NATIVE)
+      if(SMHASHER_HAS_MCPU_NATIVE)
+        set(SMHASHER_NATIVE_FLAG "-mcpu=native")
+      endif()
+    endif()
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${SMHASHER_NATIVE_FLAG}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 ${SMHASHER_NATIVE_FLAG}")
   endif()
   set_source_files_properties(blake3/blake3.c
                               PROPERTIES COMPILE_FLAGS "-std=c99")
@@ -640,6 +652,10 @@ if(CMAKE_CROSSCOMPILING)
   unset(PMPML_SRC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DCROSSCOMPILING")
 endif()
+# PMP_Multilinear uses x86-only intrinsics and inline asm; build it on x86 only
+if(NOT (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|amd64|AMD64|i[3-6]86|x86|arm"))
+  unset(PMPML_SRC)
+endif()
 if(SYSTEM_PROCESSOR_IS_AARCH64)
   #HAVE_SSE42
   unset(PMPML_SRC)
@@ -665,6 +681,11 @@ if((CMAKE_MAJOR_VERSION EQUAL 3 AND CMAKE_MINOR_VERSION GREATER_EQUAL 9)
   cmake_policy(SET CMP0069 NEW)
   include(CheckIPOSupported)
   check_ipo_supported(RESULT ipo_supported OUTPUT error)
+endif()
+
+# main.cpp registers PMP_Multilinear only when its sources were compiled
+if(PMPML_SRC)
+  add_definitions(-DHAVE_PMPML)
 endif()
 
 add_library(
