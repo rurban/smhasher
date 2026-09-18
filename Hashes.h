@@ -13,6 +13,7 @@
 #define XXH_INLINE_ALL
 #include "xxhash.h"
 #include "gxhash.h"
+#include "lanehash.h"
 
 #include "metrohash/metrohash64.h"
 #include "metrohash/metrohash128.h"
@@ -1477,3 +1478,11 @@ void rainbow256_test (const void *key, int len, uint32_t seed, void *out);
 void rainstorm64_test (const void *key, int len, uint32_t seed, void *out);
 void rainstorm128_test (const void *key, int len, uint32_t seed, void *out);
 void rainstorm256_test (const void *key, int len, uint32_t seed, void *out);
+
+// ---- lanehash: AES lanes (>64 B) + multiply short path, 64/128-bit ----
+inline void lanehash64_test( const void * key, int len, uint32_t seed, void * out ) {
+  *(uint64_t*)out = lanehash64(key, (size_t) len, (uint64_t) seed);
+}
+inline void lanehash128_test( const void * key, int len, uint32_t seed, void * out ) {
+  lanehash128(key, (size_t) len, (uint64_t) seed, out);
+}
