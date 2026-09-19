@@ -247,6 +247,8 @@ SMhasher
 | [fifty2hash64](doc/fifty2hash64.txt)          |      6411.81 |    32.07 | 453.69 (2) |    | AES only                   |
 | [fifty2hash128](doc/fifty2hash128.txt)        |      6790.27 |    36.29 | 459.37 (1) |     | AES only                   |
 | [hassh64](doc/hassh64.txt)                    |     17779.27 |    33.25 | 598.66 (60)|     |                            |
+| [chainhash](doc/chainhash.txt)                |     73478.73 |    64.90 | 430.95 (17)|2027 |                            |
+| [chainhash-128](doc/chainhash-128.txt)        |     40106.95 |   108.44 | 549.79 (25)|1650 |                            |
 
 The sortable table variants:
 
