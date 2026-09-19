@@ -136,6 +136,7 @@ SMhasher
 | --------------------------------------        |              |          |            |     |                            |
 | [tifuhash_64](doc/tifuhash_64.txt)            |        35.60 |  1679.52 |1212.75 (15)| 276 | Cyclic low32               |
 | [floppsyhash](doc/floppsyhash.txt)            |        35.72 |  1868.92 |1411.07 (7) | 616 |                            |
+| [Tachyon](doc/Tachyon.txt)                    |       460.14 |   370.28 | 851.29 (2) |   | AES only               |
 | [beamsplitter](doc/beamsplitter.txt)          |       789.22 |   682.45 |1150.33 (26)|4203 | UB                         |
 | [discohash1](doc/discohash1.txt)              |      4152.62 |   202.14 | 414.34 (4) |1294 |                            |
 | [discohash1-128](doc/discohash1-128.txt)      |      4064.39 |   231.06 | 430.94 (6) |1294 |                            |
