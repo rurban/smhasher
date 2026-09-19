@@ -703,6 +703,7 @@ add_library(
   DifferentialTest.cpp
   HashMapTest.cpp
   Hashes.cpp
+  ChainHash.cpp
   ${HIGHWAY_SRC}
   ${SSE2_SRC}
   ${SSE4_SRC}

@@ -1,3 +1,4 @@
+#include "ChainHash.h"
 #define _MAIN_CPP
 #include "Platform.h"
 #include "Hashes.h"
@@ -92,6 +93,8 @@ const char* quality_str[3] = { "SKIP", "POOR", "GOOD" };
 // marked with !! are known bad seeds, which either hash to 0 or create collisions.
 HashInfo g_hashes[] =
 {
+{ chainhash_test, 64, 0xACBCBE2E, "chainhash", "ChainHash (64-bit, 256-byte blocks over GF(2^64))", GOOD, {} },
+{ chainhash128_test, 128, 0x187D44BF, "chainhash-128", "ChainHash-128 (128-bit, 512-byte blocks over GF(2^128))", GOOD, {} },
 // first the bad hash funcs, failing tests:
 { DoNothingHash,        32, 0x0, "donothing32", "Do-Nothing function (measure call overhead)", SKIP, {0UL} /* !! */ },
 { DoNothingHash,        64, 0x0, "donothing64", "Do-Nothing function (measure call overhead)", SKIP, {0ULL} /* !! */ },
@@ -1007,6 +1010,8 @@ bool Hash_Seed_init (pfHash hash, size_t seed) {
 #endif
   else if(hash == polymur_test)
     polymur_seed_init(seed);
+  else if(hash == chainhash_test || hash == chainhash128_test)
+    chainhash_seed_init(seed);
   else
     return false;
   return true;
