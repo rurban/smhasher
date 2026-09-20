@@ -240,8 +240,10 @@ SMhasher
 | [polymur](doc/polymur.txt)                    |      9913.53 |    41.68 | 232.56 (3) |1141 |                            |
 | [gxhash32](doc/gxhash32.txt)                  |     47943.08 |    37.71 | 251.38 (2) | 736 | oob UB, AES only           |
 | [gxhash64](doc/gxhash64.txt)                  |     48919.73 |    36.61 | 236.98 (3) | 720 | oob UB, AES only           |
-| [lanehash64](doc/lanehash64.txt)              |     43802.63 |    21.82 | 119.16 (2) |3834 | AES only                   |
-| [lanehash128](doc/lanehash128.txt)            |     44261.24 |    25.31 | 138.73 (2) |3638 | Sparse high32, AES only    |
+| [lanehash64](doc/lanehash64.txt)              |    130737.76 |    17.22 | 102.33 (9) |     |                            |
+| [lanehash128](doc/lanehash128.txt)            |    130363.17 |    18.65 | 100.17 (1) |     | Sparse high32              |
+| [lanehash_aes64](doc/lanehash_aes64.txt)      |     43802.63 |    21.82 | 119.16 (2) |3834 | AES only                   |
+| [lanehash_aes128](doc/lanehash_aes128.txt)    |     44261.24 |    25.31 | 138.73 (2) |3638 | Sparse high32, AES only    |
 
 The sortable table variants:
 
