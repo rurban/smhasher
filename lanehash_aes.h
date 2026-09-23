@@ -1,8 +1,6 @@
-/* lanehash - fast non-cryptographic 64/128-bit hash (C port of the Rust crate).
- *
- * Inputs over 64 bytes are absorbed by 4/8/16 independent AES lanes, shorter
- * inputs by 64x64->128 multiply-folds. Output is identical on every backend:
- * portable software AES, AES-NI (x86 -maes), VAES+AVX2 (x86 -mvaes -mavx2).
+/* lanehash_aes - the AES-lane function (C port of the Rust crate's `lanehash::aes`).
+ * Inputs over 64 bytes: 4/8/16 AES lanes; shorter: 64x64->128 multiply-folds. Same bits
+ * on every backend: software AES, AES-NI (-maes), VAES+AVX2 (-mvaes -mavx2).
  * Verification values (SMHasher): 0x9FF60BEF (64-bit), 0x1A79672D (128-bit).
  *
  * SPDX-License-Identifier: MIT OR Apache-2.0
@@ -20,8 +18,7 @@ extern "C" {
 /* 64-bit hash of `len` bytes at `key` under `seed`. */
 uint64_t lanehash_aes64(const void *key, size_t len, uint64_t seed);
 
-/* 128-bit hash, written to `out` as 16 little-endian bytes (low 64 bits first;
- * those low 64 bits equal lanehash_aes64 of the same input). */
+/* 128-bit hash to `out`, 16 little-endian bytes; the low 64 bits equal lanehash_aes64. */
 void lanehash_aes128(const void *key, size_t len, uint64_t seed, void *out);
 
 #ifdef __cplusplus
