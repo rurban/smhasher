@@ -1,19 +1,17 @@
-/* lh2 - C port of the Rust reference (lanehash/src/lh2/{spec,short}.rs).
+/* lanehash - C port of the Rust definition (lanehash/src/{spec,short}.rs).
  *
- * Definition:
- *   len <= 64: one to four protected 64x64->128 multiplies ("mum") over the input words
- *              with fixed secrets, the mixed seed ks and the length XORed into the last
- *              multiply's second operand, then one unprotected fold per output half.
- *   len >  64: eight chains of eight 64-bit lanes, chain c starting from CT[8c+i] + ks
- *              with ks = fold(seed ^ SEED0, SEED1); 64-byte stripe s goes to chain s mod 8,
- *              per lane x = A ^ w, A = x + lo32(x) * hi32(x); the last 64 bytes (overlapping
- *              the previous stripe when len is not a multiple of 64) close chain m mod 8
- *              with w ^ len, m = (len - 1) / 64; each of the min(m + 1, 8) chains that saw
- *              data takes one more step with the constants Q; the chains are XORed lane-wise;
- *              four folds and a final fold keyed with the length and ks.
+ *   len <= 64: one to four protected 64x64->128 multiplies over the input words with
+ *              fixed secrets; the mixed seed ks and the length enter the last multiply;
+ *              one unprotected fold per output half.
+ *   len >  64: eight chains of eight 64-bit lanes, chain c starting at CT[8c+i] + ks,
+ *              ks = fold(seed ^ SEED0, SEED1); 64-byte stripe s goes to chain s mod 8,
+ *              per lane x = A ^ w, A = x + lo32(x) * hi32(x); the last 64 bytes close
+ *              chain m mod 8 with w ^ len, m = (len - 1) / 64; each chain that saw data
+ *              takes one more step with Q; lane-wise XOR; four folds; a final fold with
+ *              the length and ks.
  *
- * Backends (compile time, all produce the same bits): portable scalar; SSE2 (__SSE2__,
- * every x86-64); AVX2 (-mavx2); AVX-512F (-mavx512f). LANEHASH_PORTABLE forces the scalar code.
+ * Backends, chosen at compile time, all bit-identical: scalar (LANEHASH_PORTABLE or
+ * non-x86), SSE2, AVX2 (-mavx2), AVX-512F (-mavx512f).
  * Verification values (SMHasher): 0xD048C22B (64-bit), 0xC2F39939 (128-bit).
  *
  * SPDX-License-Identifier: MIT OR Apache-2.0
@@ -121,7 +119,7 @@ LANEHASH_INLINE uint64_t lanehash_ks(uint64_t seed) {
 }
 
 /* ------------------------------------------------------------------------- */
-/* short path, len <= 64. Returns the low half; writes the high half when `hi`. */
+/* short path, len <= 64: returns the low half, writes the high half when `hi` */
 
 LANEHASH_INLINE uint64_t lanehash_finish_short(uint64_t x, uint64_t y, uint64_t ln, uint64_t *hi) {
     if (hi)
@@ -167,7 +165,7 @@ LANEHASH_INLINE uint64_t lanehash_short_le64(const uint8_t *p, size_t len, uint6
 }
 
 /* ------------------------------------------------------------------------- */
-/* long path, len >= 65: the merged lanes M, then the folds                   */
+/* long path, len >= 65: the merged lanes, then the folds                     */
 
 LANEHASH_INLINE uint64_t lanehash_finish_lanes(const uint64_t m[8], uint64_t ks, uint64_t n, uint64_t *hi) {
     uint64_t h = lanehash_fold(m[0] ^ LANEHASH_S[0], m[1] ^ LANEHASH_S[1]) ^ lanehash_fold(m[2] ^ LANEHASH_S[2], m[3] ^ LANEHASH_S[3]) ^
@@ -181,7 +179,7 @@ LANEHASH_INLINE uint64_t lanehash_finish_lanes(const uint64_t m[8], uint64_t ks,
 }
 
 #if !defined(LANEHASH_SSE2) && !defined(LANEHASH_AVX2) && !defined(LANEHASH_AVX512)
-/* scalar: up to eight stripes without a state array, then a 64-word state */
+/* scalar: no state array up to eight stripes, a 64-word state beyond */
 static uint64_t lanehash_long(const uint8_t *p, size_t n, uint64_t seed, uint64_t *hi) {
     uint64_t ks = lanehash_ks(seed), m = (uint64_t)(n - 1) / 64, mv[8], nn = (uint64_t)n;
     unsigned i;
@@ -262,8 +260,8 @@ LANEHASH_INLINE lanehash_v lanehash_vstep(lanehash_v a, lanehash_v w) {
     lanehash_v x = lanehash_xor(a, w);
     return lanehash_add(x, lanehash_mul(x, lanehash_srl32(x)));
 }
-/* the merged lanes to memory for the scalar folds, in 128-bit pieces (a wider store is
- * not forwarded to the 64-bit loads that follow on Zen 4) */
+/* merged lanes to memory in 128-bit pieces: Zen 4 does not forward a wider store to the
+ * 64-bit loads of the folds */
 LANEHASH_INLINE void lanehash_store_words(uint64_t *out, lanehash_v v) {
 #  if defined(LANEHASH_AVX512)
     _mm_storeu_si128((__m128i *)out, _mm512_castsi512_si128(v));
@@ -278,9 +276,8 @@ LANEHASH_INLINE void lanehash_store_words(uint64_t *out, lanehash_v v) {
 #  endif
 }
 
-/* up to eight stripes (m < 8): every chain sees one stripe, stripe step and merge step
- * back to back in registers. On AVX-512 this runs with two ymm per stripe (twice the
- * parallelism of one double-pumped zmm on Zen 4). */
+/* m < 8: every chain sees one stripe, stripe step and merge step back to back in
+ * registers; AVX-512 uses two ymm per stripe (more parallelism than one zmm) */
 #  if defined(LANEHASH_AVX512)
 LANEHASH_INLINE __m256i LANEHASH_STEP256(__m256i a, __m256i w) {
     __m256i x = _mm256_xor_si256(a, w);
@@ -336,8 +333,7 @@ LANEHASH_INLINE void lanehash_small(const uint8_t *p, size_t n, uint64_t m, uint
 }
 #  endif
 
-/* eight or more stripes: 64-word state in memory (SSE2, 32 xmm would spill) or in
- * registers (AVX2: 16 ymm, AVX-512: 8 zmm) */
+/* m >= 8: 64-word state in memory (SSE2) or in registers (AVX2 16 ymm, AVX-512 8 zmm) */
 static uint64_t lanehash_long(const uint8_t *p, size_t n, uint64_t seed, uint64_t *hi) {
     uint64_t ks = lanehash_ks(seed), m = (uint64_t)(n - 1) / 64, nn = (uint64_t)n;
     uint64_t mv[8];
@@ -351,8 +347,8 @@ static uint64_t lanehash_long(const uint8_t *p, size_t n, uint64_t seed, uint64_
         uint64_t s;
 #  if LANEHASH_R == 4
         unsigned c;
-        /* SSE2: state array, 64-byte aligned so the stores never split a cache line */
-        union { uint64_t w[64]; lanehash_v v[16]; } st;
+        /* SSE2: the 64-word state in memory (32 xmm registers) */
+        union { uint64_t w[64]; lanehash_v v[32]; } st;
         for (c = 0; c < 8; c++) {
             LANEHASH_UNROLL
             for (r = 0; r < LANEHASH_R; r++)

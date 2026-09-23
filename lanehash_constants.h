@@ -1,4 +1,4 @@
-/* Generated from lanehash/src/constants.rs (pi words) and lanehash/src/lh2/{spec,short}.rs. */
+/* Generated from lanehash/src/constants.rs (pi words) and lanehash/src/{spec,short}.rs. */
 #define LANEHASH_SEED0 UINT64_C(0x997f2cf145907cba)
 #define LANEHASH_SEED1 UINT64_C(0xf76c91b34799a125)
 static const uint64_t LANEHASH_S[19] = {
