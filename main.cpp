@@ -717,8 +717,10 @@ HashInfo g_hashes[] =
 #endif
 { xxHash64_test,        64, 0x024B7CF4, "xxHash64",    "xxHash, 64-bit", GOOD, {} },
 #if !(defined(HAVE_PTRSIZE_4) && !defined(HAVE_NEON))
-{ lanehash64_test,      64, 0x9FF60BEF, "lanehash64",  "lanehash, 64-bit, AES lanes + mum short path", GOOD, {} },
-{ lanehash128_test,    128, 0x1A79672D, "lanehash128", "lanehash, 128-bit, AES lanes + mum short path", GOOD, {} },
+{ lanehash64_test,      64, 0xD048C22B, "lanehash64",  "lanehash, 64-bit, chained NH-32 stripes + mum short path, no AES", GOOD, {} },
+{ lanehash128_test,    128, 0xC2F39939, "lanehash128", "lanehash, 128-bit, chained NH-32 stripes + mum short path, no AES", GOOD, {} },
+{ lanehash_aes64_test,  64, 0x9FF60BEF, "lanehash_aes64",  "lanehash_aes, 64-bit, AES lanes + mum short path", GOOD, {} },
+{ lanehash_aes128_test,128, 0x1A79672D, "lanehash_aes128", "lanehash_aes, 128-bit, AES lanes + mum short path", GOOD, {} },
 #endif
 #if 0
 { xxhash256_test,       64, 0x024B7CF4, "xxhash256",   "xxhash256, 64-bit unportable", GOOD, {} },
