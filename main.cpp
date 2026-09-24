@@ -786,6 +786,8 @@ HashInfo g_hashes[] =
   {0x47ebda34}},
 { xxh128low_test,       64, 0x54D1CC70, "xxh128low",   "xxHash v3, 128-bit, low 64-bits part", GOOD,
   {0x47ebda34}},
+{ cortex_hash64_test,   64, 0x00000000, "cortex_hash64",  "CortexHash 64-bit (AVX2/SWAR)", GOOD, {}},
+{ cortex_hash128_test, 128, 0x00000000, "cortex_hash128", "CortexHash 128-bit (AVX2/SWAR)", GOOD, {}},
 #ifdef HAVE_BIT32
 { wyhash32_test,        32, 0x09DE8066, "wyhash32",    "wyhash v4.2 (32-bit native)", GOOD,
   {0x51a43a0f, 0x522235ae, 0x99ac2b20, 0x9a4f1376} },

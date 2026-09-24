@@ -421,6 +421,16 @@ inline void xxh128low_test( const void * key, int len, uint32_t seed, void * out
   *(uint64_t*)out = (uint64_t) (XXH128(key, (size_t) len, seed).low64);
 }
 
+#include "cortex_hash.h"
+
+inline void cortex_hash64_test( const void * key, int len, uint32_t seed, void * out ) {
+  *(uint64_t*)out = cortex_hash64(key, (size_t) len, (uint64_t) seed);
+}
+
+inline void cortex_hash128_test( const void * key, int len, uint32_t seed, void * out ) {
+  cortex_hash128(key, (size_t) len, (uint64_t) seed, (uint64_t*) out);
+}
+
 #ifdef HAVE_INT64
 inline void metrohash64_test ( const void * key, int len, uint32_t seed, void * out ) {
   MetroHash64::Hash((const uint8_t *)key, (uint64_t)len, (uint8_t *)out, seed);
