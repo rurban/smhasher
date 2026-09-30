@@ -552,7 +552,7 @@ if(NOT MSVC)
   set_source_files_properties(SpeedTest.cpp PROPERTIES COMPILE_FLAGS "-std=c++11 -I${CMAKE_SOURCE_DIR}")
   set_source_files_properties(main.cpp PROPERTIES COMPILE_FLAGS "-std=c++0x")
   set_source_files_properties(bittest.cpp PROPERTIES COMPILE_FLAGS "-std=c++0x")
-  set_source_files_properties(Hashes.cpp PROPERTIES COMPILE_FLAGS "-std=c++1y -I${CMAKE_SOURCE_DIR} -flax-vector-conversions")
+  set_source_files_properties(Hashes.cpp PROPERTIES COMPILE_FLAGS "-std=c++1y -I${CMAKE_SOURCE_DIR} -flax-vector-conversions -Wno-psabi")
   #
   add_source_file_definitions("DifferentialTest.cpp" "__STDC_FORMAT_MACROS")
   add_source_file_definitions("KeysetTest.cpp" "__STDC_FORMAT_MACROS")
