@@ -777,11 +777,14 @@ void Hash(const uint64_t* entropy, const char* char_input, size_t length,
                                          length - used_chars, entropy, output);
 }
 
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wignored-attributes"
+#endif
 template <typename Block, unsigned count>
 struct alignas(sizeof(Block) * count) Repeat {
   Block it[count];
 };
-
 template <typename InnerBlockWrapper, unsigned count>
 struct RepeatWrapper {
   using InnerBlock = typename InnerBlockWrapper::Block;
@@ -805,7 +808,9 @@ struct RepeatWrapper {
     return result;
   }
 };
-
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 template <typename Block, unsigned count>
 inline Repeat<Block, count> Xor(Repeat<Block, count> a, Repeat<Block, count> b) {
   Repeat<Block, count> result;
