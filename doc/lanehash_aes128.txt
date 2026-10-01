@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
---- Testing lanehash128 "lanehash, 128-bit, AES lanes + mum short path" GOOD
+--- Testing lanehash_aes128 "lanehash_aes, 128-bit, AES lanes + mum short path" GOOD
 
 [[[ Sanity Tests ]]]
 
@@ -10,36 +10,36 @@ Running AppendedZeroesTest .......... PASS
 [[[ Speed Tests ]]]
 
 Bulk speed test - 262144-byte keys
-Alignment  7 - 16.813 bytes/cycle - 43485.04 MiB/sec @ 2712 MHz
-Alignment  6 - 17.006 bytes/cycle - 43982.97 MiB/sec @ 2712 MHz
-Alignment  5 - 17.021 bytes/cycle - 44021.71 MiB/sec @ 2712 MHz
-Alignment  4 - 17.032 bytes/cycle - 44051.80 MiB/sec @ 2712 MHz
-Alignment  3 - 16.999 bytes/cycle - 43964.67 MiB/sec @ 2712 MHz
-Alignment  2 - 17.021 bytes/cycle - 44021.32 MiB/sec @ 2712 MHz
-Alignment  1 - 17.019 bytes/cycle - 44018.54 MiB/sec @ 2712 MHz
-Alignment  0 - 17.996 bytes/cycle - 46543.91 MiB/sec @ 2712 MHz
-Average      - 17.113 bytes/cycle - 44261.24 MiB/sec @ 2712 MHz
+Alignment  7 - 15.707 bytes/cycle - 40623.09 MiB/sec @ 2712 MHz
+Alignment  6 - 15.819 bytes/cycle - 40913.42 MiB/sec @ 2712 MHz
+Alignment  5 - 15.813 bytes/cycle - 40898.47 MiB/sec @ 2712 MHz
+Alignment  4 - 15.801 bytes/cycle - 40868.29 MiB/sec @ 2712 MHz
+Alignment  3 - 15.808 bytes/cycle - 40884.59 MiB/sec @ 2712 MHz
+Alignment  2 - 15.809 bytes/cycle - 40886.68 MiB/sec @ 2712 MHz
+Alignment  1 - 15.813 bytes/cycle - 40897.85 MiB/sec @ 2712 MHz
+Alignment  0 - 16.617 bytes/cycle - 42977.53 MiB/sec @ 2712 MHz
+Average      - 15.898 bytes/cycle - 41118.74 MiB/sec @ 2712 MHz
 
-Small key speed test -    1-byte keys -    26.73 cycles/hash
-Small key speed test -    2-byte keys -    26.82 cycles/hash
-Small key speed test -    3-byte keys -    26.77 cycles/hash
+Small key speed test -    1-byte keys -    26.91 cycles/hash
+Small key speed test -    2-byte keys -    26.89 cycles/hash
+Small key speed test -    3-byte keys -    26.99 cycles/hash
 Small key speed test -    4-byte keys -    24.99 cycles/hash
-Small key speed test -    5-byte keys -    24.99 cycles/hash
-Small key speed test -    6-byte keys -    25.00 cycles/hash
+Small key speed test -    5-byte keys -    25.00 cycles/hash
+Small key speed test -    6-byte keys -    24.99 cycles/hash
 Small key speed test -    7-byte keys -    24.99 cycles/hash
-Small key speed test -    8-byte keys -    25.00 cycles/hash
-Small key speed test -    9-byte keys -    23.62 cycles/hash
-Small key speed test -   10-byte keys -    23.55 cycles/hash
-Small key speed test -   11-byte keys -    23.61 cycles/hash
+Small key speed test -    8-byte keys -    24.99 cycles/hash
+Small key speed test -    9-byte keys -    23.52 cycles/hash
+Small key speed test -   10-byte keys -    23.68 cycles/hash
+Small key speed test -   11-byte keys -    23.49 cycles/hash
 Small key speed test -   12-byte keys -    23.63 cycles/hash
-Small key speed test -   13-byte keys -    23.63 cycles/hash
-Small key speed test -   14-byte keys -    23.58 cycles/hash
-Small key speed test -   15-byte keys -    23.61 cycles/hash
-Small key speed test -   16-byte keys -    23.47 cycles/hash
-Small key speed test -   17-byte keys -    26.00 cycles/hash
-Small key speed test -   18-byte keys -    26.00 cycles/hash
-Small key speed test -   19-byte keys -    26.00 cycles/hash
-Small key speed test -   20-byte keys -    26.00 cycles/hash
+Small key speed test -   13-byte keys -    24.00 cycles/hash
+Small key speed test -   14-byte keys -    24.00 cycles/hash
+Small key speed test -   15-byte keys -    24.00 cycles/hash
+Small key speed test -   16-byte keys -    24.00 cycles/hash
+Small key speed test -   17-byte keys -    27.00 cycles/hash
+Small key speed test -   18-byte keys -    27.00 cycles/hash
+Small key speed test -   19-byte keys -    27.00 cycles/hash
+Small key speed test -   20-byte keys -    27.00 cycles/hash
 Small key speed test -   21-byte keys -    26.00 cycles/hash
 Small key speed test -   22-byte keys -    26.00 cycles/hash
 Small key speed test -   23-byte keys -    26.00 cycles/hash
@@ -52,19 +52,19 @@ Small key speed test -   29-byte keys -    26.00 cycles/hash
 Small key speed test -   30-byte keys -    26.00 cycles/hash
 Small key speed test -   31-byte keys -    26.00 cycles/hash
 Small key speed test -   32-byte keys -    26.00 cycles/hash
-Average                                    25.312 cycles/hash
-Average, weighted by key length freq.      24.704 cycles/hash (using 93.0% of top-7m Tranco DNS names dataset)
-Average, weighted by key length freq.      23.740 cycles/hash (using 27.1% of startup-1M UMASH trace dataset)
+Average                                    25.502 cycles/hash
+Average, weighted by key length freq.      25.036 cycles/hash (using 93.0% of top-7m Tranco DNS names dataset)
+Average, weighted by key length freq.      23.958 cycles/hash (using 27.1% of startup-1M UMASH trace dataset)
 
 [[[ 'Hashmap' Speed Tests ]]]
 
 std::unordered_map
-Init std HashMapTest:     242.738 cycles/op (104334 inserts, 1% deletions)
-Running std HashMapTest:  132.725 cycles/op (0.9 stdv)
+Init std HashMapTest:     398.889 cycles/op (104334 inserts, 1% deletions)
+Running std HashMapTest:  201.394 cycles/op (6.5 stdv)
 
 greg7mdp/parallel-hashmap
-Init fast HashMapTest:    270.687 cycles/op (104334 inserts, 1% deletions)
-Running fast HashMapTest: 98.606 cycles/op (1.1 stdv)  ....... PASS
+Init fast HashMapTest:    242.338 cycles/op (104334 inserts, 1% deletions)
+Running fast HashMapTest: 132.387 cycles/op (3.8 stdv)  ....... PASS
 
 [[[ Avalanche Tests ]]]
 
@@ -1282,17 +1282,17 @@ Testing distribution - Worst bias is the 18-bit window at bit 14 - 0.126%
 
 Analyze hashes produced from a serie of linearly increasing numbers of 32-bit, using a step of 2 ... 
 Target values to approximate : 38918200.000000 - 273633.333333 
-12 threads starting...  done
-Popcount 1 stats : 38918166.643319 - 273638.474947
-Popcount 0 stats : 38919518.573372 - 273644.388321
-MomentChi2 for bits 1 :  0.00203312 
-MomentChi2 for bits 0 :   3.17688 
+8 threads starting...  done
+Popcount 1 stats : 38918879.656962 - 273646.577928
+Popcount 0 stats : 38919012.949260 - 273644.659426
+MomentChi2 for bits 1 :  0.844054 
+MomentChi2 for bits 0 :   1.20759 
 
 Derivative stats (transition from 2 consecutive values) : 
-Popcount 1 stats : 38919392.041103 - 273654.138390
-Popcount 0 stats : 38918855.905210 - 273660.607694
-MomentChi2 for deriv b1 :   2.59637 
-MomentChi2 for deriv b0 :  0.786071 
+Popcount 1 stats : 38918886.387161 - 273651.262135
+Popcount 0 stats : 38919583.330743 - 273671.582119
+MomentChi2 for deriv b1 :  0.860845 
+MomentChi2 for deriv b0 :   3.49641 
 
   Great 
 
@@ -1315,19 +1315,15 @@ Testing 0 internal bad seeds:
 
 
 Input vcode 0x00000001, Output vcode 0x00000001, Result vcode 0x00000001
-Verification value is 0x00000001 - Testing took 751.880954 seconds
+Verification value is 0x00000001 - Testing took 1907.803002 seconds
 -------------------------------------------------------------------------------
---- Testing lanehash128 "lanehash, 128-bit, AES lanes + mum short path" GOOD
-
 [[[ BadSeeds Tests ]]]
 
 Testing 0 internal bad seeds:
 0x0 PASS
 Testing the first 0xffffffff seeds ...
-12 threads starting...
-at 0 at 15555555 at 2aaaaaaa at 3fffffff 0x3fffffff at 55555554 at 6aaaaaa9 at 7ffffffe at 95555553 0x7fffffff at aaaaaaa8 at bffffffd at d5555552 at eaaaaaa7 0xbfffffff 0x55ffffff 0x15ffffff 0xd5ffffff 0x95ffffff 0x6bffffff 0x2bffffff 0xabffffff 0xebffffff 0xc1ffffff 0x01ffffff 0x41ffffff 0x81ffffff 0x17ffffff 0xd7ffffff 0x57ffffff 0x97ffffff 0x2dffffff 0x6dffffff 0xadffffff 0xedffffff 0x43ffffff 0x03ffffff 0xc3ffffff 0x83ffffff 0x19ffffff 0xd9ffffff 0x59ffffff 0x99ffffff 0x2fffffff 0x6fffffff 0xafffffff 0xefffffff 0x85ffffff 0x45ffffff 0xc5ffffff 0x05ffffff 0x1bffffff 0x9bffffff 0xdbffffff 0x5bffffff 0x31ffffff 0x71ffffff 0xb1ffffff 0xf1ffffff 0x87ffffff 0x47ffffff 0xc7ffffff 0x07ffffff 0x1dffffff 0x9dffffff 0x5dffffff 0xddffffff 0x33ffffff 0x73ffffff 0xb3ffffff 0xf3ffffff 0x89ffffff 0x49ffffff 0xc9ffffff 0x09ffffff 0x1fffffff 0x9fffffff 0xdfffffff 0x5fffffff 0x35ffffff 0x75ffffff 0xb5ffffff 0xf5ffffff 0x4bffffff 0x8bffffff 0xcbffffff 0x0bffffff 0xa1ffffff 0x21ffffff 0xe1ffffff 0x61ffffff 0x37ffffff 0x77ffffff 0xb7ffffff 0xf7ffffff 0x8dffffff 0x4dffffff 0x0dffffff 0xcdffffff 0xe3ffffff 0xa3ffffff 0x23ffffff 0x63ffffff 0x39ffffff 0x79ffffff 0xb9ffffff 0xf9ffffff 0x8fffffff 0x0fffffff 0x4fffffff 0xcfffffff 0xa5ffffff 0x25ffffff 0xe5ffffff 0x65ffffff 0x3bffffff 0x7bffffff 0xbbffffff 0xfbffffff 0x11ffffff 0x51ffffff 0x91ffffff 0xd1ffffff 0xa7ffffff 0x67ffffff 0x27ffffff 0xe7ffffff 0x3dffffff 0x7dffffff 0xbdffffff 0xfdffffff 0x53ffffff 0x13ffffff 0x93ffffff 0xd3ffffff 0xa9ffffff 0x29ffffff 0x69ffffff 0xe9ffffff All 12 threads ended
+8 threads starting...
+at 0 at 20000000 at 40000000 at 60000000 at 80000000 at a0000000 at c0000000 at e0000000 0x61ffffff 0x81ffffff 0x41ffffff 0xa1ffffff 0xc1ffffff 0x01ffffff 0x21ffffff 0xe1ffffff 0x43ffffff 0x63ffffff 0xc3ffffff 0xa3ffffff 0x03ffffff 0x83ffffff 0x23ffffff 0xe3ffffff 0x45ffffff 0xa5ffffff 0xc5ffffff 0x85ffffff 0x65ffffff 0x25ffffff 0xe5ffffff 0x05ffffff 0xa7ffffff 0x87ffffff 0x47ffffff 0xc7ffffff 0x07ffffff 0x67ffffff 0xe7ffffff 0x27ffffff 0xa9ffffff 0x89ffffff 0x49ffffff 0xc9ffffff 0x69ffffff 0x09ffffff 0xe9ffffff 0x29ffffff 0x8bffffff 0xabffffff 0xcbffffff 0x4bffffff 0x0bffffff 0xebffffff 0x6bffffff 0x2bffffff 0x8dffffff 0xcdffffff 0xadffffff 0x4dffffff 0xedffffff 0x0dffffff 0x6dffffff 0x2dffffff 0x8fffffff 0xafffffff 0xcfffffff 0x4fffffff 0x0fffffff 0xefffffff 0x6fffffff 0x2fffffff 0x91ffffff 0xb1ffffff 0x51ffffff 0xd1ffffff 0x11ffffff 0x71ffffff 0x31ffffff 0xf1ffffff 0x93ffffff 0xb3ffffff 0x13ffffff 0xd3ffffff 0x53ffffff 0x73ffffff 0xf3ffffff 0x33ffffff 0x95ffffff 0xb5ffffff 0xd5ffffff 0x15ffffff 0x55ffffff 0x75ffffff 0xf5ffffff 0x35ffffff 0x97ffffff 0x57ffffff 0x17ffffff 0xb7ffffff 0xd7ffffff 0x77ffffff 0x37ffffff 0xf7ffffff 0x99ffffff 0x19ffffff 0x59ffffff 0xb9ffffff 0xd9ffffff 0x39ffffff 0xf9ffffff 0x79ffffff 0x9bffffff 0x5bffffff 0x1bffffff 0xbbffffff 0xdbffffff 0xfbffffff 0x3bffffff 0x7bffffff 0x9dffffff 0x5dffffff 0x1dffffff 0xbdffffff 0xddffffff 0xfdffffff 0x3dffffff 0x7dffffff 0x9fffffff 0x5fffffff 0xdfffffff 0x1fffffff 0xbfffffff 0xffffffff 0x3fffffff 0x7fffffff All 8 threads ended
 PASS
 
 
-Input vcode 0x00000001, Output vcode 0x00000001, Result vcode 0x00000001
-Verification value is 0x00000001 - Testing took 2840.648046 seconds

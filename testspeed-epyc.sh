@@ -16,4 +16,4 @@ else
     done | tee "log.speed-epyc-$1"
     ./speed.pl -h=doc/epyc "log.speed-epyc-$1"
 fi
-./stop-bench.sh
+#./stop-bench.sh
