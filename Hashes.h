@@ -1515,3 +1515,6 @@ inline void lanehash_aes64_test( const void * key, int len, uint32_t seed, void 
 inline void lanehash_aes128_test( const void * key, int len, uint32_t seed, void * out ) {
   lanehash_aes128(key, (size_t) len, (uint64_t) seed, out);
 }
+
+void fifty2hash64_test  ( const void * key, int len, uint32_t seed, void * out );
+void fifty2hash128_test ( const void * key, int len, uint32_t seed, void * out );

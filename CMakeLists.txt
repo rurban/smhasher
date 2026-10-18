@@ -178,6 +178,28 @@ if(NOT CMAKE_CROSSCOMPILING)
       endif()
     endif()
   endif()
+  if(MSVC)
+    # MSVC has no -march=native: probe the host by compiling+running an AVX-512(F)
+    # / AVX-512 IFMA intrinsic (with /arch:AVX512).  52hash needs IFMA; AVX512F
+    # drives the /arch:AVX512 flag for Hashes.cpp (see below).
+    include(CheckCXXSourceRuns)
+    set(CMAKE_REQUIRED_FLAGS "/arch:AVX512")
+    check_cxx_source_runs("
+      #include <immintrin.h>
+      int main() {
+        __m512i a = _mm512_set1_epi64(1);
+        __m512i b = _mm512_add_epi64(a, a);
+        return (int)_mm_cvtsi128_si64(_mm512_castsi512_si128(b));
+      }" AVX512F_TRUE)
+    check_cxx_source_runs("
+      #include <immintrin.h>
+      int main() {
+        __m512i a = _mm512_set1_epi64(1);
+        __m512i b = _mm512_madd52lo_epu64(a, a, a);
+        return (int)_mm_cvtsi128_si64(_mm512_castsi512_si128(b));
+      }" AVX512IFMA_TRUE)
+    set(CMAKE_REQUIRED_FLAGS "")
+  endif()
 endif(NOT CMAKE_CROSSCOMPILING)
 
 if(PROCESSOR_FAMILY STREQUAL "Intel")
@@ -332,6 +354,16 @@ else(AVX512VL_TRUE)
       CACHE BOOL "AVX512VL not available")
   message(STATUS "AVX512VL not available")
 endif(AVX512VL_TRUE)
+
+if(AVX512IFMA_TRUE)
+  set(AVX512IFMA_FOUND
+      true
+      CACHE BOOL "AVX512IFMA available")
+else(AVX512IFMA_TRUE)
+  set(AVX512IFMA_FOUND
+      false
+      CACHE BOOL "AVX512IFMA not available")
+endif(AVX512IFMA_TRUE)
 
 if(CMAKE_CROSSCOMPILING)
   if(SYSTEM_PROCESSOR_IS_AARCH64)
@@ -639,6 +671,19 @@ if(AVX512F_FOUND AND AVX512VL_FOUND)
     blake3/blake3_avx512.c
     PROPERTIES COMPILE_FLAGS
                "-DBLAKE3_USE_SSE41 -DBLAKE3_USE_AVX2 -DBLAKE3_USE_AVX512 -mavx512f -mavx512vl")
+endif()
+# MSVC: /arch:AVX512 is added to Hashes.cpp (which includes 52hash.h) when the
+# host supports AVX-512F, and the IFMA define enables 52hash's SIMD path when
+# AVX-512 IFMA is available.  Scoped to Hashes.cpp, not the whole binary.
+if(MSVC AND AVX512F_FOUND)
+  get_source_file_property(_f52_flags Hashes.cpp COMPILE_FLAGS)
+  set_source_files_properties(Hashes.cpp PROPERTIES COMPILE_FLAGS
+    "${_f52_flags} /arch:AVX512")
+endif()
+if(MSVC AND AVX512IFMA_FOUND)
+  get_source_file_property(_f52_flags Hashes.cpp COMPILE_FLAGS)
+  set_source_files_properties(Hashes.cpp PROPERTIES COMPILE_FLAGS
+    "${_f52_flags} /DF52_FORCE_AVX512IFMA")
 endif()
 
 if(SSE42_FOUND

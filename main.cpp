@@ -821,6 +821,8 @@ HashInfo g_hashes[] =
 { rainstorm64_test,     64, 0xC8DB71D5, "rainstorm",     "Rainstorm 64-bit v0.0.6", GOOD, {} },
 { rainstorm128_test,   128, 0x17E0FC1B, "rainstorm-128", "Rainstorm 128-bit v0.0.6", GOOD, {} },
 { rainstorm256_test,   256, 0x8BDBF180, "rainstorm-256", "Rainstorm 256-bit v0.0.6", GOOD, {} },
+{ fifty2hash64_test,    64, 0x3C368934, "fifty2hash64",  "52hash, 64-bit", GOOD, {}},
+{ fifty2hash128_test,  128, 0x13CC0E73, "fifty2hash128", "52hash, 128-bit", GOOD, {}},
 };
 
 HashInfo * findHash ( const char * name )
