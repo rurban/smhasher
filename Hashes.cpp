@@ -1410,3 +1410,11 @@ void mum_v3_seed_init(uint32_t &seed) {
   if ((seed & 0xfffff00ULL) == 0x0ULL)
     seed++;
 }
+
+#include "hash-garage/52hash.h"
+void fifty2hash64_test ( const void * key, int len, uint32_t seed, void * out ) {
+  *(uint64_t*)out = fifty2hash64(key, (const size_t) len, seed);
+}
+void fifty2hash128_test ( const void * key, int len, uint32_t seed, void * out ) {
+  fifty2hash128(key, (const size_t) len, seed, (uint64_t*)out);
+}
