@@ -1,5 +1,5 @@
 /*
- * hassh64 1.0.0: a fast, seeded, non-cryptographic 64-bit hash.
+ * hassh64 1.0.1: a fast, seeded, non-cryptographic 64-bit hash.
  * https://github.com/zsigisti/hassh64
  *
  * AI-generated: designed and written by an AI (Anthropic's Claude, via Claude
@@ -15,7 +15,9 @@
  *                     HASSH_NO_DISPATCH to turn that off). -mvaes -mavx2 adds
  *                     a 256-bit VAES path.
  *   x86-64 MSVC       AES-NI path with /arch:AVX2 (every AVX2 CPU has
- *                     AES-NI), or define HASSH_ASSUME_AESNI.
+ *                     AES-NI), or define HASSH_ASSUME_AESNI; otherwise
+ *                     portable C. (clang-cl behaves like Clang: run-time
+ *                     check, or -maes -msse4.1.)
  *   AArch64           ARMv8 AES path when built with the crypto extension
  *                     (-march=armv8-a+crypto; the default on Apple targets).
  *   anything else     portable C (32-bit, big-endian, RISC-V, WebAssembly...).
@@ -58,8 +60,8 @@
 
 #define HASSH_VERSION_MAJOR 1   /* bumped whenever any output changes */
 #define HASSH_VERSION_MINOR 0
-#define HASSH_VERSION_PATCH 0
-#define HASSH_VERSION "1.0.0"
+#define HASSH_VERSION_PATCH 1
+#define HASSH_VERSION "1.0.1"
 
 #include <stdint.h>
 #include <stddef.h>
@@ -75,7 +77,8 @@
 #endif
 #if !defined(HASSH_PORTABLE)
 #  if defined(HASSH_X64) && ((defined(__AES__) && defined(__SSE4_1__)) || \
-        defined(HASSH_ASSUME_AESNI) || (defined(_MSC_VER) && defined(__AVX2__)))
+        (defined(_MSC_VER) && !defined(__clang__) && \
+         (defined(HASSH_ASSUME_AESNI) || defined(__AVX2__))))
 #    define HASSH_HAVE_SIMD 1
 #    include <immintrin.h>
 #    if defined(_MSC_VER) && !defined(__clang__)
@@ -633,7 +636,17 @@ HASSH_INLINE uint64_t hassh64(const void *data, size_t len, uint64_t seed) {
 #endif
 }
 
-/* Internal macros stay internal. */
+/* Internal macros stay internal. HASSH_P, HASSH_K and the hassh_* helpers
+ * remain visible (the test suite uses them); no configuration macro does. */
+#undef HASSH_INLINE
+#undef HASSH_LIKELY
+#undef HASSH_X64
+#undef HASSH_HAVE_SIMD
+#undef HASSH_DISPATCH
+#undef HASSH_SIMD
+#undef HASSH_X86
+#undef HASSH_ARM
+#undef HASSH_VAES
 #undef HASSH_SEEDKEYS
 #undef HASSH_INIT
 #undef HV_LD
