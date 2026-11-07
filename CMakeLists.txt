@@ -719,6 +719,9 @@ if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     add_definitions(-DHAVE_KHASHV)
     set(KHASHV_SRC k-hashv/khashv.h)
   endif()
+else()
+  # ChainHash's 32bit supports no hw-intrinsics (SSE/AVX/NEON/...)
+  add_definitions(-DCHAINHASH_PORTABLE -DCHAINHASH128_PORTABLE)
 endif()
 
 # IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/BeagleHashes_test.c") set(BEAGLE_SRC
