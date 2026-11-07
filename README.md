@@ -246,6 +246,7 @@ SMhasher
 | [lanehash_aes128](doc/lanehash_aes128.txt)    |     44261.24 |    25.31 | 138.73 (2) |3638 | Sparse high32, AES only    |
 | [fifty2hash64](doc/fifty2hash64.txt)          |      6411.81 |    32.07 | 453.69 (2) |    | AES only                   |
 | [fifty2hash128](doc/fifty2hash128.txt)        |      6790.27 |    36.29 | 459.37 (1) |     | AES only                   |
+| [hassh64](doc/hassh64.txt)                    |     17779.27 |    33.25 | 598.66 (60)|     |                            |
 
 The sortable table variants:
 
