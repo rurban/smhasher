@@ -394,7 +394,6 @@ inline void gxhash64_test( const void * key, int len, uint32_t seed, void * out 
 }
 #endif
 
-#define restrict // oddly enough, seems to choke on this keyword
 #include "xxh3.h"
 
 #ifdef HAVE_INT64

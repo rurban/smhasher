@@ -781,7 +781,7 @@ HashInfo g_hashes[] =
 // aHash does not adhere to a fixed output
 { ahash64_test,         64, 0x00000000, "ahash64",     "ahash 64bit", GOOD, {} },
 #endif
-{ xxh3_test,            64, 0x39CD9E4A, "xxh3",        "xxHash v3, 64-bit", GOOD, // no known bad seeds
+{ xxh3_test,            64, 0x9A636405, "xxh3",        "XXH3 v0.8.4, 64-bit", GOOD, // no known bad seeds
   {0x47ebda34,             // 32bit bad seed
    /* 0xbe4ba423396cfeb8,  // kSecret
    0x396cfeb8, 0xbe4ba423, // kSecret
@@ -789,11 +789,11 @@ HashInfo g_hashes[] =
    0xaf56bc3b0996523a,     // bitflip2 ^ input[last 8]
    */
   }},
-{ xxh3low_test,         32, 0xFAE8467B, "xxh3low",     "xxHash v3, 64-bit, low 32-bits part", GOOD,
+{ xxh3low_test,         32, 0x087EA8D0, "xxh3low",     "XXH3 v0.8.4, low 32 bits", GOOD,
   {0x47ebda34} /* !! */},
-{ xxh128_test,         128, 0xEB61B3A0, "xxh128",      "xxHash v3, 128-bit", GOOD,
+{ xxh128_test,         128, 0x5AE48E84, "xxh128",      "XXH3 v0.8.4, 128-bit", GOOD,
   {0x47ebda34}},
-{ xxh128low_test,       64, 0x54D1CC70, "xxh128low",   "xxHash v3, 128-bit, low 64-bits part", GOOD,
+{ xxh128low_test,       64, 0x2BEC6C47, "xxh128low",   "XXH3 v0.8.4, low 64 bits", GOOD,
   {0x47ebda34}},
 { silicium_hash64_test,   64, 0x00000000, "silicium_hash64",  "SiliciumHash 64-bit (AVX2/SWAR)", GOOD, {}},
 { silicium_hash128_test, 128, 0x00000000, "silicium_hash128", "SiliciumHash 128-bit (AVX2/SWAR)", GOOD, {}},
