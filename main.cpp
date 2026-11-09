@@ -790,7 +790,7 @@ HashInfo g_hashes[] =
    */
   }},
 { xxh3low_test,         32, 0x087EA8D0, "xxh3low",     "XXH3 v0.8.4, low 32 bits", GOOD,
-  {0x47ebda34} /* !! */},
+  {0x47ebda34, 0x22e17468, 0x27f8f2c4, 0x552fdf58, 0x7eed3644, 0xcdfec195} /* !! */},
 { xxh128_test,         128, 0x5AE48E84, "xxh128",      "XXH3 v0.8.4, 128-bit", GOOD,
   {0x47ebda34}},
 { xxh128low_test,       64, 0x2BEC6C47, "xxh128low",   "XXH3 v0.8.4, low 64 bits", GOOD,

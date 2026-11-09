@@ -207,10 +207,10 @@ SMhasher
 | [SpookyV2_64](doc/SpookyV2_64.txt)            |     13401.13 |    56.18 | 246.33 (11)|2069 |                            |
 | [SpookyV2_128](doc/SpookyV2_128.txt)          |     12252.64 |    58.94 | 235.46 (2) |2069 |                            |
 | [ahash64](doc/ahash64.txt)                    |      9862.62 |    27.32 | 181.68 (1) | 412 | rust                       |
-| [xxh3](doc/xxh3.txt)                          |     20853.74 |    29.46 | 220.07 (2) | 744 | DiffDist bit 7 w. 36 bits, BIC |
-| [xxh3low](doc/xxh3low.txt)                    |     20568.96 |    29.98 | 243.82 (5) | 756 |                            |
-| [xxh128](doc/xxh128.txt)                      |     19259.99 |    31.58 | 228.84 (2) |1012 |                            |
-| [xxh128low](doc/xxh128low.txt)                |     19555.88 |    30.85 | 227.83 (2) |1012 |                            |
+| [xxh3](doc/xxh3.txt)                          |     14867.39 |    31.47 | 459.04 (1) | 744 | PerlinNoise, DiffDist bit 7 w. 36 bits |
+| [xxh3low](doc/xxh3low.txt)                    |     14904.05 |    31.31 | 468.59 (1) | 756 | 5 bad seeds                  |
+| [xxh128](doc/xxh128.txt)                      |     12519.62 |    32.90 | 499.31 (3) |1012 | PerlinNoise                  |
+| [xxh128low](doc/xxh128low.txt)                |     15121.32 |    35.52 | 459.45 (1) |1012 | PerlinNoise                  |
 | [t1ha2_atonce](doc/t1ha2_atonce.txt)          |     14275.60 |    37.02 | 224.12 (2) | 660 | Zeroes low3                |
 | [t1ha2_atonce128](doc/t1ha2_atonce128.txt)    |     14059.85 |    56.44 | 251.53 (3) | 692 | LongNeighbors              |
 | [t1ha0_aes_noavx](doc/t1ha0_aes_noavx.txt)    |     27335.47 |    37.34 | 230.59 (2) | 679 | LongNeighbors, machine-specific (x86 AES-NI) |
@@ -269,10 +269,11 @@ See also the old [https://github.com/aappleby/smhasher/wiki](https://github.com/
 
 So the fastest hash functions on x86_64 without quality problems are:
 
+* lanehash64
+* umash (even universal!)
 * rapidhash (an improved wyhash)
 * xxh3low
 * wyhash
-* umash (even universal!)
 * ahash64
 * t1ha2_atonce
 * a5hash
