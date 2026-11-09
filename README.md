@@ -244,11 +244,11 @@ SMhasher
 | [lanehash128](doc/lanehash128.txt)            |     20703.49 |    31.91 | 460.52 (1) |     | Sparse high32              |
 | [lanehash_aes64](doc/lanehash_aes64.txt)      |     43802.63 |    21.82 | 119.16 (2) |3834 | AES only                   |
 | [lanehash_aes128](doc/lanehash_aes128.txt)    |     44261.24 |    25.31 | 138.73 (2) |3638 | Sparse high32, AES only    |
-| [fifty2hash64](doc/fifty2hash64.txt)          |      6411.81 |    32.07 | 453.69 (2) |    | AES only                   |
-| [fifty2hash128](doc/fifty2hash128.txt)        |      6790.27 |    36.29 | 459.37 (1) |     | AES only                   |
+| [fifty2hash64](doc/fifty2hash64.txt)          |      6411.81 |    32.07 | 453.69 (2) |    |                             |
+| [fifty2hash128](doc/fifty2hash128.txt)        |      6790.27 |    36.29 | 459.37 (1) |     |                            |
 | [hassh64](doc/hassh64.txt)                    |     17779.27 |    33.25 | 598.66 (60)|     |                            |
-| [chainhash](doc/chainhash.txt)                |     21654.74 |    80.11 | 507.10 (1) |2027 |                  |
-| [chainhash-128](doc/chainhash-128.txt)        |     13413.90 |   127.16 | 568.66 (1) |1650 |                  |
+| [chainhash](doc/chainhash.txt)                |     21654.74 |    80.11 | 507.10 (1) |2027 |                            |
+| [chainhash-128](doc/chainhash-128.txt)        |     13413.90 |   127.16 | 568.66 (1) |1650 |                            |
 
 The sortable table variants:
 
