@@ -16,7 +16,7 @@ Nothing else matters.
 We take functions written in C++, C and sometimes even in ASM.
 The smokers run on travis (x64 - Linux and darwin, x86, aarch64), appveyor (MSVC 17),
 and cirrus for FreeBSD 12.1.
-So g++ and clang++, linux, darwin, freebsd and Windows MSVC is tested, no mingw, no arm32 (yet).
+GitHub Actions also runs MinGW builds and tests; failures fail the CI job.
 Note that Windows MSVC is only C89 or C++, but not C99, and a long is not long.
 Use stdint.h
 
