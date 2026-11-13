@@ -267,6 +267,9 @@ Summary
 I added some SSE assisted hashes and fast intel/arm CRC32-C, AES and SHA HW variants.
 See also the old [https://github.com/aappleby/smhasher/wiki](https://github.com/aappleby/smhasher/wiki), the improved, but unmaintained fork [https://github.com/demerphq/smhasher](https://github.com/demerphq/smhasher), and the new improved version SMHasher3 [https://gitlab.com/fwojcik/smhasher3](https://gitlab.com/fwojcik/smhasher3).
 
+[Hash Function Prospector](https://github.com/skeeto/hash-prospector) searches
+for integer hash functions and mixing constants by measuring avalanche bias.
+
 So the fastest hash functions on x86_64 without quality problems are:
 
 * lanehash64
