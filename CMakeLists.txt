@@ -866,6 +866,8 @@ endif()
 
 if(NOT (CMAKE_CROSSCOMPILING) OR QEMU_TESTING)
   enable_testing()
+  add_executable(HashtronTest hashtron_test.cpp)
+  add_test(Hashtron HashtronTest)
   add_test(List SMHasher --list)
   add_test(VerifyAll SMHasher --test=VerifyAll --verbose)
   add_test(Sanity SMHasher --test=Sanity)
@@ -884,6 +886,7 @@ add_custom_target(
 INSTALL(DIRECTORY ${PROJECT_SOURCE_DIR}/
   DESTINATION include
   FILES_MATCHING PATTERN "*.h")
+INSTALL(FILES hashtron-LICENSE DESTINATION include)
 INSTALL(TARGETS SMHasherSupport
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib)

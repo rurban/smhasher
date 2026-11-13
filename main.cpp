@@ -275,6 +275,7 @@ HashInfo g_hashes[] =
 { khash32_test,         32, 0x99B3FFCD, "k-hash32",    "K-Hash mixer, 32-bit", POOR, {} },
 { khash64_test,         64, 0xAB5518A1, "k-hash64",    "K-Hash mixer, 64-bit", POOR, {} },
 #endif
+{ hashtron_test,        32, 0xEB180CEB, "hashtron",    "Hashtron StringHash (UTF-8)", POOR, {} },
 { FNV32a_test,          32, 0xE3CBBE91, "FNV1a",       "Fowler-Noll-Vo hash, 32-bit", POOR,
   {0x811c9dc5} /* !! */ },
 #ifdef HAVE_INT64

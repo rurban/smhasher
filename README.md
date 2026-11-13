@@ -250,6 +250,10 @@ SMhasher
 | [chainhash](doc/chainhash.txt)                |     21654.74 |    80.11 | 507.10 (1) |2027 |                            |
 | [chainhash-128](doc/chainhash-128.txt)        |     13413.90 |   127.16 | 568.66 (1) |1650 |                            |
 
+`hashtron` benchmarks the classifier's `StringHash` UTF-8 adapter with the
+SMHasher seed as its initial state. Invalid UTF-8 bytes are replaced by U+FFFD,
+as in Go, so distinct binary inputs can collide before the hash mixing step.
+
 The sortable table variants:
 
 * **[Default AMD Ryzen 5 3350G 3.6GHz](https://rurban.github.io/smhasher/doc/table.html)**

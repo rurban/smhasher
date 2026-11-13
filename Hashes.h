@@ -15,6 +15,12 @@
 #include "gxhash.h"
 #include "lanehash.h"
 #include "lanehash_aes.h"
+#include "hashtron.h"
+
+inline void hashtron_test(const void *key, int len, uint32_t seed, void *out) {
+  uint32_t value = hashtron_string(key, (size_t)len, seed);
+  memcpy(out, &value, sizeof(value));
+}
 
 #include "metrohash/metrohash64.h"
 #include "metrohash/metrohash128.h"
