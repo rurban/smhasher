@@ -250,6 +250,8 @@ SMhasher
 | [chainhash](doc/chainhash.txt)                |     21654.74 |    80.11 | 507.10 (1) |2027 |                            |
 | [chainhash-128](doc/chainhash-128.txt)        |     13413.90 |   127.16 | 568.66 (1) |1650 |                            |
 
+The komihash table entry records version 5.26; the executable includes 5.27.
+
 The sortable table variants:
 
 * **[Default AMD Ryzen 5 3350G 3.6GHz](https://rurban.github.io/smhasher/doc/table.html)**
