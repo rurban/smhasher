@@ -310,6 +310,9 @@ digests and maybe bigger databases, but not for 32bit hash tables.  The
 and worse performance, but are rarely related to real security attacks, just
 the 2nd sanity AppendZeroes test against `\0` invariance is security relevant.
 
+The AES-NI t1ha0 variants are x86-only; ARM builds use the portable t1ha
+implementations even when the processor supports AES.
+
 Columns
 -------
 
