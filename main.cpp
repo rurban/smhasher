@@ -710,12 +710,17 @@ HashInfo g_hashes[] =
 #endif
 #ifdef HAVE_AESNI
 // FIXME
+#if defined(HAVE_AVX2) && defined(__VAES__)
+#define GX32_VFY 0xE05BFE54
+#define GX_VFY 0xE919C8E3
+#else
 #if defined __linux && defined GITHUB_ACTIONS
 #define GX32_VFY 0x2D5674B0
 #define GX_VFY 0x87FA3129
 #else
 #define GX32_VFY 0xEC19D715
 #define GX_VFY 0x9189E456
+#endif
 #endif
 { gxhash32_test,        32, GX32_VFY,   "gxhash32",    "gxHash, 32-bit, AES-only", GOOD,
         {0xe1c1ec7d, 0x0376a937, 0x64ef3cc9, 0x282c25a4, 0xab1d407e, 0xef794206,

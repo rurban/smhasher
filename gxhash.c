@@ -310,10 +310,28 @@ static inline state gxhash(const uint8_t* input, int len, uint32_t seed) {
 
 uint32_t gxhash32(const uint8_t* input, int len, uint32_t seed) {
     state full_hash = gxhash(input, len, seed);
-    return *(uint32_t*)&full_hash;
+#if defined(__AES__) && defined(HAVE_AVX2) && defined(__VAES__)
+    __m128i folded = _mm_xor_si128(_mm256_castsi256_si128(full_hash),
+                                   _mm256_extracti128_si256(full_hash, 1));
+    return (uint32_t)_mm_cvtsi128_si32(folded);
+#else
+    uint32_t result;
+    memcpy(&result, &full_hash, sizeof(result));
+    return result;
+#endif
 }
 
 uint64_t gxhash64(const uint8_t* input, int len, uint32_t seed) {
     state full_hash = gxhash(input, len, seed);
-    return *(uint64_t*)&full_hash;
+#if defined(__AES__) && defined(HAVE_AVX2) && defined(__VAES__)
+    __m128i folded = _mm_xor_si128(_mm256_castsi256_si128(full_hash),
+                                   _mm256_extracti128_si256(full_hash, 1));
+    uint64_t result;
+    memcpy(&result, &folded, sizeof(result));
+    return result;
+#else
+    uint64_t result;
+    memcpy(&result, &full_hash, sizeof(result));
+    return result;
+#endif
 }

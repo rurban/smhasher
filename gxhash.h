@@ -21,6 +21,8 @@
 #if defined (__cplusplus)
 extern "C" {
 #endif
+/* AVX2/VAES hashes fold both 128-bit lanes; their values differ from older
+ * builds and are not portable across implementations. */
 uint32_t gxhash32(const uint8_t* input, int len, uint32_t seed);
 uint64_t gxhash64(const uint8_t* input, int len, uint32_t seed);
 #if defined (__cplusplus)
