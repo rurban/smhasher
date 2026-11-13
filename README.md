@@ -310,6 +310,12 @@ digests and maybe bigger databases, but not for 32bit hash tables.  The
 and worse performance, but are rarely related to real security attacks, just
 the 2nd sanity AppendZeroes test against `\0` invariance is security relevant.
 
+The Rust BLAKE3 variants are optional. Configure with
+`cmake -S . -B build -DSMHASHER_RUST_BLAKE3=ON` and build normally; Cargo is
+required. Cross-compilation also requires `-DSMHASHER_RUST_TARGET=<triple>`.
+`blake3` and `blake3_64` use the standard unseeded Rust digest, so they ignore
+SMHasher's seed. The C and Rust implementations use separate linked libraries.
+
 Columns
 -------
 

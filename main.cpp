@@ -169,8 +169,8 @@ HashInfo g_hashes[] =
 #endif
 { Tachyon_Hash, 256, 0xE9BBF229, "Tachyon", "Tachyon 256-bit C", GOOD, {} },
 #if defined(HAVE_BLAKE3)
-{ blake3_test,         256, 0x0, "blake3",       "BLAKE3 Rust", GOOD, {} },
-{ blake3_64,            64, 0x0, "blake3_64",    "BLAKE3 Rust, low 64 bits", GOOD, {} },
+{ blake3_test,         256, 0x170AB674, "blake3",       "BLAKE3 Rust (unseeded)", POOR, {} },
+{ blake3_64,            64, 0x21B14FF3, "blake3_64",    "BLAKE3 Rust, low 64 bits (unseeded)", POOR, {} },
 #endif
 { blake2s128_test,     128, 0xE8D8FCDF, "blake2s-128",  "blake2s-128", GOOD, {} },
 { blake2s160_test,     160, 0xD50FF144, "blake2s-160",  "blake2s-160", GOOD, {} },

@@ -620,12 +620,47 @@ if(AHASH_C
   endif()
 endif()
 
-if(SSE42_FOUND AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
-  find_library(BLAKE3 blake3)
-  # if (BLAKE3)
-  #   set(BLAKE3_LIB ${BLAKE3})
-  #   add_definitions(-DHAVE_BLAKE3)
-  # endif()
+option(SMHASHER_RUST_BLAKE3 "Build the Rust BLAKE3 benchmark" OFF)
+set(SMHASHER_RUST_TARGET "" CACHE STRING "Cargo target triple for Rust cross-compilation")
+if(SMHASHER_RUST_BLAKE3)
+  find_program(SMHASHER_CARGO cargo)
+  if(NOT SMHASHER_CARGO)
+    message(FATAL_ERROR "SMHASHER_RUST_BLAKE3 requires cargo")
+  endif()
+  if(CMAKE_CROSSCOMPILING AND NOT SMHASHER_RUST_TARGET)
+    message(FATAL_ERROR "Set SMHASHER_RUST_TARGET when cross-compiling Rust BLAKE3")
+  endif()
+  set(_rust_target_dir "${CMAKE_CURRENT_BINARY_DIR}/rust-blake3")
+  set(_rust_profile_dir "${_rust_target_dir}/release")
+  if(SMHASHER_RUST_TARGET)
+    set(_rust_target_arg --target "${SMHASHER_RUST_TARGET}")
+    set(_rust_profile_dir "${_rust_target_dir}/${SMHASHER_RUST_TARGET}/release")
+  endif()
+  set(_rust_archive "${_rust_profile_dir}/${CMAKE_STATIC_LIBRARY_PREFIX}smhasher_rust_blake3${CMAKE_STATIC_LIBRARY_SUFFIX}")
+  add_custom_command(OUTPUT "${_rust_archive}"
+    COMMAND ${CMAKE_COMMAND} -E env
+      "CARGO_TARGET_DIR=${_rust_target_dir}"
+      "RUSTFLAGS=$ENV{RUSTFLAGS} -C relocation-model=pic"
+      "${SMHASHER_CARGO}" build --locked --release
+      --manifest-path "${CMAKE_CURRENT_SOURCE_DIR}/rust-blake3/Cargo.toml"
+      ${_rust_target_arg}
+    DEPENDS rust-blake3/Cargo.toml rust-blake3/Cargo.lock rust-blake3/src/lib.rs
+    VERBATIM)
+  add_custom_target(rust_blake3_build DEPENDS "${_rust_archive}")
+  add_library(rust_blake3_archive STATIC IMPORTED)
+  set_target_properties(rust_blake3_archive PROPERTIES IMPORTED_LOCATION "${_rust_archive}")
+  add_library(rust_blake3_bridge SHARED rust-blake3/bridge.c)
+  add_dependencies(rust_blake3_bridge rust_blake3_build)
+  target_link_libraries(rust_blake3_bridge rust_blake3_archive ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS})
+  if(WIN32)
+    target_link_libraries(rust_blake3_bridge bcrypt ntdll userenv ws2_32)
+  elseif(APPLE)
+    set_property(TARGET rust_blake3_bridge APPEND_STRING PROPERTY LINK_FLAGS " -Wl,-exported_symbol,_smhasher_blake3_rust")
+  else()
+    set_property(TARGET rust_blake3_bridge APPEND_STRING PROPERTY LINK_FLAGS " -Wl,--exclude-libs,ALL")
+    target_link_libraries(rust_blake3_bridge m)
+  endif()
+  add_definitions(-DHAVE_BLAKE3)
 endif()
 
 # --- Tachyon ---
@@ -845,8 +880,17 @@ else()
 endif()
 
 target_link_libraries(SMHasher SMHasherSupport
-                      ${HIGHWAY_LIB} ${BLAKE3_LIB} ${AHASH_C_LIB}
+                      ${HIGHWAY_LIB} ${AHASH_C_LIB}
                       ${CMAKE_THREAD_LIBS_INIT})
+if(SMHASHER_RUST_BLAKE3)
+  target_link_libraries(SMHasher rust_blake3_bridge)
+  if(APPLE)
+    set_target_properties(SMHasher PROPERTIES INSTALL_RPATH "@loader_path/../lib")
+  elseif(UNIX)
+    set_target_properties(SMHasher PROPERTIES INSTALL_RPATH "$ORIGIN/../lib")
+  endif()
+  install(TARGETS rust_blake3_bridge RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
+endif()
 
 SET(exectargets ${exectargets} SMHasher)
 # add_executable( bittest bittest.cpp )
@@ -866,6 +910,11 @@ endif()
 
 if(NOT (CMAKE_CROSSCOMPILING) OR QEMU_TESTING)
   enable_testing()
+  if(SMHASHER_RUST_BLAKE3)
+    add_executable(RustBlake3Test rust_blake3_test.cpp)
+    target_link_libraries(RustBlake3Test rust_blake3_bridge)
+    add_test(RustBlake3 RustBlake3Test)
+  endif()
   add_test(List SMHasher --list)
   add_test(VerifyAll SMHasher --test=VerifyAll --verbose)
   add_test(Sanity SMHasher --test=Sanity)

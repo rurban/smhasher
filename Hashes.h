@@ -1248,30 +1248,18 @@ extern "C" {
 }
 
 #ifdef HAVE_BLAKE3
-// The Rust API, parallized
-typedef struct rust_array {
-  char *ptr;
-  size_t len;
-} rs_arr;
-extern "C" rs_arr *blake3_hash (const rs_arr *input);
+// The Rust implementation is the standard, unseeded BLAKE3 digest.
+extern "C" void smhasher_blake3_rust(const void *input, size_t len, void *out);
 
-inline void blake3_test ( const void * key, int len, unsigned seed, void * out )
+inline void blake3_test ( const void * key, int len, unsigned, void * out )
 {
-  rs_arr input;
-  rs_arr *result;
-  input.ptr = (char*)key;
-  input.len = (size_t)len;
-  result = blake3_hash (&input);
-  memcpy (out, result->ptr, 32);
+  smhasher_blake3_rust(key, (size_t)len, out);
 }
-inline void blake3_64 ( const void * key, int len, unsigned seed, void * out )
+inline void blake3_64 ( const void * key, int len, unsigned, void * out )
 {
-  rs_arr input;
-  rs_arr *result;
-  input.ptr = (char*)key;
-  input.len = (size_t)len;
-  result = blake3_hash (&input);
-  *(uint64_t *)out = *(uint64_t *)result->ptr;
+  uint8_t digest[32];
+  smhasher_blake3_rust(key, (size_t)len, digest);
+  memcpy(out, digest, 8);
 }
 #endif
 
