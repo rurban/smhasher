@@ -240,6 +240,34 @@ static double EstimateNbCollisionsCand(const unsigned long nbH, const int nbBits
     return NAN;
 }
 
+// Poisson upper tail for the rare-collision regime. Counted collisions are
+// duplicate outputs, so this approximation is used only for small means.
+static double CollisionTailProbability(double expected, unsigned collisions)
+{
+  if (!collisions) return 1.0;
+  if (expected <= 0.0) return 0.0;
+  double term = exp(-expected + collisions * log(expected) - lgamma(collisions + 1.0));
+  double sum = term;
+  for (unsigned k = collisions + 1; term > 0.0; ++k) {
+    term *= expected / k;
+    double next = sum + term;
+    if (next == sum) break;
+    sum = next;
+  }
+  return sum > 1.0 ? 1.0 : sum;
+}
+
+static bool RareCollisionResult(double expected, unsigned collisions, bool nofail = false)
+{
+  double p = CollisionTailProbability(expected, collisions);
+  if (p <= 0.000001 && !nofail) {
+    printf(" !!!!!\n");
+    return false;
+  }
+  if (p <= 0.0001) printf(" !");
+  return true;
+}
+
 template< typename hashtype >
 bool CountLowbitsCollisions ( std::vector<hashtype> & revhashes, int nbLBits)
 {
@@ -270,18 +298,9 @@ bool CountLowbitsCollisions ( std::vector<hashtype> & revhashes, int nbLBits)
   if (ratio > 0.98 && collcount != (int)expected)
     printf(" (%i)", collcount - (int)expected);
 
-  // low estimation values are too inaccurate
-  if (expected >= 0.1 && expected <= 10.0)
-    {
-      if (ratio > 4.0)
-        {
-          printf(" !!!!!\n");
-          return false;
-        }
-      else if (ratio > 2.0)
-        printf(" !");
-    }
-  // allow expected 0.3 and actual 1
+  if (expected <= 10.0) {
+    if (!RareCollisionResult(expected, collcount)) return false;
+  }
   else if (ratio > 2.0 && collcount > 1)
   {
     printf(" !!!!!\n");
@@ -322,18 +341,9 @@ bool CountHighbitsCollisions ( std::vector<hashtype> & hashes, int nbHBits)
   if (ratio > 0.98 && collcount != (int)expected)
     printf(" (%i)", collcount - (int)expected);
 
-  // low estimation values are too inaccurate
-  if (expected >= 0.1 && expected <= 10.0)
-    {
-      if (ratio > 4.0)
-        {
-          printf(" !!!!!\n");
-          return false;
-        }
-      else if (ratio > 2.0)
-        printf(" !");
-    }
-  // allow expected 0.3 and actual 1
+  if (expected <= 10.0) {
+    if (!RareCollisionResult(expected, collcount)) return false;
+  }
   else if (ratio > 2.0 && collcount > 1)
   {
     printf(" !!!!!\n");
@@ -644,36 +654,13 @@ bool TestHashList ( std::vector<hashtype> & hashes, bool drawDiagram,
 
     if (sizeof(hashtype) <= sizeof(uint32_t))
     {
-      // fail with >= 2x expected collisions
-
-      // TODO - collision failure cutoff needs to be expressed as a standard deviation instead
-      // of a scale factor, otherwise we fail erroneously if there are a small expected number
-      // of collisions
-
-      // low estimation values are too inaccurate
-      if (expected >= 0.1 && expected <= 10.0)
-        {
-          ratio = ceil(ratio);
-          if (ceil(ratio) > 4.0 && !nofail)
-            {
-              printf(" !!!!!!\n");
-              return false;
-            }
-          else if (ceil(ratio) > 2.0)
-            printf(" !");
-        }
-      // allow expected 0.3 and actual 1
-      else if (ceil(ratio) > 2.0 && collcount > 1 && !nofail)
-        {
-          printf(" !!!!!\n");
-          return false;
-        }
-      // don't allow expected 0.0+epsilon and actual 1
-      else if (expected < 0.001 && collcount == 1 && !nofail)
-        {
-          printf(" !!!!\n");
-          return false;
-        }
+      if (expected <= 10.0) {
+        if (!RareCollisionResult(expected, collcount, nofail)) return false;
+      }
+      else if (ceil(ratio) > 2.0 && collcount > 1 && !nofail) {
+        printf(" !!!!!\n");
+        return false;
+      }
     }
     else
     {

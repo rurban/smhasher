@@ -310,6 +310,11 @@ digests and maybe bigger databases, but not for 32bit hash tables.  The
 and worse performance, but are rarely related to real security attacks, just
 the 2nd sanity AppendZeroes test against `\0` invariance is security relevant.
 
+For full 32-bit and truncated-bit collision tests with at most ten expected
+collisions, SMHasher estimates the upper-tail probability with a Poisson
+approximation. It warns at probability 0.0001 and fails at 0.000001; larger
+expected counts retain the existing ratio-based checks.
+
 Columns
 -------
 
