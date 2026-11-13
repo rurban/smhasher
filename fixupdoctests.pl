@@ -5,9 +5,9 @@ use File::Basename 'basename';
 my $endtest = qr(^(?:---|\[\[\[ |Input vcode 0x));
 # mkdir partests; build/SMHasher --list|perl -alne'print $F[0] | parallel -j4 --bar 'build/SMHasher --test=Sparse,Permutation,Cyclic,TwoBytes,DiffDist,Text,Zeroes,Seed,Sanity,Avalanche,BIC,LongNeighbors,Diff,MomentChi2 {} >partests/{}'
 # build/SMHasher --list|perl -alne'print $F[0] | parallel -j4 --bar 'build/SMHasher --test=Sparse,Permutation,Cyclic,TwoBytes,DiffDist,Text,Zeroes,Seed {} >lowcoll/{}'
-my @orderedtests = qw(Sanity Speed HashMap Sparse Permutation Window Cyclic TwoBytes Text Zeroes Seed PerlinNoise Diff DiffDist MomentChi2 Prng LongNeighbors BIC BadSeeds);
+my @orderedtests = qw(Sanity Speed HashMap Sparse Permutation Window Cyclic TwoBytes Text Zeroes Arithmetic Seed PerlinNoise Diff DiffDist MomentChi2 Prng LongNeighbors BIC BadSeeds);
 my @keysettests = qw(Sparse Permutation Window Cyclic TwoBytes Text Zeroes Seed PerlinNoise);
-my @othertests = qw(Sanity Avalanche Diff DiffDist MomentChi2 Prng LongNeighbors BIC BadSeeds);
+my @othertests = qw(Sanity Avalanche Arithmetic Diff DiffDist MomentChi2 Prng LongNeighbors BIC BadSeeds);
 my %tests = map {$_ => 1} @keysettests, @othertests;
 my $testrx = '(' . join('|',@othertests) . ')';
 $testrx = qr($testrx);

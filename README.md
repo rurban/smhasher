@@ -310,6 +310,13 @@ digests and maybe bigger databases, but not for 32bit hash tables.  The
 and worse performance, but are rarely related to real security attacks, just
 the 2nd sanity AppendZeroes test against `\0` invariance is security relevant.
 
+`--test=Arithmetic` checks whether `h(a)+h(b)` equals `h(c)+h(d)` modulo
+2^32 when the distinct integer-key pairs have equal sums. It tests random
+32-bit keys and adjacent-byte patterns, using the first 32 output bits and
+seed zero. Two or more matches fail; for independent uniform hashes the
+expected number in 200,000 trials is about 0.000047. This measures one
+arithmetic relation, not general cryptographic security.
+
 Columns
 -------
 

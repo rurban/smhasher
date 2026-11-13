@@ -41,6 +41,7 @@ bool g_testZeroes      = false;
 bool g_testSeed        = false;
 bool g_testPerlinNoise = false;
 bool g_testDiff        = false;
+bool g_testArithmetic  = false;
 bool g_testDiffDist    = false;
 bool g_testMomentChi2  = false;
 bool g_testPrng        = false;
@@ -74,6 +75,7 @@ TestOpts g_testopts[] =
 { g_testSeed,	        "Seed" },
 { g_testPerlinNoise,	"PerlinNoise" },
 { g_testDiff,         "Diff" },
+{ g_testArithmetic,   "Arithmetic" },
 { g_testDiffDist,     "DiffDist" },
 { g_testBIC, 	        "BIC" },
 { g_testMomentChi2,   "MomentChi2" },
@@ -1775,6 +1777,16 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("\n");
     fflush(NULL);
   }
+  // Arithmetic relations between hashes of distinct 32-bit integer keys.
+  if(g_testArithmetic || g_testAll)
+  {
+    printf("[[[ Arithmetic Collision Tests ]]]\n\n");
+    Seed_init(info, 0);
+    if(!ArithmeticCollisionTest(hash, 0)) printf("*********FAIL*********\n");
+    printf("\n");
+    fflush(NULL);
+  }
+
 
   //-----------------------------------------------------------------------------
   // Keyset 'Seed'

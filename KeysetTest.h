@@ -33,6 +33,50 @@
 bool VerificationTest   ( HashInfo *info, bool verbose );
 bool SanityTest         ( pfHash hash, const int hashbits );
 void AppendedZeroesTest ( pfHash hash, const int hashbits );
+inline bool ArithmeticCollisionTest ( pfHash hash, uint32_t seed )
+{
+  const int trials = 100000;
+  unsigned collisions = 0;
+  Rand random(0x51a71cU);
+
+  for (int family = 0; family < 2; ++family) {
+    for (int i = 0; i < trials; ++i) {
+      uint32_t a, b, c, d;
+      if (family == 0) {
+        a = random.rand_u32();
+        b = random.rand_u32();
+        uint32_t delta = random.rand_u32() | 1U;
+        c = a + delta;
+        d = b - delta;
+        if (a == d || b == c) continue;
+      } else {
+        uint32_t base = random.rand_u32() & 0xffffff00U;
+        uint32_t offset = (random.rand_u32() & 63U) * 4;
+        a = base + offset;
+        b = a + 3;
+        c = a + 1;
+        d = a + 2;
+      }
+
+      alignas(16) uint32_t values[4][16] = {};
+      values[0][0] = a; values[1][0] = b;
+      values[2][0] = c; values[3][0] = d;
+      uint32_t hashes[4];
+      for (int j = 0; j < 4; ++j) {
+        uint64_t output[16] = {};
+        hash(values[j], sizeof(uint32_t), seed, output);
+        memcpy(&hashes[j], output, sizeof(hashes[j]));
+      }
+      if (hashes[0] + hashes[1] == hashes[2] + hashes[3])
+        ++collisions;
+    }
+  }
+
+  printf("Arithmetic sum relations: %u collisions in up to %d trials\n",
+         collisions, 2 * trials);
+  // A random 32-bit output has fewer than 0.00005 expected collisions here.
+  return collisions < 2;
+}
 
 static void printKey(const void* key, size_t len)
 {

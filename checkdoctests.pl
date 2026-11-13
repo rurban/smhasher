@@ -4,7 +4,7 @@ use File::Copy 'mv';
 my $endtest = qr(^(?:---|\[\[\[ |Input vcode 0x));
 # mkdir partests; build/SMHasher --list|perl -alne'print $F[0] | parallel -j4 --bar 'build/SMHasher --test=Sparse,Permutation,Cyclic,TwoBytes,DiffDist,Text,Zeroes,Seed,Sanity,Avalanche,BIC,LongNeighbors,Diff,MomentChi2 {} >partests/{}'
 my @keysettests = qw(Sparse Permutation Cyclic TwoBytes Window Text Zeroes Seed);
-my @othertests = qw(Sanity Speed Hashmap Avalanche Diff DiffDist BIC LongNeighbors MomentChi2);
+my @othertests = qw(Sanity Speed Hashmap Avalanche Arithmetic Diff DiffDist BIC LongNeighbors MomentChi2);
 my %tests = map {$_ => 1} @keysettests, @othertests;
 my $testrx = '(' . join('|',@othertests) . ')';
 $testrx = qr($testrx);

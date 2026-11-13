@@ -36,6 +36,7 @@ my @sections = (
   ["Keyset 'TwoBytes' Tests",                  "TwoBytes"],
   ["Keyset 'Text' Tests",                      "Text"],
   ["Keyset 'Zeroes' Tests",                    "Zeroes"],
+  ["Arithmetic Collision Tests",               "Arithmetic"],
   ["Keyset 'Seed' Tests",                      "Seed"],
   ["Keyset 'PerlinNoise' Tests",               "PerlinNoise"],
   ["Diff 'Differential' Tests",                "Diff"],
@@ -57,6 +58,7 @@ sub classify {
   return "BadSeeds"    if $e =~ /^\d+ bad seeds$/;
   return "BadSeeds"    if $e =~ /^too many bad seeds$/;
   return "Avalanche"   if $e =~ /^Avalanche$/;
+  return "Arithmetic"  if $e =~ /^Arithmetic$/;
   return "Sparse"      if $e =~ /^Sparse$/;
   return "Permutation" if $e =~ /^Permutation$/;
   return "Window"      if $e =~ /^Window$/;
