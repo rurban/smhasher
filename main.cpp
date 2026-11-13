@@ -46,6 +46,7 @@ bool g_testMomentChi2  = false;
 bool g_testPrng        = false;
 bool g_testBIC         = false;
 bool g_testBadSeeds    = false;
+bool g_testWide        = false;
 //bool g_testLongNeighbors = false;
 
 double g_speed = 0.0;
@@ -79,10 +80,12 @@ TestOpts g_testopts[] =
 { g_testMomentChi2,   "MomentChi2" },
 { g_testPrng,         "Prng" },
 { g_testBadSeeds,     "BadSeeds" },
+{ g_testWide,         "Wide" },
 //{ g_testLongNeighbors,"LongNeighbors" }
 };
 
 bool MomentChi2Test ( struct HashInfo *info, int inputSize );
+bool WideTest(pfHash hash, int hashbits);
 
 //-----------------------------------------------------------------------------
 // This is the list of all hashes that SMHasher can test.
@@ -1098,6 +1101,15 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("\n");
     fflush(NULL);
   }
+  if (g_testWide || g_testAll)
+  {
+    printf("[[[ Wide Tests ]]]\n\n");
+    Seed_init(info, 0);
+    if (!WideTest(info->hash, info->hashbits)) printf("*********FAIL*********\n");
+    printf("\n");
+    fflush(NULL);
+  }
+
 
   //-----------------------------------------------------------------------------
   // Speed tests

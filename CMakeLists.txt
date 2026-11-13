@@ -772,6 +772,7 @@ add_library(
   SpookyTestV2.cpp
   Stats.cpp
   SuperFastHash.cpp
+  WideTest.cpp
   Types.cpp
   PMurHash.c
   tifuhash.cpp
@@ -866,6 +867,8 @@ endif()
 
 if(NOT (CMAKE_CROSSCOMPILING) OR QEMU_TESTING)
   enable_testing()
+  add_executable(WideTestRegression wide_test.cpp WideTest.cpp)
+  add_test(WideCorrelation WideTestRegression)
   add_test(List SMHasher --list)
   add_test(VerifyAll SMHasher --test=VerifyAll --verbose)
   add_test(Sanity SMHasher --test=Sanity)

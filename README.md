@@ -310,6 +310,14 @@ digests and maybe bigger databases, but not for 32bit hash tables.  The
 and worse performance, but are rarely related to real security attacks, just
 the 2nd sanity AppendZeroes test against `\0` invariance is security relevant.
 
+The `Wide` test (also selectable with `--test=Wide`) measures per-output-bit
+correlation between 65,536 adjacent counter keys. Each key is 64 bytes, with a
+little-endian counter and zero padding, using seed 0. For independent unbiased
+outputs, each bit should change in half of adjacent pairs; the test reports
+the worst standardized deviation and fails above seven standard deviations.
+This detects only this class of correlation, not all possible patterns or a
+universal measure of how “wide” a hash can go.
+
 Columns
 -------
 

@@ -28,6 +28,7 @@ die "usage: $0 [-h=doc/<machine>] doc/<hash>.txt [...]\n" unless @ARGV;
 
 # test section name => short label, in execution order
 my @sections = (
+  ["Wide Tests",                               "Wide"],
   ["Avalanche Tests",                          "Avalanche"],
   ["Keyset 'Sparse' Tests",                    "Sparse"],
   ["Keyset 'Permutation' Tests",               "Permutation"],
@@ -53,6 +54,7 @@ sub classify {
   my ($e) = @_;
   return "DiffDist"    if $e =~ /^DiffDist(?: bit \d+(?: w\. \d+ bits)?)?$/;
   return "MomentChi2"  if $e =~ /^Moment Chi2 [0-9.eE+]+ ?!?$/;
+  return "Wide"        if $e =~ /^Wide$/;
   return "BadSeeds"    if $e =~ /^(?:bad|broken) seed 0x[0-9a-f]+$/i;
   return "BadSeeds"    if $e =~ /^\d+ bad seeds$/;
   return "BadSeeds"    if $e =~ /^too many bad seeds$/;
