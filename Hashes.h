@@ -523,8 +523,9 @@ void mum_v3_seed_init(uint32_t &seed);
 
 //-----------------------------------------------------------------------------
 
+// The accelerated t1ha0 sources are built only for x86, even if ARM has AES.
 #define T1HA0_RUNTIME_SELECT 0
-#ifdef HAVE_AESNI
+#if defined(HAVE_AESNI) && (defined(__i386__) || defined(__x86_64__) || defined(_M_IX86) || defined(_M_X64))
 # define T1HA0_AESNI_AVAILABLE 1
 #else
 # define T1HA0_AESNI_AVAILABLE 0
