@@ -310,6 +310,13 @@ digests and maybe bigger databases, but not for 32bit hash tables.  The
 and worse performance, but are rarely related to real security attacks, just
 the 2nd sanity AppendZeroes test against `\0` invariance is security relevant.
 
+Collision counts depend on the key set. A structured hash can be collision-free
+on one structured set without being uniformly distributed on others. For example,
+Java's `String.hashCode()` maps both `"Aa"` and `"BB"` to 2112, even though
+other string families can have no collisions. The usual expected collision
+count assumes independent, uniformly distributed hash values, not a guarantee
+that every hash must produce that many collisions on every key set.
+
 Columns
 -------
 
