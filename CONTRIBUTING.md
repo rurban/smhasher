@@ -24,6 +24,9 @@ Use stdint.h
 
 ## New tests
 
+The `DifferentialCollision` CTest checks differential collision grouping,
+including the final group; run it with `ctest --test-dir build -R '^DifferentialCollision$'`.
+
 Please check that a change should not exceed the test function >5min,
 esp. for >=64bit hashes. A 2hr test (e.g. for 128bit) is unacceptable.
 We don't want to wait 4 days to run through all test for all hashes.
