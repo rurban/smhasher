@@ -297,10 +297,11 @@ uint64_t clhash(const void* random, const char * stringbyte,
 #ifdef DEBUG
     if(CLHASH_DEBUG) {
         // avoid bad seeds
-        if (memcmp(&polyvalue[0], &zero128, 8) == 0)
-            polyvalue[0]++;
-        if (memcmp(&polyvalue[1], &zero128, 8) == 0)
-            polyvalue[1]++;
+        uint64_t lanes[2];
+        memcpy(lanes, &polyvalue, sizeof(lanes));
+        if (lanes[0] == 0) lanes[0] = 1;
+        if (lanes[1] == 0) lanes[1] = 1;
+        memcpy(&polyvalue, lanes, sizeof(lanes));
         assert(memcmp(&rs64[1], &zero128, 8));
     }
 #endif

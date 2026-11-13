@@ -35,6 +35,7 @@ enum {RANDOM_64BITWORDS_NEEDED_FOR_CLHASH=133,RANDOM_BYTES_NEEDED_FOR_CLHASH=133
  *  for performance reasons. This is usually generated once and reused with many
  *  inputs.
  *  It should avoid 0 in its first 64 bits. (bad seed)
+ *  Debug builds replace zero polynomial-key halves with 1 locally.
  *
  * stringbyte : the input data source, could be anything you want to has
  *
