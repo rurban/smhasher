@@ -346,10 +346,22 @@ Other
 SECURITY
 --------
 
-The hash table attacks described in [SipHash](https://131002.net/siphash/)
-against City, Murmur or Perl JenkinsOAAT or at
-[Hash Function Lounge](http://web.archive.org/web/20040205045909/planeta.terra.com.br/informatica/paulobarreto/hflounge.html) are not included here. We list some known attacks at
-[GH #186](https://github.com/rurban/smhasher/issues/186).
+Examples of known weaknesses and attacks (their applicability depends on the
+implementation, input constraints, and attacker access):
+
+* `o1hash`: for a binary key of length at least four, a zero middle word
+  makes the result zero. For example, four zero bytes and `x\0\0\0\0x`
+  collide. The function does not use a seed.
+* `FNV1a`: this repository's 32-bit implementation starts with
+  `seed ^ 2166136261`; that seed makes every all-zero input hash to zero.
+  `JenkinsOOAT` similarly hashes all-zero inputs to zero with seed zero.
+* CityHash128: [collisions among 144-byte inputs with three bits set](https://github.com/google/cityhash/issues/4).
+* MurmurHash2 and MurmurHash3: [multicollision and hash-flooding attacks](https://martinbosslet.dev/en/blog/2012/breaking-murmur-hash-flooding-dos-reloaded/).
+* Meow hash: [collision and key-recovery cryptanalysis](https://peter.website/meow-hash-cryptanalysis).
+* MD5 and SHA-1: [MD5 collision research](https://eprint.iacr.org/2013/170.pdf) and
+  [SHA-1 attack research](https://marc-stevens.nl/research/papers/PhD%20Thesis%20Marc%20Stevens%20-%20Attacks%20on%20Hash%20Functions%20and%20Applications.pdf).
+
+Further reports are collected in [GH #186](https://github.com/rurban/smhasher/issues/186).
 
 Such an attack avoidance cannot be the problem of the hash
 function, but only the hash table collision resolution scheme.  You can
