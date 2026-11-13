@@ -310,6 +310,9 @@ digests and maybe bigger databases, but not for 32bit hash tables.  The
 and worse performance, but are rarely related to real security attacks, just
 the 2nd sanity AppendZeroes test against `\0` invariance is security relevant.
 
+The Avalanche test reports the average absolute bias across all input/output
+bit pairs as well as the worst bias. The failure threshold uses the worst bias.
+
 Columns
 -------
 

@@ -21,7 +21,7 @@
 #define AVALANCHE_FAIL 0.01
 
 void PrintAvalancheDiagram ( int x, int y, int reps, double scale, int * bins );
-double maxBias ( std::vector<int> & counts, int reps );
+double maxBias ( const std::vector<int> & counts, int reps, double & average );
 
 //-----------------------------------------------------------------------------
 
@@ -113,9 +113,10 @@ bool AvalancheTest ( pfHash hash, const int reps, bool verbose )
 
   bool result = true;
 
-  double b = maxBias(bins,reps);
+  double average;
+  double b = maxBias(bins,reps,average);
 
-  printf(" worst bias is %f%%", b * 100.0);
+  printf(" worst bias is %f%%, average bias is %f%%", b * 100.0, average * 100.0);
 
   if(b > AVALANCHE_FAIL)
   {
