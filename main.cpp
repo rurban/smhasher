@@ -26,6 +26,7 @@ bool g_testExtra       = false; // excessive torture tests: Sparse, Avalanche, D
 bool g_testVerifyAll   = false;
 
 bool g_testSanity      = false;
+bool g_testNull        = false;
 bool g_testSpeedAll    = false;
 bool g_testSpeedBulk   = false;
 bool g_testSpeedSmall  = false;
@@ -59,6 +60,7 @@ TestOpts g_testopts[] =
 { g_testAll,          "All" },
 { g_testVerifyAll,    "VerifyAll" },
 { g_testSanity,       "Sanity" },
+{ g_testNull,         "Null" },
 { g_testSpeedAll,     "Speed" },
 { g_testSpeedBulk,    "SpeedBulk" },
 { g_testSpeedSmall,   "SpeedSmall" },
@@ -1098,6 +1100,14 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("\n");
     fflush(NULL);
   }
+  if (g_testNull)
+  {
+    printf("[[[ Null Tests ]]]\n\n");
+    if (!NullKeyTest(info)) printf("*********FAIL*********\n");
+    printf("\n");
+    fflush(NULL);
+  }
+
 
   //-----------------------------------------------------------------------------
   // Speed tests

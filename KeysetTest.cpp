@@ -7,6 +7,38 @@ bool Seed_init (HashInfo* info, size_t seed);
 #include <map>
 #include <set>
 
+bool NullKeyTest ( HashInfo *info )
+{
+  const size_t bytes = (size_t)info->hashbits / 8;
+  alignas(16) uint8_t hashes[2][64] = {};
+  alignas(16) uint8_t zeros[64] = {};
+  const uint8_t zero_hash[64] = {};
+  bool result = true;
+
+  for (uint32_t seed = 0; seed < 2; ++seed) {
+    Seed_init(info, seed);
+    info->hash(NULL, 0, seed, hashes[seed]);
+    printf("NULL key, seed %u: ", seed);
+    printhex(hashes[seed], (int)bytes);
+    printf("\n");
+  }
+  if (memcmp(hashes[0], hashes[1], bytes) == 0) {
+    printf("NULL-key hashes do not vary with seed !!!!!\n");
+    result = false;
+  }
+
+  const int lengths[] = {1, 4, 8, 16};
+  Seed_init(info, 0);
+  for (size_t i = 0; i < sizeof(lengths) / sizeof(lengths[0]); ++i) {
+    memset(hashes[0], 0, sizeof(hashes[0]));
+    info->hash(zeros, lengths[i], 0, hashes[0]);
+    if (memcmp(hashes[0], zero_hash, bytes) == 0) {
+      printf("All-zero key of length %d hashes to zero\n", lengths[i]);
+    }
+  }
+  return result;
+}
+
 //-----------------------------------------------------------------------------
 // This should hopefully be a thorough and uambiguous test of whether a hash
 // is correctly implemented on a given platform.

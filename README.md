@@ -310,6 +310,12 @@ digests and maybe bigger databases, but not for 32bit hash tables.  The
 and worse performance, but are rarely related to real security attacks, just
 the 2nd sanity AppendZeroes test against `\0` invariance is security relevant.
 
+The optional `--test=Null` probe hashes a NULL pointer with length zero using
+seeds 0 and 1, reports identical results as a seed failure, and notes all-zero
+keys that hash to zero. A zero result by itself is only diagnostic. Because
+some hash APIs do not accept NULL even for an empty key, this probe can crash
+such a hash and is not included in the default test suite.
+
 Columns
 -------
 
