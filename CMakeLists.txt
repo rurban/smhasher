@@ -11,6 +11,7 @@ endif()
 project(SMHasher C CXX ASM)
 
 include(CheckCCompilerFlag)
+include(CheckCXXCompilerFlag)
 # Check if the same compile family is used for both C and CXX
 if(NOT (CMAKE_C_COMPILER_ID STREQUAL CMAKE_CXX_COMPILER_ID))
   message(WARNING "CMAKE_C_COMPILER_ID (${CMAKE_C_COMPILER_ID}) is different "
@@ -254,8 +255,15 @@ if(CMAKE_COMPILER_IS_GNUCC
   # "${CMAKE_C_FLAGS} -msha") set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msha")
   # ENDIF (SHA_TRUE)
   if(NOT CMAKE_CROSSCOMPILING)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -march=native")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -march=native")
+    check_c_compiler_flag("-march=native" C_SUPPORTS_MARCH_NATIVE)
+    check_cxx_compiler_flag("-march=native" CXX_SUPPORTS_MARCH_NATIVE)
+    if(C_SUPPORTS_MARCH_NATIVE)
+      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -march=native")
+    endif()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+    if(CXX_SUPPORTS_MARCH_NATIVE)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
+    endif()
   endif()
   set_source_files_properties(blake3/blake3.c
                               PROPERTIES COMPILE_FLAGS "-std=c99")
@@ -698,7 +706,7 @@ set_source_files_properties(
     ${ASCON_SRC}
     PROPERTIES COMPILE_FLAGS "-Iasconhashv12 -DASCON_INLINE_MODE")
 
-if(NOT (CMAKE_BUILD_TYPE STREQUAL "Debug"))
+if(PROCESSOR_FAMILY STREQUAL "Intel" AND NOT (CMAKE_BUILD_TYPE STREQUAL "Debug"))
   # PMP breaks Debug build
   if(NOT (CMAKE_BUILD_TYPE STREQUAL "Asan"))
     set(PMPML_SRC PMP_Multilinear.cpp PMP_Multilinear_64.cpp
@@ -866,6 +874,11 @@ endif()
 
 if(NOT (CMAKE_CROSSCOMPILING) OR QEMU_TESTING)
   enable_testing()
+  if(AES_FOUND AND UNIX AND PROCESSOR_FAMILY STREQUAL "Arm")
+    add_executable(GxhashPartialTest gxhash_partial_test.c)
+    target_link_libraries(GxhashPartialTest SMHasherSupport ${CMAKE_THREAD_LIBS_INIT})
+    add_test(GxhashPartial GxhashPartialTest)
+  endif()
   add_test(List SMHasher --list)
   add_test(VerifyAll SMHasher --test=VerifyAll --verbose)
   add_test(Sanity SMHasher --test=Sanity)
