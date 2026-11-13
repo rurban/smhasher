@@ -319,6 +319,13 @@ The higher the better.
 cycl./hash: The average of the Small key speed test for 1-31 byte keys.
 The smaller the better.
 
+These columns measure different key sizes, so `cycl./hash` cannot be converted
+to the bulk MiB/sec figure without knowing the number of bytes per hash. For
+example, at 3 GHz, 50 cycles per hash corresponds to about 57 MiB/sec for
+1-byte keys or 916 MiB/sec for 16-byte keys. Bulk throughput instead measures
+256 KiB keys. Compiler optimization, CPU, key length, and call overhead all
+affect comparisons with another implementation.
+
 cycl./map: The result of the Hashmap test for /usr/dict/words with
 fast C++ hashmap get queries, with the standard deviation in
 brackets. This tests the inlinability of the hash function in practise (see size).
