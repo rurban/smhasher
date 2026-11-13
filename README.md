@@ -250,6 +250,11 @@ SMhasher
 | [chainhash](doc/chainhash.txt)                |     21654.74 |    80.11 | 507.10 (1) |2027 |                            |
 | [chainhash-128](doc/chainhash-128.txt)        |     13413.90 |   127.16 | 568.66 (1) |1650 |                            |
 
+`fxhash32` and `fxhash64` are C++ ports of the Rust `fxhash` 0.2.1 byte
+hashers. Seed zero matches the Rust default; other seeds initialize the
+internal state directly as an SMHasher extension. Their word loads use native
+byte order, so results can differ across endianness.
+
 The sortable table variants:
 
 * **[Default AMD Ryzen 5 3350G 3.6GHz](https://rurban.github.io/smhasher/doc/table.html)**

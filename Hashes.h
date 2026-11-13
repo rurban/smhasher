@@ -15,6 +15,16 @@
 #include "gxhash.h"
 #include "lanehash.h"
 #include "lanehash_aes.h"
+#include "fxhash.h"
+
+inline void fxhash32_test(const void *key, int len, uint32_t seed, void *out) {
+  uint32_t hash = fxhash32(key, (size_t)len, seed);
+  memcpy(out, &hash, sizeof(hash));
+}
+inline void fxhash64_test(const void *key, int len, uint32_t seed, void *out) {
+  uint64_t hash = fxhash64(key, (size_t)len, seed);
+  memcpy(out, &hash, sizeof(hash));
+}
 
 #include "metrohash/metrohash64.h"
 #include "metrohash/metrohash128.h"
