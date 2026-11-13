@@ -213,6 +213,27 @@ static inline uint64_t wyhash64(uint64_t A, uint64_t B){ A^=0x2d358dccaa6c78a5ul
 //The wyrand PRNG that pass BigCrush and PractRand
 static inline uint64_t wyrand(uint64_t *seed){ *seed+=0x2d358dccaa6c78a5ull; return _wymix(*seed,*seed^0x8bb84b93962eacc9ull);}
 
+// w1rand: full 64x64 multiply, independent of WYHASH_CONDOM/32BIT_MUM.
+static inline uint64_t w1rand(uint64_t *seed) {
+  const uint64_t c = UINT64_C(0xd07ebc63274654c7);
+  uint64_t a = (*seed += c), b = a ^ c, lo, hi;
+#if defined(__SIZEOF_INT128__)
+  __uint128_t product = (__uint128_t)a * b;
+  lo = (uint64_t)product;
+  hi = (uint64_t)(product >> 64);
+#elif defined(_MSC_VER) && defined(_M_X64)
+  lo = _umul128(a, b, &hi);
+#else
+  uint64_t ah = a >> 32, bh = b >> 32, al = (uint32_t)a, bl = (uint32_t)b;
+  uint64_t rh = ah * bh, rm0 = ah * bl, rm1 = bh * al, rl = al * bl;
+  uint64_t t = rl + (rm0 << 32), carry = t < rl;
+  lo = t + (rm1 << 32);
+  carry += lo < t;
+  hi = rh + (rm0 >> 32) + (rm1 >> 32) + carry;
+#endif
+  return lo ^ hi;
+}
+
 //convert any 64 bit pseudo random numbers to uniform distribution [0,1). It can be combined with wyrand, wyhash64 or wyhash.
 static inline double wy2u01(uint64_t r){ const double _wynorm=1.0/(1ull<<52); return (r>>12)*_wynorm;}
 

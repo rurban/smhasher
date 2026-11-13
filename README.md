@@ -267,6 +267,10 @@ Summary
 I added some SSE assisted hashes and fast intel/arm CRC32-C, AES and SHA HW variants.
 See also the old [https://github.com/aappleby/smhasher/wiki](https://github.com/aappleby/smhasher/wiki), the improved, but unmaintained fork [https://github.com/demerphq/smhasher](https://github.com/demerphq/smhasher), and the new improved version SMHasher3 [https://gitlab.com/fwojcik/smhasher3](https://gitlab.com/fwojcik/smhasher3).
 
+`wyhash.h` also provides `w1rand(uint64_t *state)`, the full-multiply PRNG
+variant. It advances the caller's state in place; a zero initial state produces
+zero on the first call. It is not a cryptographic generator.
+
 So the fastest hash functions on x86_64 without quality problems are:
 
 * lanehash64
