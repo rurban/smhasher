@@ -24,6 +24,9 @@ Use stdint.h
 
 ## New tests
 
+The `Popcount` CTest checks the 32-bit bit-count helper used by test data
+generation; run it with `ctest --test-dir build -R '^Popcount$'`.
+
 Please check that a change should not exceed the test function >5min,
 esp. for >=64bit hashes. A 2hr test (e.g. for 128bit) is unacceptable.
 We don't want to wait 4 days to run through all test for all hashes.
