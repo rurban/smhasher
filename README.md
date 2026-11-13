@@ -310,6 +310,18 @@ digests and maybe bigger databases, but not for 32bit hash tables.  The
 and worse performance, but are rarely related to real security attacks, just
 the 2nd sanity AppendZeroes test against `\0` invariance is security relevant.
 
+TestU01's statistical batteries are optional. Install TestU01 (including its
+`probdist` and `mylib` libraries), then configure with
+`-DSMHASHER_TESTU01=ON -DCMAKE_PREFIX_PATH=/path/to/testu01`. Run
+`--test=TestU01SmallCrush`, `--test=TestU01Crush`, or
+`--test=TestU01BigCrush` with a hash name. These potentially long-running
+batteries are not part of the default suite. Their stream hashes a 64-byte key
+containing a little-endian 64-bit counter followed by zeroes, with seed 0, and
+emits each digest in little-endian 32-bit words. Results characterize this
+specific counter-based construction, not every use of the hash.
+TestU01's license requires written permission for commercial use; consult its
+license before enabling and distributing a linked build.
+
 Columns
 -------
 

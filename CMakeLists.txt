@@ -833,6 +833,25 @@ add_library(
 
 add_executable(SMHasher main.cpp)
 
+option(SMHASHER_TESTU01 "Enable optional TestU01 batteries" OFF)
+if(SMHASHER_TESTU01)
+  find_path(TESTU01_INCLUDE_DIR TestU01/unif01.h)
+  find_library(TESTU01_LIBRARY testu01)
+  find_library(TESTU01_PROBDIST_LIBRARY probdist)
+  find_library(TESTU01_MYLIB_LIBRARY mylib)
+  if(NOT TESTU01_INCLUDE_DIR OR NOT TESTU01_LIBRARY OR
+     NOT TESTU01_PROBDIST_LIBRARY OR NOT TESTU01_MYLIB_LIBRARY)
+    message(FATAL_ERROR "TestU01 headers and testu01, probdist, mylib libraries are required")
+  endif()
+  target_sources(SMHasher PRIVATE TestU01Test.cpp)
+  target_compile_definitions(SMHasher PRIVATE HAVE_TESTU01=1)
+  target_include_directories(SMHasher PRIVATE ${TESTU01_INCLUDE_DIR} ${TESTU01_INCLUDE_DIR}/TestU01)
+  target_link_libraries(SMHasher ${TESTU01_LIBRARY} ${TESTU01_PROBDIST_LIBRARY} ${TESTU01_MYLIB_LIBRARY})
+  if(UNIX)
+    target_link_libraries(SMHasher m)
+  endif()
+endif()
+
 if(ipo_supported)
   message(STATUS "IPO / LTO enabled")
   set_property(TARGET SMHasherSupport PROPERTY INTERPROCEDURAL_OPTIMIZATION

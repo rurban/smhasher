@@ -7,6 +7,9 @@
 #include "AvalancheTest.h"
 #include "DifferentialTest.h"
 #include "HashMapTest.h"
+#ifdef HAVE_TESTU01
+void TestU01Test(HashInfo *info, int battery);
+#endif
 
 #if NCPU > 1 // disable with -DNCPU=0 or 1
 #include <thread>
@@ -46,6 +49,11 @@ bool g_testMomentChi2  = false;
 bool g_testPrng        = false;
 bool g_testBIC         = false;
 bool g_testBadSeeds    = false;
+#ifdef HAVE_TESTU01
+bool g_testU01SmallCrush = false;
+bool g_testU01Crush = false;
+bool g_testU01BigCrush = false;
+#endif
 //bool g_testLongNeighbors = false;
 
 double g_speed = 0.0;
@@ -79,6 +87,11 @@ TestOpts g_testopts[] =
 { g_testMomentChi2,   "MomentChi2" },
 { g_testPrng,         "Prng" },
 { g_testBadSeeds,     "BadSeeds" },
+#ifdef HAVE_TESTU01
+{ g_testU01SmallCrush, "TestU01SmallCrush" },
+{ g_testU01Crush,      "TestU01Crush" },
+{ g_testU01BigCrush,   "TestU01BigCrush" },
+#endif
 //{ g_testLongNeighbors,"LongNeighbors" }
 };
 
@@ -1098,6 +1111,12 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("\n");
     fflush(NULL);
   }
+#ifdef HAVE_TESTU01
+  if (g_testU01SmallCrush) TestU01Test(info, 0);
+  if (g_testU01Crush) TestU01Test(info, 1);
+  if (g_testU01BigCrush) TestU01Test(info, 2);
+#endif
+
 
   //-----------------------------------------------------------------------------
   // Speed tests
