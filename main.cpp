@@ -821,7 +821,10 @@ HashInfo g_hashes[] =
 { khashv64_test,        64, 0xA6B7E55B, "k-hashv64",      khashv64_desc, GOOD, {}},
 #endif
 { komihash_test,        64, 0x8157FF6D, "komihash",    "komihash 5.26", GOOD, {} },
-{ a5hash_test,          64, 0xBF40CAE1, "a5hash",      "a5hash 5.13", GOOD, {} },
+{ a5hash_test,          64, 0xADDE79B3, "a5hash",       "a5hash 5.21", GOOD, {} },
+{ a5hash32_test,        32, 0xA948D11B, "a5hash32",     "a5hash32 5.21", GOOD, {} },
+{ a5hash128_test,      128, 0x89406B11, "a5hash128",    "a5hash128 5.21", GOOD, {} },
+{ a5hash128_64_test,    64, 0x14AD402C, "a5hash128_64", "a5hash128 5.21 low 64 bits", GOOD, {} },
 { polymur_test,         64, 0x4F894810, "polymur",     "github.com/orlp/polymur-hash v1, __SIZEOF_INT128__:" MACRO_ITOA(__SIZEOF_INT128__), GOOD, {} },
 { rainbow64_test,       64, 0x2972C52E, "rainbow",     "Rainbow 64-bit v1.0.6 (aka Newhash 128-bit)", GOOD, {} },
 { rainbow128_test,     128, 0xFD9BCADD, "rainbow-128", "Rainbow 128-bit v1.0.6 (aka Newhash 128-bit)", GOOD, {} },

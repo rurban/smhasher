@@ -250,6 +250,9 @@ SMhasher
 | [chainhash](doc/chainhash.txt)                |     21654.74 |    80.11 | 507.10 (1) |2027 |                            |
 | [chainhash-128](doc/chainhash-128.txt)        |     13413.90 |   127.16 | 568.66 (1) |1650 |                            |
 
+The a5hash table entry records an older version; the executable includes
+a5hash 5.21 and its 32-bit, 128-bit, and low-64-bit-of-128 variants.
+
 The sortable table variants:
 
 * **[Default AMD Ryzen 5 3350G 3.6GHz](https://rurban.github.io/smhasher/doc/table.html)**

@@ -1364,6 +1364,21 @@ inline void a5hash_test ( const void * key, int len, unsigned seed, void * out )
   *(uint64_t*)out = a5hash ((const uint8_t *)key, (size_t)len, (uint64_t)seed);
 }
 
+inline void a5hash32_test ( const void * key, int len, unsigned seed, void * out )
+{
+  *(uint32_t*)out = a5hash32(key, (size_t)len, seed);
+}
+
+inline void a5hash128_test ( const void * key, int len, unsigned seed, void * out )
+{
+  *(uint64_t*)out = a5hash128(key, (size_t)len, seed, (uint8_t*)out + 8);
+}
+
+inline void a5hash128_64_test ( const void * key, int len, unsigned seed, void * out )
+{
+  *(uint64_t*)out = a5hash128(key, (size_t)len, seed, NULL);
+}
+
 // objsize: 408dd0 - 4090ae: 734
 #include "mx3/mx3.h"
 inline void mx3hash64_test ( const void * key, int len, uint32_t seed, void * out ) {
