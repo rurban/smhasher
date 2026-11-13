@@ -102,14 +102,14 @@ void CityHashCrc256_test(const void *key, int len, uint32_t seed, void *out);
  * and must be 16-byte aligned, and larger than 63. */
 extern "C" uint32_t crc32_pclmul_le_16(unsigned char const *buffer, size_t len,
                                        uint32_t crc32);
-void crc32c_pclmul_test(const void *key, int len, uint32_t seed, void *out);
-static inline bool crc32c_pclmul_bad_seeds(std::vector<uint32_t> &seeds)
+void crc32_pclmul_test(const void *key, int len, uint32_t seed, void *out);
+static inline bool crc32_pclmul_bad_seeds(std::vector<uint32_t> &seeds)
 {
   seeds = std::vector<uint32_t> { UINT32_C(0) };
   return true;
 }
 static inline bool need_minlen64_align16(pfHash hash) {
-  return hash == crc32c_pclmul_test;
+  return hash == crc32_pclmul_test;
 }
 void falkhash_test_cxx(const void *key, int len, uint32_t seed, void *out);
 #else

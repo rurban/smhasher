@@ -246,16 +246,16 @@ HashInfo g_hashes[] =
 #   define CRC64_VERIF   0xE7C3FD0E
 #  endif
 # ifndef HAVE_BROKEN_MSVC_CRC32C_HW
-{ crc32c_hw_test,       32, CRC32_VERIF, "crc32_hw",    "SSE4.2 crc32 in HW", POOR, {0x111c2232} /* !! */},
-{ crc64c_hw_test,       64, CRC64_VERIF, "crc64_hw",    "SSE4.2 crc64 in HW", POOR, {0x0} /* !! */ },
+{ crc32c_hw_test,       32, CRC32_VERIF, "crc32c_hw",   "CRC-32C using hardware instructions", POOR, {0x111c2232} /* !! */},
+{ crc64c_hw_test,       64, CRC64_VERIF, "crc32c_hw64", "Raw CRC-32C zero-extended to 64 bits", POOR, {0x0} /* !! */ },
 # endif
 # if defined(__SSE4_2__) && (defined(__i686__) || defined(__x86_64__)) && !defined(_MSC_VER)
-{ crc32c_hw1_test,      32, 0x0C7346F0,  "crc32_hw1",   "Faster Adler SSE4.2 crc32 on Intel HW", POOR, {0x111c2232} /* !! */},
+{ crc32c_hw1_test,      32, 0x0C7346F0, "crc32c_hw1",  "Adler's CRC-32C using x86 SSE4.2", POOR, {0x111c2232} /* !! */},
 # endif
 #endif
 // 32bit crashes
 #if defined(HAVE_CLMUL) && !defined(_MSC_VER) && defined(__x86_64__)
-{ crc32c_pclmul_test,   32, 0x0, "crc32_pclmul","-mpclmul crc32 in asm on HW", POOR, {0x0} /* !! */ },
+{ crc32_pclmul_test,    32, 0x0, "crc32_pclmul", "IEEE CRC-32 using PCLMUL", POOR, {0x0} /* !! */ },
 #endif
 #ifdef HAVE_INT64
 /* Implementation of CRC64 using the Jones polynomial currently used by Valkey. */
@@ -398,10 +398,10 @@ HashInfo g_hashes[] =
 { CityHash64noSeed_test, 64, 0x4C4E54B1, "City64noSeed","Google CityHash64 without seed (v1.1)(default version, misses one final avalanche)", POOR, {} },
 { CityHash64_test,      64, 0x5FABC5C5, "City64",       "Google CityHash64WithSeed (v1.1)", POOR, {} },
 #if defined(HAVE_SSE2) && defined(HAVE_AESNI) && !defined(_MSC_VER)
-{ aesnihash_test,       64, 0xA68E0D42, "aesnihash",    "majek's seeded aesnihash with aesenc, 64-bit for x64", POOR,
+{ aesnihash_test,       64, 0xA68E0D42, "aesni-majek64", "majek's seeded aesnihash with aesenc, 64-bit for x64", POOR,
   {0x70736575} },
-{ aesni128_test,       128, 0xF06DA1B1, "aesni",    "aesni 128bit", GOOD,{} },
-{ aesni64_test,         64, 0x3AA1A480, "aesni-low","aesni 64bit",  GOOD,{} },
+{ aesni128_test,       128, 0xF06DA1B1, "aesni-legacy128", "Legacy PeterRK AESNI hash, 128-bit", GOOD,{} },
+{ aesni64_test,         64, 0x3AA1A480, "aesni-legacy64",  "Legacy PeterRK AESNI hash, 64-bit", GOOD,{} },
 #endif
 #if defined(HAVE_SSE2) && defined(HAVE_AESNI)
 #ifndef _MSC_VER
@@ -1638,8 +1638,8 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
   // Skip distribution test for these - they're too easy to distribute well,
   // and it generates a _lot_ of testing.
-  // 11s for crc32_hw, 28s for xxh3
-  // 51s for crc32_hw --extra
+  // 11s for crc32c_hw, 28s for xxh3
+  // 51s for crc32c_hw --extra
   // 180m for farmhash128_c with 20 windowbits,
   //      0.19s with windowbits=10, 2s for 14, 9s for 16, 37s for 18
   // 7m for FNV64 with windowbits=27 / 32bit keys
@@ -1669,7 +1669,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
   //-----------------------------------------------------------------------------
   // Keyset 'Cyclic' - keys of the form "abcdabcdabcd..."
-  // 5s for crc32_hw
+  // 5s for crc32c_hw
   // 18s for farmhash128_c
 
   if ((g_testCyclic || g_testAll) && !need_minlen64_align16(hash))
@@ -1698,7 +1698,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
 
   //-----------------------------------------------------------------------------
   // Keyset 'TwoBytes' - all keys up to N bytes containing two non-zero bytes
-  // 3m40 for crc32_hw (32bit), 8m30 for xxh3 --extra (64bit)
+  // 3m40 for crc32c_hw (32bit), 8m30 for xxh3 --extra (64bit)
   // 4m16 for xxh3
   // 4m50 for metrohash128crc_1
   // 260m for farmhash128_c with maxlen=16, 31s with maxlen=10, 2m with 12,14,15

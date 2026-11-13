@@ -456,7 +456,7 @@ tr.good {background-color:#afa}
 <td align="left"></td>
 </tr>
 <tr class="poor">
-<td align="left"><a href="crc32_hw.txt">crc32_hw</a></td>
+<td align="left"><a href="crc32c_hw.txt">crc32c_hw</a></td>
 <td align="right">5611.01</td>
 <td align="right">49.38</td>
 <td align="right">-</td>
@@ -464,7 +464,7 @@ tr.good {background-color:#afa}
 <td align="left">insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2)</td>
 </tr>
 <tr class="poor">
-<td align="left"><a href="crc32_hw1.txt">crc32_hw1</a></td>
+<td align="left"><a href="crc32c_hw1.txt">crc32c_hw1</a></td>
 <td align="right">6713.63</td>
 <td align="right">54.76</td>
 <td align="right">-</td>
@@ -472,7 +472,7 @@ tr.good {background-color:#afa}
 <td align="left">insecure, 100% bias, collisions, distrib, machine-specific (x86 SSE4.2)</td>
 </tr>
 <tr class="poor">
-<td align="left"><a href="crc64_hw.txt">crc64_hw</a></td>
+<td align="left"><a href="crc32c_hw64.txt">crc32c_hw64</a></td>
 <td align="right">5256.51</td>
 <td align="right">48.43</td>
 <td align="right">760.34 (13)</td>
@@ -1008,7 +1008,7 @@ tr.good {background-color:#afa}
 <td align="left">Sparse, Permutation, LongNeighbors</td>
 </tr>
 <tr class="poor">
-<td align="left"><a href="aesnihash.txt">aesnihash</a></td>
+<td align="left"><a href="aesni-majek64.txt">aesni-majek64</a></td>
 <td align="right">4692.47</td>
 <td align="right">52.55</td>
 <td align="right">1022.91 (101)</td>
@@ -1264,7 +1264,7 @@ tr.good {background-color:#afa}
 <td align="left">!msvc</td>
 </tr>
 <tr class="good">
-<td align="left"><a href="aesni.txt">aesni</a></td>
+<td align="left"><a href="aesni-legacy128.txt">aesni-legacy128</a></td>
 <td align="right">37340.59</td>
 <td align="right">26.87</td>
 <td align="right">-</td>
@@ -1272,7 +1272,7 @@ tr.good {background-color:#afa}
 <td align="left">machine-specific (x64 AES-NI)</td>
 </tr>
 <tr class="good">
-<td align="left"><a href="aesni-low.txt">aesni-low</a></td>
+<td align="left"><a href="aesni-legacy64.txt">aesni-legacy64</a></td>
 <td align="right">25760.44</td>
 <td align="right">34.90</td>
 <td align="right">-</td>
@@ -1997,7 +1997,7 @@ Other timings:
 </ul>
 <p>Hash functions for symbol tables or hash tables typically use 32 bit hashes, for databases, file systems and file checksums typically 64 or 128bit, for crypto now starting with 256 bit.</p>
 <p>Typical median key size in perl5 is 20, the most common 4. Similar for all other dynamic languages. See <a href="https://github.com/rurban/perl-hash-stats">github.com/rurban/perl-hash-stats</a></p>
-<p>When used in a hash table the instruction cache will usually beat the CPU and throughput measured here. In my tests the smallest <code>FNV1A</code> beats the fastest <code>crc32_hw1</code> with <a href="https://github.com/rurban/perl-hash-stats">Perl 5 hash tables</a>. Even if those worse hash functions will lead to more collisions, the overall speed advantage and inline-ability beats the slightly worse quality. See e.g. <a href="https://infosys.cs.uni-saarland.de/publications/p249-richter.pdf">A Seven-Dimensional Analysis of Hashing Methods and its Implications on Query Processing</a> for a concise overview of the best hash table strategies, confirming that the simplest Mult hashing (bernstein, FNV*, x17, sdbm) always beat &quot;better&quot; hash functions (Tabulation, Murmur, Farm, ...) when used in a hash table.</p>
+<p>When used in a hash table the instruction cache will usually beat the CPU and throughput measured here. In my tests the smallest <code>FNV1A</code> beats the fastest <code>crc32c_hw1</code> with <a href="https://github.com/rurban/perl-hash-stats">Perl 5 hash tables</a>. Even if those worse hash functions will lead to more collisions, the overall speed advantage and inline-ability beats the slightly worse quality. See e.g. <a href="https://infosys.cs.uni-saarland.de/publications/p249-richter.pdf">A Seven-Dimensional Analysis of Hashing Methods and its Implications on Query Processing</a> for a concise overview of the best hash table strategies, confirming that the simplest Mult hashing (bernstein, FNV*, x17, sdbm) always beat &quot;better&quot; hash functions (Tabulation, Murmur, Farm, ...) when used in a hash table.</p>
 <p>The fast hash functions tested here are recommendable as fast for file digests and maybe bigger databases, but not for 32bit hash tables. The &quot;Quality problems&quot; lead to less uniform distribution, i.e. more collisions and worse performance, but are rarely related to real security attacks, just the 2nd sanity zeroes test against <code>\0</code> invariance is security relevant.</p>
 <h2 id="columns">Columns</h2>
 <p>MiB/sec: The average of the Bulk key speed test for alignments 0-7 with 262144-byte keys. The higher the better.</p>

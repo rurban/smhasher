@@ -1267,7 +1267,7 @@ void aesni64_test ( const void * key, int len, unsigned seed, void * out ) {
 #endif
 
 #if defined(HAVE_CLMUL) && !defined(_MSC_VER)
-void crc32c_pclmul_test(const void *key, int len, uint32_t seed, void *out)
+void crc32_pclmul_test(const void *key, int len, uint32_t seed, void *out)
 {
   if (!len) {
     *(uint32_t *) out = 0;

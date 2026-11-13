@@ -56,9 +56,9 @@ SMhasher
 | [poly_4_mersenne](doc/poly_4_mersenne.txt)    |      1393.93 |    89.07 | 262.97 (2) | 479 |                  |
 | [tabulation32](doc/tabulation32.txt)          |      5819.40 |    40.16 | 233.00 (3) | 848 | collisions       |
 | [tabulation](doc/tabulation.txt)              |      7407.94 |    39.83 | 240.25 (4) | 554 |                  |
-| [crc32_hw](doc/crc32_hw.txt)                  |      5537.79 |    40.80 | 225.65 (3) | 653 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (SSE4.2/NEON) |
-| [crc32_hw1](doc/crc32_hw1.txt)                |      7626.17 |    50.21 | 228.50 (2) | 696 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2)  |
-| [crc64_hw](doc/crc64_hw.txt)                  |      5579.17 |    40.87 | 202.19 (1) | 652 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (SSE4.2/NEON) |
+| [crc32c_hw](doc/crc32c_hw.txt)                |      5537.79 |    40.80 | 225.65 (3) | 653 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (SSE4.2/NEON) |
+| [crc32c_hw1](doc/crc32c_hw1.txt)              |      7626.17 |    50.21 | 228.50 (2) | 696 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2)  |
+| [crc32c_hw64](doc/crc32c_hw64.txt)            |      5579.17 |    40.87 | 202.19 (1) | 652 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (SSE4.2/NEON) |
 | [crc32_pclmul](doc/crc32_pclmul.txt)          |      7963.20 |   106.02 | 567.70 (3) | 254 | insecure, 100% bias, collisions, distrib, BIC, machine-specific (x86 SSE4.2+PCLMUL) |
 | [crc64_jones1](doc/crc64_jones1.txt)          |      1673.67 |    83.00 | 249.16 (2) |     | insecure, 100% bias, collisions, distrib, BIC, machine-specific  |
 | [crc64_jones2](doc/crc64_jones2.txt)          |      2968.07 |   314.60 | 253.01 (3) |     | insecure, 100% bias, collisions, distrib, BIC, machine-specific  |
@@ -127,7 +127,7 @@ SMhasher
 | [t1ha0_aes_avx1](doc/t1ha0_aes_avx1.txt)      |     27881.52 |    36.78 | 227.13 (2) | 679 | Sparse, LongNeighbors      |
 | [t1ha2_stream](doc/t1ha2_stream.txt)          |     13673.22 |    81.12 | 263.88 (3) |1643 | Sparse, Permutation, LongNeighbors |
 | [t1ha2_stream128](doc/t1ha2_stream128.txt)    |     13913.43 |    94.60 | 296.15 (4) |1570 | Sparse, Permutation, LongNeighbors |
-| [aesnihash](doc/aesnihash.txt)                |      5365.60 |    57.21 | 255.87 (3) | 590 | fails many tests, machine-specific (x64 AES-NI) |
+| [aesni-majek64](doc/aesni-majek64.txt)        |      5365.60 |    57.21 | 255.87 (3) | 590 | fails many tests, machine-specific (x64 AES-NI) |
 | [aesni-hash-peterrk](doc/aesni-hash-peterrk.txt)|   29107.73 |    28.86 | 217.57 (1) |     | machine-specific (x64 AES-NI) |
 | [falkhash](doc/falkhash.txt)                  |     52401.48 |   122.70 | 316.79 (4) | 264 | Sparse, LongNeighbors, machine-specific (x64 AES-NI) |
 | [MeowHash](doc/MeowHash.txt)                  |     29969.81 |    64.90 | 273.79 (8) |1764 | Sparse, invertible, machine-specific (x64 AES-NI)  |
@@ -171,8 +171,8 @@ SMhasher
 | [mirhashstrict32low](doc/mirhashstrict32low.txt)|    3642.77 |    50.16 | 233.34 (3) |1112 | 1 bad seed, MomentChi2 9   |
 | [fasthash32](doc/fasthash32.txt)              |      6107.05 |    40.49 | 237.83 (2) | 566 | UB                         |
 | [fasthash64](doc/fasthash64.txt)              |      5600.11 |    38.04 | 219.71 (2) | 509 | UB                         |
-| [aesni](doc/aesni.txt)                        |     31185.98 |    29.45 | 226.75 (2) | 519 | machine-specific (x64 AES-NI)           |
-| [aesni-low](doc/aesni-low.txt)                |     31027.39 |    29.47 | 232.54 (2) | 519 | machine-specific (x64 AES-NI)           |
+| [aesni-legacy128](doc/aesni-legacy128.txt)    |     31185.98 |    29.45 | 226.75 (2) | 519 | machine-specific (x64 AES-NI)           |
+| [aesni-legacy64](doc/aesni-legacy64.txt)      |     31027.39 |    29.47 | 232.54 (2) | 519 | machine-specific (x64 AES-NI)           |
 | [mx3](doc/mx3.txt)                            |      9332.99 |    47.07 | 221.61 (2) | 766 | UB                         |
 | [rainbow](doc/rainbow.txt)                    |      6115.72 |    71.13 | 470.84 (12)| 891 |                            |
 | [rainbow-128](doc/rainbow-128.txt)            |      6463.52 |    68.99 | 474.64 (5) | 943 |                            |
@@ -296,7 +296,7 @@ See [github.com/rurban/perl-hash-stats](https://github.com/rurban/perl-hash-stat
 
 When used in a hash table the instruction cache will usually beat the
 CPU and throughput measured here. In my tests the smallest `FNV1A`
-beats the fastest `crc32_hw1` with [Perl 5 hash tables](https://github.com/rurban/perl-hash-stats).
+beats the fastest `crc32c_hw1` with [Perl 5 hash tables](https://github.com/rurban/perl-hash-stats).
 Even if those worse hash functions will lead to more collisions, the
 overall speed advantage and inline-ability beats the slightly worse quality.
 See e.g. [A Seven-Dimensional Analysis of Hashing Methods and its Implications on Query Processing](https://infosys.cs.uni-saarland.de/publications/p249-richter.pdf)
@@ -309,6 +309,15 @@ digests and maybe bigger databases, but not for 32bit hash tables.  The
 "Quality problems" lead to less uniform distribution, i.e.  more collisions
 and worse performance, but are rarely related to real security attacks, just
 the 2nd sanity AppendZeroes test against `\0` invariance is security relevant.
+
+Hash names distinguish IEEE CRC-32 (`crc32`, `crc32_pclmul`) from CRC-32C
+(`crc32c_hw`, `crc32c_hw1`, `crc32c_hw64`). The last is a raw 32-bit CRC-32C
+zero-extended to 64 bits, not CRC-64. The registry in `main.cpp` maps names to
+wrappers: the CRC hardware implementations are in `crc32_hw.c` and
+`crc32_hw1.c`, while the IEEE PCLMUL implementation is in `crc32-pclmul_asm.S`.
+`aesni-majek64` is Majek's implementation in `Hashes.cpp`; the legacy PeterRK
+variants use `aesni-hash.h`, and `aesni-hash-peterrk` uses
+`aesnihash-peterrk.hpp`.
 
 Columns
 -------
