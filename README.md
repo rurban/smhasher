@@ -287,6 +287,11 @@ So the fastest hash functions on x86_64 without quality problems are:
 * MUM/mir (_different results on 32/64-bit archs, lots of bad seeds to filter out_)
 * fasthash32
 
+FarmHash's general hash APIs intentionally change output between debug and
+release builds and may differ across platforms. Do not persist their outputs or
+compare them across builds; use FarmHash's fingerprint APIs when stable,
+portable values are required.
+
 Hash functions for symbol tables or hash tables typically use 32 bit
 hashes, for databases, file systems and file checksums typically 64 or
 128bit, for crypto now starting with 256 bit.
