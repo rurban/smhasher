@@ -310,6 +310,12 @@ digests and maybe bigger databases, but not for 32bit hash tables.  The
 and worse performance, but are rarely related to real security attacks, just
 the 2nd sanity AppendZeroes test against `\0` invariance is security relevant.
 
+When zlib is available, `--test=Compressibility` repeatedly hashes its own
+output and compresses 1 MiB of the resulting stream. For 32-bit hashes, two
+domain-separated outputs form each 64-bit state to avoid short-state birthday
+cycles dominating the result. A compressed size below 99.5% fails the test.
+Passing this test does not establish randomness or cryptographic security.
+
 Columns
 -------
 

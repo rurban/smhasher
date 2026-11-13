@@ -7,6 +7,9 @@
 #include "AvalancheTest.h"
 #include "DifferentialTest.h"
 #include "HashMapTest.h"
+#ifdef HAVE_ZLIB
+#include "CompressibilityTest.h"
+#endif
 
 #if NCPU > 1 // disable with -DNCPU=0 or 1
 #include <thread>
@@ -44,6 +47,9 @@ bool g_testDiff        = false;
 bool g_testDiffDist    = false;
 bool g_testMomentChi2  = false;
 bool g_testPrng        = false;
+#ifdef HAVE_ZLIB
+bool g_testCompressibility = false;
+#endif
 bool g_testBIC         = false;
 bool g_testBadSeeds    = false;
 //bool g_testLongNeighbors = false;
@@ -78,6 +84,9 @@ TestOpts g_testopts[] =
 { g_testBIC, 	        "BIC" },
 { g_testMomentChi2,   "MomentChi2" },
 { g_testPrng,         "Prng" },
+#ifdef HAVE_ZLIB
+{ g_testCompressibility, "Compressibility" },
+#endif
 { g_testBadSeeds,     "BadSeeds" },
 //{ g_testLongNeighbors,"LongNeighbors" }
 };
@@ -1913,6 +1922,18 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("\n");
     fflush(NULL);
   }
+#ifdef HAVE_ZLIB
+  if (g_testCompressibility || g_testAll)
+  {
+    printf("[[[ Compressibility Tests ]]]\n\n");
+    Seed_init(info, 0);
+    if (!CompressibilityTest(hash, info->hashbits))
+      printf("*********FAIL*********\n");
+    printf("\n");
+    fflush(NULL);
+  }
+#endif
+
 
   //-----------------------------------------------------------------------------
   // LongNeighbors - collisions between long messages of low Hamming distance

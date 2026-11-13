@@ -4,11 +4,12 @@ use File::Copy 'mv';
 my $endtest = qr(^(?:---|\[\[\[ |Input vcode 0x));
 # mkdir partests; build/SMHasher --list|perl -alne'print $F[0] | parallel -j4 --bar 'build/SMHasher --test=Sparse,Permutation,Cyclic,TwoBytes,DiffDist,Text,Zeroes,Seed,Sanity,Avalanche,BIC,LongNeighbors,Diff,MomentChi2 {} >partests/{}'
 my @keysettests = qw(Sparse Permutation Cyclic TwoBytes Window Text Zeroes Seed);
-my @othertests = qw(Sanity Speed Hashmap Avalanche Diff DiffDist BIC LongNeighbors MomentChi2);
+my @othertests = qw(Sanity Speed Hashmap Avalanche Compressibility Diff DiffDist BIC LongNeighbors MomentChi2);
 my %tests = map {$_ => 1} @keysettests, @othertests;
 my $testrx = '(' . join('|',@othertests) . ')';
 $testrx = qr($testrx);
 delete $tests{LongNeighbors}; # invalid license
+delete $tests{Compressibility}; # optional zlib dependency
 
 if (@ARGV) {
   readf($_) for @ARGV;
@@ -49,15 +50,10 @@ sub readf {
 sub check {
   my ($n,$r,$fn) = @_;
   return unless $n;
-  my @keys = sort keys %$r;
   my @tests = sort keys %tests;
-  my @t;
-  if (@keys != @tests) {
+  my @t = grep { !$r->{$_} } @tests;
+  if (@t) {
     print "# missing tests in $fn for $n:\n";
-    print "SMHasher --test=";
-    for (@tests) {
-      push @t, $_ unless $r->{$_};
-    }
-    print join(',',@t)," $n >>doc/$n.txt\n";
+    print "SMHasher --test=", join(',',@t), " $n >>doc/$n.txt\n";
   }
 }

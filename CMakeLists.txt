@@ -11,6 +11,11 @@ endif()
 project(SMHasher C CXX ASM)
 
 include(CheckCCompilerFlag)
+find_package(ZLIB QUIET)
+if(ZLIB_FOUND)
+  add_definitions(-DHAVE_ZLIB)
+  set(COMPRESSIBILITY_SRC CompressibilityTest.cpp)
+endif()
 # Check if the same compile family is used for both C and CXX
 if(NOT (CMAKE_C_COMPILER_ID STREQUAL CMAKE_CXX_COMPILER_ID))
   message(WARNING "CMAKE_C_COMPILER_ID (${CMAKE_C_COMPILER_ID}) is different "
@@ -742,6 +747,7 @@ endif()
 add_library(
   SMHasherSupport STATIC
   AvalancheTest.cpp
+  ${COMPRESSIBILITY_SRC}
   Bitslice.cpp
   Bitvec.cpp
   chaskey.c
@@ -831,6 +837,10 @@ add_library(
   rainstorm_test.cpp
   )
 
+if(ZLIB_FOUND)
+  target_link_libraries(SMHasherSupport PUBLIC ZLIB::ZLIB)
+endif()
+
 add_executable(SMHasher main.cpp)
 
 if(ipo_supported)
@@ -866,6 +876,11 @@ endif()
 
 if(NOT (CMAKE_CROSSCOMPILING) OR QEMU_TESTING)
   enable_testing()
+  if(ZLIB_FOUND)
+    add_executable(CompressibilityRegression compressibility_test.cpp)
+    target_link_libraries(CompressibilityRegression SMHasherSupport ${CMAKE_THREAD_LIBS_INIT})
+    add_test(Compressibility CompressibilityRegression)
+  endif()
   add_test(List SMHasher --list)
   add_test(VerifyAll SMHasher --test=VerifyAll --verbose)
   add_test(Sanity SMHasher --test=Sanity)

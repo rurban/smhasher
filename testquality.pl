@@ -42,6 +42,7 @@ my @sections = (
   ["DiffDist 'Differential Distribution' Tests","DiffDist"],
   ["MomentChi2 Tests",                         "MomentChi2"],
   ["Prng Tests",                               "Prng"],
+  ["Compressibility Tests",                    "Compressibility"],
   ["LongNeighbors Tests",                      "LongNeighbors"],
   ["BIC 'Bit Independence Criteria' Tests",    "BIC"],
   ["BadSeeds Tests",                           "BadSeeds"],
@@ -57,6 +58,7 @@ sub classify {
   return "BadSeeds"    if $e =~ /^\d+ bad seeds$/;
   return "BadSeeds"    if $e =~ /^too many bad seeds$/;
   return "Avalanche"   if $e =~ /^Avalanche$/;
+  return "Compressibility" if $e =~ /^Compressibility$/;
   return "Sparse"      if $e =~ /^Sparse$/;
   return "Permutation" if $e =~ /^Permutation$/;
   return "Window"      if $e =~ /^Window$/;
