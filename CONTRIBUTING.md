@@ -17,6 +17,8 @@ We take functions written in C++, C and sometimes even in ASM.
 The smokers run on travis (x64 - Linux and darwin, x86, aarch64), appveyor (MSVC 17),
 and cirrus for FreeBSD 12.1.
 So g++ and clang++, linux, darwin, freebsd and Windows MSVC is tested, no mingw, no arm32 (yet).
+On non-x86 targets PMP_Multilinear is omitted; native builds use
+`-march=native` only when the compiler accepts it.
 Note that Windows MSVC is only C89 or C++, but not C99, and a long is not long.
 Use stdint.h
 

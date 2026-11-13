@@ -170,39 +170,21 @@ static inline state finalize(state hash, uint32_t seed) {
 #elif defined(__ARM_NEON) || defined(__ARM_NEON__) || defined(__aarch64__)
 #include <arm_neon.h>
 
-typedef int8x16_t state;
+typedef uint8x16_t state;
 
 static inline state create_empty() {
-    return vdupq_n_s8(0);
+    return vdupq_n_u8(0);
 }
 
 static inline state load_unaligned(const state* p) {
-    return vld1q_s8((const int8_t*)p);
+    return vld1q_u8((const uint8_t*)p);
 }
 
-static inline int check_same_page(const state* ptr) {
-    uintptr_t address = (uintptr_t)ptr;
-    uintptr_t offset_within_page = address & 0xFFF;
-    return offset_within_page <= (4096 - sizeof(state) - 1);
-}
 
 static inline state get_partial(const state* p, int len) {
-    int8x16_t partial;
-    if (check_same_page(p)) {
-        // Unsafe (hence the check) but much faster
-#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-        static const int8_t indices[] = {15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
-#else
-        static const int8_t indices[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
-#endif
-        int8x16_t mask = vcgtq_s8(vdupq_n_u8(len), vld1q_s8(indices));
-        partial = vandq_s8(load_unaligned(p), mask);
-    } else {
-        // Safer but slower, using memcpy
-        uint8_t buffer[sizeof(state)] = {0};
-        memcpy(buffer, (const uint8_t*)p, len);
-        partial = vld1q_s8((const int8_t*)buffer);
-    }
+    uint8_t buffer[sizeof(state)] = {0};
+    memcpy(buffer, (const uint8_t*)p, len);
+    state partial = vld1q_u8(buffer);
 
     // Prevents padded zeroes to introduce bias
     return vaddq_u8(partial, vdupq_n_u8(len));
@@ -223,8 +205,8 @@ static inline state compress(state a, state b) {
     static const uint32_t keys_1[4] = {0xFC3BC28E, 0x89C222E5, 0xB09D3E21, 0xF2784542};
     static const uint32_t keys_2[4] = {0x03FCE279, 0xCB6B2E9B, 0xB361DC58, 0x39136BD9};
 
-    b = aes_encrypt(b, vld1q_u32(keys_1));
-    b = aes_encrypt(b, vld1q_u32(keys_2));
+    b = aes_encrypt(b, vreinterpretq_u8_u32(vld1q_u32(keys_1)));
+    b = aes_encrypt(b, vreinterpretq_u8_u32(vld1q_u32(keys_2)));
 
     return aes_encrypt_last(a, b);
 }
@@ -238,10 +220,10 @@ static inline state finalize(state hash, uint32_t seed) {
     static const uint32_t keys_2[4] = {0xE7554D6F, 0x6EA75BBA, 0xDE3A74DB, 0x3D423129};
     static const uint32_t keys_3[4] = {0xC992E848, 0xA735B3F2, 0x790FC729, 0x444DF600};
 
-    hash = aes_encrypt(hash, vdupq_n_u32(seed + 0xC992E848));
-    hash = aes_encrypt(hash, vld1q_u32(keys_1));
-    hash = aes_encrypt(hash, vld1q_u32(keys_2));
-    hash = aes_encrypt_last(hash, vld1q_u32(keys_3));
+    hash = aes_encrypt(hash, vreinterpretq_u8_u32(vdupq_n_u32(seed + 0xC992E848)));
+    hash = aes_encrypt(hash, vreinterpretq_u8_u32(vld1q_u32(keys_1)));
+    hash = aes_encrypt(hash, vreinterpretq_u8_u32(vld1q_u32(keys_2)));
+    hash = aes_encrypt_last(hash, vreinterpretq_u8_u32(vld1q_u32(keys_3)));
 
     return hash;
 }
