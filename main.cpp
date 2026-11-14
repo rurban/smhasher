@@ -397,13 +397,13 @@ HashInfo g_hashes[] =
 #endif
 { CityHash64noSeed_test, 64, 0x4C4E54B1, "City64noSeed","Google CityHash64 without seed (v1.1)(default version, misses one final avalanche)", POOR, {} },
 { CityHash64_test,      64, 0x5FABC5C5, "City64",       "Google CityHash64WithSeed (v1.1)", POOR, {} },
-#if defined(HAVE_SSE2) && defined(HAVE_AESNI) && !defined(_MSC_VER)
+#if defined(HAVE_SSE42) && defined(HAVE_AESNI) && !defined(_MSC_VER) && (defined(__i386__) || defined(__x86_64__))
 { aesnihash_test,       64, 0xA68E0D42, "aesnihash",    "majek's seeded aesnihash with aesenc, 64-bit for x64", POOR,
   {0x70736575} },
 { aesni128_test,       128, 0xF06DA1B1, "aesni",    "aesni 128bit", GOOD,{} },
 { aesni64_test,         64, 0x3AA1A480, "aesni-low","aesni 64bit",  GOOD,{} },
 #endif
-#if defined(HAVE_SSE2) && defined(HAVE_AESNI)
+#if defined(HAVE_SSE2) && defined(HAVE_AESNI) && (defined(__i386__) || defined(__x86_64__) || defined(_M_IX86) || defined(_M_X64))
 #ifndef _MSC_VER
 #define AESPRK_VFY 0xF06DA1B1
 #else
@@ -411,7 +411,7 @@ HashInfo g_hashes[] =
 #endif
 { aesnihash_peterrk,   128, AESPRK_VFY, "aesni-hash-peterrk",    "PeterRK's seeded aesnihash, 128-bit for x64, unportable", GOOD, {} },
 #endif
-#if defined(HAVE_SSE2) && defined(__x86_64__) && !defined(_WIN32) && !defined(_MSC_VER)
+#if defined(HAVE_FALKHASH)
 { falkhash_test_cxx,    64, 0x2F99B071, "falkhash",    "falkhash.asm with aesenc, 64-bit for x64", POOR, {} },
 #endif
 #ifdef HAVE_MEOW_HASH
@@ -708,7 +708,7 @@ HashInfo g_hashes[] =
 { farmhash64_c_test,    64, FARM64_VERIF, "farmhash64_c",  "farmhash64_with_seed (C99)", GOOD, {} },
 { farmhash128_c_test,  128, FARM128_VERIF,"farmhash128_c", "farmhash128_with_seed (C99)", GOOD, {} },
 #endif
-#ifdef HAVE_AESNI
+#ifdef HAVE_GXHASH
 // FIXME
 #if defined __linux && defined GITHUB_ACTIONS
 #define GX32_VFY 0x2D5674B0
@@ -958,7 +958,7 @@ void Bad_Seed_init (pfHash hash, uint32_t &seed) {
           (hash == poly_3_mersenne && seed == 0x3d25f745))
     seed++;
 #endif
-#ifdef HAVE_AESNI
+#ifdef HAVE_GXHASH
   else if (hash == gxhash32_test)
     gxhash32_seed_init(seed);
 #endif

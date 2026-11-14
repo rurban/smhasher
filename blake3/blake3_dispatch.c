@@ -216,10 +216,12 @@ void blake3_compress_in_place(uint32_t cv[8],
         return;
     }
 #  endif
+#  ifdef BLAKE3_USE_SSE41
     if(features & SSE41) {
         blake3_compress_in_place_sse41(cv, block, block_len, counter, flags);
         return;
     }
+#  endif
 #endif
     blake3_compress_in_place_portable(cv, block, block_len, counter, flags);
 }
@@ -237,10 +239,12 @@ void blake3_compress_xof(const uint32_t cv[8],
         return;
     }
 #endif
+#ifdef BLAKE3_USE_SSE41
     if(features & SSE41) {
         blake3_compress_xof_sse41(cv, block, block_len, counter, flags, out);
         return;
     }
+#endif
 #endif
     blake3_compress_xof_portable(cv, block, block_len, counter, flags, out);
 }
@@ -265,10 +269,12 @@ void blake3_hash_many(const uint8_t *const *inputs, size_t num_inputs,
         return;
     }
 #endif
+#ifdef BLAKE3_USE_SSE41
     if(features & SSE41) {
         blake3_hash_many_sse41(inputs, num_inputs, blocks, key, counter, increment_counter, flags, flags_start, flags_end, out);
         return;
     }
+#endif
 #endif
     blake3_hash_many_portable(inputs, num_inputs, blocks, key, counter, increment_counter, flags, flags_start, flags_end, out);
 }

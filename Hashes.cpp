@@ -810,7 +810,7 @@ halfsiphash_test(const void *input, int len, uint32_t seed, void *out)
 }
 
 /* https://github.com/gamozolabs/falkhash */
-#if defined(__SSE4_2__) && defined(__x86_64__) && !defined(_WIN32)
+#if defined(HAVE_FALKHASH)
 extern "C" {
   uint64_t falkhash_test(uint8_t *data, uint64_t len, uint32_t seed, void *out);
 }
@@ -1218,7 +1218,7 @@ void farsh256_test ( const void * key, int len, unsigned seed, void * out )
 #endif
 
 // arm also has AESNI, check for sse
-#if defined(HAVE_SSE42) && defined(HAVE_AESNI) && !defined(_MSC_VER)
+#if defined(HAVE_SSE42) && defined(HAVE_AESNI) && !defined(_MSC_VER) && (defined(__i386__) || defined(__x86_64__))
 /* See https://news.ycombinator.com/item?id=22463979 */
 /* From https://gist.github.com/majek/96dd615ed6c8aa64f60aac14e3f6ab5a, but added a seed */
 uint64_t aesnihash(uint8_t *in, unsigned long src_sz, uint32_t seed) {
@@ -1389,7 +1389,7 @@ void polymur_test ( const void *key, int len, uint32_t seed, void *out) {
                                  (uint64_t)seed);
 }
 
-#if defined(HAVE_AESNI)
+#if defined(HAVE_GXHASH)
 void gxhash32_seed_init(uint32_t &seed)
 {
   // reject bad seeds
@@ -1400,7 +1400,7 @@ void gxhash32_seed_init(uint32_t &seed)
 }
 #endif
 
-#if defined(HAVE_SSE2) && defined(HAVE_AESNI)
+#if defined(HAVE_SSE2) && defined(HAVE_AESNI) && (defined(__i386__) || defined(__x86_64__) || defined(_M_IX86) || defined(_M_X64))
 #include "aesnihash-peterrk.hpp"
 #endif
 

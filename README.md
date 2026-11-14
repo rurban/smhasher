@@ -313,6 +313,13 @@ the 2nd sanity AppendZeroes test against `\0` invariance is security relevant.
 The AES-NI t1ha0 variants are x86-only; ARM builds use the portable t1ha
 implementations even when the processor supports AES.
 
+For GCC and Clang, CMake probes target feature macros with both the C and C++
+compilers. Native builds use `-march=native` when both compilers support it,
+unless explicit `-m` target flags are supplied. Cross builds use the toolchain's
+target flags instead of the build host's CPU. Set compatible `CMAKE_C_FLAGS`
+and `CMAKE_CXX_FLAGS` (or toolchain flags) to select target features; changing
+them and reconfiguring re-runs detection. MSVC retains its platform probes.
+
 Columns
 -------
 

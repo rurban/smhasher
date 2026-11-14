@@ -1289,7 +1289,7 @@ inline void blake3_64 ( const void * key, int len, unsigned seed, void * out )
 // objsize: 452010-45251e: 1294 (DISCoHAsH)
 #include "discohash.h"
 
-#if defined(HAVE_SSE2) && defined(HAVE_AESNI) && !defined(_MSC_VER)
+#if defined(HAVE_SSE42) && defined(HAVE_AESNI) && !defined(_MSC_VER) && (defined(__i386__) || defined(__x86_64__))
 /* https://gist.github.com/majek/96dd615ed6c8aa64f60aac14e3f6ab5a plus seed */
 /* objsize: 41f530-41f6cb: 1209 */
 uint64_t aesnihash(uint8_t *in, unsigned long src_sz, uint32_t seed);
@@ -1497,7 +1497,7 @@ extern "C" void crc64_jones_test2(const void *input, int len, uint32_t seed, voi
 extern "C" void crc64_jones_test3(const void *input, int len, uint32_t seed, void *out);
 extern "C" void crc64_jones_default(const void *input, int len, uint32_t seed, void *out);
 
-#if defined(HAVE_SSE2) && defined(HAVE_AESNI)
+#if defined(HAVE_SSE2) && defined(HAVE_AESNI) && (defined(__i386__) || defined(__x86_64__) || defined(_M_IX86) || defined(_M_X64))
 void aesnihash_peterrk(const void * in, int len0, uint32_t seed, void * out);
 #endif
 
