@@ -155,17 +155,10 @@ HashInfo g_hashes[] =
 { edonr224,            224, 0x83A8E7AB, "edonr224",     "EDON-R 224", GOOD, {} },
 { edonr256,            256, 0x06DD4F96, "edonr256",     "EDON-R 256", GOOD, {} },
 #endif
-// There are certain 32-bit non-Windows machines producing 0x58571F56 as verification value for blake3_c.
-// That deserves further investigation.
-#if defined HAVE_BIT32 && !defined _WIN32 && !defined __arm__
-#define BL3_VF 0x58571F56
-#else
-#define BL3_VF 0x50E4CD91
-#endif
 #ifndef HAVE_ASAN
 // blake3_c segfaults under ASan (tree-merge underflow in blake3.c:185), so skip
 // it in sanitizer builds until the upstream blake3 issue is fixed.
-{ blake3c_test,        256, BL3_VF, "blake3_c",   "BLAKE3 c",   GOOD, {0x6a09e667} },
+{ blake3c_test,        256, 0x50E4CD91, "blake3_c",   "BLAKE3 c",   GOOD, {0x6a09e667} },
 #endif
 { Tachyon_Hash, 256, 0xE9BBF229, "Tachyon", "Tachyon 256-bit C", GOOD, {} },
 #if defined(HAVE_BLAKE3)
@@ -197,25 +190,21 @@ HashInfo g_hashes[] =
 #  define POLY2_VERIF   0xA31DD921
 #  define POLY3_VERIF   0x26F7EDA0
 #  define POLY4_VERIF   0x8EE270BD
-#  define TABUL_VERIF   0x4917178C
 #elif defined __apple_build_version__ && defined __clang__
 #  define POLY1_VERIF   0xE389931F
 #  define POLY2_VERIF   0x458D056D
 #  define POLY3_VERIF   0x208145CC
 #  define POLY4_VERIF   0xE798712E
-#  define TABUL_VERIF   0x91618263
 #elif defined DEBUG
 #  define POLY1_VERIF   0x9E4BA93D
 #  define POLY2_VERIF   0x5CB4CB25
 #  define POLY3_VERIF   0x3C87C852
 #  define POLY4_VERIF   0xFF88BAF6
-#  define TABUL_VERIF   0xB49C607C
 #else
 #  define POLY1_VERIF   0x64706572
 #  define POLY2_VERIF   0xE8906EDF
 #  define POLY3_VERIF   0xF2A7E178
 #  define POLY4_VERIF   0xD4E89421
-#  define TABUL_VERIF   0xB49C607C
 #endif
 // Thomas Dybdahl Ahle, Jakob Tejs Bæk Knudsen, and Mikkel Thorup
 // "The Power of Hashing with Mersenne Primes".
@@ -223,18 +212,9 @@ HashInfo g_hashes[] =
 { poly_2_mersenne,      32, 0, "poly_2_mersenne", "Degree 2 Hashing mod 2^61-1", GOOD, {0x60e8512c} /* !! */},
 { poly_3_mersenne,      32, 0, "poly_3_mersenne", "Degree 3 Hashing mod 2^61-1", GOOD, {0x3d25f745} /* !! */},
 { poly_4_mersenne,      32, 0, "poly_4_mersenne", "Degree 4 Hashing mod 2^61-1", GOOD, {} },
-{ tabulation_test,      64, TABUL_VERIF, "tabulation",      "64-bit Tabulation with Multiply-Shift Mixer", GOOD, {} },
+{ tabulation_test,      64, 0xB49C607C, "tabulation", "64-bit Tabulation with Multiply-Shift Mixer", GOOD, {} },
 #endif
-#if defined(_MSC_VER) /* truncated long to 32 */
-#  define TABUL32_VERIF   0x3C3B7BDD
-#elif defined __FreeBSD__
-#  define TABUL32_VERIF   0x84F58D1F
-#elif defined __apple_build_version__ && defined __clang__
-#  define TABUL32_VERIF   0x2C8EDFFE
-#else
-#  define TABUL32_VERIF   0x335F64EA
-#endif
-{ tabulation_32_test,   32, TABUL32_VERIF, "tabulation32",    "32-bit Tabulation with Multiply-Shift Mixer", POOR, {} },
+{ tabulation_32_test,   32, 0x335F64EA, "tabulation32", "32-bit Tabulation with Multiply-Shift Mixer", POOR, {} },
 #ifdef HAVE_SSE42
 // all CRC's are insecure by default due to its polynomial nature.
 /* Even 32 uses crc32q, quad only */
@@ -723,7 +703,7 @@ HashInfo g_hashes[] =
 { gxhash64_test,        64, GX_VFY,     "gxhash64",    "gxHash, 64-bit, AES-only, unportable", GOOD, {} },
 #endif
 { xxHash64_test,        64, 0x024B7CF4, "xxHash64",    "xxHash, 64-bit", GOOD, {} },
-#if !(defined(HAVE_PTRSIZE_4) && !defined(HAVE_NEON))
+#if !(defined(HAVE_BIT32) && !defined(HAVE_NEON))
 { lanehash64_test,      64, 0xD048C22B, "lanehash64",  "lanehash, 64-bit, chained NH-32 stripes + mum short path, no AES", GOOD, {} },
 { lanehash128_test,    128, 0xC2F39939, "lanehash128", "lanehash, 128-bit, chained NH-32 stripes + mum short path, no AES", GOOD, {} },
 { lanehash_aes64_test,  64, 0x9FF60BEF, "lanehash_aes64",  "lanehash_aes, 64-bit, AES lanes + mum short path", GOOD, {} },
