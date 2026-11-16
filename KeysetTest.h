@@ -32,7 +32,7 @@
 
 bool VerificationTest   ( HashInfo *info, bool verbose );
 bool SanityTest         ( pfHash hash, const int hashbits );
-void AppendedZeroesTest ( pfHash hash, const int hashbits );
+bool AppendedZeroesTest ( pfHash hash, const int hashbits );
 
 static void printKey(const void* key, size_t len)
 {

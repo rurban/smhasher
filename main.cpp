@@ -16,6 +16,95 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <time.h>
+#include <vector>
+#ifdef _WIN32
+#include <io.h>
+#define tap_dup _dup
+#define tap_dup2 _dup2
+#define tap_close _close
+#define tap_fileno _fileno
+#else
+#include <unistd.h>
+#define tap_dup dup
+#define tap_dup2 dup2
+#define tap_close close
+#define tap_fileno fileno
+#endif
+
+struct TapResult {
+  const char *name;
+  bool passed;
+  bool skipped;
+};
+
+static bool g_tap = false;
+static std::vector<TapResult> g_tapResults;
+
+static void tap_result(bool passed, const char *name, bool skipped = false)
+{
+  if (g_tap) g_tapResults.push_back({name, passed, skipped});
+}
+
+static bool tap_begin(FILE *&log, int &saved_stdout)
+{
+  log = tmpfile();
+  if (!log) return false;
+  fflush(stdout);
+  saved_stdout = tap_dup(tap_fileno(stdout));
+  if (saved_stdout < 0) { fclose(log); return false; }
+  if (tap_dup2(tap_fileno(log), tap_fileno(stdout)) < 0) {
+    tap_close(saved_stdout);
+    fclose(log);
+    return false;
+  }
+  return true;
+}
+
+static int tap_finish(FILE *log, int saved_stdout)
+{
+  const bool write_error = fflush(stdout) == EOF || ferror(stdout);
+  if (tap_dup2(saved_stdout, tap_fileno(stdout)) < 0) {
+    tap_close(saved_stdout);
+    fclose(log);
+    fprintf(stderr, "Cannot restore stdout for TAP output\n");
+    return 1;
+  }
+  tap_close(saved_stdout);
+  clearerr(stdout);
+  printf("TAP version 13\n");
+  if (write_error || fseek(log, 0, SEEK_SET) != 0) {
+    fclose(log);
+    printf("Bail out! Cannot capture test output\n");
+    return 1;
+  }
+  char buffer[4096];
+  bool line_start = true;
+  while (fgets(buffer, sizeof(buffer), log)) {
+    if (line_start) fputs("# ", stdout);
+    fputs(buffer, stdout);
+    size_t len = strlen(buffer);
+    line_start = len && buffer[len - 1] == '\n';
+  }
+  const bool read_error = ferror(log);
+  fclose(log);
+  if (!line_start) putchar('\n');
+  if (read_error) {
+    printf("Bail out! Cannot read captured test output\n");
+    return 1;
+  }
+  int failures = 0;
+  for (size_t i = 0; i < g_tapResults.size(); ++i) {
+    const TapResult &result = g_tapResults[i];
+    if (!result.passed && !result.skipped) ++failures;
+    printf("%s %zu - %s%s\n", result.passed || result.skipped ? "ok" : "not ok",
+           i + 1, result.name, result.skipped ? " # SKIP not applicable" : "");
+  }
+  if (g_tapResults.empty())
+    printf("1..0 # SKIP no correctness tests selected\n");
+  else
+    printf("1..%zu\n", g_tapResults.size());
+  return failures ? 1 : 0;
+}
 
 //-----------------------------------------------------------------------------
 // Configuration.
@@ -1030,7 +1119,7 @@ bool Hash_Seed_init (pfHash hash, size_t seed) {
 //-----------------------------------------------------------------------------
 // Self-test on startup - verify that all installed hashes work correctly.
 
-void SelfTest(bool verbose) {
+bool SelfTest(bool verbose) {
   bool pass = true;
   for (size_t i = 0; i < sizeof(g_hashes) / sizeof(HashInfo); i++) {
     HashInfo *info = &g_hashes[i];
@@ -1048,8 +1137,9 @@ void SelfTest(bool verbose) {
         pass &= VerificationTest(info, true);
       }
     }
-    exit(1);
+    return false;
   }
+  return true;
 }
 
 //----------------------------------------------------------------------------
@@ -1074,8 +1164,13 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     for (HashInfo *i = g_hashes; i != ARRAY_END(g_hashes); i++)
       Hash_init(i); // init all the hashes, not just `info`
     printf("[[[ VerifyAll Tests ]]]\n\n"); fflush(NULL);
-    SelfTest(g_drawDiagram);
-    printf("PASS\n\n"); fflush(NULL); // if not it does exit(1)
+    const bool verified = SelfTest(g_drawDiagram);
+    tap_result(verified, "VerifyAll");
+    if (!verified) {
+      if (!g_tap) exit(1);
+      return;
+    }
+    printf("PASS\n\n"); fflush(NULL);
   }
 
   if (g_testAll || g_testSpeedBulk || g_testSpeedSmall || g_testHashmap) {
@@ -1091,10 +1186,11 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     printf("[[[ Sanity Tests ]]]\n\n");
     fflush(NULL);
 
-    VerificationTest(info,true);
+    const bool verified = VerificationTest(info,true);
+    tap_result(verified, "Verification", info->verification == 0);
     Seed_init (info, 0);
-    SanityTest(hash,hashbits);
-    AppendedZeroesTest(hash,hashbits);
+    tap_result(SanityTest(hash,hashbits), "Sanity");
+    tap_result(AppendedZeroesTest(hash,hashbits), "AppendedZeroes");
     printf("\n");
     fflush(NULL);
   }
@@ -1201,6 +1297,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       }
     }
     if(!result) printf("*********FAIL*********\n");
+    tap_result(result, "Hashmap", info->quality == SKIP);
     printf("\n");
     fflush(NULL);
   }
@@ -1268,6 +1365,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     }
 
     if(!result) printf("*********FAIL*********\n");
+    tap_result(result, "Avalanche");
     printf("\n");
     fflush(NULL);
   }
@@ -1335,6 +1433,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     }
   END_Sparse:
     if(!result) printf("*********FAIL*********\n");
+    tap_result(result, "Sparse");
     printf("\n");
     fflush(NULL);
   }
@@ -1368,6 +1467,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
                                              true,true, g_drawDiagram);
 
       if(!result) printf("*********FAIL*********\n");
+      tap_result(result, "Permutation");
       printf("\n");
       fflush(NULL);
     }
@@ -1388,6 +1488,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
                                    true,true, g_drawDiagram);
 
       if(!result) printf("*********FAIL*********\n");
+      tap_result(result, "Permutation");
       printf("\n");
       fflush(NULL);
     }
@@ -1408,6 +1509,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
                                              true,true, g_drawDiagram);
 
       if(!result) printf("*********FAIL*********\n");
+      tap_result(result, "Permutation");
       printf("\n");
       fflush(NULL);
     }
@@ -1428,6 +1530,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
                                    true,true, g_drawDiagram);
 
       if(!result) printf("*********FAIL*********\n");
+      tap_result(result, "Permutation");
       printf("\n");
       fflush(NULL);
     }
@@ -1447,6 +1550,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
                                    true, true, g_drawDiagram);
 
       if(!result) printf("*********FAIL*********\n");
+      tap_result(result, "Permutation");
       printf("\n");
       fflush(NULL);
     }
@@ -1467,6 +1571,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
                                    true, true, g_drawDiagram);
 
       if(!result) printf("*********FAIL*********\n");
+      tap_result(result, "Permutation");
       printf("\n");
       fflush(NULL);
     }
@@ -1487,6 +1592,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
                                    true, true, g_drawDiagram);
 
       if(!result) printf("*********FAIL*********\n");
+      tap_result(result, "Permutation");
       printf("\n");
       fflush(NULL);
     }
@@ -1504,6 +1610,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       result &= CombinationKeyTest(hash, maxlen, blocks, 2, true, true, g_drawDiagram);
 
       if(!result) printf("*********FAIL*********\n");
+      tap_result(result, "Permutation");
       printf("\n");
       fflush(NULL);
     }
@@ -1522,6 +1629,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       result &= CombinationKeyTest(hash, maxlen, blocks, nbElts, true, true, g_drawDiagram);
 
       if(!result) printf("*********FAIL*********\n");
+      tap_result(result, "Permutation");
       printf("\n");
       fflush(NULL);
     }
@@ -1539,6 +1647,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       result &= CombinationKeyTest(hash, maxlen, blocks, 2, true, true, g_drawDiagram);
 
       if(!result) printf("*********FAIL*********\n");
+      tap_result(result, "Permutation");
       printf("\n");
       fflush(NULL);
     }
@@ -1557,6 +1666,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       result &= CombinationKeyTest(hash, maxlen, blocks, nbElts, true, true, g_drawDiagram);
 
       if(!result) printf("*********FAIL*********\n");
+      tap_result(result, "Permutation");
       printf("\n");
       fflush(NULL);
     }
@@ -1574,6 +1684,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       result &= CombinationKeyTest(hash, maxlen, blocks, 2, true, true, g_drawDiagram);
 
       if(!result) printf("*********FAIL*********\n");
+      tap_result(result, "Permutation");
       printf("\n");
       fflush(NULL);
     }
@@ -1592,6 +1703,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       result &= CombinationKeyTest(hash, maxlen, blocks, nbElts, true, true, g_drawDiagram);
 
       if(!result) printf("*********FAIL*********\n");
+      tap_result(result, "Permutation");
       printf("\n");
       fflush(NULL);
     }
@@ -1609,6 +1721,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       result &= CombinationKeyTest(hash, maxlen, blocks, 2, true, true, g_drawDiagram);
 
       if(!result) printf("*********FAIL*********\n");
+      tap_result(result, "Permutation");
       printf("\n");
       fflush(NULL);
     }
@@ -1627,6 +1740,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
       result &= CombinationKeyTest(hash, maxlen, blocks, nbElts, true, true, g_drawDiagram);
 
       if(!result) printf("*********FAIL*********\n");
+      tap_result(result, "Permutation");
       printf("\n");
       fflush(NULL);
     }
@@ -1645,6 +1759,8 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   // 7m for FNV64 with windowbits=27 / 32bit keys
   // 5m35 for hasshe2 with windowbits=25 / 32bit keys
 
+  if (g_tap && (g_testWindow || g_testAll) && need_minlen64_align16(hash))
+    tap_result(true, "Window", true);
   if((g_testWindow || g_testAll) && !need_minlen64_align16(hash))
   {
     printf("[[[ Keyset 'Window' Tests ]]]\n\n");
@@ -1663,6 +1779,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
         ( hash, windowbits, testCollision, testDistribution, g_drawDiagram );
 
     if(!result) printf("*********FAIL*********\n");
+    tap_result(result, "Window");
     printf("\n");
     fflush(NULL);
   }
@@ -1672,6 +1789,8 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   // 5s for crc32_hw
   // 18s for farmhash128_c
 
+  if (g_tap && (g_testCyclic || g_testAll) && need_minlen64_align16(hash))
+    tap_result(true, "Cyclic", true);
   if ((g_testCyclic || g_testAll) && !need_minlen64_align16(hash))
   {
     printf("[[[ Keyset 'Cyclic' Tests ]]]\n\n");
@@ -1692,6 +1811,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     result &= CyclicKeyTest<hashtype>(hash,sizeof(hashtype)+8,8,reps, g_drawDiagram);
 
     if(!result) printf("*********FAIL*********\n");
+    tap_result(result, "Cyclic");
     printf("\n");
     fflush(NULL);
   }
@@ -1726,6 +1846,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     }
 
     if(!result) printf("*********FAIL*********\n");
+    tap_result(result, "TwoBytes");
     printf("\n");
     fflush(NULL);
   }
@@ -1755,6 +1876,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     result &= WordsStringTest( hash, words, g_drawDiagram );
 
     if(!result) printf("*********FAIL*********\n");
+    tap_result(result, "Text");
     printf("\n");
     fflush(NULL);
   }
@@ -1772,6 +1894,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     result &= ZeroKeyTest<hashtype>( hash, g_drawDiagram );
 
     if(!result) printf("*********FAIL*********\n");
+    tap_result(result, "Zeroes");
     printf("\n");
     fflush(NULL);
   }
@@ -1788,6 +1911,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     result &= SeedTest<hashtype>( hash, 5000000U, g_drawDiagram );
 
     if(!result) printf("*********FAIL*********\n");
+    tap_result(result, "Seed");
     printf("\n");
     fflush(NULL);
   }
@@ -1812,6 +1936,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     result &= PerlinNoiseAV<hashtype>( hash, testCollision, testDistribution, g_drawDiagram );
 
     if(!result) printf("*********FAIL*********\n");
+    tap_result(result, "PerlinNoise");
     printf("\n");
     fflush(NULL);
   }
@@ -1848,6 +1973,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     result &= DiffTest< Blob<256>, hashtype >(hash,3,reps,dumpCollisions);
 
     if(!result) printf("*********FAIL*********\n");
+    tap_result(result, "Diff");
     printf("\n");
     fflush(NULL);
   }
@@ -1866,6 +1992,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     result &= DiffDistTest2<uint64_t,hashtype>(hash, g_drawDiagram);
 
     if(!result) printf("*********FAIL*********\n");
+    tap_result(result, "DiffDist");
     printf("\n");
     fflush(NULL);
   }
@@ -1894,6 +2021,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     }
 
     if(!result) printf("\n*********FAIL*********\n");
+    tap_result(result, "MomentChi2");
     printf("\n");
     fflush(NULL);
   }
@@ -1910,6 +2038,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     result &= PrngTest<hashtype>( hash, testCollision, testDistribution, g_drawDiagram );
 
     if(!result) printf("\n*********FAIL*********\n");
+    tap_result(result, "Prng");
     printf("\n");
     fflush(NULL);
   }
@@ -1934,6 +2063,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     result &= testLongNeighbors(info->hash, info->hashbits, g_drawDiagram);
 
     if(!result) printf("*********FAIL*********\n");
+    tap_result(result, "LongNeighbors");
     printf("\n");
     fflush(NULL);
   }
@@ -1961,6 +2091,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     }
 
     if(!result) printf("\n*********FAIL*********\n");
+    tap_result(result, "BIC");
     printf("\n");
     fflush(NULL);
   }
@@ -1973,6 +2104,7 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     Seed_init (info, 0);
     bool result = BadSeedsTest<hashtype>( info, g_testExtra );
     if(!result) printf("\n*********FAIL*********\n");
+    tap_result(result, "BadSeeds");
     printf("\n");
     fflush(NULL);
   }
@@ -2770,7 +2902,7 @@ static char* strndup(char const *s, size_t n)
 
 void usage( void )
 {
-    printf("Usage: SMHasher [--list][--listnames][--tests] [--verbose][--extra]\n"
+    printf("Usage: SMHasher [--list][--listnames][--tests] [--verbose][--extra][--tap]\n"
            "       [--test=Speed,...] hash\n");
 }
 
@@ -2819,6 +2951,10 @@ int main ( int argc, const char ** argv )
           printf("  %s\n", g_testopts[i].name);
         }
         exit(0);
+      }
+      if (strcmp(arg,"--tap") == 0) {
+        g_tap = true;
+        continue;
       }
       if (strcmp(arg,"--verbose") == 0) {
         g_drawDiagram = true;
@@ -2884,6 +3020,19 @@ int main ( int argc, const char ** argv )
   // Code runs on the 3rd CPU by default? only for speed tests
   //SetAffinity((1 << 2));
   //SelfTest();
+  FILE *tap_log = NULL;
+  int saved_stdout = -1;
+  if (g_tap) {
+    if (!findHash(hashToTest)) {
+      fprintf(stderr, "Invalid hash '%s' specified\n", hashToTest);
+      return 1;
+    }
+    if (!tap_begin(tap_log, saved_stdout)) {
+      fprintf(stderr, "Cannot capture stdout for TAP output\n");
+      return 1;
+    }
+  }
+
 
   clock_t timeBegin = clock();
 
@@ -2902,5 +3051,6 @@ int main ( int argc, const char ** argv )
     fprintf(stderr, "Verification value is 0x%08x - Testing took %f seconds\n", g_verify, double(timeEnd-timeBegin)/double(CLOCKS_PER_SEC));
   }
     fflush(NULL);
+  if (g_tap) return tap_finish(tap_log, saved_stdout);
   return 0;
 }

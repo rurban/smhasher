@@ -866,6 +866,10 @@ endif()
 
 if(NOT (CMAKE_CROSSCOMPILING) OR QEMU_TESTING)
   enable_testing()
+  if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|AMD64|amd64|i[3-6]86)$")
+    add_test(NAME TAPProtocol COMMAND ${CMAKE_COMMAND}
+             -DSMHASHER=$<TARGET_FILE:SMHasher> -P ${CMAKE_CURRENT_SOURCE_DIR}/tap_protocol_test.cmake)
+  endif()
   add_test(List SMHasher --list)
   add_test(VerifyAll SMHasher --test=VerifyAll --verbose)
   add_test(Sanity SMHasher --test=Sanity)

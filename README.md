@@ -330,6 +330,17 @@ The smaller the better.
 Quality problems: See the failures in the linked doc.
 The less the better.
 
+TAP output
+----------
+
+Use `build/SMHasher --tap --test=Sanity xxh3` to emit TAP 13 on stdout.
+Test diagnostics are TAP comments; verification and correctness results are
+numbered `ok` or `not ok`, with unsupported cases marked `# SKIP`. Speed-only
+runs have a skip plan because timings are not pass/fail tests. TAP mode returns
+nonzero when a correctness test fails. Output is emitted after the run finishes;
+standard-error diagnostics remain on stderr. Without `--tap`, output and exit
+behavior are unchanged.
+
 Other
 -----
 

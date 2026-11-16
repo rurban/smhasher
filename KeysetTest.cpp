@@ -196,7 +196,7 @@ bool SanityTest ( pfHash hash, const int hashbits )
 // Appending zero bytes to a key should always cause it to produce a different
 // hash value
 
-void AppendedZeroesTest ( pfHash hash, const int hashbits )
+bool AppendedZeroesTest ( pfHash hash, const int hashbits )
 {
 //printf("Verification value 0x%08X ....... PASS\n",verification);
 //printf("Running sanity check 1     ");
@@ -229,7 +229,7 @@ void AppendedZeroesTest ( pfHash hash, const int hashbits )
       if(memcmp(h1,h2,hashbytes) == 0)
       {
         printf(" FAIL !!!!!\n");
-        return;
+        return false;
       }
 
       memcpy(h2,h1,hashbytes);
@@ -237,6 +237,7 @@ void AppendedZeroesTest ( pfHash hash, const int hashbits )
   }
 
   printf(" PASS\n");
+  return true;
 }
 
 //-----------------------------------------------------------------------------

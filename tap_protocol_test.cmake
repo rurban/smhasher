@@ -1,0 +1,25 @@
+function(check_tap hash expected_status expected_last)
+  execute_process(COMMAND "${SMHASHER}" --tap --test=Sanity "${hash}"
+    RESULT_VARIABLE status OUTPUT_VARIABLE output ERROR_VARIABLE diagnostics)
+  if(NOT status EQUAL expected_status)
+    message(FATAL_ERROR "${hash}: exit ${status}, expected ${expected_status}: ${diagnostics}")
+  endif()
+  string(REPLACE "\r\n" "\n" output "${output}")
+  string(REGEX REPLACE "\n#[^\n]*" "" output "${output}")
+  if(NOT output MATCHES "^TAP version 13\nok 1 - Verification\nok 2 - Sanity\n${expected_last} 3 - AppendedZeroes\n1\\.\\.3\n$")
+    message(FATAL_ERROR "${hash}: invalid TAP output: ${output}")
+  endif()
+endfunction()
+
+check_tap(xxh3 0 "ok")
+check_tap(superfast 1 "not ok")
+execute_process(COMMAND "${SMHASHER}" --tap --test=Sanity nonexistent-hash
+  RESULT_VARIABLE invalid OUTPUT_QUIET ERROR_QUIET)
+if(invalid EQUAL 0)
+  message(FATAL_ERROR "An unknown hash must fail in TAP mode")
+endif()
+execute_process(COMMAND "${SMHASHER}" --tap --test=Hashmap donothing32
+  RESULT_VARIABLE skipped OUTPUT_VARIABLE skip_output ERROR_QUIET)
+if(NOT skipped EQUAL 0 OR NOT skip_output MATCHES "ok 1 - Hashmap # SKIP not applicable")
+  message(FATAL_ERROR "A skipped Hashmap test must be reported as TAP SKIP")
+endif()
