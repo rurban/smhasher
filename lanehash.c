@@ -1,18 +1,20 @@
 /* lanehash - C port of the Rust definition (lanehash/src/{spec,short}.rs).
  *
- *   len <= 64: one to four protected 64x64->128 multiplies over the input words with
- *              fixed secrets; the mixed seed ks and the length enter the last multiply;
- *              one unprotected fold per output half.
+ *   len <= 64: one to four protected 64x64->128 multiplies over the input words. Every
+ *              operand is a word XORed with a secret of the seed: ka for first operands,
+ *              kb for second operands, both rotated by a different amount for each
+ *              multiply (a public operand can be set to 1, which erases the other one).
+ *              The length enters the last multiply; one unprotected fold per half.
  *   len >  64: eight chains of eight 64-bit lanes, chain c starting at CT[8c+i] + ks,
  *              ks = fold(seed ^ SEED0, SEED1); 64-byte stripe s goes to chain s mod 8,
  *              per lane x = A ^ w, A = x + lo32(x) * hi32(x); the last 64 bytes close
  *              chain m mod 8 with w ^ len, m = (len - 1) / 64; each chain that saw data
- *              takes one more step with Q; lane-wise XOR; four folds; a final fold with
- *              the length and ks.
+ *              takes one more step with its own constants QT[8c+i]; lane-wise XOR; four
+ *              folds; a final fold with the length and ks.
  *
  * Backends, chosen at compile time, all bit-identical: scalar (LANEHASH_PORTABLE or
  * non-x86), SSE2, AVX2 (-mavx2), AVX-512F (-mavx512f).
- * Verification values (SMHasher): 0xD048C22B (64-bit), 0xC2F39939 (128-bit).
+ * Verification values (SMHasher): 0x36B435A3 (64-bit), 0xB5F2A65D (128-bit).
  *
  * SPDX-License-Identifier: MIT OR Apache-2.0
  */
@@ -114,8 +116,19 @@ LANEHASH_INLINE uint64_t lanehash_step(uint64_t a, uint64_t w) {
     uint64_t x = a ^ w;
     return x + (uint64_t)(uint32_t)x * (x >> 32);
 }
+/* the secrets of one seed: returns ks (long path), sets ka and kb (short path) */
+LANEHASH_INLINE uint64_t lanehash_keys(uint64_t seed, uint64_t *ka, uint64_t *kb) {
+    uint64_t lo, hi;
+    lanehash_mul128(seed ^ LANEHASH_SEED0, LANEHASH_SEED1, &lo, &hi);
+    *ka = lo ^ LANEHASH_KS[0];
+    *kb = lo ^ hi ^ LANEHASH_KS[1];
+    return lo ^ hi;
+}
 LANEHASH_INLINE uint64_t lanehash_ks(uint64_t seed) {
     return lanehash_fold(seed ^ LANEHASH_SEED0, LANEHASH_SEED1);
+}
+LANEHASH_INLINE uint64_t lanehash_rotl(uint64_t x, unsigned r) {
+    return (x << r) | (x >> (64 - r));
 }
 
 /* ------------------------------------------------------------------------- */
@@ -127,7 +140,8 @@ LANEHASH_INLINE uint64_t lanehash_finish_short(uint64_t x, uint64_t y, uint64_t 
     return lanehash_fold(x ^ (LANEHASH_KF[0] ^ ln), y ^ LANEHASH_KF[1]);
 }
 LANEHASH_INLINE uint64_t lanehash_short_le16(const uint8_t *p, size_t len, uint64_t seed, uint64_t *hi) {
-    uint64_t ln = (uint64_t)len, w0, w1 = 0;
+    uint64_t ln = (uint64_t)len, w0, w1 = 0, ka, kb;
+    (void)lanehash_keys(seed, &ka, &kb);
     if (len == 0)
         w0 = 0;
     else if (len <= 3)
@@ -138,25 +152,33 @@ LANEHASH_INLINE uint64_t lanehash_short_le16(const uint8_t *p, size_t len, uint6
         w0 = lanehash_le64(p);
         w1 = lanehash_le64(p + len - 8);
     }
-    w0 ^= LANEHASH_KS[0];
-    w1 ^= LANEHASH_KS[1] ^ ln ^ lanehash_ks(seed);
+    w0 ^= ka;
+    w1 ^= kb ^ ln;
     lanehash_mum(&w0, &w1);
     return lanehash_finish_short(w0, w1, ln, hi);
 }
 LANEHASH_INLINE uint64_t lanehash_short_le32(const uint8_t *p, size_t len, uint64_t seed, uint64_t *hi) {
-    uint64_t ln = (uint64_t)len;
-    uint64_t a0 = lanehash_le64(p) ^ LANEHASH_KS[0], b0 = lanehash_le64(p + 8) ^ LANEHASH_KS[1];
-    uint64_t a1 = lanehash_le64(p + len - 16) ^ LANEHASH_KS[2], b1 = lanehash_le64(p + len - 8) ^ (LANEHASH_KS[3] ^ ln ^ lanehash_ks(seed));
+    uint64_t ln = (uint64_t)len, ka, kb, a0, b0, a1, b1;
+    (void)lanehash_keys(seed, &ka, &kb);
+    a0 = lanehash_le64(p) ^ ka;
+    b0 = lanehash_le64(p + 8) ^ kb;
+    a1 = lanehash_le64(p + len - 16) ^ lanehash_rotl(ka, LANEHASH_ROT1);
+    b1 = lanehash_le64(p + len - 8) ^ (lanehash_rotl(kb, LANEHASH_ROT1) ^ ln);
     lanehash_mum(&a0, &b0);
     lanehash_mum(&a1, &b1);
     return lanehash_finish_short(a0 ^ b1, b0 ^ a1, ln, hi);
 }
 LANEHASH_INLINE uint64_t lanehash_short_le64(const uint8_t *p, size_t len, uint64_t seed, uint64_t *hi) {
-    uint64_t ln = (uint64_t)len;
-    uint64_t a0 = lanehash_le64(p) ^ LANEHASH_KS[0], b0 = lanehash_le64(p + 8) ^ LANEHASH_KS[1];
-    uint64_t a1 = lanehash_le64(p + 16) ^ LANEHASH_KS[2], b1 = lanehash_le64(p + 24) ^ LANEHASH_KS[3];
-    uint64_t a2 = lanehash_le64(p + len - 32) ^ LANEHASH_KS[4], b2 = lanehash_le64(p + len - 24) ^ LANEHASH_KS[5];
-    uint64_t a3 = lanehash_le64(p + len - 16) ^ LANEHASH_KS[6], b3 = lanehash_le64(p + len - 8) ^ (LANEHASH_KS[7] ^ ln ^ lanehash_ks(seed));
+    uint64_t ln = (uint64_t)len, ka, kb, a0, b0, a1, b1, a2, b2, a3, b3;
+    (void)lanehash_keys(seed, &ka, &kb);
+    a0 = lanehash_le64(p) ^ ka;
+    b0 = lanehash_le64(p + 8) ^ kb;
+    a1 = lanehash_le64(p + 16) ^ lanehash_rotl(ka, LANEHASH_ROT1);
+    b1 = lanehash_le64(p + 24) ^ lanehash_rotl(kb, LANEHASH_ROT1);
+    a2 = lanehash_le64(p + len - 32) ^ lanehash_rotl(ka, LANEHASH_ROT2);
+    b2 = lanehash_le64(p + len - 24) ^ lanehash_rotl(kb, LANEHASH_ROT2);
+    a3 = lanehash_le64(p + len - 16) ^ lanehash_rotl(ka, LANEHASH_ROT3);
+    b3 = lanehash_le64(p + len - 8) ^ (lanehash_rotl(kb, LANEHASH_ROT3) ^ ln);
     lanehash_mum(&a0, &b0);
     lanehash_mum(&a1, &b1);
     lanehash_mum(&a2, &b2);
@@ -188,9 +210,9 @@ static uint64_t lanehash_long(const uint8_t *p, size_t n, uint64_t seed, uint64_
         uint64_t s;
         for (s = 0; s < m; s++)
             for (i = 0; i < 8; i++)
-                mv[i] ^= lanehash_step(lanehash_step(LANEHASH_CT[8 * s + i] + ks, lanehash_le64(p + s * 64 + 8 * i)), LANEHASH_Q[i]);
+                mv[i] ^= lanehash_step(lanehash_step(LANEHASH_CT[8 * s + i] + ks, lanehash_le64(p + s * 64 + 8 * i)), LANEHASH_QT[8 * s + i]);
         for (i = 0; i < 8; i++)
-            mv[i] ^= lanehash_step(lanehash_step(LANEHASH_CT[8 * m + i] + ks, lanehash_le64(p + n - 64 + 8 * i) ^ nn), LANEHASH_Q[i]);
+            mv[i] ^= lanehash_step(lanehash_step(LANEHASH_CT[8 * m + i] + ks, lanehash_le64(p + n - 64 + 8 * i) ^ nn), LANEHASH_QT[8 * m + i]);
         return lanehash_finish_lanes(mv, ks, nn, hi);
     }
     {
@@ -211,7 +233,7 @@ static uint64_t lanehash_long(const uint8_t *p, size_t n, uint64_t seed, uint64_
         }
         for (c = 0; c < 8; c++)
             for (i = 0; i < 8; i++)
-                mv[i] ^= lanehash_step(st[8 * c + i], LANEHASH_Q[i]);
+                mv[i] ^= lanehash_step(st[8 * c + i], LANEHASH_QT[8 * c + i]);
         return lanehash_finish_lanes(mv, ks, nn, hi);
     }
 }
@@ -260,7 +282,7 @@ LANEHASH_INLINE lanehash_v lanehash_vstep(lanehash_v a, lanehash_v w) {
     lanehash_v x = lanehash_xor(a, w);
     return lanehash_add(x, lanehash_mul(x, lanehash_srl32(x)));
 }
-/* merged lanes to memory in 128-bit pieces: Zen 4 does not forward a wider store to the
+/* merged lanes to memory in 128-bit pieces: the test CPU does not forward a wider store to the
  * 64-bit loads of the folds */
 LANEHASH_INLINE void lanehash_store_words(uint64_t *out, lanehash_v v) {
 #  if defined(LANEHASH_AVX512)
@@ -285,18 +307,19 @@ LANEHASH_INLINE __m256i LANEHASH_STEP256(__m256i a, __m256i w) {
 }
 LANEHASH_INLINE void lanehash_small(const uint8_t *p, size_t n, uint64_t m, uint64_t ks, uint64_t mv[8]) {
     __m256i ksv = _mm256_set1_epi64x((long long)ks), nv = _mm256_set1_epi64x((long long)n);
-    __m256i q0 = _mm256_loadu_si256((const __m256i *)LANEHASH_Q), q1 = _mm256_loadu_si256((const __m256i *)(LANEHASH_Q + 4));
     __m256i m0 = _mm256_setzero_si256(), m1 = _mm256_setzero_si256();
     uint64_t s;
     for (s = 0; s < m; s++) {
         __m256i a0 = _mm256_add_epi64(_mm256_loadu_si256((const __m256i *)(LANEHASH_CT + 8 * s)), ksv);
         __m256i a1 = _mm256_add_epi64(_mm256_loadu_si256((const __m256i *)(LANEHASH_CT + 8 * s + 4)), ksv);
+        __m256i q0 = _mm256_loadu_si256((const __m256i *)(LANEHASH_QT + 8 * s)), q1 = _mm256_loadu_si256((const __m256i *)(LANEHASH_QT + 8 * s + 4));
         m0 = _mm256_xor_si256(m0, LANEHASH_STEP256(LANEHASH_STEP256(a0, _mm256_loadu_si256((const __m256i *)(p + s * 64))), q0));
         m1 = _mm256_xor_si256(m1, LANEHASH_STEP256(LANEHASH_STEP256(a1, _mm256_loadu_si256((const __m256i *)(p + s * 64 + 32))), q1));
     }
     {
         __m256i a0 = _mm256_add_epi64(_mm256_loadu_si256((const __m256i *)(LANEHASH_CT + 8 * m)), ksv);
         __m256i a1 = _mm256_add_epi64(_mm256_loadu_si256((const __m256i *)(LANEHASH_CT + 8 * m + 4)), ksv);
+        __m256i q0 = _mm256_loadu_si256((const __m256i *)(LANEHASH_QT + 8 * m)), q1 = _mm256_loadu_si256((const __m256i *)(LANEHASH_QT + 8 * m + 4));
         m0 = _mm256_xor_si256(m0, LANEHASH_STEP256(LANEHASH_STEP256(a0, _mm256_xor_si256(_mm256_loadu_si256((const __m256i *)(p + n - 64)), nv)), q0));
         m1 = _mm256_xor_si256(m1, LANEHASH_STEP256(LANEHASH_STEP256(a1, _mm256_xor_si256(_mm256_loadu_si256((const __m256i *)(p + n - 32)), nv)), q1));
     }
@@ -307,25 +330,23 @@ LANEHASH_INLINE void lanehash_small(const uint8_t *p, size_t n, uint64_t m, uint
 }
 #  else
 LANEHASH_INLINE void lanehash_small(const uint8_t *p, size_t n, uint64_t m, uint64_t ks, uint64_t mv[8]) {
-    lanehash_v ksv = lanehash_set1(ks), nv = lanehash_set1(n), q[LANEHASH_R], acc[LANEHASH_R];
+    lanehash_v ksv = lanehash_set1(ks), nv = lanehash_set1(n), acc[LANEHASH_R];
     uint64_t s;
     unsigned r;
     LANEHASH_UNROLL
-    for (r = 0; r < LANEHASH_R; r++) {
-        q[r] = lanehash_loadu(LANEHASH_Q + r * LANEHASH_WPR);
+    for (r = 0; r < LANEHASH_R; r++)
         acc[r] = lanehash_zero();
-    }
     for (s = 0; s < m; s++) {
         LANEHASH_UNROLL
         for (r = 0; r < LANEHASH_R; r++) {
             lanehash_v a = lanehash_add(lanehash_loadu(LANEHASH_CT + 8 * s + r * LANEHASH_WPR), ksv);
-            acc[r] = lanehash_xor(acc[r], lanehash_vstep(lanehash_vstep(a, lanehash_loadu(p + s * 64 + r * LANEHASH_W)), q[r]));
+            acc[r] = lanehash_xor(acc[r], lanehash_vstep(lanehash_vstep(a, lanehash_loadu(p + s * 64 + r * LANEHASH_W)), lanehash_loadu(LANEHASH_QT + 8 * s + r * LANEHASH_WPR)));
         }
     }
     LANEHASH_UNROLL
     for (r = 0; r < LANEHASH_R; r++) {
         lanehash_v a = lanehash_add(lanehash_loadu(LANEHASH_CT + 8 * m + r * LANEHASH_WPR), ksv);
-        acc[r] = lanehash_xor(acc[r], lanehash_vstep(lanehash_vstep(a, lanehash_xor(lanehash_loadu(p + n - 64 + r * LANEHASH_W), nv)), q[r]));
+        acc[r] = lanehash_xor(acc[r], lanehash_vstep(lanehash_vstep(a, lanehash_xor(lanehash_loadu(p + n - 64 + r * LANEHASH_W), nv)), lanehash_loadu(LANEHASH_QT + 8 * m + r * LANEHASH_WPR)));
     }
     LANEHASH_UNROLL
     for (r = 0; r < LANEHASH_R; r++)
@@ -342,7 +363,7 @@ static uint64_t lanehash_long(const uint8_t *p, size_t n, uint64_t seed, uint64_
         return lanehash_finish_lanes(mv, ks, nn, hi);
     }
     {
-        lanehash_v ksv = lanehash_set1(ks), nv = lanehash_set1(nn), q[LANEHASH_R], acc[LANEHASH_R];
+        lanehash_v ksv = lanehash_set1(ks), nv = lanehash_set1(nn), acc[LANEHASH_R];
         unsigned r;
         uint64_t s;
 #  if LANEHASH_R == 4
@@ -368,14 +389,12 @@ static uint64_t lanehash_long(const uint8_t *p, size_t n, uint64_t seed, uint64_
                 ch[r] = lanehash_vstep(ch[r], lanehash_xor(lanehash_loadu(p + n - 64 + r * LANEHASH_W), nv));
         }
         LANEHASH_UNROLL
-        for (r = 0; r < LANEHASH_R; r++) {
-            q[r] = lanehash_loadu(LANEHASH_Q + r * LANEHASH_WPR);
+        for (r = 0; r < LANEHASH_R; r++)
             acc[r] = lanehash_zero();
-        }
         for (c = 0; c < 8; c++) {
             LANEHASH_UNROLL
             for (r = 0; r < LANEHASH_R; r++)
-                acc[r] = lanehash_xor(acc[r], lanehash_vstep(st.v[4 * c + r], q[r]));
+                acc[r] = lanehash_xor(acc[r], lanehash_vstep(st.v[4 * c + r], lanehash_loadu(LANEHASH_QT + 8 * c + r * LANEHASH_WPR)));
         }
 #  else
         /* eight named chains (an array of chains stays on the stack with gcc: 61 spills
@@ -400,11 +419,9 @@ static uint64_t lanehash_long(const uint8_t *p, size_t n, uint64_t seed, uint64_
             LANEHASH_FOR8(LANEHASH_TAIL)
         }
         LANEHASH_UNROLL
-        for (r = 0; r < LANEHASH_R; r++) {
-            q[r] = lanehash_loadu(LANEHASH_Q + r * LANEHASH_WPR);
+        for (r = 0; r < LANEHASH_R; r++)
             acc[r] = lanehash_zero();
-        }
-#    define LANEHASH_MERGE(c) LANEHASH_UNROLL for (r = 0; r < LANEHASH_R; r++) acc[r] = lanehash_xor(acc[r], lanehash_vstep(a##c[r], q[r]));
+#    define LANEHASH_MERGE(c) LANEHASH_UNROLL for (r = 0; r < LANEHASH_R; r++) acc[r] = lanehash_xor(acc[r], lanehash_vstep(a##c[r], lanehash_loadu(LANEHASH_QT + 8 * c + r * LANEHASH_WPR)));
         LANEHASH_FOR8(LANEHASH_MERGE)
 #    undef LANEHASH_FOR8
 #    undef LANEHASH_INIT

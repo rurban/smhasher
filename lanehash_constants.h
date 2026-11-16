@@ -26,14 +26,34 @@ static const uint64_t LANEHASH_CT[64] = {
     UINT64_C(0xf82232dbf8e9a58e), UINT64_C(0x156b61fddf16753c), UINT64_C(0xab5205adc81e502f), UINT64_C(0x608723fdfab53d32),
     UINT64_C(0x82df003e487b3153), UINT64_C(0xa08c6fcabb575c9e), UINT64_C(0xdb6917df2e56871a), UINT64_C(0xc3ff7e28f6a842d5),
 };
-static const uint64_t LANEHASH_Q[8] = {
+/* merge constants per chain: chain c lane i uses word (i + c) mod 8 of the eight
+ * merge words (pi words 88..95) */
+static const uint64_t LANEHASH_QT[64] = {
     UINT64_C(0x73554f8cc63267ac), UINT64_C(0xc858cabbb0275b69), UINT64_C(0xa011f0b85da3ffe1), UINT64_C(0xb88321fd983dfa10),
     UINT64_C(0x5bd3d12d6cb5fc4a), UINT64_C(0x6545f8b679e4539a), UINT64_C(0x9097fb4bbc498ed2), UINT64_C(0x337ecba4daf2dde1),
+    UINT64_C(0xc858cabbb0275b69), UINT64_C(0xa011f0b85da3ffe1), UINT64_C(0xb88321fd983dfa10), UINT64_C(0x5bd3d12d6cb5fc4a),
+    UINT64_C(0x6545f8b679e4539a), UINT64_C(0x9097fb4bbc498ed2), UINT64_C(0x337ecba4daf2dde1), UINT64_C(0x73554f8cc63267ac),
+    UINT64_C(0xa011f0b85da3ffe1), UINT64_C(0xb88321fd983dfa10), UINT64_C(0x5bd3d12d6cb5fc4a), UINT64_C(0x6545f8b679e4539a),
+    UINT64_C(0x9097fb4bbc498ed2), UINT64_C(0x337ecba4daf2dde1), UINT64_C(0x73554f8cc63267ac), UINT64_C(0xc858cabbb0275b69),
+    UINT64_C(0xb88321fd983dfa10), UINT64_C(0x5bd3d12d6cb5fc4a), UINT64_C(0x6545f8b679e4539a), UINT64_C(0x9097fb4bbc498ed2),
+    UINT64_C(0x337ecba4daf2dde1), UINT64_C(0x73554f8cc63267ac), UINT64_C(0xc858cabbb0275b69), UINT64_C(0xa011f0b85da3ffe1),
+    UINT64_C(0x5bd3d12d6cb5fc4a), UINT64_C(0x6545f8b679e4539a), UINT64_C(0x9097fb4bbc498ed2), UINT64_C(0x337ecba4daf2dde1),
+    UINT64_C(0x73554f8cc63267ac), UINT64_C(0xc858cabbb0275b69), UINT64_C(0xa011f0b85da3ffe1), UINT64_C(0xb88321fd983dfa10),
+    UINT64_C(0x6545f8b679e4539a), UINT64_C(0x9097fb4bbc498ed2), UINT64_C(0x337ecba4daf2dde1), UINT64_C(0x73554f8cc63267ac),
+    UINT64_C(0xc858cabbb0275b69), UINT64_C(0xa011f0b85da3ffe1), UINT64_C(0xb88321fd983dfa10), UINT64_C(0x5bd3d12d6cb5fc4a),
+    UINT64_C(0x9097fb4bbc498ed2), UINT64_C(0x337ecba4daf2dde1), UINT64_C(0x73554f8cc63267ac), UINT64_C(0xc858cabbb0275b69),
+    UINT64_C(0xa011f0b85da3ffe1), UINT64_C(0xb88321fd983dfa10), UINT64_C(0x5bd3d12d6cb5fc4a), UINT64_C(0x6545f8b679e4539a),
+    UINT64_C(0x337ecba4daf2dde1), UINT64_C(0x73554f8cc63267ac), UINT64_C(0xc858cabbb0275b69), UINT64_C(0xa011f0b85da3ffe1),
+    UINT64_C(0xb88321fd983dfa10), UINT64_C(0x5bd3d12d6cb5fc4a), UINT64_C(0x6545f8b679e4539a), UINT64_C(0x9097fb4bbc498ed2),
 };
-static const uint64_t LANEHASH_KS[8] = {
-    UINT64_C(0xe8c6e4ce4113fb62), UINT64_C(0x014c7736daca20ef), UINT64_C(0xb41ff12bfe9e7ed0), UINT64_C(0x989190ae4ddadb95),
-    UINT64_C(0xa0d5936b718eadea), UINT64_C(0xe025c7afd0d18ed0), UINT64_C(0xb794758e2f5b3c8e), UINT64_C(0x642b12f2fbe2f68f),
+/* XORed into the two seed secrets of the short path */
+static const uint64_t LANEHASH_KS[2] = {
+    UINT64_C(0xe8c6e4ce4113fb62), UINT64_C(0x014c7736daca20ef),
 };
+/* rotation of both secrets for multiply j of a short class */
+#define LANEHASH_ROT1 19
+#define LANEHASH_ROT2 38
+#define LANEHASH_ROT3 57
 static const uint64_t LANEHASH_KF[4] = {
     UINT64_C(0x1cf00d9012b88888), UINT64_C(0x1cc38f68a05ead4f), UINT64_C(0xadc1a8b391f1cfd1), UINT64_C(0x77170ebe18222f2f),
 };
