@@ -25,20 +25,33 @@ inline static uint64_t rotate_right(uint64_t v, unsigned k)
     return (v >> k) | (v << (64 - k));
 }
 
-// unaligned reads, fast and safe on Nehalem and later microarchitectures
+// Read little-endian words from possibly unaligned byte buffers.
 inline static uint64_t read_u64(const void * const ptr)
 {
-    return static_cast<uint64_t>(*reinterpret_cast<const uint64_t*>(ptr));
+    const uint8_t *p = static_cast<const uint8_t *>(ptr);
+    return uint64_t(p[0]) | uint64_t(p[1]) << 8 | uint64_t(p[2]) << 16 |
+           uint64_t(p[3]) << 24 | uint64_t(p[4]) << 32 | uint64_t(p[5]) << 40 |
+           uint64_t(p[6]) << 48 | uint64_t(p[7]) << 56;
 }
 
 inline static uint64_t read_u32(const void * const ptr)
 {
-    return static_cast<uint64_t>(*reinterpret_cast<const uint32_t*>(ptr));
+    const uint8_t *p = static_cast<const uint8_t *>(ptr);
+    return uint64_t(p[0]) | uint64_t(p[1]) << 8 |
+           uint64_t(p[2]) << 16 | uint64_t(p[3]) << 24;
 }
 
 inline static uint64_t read_u16(const void * const ptr)
 {
-    return static_cast<uint64_t>(*reinterpret_cast<const uint16_t*>(ptr));
+    const uint8_t *p = static_cast<const uint8_t *>(ptr);
+    return uint64_t(p[0]) | uint64_t(p[1]) << 8;
+}
+
+inline static void write_u64(void *ptr, uint64_t value)
+{
+    uint8_t *p = static_cast<uint8_t *>(ptr);
+    for (unsigned i = 0; i < 8; ++i)
+        p[i] = static_cast<uint8_t>(value >> (8 * i));
 }
 
 inline static uint64_t read_u8 (const void * const ptr)

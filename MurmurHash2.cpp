@@ -2,18 +2,20 @@
 // MurmurHash2 was written by Austin Appleby, and is placed in the public
 // domain. The author hereby disclaims copyright to this source code.
 
-// Note - This code makes a few assumptions about how your machine behaves -
-
-// 1. We can read a 4-byte value from any address without crashing
-// 2. sizeof(int) == 4
-
-// And it has a few limitations -
-
-// 1. It will not work incrementally.
-// 2. It will not produce the same results on little-endian and big-endian
-//    machines.
+// Blocks are read as little-endian bytes, including from unaligned addresses.
 
 #include "MurmurHash2.h"
+
+static inline uint32_t murmur2_load32(const unsigned char *p)
+{
+  return uint32_t(p[0]) | (uint32_t(p[1]) << 8) |
+         (uint32_t(p[2]) << 16) | (uint32_t(p[3]) << 24);
+}
+
+static inline uint64_t murmur2_load64(const unsigned char *p)
+{
+  return uint64_t(murmur2_load32(p)) | (uint64_t(murmur2_load32(p + 4)) << 32);
+}
 
 //-----------------------------------------------------------------------------
 // Platform-specific functions and macros
@@ -53,7 +55,7 @@ uint32_t MurmurHash2 ( const void * key, int len, uint32_t seed )
 
   while(len >= 4)
   {
-    uint32_t k = *(uint32_t*)data;
+    uint32_t k = murmur2_load32(data);
 
     k *= m;
     k ^= k >> r;
@@ -89,8 +91,7 @@ uint32_t MurmurHash2 ( const void * key, int len, uint32_t seed )
 //-----------------------------------------------------------------------------
 // MurmurHash2, 64-bit versions, by Austin Appleby
 
-// The same caveats as 32-bit MurmurHash2 apply here - beware of alignment 
-// and endian-ness issues if used across multiple platforms.
+// Blocks are read in little-endian order on every platform.
 
 // 64-bit hash for 64-bit platforms
 // objsize: 0x170-0x321: 433
@@ -102,12 +103,13 @@ uint64_t MurmurHash64A ( const void * key, int len, uint64_t seed )
 
   uint64_t h = seed ^ (len * m);
 
-  const uint64_t * data = (const uint64_t *)key;
-  const uint64_t * end = data + (len/8);
+  const unsigned char * data = (const unsigned char *)key;
+  const unsigned char * end = data + (len/8)*8;
 
   while(data != end)
   {
-    uint64_t k = *data++;
+    uint64_t k = murmur2_load64(data);
+    data += 8;
 
     k *= m; 
     k ^= k >> r; 
@@ -150,16 +152,18 @@ uint64_t MurmurHash64B ( const void * key, int len, uint64_t seed )
   uint32_t h1 = uint32_t(seed) ^ len;
   uint32_t h2 = uint32_t(seed >> 32);
 
-  const uint32_t * data = (const uint32_t *)key;
+  const unsigned char * data = (const unsigned char *)key;
 
   while(len >= 8)
   {
-    uint32_t k1 = *data++;
+    uint32_t k1 = murmur2_load32(data);
+    data += 4;
     k1 *= m; k1 ^= k1 >> r; k1 *= m;
     h1 *= m; h1 ^= k1;
     len -= 4;
 
-    uint32_t k2 = *data++;
+    uint32_t k2 = murmur2_load32(data);
+    data += 4;
     k2 *= m; k2 ^= k2 >> r; k2 *= m;
     h2 *= m; h2 ^= k2;
     len -= 4;
@@ -167,7 +171,8 @@ uint64_t MurmurHash64B ( const void * key, int len, uint64_t seed )
 
   if(len >= 4)
   {
-    uint32_t k1 = *data++;
+    uint32_t k1 = murmur2_load32(data);
+    data += 4;
     k1 *= m; k1 ^= k1 >> r; k1 *= m;
     h1 *= m; h1 ^= k1;
     len -= 4;
@@ -219,7 +224,7 @@ uint32_t MurmurHash2A ( const void * key, int len, uint32_t seed )
 
   while(len >= 4)
   {
-    uint32_t k = *(uint32_t*)data;
+    uint32_t k = murmur2_load32(data);
 
     mmix(h,k);
 
@@ -282,7 +287,7 @@ public:
 
     while(len >= 4)
     {
-      uint32_t k = *(uint32_t*)data;
+      uint32_t k = murmur2_load32(data);
 
       mmix(m_hash,k);
 

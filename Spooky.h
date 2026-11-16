@@ -12,10 +12,7 @@
 // All 1 or 2 bit deltas achieve avalanche within 1% bias per output bit.
 //
 // This was developed for and tested on 64-bit x86-compatible processors.
-// It assumes the processor is little-endian.  There is a macro
-// controlling whether unaligned reads are allowed (by default they are).
-// This should be an equally good hash on big-endian machines, but it will
-// compute different results on them than on little-endian machines.
+// Input words are interpreted in little-endian byte order.
 //
 // Google's CityHash has similar specs to SpookyHash, and CityHash is faster
 // on some platforms.  MD4 and MD5 also have similar specs, but they are orders
@@ -120,6 +117,21 @@ public:
         return (x << k) | (x >> (64 - k));
     }
 
+    static INLINE uint64 Read64(const void *ptr)
+    {
+        const uint8 *p = (const uint8 *)ptr;
+        return uint64(p[0]) | uint64(p[1]) << 8 | uint64(p[2]) << 16 |
+               uint64(p[3]) << 24 | uint64(p[4]) << 32 | uint64(p[5]) << 40 |
+               uint64(p[6]) << 48 | uint64(p[7]) << 56;
+    }
+
+    static INLINE uint32 Read32(const void *ptr)
+    {
+        const uint8 *p = (const uint8 *)ptr;
+        return uint32(p[0]) | uint32(p[1]) << 8 | uint32(p[2]) << 16 |
+               uint32(p[3]) << 24;
+    }
+
     //
     // This is used if the input is 96 bytes long or longer.
     //
@@ -139,18 +151,18 @@ public:
         uint64 &s4, uint64 &s5, uint64 &s6, uint64 &s7,
         uint64 &s8, uint64 &s9, uint64 &s10,uint64 &s11)
     {
-      s0 += data[0];    s2 ^= s10;    s11 ^= s0;    s0 = Rot64(s0,11);    s11 += s1;
-      s1 += data[1];    s3 ^= s11;    s0 ^= s1;    s1 = Rot64(s1,32);    s0 += s2;
-      s2 += data[2];    s4 ^= s0;    s1 ^= s2;    s2 = Rot64(s2,43);    s1 += s3;
-      s3 += data[3];    s5 ^= s1;    s2 ^= s3;    s3 = Rot64(s3,31);    s2 += s4;
-      s4 += data[4];    s6 ^= s2;    s3 ^= s4;    s4 = Rot64(s4,17);    s3 += s5;
-      s5 += data[5];    s7 ^= s3;    s4 ^= s5;    s5 = Rot64(s5,28);    s4 += s6;
-      s6 += data[6];    s8 ^= s4;    s5 ^= s6;    s6 = Rot64(s6,39);    s5 += s7;
-      s7 += data[7];    s9 ^= s5;    s6 ^= s7;    s7 = Rot64(s7,57);    s6 += s8;
-      s8 += data[8];    s10 ^= s6;    s7 ^= s8;    s8 = Rot64(s8,55);    s7 += s9;
-      s9 += data[9];    s11 ^= s7;    s8 ^= s9;    s9 = Rot64(s9,54);    s8 += s10;
-      s10 += data[10];    s0 ^= s8;    s9 ^= s10;    s10 = Rot64(s10,22);    s9 += s11;
-      s11 += data[11];    s1 ^= s9;    s10 ^= s11;    s11 = Rot64(s11,46);    s10 += s0;
+      s0 += Read64((const uint8 *)data + 0);  s2 ^= s10; s11 ^= s0;  s0 = Rot64(s0,11); s11 += s1;
+      s1 += Read64((const uint8 *)data + 8);  s3 ^= s11; s0 ^= s1;  s1 = Rot64(s1,32); s0 += s2;
+      s2 += Read64((const uint8 *)data + 16); s4 ^= s0; s1 ^= s2; s2 = Rot64(s2,43); s1 += s3;
+      s3 += Read64((const uint8 *)data + 24); s5 ^= s1; s2 ^= s3; s3 = Rot64(s3,31); s2 += s4;
+      s4 += Read64((const uint8 *)data + 32); s6 ^= s2; s3 ^= s4; s4 = Rot64(s4,17); s3 += s5;
+      s5 += Read64((const uint8 *)data + 40); s7 ^= s3; s4 ^= s5; s5 = Rot64(s5,28); s4 += s6;
+      s6 += Read64((const uint8 *)data + 48); s8 ^= s4; s5 ^= s6; s6 = Rot64(s6,39); s5 += s7;
+      s7 += Read64((const uint8 *)data + 56); s9 ^= s5; s6 ^= s7; s7 = Rot64(s7,57); s6 += s8;
+      s8 += Read64((const uint8 *)data + 64); s10 ^= s6; s7 ^= s8; s8 = Rot64(s8,55); s7 += s9;
+      s9 += Read64((const uint8 *)data + 72); s11 ^= s7; s8 ^= s9; s9 = Rot64(s9,54); s8 += s10;
+      s10 += Read64((const uint8 *)data + 80); s0 ^= s8; s9 ^= s10; s10 = Rot64(s10,22); s9 += s11;
+      s11 += Read64((const uint8 *)data + 88); s1 ^= s9; s10 ^= s11; s11 = Rot64(s11,46); s10 += s0;
     }
 
     //

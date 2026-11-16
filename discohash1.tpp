@@ -46,13 +46,11 @@ namespace discohash1 {
   static const uint64_t Q         = UINT64_C(13166748625691186689);
 
   static inline uint64_t GET_U64(const uint8_t * b, const uint32_t i) {
-      uint64_t n;
-      memcpy(&n, &b[i], 8);
-      return n;
+      return disco_load_le64(b + i);
   }
 
   static inline void PUT_U64(uint64_t n, uint8_t * b, const uint32_t i) {
-      memcpy(&b[i], &n, 8);
+      disco_store_le64(b + i, n);
   }
 
   //--------
@@ -105,9 +103,9 @@ namespace discohash1 {
       uint8_t  counter8 = 137;
 
       for (index = 0; index < Len; index++) {
-          uint64_t blk = GET_U64(m8, index * 8);
+          uint64_t blk = reread ? reinterpret_cast<const uint64_t *>(m8)[index] : GET_U64(m8, index * 8);
           ds[sindex] += ROTR64(blk + index + counter + 1, 23);
-          if (reread) { blk = GET_U64(m8, index * 8); }
+          if (reread) { blk = reinterpret_cast<const uint64_t *>(m8)[index]; }
           counter    += ~blk + 1;
           if (sindex == HSTATE64M) {
               mix(ds, 0);
@@ -124,7 +122,10 @@ namespace discohash1 {
       sindex = Len & (STATEM);
 
       for (index = Len; index < len; index++) {
-          ((uint8_t *)ds)[false ? (sindex ^ 7) : sindex] += ROTR8(m8[index] + index + counter8 + 1, 23);
+          const unsigned shift = (sindex & 7) * 8;
+          uint8_t byte = (uint8_t)(ds[sindex >> 3] >> shift);
+          byte += ROTR8(m8[index] + index + counter8 + 1, 23);
+          ds[sindex >> 3] = (ds[sindex >> 3] & ~(UINT64_C(0xff) << shift)) | (uint64_t(byte) << shift);
           // I also wonder if this was intended to be m8[index], to
           // mirror the primary 8-byte loop above...
           //
@@ -151,25 +152,14 @@ namespace discohash1 {
   void DISCoHAsH( const void * in, int len, const seed_t seed, void * out ) {
       const uint8_t * key8Arr = (const uint8_t *)in;
       uint8_t *       out8    = (uint8_t *      )out;
-      uint32_t        seedbuf[4];
+      uint64_t        seedbuf[2];
 
       if (len >= UINT32_C(0xffffffff)) { return; }
 
       // the cali number from the Matrix (1999)
       uint32_t seed32 = seed;
-      if (!false) {
-          seedbuf[0]  = 0xc5550690;
-          seedbuf[0] -= seed32;
-          seedbuf[1]  =   1 + seed32;
-          seedbuf[2]  = ~(1 - seed32);
-          seedbuf[3]  =  (1 + seed32) * 0xf00dacca;
-      } else {
-          seedbuf[1]  = 0xc5550690;
-          seedbuf[1] -= seed32;
-          seedbuf[0]  =   1 + seed32;
-          seedbuf[3]  = ~(1 - seed32);
-          seedbuf[2]  =  (1 + seed32) * 0xf00dacca;
-      }
+      seedbuf[0] = uint64_t(0xc5550690U - seed32) | (uint64_t(1U + seed32) << 32);
+      seedbuf[1] = uint64_t(~(1U - seed32)) | (uint64_t((1U + seed32) * 0xf00daccaU) << 32);
 
       uint64_t ds[STATE / 8];
       // nothing up my sleeve
@@ -178,13 +168,9 @@ namespace discohash1 {
       ds[2] = UINT64_C(0xaccadacca80081e5);
       ds[3] = UINT64_C(0xf00baaf00f00baaa);
 
-      // The mixing in of the seed array does not need bswap set, since
-      // the if() above will order the bytes correctly for that
-      // variable. The mixing of the state with itself also doesn't need
-      // bswap set, because the endianness of the data will naturally
-      // always match the endianness of the ds[] values.
+      // Seed and state words are already native numeric values.
       round<false>(ds, key8Arr           , (uint32_t)len);
-      round<false>(ds, (uint8_t *)seedbuf,            16);
+      round< true>(ds, (uint8_t *)seedbuf,            16);
       round< true>(ds, (uint8_t *)ds     , STATE        );
 
       uint64_t h[STATE64] = { 0 };

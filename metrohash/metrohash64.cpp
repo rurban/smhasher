@@ -148,7 +148,7 @@ void MetroHash64::Finalize(uint8_t * const hash)
 
     // do any endian conversion here
 
-    memcpy(hash, state.v, 8);
+    write_u64(hash, state.v[0]);
 }
 
 
@@ -220,7 +220,7 @@ void MetroHash64::Hash(const uint8_t * buffer, const uint64_t length, uint8_t * 
     h *= k0;
     h ^= rotate_right(h, 29);
 
-    memcpy(hash, &h, 8);
+    write_u64(hash, h);
 }
 
 
@@ -327,7 +327,7 @@ void metrohash64_1(const uint8_t * key, uint64_t len, uint32_t seed, uint8_t * o
     hash *= k0;
     hash ^= rotate_right(hash, 33);
 
-    memcpy(out, &hash, 8);
+    write_u64(out, hash);
 }
 
 
@@ -404,7 +404,7 @@ void metrohash64_2(const uint8_t * key, uint64_t len, uint32_t seed, uint8_t * o
     hash *= k0;
     hash ^= rotate_right(hash, 29);
 
-    memcpy(out, &hash, 8);
+    write_u64(out, hash);
 }
 
 

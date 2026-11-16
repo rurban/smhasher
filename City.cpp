@@ -33,17 +33,6 @@
 
 using namespace std;
 
-static uint64_t UNALIGNED_LOAD64(const char *p) {
-  uint64_t result;
-  memcpy(&result, p, sizeof(result));
-  return result;
-}
-
-static uint32_t UNALIGNED_LOAD32(const char *p) {
-  uint32_t result;
-  memcpy(&result, p, sizeof(result));
-  return result;
-}
 
 #if defined(_MSC_VER) || defined(__MINGW32__)
 
@@ -91,13 +80,6 @@ static uint32_t UNALIGNED_LOAD32(const char *p) {
 
 #endif
 
-#ifdef WORDS_BIGENDIAN
-#define uint32_in_expected_order(x) (bswap_32(x))
-#define uint64_in_expected_order(x) (bswap_64(x))
-#else
-#define uint32_in_expected_order(x) (x)
-#define uint64_in_expected_order(x) (x)
-#endif
 
 #if !defined(LIKELY)
 #if HAVE_BUILTIN_EXPECT
@@ -108,11 +90,16 @@ static uint32_t UNALIGNED_LOAD32(const char *p) {
 #endif
 
 static uint64_t Fetch64(const char *p) {
-  return uint64_in_expected_order(UNALIGNED_LOAD64(p));
+  const unsigned char *b = reinterpret_cast<const unsigned char *>(p);
+  return uint64_t(b[0]) | uint64_t(b[1]) << 8 | uint64_t(b[2]) << 16 |
+         uint64_t(b[3]) << 24 | uint64_t(b[4]) << 32 | uint64_t(b[5]) << 40 |
+         uint64_t(b[6]) << 48 | uint64_t(b[7]) << 56;
 }
 
 static uint32_t Fetch32(const char *p) {
-  return uint32_in_expected_order(UNALIGNED_LOAD32(p));
+  const unsigned char *b = reinterpret_cast<const unsigned char *>(p);
+  return uint32_t(b[0]) | uint32_t(b[1]) << 8 | uint32_t(b[2]) << 16 |
+         uint32_t(b[3]) << 24;
 }
 
 // Some primes between 2^63 and 2^64 for various uses.

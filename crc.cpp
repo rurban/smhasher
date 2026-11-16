@@ -96,5 +96,6 @@ void crc32 ( const void * key, int len, uint32_t seed, void * out )
 
   crc ^= 0xffffffffL;
 
-  *(uint32_t*)out = crc;
+  uint8_t *result = (uint8_t *)out;
+  for (unsigned i = 0; i < 4; ++i) result[i] = (uint8_t)(crc >> (8 * i));
 }

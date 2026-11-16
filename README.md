@@ -313,14 +313,24 @@ the 2nd sanity AppendZeroes test against `\0` invariance is security relevant.
 Tabulation tables use a local deterministic generator matching the historical
 glibc sequence instead of the host C library's `rand()`. This preserves prior
 glibc results but changes results produced by other libc implementations, and
-does not modify the process-wide random state. Tabulation's input-word byte
-order remains platform-dependent.
+does not modify the process-wide random state. Tabulation input words are
+decoded as little-endian, including on big-endian targets.
 
 SuperFastHash uses explicit little-endian reads and a fixed signed-byte tail,
 so its results do not depend on alignment or the compiler's `char` signedness.
 This changes its old output on targets where `char` was unsigned. ARMv6 CPUs,
 including the Raspberry Pi Model B, do not support NEON; build without
 `HAVE_NEON` on those machines.
+
+The corrected hash adapters serialize numeric results in little-endian byte
+order, and portable implementations decode little-endian words explicitly.
+This changes previous results on big-endian targets. SHA-1 now follows the
+word order on all platforms; its old Linux results used a nonstandard order,
+so the SHA-1 verification values and hash outputs have changed.
+
+The VHASH adapters now respect the supplied length, use a fixed key with an
+effective seed, and zero-pad only the final NH block. Their verification values
+therefore differ from the former unseeded, over-reading implementation.
 
 Columns
 -------

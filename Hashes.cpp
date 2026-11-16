@@ -19,6 +19,20 @@ static inline uint32_t sm_get_u32_le(const uint8_t *p)
   return (uint32_t)p[0] | ((uint32_t)p[1] << 8) |
          ((uint32_t)p[2] << 16) | ((uint32_t)p[3] << 24);
 }
+static inline uint16_t sm_get_u16_le(const uint8_t *p)
+{
+  return (uint16_t)((uint16_t)p[0] | ((uint16_t)p[1] << 8));
+}
+static inline uint64_t sm_get_u64_le(const uint8_t *p)
+{
+  return (uint64_t)sm_get_u32_le(p) | ((uint64_t)sm_get_u32_le(p + 4) << 32);
+}
+static inline size_t sm_get_size_le(const uint8_t *p)
+{
+  size_t v = 0;
+  for (unsigned i = 0; i < sizeof(v); ++i) v |= (size_t)p[i] << (8 * i);
+  return v;
+}
 static inline void sm_put_u32_le(uint32_t v, void *out)
 {
   uint8_t *o = (uint8_t *)out;
@@ -100,7 +114,7 @@ NoopOAATReadHash(const void *key, int len, uint32_t seed, void *out)
   while (data < end) {
     h = *data++;
   }
-  *(uint32_t *) out = h;
+  sm_store32(out, h);
 }
 
 //-----------------------------------------------------------------------------
@@ -128,18 +142,14 @@ size_t
 fibonacci(const char *key, int len, uint32_t seed)
 {
   size_t h = (size_t)seed;
-  size_t *dw = (size_t *)key; //word stepper
-  const size_t *const endw = &((const size_t*)key)[len/sizeof(size_t)];
-  while (dw < endw) {
-    h += *dw++ * UINT64_C(11400714819323198485);
+  const uint8_t *p = (const uint8_t *)key;
+  while (len >= (int)sizeof(size_t)) {
+    h += sm_get_size_le(p) * UINT64_C(11400714819323198485);
+    p += sizeof(size_t);
+    len -= sizeof(size_t);
   }
-  if (len & (sizeof(size_t)-1)) {
-    uint8_t *dc = (uint8_t*)dw; //byte stepper
-    const uint8_t *const endc = &((const uint8_t*)key)[len];
-    while (dc < endc) {
-      h += *dc++ * UINT64_C(11400714819323198485);
-    }
-  }
+  while (len-- > 0)
+    h += *p++ * UINT64_C(11400714819323198485);
   return h;
 }
 
@@ -148,8 +158,7 @@ size_t
 FNV2(const char *key, int len, size_t seed)
 {
   size_t h;
-  size_t *dw = (size_t *)key; //word stepper
-  const size_t *const endw = &((const size_t*)key)[len/sizeof(size_t)];
+  const uint8_t *p = (const uint8_t *)key;
 
 #ifdef HAVE_BIT32
   h = seed ^ UINT32_C(2166136261);
@@ -157,73 +166,23 @@ FNV2(const char *key, int len, size_t seed)
   h = seed ^ UINT64_C(0xcbf29ce484222325);
 #endif
 
-#ifdef HAVE_ALIGNED_ACCESS_REQUIRED
-  // avoid ubsan, misaligned writes
-  int i = (uintptr_t)dw % sizeof (size_t);
-  if (i) {
-    uint8_t *dc = (uint8_t*)key;
-    switch (i) {
-    case 1:
-      h ^= *dc++;
-#ifdef HAVE_BIT32
-      h *= UINT32_C(16777619);
-#else
-      h *= UINT64_C(0x100000001b3);
-#endif
-    case 2:
-      h ^= *dc++;
-#ifdef HAVE_BIT32
-      h *= UINT32_C(16777619);
-#else
-      h *= UINT64_C(0x100000001b3);
-#endif
-    case 3:
-      h ^= *dc++;
-#ifdef HAVE_BIT32
-      h *= UINT32_C(16777619);
-#else
-      h *= UINT64_C(0x100000001b3);
-#endif
-#ifndef HAVE_BIT32
-    case 4:
-      h ^= *dc++;
-      h *= UINT64_C(0x100000001b3);
-    case 5:
-      h ^= *dc++;
-      h *= UINT64_C(0x100000001b3);
-    case 6:
-      h ^= *dc++;
-      h *= UINT64_C(0x100000001b3);
-    case 7:
-      h ^= *dc++;
-      h *= UINT64_C(0x100000001b3);
-#endif
-    default:
-      break;
-    }
-    dw = (size_t*)dc; //word stepper
-  }
-#endif
-
-  while (dw < endw) {
-    h ^= *dw++;
+  while (len >= (int)sizeof(size_t)) {
+    h ^= sm_get_size_le(p);
+    p += sizeof(size_t);
+    len -= sizeof(size_t);
 #ifdef HAVE_BIT32
     h *= UINT32_C(16777619);
 #else
     h *= UINT64_C(0x100000001b3);
 #endif
   }
-  if (len & (sizeof(size_t)-1)) {
-    uint8_t *dc = (uint8_t*)dw; //byte stepper
-    const uint8_t *const endc = &((const uint8_t*)key)[len];
-    while (dc < endc) {
-      h ^= *dc++;
+  while (len-- > 0) {
+      h ^= *p++;
 #ifdef HAVE_BIT32
       h *= UINT32_C(16777619);
 #else
       h *= UINT64_C(0x100000001b3);
 #endif
-    }
   }
   return h;
 }
@@ -255,34 +214,34 @@ FNV32a_YoshimitsuTRIAD(const char *key, int len, uint32_t seed)
   uint32_t	  hash32C = UINT32_C(2166136261);
 
   for (; len >= 3 * 2 * sizeof(uint32_t); len -= 3 * 2 * sizeof(uint32_t), p += 3 * 2 * sizeof(uint32_t)) {
-    hash32A = (hash32A ^ (ROTL32(*(uint32_t *) (p + 0), 5)  ^ *(uint32_t *) (p + 4)))  * PRIME;
-    hash32B = (hash32B ^ (ROTL32(*(uint32_t *) (p + 8), 5)  ^ *(uint32_t *) (p + 12))) * PRIME;
-    hash32C = (hash32C ^ (ROTL32(*(uint32_t *) (p + 16), 5) ^ *(uint32_t *) (p + 20))) * PRIME;
+    hash32A = (hash32A ^ (ROTL32(sm_get_u32_le(p + 0), 5) ^ sm_get_u32_le(p + 4))) * PRIME;
+    hash32B = (hash32B ^ (ROTL32(sm_get_u32_le(p + 8), 5) ^ sm_get_u32_le(p + 12))) * PRIME;
+    hash32C = (hash32C ^ (ROTL32(sm_get_u32_le(p + 16), 5) ^ sm_get_u32_le(p + 20))) * PRIME;
   }
   if (p != (const uint8_t *)key) {
     hash32A = (hash32A ^ ROTL32(hash32C, 5)) * PRIME;
   }
   //Cases 0. .31
   if (len & 4 * sizeof(uint32_t)) {
-    hash32A = (hash32A ^ (ROTL32(*(uint32_t *) (p + 0), 5) ^ *(uint32_t *) (p + 4))) * PRIME;
-    hash32B = (hash32B ^ (ROTL32(*(uint32_t *) (p + 8), 5) ^ *(uint32_t *) (p + 12))) * PRIME;
+    hash32A = (hash32A ^ (ROTL32(sm_get_u32_le(p + 0), 5) ^ sm_get_u32_le(p + 4))) * PRIME;
+    hash32B = (hash32B ^ (ROTL32(sm_get_u32_le(p + 8), 5) ^ sm_get_u32_le(p + 12))) * PRIME;
     p += 8 * sizeof(uint16_t);
   }
   //Cases 0. .15
   if (len & 2 * sizeof(uint32_t)) {
-    hash32A = (hash32A ^ *(uint32_t *) (p + 0)) * PRIME;
-    hash32B = (hash32B ^ *(uint32_t *) (p + 4)) * PRIME;
+    hash32A = (hash32A ^ sm_get_u32_le(p + 0)) * PRIME;
+    hash32B = (hash32B ^ sm_get_u32_le(p + 4)) * PRIME;
     p += 4 * sizeof(uint16_t);
   }
   //Cases:0. .7
   if (len & sizeof(uint32_t)) {
-    hash32A = (hash32A ^ *(uint16_t *) (p + 0)) * PRIME;
-    hash32B = (hash32B ^ *(uint16_t *) (p + 2)) * PRIME;
+    hash32A = (hash32A ^ sm_get_u16_le(p + 0)) * PRIME;
+    hash32B = (hash32B ^ sm_get_u16_le(p + 2)) * PRIME;
     p += 2 * sizeof(uint16_t);
   }
   //Cases:0. .3
   if (len & sizeof(uint16_t)) {
-    hash32A = (hash32A ^ *(uint16_t *) p) * PRIME;
+    hash32A = (hash32A ^ sm_get_u16_le(p)) * PRIME;
     p += sizeof(uint16_t);
   }
   if (len & 1)
@@ -306,12 +265,13 @@ FNV1A_Totenschiff(const char *key, int len, uint32_t seed)
   uint64_t PADDEDby8;
 
   for (; len > 8; len -= 8, p += 8) {
-    PADDEDby8 = *(uint64_t *)(p + 0);
+    PADDEDby8 = sm_get_u64_le((const uint8_t *)p);
     hash64 = (hash64 ^ PADDEDby8) * PRIME;
   }
 
-  // Here len is 1..8. when (8-8) the QWORD remains intact
-  PADDEDby8 = _PADr_KAZE(*(uint64_t *)(p + 0), (8 - len) << 3);
+  PADDEDby8 = 0;
+  for (int i = 0; i < len; ++i)
+    PADDEDby8 |= (uint64_t)(uint8_t)p[i] << (8 * i);
   hash64 = (hash64 ^ PADDEDby8) * PRIME;
 
   hash32 = (uint32_t)(hash64 ^ (hash64 >> 32));
@@ -443,11 +403,11 @@ x17(const char *key, int len, uint32_t h)
 uint64_t
 fletcher2(const char *key, int len, uint64_t seed)
 {
-  uint64_t *dataw = (uint64_t *)key;
-  const uint64_t *const endw = &((const uint64_t*)key)[len/8];
+  const uint8_t *dataw = (const uint8_t *)key;
+  const uint8_t *const endw = dataw + (len & ~7);
   uint64_t A = seed, B = 0;
-  for (; dataw < endw; dataw++) {
-    A += *dataw;
+  for (; dataw < endw; dataw += 8) {
+    A += sm_get_u64_le(dataw);
     B += A;
   }
   if (len & 7) {
@@ -466,11 +426,12 @@ fletcher2(const char *key, int len, uint64_t seed)
 uint64_t
 fletcher4(const char *key, int len, uint64_t seed)
 {
-  uint32_t *dataw = (uint32_t *)key;
-  const uint32_t *const endw = &((const uint32_t*)key)[len/4];
+  const uint8_t *dataw = (const uint8_t *)key;
+  const uint8_t *const endw = dataw + (len & ~3);
   uint64_t A = seed, B = 0, C = 0, D = 0;
   while (dataw < endw) {
-    A += *dataw++;
+    A += sm_get_u32_le(dataw);
+    dataw += 4;
     B += A;
     C += B;
     D += C;
@@ -525,9 +486,8 @@ JenkinsOOAT(const char *key, int len, uint32_t hash)
 {
   unsigned char  *str = (unsigned char *)key;
   const unsigned char *const end = (const unsigned char *)str + len;
-  uint64_t	  s = (uint64_t) hash;
-  unsigned char  *seed = (unsigned char *)&s;
-  //unsigned char seed[8];
+  // On the canonical little-endian path the upper four bytes of the
+  // zero-extended 32-bit seed are all zero.
   //note that perl5 adds the seed to the end of key, which looks like cargo cult
   while (str < end) {
     hash += (hash << 10);
@@ -537,19 +497,15 @@ JenkinsOOAT(const char *key, int len, uint32_t hash)
 
   hash += (hash << 10);
   hash ^= (hash >> 6);
-  hash += seed[4];
 
   hash += (hash << 10);
   hash ^= (hash >> 6);
-  hash += seed[5];
 
   hash += (hash << 10);
   hash ^= (hash >> 6);
-  hash += seed[6];
 
   hash += (hash << 10);
   hash ^= (hash >> 6);
-  hash += seed[7];
 
   hash += (hash << 10);
   hash ^= (hash >> 6);
@@ -663,20 +619,22 @@ Crap8(const uint8_t * key, uint32_t len, uint32_t seed)
 #define c8fold( a, b, y, z ) { p = (uint32_t)(a) * (uint64_t)(b); y ^= (uint32_t)p; z ^= (uint32_t)(p >> 32); }
 #define c8mix( in ) { h *= m; c8fold( in, m, k, h ); }
 
-  const uint32_t  m = 0x83d2e73b, n = 0x97e1cc59, *key4 = (const uint32_t *)key;
+  const uint32_t m = 0x83d2e73b, n = 0x97e1cc59;
   uint32_t	  h = len + seed, k = n + len;
   uint64_t	  p;
 
   while (len >= 8) {
-    c8mix(key4[0]) c8mix(key4[1]) key4 += 2;
+    c8mix(sm_get_u32_le(key)) c8mix(sm_get_u32_le(key + 4)) key += 8;
     len -= 8;
   }
   if (len >= 4) {
-    c8mix(key4[0]) key4 += 1;
+    c8mix(sm_get_u32_le(key)) key += 4;
     len -= 4;
   }
   if (len) {
-    c8mix(key4[0] & ((1 << (len * 8)) - 1))
+    uint32_t last = 0;
+    for (uint32_t i = 0; i < len; ++i) last |= (uint32_t)key[i] << (8 * i);
+    c8mix(last)
   }
   c8fold(h ^ k, n, k, k)
   return k;
@@ -702,7 +660,7 @@ void
 hasshe2_test(const void *input, int len, uint32_t seed, void *out)
 {
   if (!len) {
-    *(uint32_t *) out = 0;
+    sm_store32(out, 0);
     return;
   }
   if (len % 16) {
@@ -724,22 +682,22 @@ void
 crc32c_hw_test(const void *input, int len, uint32_t seed, void *out)
 {
   if (!len) {
-    *(uint32_t *) out = 0;
+    sm_store32(out, 0);
     return;
   }
   // objsize: 0-28d: 653
-  *(uint32_t *) out = crc32c_hw(input, len, seed);
+  sm_store32(out, crc32c_hw(input, len, seed));
 }
 /* Compute CRC-64C using the Intel hardware instruction. */
 void
 crc64c_hw_test(const void *input, int len, uint32_t seed, void *out)
 {
   if (!len) {
-    *(uint64_t *) out = 0;
+    sm_store64(out, 0);
     return;
   }
   // objsize: 0x290-0x51c: 652
-  *(uint64_t *) out = crc64c_hw(input, len, seed);
+  sm_store64(out, crc64c_hw(input, len, seed));
 }
 # endif
 
@@ -749,11 +707,11 @@ void
 crc32c_hw1_test(const void *input, int len, uint32_t seed, void *out)
 {
   if (!len) {
-    *(uint32_t *) out = 0;
+    sm_store32(out, 0);
     return;
   }
   // objsize: 0-29f: 671
-  *(uint32_t *) out = crc32c(input, len, seed);
+  sm_store32(out, crc32c(input, len, seed));
 }
 # endif
 #endif
@@ -766,7 +724,7 @@ extern "C" {
 void
 fhtw_test(const void *input, int len, uint32_t seed, void *out)
 {
-  *(uint32_t *) out = fhtw_hash(input, len);
+  sm_store32(out, fhtw_hash(input, len));
 }
 #endif
 
@@ -777,36 +735,36 @@ siphash_test(const void *input, int len, uint32_t seed, void *out)
   /* 128bit state, filled with a 32bit seed */
   unsigned char	key[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   if (!len) {
-    *(uint32_t *) out = 0;
+    sm_store32(out, 0);
     return;
   }
-  memcpy(key, &seed, sizeof(seed));
+  sm_store32(key, seed);
   // objsize: 0-0x42f: 1071
-  *(uint64_t *) out = siphash(key, (const unsigned char *)input, (size_t) len);
+  sm_store64(out, siphash(key, (const unsigned char *)input, (size_t) len));
 }
 void
 siphash13_test(const void *input, int len, uint32_t seed, void *out)
 {
   unsigned char	key[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   if (!len) {
-    *(uint32_t *) out = 0;
+    sm_store32(out, 0);
     return;
   }
-  memcpy(key, &seed, sizeof(seed));
+  sm_store32(key, seed);
   // objsize: 0x450-0x75a: 778
-  *(uint64_t *) out = siphash13(key, (const unsigned char *)input, (size_t) len);
+  sm_store64(out, siphash13(key, (const unsigned char *)input, (size_t) len));
 }
 void
 halfsiphash_test(const void *input, int len, uint32_t seed, void *out)
 {
   unsigned char	key[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   if (!len) {
-    *(uint32_t *) out = 0;
+    sm_store32(out, 0);
     return;
   }
-  memcpy(key, &seed, sizeof(seed));
+  sm_store32(key, seed);
   // objsize: 0x780-0xa3c: 700
-  *(uint32_t *) out = halfsiphash(key, (const unsigned char *)input, (size_t) len);
+  sm_store32(out, halfsiphash(key, (const unsigned char *)input, (size_t) len));
 }
 
 /* https://github.com/gamozolabs/falkhash */
@@ -819,12 +777,12 @@ falkhash_test_cxx(const void *input, int len, uint32_t seed, void *out)
 {
   uint64_t hash[2] = {0ULL, 0ULL};
   if (!len) {
-    *(uint32_t *) out = 0;
+    sm_store32(out, 0);
     return;
   }
   // objsize: 0-0x108: 264
   falkhash_test((uint8_t *)input, (uint64_t)len, seed, hash);
-  *(uint64_t *) out = hash[0];
+  sm_store64(out, hash[0]);
 }
 #endif
 
@@ -835,7 +793,7 @@ static char clhash_random[RANDOM_BYTES_NEEDED_FOR_CLHASH];
 void clhash_test (const void * key, int len, uint32_t seed, void * out) {
   memcpy(clhash_random, &seed, 4);
   // objsize: 0-0x711: 1809  
-  *(uint64_t*)out = clhash(&clhash_random, (char*)key, (size_t)len);
+  sm_store64(out, clhash(&clhash_random, (char*)key, (size_t)len));
 }
 void clhash_init()
 {
@@ -867,23 +825,19 @@ alignas(64) static uint64_t
     halftime_hash_random[8 * ((halftime_hash::kEntropyBytesNeeded / 64) + 1)];
 
 void halftime_hash_style64_test(const void *key, int len, uint32_t seed, void *out) {
-  *(uint64_t *)out =
-      halftime_hash::HalftimeHashStyle64(halftime_hash_random, (char *)key, (size_t)len);
+  sm_store64(out, halftime_hash::HalftimeHashStyle64(halftime_hash_random, (char *)key, (size_t)len));
 }
 
 void halftime_hash_style128_test(const void *key, int len, uint32_t seed, void *out) {
-  *(uint64_t *)out =
-      halftime_hash::HalftimeHashStyle128(halftime_hash_random, (char *)key, (size_t)len);
+  sm_store64(out, halftime_hash::HalftimeHashStyle128(halftime_hash_random, (char *)key, (size_t)len));
 }
 
 void halftime_hash_style256_test(const void *key, int len, uint32_t seed, void *out) {
-  *(uint64_t *)out =
-      halftime_hash::HalftimeHashStyle256(halftime_hash_random, (char *)key, (size_t)len);
+  sm_store64(out, halftime_hash::HalftimeHashStyle256(halftime_hash_random, (char *)key, (size_t)len));
 }
 
 void halftime_hash_style512_test(const void *key, int len, uint32_t seed, void *out) {
-  *(uint64_t *)out =
-      halftime_hash::HalftimeHashStyle512(halftime_hash_random, (char *)key, (size_t)len);
+  sm_store64(out, halftime_hash::HalftimeHashStyle512(halftime_hash_random, (char *)key, (size_t)len));
 }
 
 void halftime_hash_init() {
@@ -1021,7 +975,7 @@ void halftime_hash_seed_init(size_t &seed)
          h += multiply_shift_random[len % MULTIPLY_SHIFT_RANDOM_WORDS] * last >> 64;
       }
 
-      *(uint64_t*)out = h;
+      sm_store64(out, h);
    }
    static __uint128_t rand128() {
      return rand_u128();
@@ -1079,7 +1033,7 @@ void halftime_hash_seed_init(size_t &seed)
          h += multiply_shift_random[len & MULTIPLY_SHIFT_RANDOM_WORDS-1] * last >> 64;
       }
 
-      *(uint64_t*)out = h;
+      sm_store64(out, h);
    }
 
   //objsize: 450fb0-45118f: 479. low32 of 128bit
@@ -1138,19 +1092,19 @@ void halftime_hash_seed_init(size_t &seed)
       return h;
    }
    void poly_0_mersenne(const void * key, int len_bytes, uint32_t seed, void * out) {
-      *(uint32_t*)out = (uint32_t)poly_k_mersenne(key, len_bytes, seed, 0);
+      sm_store32(out, (uint32_t)poly_k_mersenne(key, len_bytes, seed, 0));
    }
    void poly_1_mersenne(const void * key, int len_bytes, uint32_t seed, void * out) {
-      *(uint32_t*)out = (uint32_t)poly_k_mersenne(key, len_bytes, seed, 1);
+      sm_store32(out, (uint32_t)poly_k_mersenne(key, len_bytes, seed, 1));
    }
    void poly_2_mersenne(const void * key, int len_bytes, uint32_t seed, void * out) {
-      *(uint32_t*)out = (uint32_t)poly_k_mersenne(key, len_bytes, seed, 2);
+      sm_store32(out, (uint32_t)poly_k_mersenne(key, len_bytes, seed, 2));
    }
    void poly_3_mersenne(const void * key, int len_bytes, uint32_t seed, void * out) {
-      *(uint32_t*)out = (uint32_t)poly_k_mersenne(key, len_bytes, seed, 3);
+      sm_store32(out, (uint32_t)poly_k_mersenne(key, len_bytes, seed, 3));
    }
    void poly_4_mersenne(const void * key, int len_bytes, uint32_t seed, void * out) {
-      *(uint32_t*)out = (uint32_t)poly_k_mersenne(key, len_bytes, seed, 4);
+      sm_store32(out, (uint32_t)poly_k_mersenne(key, len_bytes, seed, 4));
    }
    void poly_mersenne_seed_init(uint32_t &seed) {
       srand(seed);
@@ -1178,13 +1132,14 @@ static uint8_t tsip_key[16];
 void tsip_init()
 {
   Rand rng(UINT32_C(4044698852));
-  rng.rand_p(tsip_key, sizeof(tsip_key));
+  for (unsigned i = 0; i < sizeof(tsip_key); i += 4)
+    sm_store32(tsip_key + i, rng.rand_u32());
 }
 void tsip_test(const void *bytes, int len, uint32_t seed, void *out)
 {
-  memcpy(&tsip_key[0], &seed, 4);
-  memcpy(&tsip_key[8], &seed, 4);
-  *(uint64_t*)out = tsip(tsip_key, (const unsigned char*)bytes, (uint64_t)len);
+  sm_store32(&tsip_key[0], seed);
+  sm_store32(&tsip_key[8], seed);
+  sm_store64(out, tsip(tsip_key, (const unsigned char*)bytes, (uint64_t)len));
 }
 
 #endif /* !MSVC */
@@ -1261,7 +1216,7 @@ void aesni128_test ( const void * key, int len, unsigned seed, void * out ) {
 	*(__m128i*)out = AESNI_Hash128((const uint8_t*)key, len, seed);
 }
 void aesni64_test ( const void * key, int len, unsigned seed, void * out ) {
-	*(uint64_t*)out = AESNI_Hash64((const uint8_t*)key, len, seed);
+	sm_store64(out, AESNI_Hash64((const uint8_t*)key, len, seed));
 }
 
 #endif
@@ -1270,7 +1225,7 @@ void aesni64_test ( const void * key, int len, unsigned seed, void * out ) {
 void crc32c_pclmul_test(const void *key, int len, uint32_t seed, void *out)
 {
   if (!len) {
-    *(uint32_t *) out = 0;
+    sm_store32(out, 0);
     return;
   }
   // objsize: 0x1e1 = 481
@@ -1278,7 +1233,7 @@ void crc32c_pclmul_test(const void *key, int len, uint32_t seed, void *out)
     if (len < 1024) {
       alignas(16) unsigned char stack[1024];
       memcpy(stack, key, len);
-      *(uint32_t *) out = crc32_pclmul_le_16(stack, (size_t)len, seed);
+      sm_store32(out, crc32_pclmul_le_16(stack, (size_t)len, seed));
     }
     else {
 #ifdef _MSC_VER // TODO need to verify
@@ -1291,13 +1246,13 @@ void crc32c_pclmul_test(const void *key, int len, uint32_t seed, void *out)
         exit(1);
 #endif
       memcpy((void*)input, key, len);
-      *(uint32_t *) out = crc32_pclmul_le_16(input, (size_t)len, seed);
+      sm_store32(out, crc32_pclmul_le_16(input, (size_t)len, seed));
       free ((void*)input);
     }
   }
   else {
     assert(((uintptr_t)key & 15) == 0); // input is 16byte aligned already
-    *(uint32_t *) out = crc32_pclmul_le_16((unsigned char const *)key, (size_t)len, seed);
+    sm_store32(out, crc32_pclmul_le_16((unsigned char const *)key, (size_t)len, seed));
   }
 }
 #endif
@@ -1342,11 +1297,11 @@ bool nmhash32_broken( void ) {
 
 // objsize: 4202f0-420c7d: 2445
 void nmhash32_test ( const void * key, int len, uint32_t seed, void * out ) {
-  *(uint32_t*)out = NMHASH32 (key, (const size_t) len, seed);
+  sm_store32(out, NMHASH32 (key, (const size_t) len, seed));
 }
 // objsize: 466100-4666d6: 1494
 void nmhash32x_test ( const void * key, int len, uint32_t seed, void * out ) {
-  *(uint32_t*)out = NMHASH32X (key, (const size_t) len, seed);
+  sm_store32(out, NMHASH32X (key, (const size_t) len, seed));
 }
 
 #ifdef HAVE_KHASHV
@@ -1366,11 +1321,11 @@ void khashv_seed_init(size_t &seed) {
 }
 //objsize: 46b4a0-46b535: 149 + 426ad0-426f3a: 1130
 void khashv64_test ( const void *key, int len, uint32_t seed, void *out) {
-  *(uint64_t*)out = khashv64 (&khashv_seed, (const uint8_t*)key, (size_t)len);
+  sm_store64(out, khashv64 (&khashv_seed, (const uint8_t*)key, (size_t)len));
 }
 //objsize: 46b540-46b5d6: 150 + 1130
 void khashv32_test ( const void *key, int len, uint32_t seed, void *out) {
-  *(uint32_t*)out = khashv32 (&khashv_seed, (const uint8_t*)key, (size_t)len);
+  sm_store32(out, khashv32 (&khashv_seed, (const uint8_t*)key, (size_t)len));
 }
 #endif // HAVE_KHASHV
 
@@ -1385,8 +1340,8 @@ void polymur_seed_init (size_t seed) {
 }
 // objsize: 6ba30-6be98: 1128
 void polymur_test ( const void *key, int len, uint32_t seed, void *out) {
-  *(uint64_t*)out = polymur_hash((const uint8_t*)key, (size_t)len, &g_polymurhashparams,
-                                 (uint64_t)seed);
+  sm_store64(out, polymur_hash((const uint8_t*)key, (size_t)len, &g_polymurhashparams,
+                               (uint64_t)seed));
 }
 
 #if defined(HAVE_AESNI)
@@ -1413,8 +1368,11 @@ void mum_v3_seed_init(uint32_t &seed) {
 
 #include "hash-garage/52hash.h"
 void fifty2hash64_test ( const void * key, int len, uint32_t seed, void * out ) {
-  *(uint64_t*)out = fifty2hash64(key, (const size_t) len, seed);
+  sm_store64(out, fifty2hash64(key, (const size_t) len, seed));
 }
 void fifty2hash128_test ( const void * key, int len, uint32_t seed, void * out ) {
-  fifty2hash128(key, (const size_t) len, seed, (uint64_t*)out);
+  uint64_t result[2];
+  fifty2hash128(key, (const size_t) len, seed, result);
+  sm_store64(out, result[0]);
+  sm_store64((uint8_t *)out + 8, result[1]);
 }

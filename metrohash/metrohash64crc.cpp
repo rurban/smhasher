@@ -98,7 +98,7 @@ void metrohash64crc_1(const uint8_t * key, uint64_t len, uint32_t seed, uint8_t 
     hash *= k0;
     hash ^= rotate_right(hash, 33);
 
-    memcpy(out, &hash, 8);
+    write_u64(out, hash);
 }
 
 void metrohash64crc_2(const uint8_t * key, uint64_t len, uint32_t seed, uint8_t * out)
@@ -175,5 +175,5 @@ void metrohash64crc_2(const uint8_t * key, uint64_t len, uint32_t seed, uint8_t 
     hash *= k0;
     hash ^= rotate_right(hash, 33);
 
-    memcpy(out, &hash, 8);
+    write_u64(out, hash);
 }

@@ -3,7 +3,6 @@
 
 #include <stdint.h>
 
-#include "endian.h"
 #include "forceinline.h"
 
 typedef uint64_t word_t;
@@ -41,29 +40,25 @@ forceinline word_t CLEAR(word_t w, int n) {
   return w & mask;
 }
 
-forceinline uint64_t MASK(int n) {
-  /* undefined for n == 0 */
-  return ~0ull >> (64 - 8 * n);
-}
-
+/* Ascon v1.2 absorbs and emits the most significant byte first. */
 forceinline word_t LOAD(const uint8_t* bytes, int n) {
-  uint64_t x = *(uint64_t*)bytes & MASK(n);
-  return U64BIG(x);
-}
-
-forceinline void STORE(uint8_t* bytes, word_t w, int n) {
-  *(uint64_t*)bytes &= ~MASK(n);
-  *(uint64_t*)bytes |= U64BIG(w);
-}
-
-forceinline word_t LOADBYTES(const uint8_t* bytes, int n) {
-  uint64_t x = 0;
-  for (int i = 0; i < n; ++i) ((uint8_t*)&x)[7 - i] = bytes[i];
+  word_t x = 0;
+  for (int i = 0; i < n; ++i)
+    x |= (word_t)bytes[i] << (56 - 8 * i);
   return x;
 }
 
+forceinline void STORE(uint8_t* bytes, word_t w, int n) {
+  for (int i = 0; i < n; ++i)
+    bytes[i] = (uint8_t)(w >> (56 - 8 * i));
+}
+
+forceinline word_t LOADBYTES(const uint8_t* bytes, int n) {
+  return LOAD(bytes, n);
+}
+
 forceinline void STOREBYTES(uint8_t* bytes, word_t w, int n) {
-  for (int i = 0; i < n; ++i) bytes[i] = ((uint8_t*)&w)[7 - i];
+  STORE(bytes, w, n);
 }
 
 #endif /* WORD_H_ */

@@ -49,17 +49,30 @@ inline uint64_t rotl64 ( uint64_t x, int8_t r )
 #endif // !defined(_MSC_VER)
 
 //-----------------------------------------------------------------------------
-// Block read - if your platform needs to do endian-swapping or can only
-// handle aligned reads, do the conversion here
-
-FORCE_INLINE uint32_t getblock32 ( const uint32_t * p, int i )
+// Blocks and output lanes use the original little-endian byte order.
+FORCE_INLINE uint32_t getblock32 ( const uint8_t * p, int i )
 {
-  return p[i];
+  p += i * 4;
+  return uint32_t(p[0]) | (uint32_t(p[1]) << 8) |
+         (uint32_t(p[2]) << 16) | (uint32_t(p[3]) << 24);
 }
 
-FORCE_INLINE uint64_t getblock64 ( const uint64_t * p, int i )
+FORCE_INLINE uint64_t getblock64 ( const uint8_t * p, int i )
 {
-  return p[i];
+  p += i * 8;
+  return uint64_t(getblock32(p, 0)) | (uint64_t(getblock32(p, 1)) << 32);
+}
+
+FORCE_INLINE void putblock32 ( uint8_t *p, uint32_t v )
+{
+  p[0] = uint8_t(v); p[1] = uint8_t(v >> 8);
+  p[2] = uint8_t(v >> 16); p[3] = uint8_t(v >> 24);
+}
+
+FORCE_INLINE void putblock64 ( uint8_t *p, uint64_t v )
+{
+  putblock32(p, uint32_t(v));
+  putblock32(p + 4, uint32_t(v >> 32));
 }
 
 //-----------------------------------------------------------------------------
@@ -106,7 +119,7 @@ void MurmurHash3_x86_32 ( const void * key, int len,
   //----------
   // body
 
-  const uint32_t * blocks = (const uint32_t *)(data + nblocks*4);
+  const uint8_t * blocks = data + nblocks*4;
 
   for(int i = -nblocks; i; i++)
   {
@@ -143,7 +156,7 @@ void MurmurHash3_x86_32 ( const void * key, int len,
 
   h1 = fmix32(h1);
 
-  *(uint32_t*)out = h1;
+  putblock32((uint8_t*)out, h1);
 } 
 
 //-----------------------------------------------------------------------------
@@ -168,7 +181,7 @@ void MurmurHash3_x86_128 ( const void * key, const int len,
   //----------
   // body
 
-  const uint32_t * blocks = (const uint32_t *)(data + nblocks*16);
+  const uint8_t * blocks = data + nblocks*16;
 
   for(int i = -nblocks; i; i++)
   {
@@ -246,10 +259,10 @@ void MurmurHash3_x86_128 ( const void * key, const int len,
   h1 += h2; h1 += h3; h1 += h4;
   h2 += h1; h3 += h1; h4 += h1;
 
-  ((uint32_t*)out)[0] = h1;
-  ((uint32_t*)out)[1] = h2;
-  ((uint32_t*)out)[2] = h3;
-  ((uint32_t*)out)[3] = h4;
+  putblock32((uint8_t*)out, h1);
+  putblock32((uint8_t*)out + 4, h2);
+  putblock32((uint8_t*)out + 8, h3);
+  putblock32((uint8_t*)out + 12, h4);
 }
 
 //-----------------------------------------------------------------------------
@@ -270,7 +283,7 @@ void MurmurHash3_x64_128 ( const void * key, const int len,
   //----------
   // body
 
-  const uint64_t * blocks = (const uint64_t *)(data);
+  const uint8_t * blocks = data;
 
   for(int i = 0; i < nblocks; i++)
   {
@@ -330,8 +343,8 @@ void MurmurHash3_x64_128 ( const void * key, const int len,
   h1 += h2;
   h2 += h1;
 
-  ((uint64_t*)out)[0] = h1;
-  ((uint64_t*)out)[1] = h2;
+  putblock64((uint8_t*)out, h1);
+  putblock64((uint8_t*)out + 8, h2);
 }
 
 //-----------------------------------------------------------------------------

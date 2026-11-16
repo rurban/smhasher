@@ -1,7 +1,10 @@
 #include <stdint.h>
 
 static uint64_t inline U8TO64_LE(const unsigned char *p) {
-  return *(const uint64_t *)p;
+  return (uint64_t)p[0] | (uint64_t)p[1] << 8 |
+         (uint64_t)p[2] << 16 | (uint64_t)p[3] << 24 |
+         (uint64_t)p[4] << 32 | (uint64_t)p[5] << 40 |
+         (uint64_t)p[6] << 48 | (uint64_t)p[7] << 56;
 }
 
 static uint64_t rotl64(uint64_t x, int k) {

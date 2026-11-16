@@ -20,6 +20,26 @@ static uint64_t sea_swap64 (uint64_t x)
 }
 #endif
 
+static inline uint64_t sea_load64(const void *p)
+{
+  uint64_t value;
+  memcpy(&value, p, sizeof(value));
+#if !defined(_MSC_VER) && (!defined(__BYTE_ORDER__) || !defined(__ORDER_LITTLE_ENDIAN__))
+#error "Unknown byte order"
+#endif
+#if !defined(_MSC_VER) && __BYTE_ORDER__ != __ORDER_LITTLE_ENDIAN__
+  value = sea_swap64(value);
+#endif
+  return value;
+}
+
+static inline uint64_t sea_next64(const char **p)
+{
+  uint64_t value = sea_load64(*p);
+  *p += sizeof(value);
+  return value;
+}
+
 static inline uint64_t diffuse(uint64_t val)
 {
   uint64_t a, b;
@@ -34,7 +54,7 @@ static inline uint64_t diffuse(uint64_t val)
 uint64_t seahash(const char *key, int len, uint64_t seed) {
   uint64_t a, b, c, d;
   uint64_t s = seed;
-  uint64_t *p;
+  const char *p;
   uint8_t pad[8] = {0};
   const uint64_t orig_len = (uint64_t)len;
 
@@ -43,12 +63,12 @@ uint64_t seahash(const char *key, int len, uint64_t seed) {
   c = 0x6fe2e5aaf078ebc9ULL;
   d = 0x14f994a4c5259381ULL;
 
-  p = (uint64_t *)key;
+  p = key;
   while (len >= 32) {
-    a ^= *p++;
-    b ^= *p++;
-    c ^= *p++;
-    d ^= *p++;
+    a ^= sea_next64(&p);
+    b ^= sea_next64(&p);
+    c ^= sea_next64(&p);
+    d ^= sea_next64(&p);
     a = diffuse(a);
     b = diffuse(b);
     c = diffuse(c);
@@ -59,53 +79,53 @@ uint64_t seahash(const char *key, int len, uint64_t seed) {
   switch (len) {
     // illegal msvc 15 syntax
     case 25 ... 31:
-      a ^= *p++;
-      b ^= *p++;
-      c ^= *p++;
+      a ^= sea_next64(&p);
+      b ^= sea_next64(&p);
+      c ^= sea_next64(&p);
       memcpy(pad, p, len - 24);
-      d ^= *(uint64_t *)pad;
+      d ^= sea_load64(pad);
       a = diffuse(a);
       b = diffuse(b);
       c = diffuse(c);
       d = diffuse(d);
       break;
     case 24:
-      a ^= *p++;
-      b ^= *p++;
-      c ^= *p++;
+      a ^= sea_next64(&p);
+      b ^= sea_next64(&p);
+      c ^= sea_next64(&p);
       a = diffuse(a);
       b = diffuse(b);
       c = diffuse(c);
       break;
     case 17 ... 23:
-      a ^= *p++;
-      b ^= *p++;
+      a ^= sea_next64(&p);
+      b ^= sea_next64(&p);
       memcpy(pad, p, len - 16);
-      c ^= *(uint64_t *)pad;
+      c ^= sea_load64(pad);
       a = diffuse(a);
       b = diffuse(b);
       c = diffuse(c);
       break;
     case 16:
-      a ^= *p++;
-      b ^= *p++;
+      a ^= sea_next64(&p);
+      b ^= sea_next64(&p);
       a = diffuse(a);
       b = diffuse(b);
       break;
     case 9 ... 15:
-      a ^= *p++;
+      a ^= sea_next64(&p);
       memcpy(pad, p, len - 8);
-      b ^= *(uint64_t *)pad;
+      b ^= sea_load64(pad);
       a = diffuse(a);
       b = diffuse(b);
       break;
     case 8:
-      a ^= *p++;
+      a ^= sea_next64(&p);
       a = diffuse(a);
       break;
     case 1 ... 7:
       memcpy(pad, p, len);
-      a ^= *(uint64_t *)pad;
+      a ^= sea_load64(pad);
       a = diffuse(a);
       break;
     case 0:

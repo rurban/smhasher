@@ -51,18 +51,18 @@ void SpookyHashV1::Short(
         // handle all complete sets of 32 bytes
         for (; u.p64 < end; u.p64 += 4)
         {
-            c += u.p64[0];
-            d += u.p64[1];
+            c += Read64(u.p8);
+            d += Read64(u.p8 + 8);
             ShortMix(a,b,c,d);
-            a += u.p64[2];
-            b += u.p64[3];
+            a += Read64(u.p8 + 16);
+            b += Read64(u.p8 + 24);
         }
         
         //Handle the case of 16+ remaining bytes.
         if (remainder >= 16)
         {
-            c += u.p64[0];
-            d += u.p64[1];
+            c += Read64(u.p8);
+            d += Read64(u.p8 + 8);
             ShortMix(a,b,c,d);
             u.p64 += 2;
             remainder -= 16;
@@ -80,8 +80,8 @@ void SpookyHashV1::Short(
     case 13:
         d += ((uint64)u.p8[12]) << 32;
     case 12:
-        d += u.p32[2];
-        c += u.p64[0];
+        d += Read32(u.p8 + 8);
+        c += Read64(u.p8);
         break;
     case 11:
         d += ((uint64)u.p8[10]) << 16;
@@ -90,7 +90,7 @@ void SpookyHashV1::Short(
     case 9:
         d += (uint64)u.p8[8];
     case 8:
-        c += u.p64[0];
+        c += Read64(u.p8);
         break;
     case 7:
         c += ((uint64)u.p8[6]) << 48;
@@ -99,7 +99,7 @@ void SpookyHashV1::Short(
     case 5:
         c += ((uint64)u.p8[4]) << 32;
     case 4:
-        c += u.p32[0];
+        c += Read32(u.p8);
         break;
     case 3:
         c += ((uint64)u.p8[2]) << 16;

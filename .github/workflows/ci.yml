@@ -50,6 +50,24 @@ jobs:
     - run: cmake -DCMAKE_TOOLCHAIN_FILE=CMakeARMCross.txt
     - run: make -j4 VERBOSE=1
     - run: make -j4 test ARGS=-V
+  mips32be:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        fetch-depth: 1
+        submodules: recursive
+    - run: sudo apt-get update -y
+    - run: sudo apt-get install -y g++-mips-linux-gnu qemu-user
+    - run: >-
+        cmake -S . -B build-mips
+        -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR=mips
+        -DCMAKE_C_COMPILER=mips-linux-gnu-gcc -DCMAKE_CXX_COMPILER=mips-linux-gnu-g++
+        -DCMAKE_C_FLAGS="-mips32r2 -mtune=24kc"
+        -DCMAKE_CXX_FLAGS="-mips32r2 -mtune=24kc"
+        -DCMAKE_EXE_LINKER_FLAGS=-static
+    - run: cmake --build build-mips --target SMHasher -j4
+    - run: qemu-mips -cpu 24Kc build-mips/SMHasher --test=VerifyAll --verbose
   macOS:
     name: macOS
     runs-on: macOS-latest

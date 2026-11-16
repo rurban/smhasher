@@ -32,33 +32,33 @@ uint32_t lookup3 ( const char * key, int length, uint32_t initval )
 
   a = b = c = 0xdeadbeef + ((uint32_t)length) + initval;
 
-  const uint32_t *k = (const uint32_t *)key;         /* read 32-bit chunks */
+  const unsigned char *k = (const unsigned char *)key;
 
-  /*------ all but last block: aligned reads and affect 32 bits of (a,b,c) */
+  /* Read complete words as little-endian bytes, regardless of alignment. */
   while (length > 12)
   {
-    a += k[0];
-    b += k[1];
-    c += k[2];
+    a += (uint32_t)k[0] | (uint32_t)k[1] << 8 | (uint32_t)k[2] << 16 | (uint32_t)k[3] << 24;
+    b += (uint32_t)k[4] | (uint32_t)k[5] << 8 | (uint32_t)k[6] << 16 | (uint32_t)k[7] << 24;
+    c += (uint32_t)k[8] | (uint32_t)k[9] << 8 | (uint32_t)k[10] << 16 | (uint32_t)k[11] << 24;
     mix(a,b,c);
     length -= 12;
-    k += 3;
+    k += 12;
   }
 
   switch(length)
   {
-    case 12: c+=k[2]; b+=k[1]; a+=k[0]; break;
-    case 11: c+=k[2]&0xffffff; b+=k[1]; a+=k[0]; break;
-    case 10: c+=k[2]&0xffff; b+=k[1]; a+=k[0]; break;
-    case 9 : c+=k[2]&0xff; b+=k[1]; a+=k[0]; break;
-    case 8 : b+=k[1]; a+=k[0]; break;
-    case 7 : b+=k[1]&0xffffff; a+=k[0]; break;
-    case 6 : b+=k[1]&0xffff; a+=k[0]; break;
-    case 5 : b+=k[1]&0xff; a+=k[0]; break;
-    case 4 : a+=k[0]; break;
-    case 3 : a+=k[0]&0xffffff; break;
-    case 2 : a+=k[0]&0xffff; break;
-    case 1 : a+=k[0]&0xff; break;
+    case 12: c += (uint32_t)k[11] << 24;
+    case 11: c += (uint32_t)k[10] << 16;
+    case 10: c += (uint32_t)k[9] << 8;
+    case 9 : c += k[8];
+    case 8 : b += (uint32_t)k[7] << 24;
+    case 7 : b += (uint32_t)k[6] << 16;
+    case 6 : b += (uint32_t)k[5] << 8;
+    case 5 : b += k[4];
+    case 4 : a += (uint32_t)k[3] << 24;
+    case 3 : a += (uint32_t)k[2] << 16;
+    case 2 : a += (uint32_t)k[1] << 8;
+    case 1 : a += k[0]; break;
     case 0 : { return c; }              /* zero length strings require no mixing */
   }
 

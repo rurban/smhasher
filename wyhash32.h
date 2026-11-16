@@ -1,13 +1,10 @@
 // Author: Wang Yi <godspeed_china@yeah.net>
 #include <stdint.h>
 #include <string.h>
-#ifndef WYHASH32_BIG_ENDIAN
-static inline unsigned _wyr32(const uint8_t *p) { unsigned v; memcpy(&v, p, 4); return v;}
-#elif defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__clang__)
-static inline unsigned _wyr32(const uint8_t *p) { unsigned v; memcpy(&v, p, 4); return __builtin_bswap32(v);}
-#elif defined(_MSC_VER)
-static inline unsigned _wyr32(const uint8_t *p) { unsigned v; memcpy(&v, p, 4); return _byteswap_ulong(v);}
-#endif
+static inline unsigned _wyr32(const uint8_t *p) {
+  return (unsigned)p[0] | ((unsigned)p[1] << 8) |
+         ((unsigned)p[2] << 16) | ((unsigned)p[3] << 24);
+}
 static inline unsigned _wyr24(const uint8_t *p, unsigned k) { return (((unsigned)p[0])<<16)|(((unsigned)p[k>>1])<<8)|p[k-1];}
 static inline void _wymix32(unsigned  *A,  unsigned  *B){
   uint64_t  c=*A^0x53c5ca59u;  c*=*B^0x74743c1bu;

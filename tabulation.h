@@ -9,9 +9,9 @@
 #include <assert.h>
 
 static inline uint8_t  take08(const uint8_t *p){ uint8_t  v; memcpy(&v, p, 1); return v; }
-static inline uint16_t take16(const uint8_t *p){ uint16_t v; memcpy(&v, p, 2); return v; }
-static inline uint32_t take32(const uint8_t *p){ uint32_t v; memcpy(&v, p, 4); return v; }
-static inline uint64_t take64(const uint8_t *p){ uint64_t v; memcpy(&v, p, 8); return v; }
+static inline uint16_t take16(const uint8_t *p){ return (uint16_t)p[0] | ((uint16_t)p[1] << 8); }
+static inline uint32_t take32(const uint8_t *p){ return (uint32_t)take16(p) | ((uint32_t)take16(p+2) << 16); }
+static inline uint64_t take64(const uint8_t *p){ return (uint64_t)take32(p) | ((uint64_t)take32(p+4) << 32); }
 
 
 ////////////////////////////////////////////////////////////////////////////////

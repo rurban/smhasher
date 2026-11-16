@@ -2,16 +2,7 @@
 // MurmurHash was written by Austin Appleby, and is placed in the public
 // domain. The author hereby disclaims copyright to this source code.
 
-// Note - This code makes a few assumptions about how your machine behaves -
-
-// 1. We can read a 4-byte value from any address without crashing
-// 2. sizeof(int) == 4
-
-// And it has a few limitations -
-
-// 1. It will not work incrementally.
-// 2. It will not produce the same results on little-endian and big-endian
-//    machines.
+// Blocks are read as little-endian bytes, including from unaligned addresses.
 
 #include "MurmurHash1.h"
 
@@ -32,7 +23,8 @@ uint32_t MurmurHash1 ( const void * key, int len, uint32_t seed )
 
   while(len >= 4)
   {
-    unsigned int k = *(unsigned int *)data;
+    unsigned int k = uint32_t(data[0]) | (uint32_t(data[1]) << 8) |
+                     (uint32_t(data[2]) << 16) | (uint32_t(data[3]) << 24);
 
     h += k;
     h *= m;
@@ -111,7 +103,8 @@ unsigned int MurmurHash1Aligned ( const void * key, int len, unsigned int seed )
 
     while(len >= 4)
     {
-      d = *(unsigned int *)data;
+      d = uint32_t(data[0]) | (uint32_t(data[1]) << 8) |
+          (uint32_t(data[2]) << 16) | (uint32_t(data[3]) << 24);
       t = (t >> sr) | (d << sl);
       h += t;
       h *= m;
@@ -145,7 +138,8 @@ unsigned int MurmurHash1Aligned ( const void * key, int len, unsigned int seed )
   {
     while(len >= 4)
     {
-      h += *(unsigned int *)data;
+      h += uint32_t(data[0]) | (uint32_t(data[1]) << 8) |
+           (uint32_t(data[2]) << 16) | (uint32_t(data[3]) << 24);
       h *= m;
       h ^= h >> r;
 

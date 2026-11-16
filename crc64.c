@@ -140,13 +140,18 @@ uint64_t crc64(uint64_t crc, const unsigned char *s, uint64_t l) {
     return crcspeed64native(crc64_table, crc, (void *) s, l);
 }
 
+static void crc64_store(void *out, uint64_t value) {
+    unsigned char *p = (unsigned char *)out;
+    for (unsigned i = 0; i < 8; ++i) p[i] = (unsigned char)(value >> (8 * i));
+}
+
 
 void crc64_jones_test1(const void *input, int len, uint32_t seed, void *out)
 {
     if (!crc64_table[0][1]) crc64_init();
     size_t old1 = get_cutoff(0), old2 = get_cutoff(1);
     set_crc64_cutoffs(SIZE_MAX, SIZE_MAX);
-    ((uint64_t*)out)[0] = crc64((uint64_t)seed, (const unsigned char*)input, len);
+    crc64_store(out, crc64((uint64_t)seed, (const unsigned char*)input, len));
     set_crc64_cutoffs(old2, old1);
 }
 
@@ -155,7 +160,7 @@ void crc64_jones_test2(const void *input, int len, uint32_t seed, void *out)
     if (!crc64_table[0][1]) crc64_init();
     size_t old1 = get_cutoff(0), old2 = get_cutoff(1);
     set_crc64_cutoffs(1, SIZE_MAX);
-    ((uint64_t*)out)[0] = crc64((uint64_t)seed, (const unsigned char*)input, len);
+    crc64_store(out, crc64((uint64_t)seed, (const unsigned char*)input, len));
     set_crc64_cutoffs(old2, old1);
 }
 
@@ -164,12 +169,12 @@ void crc64_jones_test3(const void *input, int len, uint32_t seed, void *out)
     if (!crc64_table[0][1]) crc64_init();
     size_t old1 = get_cutoff(0), old2 = get_cutoff(1);
     set_crc64_cutoffs(1, 1);
-    ((uint64_t*)out)[0] = crc64((uint64_t)seed, (const unsigned char*)input, len);
+    crc64_store(out, crc64((uint64_t)seed, (const unsigned char*)input, len));
     set_crc64_cutoffs(old2, old1);
 }
 
 void crc64_jones_default(const void *input, int len, uint32_t seed, void *out)
 {
     if (!crc64_table[0][1]) crc64_init();
-    ((uint64_t*)out)[0] = crc64((uint64_t)seed, (const unsigned char*)input, len);
+    crc64_store(out, crc64((uint64_t)seed, (const unsigned char*)input, len));
 }

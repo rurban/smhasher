@@ -12,10 +12,6 @@ A million repetitions of "a"
   34AA973C D4C4DAA4 F61EEB2B DBAD2731 6534016F
 */
 
-/* #define LITTLE_ENDIAN * This should be #define'd already, if true. */
-/* #define SHA1HANDSOFF * Copies data before messing with it. */
-
-#define SHA1HANDSOFF
 
 #include "sha1.h"
 #include <stdio.h>
@@ -26,14 +22,8 @@ A million repetitions of "a"
 
 /* blk0() and blk() perform the initial expand. */
 /* I got the idea of expanding during the round function from SSLeay */
-/* BIG_ENDIAN defined by cmake TestBigEndian */
-#ifndef BIG_ENDIAN
-#define blk0(i)                                                                \
-  (block->l[i] = (rol(block->l[i], 24) & 0xFF00FF00) |                         \
-                 (rol(block->l[i], 8) & 0x00FF00FF))
-#else
-#define blk0(i)  block->l[i]
-#endif
+/* The message schedule is loaded in SHA-1's big-endian byte order. */
+#define blk0(i) block->l[i]
 
 #define blk(i)                                                                 \
   (block->l[i & 15] = rol(block->l[(i + 13) & 15] ^ block->l[(i + 8) & 15] ^   \
@@ -61,21 +51,12 @@ A million repetitions of "a"
 
 void SHA1_Transform(uint32_t state[5], const uint8_t buffer[64]) {
   uint32_t a, b, c, d, e;
-  typedef union {
-    uint8_t c[64];
-    uint32_t l[16];
-  } CHAR64LONG16;
-#ifdef SHA1HANDSOFF
-  CHAR64LONG16 block[1]; /* use array to appear as a pointer */
-  memcpy(block, buffer, 64);
-#else
-  /* The following had better never be used because it causes the
-   * pointer-to-const buffer to be cast into a pointer to non-const.
-   * And the result is written through.  I threw a "const" in, hoping
-   * this will cause a diagnostic.
-   */
-  const CHAR64LONG16 *block = (const CHAR64LONG16 *)buffer;
-#endif
+  struct { uint32_t l[16]; } block_storage, *block = &block_storage;
+  for (unsigned i = 0; i < 16; ++i) {
+    const uint8_t *p = buffer + 4 * i;
+    block->l[i] = ((uint32_t)p[0] << 24) | ((uint32_t)p[1] << 16) |
+                  ((uint32_t)p[2] << 8) | (uint32_t)p[3];
+  }
   /* Copy context->state[] to working vars */
   a = state[0];
   b = state[1];
@@ -171,9 +152,7 @@ void SHA1_Transform(uint32_t state[5], const uint8_t buffer[64]) {
   state[4] += e;
   /* Wipe variables */
   a = b = c = d = e = 0;
-#ifdef SHA1HANDSOFF
-  memset(block, '\0', sizeof(block));
-#endif
+  memset(block, '\0', sizeof(*block));
 }
 
 /* SHA1_Init - Initialize new context */

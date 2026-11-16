@@ -17,15 +17,8 @@
 #endif
 #endif
 
-#ifdef __arm__
-#define VMAC_USE_SSE2    0 // always
-#else // __arm__
-#ifdef VMAC_ARCH_64
-#define VMAC_USE_SSE2    1 // always
-#else // VMAC_ARCH_64
-#define VMAC_USE_SSE2    0 // 0 or 1; further considerations should be applied
-#endif // VMAC_ARCH_64
-#endif // __arm__
+/* The MMX implementation is only selected for 32-bit x86. */
+#define VMAC_USE_SSE2 0
 
 /* Enable code tuned for Intel SSE2 instruction set                   */
 #if ((__SSE2__ || (_M_IX86_FP >= 2)) && ( ! VMAC_ARCH_64))
@@ -44,10 +37,14 @@
 
 
 /* Native word reads. Update (or define via compiler) if incorrect */
-#ifndef VMAC_ARCH_BIG_ENDIAN       /* Assume big-endian unless on the list */
+#ifndef VMAC_ARCH_BIG_ENDIAN
+#if defined(__BYTE_ORDER__) && defined(__ORDER_BIG_ENDIAN__)
+#define VMAC_ARCH_BIG_ENDIAN (__BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
+#else
 #define VMAC_ARCH_BIG_ENDIAN \
     (!(__x86_64__ || __i386__ || _M_IX86 || \
        _M_X64 || __ARMEL__ || __MIPSEL__))
+#endif
 #endif
 
 /* ----------------------------------------------------------------------- */
@@ -260,6 +257,26 @@ const uint64_t mpoly = UINT64_C(0x1fffffff1fffffff);  /* Poly key mask     */
 
 /* ----------------------------------------------------------------------- */
 
+static uint64_t vmac_load64(const void *ptr)
+{
+    uint64_t value;
+    memcpy(&value, ptr, sizeof(value));
+    return value;
+}
+
+static uint64_t vmac_bswap64(uint64_t x)
+{
+#if defined(__GNUC__) || defined(__clang__)
+    return __builtin_bswap64(x);
+#else
+    x = ((x & UINT64_C(0x00ff00ff00ff00ff)) << 8) |
+        ((x >> 8) & UINT64_C(0x00ff00ff00ff00ff));
+    x = ((x & UINT64_C(0x0000ffff0000ffff)) << 16) |
+        ((x >> 16) & UINT64_C(0x0000ffff0000ffff));
+    return (x << 32) | (x >> 32);
+#endif
+}
+
 #if (VMAC_PREFER_BIG_ENDIAN)
 #  define get64PE get64BE
 #else
@@ -267,11 +284,11 @@ const uint64_t mpoly = UINT64_C(0x1fffffff1fffffff);  /* Poly key mask     */
 #endif
 
 #if (VMAC_ARCH_BIG_ENDIAN)
-#  define get64BE(ptr) (*(uint64_t *)(ptr))
-#  define get64LE(ptr) GET_REVERSED_64(ptr)
-#else /* assume little-endian */
-#  define get64BE(ptr) GET_REVERSED_64(ptr)
-#  define get64LE(ptr) (*(uint64_t *)(ptr))
+#  define get64BE(ptr) vmac_load64(ptr)
+#  define get64LE(ptr) vmac_bswap64(vmac_load64(ptr))
+#else
+#  define get64BE(ptr) vmac_bswap64(vmac_load64(ptr))
+#  define get64LE(ptr) vmac_load64(ptr)
 #endif
 
 
@@ -650,29 +667,20 @@ static void poly_step_func(uint64_t *ahi, uint64_t *alo, const uint64_t *kh,
                const uint64_t *kl, const uint64_t *mh, const uint64_t *ml)                  
 {
 
-#if VMAC_ARCH_BIG_ENDIAN
-#define INDEX_HIGH 0
-#define INDEX_LOW 1
-#else
-#define INDEX_HIGH 1
-#define INDEX_LOW 0
-#endif
-
-#define a0 *(((uint32_t*)alo)+INDEX_LOW)
-#define a1 *(((uint32_t*)alo)+INDEX_HIGH)
-#define a2 *(((uint32_t*)ahi)+INDEX_LOW)
-#define a3 *(((uint32_t*)ahi)+INDEX_HIGH)
-#define k0 *(((uint32_t*)kl)+INDEX_LOW)
-#define k1 *(((uint32_t*)kl)+INDEX_HIGH)
-#define k2 *(((uint32_t*)kh)+INDEX_LOW)
-#define k3 *(((uint32_t*)kh)+INDEX_HIGH)
-
+    const uint32_t a0 = (uint32_t)*alo;
+    const uint32_t a1 = (uint32_t)(*alo >> 32);
+    const uint32_t a2 = (uint32_t)*ahi;
+    const uint32_t a3 = (uint32_t)(*ahi >> 32);
+    const uint32_t k0 = (uint32_t)*kl;
+    const uint32_t k1 = (uint32_t)(*kl >> 32);
+    const uint32_t k2 = (uint32_t)*kh;
+    const uint32_t k3 = (uint32_t)(*kh >> 32);
     uint64_t p, q, t;
     uint32_t t2;
 
     p = MUL32(a3, k3);
     p += p;
-	p += *(uint64_t *)mh;
+    p += *mh;
     p += MUL32(a0, k2);
     p += MUL32(a1, k1);
     p += MUL32(a2, k0);
@@ -684,7 +692,7 @@ static void poly_step_func(uint64_t *ahi, uint64_t *alo, const uint64_t *kh,
     p += MUL32(a3, k0);
     t |= ((uint64_t)((uint32_t)p & 0x7fffffff)) << 32;
     p >>= 31;
-    p += (uint64_t)(((uint32_t*)ml)[INDEX_LOW]);
+    p += (uint32_t)*ml;
     p += MUL32(a0, k0);
     q =  MUL32(a1, k3);
     q += MUL32(a2, k2);
@@ -693,25 +701,17 @@ static void poly_step_func(uint64_t *ahi, uint64_t *alo, const uint64_t *kh,
     p += q;
     t2 = (uint32_t)(p);
     p >>= 32;
-    p += (uint64_t)(((uint32_t*)ml)[INDEX_HIGH]);
+    p += (uint32_t)(*ml >> 32);
     p += MUL32(a0, k1);
     p += MUL32(a1, k0);
     q =  MUL32(a2, k3);
     q += MUL32(a3, k2);
     q += q;
     p += q;
-    *(uint64_t *)(alo) = (p << 32) | t2;
+    *alo = (p << 32) | t2;
     p >>= 32;
-    *(uint64_t *)(ahi) = p + t;
+    *ahi = p + t;
 
-#undef a0
-#undef a1
-#undef a2
-#undef a3
-#undef k0
-#undef k1
-#undef k2
-#undef k3
 }
 
 #define poly_step(ah, al, kh, kl, mh, ml)   \
@@ -955,10 +955,10 @@ uint64_t vhash(unsigned char m[],
         #else
         nh_vmac_nhbytes_2(mptr,kptr,VMAC_NHBYTES/8,ch,cl,ch2,cl2);
         ch2 &= m62;
-        ADD128(ch2,cl2,pkh2,pkl2);
+        ADD128(ch2,cl2,ctx->polytmp[2],ctx->polytmp[3]);
         #endif
         ch &= m62;
-        ADD128(ch,cl,pkh,pkl);
+        ADD128(ch,cl,ctx->polytmp[0],ctx->polytmp[1]);
         mptr += (VMAC_NHBYTES/sizeof(uint64_t));
         i--;
     }
@@ -969,18 +969,17 @@ uint64_t vhash(unsigned char m[],
         #else
         nh_16_2(mptr,kptr,2*((remaining+15)/16),ch,cl,ch2,cl2);
         ch2 &= m62;
-        ADD128(ch2,cl2,pkh2,pkl2);
+        ADD128(ch2,cl2,ctx->polytmp[2],ctx->polytmp[3]);
         #endif
         ch &= m62;
-        ADD128(ch,cl,pkh,pkl);
-        mptr += (VMAC_NHBYTES/sizeof(uint64_t));
+        ADD128(ch,cl,ctx->polytmp[0],ctx->polytmp[1]);
         goto do_l3;
     }
     else /* Empty String */
     {
-        ch = pkh; cl = pkl;
+        ch = ctx->polytmp[0]; cl = ctx->polytmp[1];
         #if (VMAC_TAG_LEN == 128)
-        ch2 = pkh2; cl2 = pkl2;
+        ch2 = ctx->polytmp[2]; cl2 = ctx->polytmp[3];
         #endif
         goto do_l3;
     }
@@ -1141,7 +1140,8 @@ unsigned prime(void)  /* Wake variable speed cpu, get rough speed estimate */
     volatile clock_t ticks = clock();
     do {
         for (i = 0; i < 500000; i++) {
-            uint64_t x = get64PE(&j);
+            uint64_t value = j;
+            uint64_t x = get64PE(&value);
             j = x * x + (uint64_t)ticks;
         }
         cnt++;
@@ -1156,11 +1156,13 @@ private:
 public:
 	enum{ MAX_BUFF_LN = 0x100000};
 	ALIGN(16) vmac_ctx_t ctx;
+	ALIGN(16) vmac_ctx_t wrapper_ctx;
 	unsigned char * aligned16Buff;
 	VHASH_initializer()
 	{
 		ALIGN(4) unsigned char key[] = "abcdefghijklmnop";
 		vmac_set_key(key, &ctx);
+		vmac_set_key(key, &wrapper_ctx);
 		buff = new unsigned char[ MAX_BUFF_LN + 128 ];
 		aligned16Buff = (unsigned char*)( ( ( ( size_t(buff) ) >> 4 ) << 4 ) + 16 );
 	}
@@ -1172,23 +1174,38 @@ public:
 
 VHASH_initializer vhi;
 
+/* SMHasher's interface provides neither padding nor alignment guarantees.
+ * Keep its state private and pad only the final partial NH block. */
+static uint64_t vhash_smhasher(const void *key, int len, uint32_t seed)
+{
+    vmac_ctx_t ctx = vhi.wrapper_ctx;
+    const unsigned char *input = (const unsigned char *)key;
+    ALIGN(16) unsigned char block[VMAC_NHBYTES];
+    uint64_t tagl;
+
+    ctx.polytmp[0] ^= (uint64_t)seed;
+    while (len >= VMAC_NHBYTES) {
+        memcpy(block, input, VMAC_NHBYTES);
+        vhash_update(block, VMAC_NHBYTES, &ctx);
+        input += VMAC_NHBYTES;
+        len -= VMAC_NHBYTES;
+    }
+    memset(block, 0, sizeof(block));
+    if (len)
+        memcpy(block, input, (size_t)len);
+    return vhash(block, (unsigned int)len, &tagl, &ctx);
+}
+
+static void vhash_store_le(void *res, uint64_t hash, unsigned bytes)
+{
+    unsigned char *out = (unsigned char *)res;
+    for (unsigned i = 0; i < bytes; ++i)
+        out[i] = (unsigned char)(hash >> (8 * i));
+}
+
 void VHASH_32( const void * key, int len, uint32_t seed, void * res )
 {
-    uint64_t tagl;
-#if _WORDSIZE > 32
-    *(size_t*)res = 0;
-#endif
-#if (VMAC_TAG_LEN == 128)
-    ctx.polytmp[0] = seed;
-    vhash( (unsigned char *)key, len, &tagl, &ctx);
-    *(uint32_t*)res = (uint32_t)tagl;
-#elif (VMAC_TAG_LEN == 64)
-    vhi.ctx.polytmp[0] = seed;
-    *(uint32_t*)res = (uint32_t)vhash( (unsigned char *)key, len, &tagl, &(vhi.ctx) );
-
-#else
-#error VMAC_TAG_LEN could be either 64 or 128
-#endif
+    vhash_store_le(res, vhash_smhasher(key, len, seed), 4);
 }
 
 void VHASH_PADDED_32(const void * key, int len, uint32_t seed, void * res)
@@ -1336,17 +1353,7 @@ void VHASH_PADDED_32_but_hashing(const void * key, int len, uint32_t seed, void 
 
 void VHASH_64( const void * key, int len, uint32_t seed, void * res )
 {
-    uint64_t tagl;
-#if (VMAC_TAG_LEN == 128)
-    ctx.polytmp[0] = seed;
-    vhash( (unsigned char *)key, len, &tagl, &ctx);
-    *(uint32_t*)res = (uint32_t)tagl;
-#elif (VMAC_TAG_LEN == 64)
-    vhi.ctx.polytmp[0] = seed;
-    *(uint64_t*)res = vhash( (unsigned char *)key, len, &tagl, &(vhi.ctx) );
-#else
-#error VMAC_TAG_LEN could be either 64 or 128
-#endif
+    vhash_store_le(res, vhash_smhasher(key, len, seed), 8);
 }
 
 void VHASH_PADDED_64( const void * key, int len, uint64_t seed, void * res )

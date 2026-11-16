@@ -39,14 +39,18 @@ static inline uint64_t mix(uint64_t h) {
 uint64_t fasthash64(const void *buf, size_t len, uint64_t seed)
 {
 	const uint64_t    m = 0x880355f21e6d1965ULL;
-	const uint64_t *pos = (const uint64_t *)buf;
-	const uint64_t *end = pos + (len / 8);
+	const unsigned char *pos = (const unsigned char *)buf;
 	const unsigned char *pos2;
+	size_t blocks = len / 8;
 	uint64_t h = seed ^ (len * m);
 	uint64_t v;
 
-	while (pos != end) {
-		v  = *pos++;
+	while (blocks--) {
+		v = (uint64_t)pos[0] | (uint64_t)pos[1] << 8 |
+		    (uint64_t)pos[2] << 16 | (uint64_t)pos[3] << 24 |
+		    (uint64_t)pos[4] << 32 | (uint64_t)pos[5] << 40 |
+		    (uint64_t)pos[6] << 48 | (uint64_t)pos[7] << 56;
+		pos += 8;
 		h ^= mix(v);
 		h *= m;
 	}

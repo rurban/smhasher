@@ -91,6 +91,12 @@
 #define FARMHASH_BIG_ENDIAN 1
 #endif
 
+#if !defined(FARMHASH_BIG_ENDIAN) && !defined(FARMHASH_LITTLE_ENDIAN) && \
+    defined(__BYTE_ORDER__) && defined(__ORDER_BIG_ENDIAN__) && \
+    __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+#define FARMHASH_BIG_ENDIAN 1
+#endif
+
 #if defined(FARMHASH_LITTLE_ENDIAN) && defined(FARMHASH_BIG_ENDIAN)
 #error
 #endif

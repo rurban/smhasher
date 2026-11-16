@@ -6,8 +6,6 @@
 
 int main()
 {
-  const uint16_t endian = 1;
-  if (*(const uint8_t *)&endian != 1) return 77;
   uint8_t key[2050];
   for (size_t i = 0; i < sizeof(key); ++i) key[i] = (uint8_t)i;
   const uint32_t seeds[] = {0, 1, 0x80000000U, 0xffffffffU};

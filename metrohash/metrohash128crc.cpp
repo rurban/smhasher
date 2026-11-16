@@ -97,7 +97,8 @@ void metrohash128crc_1(const uint8_t * key, uint64_t len, uint32_t seed, uint8_t
     v[0] += rotate_right((v[0] * k0) + v[1], 11);
     v[1] += rotate_right((v[1] * k1) + v[0], 26);
 
-    memcpy(out, v, 16);
+    write_u64(out, v[0]);
+    write_u64(out + 8, v[1]);
 }
 
 
@@ -173,5 +174,6 @@ void metrohash128crc_2(const uint8_t * key, uint64_t len, uint32_t seed, uint8_t
     v[0] += rotate_right((v[0] * k0) + v[1], 15);
     v[1] += rotate_right((v[1] * k1) + v[0], 27);
 
-    memcpy(out, v, 16);
+    write_u64(out, v[0]);
+    write_u64(out + 8, v[1]);
 }

@@ -22,6 +22,7 @@ extern "C" {
 
 /* Required for uint64_t */
 #include <stdint.h>
+#include <stddef.h>
 
 /* Width of a jody_hash. Changing this will also require
  * changing the width of tail masks to match. */
@@ -73,7 +74,7 @@ static const jodyhash32_t tail32_mask[] = {
 #define JH32_ROR2(a) (jodyhash32_t)(a >> JH32_SHIFT2 | (a << ((sizeof(jodyhash32_t) * 8) - JH32_SHIFT2)))
 
 
-extern jodyhash32_t jody_block_hash32(const jodyhash32_t *data, const jodyhash32_t start_hash, const size_t count);
+extern jodyhash32_t jody_block_hash32(const void *data, const jodyhash32_t start_hash, const size_t count);
 
 #ifdef __cplusplus
 }

@@ -82,6 +82,14 @@ on big endian machines, or a byte-by-byte read if the endianess is unknown.
   #define __LITTLE_ENDIAN 1234
 #endif
 
+#if !defined(__BYTE_ORDER) && defined(__BYTE_ORDER__)
+  #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+    #define __BYTE_ORDER __LITTLE_ENDIAN
+  #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+    #define __BYTE_ORDER __BIG_ENDIAN
+  #endif
+#endif
+
 /* I386 */
 #if defined(_M_IX86) || defined(__i386__) || defined(__i386) || defined(i386)
   #define __BYTE_ORDER __LITTLE_ENDIAN
@@ -132,12 +140,12 @@ on big endian machines, or a byte-by-byte read if the endianess is unknown.
     #define READ_UINT32(ptr)   (__builtin_bswap32(*((uint32_t*)(ptr))))
   #else
     /* Without a known fast bswap32 we're just as well off doing this */
-    #define READ_UINT32(ptr)   (ptr[0]|ptr[1]<<8|ptr[2]<<16|ptr[3]<<24)
+    #define READ_UINT32(ptr)   ((uint32_t)ptr[0]|(uint32_t)ptr[1]<<8|(uint32_t)ptr[2]<<16|(uint32_t)ptr[3]<<24)
     #define UNALIGNED_SAFE
   #endif
 #else
   /* Unknown endianess so last resort is to read individual bytes */
-  #define READ_UINT32(ptr)   (ptr[0]|ptr[1]<<8|ptr[2]<<16|ptr[3]<<24)
+  #define READ_UINT32(ptr)   ((uint32_t)ptr[0]|(uint32_t)ptr[1]<<8|(uint32_t)ptr[2]<<16|(uint32_t)ptr[3]<<24)
 
   /* Since we're not doing word-reads we can skip the messing about with realignment */
   #define UNALIGNED_SAFE
@@ -180,7 +188,7 @@ on big endian machines, or a byte-by-byte read if the endianess is unknown.
 #define DOBYTES(cnt, h1, c, n, ptr, len) do{ \
     int _i = cnt; \
     while(_i--) { \
-        c = c>>8 | *ptr++<<24; \
+        c = c>>8 | (uint32_t)*ptr++<<24; \
         n++; len--; \
         if(n==4) { \
             DOBLOCK(h1, c); \
@@ -329,7 +337,8 @@ void PMurHash32_test(const void *key, int len, uint32_t seed, void *out)
   PMurHash32_Process(&h1, &carry, ptr, (int)(end-ptr));
 #endif
   h1 = PMurHash32_Result(h1, carry, len);
-  *(uint32_t*)out = h1;
+  uint8_t *result = (uint8_t *)out;
+  for (unsigned i = 0; i < 4; ++i) result[i] = (uint8_t)(h1 >> (8 * i));
 }
 
 /*---------------------------------------------------------------------------*/

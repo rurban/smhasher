@@ -47,13 +47,24 @@ static const uint8_t SBOX[256] = {
 // HELPERS
 // =============================================================================
 
-/* Pack two uint64 values into a 128-bit register (lo in bytes 0-7, hi in bytes 8-15). */
-static inline tachyon_vec128_t to_m128i(uint64_t lo, uint64_t hi) {
-    tachyon_vec128_t r; memcpy(&r.b[0], &lo, 8); memcpy(&r.b[8], &hi, 8); return r;
+static inline void load_u64(const uint8_t *ptr, uint64_t *out) {
+    memcpy(out, ptr, 8);
+#if defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+    *out = __builtin_bswap64(*out);
+#endif
 }
 
-static inline void load_u64(const uint8_t *ptr, uint64_t *out) { memcpy(out, ptr, 8); }
-static inline void store_u64(uint8_t *ptr, uint64_t val) { memcpy(ptr, &val, 8); }
+static inline void store_u64(uint8_t *ptr, uint64_t val) {
+#if defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+    val = __builtin_bswap64(val);
+#endif
+    memcpy(ptr, &val, 8);
+}
+
+/* Pack two uint64 values into a 128-bit register (lo in bytes 0-7, hi in bytes 8-15). */
+static inline tachyon_vec128_t to_m128i(uint64_t lo, uint64_t hi) {
+    tachyon_vec128_t r; store_u64(&r.b[0], lo); store_u64(&r.b[8], hi); return r;
+}
 
 static inline tachyon_vec128_t xor_m128i(tachyon_vec128_t a, tachyon_vec128_t b) {
     tachyon_vec128_t r; for (int i = 0; i < VEC_SIZE; i++) r.b[i] = a.b[i] ^ b.b[i]; return r;

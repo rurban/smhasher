@@ -10,8 +10,7 @@
    You should have received a copy of the CC0 Public Domain Dedication along with
    this software. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
    
-   NOTE: This implementation assumes a little-endian architecture
-         that does not require aligned memory accesses.
+   Message words and tags use little-endian byte order.
    http://mouha.be/chaskey/
 */
 #include <stdint.h>
@@ -22,6 +21,12 @@
 static uint32_t k[4] = { 0x833D3433, 0x009F389F, 0x2398E64F, 0x417ACF39 };
 static uint32_t k1[4], k2[4];
 const volatile uint32_t C[2] = { 0x00, 0x87 };
+
+static uint32_t load32le(const uint8_t *p)
+{
+  return (uint32_t)p[0] | ((uint32_t)p[1] << 8) |
+         ((uint32_t)p[2] << 16) | ((uint32_t)p[3] << 24);
+}
 
 #define ROTL(x,b) (uint32_t)( ((x) >> (32 - (b))) | ( (x) << (b)) )
 
@@ -59,16 +64,15 @@ void subkeys(uint32_t k1[4], uint32_t k2[4], const uint32_t k[4]) {
 void chaskey(uint32_t *tag, uint32_t taglen, const uint8_t *m, const uint32_t mlen,
              const uint32_t k[4], const uint32_t k1[4], const uint32_t k2[4])
 {
-  const uint32_t *M = (uint32_t*) m;
-  const uint32_t *end = M + (((mlen-1)>>4)<<2); /* pointer to last message block */
-
+  const uint8_t *M = m;
+  const uint32_t blocks = mlen ? (mlen - 1) / 16 : 0;
+  uint32_t block;
   const uint32_t *l;
   uint8_t lb[16];
-  const uint32_t *lastblock;
+  const uint8_t *lastblock;
   uint32_t v[4];
   
   int i;
-  uint8_t *p;
   
   assert(taglen <= 16);
 
@@ -87,7 +91,7 @@ void chaskey(uint32_t *tag, uint32_t taglen, const uint8_t *m, const uint32_t ml
     v[0] ^= tag[0];
 
   if (mlen != 0) {
-    for ( ; M != end; M += 4 ) {
+    for (block = 0; block < blocks; block++, M += 16) {
 #ifdef CHASKEY_DEBUG
       printf("(%3d) v[0] %08X\n", mlen, v[0]);
       printf("(%3d) v[1] %08X\n", mlen, v[1]);
@@ -95,10 +99,10 @@ void chaskey(uint32_t *tag, uint32_t taglen, const uint8_t *m, const uint32_t ml
       printf("(%3d) v[3] %08X\n", mlen, v[3]);
       printf("(%3d) compress %08X %08X %08X %08X\n", mlen, m[0], m[1], m[2], m[3]);
 #endif
-      v[0] ^= M[0];
-      v[1] ^= M[1];
-      v[2] ^= M[2];
-      v[3] ^= M[3];
+      v[0] ^= load32le(M);
+      v[1] ^= load32le(M + 4);
+      v[2] ^= load32le(M + 8);
+      v[3] ^= load32le(M + 12);
       PERMUTE;
     }
   }
@@ -108,16 +112,14 @@ void chaskey(uint32_t *tag, uint32_t taglen, const uint8_t *m, const uint32_t ml
     lastblock = M;
   } else {
     l = k2;
-    p = (uint8_t*) M;
-    i = 0;
-    for ( ; p != m + mlen; p++,i++) {
-      lb[i] = *p;
+    for (i = 0; i < (int)(mlen - blocks * 16); i++) {
+      lb[i] = M[i];
     }
     lb[i++] = 0x01; /* padding bit */
     for ( ; i != 16; i++) {
       lb[i] = 0;
     }
-    lastblock = (uint32_t*) lb;
+    lastblock = lb;
   }
 
 #ifdef CHASKEY_DEBUG
@@ -125,12 +127,12 @@ void chaskey(uint32_t *tag, uint32_t taglen, const uint8_t *m, const uint32_t ml
   printf("(%3d) v[1] %08X\n", mlen, v[1]);
   printf("(%3d) v[2] %08X\n", mlen, v[2]);
   printf("(%3d) v[3] %08X\n", mlen, v[3]);
-  printf("(%3d) last block %08X %08X %08X %08X\n", mlen, lastblock[0], lastblock[1], lastblock[2], lastblock[3]);
+  printf("(%3d) last block %08X %08X %08X %08X\n", mlen, load32le(lastblock), load32le(lastblock + 4), load32le(lastblock + 8), load32le(lastblock + 12));
 #endif
-  v[0] ^= lastblock[0];
-  v[1] ^= lastblock[1];
-  v[2] ^= lastblock[2];
-  v[3] ^= lastblock[3];
+  v[0] ^= load32le(lastblock);
+  v[1] ^= load32le(lastblock + 4);
+  v[2] ^= load32le(lastblock + 8);
+  v[3] ^= load32le(lastblock + 12);
 
   v[0] ^= l[0];
   v[1] ^= l[1];
@@ -151,7 +153,8 @@ void chaskey(uint32_t *tag, uint32_t taglen, const uint8_t *m, const uint32_t ml
   v[2] ^= l[2];
   v[3] ^= l[3];
 
-  memcpy(tag,v,taglen);
+  for (i = 0; i < (int)taglen; i++)
+    ((uint8_t *)tag)[i] = (uint8_t)(v[i / 4] >> (8 * (i % 4)));
 
 }
 
@@ -165,14 +168,9 @@ chaskey_init()
 void
 chaskey_c(const void *input, int len, uint64_t seed, void *out)
 {
-#if 0
-  if (!len) {
-    *(uint64_t *) out = 0;
-    return;
-  }
-#endif
-  chaskey((uint32_t *)&seed, 8, input, len, k, k1, k2);
-  *(uint64_t *) out = seed;
+  uint32_t tag[2] = { (uint32_t)seed, (uint32_t)(seed >> 32) };
+  chaskey(tag, 8, input, len, k, k1, k2);
+  memcpy(out, tag, 8);
 }
 
 #if 0

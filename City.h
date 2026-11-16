@@ -32,10 +32,8 @@
 //
 // Functions in the CityHash family are not suitable for cryptography.
 //
-// WARNING: This code has not been tested on big-endian platforms!
-// It is known to work well on little-endian platforms that have a small
-// penalty for unaligned reads, such as current Intel and AMD
-// moderate-to-high-end CPUs.
+// Input words are interpreted in little-endian byte order on all platforms.
+// The implementation supports unaligned input.
 //
 // By the way, for some hash functions, given strings a and b, the hash
 // of a+b is easily derived from the hashes of a and b.  This property

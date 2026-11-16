@@ -57,16 +57,11 @@
 
 
 
-/* Hash a block of arbitrary size; must be divisible by sizeof(jodyhash_t)
- * The first block should pass a start_hash of zero.
- * All blocks after the first should pass start_hash as the value
- * returned by the last call to this function. This allows hashing
- * of any amount of data. If data is not divisible by the size of
- * jodyhash_t, it is MANDATORY that the caller provide a data buffer
- * which is divisible by sizeof(jodyhash_t). */
-extern jodyhash_t jody_block_hash(jodyhash_t *data,
+/* Hash count bytes, interpreting each word in little-endian order. */
+extern jodyhash_t jody_block_hash(const void *input,
 		const jodyhash_t start_hash, const size_t count)
 {
+	const unsigned char *data = (const unsigned char *)input;
 	const jodyhash_t s_constant = JH_ROR2(JODY_HASH_CONSTANT);
 	jodyhash_t hash = start_hash;
 	jodyhash_t element, element2;
@@ -169,7 +164,7 @@ extern jodyhash_t jody_block_hash(jodyhash_t *data,
 					hash += ep1;
 				}  // End of hash finish loop
 			}  // End of main AVX for loop
-			data += vec_allocsize / sizeof(jodyhash_t);
+			data += vec_allocsize;
 			length = (count - vec_allocsize) / sizeof(jodyhash_t);
 			if (((uintptr_t)data & (uintptr_t)0x1fULL) != 0) ALIGNED_FREE(aligned_data);
 			goto skip_sse2;
@@ -269,7 +264,7 @@ extern jodyhash_t jody_block_hash(jodyhash_t *data,
 					hash += ep1;
 				}  // End of hash finish loop
 			}  // End of main SSE for loop
-			data += vec_allocsize / sizeof(jodyhash_t);
+			data += vec_allocsize;
 			length = (count - vec_allocsize) / sizeof(jodyhash_t);
 			if (((uintptr_t)data & (uintptr_t)0x0fULL) != 0) ALIGNED_FREE(aligned_data);
 		} else {
@@ -289,7 +284,9 @@ skip_sse2:
 
 	/* Hash everything (normal) or remaining small tails (SSE2) */
 	for (; length > 0; length--) {
-		element = *data;
+		element = 0;
+		for (size_t i = 0; i < sizeof(jodyhash_t); i++)
+			element |= (jodyhash_t)data[i] << (8 * i);
 		element2 = JH_ROR(element);
 		element2 ^= s_constant;
 		element += JODY_HASH_CONSTANT;
@@ -297,13 +294,15 @@ skip_sse2:
 		hash ^= element2;
 		hash = JH_ROL2(hash);
 		hash += element;
-		data++;
+		data += sizeof(jodyhash_t);
 	}
 
 	/* Handle data tail (for blocks indivisible by sizeof(jodyhash_t)) */
 	length = count & (sizeof(jodyhash_t) - 1);
 	if (length) {
-		element = *data & tail_mask[length];
+		element = 0;
+		for (size_t i = 0; i < length; i++)
+			element |= (jodyhash_t)data[i] << (8 * i);
 		element2 = JH_ROR(element);
 		element2 ^= s_constant;
 		element += JODY_HASH_CONSTANT;

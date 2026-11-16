@@ -84,7 +84,7 @@ INLINE void output_chaining_value(const output_t *self, uint8_t cv[32]) {
   memcpy(cv_words, self->input_cv, 32);
   blake3_compress_in_place(cv_words, self->block, self->block_len, self->counter,
                     self->flags);
-  memcpy(cv, cv_words, 32);
+  store_cv_words(cv, cv_words);
 }
 
 INLINE void output_root_bytes(const output_t *self, uint8_t *out,

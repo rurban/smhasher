@@ -125,18 +125,9 @@ HashInfo g_hashes[] =
 { md5_128,             128, 0xF263F96F, "md5-128",     "MD5", GOOD, {} },
 { md5_64,               64, 0x12F0BA8E, "md5_64",      "MD5, bits 32-95", GOOD, {} },
 { md5_32,               32, 0xF3DFF19F, "md5_32",      "MD5, bits 32-63", GOOD, {} },
-#ifdef _MSC_VER /* truncated long to 32 */
-#  define SHA1_VERIF            0xED2F35E4
-#  define SHA1_32_VERIF         0x00000000
-#  define SHA1_64_VERIF         0x00000000
-#else
-#  define SHA1_VERIF            0x6AF411D8
-#  define SHA1_32_VERIF         0xB3122757
-#  define SHA1_64_VERIF         0x995397D5
-#endif
-{ sha1_160,            160, SHA1_VERIF, "sha1-160",     "SHA1", GOOD},
-{ sha1_32,              32, SHA1_32_VERIF,"sha1_32",    "SHA1, low 32 bits", GOOD},
-{ sha1_64,              64, SHA1_64_VERIF,"sha1_64",    "SHA1, low 64 bits", GOOD},
+{ sha1_160,            160, 0xED2F35E4, "sha1-160",     "SHA1", GOOD},
+{ sha1_32,              32, 0x480A2B09, "sha1_32",    "SHA1, low 32 bits", GOOD},
+{ sha1_64,              64, 0x296A3B95, "sha1_64",    "SHA1, low 64 bits", GOOD},
 { sha2_224,            224, 0x407AA518, "sha2-224",     "SHA2-224", POOR, {} },
 { sha2_224_64,          64, 0xF3E40ECA, "sha2-224_64",  "SHA2-224, low 64 bits", POOR, {} },
 { sha2_256,            256, 0xEBDA2FB1, "sha2-256",     "SHA2-256", GOOD, {} },
@@ -293,20 +284,8 @@ HashInfo g_hashes[] =
 { pearsonb128_test,    128, 0x6BEFE6EA, "pearsonbhash128", "Pearson block hash, 128-bit, low 64-bit", GOOD, {}},
 { pearsonb256_test,    256, 0x999B3C19, "pearsonbhash256", "Pearson block hash, 256-bit, low 64-bit", GOOD, {}},
 #endif
-// FIXME: seed
-#ifdef __aarch64__
-#define VHASH32_VERIF 0x0F02AEFD
-#define VHASH64_VERIF 0xFAAEE597
-#elif defined(HAVE_BIT32)
-// unstable
-#define VHASH32_VERIF 0
-#define VHASH64_VERIF 0
-#else
-#define VHASH32_VERIF 0xF0077651
-#define VHASH64_VERIF 0xF97D84FE
-#endif
-{ VHASH_32,             32, VHASH32_VERIF, "VHASH_32",    "VHASH_32 by Ted Krovetz and Wei Dai", POOR, {} },
-{ VHASH_64,             64, VHASH64_VERIF, "VHASH_64",    "VHASH_64 by Ted Krovetz and Wei Dai", POOR, {} },
+{ VHASH_32,             32, 0x488B04F8, "VHASH_32",    "VHASH_32 by Ted Krovetz and Wei Dai", POOR, {} },
+{ VHASH_64,             64, 0x026B45A6, "VHASH_64",    "VHASH_64 by Ted Krovetz and Wei Dai", POOR, {} },
 { MicroOAAT_test,       32, 0x16F1BA97,    "MicroOAAT",   "Small non-multiplicative OAAT (by funny-falcon)", POOR,
   {0x3b00} },
 #ifdef HAVE_SSE2

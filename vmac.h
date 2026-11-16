@@ -161,6 +161,11 @@ uint64_t vhash(unsigned char m[],
           uint64_t *tagl,
           vmac_ctx_t *ctx);
 
+/* SMHasher adapters use the fixed key "abcdefghijklmnop". The 32-bit seed
+ * is XORed into the low 32 bits of the initial polynomial high word; it does
+ * not change the NH, polynomial multiplier, or L3 keys. They read exactly
+ * len bytes, zero-pad the last NH block, and write the low 32 or 64 bits of
+ * the tag in little-endian byte order. VHASH_32 is the low half of VHASH_64. */
 void VHASH_32( const void * key, int len, uint32_t seed, void * res );
 void VHASH_PADDED_32( const void * key, int len, uint32_t seed, void * res );
 void VHASH_64( const void * key, int len, uint32_t seed, void * res );

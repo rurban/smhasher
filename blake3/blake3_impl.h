@@ -73,6 +73,16 @@ INLINE uint32_t load32(const void *src) {
          ((uint32_t)(p[2]) << 16) | ((uint32_t)(p[3]) << 24);
 }
 
+INLINE void store_cv_words(uint8_t out[32], const uint32_t cv[8]) {
+  for (size_t i = 0; i < 8; ++i) {
+    uint32_t w = cv[i];
+    out[4 * i] = (uint8_t)w;
+    out[4 * i + 1] = (uint8_t)(w >> 8);
+    out[4 * i + 2] = (uint8_t)(w >> 16);
+    out[4 * i + 3] = (uint8_t)(w >> 24);
+  }
+}
+
 INLINE void load_key_words(const uint8_t key[BLAKE3_KEY_LEN],
                            uint32_t key_words[8]) {
   key_words[0] = load32(&key[0 * 4]);

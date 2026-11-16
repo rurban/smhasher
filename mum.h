@@ -163,7 +163,7 @@ _mum (uint64_t v, uint64_t p) {
 
 static inline uint64_t
 _mum_le (uint64_t v) {
-#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__ || !defined(MUM_TARGET_INDEPENDENT_HASH)
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__ || (!defined(MUM_TARGET_INDEPENDENT_HASH) && !defined(MUM_CANONICAL_ENDIAN))
   return v;
 #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
   return _mum_bswap64 (v);
@@ -174,7 +174,7 @@ _mum_le (uint64_t v) {
 
 static inline uint32_t
 _mum_le32 (uint32_t v) {
-#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__ || !defined(MUM_TARGET_INDEPENDENT_HASH)
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__ || (!defined(MUM_TARGET_INDEPENDENT_HASH) && !defined(MUM_CANONICAL_ENDIAN))
   return v;
 #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
   return _mum_bswap32 (v);
@@ -185,7 +185,7 @@ _mum_le32 (uint32_t v) {
 
 static inline uint64_t
 _mum_le16 (uint16_t v) {
-#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__ || !defined(MUM_TARGET_INDEPENDENT_HASH)
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__ || (!defined(MUM_TARGET_INDEPENDENT_HASH) && !defined(MUM_CANONICAL_ENDIAN))
   return v;
 #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
   return (v >> 8) | ((v & 0xff) << 8);

@@ -26,15 +26,10 @@
 #include <string.h>
 #include "jody_hash32.h"
 
-/* Hash a block of arbitrary size; must be divisible by sizeof(jodyhash_t)
- * The first block should pass a start_hash of zero.
- * All blocks after the first should pass start_hash as the value
- * returned by the last call to this function. This allows hashing
- * of any amount of data. If data is not divisible by the size of
- * jodyhash_t, it is MANDATORY that the caller provide a data buffer
- * which is divisible by sizeof(jodyhash_t). */
-jodyhash32_t jody_block_hash32(const jodyhash32_t * data, const jodyhash32_t start_hash, const size_t count)
+/* Hash count bytes, interpreting each word in little-endian order. */
+jodyhash32_t jody_block_hash32(const void *input, const jodyhash32_t start_hash, const size_t count)
 {
+	const unsigned char *data = (const unsigned char *)input;
 	const jodyhash32_t s_constant = JH32_ROR2(JODY_HASH32_CONSTANT);
 	jodyhash32_t hash = start_hash;
 	jodyhash32_t element, element2, partial_constant;
@@ -47,7 +42,8 @@ jodyhash32_t jody_block_hash32(const jodyhash32_t * data, const jodyhash32_t sta
 
 	/* Handle tails or everything */
 	for (; length > 0; length--) {
-		element = *data;
+		element = (jodyhash32_t)data[0] | (jodyhash32_t)data[1] << 8 |
+		          (jodyhash32_t)data[2] << 16 | (jodyhash32_t)data[3] << 24;
 		element2 = JH32_ROR(element);
 		element2 ^= s_constant;
 		element += JODY_HASH32_CONSTANT;
@@ -55,14 +51,16 @@ jodyhash32_t jody_block_hash32(const jodyhash32_t * data, const jodyhash32_t sta
 		hash ^= element2;
 		hash = JH32_ROL2(hash);
 		hash += element;
-		data++;
+		data += sizeof(jodyhash32_t);
 	}
 
 	/* Handle data tail (for blocks indivisible by sizeof(jodyhash32_t)) */
 	length = count & (sizeof(jodyhash32_t) - 1);
 	if (length) {
 		partial_constant = JODY_HASH32_CONSTANT & tail32_mask[length];
-		element = *data & tail32_mask[length];
+		element = 0;
+		for (size_t i = 0; i < length; i++)
+			element |= (jodyhash32_t)data[i] << (8 * i);
 		hash += partial_constant;
 		hash += element;
 		hash = JH32_ROL(hash);

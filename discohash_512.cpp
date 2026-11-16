@@ -61,7 +61,7 @@ mix (const int A)
 }
 
 static inline void
-round (const uint64_t *m64, const uint8_t *m8, int len)
+round (const uint8_t *m8, int len, bool native_words)
 {
   int index = 0;
   int sindex = 0;
@@ -70,8 +70,11 @@ round (const uint64_t *m64, const uint8_t *m8, int len)
 
   for (int Len = len >> 3; index < Len; index++)
     {
-      dcs[sindex] += rot (m64[index] + index + counter + 1, 23);
-      counter += ~m64[index] + 1;
+      uint64_t word = native_words ? reinterpret_cast<const uint64_t *>(m8)[index]
+                                   : disco_load_le64(m8 + 8 * index);
+      dcs[sindex] += rot (word + index + counter + 1, 23);
+      if (native_words) word = reinterpret_cast<const uint64_t *>(m8)[index];
+      counter += ~word + 1;
       switch (sindex)
         {
         case 1:
@@ -104,7 +107,10 @@ round (const uint64_t *m64, const uint8_t *m8, int len)
   sindex = index & (STATEM);
   for (; index < len; index++)
     {
-      dcs8[sindex] += rot8 (m8[index] + index + counter8 + 1, 23);
+      const unsigned shift = (sindex & 7) * 8;
+      uint8_t byte = (uint8_t)(dcs[sindex >> 3] >> shift);
+      byte += rot8 (m8[index] + index + counter8 + 1, 23);
+      dcs[sindex >> 3] = (dcs[sindex >> 3] & ~(UINT64_C(0xff) << shift)) | (uint64_t(byte) << shift);
       counter8 += ~m8[index] + 1;
       mix (index % STATE64M);
       if (sindex >= STATEM)
@@ -129,25 +135,11 @@ round (const uint64_t *m64, const uint8_t *m8, int len)
 void
 DISCoHAsH_512_64 (const void *key, int len, seed_t seed, void *out)
 {
-  int tempLen = len;
-  if (tempLen == 0)
-    {
-      tempLen = 1;
-    }
-  alignas (uint64_t) uint8_t *tempBuf = new uint8_t[tempLen];
-  const uint8_t *key8Arr = (uint8_t *)key;
-
-  alignas (uint64_t) const uint8_t seedbuf[16] = { 0 };
-  const uint8_t *seed8Arr = (uint8_t *)seedbuf;
-  const uint64_t *seed64Arr = (uint64_t *)seedbuf;
-  uint32_t *seed32Arr = (uint32_t *)seedbuf;
-
-  // the cali number from the Matrix (1999)
-  seed32Arr[0] = UINT32_C (0xc5550690);
-  seed32Arr[0] -= seed;
-  seed32Arr[1] = 1 + seed;
-  seed32Arr[2] = ~(1 - seed);
-  seed32Arr[3] = (1 + seed) * UINT32_C (0xf00dacca);
+  const uint8_t *key8Arr = (const uint8_t *)key;
+  const uint64_t seedbuf[2] = {
+    uint64_t(UINT32_C(0xc5550690) - seed) | (uint64_t(1U + seed) << 32),
+    uint64_t(~(1U - seed)) | (uint64_t((1U + seed) * UINT32_C(0xf00dacca)) << 32)
+  };
 
   // nothing up my sleeve
   dcs[0] = UINT64_C (0x123456789abcdef0);
@@ -159,12 +151,9 @@ DISCoHAsH_512_64 (const void *key, int len, seed_t seed, void *out)
   dcs[6] = UINT64_C (0xfaceb00cfacec0de);
   dcs[7] = UINT64_C (0xdeadc0dedeadbeef);
 
-  memcpy (tempBuf, key, len);
-  uint64_t *temp64 = reinterpret_cast<uint64_t *> (tempBuf);
-
-  round (temp64, key8Arr, len);
-  round (seed64Arr, seed8Arr, 16);
-  round (dcs, dcs8, STATE);
+  round (key8Arr, len, false);
+  round ((const uint8_t *)seedbuf, 16, true);
+  round (dcs8, STATE, true);
 
   // 512-bit internal state 256-bit output
   uint64_t h[4] = { 0 }; // This will hold the final output
@@ -186,9 +175,7 @@ DISCoHAsH_512_64 (const void *key, int len, seed_t seed, void *out)
     h[3] = dcs[0] ^ dcs[1] ^ dcs[4] ^ dcs[5];
   */
 
-  memcpy (out, h, sizeof (h) / 4); // divide by 4 as smhasher only uses 64 bits
-
-  delete[] tempBuf;
+  disco_store_le64(out, h[0]);
 }
 
 static bool DISCoHAsH_512_64_bad_seeds(std::vector<uint32_t> &seeds)
