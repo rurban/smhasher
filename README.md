@@ -30,7 +30,7 @@ SMhasher
 | [sha1ni_32](doc/sha1ni_32.txt)                |      1583.50 |   172.17 | 387.70 (4) |1273 | machine-specific   |
 | [sha2ni-256](doc/sha2ni-256.txt)              |      1556.66 |   180.75 | 393.79 (5) |1495 | insecure,sanity, Permutation, Zeroes, machine-specific |
 | [sha2ni-256_64](doc/sha2ni-256_64.txt)        |      1508.82 |   184.89 | 393.07 (6) |1409 | Zeroes, machine-specific |
-| [blake3_c](doc/blake3_c.txt)                  |      1298.04 |   354.25 | 563.63 (4) |16462| no 32bit portability     |
+| [blake3_c](doc/blake3_c.txt)                  |      1298.04 |   354.25 | 563.63 (4) |16462| MIPS32 LE verification fixed |
 | [rmd128](doc/rmd128.txt)                      |       294.42 |   712.67 | 930.65 (4) | 950 |                  |
 | [rmd160](doc/rmd160.txt)                      |       202.16 |  1045.79 |1287.74 (16)| 950 | Cyclic hi32      |
 | [rmd256](doc/rmd256.txt)                      |       366.21 |   615.39 | 830.04 (7) |1026 |                  |
@@ -309,6 +309,12 @@ digests and maybe bigger databases, but not for 32bit hash tables.  The
 "Quality problems" lead to less uniform distribution, i.e.  more collisions
 and worse performance, but are rarely related to real security attacks, just
 the 2nd sanity AppendZeroes test against `\0` invariance is security relevant.
+
+Tabulation tables use a local deterministic generator matching the historical
+glibc sequence instead of the host C library's `rand()`. This preserves prior
+glibc results but changes results produced by other libc implementations, and
+does not modify the process-wide random state. Tabulation's input-word byte
+order remains platform-dependent.
 
 Columns
 -------
