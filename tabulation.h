@@ -70,41 +70,66 @@ static uint32_t tabulation_32_hash(const void * key, int len_bytes, uint32_t see
 }
 
 
-static uint64_t tab_rand64() {
-   // we don't know how many bits we get from rand(),
-   // but it is at least 16, so we concatenate a couple.
+// Deterministic 31-bit additive generator matching the historical glibc
+// random() sequence; its state is local and independent of the host libc.
+struct TabulationRng {
+   uint32_t words[31];
+   unsigned index;
+
+   explicit TabulationRng(uint32_t seed) : index(3) {
+      if (!seed) seed = 1;
+      words[0] = seed;
+      int64_t value = seed < 0x80000000U ? (int64_t)seed : (int64_t)seed - 0x100000000LL;
+      for (int i = 1; i < 31; ++i) {
+         value = (value * 16807) % 2147483647;
+         if (value < 0) value += 2147483647;
+         words[i] = (uint32_t)value;
+      }
+      for (int i = 0; i < 310; ++i) next();
+   }
+
+   uint32_t next() {
+      const unsigned lag = index >= 3 ? index - 3 : index + 28;
+      const uint32_t value = words[index] + words[lag];
+      words[index] = value;
+      if (++index == 31) index = 0;
+      return value >> 1;
+   }
+};
+
+static uint64_t tab_rand64(TabulationRng &rng) {
    uint64_t r = 0;
    for (int i = 0; i < 4; i++) {
       r <<= 16;
-      r ^= rand();
+      r ^= rng.next();
    }
    return r;
 }
 
 static void tabulation_32_seed_init(size_t &seed) {
-   srand(seed);
+   TabulationRng rng((uint32_t)seed);
    // the lazy mersenne combination requires 30 bits values in the polynomial.
-   multiply_shift_a_64 = tab_rand64() & ((1ull<<30)-1);
+   multiply_shift_a_64 = tab_rand64(rng) & ((1ull<<30)-1);
    if (!multiply_shift_a_64) {
-      multiply_shift_a_64 = tab_rand64() & ((1ull<<30)-1);
+      multiply_shift_a_64 = tab_rand64(rng) & ((1ull<<30)-1);
    }
    if (!multiply_shift_a_64) {
       have_broken_rand = 1;
       multiply_shift_a_64 = 0xababababbeafcafeULL & ((1ull<<30)-1);
    }
-   multiply_shift_b_64 = tab_rand64();
+   multiply_shift_b_64 = tab_rand64(rng);
    if (!multiply_shift_b_64) {
-      multiply_shift_b_64 = have_broken_rand ? 0xdeadbeef : tab_rand64();
+      multiply_shift_b_64 = have_broken_rand ? 0xdeadbeef : tab_rand64(rng);
    }
    for (int i = 0; i < BLOCK_SIZE_32; i++) {
-      multiply_shift_random_64[i] = tab_rand64();
+      multiply_shift_random_64[i] = tab_rand64(rng);
       if (!multiply_shift_random_64[i]) {
-         multiply_shift_random_64[i] = have_broken_rand ? 0xdeadbeef : tab_rand64();
+         multiply_shift_random_64[i] = have_broken_rand ? 0xdeadbeef : tab_rand64(rng);
       }
    }
    for (int i = 0; i < 32/CHAR_SIZE; i++)
       for (int j = 0; j < 1<<CHAR_SIZE; j++)
-         tabulation_32[i][j] = tab_rand64();
+         tabulation_32[i][j] = tab_rand64(rng);
 }
 
 
@@ -215,28 +240,30 @@ static uint64_t tabulation_hash(const void * key, int len_bytes, uint32_t seed) 
    return finalize_tabulation(h);
 }
 
-static __uint128_t tab_rand128() {
-   return (__uint128_t)tab_rand64() << 64 | tab_rand64();
+static __uint128_t tab_rand128(TabulationRng &rng) {
+   const uint64_t high = tab_rand64(rng);
+   const uint64_t low = tab_rand64(rng);
+   return (__uint128_t)high << 64 | low;
 }
 
 static void tabulation_seed_init(size_t &seed) {
-   srand(seed);
+   TabulationRng rng((uint32_t)seed);
    // the lazy mersenne combination requires 60 bits values in the polynomial.
    // rurban: added checks for bad seeds
-   tab_multiply_shift_a = tab_rand128() & ((1ull<<60)-1);
-   tab_multiply_shift_b = tab_rand128();
-   if (!tab_multiply_shift_a) tab_multiply_shift_a = tab_rand128() & ((1ull<<60)-1);
+   tab_multiply_shift_a = tab_rand128(rng) & ((1ull<<60)-1);
+   tab_multiply_shift_b = tab_rand128(rng);
+   if (!tab_multiply_shift_a) tab_multiply_shift_a = tab_rand128(rng) & ((1ull<<60)-1);
    if (!tab_multiply_shift_a) {
       have_broken_rand = 1;
       tab_multiply_shift_a = 0xababababbeafcafeULL & ((1ull<<60)-1);
    }
-   if (!tab_multiply_shift_b) tab_multiply_shift_b = tab_rand128();
+   if (!tab_multiply_shift_b) tab_multiply_shift_b = tab_rand128(rng);
    if (!tab_multiply_shift_b) {
       have_broken_rand = 1;
       tab_multiply_shift_b++;
    }
    for (int i = 0; i < TAB_BLOCK_SIZE; i++) {
-      tab_multiply_shift_random[i] = tab_rand128();
+      tab_multiply_shift_random[i] = tab_rand128(rng);
       if (!tab_multiply_shift_random[i])
          tab_multiply_shift_random[i] = 0x12345678;
    }
@@ -244,7 +271,7 @@ static void tabulation_seed_init(size_t &seed) {
       assert(TAB_BLOCK_SIZE >= 64/CHAR_SIZE);
    for (int i = 0; i < 64/CHAR_SIZE; i++)
       for (int j = 0; j < 1<<CHAR_SIZE; j++)
-         tabulation[i][j] = have_broken_rand ? tab_multiply_shift_random[i] : tab_rand128();
+         tabulation[i][j] = have_broken_rand ? tab_multiply_shift_random[i] : tab_rand128(rng);
 }
 
 #endif
