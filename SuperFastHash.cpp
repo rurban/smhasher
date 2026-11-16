@@ -6,22 +6,10 @@
 
    http://www.azillionmonkeys.com/qed/hash.html */
 
-/*
-#undef get16bits
-#if (defined(__GNUC__) && defined(__i386__)) || defined(__WATCOMC__) \
-  || defined(_MSC_VER) || defined (__BORLANDC__) || defined (__TURBOC__)
-#define get16bits(d) (*((const uint16_t *) (d)))
-#endif
-
-#if !defined (get16bits)
-#define get16bits(d) ((((uint32_t)(((const uint8_t *)(d))[1])) << 8)\
-                       +(uint32_t)(((const uint8_t *)(d))[0]) )
-#endif
-*/
-
 FORCE_INLINE uint16_t get16bits ( const void * p )
 {
-  return *(const uint16_t*)p;
+  const uint8_t *bytes = (const uint8_t *)p;
+  return (uint16_t)((uint16_t)bytes[0] | (uint16_t)bytes[1] << 8);
 }
 
 // objsize: 0-d2: 210
@@ -43,18 +31,18 @@ uint32_t SuperFastHash (const char * data, int len, uint32_t hash) {
     hash  += hash >> 11;
   }
 
-  /* Handle end cases */
+  /* Legacy tails sign-extend the final byte, regardless of char signedness. */
   switch (rem) {
     case 3:	hash += get16bits (data);
         hash ^= hash << 16;
-        hash ^= data[sizeof (uint16_t)] << 18;
+        hash ^= (((uint32_t)(uint8_t)data[2] ^ 0x80U) - 0x80U) << 18;
         hash += hash >> 11;
         break;
     case 2:	hash += get16bits (data);
         hash ^= hash << 11;
         hash += hash >> 17;
         break;
-    case 1: hash += *data;
+    case 1: hash += ((uint32_t)(uint8_t)*data ^ 0x80U) - 0x80U;
         hash ^= hash << 10;
         hash += hash >> 1;
   }
