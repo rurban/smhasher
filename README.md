@@ -330,6 +330,37 @@ The smaller the better.
 Quality problems: See the failures in the linked doc.
 The less the better.
 
+Compiler speed comparison
+-------------------------
+
+Build the same revision and configuration separately with GCC and Clang, then
+run the comparison on an otherwise idle machine:
+
+```sh
+CC=gcc CXX=g++ cmake -S . -B build-gcc -DCMAKE_BUILD_TYPE=Release
+cmake --build build-gcc --target SMHasher
+CC=clang CXX=clang++ cmake -S . -B build-clang -DCMAKE_BUILD_TYPE=Release
+cmake --build build-clang --target SMHasher
+./compare_compilers.py build-gcc/SMHasher build-clang/SMHasher > comparison.md
+```
+
+The report covers every hash available in either build; append hash names to
+measure only those algorithms. A dash means that a build lacks that hash; an
+error is reported separately and makes the command fail. Bulk results average
+alignments 0–7 for 256 KiB keys; short-key results average the configured key
+lengths (normally 1–32 bytes). Timer ticks are not necessarily CPU core cycles,
+and frequency scaling, scheduling and build flags affect comparisons.
+
+Example on an Intel Core i7-6820HQ, GCC 15.2.0 and Clang 21.1.8, CMake
+Release (`-O3 -DNDEBUG`), one run per compiler and hash:
+
+| Hash | GCC bulk B/tick | Clang bulk B/tick | GCC short ticks/hash | Clang short ticks/hash |
+|---|---:|---:|---:|---:|
+| Murmur3A | 0.969 | 0.944 | 44.283 | 44.577 |
+| SipHash | 0.388 | 0.410 | 116.522 | 106.275 |
+| xxHash32 | 2.484 | 2.473 | 40.363 | 37.567 |
+| xxh3 | 12.611 | 14.120 | 23.321 | 21.018 |
+
 Other
 -----
 
