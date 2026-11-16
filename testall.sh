@@ -1,5 +1,6 @@
 #!/bin/sh
 make -C build
+make -C build CollisionSolverProbe
 which performance && performance
 # same machine dispatch as testspeed.sh: speed.pl must update the per-machine html
 hname=`hostname`
@@ -23,11 +24,13 @@ if test -z "$@"; then
     test -f log.hashes && mv log.hashes log.hashes.bak
     (for g in `build/SMHasher --listnames`; do
          build/SMHasher $g | tee doc/$g.txt;
+        ./collision_solver.py --section $g | tee -a doc/$g.txt;
         ./testseeds.sh $g;
      done) | tee log.hashes
 else
     for g in $@; do
         build/SMHasher $g | tee doc/$g.txt
+        ./collision_solver.py --section $g | tee -a doc/$g.txt
         ./speed.pl $H doc/$g.txt && \
             ./fixupdocspeeds.pl doc/$g.txt
         ./testseeds.sh $g

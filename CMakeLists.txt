@@ -848,6 +848,11 @@ target_link_libraries(SMHasher SMHasherSupport
                       ${HIGHWAY_LIB} ${BLAKE3_LIB} ${AHASH_C_LIB}
                       ${CMAKE_THREAD_LIBS_INIT})
 
+add_executable(CollisionSolverProbe EXCLUDE_FROM_ALL collision_solver_probe.cpp)
+target_link_libraries(CollisionSolverProbe SMHasherSupport
+                      ${HIGHWAY_LIB} ${BLAKE3_LIB} ${AHASH_C_LIB}
+                      ${CMAKE_THREAD_LIBS_INIT})
+
 SET(exectargets ${exectargets} SMHasher)
 # add_executable( bittest bittest.cpp )
 #

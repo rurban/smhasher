@@ -45,6 +45,7 @@ my @sections = (
   ["LongNeighbors Tests",                      "LongNeighbors"],
   ["BIC 'Bit Independence Criteria' Tests",    "BIC"],
   ["BadSeeds Tests",                           "BadSeeds"],
+  ["Collision Solver Tests",                   "Solver"],
 );
 
 # classify an existing cell entry: label of the auto entry it came from,
@@ -69,6 +70,7 @@ sub classify {
   return "Diff"        if $e =~ /^Diff$/;
   return "LongNeighbors" if $e =~ /^LongNeighbors$/;
   return "BIC"         if $e =~ /^BIC$/;
+  return "Solver"      if $e =~ /^Solver$/;
   return "Prng"        if $e =~ /^Prng$/;
   return undef;
 }
