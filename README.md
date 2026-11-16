@@ -244,6 +244,10 @@ SMhasher
 | [lanehash128](doc/lanehash128.txt)            |     20703.49 |    31.91 | 460.52 (1) |     | Sparse high32              |
 | [lanehash_aes64](doc/lanehash_aes64.txt)      |     43802.63 |    21.82 | 119.16 (2) |3834 | AES only                   |
 | [lanehash_aes128](doc/lanehash_aes128.txt)    |     44261.24 |    25.31 | 138.73 (2) |3638 | Sparse high32, AES only    |
+| [fastest32](doc/fastest32.txt)                |     33941.95 |    32.63 | -          |     |                            |
+| [fastest64](doc/fastest64.txt)                |     32784.90 |    30.33 | -          |     |                            |
+| [fastest128](doc/fastest128.txt)              |     30909.27 |    31.12 | -          |     |                            |
+| [fastest256](doc/fastest256.txt)              |     32664.41 |    33.98 | -          |     |                            |
 | [fifty2hash64](doc/fifty2hash64.txt)          |      6411.81 |    32.07 | 453.69 (2) |    |                             |
 | [fifty2hash128](doc/fifty2hash128.txt)        |      6790.27 |    36.29 | 459.37 (1) |     |                            |
 | [hassh64](doc/hassh64.txt)                    |     17779.27 |    33.25 | 598.66 (60)|     |                            |

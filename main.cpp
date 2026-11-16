@@ -729,6 +729,10 @@ HashInfo g_hashes[] =
 { lanehash_aes64_test,  64, 0x9FF60BEF, "lanehash_aes64",  "lanehash_aes, 64-bit, AES lanes + mum short path", GOOD, {} },
 { lanehash_aes128_test,128, 0x1A79672D, "lanehash_aes128", "lanehash_aes, 128-bit, AES lanes + mum short path", GOOD, {} },
 #endif
+{ fastest32_test,       32, 0x82537DC3, "fastest32",       "fastest, 32-bit, paired AES lanes + mum short path", GOOD, {} },
+{ fastest64_test,       64, 0xF934EA12, "fastest64",       "fastest, 64-bit, paired AES lanes + mum short path", GOOD, {} },
+{ fastest128_test,     128, 0xA56C349D, "fastest128",      "fastest, 128-bit, paired AES lanes + mum short path", GOOD, {} },
+{ fastest256_test,     256, 0xE4141364, "fastest256",      "fastest, 256-bit, paired AES lanes + mum short path", GOOD, {} },
 #if 0
 { xxhash256_test,       64, 0x024B7CF4, "xxhash256",   "xxhash256, 64-bit unportable", GOOD, {} },
 #endif

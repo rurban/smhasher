@@ -568,6 +568,7 @@ endif(AES_FOUND)
 if((CMAKE_SIZEOF_VOID_P GREATER 4) OR (CMAKE_SYSTEM_PROCESSOR STREQUAL "arm"))
   set(LANEHASH_SRC lanehash.c lanehash_aes.c)
 endif()
+set(FASTEST_SRC fastest.c)
 
 if(SHA_FOUND)
   # todo: arm, power
@@ -792,6 +793,7 @@ add_library(
   ${SHA_SRC}
   ${GX_SRC}
   ${LANEHASH_SRC}
+  ${FASTEST_SRC}
   mum.cc
   mum_v3.cc
   jody_hash32.c

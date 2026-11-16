@@ -15,6 +15,7 @@
 #include "gxhash.h"
 #include "lanehash.h"
 #include "lanehash_aes.h"
+#include "fastest.h"
 
 #include "metrohash/metrohash64.h"
 #include "metrohash/metrohash128.h"
@@ -1520,6 +1521,20 @@ inline void lanehash_aes64_test( const void * key, int len, uint32_t seed, void 
 }
 inline void lanehash_aes128_test( const void * key, int len, uint32_t seed, void * out ) {
   lanehash_aes128(key, (size_t) len, (uint64_t) seed, out);
+}
+
+// ---- fastest: paired AES lanes + rot_bytes_2 (>64 B) + mum short path, 32/64/128/256-bit ----
+inline void fastest32_test( const void * key, int len, uint32_t seed, void * out ) {
+  *(uint32_t*)out = fastest32(key, (size_t) len, (uint64_t) seed);
+}
+inline void fastest64_test( const void * key, int len, uint32_t seed, void * out ) {
+  *(uint64_t*)out = fastest64(key, (size_t) len, (uint64_t) seed);
+}
+inline void fastest128_test( const void * key, int len, uint32_t seed, void * out ) {
+  fastest128(key, (size_t) len, (uint64_t) seed, out);
+}
+inline void fastest256_test( const void * key, int len, uint32_t seed, void * out ) {
+  fastest256(key, (size_t) len, (uint64_t) seed, out);
 }
 
 void fifty2hash64_test  ( const void * key, int len, uint32_t seed, void * out );
