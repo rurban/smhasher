@@ -132,12 +132,12 @@ on big endian machines, or a byte-by-byte read if the endianess is unknown.
     #define READ_UINT32(ptr)   (__builtin_bswap32(*((uint32_t*)(ptr))))
   #else
     /* Without a known fast bswap32 we're just as well off doing this */
-    #define READ_UINT32(ptr)   (ptr[0]|ptr[1]<<8|ptr[2]<<16|ptr[3]<<24)
+    #define READ_UINT32(ptr)   ((uint32_t)ptr[0]|(uint32_t)ptr[1]<<8|(uint32_t)ptr[2]<<16|(uint32_t)ptr[3]<<24)
     #define UNALIGNED_SAFE
   #endif
 #else
   /* Unknown endianess so last resort is to read individual bytes */
-  #define READ_UINT32(ptr)   (ptr[0]|ptr[1]<<8|ptr[2]<<16|ptr[3]<<24)
+  #define READ_UINT32(ptr)   ((uint32_t)ptr[0]|(uint32_t)ptr[1]<<8|(uint32_t)ptr[2]<<16|(uint32_t)ptr[3]<<24)
 
   /* Since we're not doing word-reads we can skip the messing about with realignment */
   #define UNALIGNED_SAFE
@@ -180,7 +180,7 @@ on big endian machines, or a byte-by-byte read if the endianess is unknown.
 #define DOBYTES(cnt, h1, c, n, ptr, len) do{ \
     int _i = cnt; \
     while(_i--) { \
-        c = c>>8 | *ptr++<<24; \
+        c = c>>8 | (uint32_t)*ptr++<<24; \
         n++; len--; \
         if(n==4) { \
             DOBLOCK(h1, c); \

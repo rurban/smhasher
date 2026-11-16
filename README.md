@@ -330,6 +330,27 @@ The smaller the better.
 Quality problems: See the failures in the linked doc.
 The less the better.
 
+Collision searches
+------------------
+
+`build/SMHasher --test=HashFlood xxh3` hashes 1,048,576 distinct binary
+64-byte keys with the known seed 0. The first eight key bytes contain a
+little-endian counter; the remaining bytes are zero, so NUL and control bytes
+are included. Set `SMHASHER_FLOOD_ATTEMPTS` to change the number of keys.
+The report covers 0–32 low output bits against bucket zero, with the number of
+matches, collisions after the first match, time to the first collision, and
+the first two matching counters. All widths share one hash pass. A dash means
+that fewer than two matches were found within the requested search.
+
+`./collision_solver.py` uses CBMC and a C compiler to find a pair of distinct
+four-byte PMurHash32 keys sharing their low 10 bits with seed 0. It verifies
+the solver witness by compiling and running the actual hash before reporting
+the keys, hashes, collision count and solve time. The solver search currently
+models PMurHash32; the brute-force search accepts any registered hash.
+
+These are known-seed bucket collisions, not necessarily full-hash collisions
+or evidence that a hidden seed can be recovered.
+
 Other
 -----
 

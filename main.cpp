@@ -7,6 +7,7 @@
 #include "AvalancheTest.h"
 #include "DifferentialTest.h"
 #include "HashMapTest.h"
+#include "CollisionAttack.h"
 
 #if NCPU > 1 // disable with -DNCPU=0 or 1
 #include <thread>
@@ -16,6 +17,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <time.h>
+#include <limits.h>
 
 //-----------------------------------------------------------------------------
 // Configuration.
@@ -46,6 +48,7 @@ bool g_testMomentChi2  = false;
 bool g_testPrng        = false;
 bool g_testBIC         = false;
 bool g_testBadSeeds    = false;
+bool g_testHashFlood   = false;
 //bool g_testLongNeighbors = false;
 
 double g_speed = 0.0;
@@ -78,6 +81,7 @@ TestOpts g_testopts[] =
 { g_testBIC, 	        "BIC" },
 { g_testMomentChi2,   "MomentChi2" },
 { g_testPrng,         "Prng" },
+{ g_testHashFlood,    "HashFlood" },
 { g_testBadSeeds,     "BadSeeds" },
 //{ g_testLongNeighbors,"LongNeighbors" }
 };
@@ -1084,6 +1088,12 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
     fprintf(stderr, "--- Testing %s \"%s\" %s\n\n", info->name, info->desc, quality_str[info->quality]);
   }
   fflush(NULL);
+  if (g_testHashFlood) {
+    const uint64_t attempts = (uint64_t)getenvlong("SMHASHER_FLOOD_ATTEMPTS", 1, 1048576, LONG_MAX);
+    Seed_init(info, 0);
+    PrintCollisionAttack(CollisionAttack(info->hash, 0, attempts), 0);
+  }
+
 
   // sha1_32 runs 30s
   if(g_testSanity || g_testAll)

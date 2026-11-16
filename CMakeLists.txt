@@ -866,6 +866,8 @@ endif()
 
 if(NOT (CMAKE_CROSSCOMPILING) OR QEMU_TESTING)
   enable_testing()
+  add_executable(CollisionAttackTest collision_attack_test.cpp)
+  add_test(CollisionAttackRegression CollisionAttackTest)
   add_test(List SMHasher --list)
   add_test(VerifyAll SMHasher --test=VerifyAll --verbose)
   add_test(Sanity SMHasher --test=Sanity)
