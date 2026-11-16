@@ -97,7 +97,7 @@ SMhasher
 | [jodyhash32](doc/jodyhash32.txt)              |      1762.46 |    42.66 | 236.09 (2) | 153 | bias, collisions, distr, BIC LongNeighbors |
 | [jodyhash64](doc/jodyhash64.txt)              |      4861.84 |    44.05 | 234.35 (2) |1036 | bias, collisions, distr, BIC, LongNeighbors |
 | [lookup3](doc/lookup3.txt)                    |      2474.09 |    40.19 | 238.22 (3) | 408 | UB, 28% bias, collisions, 30% distr, BIC  |
-| [superfast](doc/superfast.txt)                |      2085.79 |    49.89 | 230.76 (3) | 210 | UB, bad seed 0, 91% bias, 5273.01x collisions, 37% distr, BIC |
+| [superfast](doc/superfast.txt)                |      2085.79 |    49.89 | 230.76 (3) | 210 | bad seed 0, 91% bias, 5273.01x collisions, 37% distr, BIC |
 | [MurmurOAAT](doc/MurmurOAAT.txt)              |       513.75 |   105.23 | 244.81 (4) |  45 | bad seed 0, collisions, 99.998% distr., BIC, LongNeighbors |
 | [Crap8](doc/Crap8.txt)                        |      3081.04 |    37.15 | 234.94 (2) | 245 | UB, 2.42% bias, collisions, 2% distrib |
 | [Murmur1](doc/Murmur1.txt)                    |      1955.36 |    48.84 | 236.25 (2) | 197 | UB, 1 bad seed, 511x collisions, Diff, BIC |
@@ -316,6 +316,12 @@ glibc results but changes results produced by other libc implementations, and
 does not modify the process-wide random state. Tabulation's input-word byte
 order remains platform-dependent.
 
+SuperFastHash uses explicit little-endian reads and a fixed signed-byte tail,
+so its results do not depend on alignment or the compiler's `char` signedness.
+This changes its old output on targets where `char` was unsigned. ARMv6 CPUs,
+including the Raspberry Pi Model B, do not support NEON; build without
+`HAVE_NEON` on those machines.
+
 Columns
 -------
 
@@ -489,16 +495,11 @@ Typical undefined behaviour (**UB**) problems:
 
 * Signed integer overflow
 
-  A simple type error, this hash needs to use unsigned integer types
-  internally, to avoid undefined and inconsistent behaviour.
-  i.e. SuperFastHash: signed integer overflow: -2147483641 + -113 cannot be represented in type 'int'
+  Hash implementations need unsigned integer types internally to avoid
+  undefined and inconsistent overflow behavior.
 
 * shift exponent overflow
 
   With: FNV1A_Totenschiff, pair\_multiply\_shift, sumhash32
   shift exponent 64 is too large for 64-bit type 'long unsigned int'
   PMurHash left-shifts 128 by 24 into int.
-
-* left shift of negative value
-
-  With: SuperFastHash left shift of -126
