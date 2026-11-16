@@ -2,7 +2,9 @@
 #include "Random.h"
 #include "vmac.h"
 #include "Hashes.h"
+#include "LinearHashMap.h"
 
+#include <inttypes.h>
 #include <stdio.h>   // for printf
 #include <memory.h>  // for memset
 #include <math.h>    // for sqrt
@@ -77,7 +79,7 @@ double CalcStdv ( std::vector<double> & v, int a, int b )
 
 double CalcStdv ( std::vector<double> & v )
 {
-  return CalcStdv(v, 0, v.size());
+  return v.empty() ? NAN : CalcStdv(v, 0, (int)v.size() - 1);
 }
 
 // Return true if the largest value in v[0,len) is more than three
@@ -120,7 +122,7 @@ void FilterOutliers ( std::vector<double> & v )
   
   for(size_t x = 0x40000000; x; x = x >> 1 )
   {
-    if((len | x) >= v.size()) continue;
+    if((len | x) > v.size()) continue;
     
     if(!ContainsOutlier(v,len | x))
     {
@@ -416,33 +418,94 @@ void ReportTinySpeedTest ( const std::vector<double>& cycles_per_hash, int minke
   }
 }
 
+static void LinearHashMapSpeedTest(const std::vector<std::string> &words,
+                                   const LinearHashMap::Hasher &hash,
+                                   int trials)
+{
+  LinearHashMap map(words.size(), hash);
+  printf("Instrumented linear-probing hashmap\n");
+  volatile int64_t begin = timer_start();
+  for (size_t i = 0; i < words.size(); ++i) {
+    std::string key = words[i];
+    int *value = map.get_or_insert(key);
+    if (!value) break;
+    *value = 1;
+  }
+  volatile int64_t end = timer_end();
+  if (map.limit_reached()) {
+    printf("Linear HashMapTest: SKIP (probe limit %d reached, %" PRIu64 " collisions)\n\n",
+           LinearHashMap::kProbeLimit, map.collisions());
+    return;
+  }
+  printf("Init linear HashMapTest:  %.3f cycles/op (%zu inserts)\n",
+         double(timer_sub(end, begin)) / words.size(), words.size());
+  const size_t deletions = (words.size() - 1) / 100 + 1;
+  begin = timer_start();
+  for (size_t i = 0; i < words.size(); i += 100) map.erase(words[i]);
+  end = timer_end();
+  if (map.limit_reached()) {
+    printf("Delete linear HashMapTest: SKIP (probe limit %d reached)\n\n",
+           LinearHashMap::kProbeLimit);
+    return;
+  }
+  printf("Delete linear HashMapTest: %.3f cycles/op (%zu deletions)\n",
+         double(timer_sub(end, begin)) / deletions, deletions);
+
+  std::vector<double> times;
+  times.reserve(trials);
+  for (int trial = 0; trial < trials; ++trial) {
+    int found = 0;
+    begin = timer_start();
+    for (size_t i = 0; i < words.size(); ++i) {
+      std::string key = words[i];
+      int *value = map.get_or_insert(key);
+      if (!value) break;
+      if (*value) ++found;
+    }
+    end = timer_end();
+    if (map.limit_reached()) break;
+    const double elapsed = double(timer_sub(end, begin)) / words.size();
+    blackhole((uint32_t)found);
+    if (elapsed > 0) times.push_back(elapsed);
+  }
+  if (map.limit_reached()) {
+    printf("Running linear HashMapTest: SKIP (probe limit %d reached)\n",
+           LinearHashMap::kProbeLimit);
+  } else if (times.empty()) {
+    printf("Running linear HashMapTest: SKIP (no valid samples)\n");
+  } else {
+    std::sort(times.begin(), times.end());
+    FilterOutliers(times);
+    printf("Running linear HashMapTest: %.3f cycles/op (%.1f stdv)\n",
+           CalcMean(times), CalcStdv(times));
+  }
+  printf("Linear probe collisions: %" PRIu64 ", maximum probes: %zu\n\n",
+         map.collisions(), map.max_probe());
+}
+
 double HashMapSpeedTest ( pfHash pfhash, const int hashbits,
                           std::vector<std::string> words,
                           const uint32_t seed, const int trials, bool verbose )
 {
-  //using phmap::flat_node_hash_map;
-  Rand r(82762);
-  std_hashmap hashmap(words.size(), [=](const std::string &key)
-                  {
-                    // 256 needed for hasshe2, but only size_t used
-                    static char out[256] = { 0 };
-                    pfhash(key.c_str(), key.length(), seed, &out);
-                    return *(size_t*)out;
-                  });
-  fast_hashmap phashmap(words.size(), [=](const std::string &key)
-                  {
-                    static char out[256] = { 0 }; // 256 for hasshe2, but stripped to 64/32
-                    pfhash(key.c_str(), key.length(), seed, &out);
-                    return *(size_t*)out;
-                  });
+  if (words.empty()) {
+    printf("Hashmap tests skipped: no input words\n");
+    return 0.;
+  }
+  LinearHashMap::Hasher hash_key = [=](const std::string &key) {
+    alignas(64) unsigned char out[256];
+    memset(out, 0, sizeof(size_t));
+    pfhash(key.c_str(), (int)key.length(), seed, out);
+    size_t result;
+    memcpy(&result, out, sizeof(result));
+    return result;
+  };
+  std_hashmap hashmap(words.size(), hash_key);
+  fast_hashmap phashmap(words.size(), hash_key);
   
   std::vector<std::string>::iterator it;
   std::vector<double> times;
   double t1;
 
-  printf("std::unordered_map\n");
-  printf("Init std HashMapTest:     ");
-  fflush(NULL);
   times.reserve(trials);
   if (need_minlen64_align16(pfhash)) {
     for (it = words.begin(); it != words.end(); it++) {
@@ -450,23 +513,29 @@ double HashMapSpeedTest ( pfHash pfhash, const int hashbits,
       (*it).resize(64);
     }
   }
+  LinearHashMapSpeedTest(words, hash_key, trials);
+  const size_t deletions = (words.size() - 1) / 100 + 1;
+  double tdelete;
+  printf("std::unordered_map\n");
+  printf("Init std HashMapTest:     ");
+  fflush(NULL);
   {
-    // hash inserts plus 1% deletes
     volatile int64_t begin, end;
-    int i = 0;
     begin = timer_start();
-    for (it = words.begin(); it != words.end(); it++, i++) {
+    for (it = words.begin(); it != words.end(); ++it) {
       std::string line = *it;
       hashmap[line] = 1;
-      if (i % 100 == 0)
-        hashmap.erase(line);
     }
     end = timer_end();
     t1 = double(timer_sub(end, begin)) / words.size();
+    begin = timer_start();
+    for (size_t i = 0; i < words.size(); i += 100) hashmap.erase(words[i]);
+    end = timer_end();
+    tdelete = double(timer_sub(end, begin)) / deletions;
   }
   fflush(NULL);
-  printf("%0.3f cycles/op (%zu inserts, 1%% deletions)\n",
-         t1, words.size());
+  printf("%0.3f cycles/op (%zu inserts)\n", t1, words.size());
+  printf("Delete std HashMapTest:   %0.3f cycles/op (%zu deletions)\n", tdelete, deletions);
   printf("Running std HashMapTest:  ");
   if (t1 > 10000.) { // e.g. multiply_shift 459271.700
     printf("SKIP");
@@ -488,16 +557,20 @@ double HashMapSpeedTest ( pfHash pfhash, const int hashbits,
         }
       end = timer_end();
       t = double(timer_sub(end, begin)) / words.size();
-      if(found > 0 && t > 0) times.push_back(t);
+      blackhole((uint32_t)found);
+      if(t > 0) times.push_back(t);
     }
   hashmap.clear();
 
-  std::sort(times.begin(),times.end());
-  FilterOutliers(times);
-  double mean = CalcMean(times);
-  double stdv = CalcStdv(times);
-  printf("%0.3f cycles/op", mean);
-  printf(" (%0.1f stdv)\n", stdv);
+  double mean = 0.;
+  if (times.empty()) {
+    printf("SKIP (no valid samples)\n");
+  } else {
+    FilterOutliers(times);
+    mean = CalcMean(times);
+    double stdv = CalcStdv(times);
+    printf("%0.3f cycles/op (%0.1f stdv)\n", mean, stdv);
+  }
 
   times.clear();
 
@@ -512,22 +585,23 @@ double HashMapSpeedTest ( pfHash pfhash, const int hashbits,
 #endif
   fflush(NULL);
   times.reserve(trials);
-  { // hash inserts and 1% deletes
+  {
     volatile int64_t begin, end;
-    int i = 0;
     begin = timer_start();
-    for (it = words.begin(); it != words.end(); it++, i++) {
+    for (it = words.begin(); it != words.end(); ++it) {
       std::string line = *it;
       phashmap[line] = 1;
-      if (i % 100 == 0)
-        phashmap.erase(line);
     }
     end = timer_end();
     t1 = double(timer_sub(end,  begin)) / words.size();
+    begin = timer_start();
+    for (size_t i = 0; i < words.size(); i += 100) phashmap.erase(words[i]);
+    end = timer_end();
+    tdelete = double(timer_sub(end, begin)) / deletions;
   }
   fflush(NULL);
-  printf("%0.3f cycles/op (%zu inserts, 1%% deletions)\n",
-         t1, words.size());
+  printf("%0.3f cycles/op (%zu inserts)\n", t1, words.size());
+  printf("Delete fast HashMapTest:  %0.3f cycles/op (%zu deletions)\n", tdelete, deletions);
   printf("Running fast HashMapTest: ");
   if (t1 > 10000.) { // e.g. multiply_shift 459271.700
     printf("SKIP");
@@ -548,17 +622,20 @@ double HashMapSpeedTest ( pfHash pfhash, const int hashbits,
         }
       end = timer_end();
       t = double(timer_sub(end, begin)) / words.size();
-      if(found > 0 && t > 0) times.push_back(t);
+      blackhole((uint32_t)found);
+      if(t > 0) times.push_back(t);
     }
   phashmap.clear();
   fflush(NULL);
 
-  std::sort(times.begin(),times.end());
-  FilterOutliers(times);
-  double mean1 = CalcMean(times);
-  double stdv1 = CalcStdv(times);
-  printf("%0.3f cycles/op", mean1);
-  printf(" (%0.1f stdv) ", stdv1);
+  if (times.empty()) {
+    printf("SKIP (no valid samples) ");
+  } else {
+    FilterOutliers(times);
+    double mean1 = CalcMean(times);
+    double stdv1 = CalcStdv(times);
+    printf("%0.3f cycles/op (%0.1f stdv) ", mean1, stdv1);
+  }
   fflush(NULL);
 
   return mean;

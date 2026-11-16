@@ -12,8 +12,8 @@
 using namespace std;
 
 //-----------------------------------------------------------------------------
-// This should be a realistic I-Cache test, when our hash is used inlined
-// in a hash table. There the size matters more than the bulk speed.
+// Compare hash-table workloads. The hash is called through a function pointer,
+// so this does not measure inlined hash performance.
 
 std::vector<std::string> HashMapInit(bool verbose) {
   std::vector<std::string> words;

@@ -319,10 +319,19 @@ The higher the better.
 cycl./hash: The average of the Small key speed test for 1-31 byte keys.
 The smaller the better.
 
-cycl./map: The result of the Hashmap test for /usr/dict/words with
-fast C++ hashmap get queries, with the standard deviation in
-brackets. This tests the inlinability of the hash function in practise (see size).
-The smaller the better.
+cycl./map: The result of the Hashmap test for `/usr/share/dict/words` (or
+`SMHASHER_WORDS`) with fast C++ hashmap get queries, with standard deviation in
+brackets. Hashes are called through a function pointer, so this does not measure
+inlining. The smaller the better.
+
+The hashmap benchmark also reports an instrumented fixed-capacity linear-probing
+map on the same string workload. It separately times insertion, deletion of
+every hundredth key, and lookups; lookup reports include mean and standard
+deviation. It also reports total occupied-slot collisions
+and maximum probe length. The map uses the hash bits directly and stops the
+linear run if a probe reaches 1,024 slots; this bounds benchmark work, not a
+production hash-flood defense. Its instrumentation adds overhead, so timings
+should not be treated as direct comparisons with uninstrumented maps.
 
 size: The object size in byte on AMD64. This affects the inlinability in e.g. hash tables.
 The smaller the better.
