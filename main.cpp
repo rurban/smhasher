@@ -7,6 +7,7 @@
 #include "AvalancheTest.h"
 #include "DifferentialTest.h"
 #include "HashMapTest.h"
+#include "LongNeighborTest.h"
 
 #if NCPU > 1 // disable with -DNCPU=0 or 1
 #include <thread>
@@ -46,7 +47,7 @@ bool g_testMomentChi2  = false;
 bool g_testPrng        = false;
 bool g_testBIC         = false;
 bool g_testBadSeeds    = false;
-//bool g_testLongNeighbors = false;
+bool g_testLongNeighbors = false;
 
 double g_speed = 0.0;
 
@@ -79,7 +80,7 @@ TestOpts g_testopts[] =
 { g_testMomentChi2,   "MomentChi2" },
 { g_testPrng,         "Prng" },
 { g_testBadSeeds,     "BadSeeds" },
-//{ g_testLongNeighbors,"LongNeighbors" }
+{ g_testLongNeighbors,"LongNeighbors" }
 };
 
 bool MomentChi2Test ( struct HashInfo *info, int inputSize );
@@ -1915,29 +1916,25 @@ void test ( hashfunc<hashtype> hash, HashInfo* info )
   }
 
   //-----------------------------------------------------------------------------
-  // LongNeighbors - collisions between long messages of low Hamming distance
-  // esp. for testing separate word and then byte-wise processing of unaligned
-  // rest parts. Only with --test=LongNeighbors or --extra
-  // 10s for fasthash32
-  // 7m with xxh3 (64bit)
-  // 10m30s with farmhash128_c
-
-  // Not yet included for licensing reasons
-#if 0
+  // LongNeighbors is expensive and runs explicitly or with --extra.
   if(g_testLongNeighbors || (g_testAll && g_testExtra))
   {
     printf("[[[ LongNeighbors Tests ]]]\n\n");
-
-    bool result = true;
-
-    Seed_init (info, 0);
-    result &= testLongNeighbors(info->hash, info->hashbits, g_drawDiagram);
-
-    if(!result) printf("*********FAIL*********\n");
+    if (need_minlen64_align16(hash)) {
+      printf("SKIP: hash requires constrained input alignment and length\n");
+    } else {
+      const int minlen = getenvlong("SMHASHER_LONGNEIGHBORS_MIN", 1, 10, 300);
+      const int maxlen = getenvlong("SMHASHER_LONGNEIGHBORS_MAX", minlen, 300, 300);
+      const LongNeighborConfig cfg = {minlen, maxlen, 5,
+                                      hashbits <= 32 ? 256 : 2048,
+                                      hashbits <= 32 ? 16 : 160};
+      Seed_init(info, 0);
+      if (!LongNeighborTest<hashtype>(info->hash, cfg, g_drawDiagram))
+        printf("*********FAIL*********\n");
+    }
     printf("\n");
     fflush(NULL);
   }
-#endif
 
   //-----------------------------------------------------------------------------
   // Bit Independence Criteria. Interesting, but doesn't tell us much about

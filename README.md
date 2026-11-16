@@ -330,6 +330,30 @@ The smaller the better.
 Quality problems: See the failures in the linked doc.
 The less the better.
 
+Long-neighbor collisions
+------------------------
+
+`build/SMHasher --test=LongNeighbors SpookyV2_128` runs an independent
+implementation of the published low-Hamming-distance collision method. For
+each length from 10 through 300 bytes it checks all-zero, all-one, and three
+deterministic random bases. It compares one-bit variants, two-bit variants
+near the end, three-bit variants near the end, and two-bit variants with one
+to three appended zero bytes. `--verbose` prints example colliding keys.
+
+The default search examines up to 2,048 tail bits for pairs and 160 for
+triples; 32-bit hashes use 256 and 16, respectively, to limit birthday
+collisions. It reports the number of affected bases and the expected number
+for uniform hashes. One collision fails a 128-bit-or-wider hash; two affected
+bases or one severe collision fail a 64-bit hash. Severity uses a conservative
+bound of one in $10^{12}$ for a low-distance delta or a three-way collision.
+For 32-bit hashes the threshold is 1.3 times the expected number (with at
+least one allowed unless its expected probability is below one in a million).
+
+This test is slow and may use hundreds of megabytes. Set
+`SMHASHER_LONGNEIGHBORS_MIN` and `SMHASHER_LONGNEIGHBORS_MAX` to restrict the
+byte-length range (1–300); defaults are 10 and 300. Hashes requiring a minimum
+length and fixed alignment are skipped.
+
 Other
 -----
 
