@@ -432,7 +432,7 @@ PROBLEMS
 
   Hash functions are typically initialized with a random seed. But
   some seed values may lead to bad hash functions, regardless of the
-  key. In the regular case with random seeds the probablity of such
+  key. In the regular case with random seeds the probability of such
   bad seeds is very low, like 2^32 or 2^64.
   A practical application needs to know if bad seeds exist and choose another
   one. See e.g. `mirhash_seed_init()` and `mirhash_bad_seeds()` in `Hashes.h`.
@@ -478,7 +478,7 @@ Typical undefined behaviour (**UB**) problems:
   Some hash function assume a padded input buffer which can be
   accessed past its length up to the word size. This allows for faster
   loop processing, as no 2nd loop or switch table for the rest is
-  needed, but it requires a cooperative calling enviroment and is as
+  needed, but it requires a cooperative calling environment and is as
   such considered cheating.
 
 * Signed integer overflow
