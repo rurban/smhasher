@@ -227,9 +227,10 @@ def fnv64_collision(ctx):
 
 
 @attack("FNV64", "seed-independent collision", 64, method="none known: needs one difference vector that works for all 256 values of low8(c_0)",
-        expect="notfound")
+        expect="notfound",
+        argued="no construction known: the seed changes low8(c_0), so one key difference would have to cancel for all 256 values of it")
 def fnv64_sic(ctx):
-    """Not found, honest attempt. Seed 32 bit = XOR into c_0; (c_0 - low8 c_0) p^L is common to both keys, so the
+    """Not attempted at run time, only argued (no construction known). Seed 32 bit = XOR into c_0; (c_0 - low8 c_0) p^L is common to both keys, so the
     two keys must agree for all 256 values of low8(c_0). The increments d_i = (v_i - v_i') - (g(v_{i-1}) - g(v_i'))
     would have to be one fixed short lattice vector for every low8(c_0); XOR differences (the only thing a key
     difference controls) give integer differences whose sign depends on the data bits (only 0x80 commutes with g),
@@ -240,9 +241,10 @@ def fnv64_sic(ctx):
     return None
 
 
-@attack("FNV1a", "seed-independent collision", 32, method="none known (same argument as FNV64)", expect="notfound")
+@attack("FNV1a", "seed-independent collision", 32, method="none known (same argument as FNV64)", expect="notfound",
+        argued="no construction known: same argument as FNV64 (the seed changes low8(c_0), 256 cases)")
 def fnv1a_sic(ctx):
-    """Not found, honest attempt: see fnv64_sic (the 32-bit state has the same structure, low8(c_0) is the only
+    """Not attempted at run time, only argued: see fnv64_sic (the 32-bit state has the same structure, low8(c_0) is the only
     seed-dependent part of the difference after the common term (c_0 - low8 c_0) p^L). Returns None."""
     return None
 
