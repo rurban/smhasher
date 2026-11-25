@@ -468,9 +468,10 @@ def xxhash32_preimage(ctx):
 
 @attack("xxHash32", "seed-independent collision", 32,
         method="no deterministic differential known: the seed is added (not xored), the rotation moves the top bit",
-        expect="notfound")
+        expect="notfound",
+        argued="no construction known: the seed is added, so a two-word differential cancels for only about 50% of the seeds (measured offline on the Python model), not for all of them")
 def xxhash32_seed_independent(ctx):
-    """Not found.  XXH32 injects words by ADDITION (h += w*P3, resp. acc += w*P2) before the rotation.
+    """Not attempted at run time, only argued (no construction known).  XXH32 injects words by ADDITION (h += w*P3, resp. acc += w*P2) before the rotation.
     A difference that is carry free (2^31) is moved by the rotation (17 resp. 13) to bit 16 resp. 12,
     where it is an addition or a subtraction depending on one seed-dependent bit; the multiplication then
     keeps that sign-dependent difference. A cancelling second word works for one sign only; measured with
