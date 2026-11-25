@@ -351,6 +351,38 @@ models PMurHash32; the brute-force search accepts any registered hash.
 These are known-seed bucket collisions, not necessarily full-hash collisions
 or evidence that a hidden seed can be recovered.
 
+Collision prover
+----------------
+
+`./collision_prover.py [hash[:goal] ...]` tries to invert registered hashes, with one
+attempt per hash and goal under a hard timeout of 2 minutes (`--timeout`). Goals:
+
+* `preimage`: a key whose hash is a fixed target (the first bytes of SHA-256 of
+  `smhasher collision prover: <name>`, so nobody holds a key for it) at the known seed 0.
+* `collision`: two different keys with the same full-width hash at the known seed.
+* `sic` (seed-independent collision): two different keys with the same full-width hash
+  for every seed.
+
+A find is only reported after `build/CollisionProverVerify` has recomputed it with the
+compiled hash function from the registry, and it counts only if the attack was at least
+2^8 times cheaper than brute force (2^bits evaluations for a preimage, the birthday
+bound 2^(bits/2) for a collision; the cost is printed). A 32-bit collision at a known
+seed is a birthday problem and never counts: for 32-bit hashes only a preimage or a
+seed-independent collision does. What is not found in time is `not found (2 min)`.
+
+`testall.sh` appends a `[[[ Collision Prover Tests ]]]` section to `doc/<hash>.txt`. A
+verified find that counts prints `*********FAIL*********`, and `testquality.pl` then lists
+`Prover` in the quality problems of that hash. `collision_prover.py --table` prints the
+results as a table, `--list` the registered attacks, `--selftest` is run by `ctest`.
+
+"Automatic" is meant per hash family: each family in `prover/fam_*.py` inverts the
+bijective steps of the hash algebraically (multiplication by an odd constant, xorshift,
+rotation, addition), or uses meet in the middle, linear algebra or lattice reduction
+where the structure allows it. This is not a solver that reverses arbitrary C code; long
+chains of 64-bit multiplications defeat those. Everything rebuilt here is known work
+(for example Aumasson, Bernstein, Bosslet 2012, "Hash-flooding DoS reloaded", for
+seed-independent multicollisions of MurmurHash2/3 and CityHash64); the point is to check
+it against the implementations in this repository.
 Other
 -----
 
