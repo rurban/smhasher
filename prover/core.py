@@ -338,6 +338,8 @@ def run_attack(name, goal, native, timeout=DEFAULT_TIMEOUT, seed=0):
         return res
     if d["status"] != "found":
         res.why = d.get("why", "")
+        if res.seconds >= 0.9 * timeout:        # ran up to its soft deadline: reported as the 2 minute limit
+            res.why = "timeout"
         return res
     f = Finding.from_json(d["finding"])
     res.finding = f
