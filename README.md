@@ -385,6 +385,7 @@ chains of 64-bit multiplications defeat those. Everything rebuilt here is known 
 (for example Aumasson, Bernstein, Bosslet 2012, "Hash-flooding DoS reloaded", for
 seed-independent multicollisions of MurmurHash2/3 and CityHash64); the point is to check
 it against the implementations in this repository.
+
 Other
 -----
 
