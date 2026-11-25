@@ -48,24 +48,27 @@ class Timeout(Exception):
 # registry
 # ---------------------------------------------------------------------------
 class Attack:
-    def __init__(self, hash, goal, bits, method, fn, expect, fast):
+    def __init__(self, hash, goal, bits, method, fn, expect, fast, argued=""):
         self.hash, self.goal, self.bits, self.method, self.fn = hash, goal, bits, method, fn
-        self.expect, self.fast = expect, fast
+        self.expect, self.fast, self.argued = expect, fast, argued
 
 
 REGISTRY = {}
 
 
-def attack(hash, goal, bits, method, expect="found", fast=True):
+def attack(hash, goal, bits, method, expect="found", fast=True, argued=""):
     """Register fn(ctx) -> Finding | None for (hash, goal). `hash` is the registry name of SMHasher,
     `bits` its output width (the self test checks it against build/CollisionProverVerify --listnames).
 
     expect: "found" or "notfound" - what the self test (ctest) asserts.
-    fast:   True if the attack ends within a few seconds (self test runs it)."""
+    fast:   True if the attack ends within a few seconds (self test runs it).
+    argued: one sentence. Set it for a goal where NO attack is run and only an argument is given (see the
+            docstring of the function): the harness then reports "not attempted - argued infeasible" and
+            does not claim a measurement. Leave it empty for every goal that really runs (up to the time limit)."""
     goal = GOAL_ALIAS[goal]
 
     def deco(fn):
-        REGISTRY[(hash, goal)] = Attack(hash, goal, bits, method, fn, expect, fast)
+        REGISTRY[(hash, goal)] = Attack(hash, goal, bits, method, fn, expect, fast, argued)
         return fn
     return deco
 
@@ -207,6 +210,7 @@ class Result:
         self.why = ""                 # NOTFOUND/REJECTED reason or verification detail
         self.brute = ""               # what brute force would have cost
         self.counts = False           # FOUND and beats brute force by the agreed margin
+        self.reason = ""              # why a goal was not attempted (only argued, nothing was run)
         self.bits = 0
 
     @property
@@ -308,6 +312,9 @@ def run_attack(name, goal, native, timeout=DEFAULT_TIMEOUT, seed=0):
     bits = atk.bits
     res = Result(name, goal, atk.method)
     res.bits = bits
+    if atk.argued:                  # nothing is run: an argument, not a measurement
+        res.why, res.reason = "not attempted", atk.argued
+        return res
     cmd = [sys.executable, str(SCRIPT), "--worker", name, goal, str(max(1, timeout - 4))]
     t0 = time.monotonic()
     kw = {"start_new_session": True} if os.name == "posix" else {}
@@ -387,6 +394,8 @@ def line(res):
             res.finding.work or res.method)
     if res.status == "REJECTED":
         return "Prover %s %s: REJECTED %s" % (res.hash, g, res.why)
+    if res.why == "not attempted":
+        return "Prover %s %s: NOTATTEMPTED (argued infeasible, see docstring: %s)" % (res.hash, g, res.reason)
     if res.why in ("timeout", "soft deadline"):
         return "Prover %s %s: NOTFOUND (not found in %d min)" % (res.hash, g, round(DEFAULT_TIMEOUT / 60.0))
     return "Prover %s %s: NOTFOUND (stopped after %.1fs: %s)" % (res.hash, g, res.seconds, res.why or "no result")

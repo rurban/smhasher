@@ -5,7 +5,8 @@ For every (hash, goal) with a registered attack (see prover/fam_*.py) the attack
 own process for at most --timeout seconds (default 120 = 2 minutes). A result counts only if
 the compiled hash function of SMHasher (build/CollisionProverVerify) reproduces it natively
 and the attack was clearly cheaper than brute force. What is not found in time is reported as
-"not found (2 min)".
+"not found (2 min)". A goal for which no attack is run, only an argument is given, is reported as
+"not attempted - argued infeasible (see docstring)".
 
 Goals: preimage (known seed, fixed target), collision (known seed, full width), seed-independent
 collision (same full hash for every seed). A 32-bit collision at a known seed is a birthday
@@ -53,13 +54,15 @@ def table(results):
             res = "found" if r.counts else "found, not counted"
         elif r.status == "REJECTED":
             res = "rejected"
+        elif r.why == "not attempted":
+            res = "not attempted - argued infeasible (see docstring): %s" % r.reason
         else:
             res = "not found (%d min)" % round(core.DEFAULT_TIMEOUT / 60.0) if r.why in ("timeout", "soft deadline") \
                 else "not found (%s)" % (r.why or "no attack succeeded")
         ver = {True: "yes", False: "NO", None: "-"}[r.verified] if r.status != "NOTFOUND" else "-"
         work = "2^%.3g steps" % r.finding.evals_log2 if r.finding else "-"
-        rows.append("| %s | %s | %s | %s | %.1f s | %s | %s | %s | `%s` |" % (
-            r.hash, r.goal, r.method, res, r.seconds, ver, r.brute or "-", work, r.command))
+        rows.append("| %s | %s | %s | %s | %s | %s | %s | %s | `%s` |" % (
+            r.hash, r.goal, r.method, res, "-" if r.why == "not attempted" else "%.1f s" % r.seconds, ver, r.brute or "-", work, r.command))
     return "\n".join(rows) + "\n"
 
 

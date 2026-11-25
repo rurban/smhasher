@@ -370,7 +370,9 @@ bound 2^(bits/2) for a collision; the cost is printed). The attack's own work is
 separately, in its own steps (table operations, field operations, hash evaluations ...),
 which are not hash evaluations; it is only compared with the brute-force bound. A 32-bit collision at a known
 seed is a birthday problem and never counts: for 32-bit hashes only a preimage or a
-seed-independent collision does. What is not found in time is `not found (2 min)`.
+seed-independent collision does. What is not found in time is `not found (2 min)`. A goal for which no attack
+is run, only an argument is given (see the docstring of the family module), is listed as
+`not attempted - argued infeasible`, so that every row says whether it was measured or only argued.
 
 `testall.sh` appends a `[[[ Collision Prover Tests ]]]` section to `doc/<hash>.txt`. A
 verified find that counts prints `*********FAIL*********`, and `testquality.pl` then lists
