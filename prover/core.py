@@ -369,7 +369,7 @@ def run_attack(name, goal, native, timeout=DEFAULT_TIMEOUT, seed=0):
     return res
 
 
-def fmt_keys(f, limit=48):
+def fmt_keys(f, limit=130):   # keys up to 64 bytes are printed in full
     def one(k):
         h = k.hex()
         return h if len(h) <= limit else h[:limit] + "..(%d bytes)" % len(k)
