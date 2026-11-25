@@ -366,7 +366,9 @@ attempt per hash and goal under a hard timeout of 2 minutes (`--timeout`). Goals
 A find is only reported after `build/CollisionProverVerify` has recomputed it with the
 compiled hash function from the registry, and it counts only if the attack was at least
 2^8 times cheaper than brute force (2^bits evaluations for a preimage, the birthday
-bound 2^(bits/2) for a collision; the cost is printed). A 32-bit collision at a known
+bound 2^(bits/2) for a collision; the cost is printed). The attack's own work is printed
+separately, in its own steps (table operations, field operations, hash evaluations ...),
+which are not hash evaluations; it is only compared with the brute-force bound. A 32-bit collision at a known
 seed is a birthday problem and never counts: for 32-bit hashes only a preimage or a
 seed-independent collision does. What is not found in time is `not found (2 min)`.
 

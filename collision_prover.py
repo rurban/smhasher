@@ -46,8 +46,8 @@ def parse_names(items):
 
 
 def table(results):
-    rows = ["| Hash | Goal | Method | Result | Time | Native verified | Brute force would cost | Re-run |",
-            "|---|---|---|---|---|---|---|---|"]
+    rows = ["| Hash | Goal | Method | Result | Time | Native verified | Brute force would cost | Attack work (own steps, not hash evaluations) | Re-run |",
+            "|---|---|---|---|---|---|---|---|---|"]
     for r in results:
         if r.status == "FOUND":
             res = "found" if r.counts else "found, not counted"
@@ -57,8 +57,9 @@ def table(results):
             res = "not found (%d min)" % round(core.DEFAULT_TIMEOUT / 60.0) if r.why in ("timeout", "soft deadline") \
                 else "not found (%s)" % (r.why or "no attack succeeded")
         ver = {True: "yes", False: "NO", None: "-"}[r.verified] if r.status != "NOTFOUND" else "-"
-        rows.append("| %s | %s | %s | %s | %.1f s | %s | %s | `%s` |" % (
-            r.hash, r.goal, r.method, res, r.seconds, ver, r.brute or "-", r.command))
+        work = "2^%.3g steps" % r.finding.evals_log2 if r.finding else "-"
+        rows.append("| %s | %s | %s | %s | %.1f s | %s | %s | %s | `%s` |" % (
+            r.hash, r.goal, r.method, res, r.seconds, ver, r.brute or "-", work, r.command))
     return "\n".join(rows) + "\n"
 
 

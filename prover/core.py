@@ -82,8 +82,10 @@ def register_model(hash, fn):
 
 class Finding:
     """What an attack claims. keys: 1 key (preimage) or >= 2 distinct keys (collision).
-    seeds: seeds the claim is made for; evals_log2: log2 of the number of hash
-    evaluations (or equivalent steps) the attack spent, used to compare with brute force."""
+    seeds: seeds the claim is made for; evals_log2: log2 of the attack's own work, counted in
+    whatever steps the attack takes (hash evaluations, table operations, field multiplications ...). It is
+    NOT necessarily a number of hash evaluations; it is reported as "attack work (steps)" and only used to
+    check that the attack is clearly cheaper than brute force (2^bits hash evaluations)."""
 
     def __init__(self, keys, seeds=(0,), evals_log2=0.0, work="", notes=""):
         self.keys = [bytes(k) for k in keys]
@@ -377,9 +379,10 @@ def line(res):
     g = res.goal
     if res.status == "FOUND":
         tag = "FOUND" if res.counts else "FOUND-NOT-COUNTED"
-        return "Prover %s %s: %s %s (%.2fs, native verified: %s; brute force %s; %s)" % (
+        return "Prover %s %s: %s %s (%.2fs, native verified: %s; brute force %s; attack work 2^%.3g steps, not hash evaluations; %s)" % (
             res.hash, g, tag, fmt_keys(res.finding), res.seconds,
-            {True: "yes", False: "NO", None: "n/a"}[res.verified], res.brute, res.finding.work or res.method)
+            {True: "yes", False: "NO", None: "n/a"}[res.verified], res.brute, res.finding.evals_log2,
+            res.finding.work or res.method)
     if res.status == "REJECTED":
         return "Prover %s %s: REJECTED %s" % (res.hash, g, res.why)
     if res.why in ("timeout", "soft deadline"):
