@@ -853,6 +853,11 @@ target_link_libraries(CollisionSolverProbe SMHasherSupport
                       ${HIGHWAY_LIB} ${BLAKE3_LIB} ${AHASH_C_LIB}
                       ${CMAKE_THREAD_LIBS_INIT})
 
+add_executable(CollisionProverVerify EXCLUDE_FROM_ALL collision_prover_verify.cpp)
+target_link_libraries(CollisionProverVerify SMHasherSupport
+                      ${HIGHWAY_LIB} ${BLAKE3_LIB} ${AHASH_C_LIB}
+                      ${CMAKE_THREAD_LIBS_INIT})
+
 SET(exectargets ${exectargets} SMHasher)
 # add_executable( bittest bittest.cpp )
 #
@@ -873,6 +878,17 @@ if(NOT (CMAKE_CROSSCOMPILING) OR QEMU_TESTING)
   enable_testing()
   add_executable(CollisionAttackTest collision_attack_test.cpp)
   add_test(CollisionAttackRegression CollisionAttackTest)
+  find_program(PYTHON3_EXECUTABLE NAMES python3 python)
+  if(PYTHON3_EXECUTABLE AND NOT MSVC)
+    # builds the native oracle of collision_prover.py on demand, then runs the quick self test
+    add_test(NAME CollisionProverBuild
+             COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target CollisionProverVerify)
+    add_test(NAME CollisionProverSelfTest
+             COMMAND ${PYTHON3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/collision_prover.py --selftest
+             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+    set_tests_properties(CollisionProverSelfTest PROPERTIES DEPENDS CollisionProverBuild
+                         ENVIRONMENT "SMHASHER_PROVER_VERIFY=${CMAKE_BINARY_DIR}/CollisionProverVerify")
+  endif()
   add_test(List SMHasher --list)
   add_test(VerifyAll SMHasher --test=VerifyAll --verbose)
   add_test(Sanity SMHasher --test=Sanity)
